@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import './isa.css';
+import './manageInspections.css'
 
 //components
 import Loading from '../Loading';
+import ItemListInspections from '../ManageInspectionsComponents/ItemListInspections';
 
 //services
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 
 export default function ManageInpections({user, walletAddress}){
-    const [inspections, setInpections] = useState([{id: 'teste'}])
+    const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -18,16 +20,15 @@ export default function ManageInpections({user, walletAddress}){
     async function getInspections(){
         setLoading(true);
         const res = await GetInspections();
-        //setInpections(res);
-        console.log(res)
+        setInpections(res);
         setLoading(false);
     }
 
     async function requestInspection(){
         setLoading(true);
         const res = await RequestInspection(walletAddress);
-        console.log(res);
         setLoading(false);
+        getInspections()
     }
     return(
         <div className='container-isa-page'>
@@ -44,7 +45,7 @@ export default function ManageInpections({user, walletAddress}){
                     )}
                     <button
                         className='btn-load-categories-isa'
-                        onClick={() => {}}
+                        onClick={() => getInspections()}
                     >
                         Load Inspections
                     </button>
@@ -57,14 +58,28 @@ export default function ManageInpections({user, walletAddress}){
                     <div className='container-table-categories'>
                         <table>
                             <thead>
-                                <th>Requested By</th>
-                                <th>Inspected By</th>
+                                <th className='th-wallet'>Requested By</th>
+                                <th className='th-wallet'>Inspected By</th>
                                 <th>Created At</th>
                                 <th>Expires In</th>
-                                <th>Status</th>
-                                <th>Isa Score</th>
-                                <th>Actions</th>
+                                <th className='th-wallet'>Status</th>
+                                <th>Inspected At</th>
+                                <th className='th-wallet'>Isa Score</th>
+                                <th className='th-wallet'>Actions</th>
                             </thead>
+                            <tbody>
+                                {inspections.map(item => {
+                                    return(
+                                        <ItemListInspections
+                                            data={item}
+                                            user={user}
+                                            walletAddress={walletAddress}
+                                            key={item.id}
+                                            reloadInspections={() => getInspections()}
+                                        />
+                                    )
+                                })}
+                            </tbody>
                         </table>
                     </div>
                 )}

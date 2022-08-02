@@ -13,7 +13,7 @@ function Register() {
 
 
   useEffect(()=>{
-    loadActivist();
+    //loadActivist();
   },[])
 
 

@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import './isa.css';
 
-import Web3 from 'web3';
-import CategoryContract from '../../data/contracts/abis/CategoryContract.json';
-
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
 import ItemsListISA from '../IsaPageComponents/ItemsListISA';
 import Loading from '../Loading';
+
+//services
+import {GetCategories} from '../../services/isaService';
 
 export default function ISA({user, walletAddress}){
     const [categories, setCategories] = useState([]);
@@ -18,16 +18,11 @@ export default function ISA({user, walletAddress}){
         getCategories()
     },[])
 
-    function getCategories(){
+    async function getCategories(){
         setLoading(true);
-        const contractAddress = CategoryContract.networks[5777].address;
-        const web3js = new Web3(window.ethereum);
-        const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress)
-        contract.methods.getCategories().call({from: contractAddress})
-        .then((res) => {
-            setCategories(res);
-            setLoading(false);
-        })
+        const response = await GetCategories();
+        setCategories(response);
+        setLoading(false);
     }
 
     return(
