@@ -1,0 +1,38 @@
+.area_data_inspection{
+    display: flex;
+    flex-direction: column;
+}
+
+.card_data_inspection{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.title_card_data_inspection{
+    margin: 0;
+    color: green;
+    font-size: 14px;
+}
+
+.description_card_data_inspection{
+    margin: 0;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.area_data_2_inspection{
+    display: flex;
+}
+
+.created_score{
+    width: 50%;
+}
+
+.created_score:nth-child(1){
+    margin-right: 10px;
+}

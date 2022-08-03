@@ -1,0 +1,37 @@
+.container_modal_options{
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.container__options{
+
+}
+
+.header-options{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.header-options p {
+    margin: 0
+}
+
+.btn-close-modal:hover{
+    cursor: pointer;
+}
+
+.btn-action-options{
+    background: none;
+    border: 0;
+    font-weight: bold;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.btn-action-options:hover{
+    cursor: pointer;
+    color: green;
+}

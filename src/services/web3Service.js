@@ -64,9 +64,9 @@ export const addActivist = async (
   const activistDataNetwork = ActivistContract.networks["5777"];
   const activistContractAddress = activistDataNetwork.address;
   const activistABI = ActivistContract.abi;
-  const address = localStorage.getItem("account")
+  const address = localStorage.getItem("account");
+  await allowedContract(activistContractAddress);
   if (activistContractAddress && activistDataNetwork) {
-    await allowedContract(activistContractAddress);
     const activistContract =  new web3.eth.Contract(
       activistABI,
       activistContractAddress
@@ -107,7 +107,7 @@ export const addProducer = async (
   const producerABI = ProducerContract.abi;
   const address = localStorage.getItem("account")
   if (producerContractAddress && producerDataNetwork) {
-    await allowedContract(producerContractAddress);
+    //await allowedContract(producerContractAddress);
     const producerContract =  new web3.eth.Contract(
       producerABI,
       producerContractAddress

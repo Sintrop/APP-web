@@ -16,8 +16,8 @@ import ItemsList from './itemsList';
 export default function Menu({changeTab}){
     const [itemsMenu, setItemsMenu] = useState([
         {id: 'isa', title: 'ISA', icon: IconISA, action: ''},
-        {id: 'inspections', title: 'Inspections', icon: IconInspections, action: ''},
-        {id: 'accepted-inspections', title: 'Accepted Inspection', icon: IconAcceptedInspection, action: ''},
+        {id: 'inspection-history', title: 'Inspection History', icon: IconInspections, action: ''},
+        {id: 'manage-inspections', title: 'Manage Inspections', icon: IconAcceptedInspection, action: ''},
         {id: 'producers', title: 'Producers', icon: IconProducers, action: ''},
         {id: 'activists', title: 'Activists', icon: IconActivists, action: ''},
         {id: 'my-account', title: 'My Account', icon: IconMyAccount, action: ''},

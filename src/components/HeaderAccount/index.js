@@ -7,6 +7,7 @@ export default function HeaderAccount({wallet}){
     async function logout(){
       navigate('/');
     }
+    
     return(
         <div className='container-header-account'>
             <p>ACCOUNT: {wallet}</p>

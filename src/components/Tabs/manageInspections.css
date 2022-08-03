@@ -1,0 +1,18 @@
+.th-wallet{
+    width: 150px;
+}
+
+.td-actions-manage-inspections{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-show-actions{
+    font-weight: bold;
+    color: green;
+    background: none;
+    border: 0;
+    font-size: larger;
+    cursor: pointer;
+    margin: 5px 10px 0 0
+}

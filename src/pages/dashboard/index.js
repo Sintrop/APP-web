@@ -6,6 +6,7 @@ import './dashboard.css';
 import Menu from '../../components/Menu';
 import HeaderAccount from '../../components/HeaderAccount';
 import TabIndicator from '../../components/TabIndicator';
+import ManageInspections from '../../components/Tabs/ManageInspections';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -67,6 +68,10 @@ export default function Dashboard(){
 
                 {activeTab === 'isa' && (
                     <ISA user={user} walletAddress={walletAddress}/>
+                )}
+
+                {activeTab === 'manage-inspections' && (
+                    <ManageInspections user={user} walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
