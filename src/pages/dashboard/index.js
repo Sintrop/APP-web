@@ -23,9 +23,6 @@ export default function Dashboard(){
 
     useEffect(() => {
         async function checkConnection(){
-            var i = 0;
-            var accountsIndentify = 0;
-            
             if(window.ethereum){
                 await window.ethereum.request({
                     method: 'eth_accounts'
@@ -34,14 +31,8 @@ export default function Dashboard(){
                     if(accounts.length == 0){
                         navigate('/')
                     }else{
-                        while(i <= accounts.length){
-                            if(accounts[i] === walletAddress){
-                                accountsIndentify++
-                            }
-                            i++
-                            if(i > accounts.length && accountsIndentify == 0){
-                                navigate('/')
-                            }
+                        if(accounts[0] != walletAddress){
+                            navigate('/')
                         }
                     }
                 })
