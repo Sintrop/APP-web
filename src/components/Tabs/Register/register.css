@@ -10,21 +10,21 @@
   width: 870px;
   height: 100%;
   margin-left: 150px;
-  margin-top: 80px;
+  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .container input, select {
   width: 200px;
-  height: 25px;
-  border: 1px solid gray;
-  border-radius: 10px;
+  height: 28px;
+  border: 2px solid #a1a1a1;
+  border-radius: 4px;
 }
 
-.container button{ 
+.buttonRegister { 
   margin-top: 15px;
   width: 250px;
   height: 50px;
@@ -36,7 +36,26 @@
   cursor: pointer;
 }
 
-.container button:hover{ 
+.buttonRegister:hover{ 
   color: rgb(204, 37, 226, 0.7);
   border-color: rgb(204, 37, 226, 0.5);
 }
+
+.inputGroup {
+  display: flex;
+}
+
+.inputGroup .inputControl{
+  display: flex;
+  flex-direction: column;
+  margin-right: 4%;
+}
+
+
+.inputControl label{
+  margin:5% 0;
+}
+
+/* .inputGroup label {
+  display:;
+} */

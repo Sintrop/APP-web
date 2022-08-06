@@ -14,6 +14,7 @@ import ISA from '../../components/Tabs/ISA';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
+import HistoryInspections from '../../components/Tabs/HistoryInspections';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ export default function Dashboard(){
                 <TabIndicator activeTab={activeTab} wallet={walletAddress}/>
 
                 {activeTab === 'register' && (
-                    <Register/>
+                    <Register wallet={walletAddress}/>
                 )}
 
                 {activeTab === 'isa' && (
@@ -72,6 +73,9 @@ export default function Dashboard(){
 
                 {activeTab === 'manage-inspections' && (
                     <ManageInspections user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'inspection-history' && (
+                    <HistoryInspections walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
