@@ -1,9 +1,6 @@
 import React, { useState} from 'react';
 import '../../../ManageInspectionsComponents/ItemListInspections/itemListInspections.css';
 
-//components
-import ModalActions from '../../../ManageInspectionsComponents/ModalActions';
-import ModalRealize from '../../../ManageInspectionsComponents/ModalRealize';
 import Loading from '../../../Loading';
 
 export default function ListItemHistory({data, user, walletAddress, reloadInspections}){
