@@ -75,7 +75,7 @@ export default function Dashboard(){
                     <ManageInspections user={user} walletAddress={walletAddress}/>
                 )}
                 {activeTab === 'inspection-history' && (
-                    <HistoryInspections walletAddress={walletAddress}/>
+                    <HistoryInspections user={user} walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
