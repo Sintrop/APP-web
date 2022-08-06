@@ -22,10 +22,10 @@ function Register({ wallet }) {
           name,
           documetNumber,
           documetType,
-          cep,
+          country,
           state,
           city,
-          country
+          cep,
           ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "activist":
@@ -33,10 +33,10 @@ function Register({ wallet }) {
           name,
           documetNumber,
           documetType,
-          cep,
+          country,
           state,
           city,
-          country
+          cep
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       default:
