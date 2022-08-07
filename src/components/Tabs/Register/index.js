@@ -25,7 +25,7 @@ function Register({ wallet }) {
           country,
           state,
           city,
-          cep,
+          cep
           ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "activist":
