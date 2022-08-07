@@ -1,0 +1,16 @@
+
+table {
+  width: 90%;
+  margin: 15px;
+  border: 1px solid gray;
+}
+
+th {
+  padding: 5px;
+}
+
+td {
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}

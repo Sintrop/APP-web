@@ -11,7 +11,7 @@ import ManageInspections from '../../components/Tabs/ManageInspections';
 //Tabs
 import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
-
+import ProducerRanking from '../../components/Tabs/Ranking/Producer'
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
@@ -76,6 +76,9 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'inspection-history' && (
                     <HistoryInspections user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'producers' && (
+                    <ProducerRanking user={user} walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
