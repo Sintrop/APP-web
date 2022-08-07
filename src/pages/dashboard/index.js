@@ -15,6 +15,7 @@ import ProducerRanking from '../../components/Tabs/Ranking/Producer'
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
+import ActivistRanking from '../../components/Tabs/Ranking/Activist';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -79,6 +80,9 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'producers' && (
                     <ProducerRanking user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'activists' && (
+                    <ActivistRanking user={user} walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
