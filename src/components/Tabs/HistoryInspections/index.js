@@ -16,10 +16,10 @@ function HistoryInspections({ walletAddress, user } ) {
     
   const loadInspections = () => {
     inspection.getAllInspections().then( res => {
-      console.log(res)
       setInspections(res);
     });
   }
+
   return (
     <>
       <div className='container-isa-page'>

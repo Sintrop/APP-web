@@ -2,9 +2,14 @@ import React, { useState} from 'react';
 import '../../../ManageInspectionsComponents/ItemListInspections/itemListInspections.css';
 
 import Loading from '../../../Loading';
+import ModalSeeResult from '../../../ManageInspectionsComponents/ModalSeeResult';
+import ModalRealize from '../../../ManageInspectionsComponents/ModalRealize';
+import ModalActions from '../../../ManageInspectionsComponents/ModalActions';
 
 export default function ListItemHistory({data, user, walletAddress, reloadInspections}){
     const [showActions, setShowActions] = useState(false);
+    const [showModalRealize, setShowModalRealize] = useState(false);
+    const [showSeeResult, setShowSeeResult] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
@@ -52,6 +57,50 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                     
                 </button>
             </td>
+            <td className='td-actions-manage-inspections'>
+                <button 
+                    onClick={() => setShowActions(true)} 
+                    className='btn-show-actions'>
+                    ...
+                </button>
+            </td>
+
+            {showActions && (
+                <div className='container-modal-actions'>
+                    <ModalActions 
+                        close={() => setShowActions(false)}
+                        user={user}
+                        item={data}
+                        walletAddress={walletAddress}
+                        showRealize={() => setShowModalRealize(true)}
+                        showSeeResult={() => setShowSeeResult(true)}
+                        reloadInspection={() => {
+                            setLoading(false);
+                            reloadInspections();
+                        }}
+                        setLoading={() => setLoading(!loading)}
+                    />
+                </div>
+            )}
+
+            {showModalRealize && (
+                <ModalRealize
+                    close={() => setShowModalRealize(false)}
+                    inspectionID={data.id}
+                    walletAddress={walletAddress}
+                    reloadInspections={() => {
+                        setShowActions(false);
+                        reloadInspections();
+                    }}
+                />
+            )}
+
+            {showSeeResult && (
+                <ModalSeeResult
+                    close={() => setShowSeeResult(false)}
+                    inspectionData={data}
+                />
+            )}
 
             {loading && (
                 <Loading/>

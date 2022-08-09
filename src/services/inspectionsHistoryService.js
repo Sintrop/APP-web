@@ -10,6 +10,7 @@ class InspectionsHistoryService {
         this.sintroptABI = Sintrop.abi;
     }
 
+
     async getAllInspections(){
 
         if (this.sintropContractAddress && this.sintropDataNetwork) {
