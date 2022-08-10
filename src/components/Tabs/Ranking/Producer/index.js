@@ -33,7 +33,7 @@ export default function ProducerRanking({ wallet }) {
         {producers.map(item => (
           <tr key={item.producerWallet}>
             <td>{item.id}</td>
-            <td><a href="#">{item.producerWallet}</a></td>
+            <td><a href={`/producer-page/${item.producerWallet}`}>{item.producerWallet}</a></td>
             <td>{item.name}</td>
             <td>{item.propertyAddress.map(address => <p>{address}</p>)}</td>
             <td>{item.totalRequests}</td>

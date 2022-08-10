@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Web3 from "web3";
 import ProducerContract from '../data/contracts/abis/ProducerContract.json';
 
@@ -15,11 +14,7 @@ export const GetProducer = async (wallet) => {
 
     return dataProducer;
 }
-=======
 
-
-import Web3 from "web3";
-import ProducerContract from  '../data/contracts/abis/ProducerContract.json';
 class ProducerService {
     constructor(wallet) {
         this.web3 = new Web3(window.ethereum);
@@ -41,4 +36,3 @@ class ProducerService {
 
 
 export default ProducerService; 
->>>>>>> 606060eb5aa0c0181589789e7856d4980882ceab

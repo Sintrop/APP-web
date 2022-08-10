@@ -16,7 +16,9 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     return(
         <tr key={data.id}>
             <td>
+                <a href={`/producer-page/${data.createdBy}`}>
                 <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
+                </a>
             </td>
             <td>
                 <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
