@@ -11,9 +11,11 @@ import ManageInspections from '../../components/Tabs/ManageInspections';
 //Tabs
 import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
-
+import ProducerRanking from '../../components/Tabs/Ranking/Producer'
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
+import HistoryInspections from '../../components/Tabs/HistoryInspections';
+import ActivistRanking from '../../components/Tabs/Ranking/Activist';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -63,7 +65,7 @@ export default function Dashboard(){
                 <TabIndicator activeTab={activeTab} wallet={walletAddress}/>
 
                 {activeTab === 'register' && (
-                    <Register/>
+                    <Register wallet={walletAddress}/>
                 )}
 
                 {activeTab === 'isa' && (
@@ -72,6 +74,15 @@ export default function Dashboard(){
 
                 {activeTab === 'manage-inspections' && (
                     <ManageInspections user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'inspection-history' && (
+                    <HistoryInspections user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'producers' && (
+                    <ProducerRanking user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab === 'activists' && (
+                    <ActivistRanking user={user} walletAddress={walletAddress}/>
                 )}
             </div>
         </div>
