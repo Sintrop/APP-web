@@ -8,8 +8,10 @@ export default function ActivistRanking({ wallet }) {
     activistService
       .getAtivistRanking()
       .then((res) => {
-        let activistSort = res;
-        if(res.length > 0) setActivist(activistSort.sort((a, b) => b.totalInspections - a.totalInspections));
+        if(res.length > 0){
+          let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
+          setActivist(activistSort);
+        }
       })
       .catch((err) => console.log(err));
   }, []);
