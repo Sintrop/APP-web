@@ -8,8 +8,12 @@ export default function ProducerRanking({ wallet }) {
     producerService
       .getProducerRanking()
       .then((res) =>{
-         let producerSort = res;
-         if(res.length > 0) setProducers(producerSort.sort((a,b) => b.isa.isaScore - a.isa.isaScore ))
+        if(res.length > 0){
+
+          let producerSort = res.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
+          
+          setProducers(producerSort)
+        } 
       })
       .catch((err) => console.log(err));
   }, []);
