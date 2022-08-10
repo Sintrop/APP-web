@@ -9,7 +9,7 @@ export default function ActivistRanking({ wallet }) {
       .getAtivistRanking()
       .then((res) => {
         let activistSort = res;
-        setActivist(activistSort.sort((a, b) => b.totalInspections - a.totalInspections));
+        if(res.length > 0) setActivist(activistSort.sort((a, b) => b.totalInspections - a.totalInspections));
       })
       .catch((err) => console.log(err));
   }, []);

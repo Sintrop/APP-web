@@ -13,7 +13,6 @@ class ActivistService {
       if (this.activistContractAddress && this.activistDataNetwork) {
           const ActivistContract = new this.web3.eth.Contract(this.activistABI, this.activistContractAddress);
           const activists = await ActivistContract.methods.getActivists().call()
-            console.log(activists)
           return activists;
         } 
     }

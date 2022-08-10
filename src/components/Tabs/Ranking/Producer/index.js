@@ -8,8 +8,8 @@ export default function ProducerRanking({ wallet }) {
     producerService
       .getProducerRanking()
       .then((res) =>{
-         let producerSort = res; 
-         setProducers(producerSort.sort((a,b) => b.isaScore - a.isaScore ))
+         let producerSort = res;
+         if(res.length > 0) setProducers(producerSort.sort((a,b) => b.isa.isaScore - a.isa.isaScore ))
       })
       .catch((err) => console.log(err));
   }, []);
@@ -27,7 +27,7 @@ export default function ProducerRanking({ wallet }) {
           <th>Isa average</th>
         </tr>
         {producers.map(item => (
-          <tr key={item.id}>
+          <tr key={item.producerWallet}>
             <td>{item.id}</td>
             <td><a href="#">{item.producerWallet}</a></td>
             <td>{item.name}</td>
