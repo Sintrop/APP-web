@@ -29,7 +29,9 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     return(
         <tr key={data.id}>
             <td>
-                <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
+                <a href={`/producer-page/${data.createdBy}`}>
+                    <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
+                </a>
             </td>
             <td>
                 <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
