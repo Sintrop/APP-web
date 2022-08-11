@@ -15,9 +15,7 @@
 
 .item-inspection__content-inspection-info{
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     margin-bottom: 15px;
 }
 
@@ -32,18 +30,11 @@
 
 .item-inspection__card-info{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    width: 140px;
-    margin-right: 20px;
-    margin-top: 10px;
-}
-
-.card-wallet{
-    width: 320px;
 }
 
 .item-inspection__tit-cards-info{
+    margin: 0;
     font-size: 14px;
     font-weight: bold;
     color: black;
@@ -51,6 +42,7 @@
 }
 
 .item-inspection__description-cards-info{
+    margin: 0 0 0 5px;
     font-size: 14px;
 }
 
@@ -80,9 +72,9 @@
     font-size: 12px
 }
 
-@media  screen and (max-width: 321px) {
+@media  screen and (max-width: 320px) {
     .item-inpection__container{
-        height: 270px;
+        height: 155px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
@@ -102,19 +94,19 @@
     }
 
     .card-wallet{
-        flex-direction: column;
-    }
-
-    .card-wallet{
         width: 100%;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
     }
 }
 
 
 
-@media  screen and (max-width: 426px) {
+@media  screen and (max-width: 425px) {
     .item-inpection__container{
-        height: 270px;
+        height: 155px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
@@ -131,10 +123,6 @@
     .item-inspection__card-info{
         align-items: center;
         flex-direction: row;
-    }
-
-    .card-wallet{
-        flex-direction: column;
     }
 
     .item-inspection__content-inspection-info{
@@ -143,12 +131,16 @@
 
     .card-wallet{
         width: 100%;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
     }
 }
 
 @media  screen and (max-width: 769px) {
     .item-inpection__container{
-        height: 270px;
+        height: 155px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
@@ -167,15 +159,15 @@
         flex-direction: row;
     }
 
-    .card-wallet{
-        flex-direction: column;
-    }
-
     .item-inspection__content-inspection-info{
         flex-direction: column;
     }
 
     .card-wallet{
         width: 100%;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
     }
 }

@@ -37,21 +37,23 @@ export default function ItemInspection({data}){
             <div className='item-inspection__content-inspection-info'>
                     <div className='item-inspection__card-info card-wallet'>
                         <h1 className='item-inspection__tit-cards-info'>Activist Wallet</h1>
-                        <a href='/' className='item-inspection__description-cards-info'>{data.acceptedBy}</a>
+                        <a href='/' className='item-inspection__description-cards-info'> {data.acceptedBy}</a>
                     </div>
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Isa Score: </h1>
-                    <p className='item-inspection__description-cards-info'>{data.isaScore}</p>
+                    <p className='item-inspection__description-cards-info'>
+                        {data.isaScore}
+                    </p>
                 </div>
 
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Requested At: </h1>
-                    <p className='item-inspection__description-cards-info'>{data.createdAt}</p>
+                    <p className='item-inspection__description-cards-info'> {data.createdAt}</p>
                 </div>
 
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Updated At: </h1>
-                    <p className='item-inspection__description-cards-info'>{data.updatedAt}</p>
+                    <p className='item-inspection__description-cards-info'> {data.updatedAt}</p>
                 </div>
             </div>
             <div className='item-inspection__content-inspections'>
