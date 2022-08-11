@@ -3,7 +3,7 @@
     border: 1px solid #aaa;
     flex-direction: column;
     padding: 10px;
-    height: 158px;
+    height: 190px;
     overflow: hidden;
     margin-bottom: 20px;
 }
@@ -31,6 +31,7 @@
 .item-inspection__card-info{
     display: flex;
     align-items: center;
+    margin-bottom: 8px;
 }
 
 .item-inspection__tit-cards-info{
@@ -74,7 +75,7 @@
 
 @media  screen and (max-width: 320px) {
     .item-inpection__container{
-        height: 155px;
+        height: 175px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
@@ -106,7 +107,7 @@
 
 @media  screen and (max-width: 425px) {
     .item-inpection__container{
-        height: 155px;
+        height: 175px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
@@ -140,7 +141,7 @@
 
 @media  screen and (max-width: 769px) {
     .item-inpection__container{
-        height: 155px;
+        height: 175px;
     }
     .item-inspection__title-inspection{
         font-size: 12px;
