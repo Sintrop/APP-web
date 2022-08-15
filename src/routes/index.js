@@ -2,8 +2,10 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Login from "../pages/login";
 import Dashboard from '../pages/dashboard';
+import Register from "../components/Tabs/Register";
 import ProducerRanking from "../components/Tabs/Ranking/Producer";
 import ActivistRanking from "../components/Tabs/Ranking/Activist";
+import AccountProducer from "../pages/accountProducer";
 
 export default function Router(){
     return(
@@ -11,6 +13,10 @@ export default function Router(){
             <Routes>
                 <Route exact path="/" element={<Login/>}/>
                 <Route exact path="/dashboard/:walletAddress" element={<Dashboard/>}/>
+
+                <Route exact path="/register" element={<Register/>}/>
+                <Route exact path="/account-producer/:walletAddress" element={<AccountProducer/>}/>
+
                 <Route exact path="/producers-ranking" element={ <ProducerRanking />}/>
                 <Route exact path="/activists-ranking" element={ <ActivistRanking />}/>
             </Routes>

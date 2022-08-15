@@ -9,7 +9,7 @@ import ItemListInspections from '../ManageInspectionsComponents/ItemListInspecti
 //services
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 
-export default function ManageInpections({user, walletAddress}){
+export default function ManageInpections({user, walletAddress, setTab}){
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
 
@@ -76,6 +76,7 @@ export default function ManageInpections({user, walletAddress}){
                                             walletAddress={walletAddress}
                                             key={item.id}
                                             reloadInspections={() => getInspections()}
+                                            setTab={(tab, wallet) => setTab(tab, wallet)}
                                         />
                                     )
                                 })}

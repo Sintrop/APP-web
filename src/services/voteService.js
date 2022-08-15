@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import Web3 from "web3";
 import CategoryContract from '../data/contracts/abis/CategoryContract.json';
 import IsaPoolContract from '../data/contracts/abis/IsaPool.json';

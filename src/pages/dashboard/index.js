@@ -11,7 +11,8 @@ import ManageInspections from '../../components/Tabs/ManageInspections';
 //Tabs
 import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
-import ProducerRanking from '../../components/Tabs/Ranking/Producer'
+import ProducerRanking from '../../components/Tabs/Ranking/Producer';
+import ProducerPage from '../../components/Tabs/ProducerPage';
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
@@ -22,6 +23,7 @@ export default function Dashboard(){
     const {walletAddress} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
     const {user} = CheckUserRegister({walletAddress: walletAddress});
+    const [walletSelect, setWalletSelect] = useState('');
 
     useEffect(() => {
         async function checkConnection(){
@@ -73,16 +75,33 @@ export default function Dashboard(){
                 )}
 
                 {activeTab === 'manage-inspections' && (
-                    <ManageInspections user={user} walletAddress={walletAddress}/>
+                    <ManageInspections 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'inspection-history' && (
                     <HistoryInspections user={user} walletAddress={walletAddress}/>
                 )}
                 {activeTab === 'producers' && (
-                    <ProducerRanking user={user} walletAddress={walletAddress}/>
+                    <ProducerRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'activists' && (
                     <ActivistRanking user={user} walletAddress={walletAddress}/>
+                )}
+                {activeTab ===  'producer-page' && (
+                    <ProducerPage wallet={walletSelect}/>
                 )}
             </div>
         </div>

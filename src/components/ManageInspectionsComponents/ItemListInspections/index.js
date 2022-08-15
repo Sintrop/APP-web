@@ -10,7 +10,7 @@ import Loading from '../../Loading';
 //services
 import {GetInspection} from '../../../services/manageInspectionsService';
 
-export default function ItemListInspections({data, user, walletAddress, reloadInspections}){
+export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
     const [showActions, setShowActions] = useState(false);
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
@@ -29,7 +29,13 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     return(
         <tr key={data.id}>
             <td>
-                <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
+                <a href='#'>
+                    <p 
+                        onClick={() => setTab('producer-page', data.createdBy)} 
+                        className='id-wallets' 
+                        title={data.createdBy}
+                    >{data.createdBy}</p>
+                </a>
             </td>
             <td>
                 <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
