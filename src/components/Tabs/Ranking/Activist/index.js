@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
 import "./activist.css";
-export default function ActivistRanking({ wallet }) {
+export default function ActivistRanking({ wallet, setTab }) {
   const activistService = new ActivistService(wallet);
   const [activist, setActivist] = useState([]);
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function ActivistRanking({ wallet }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>
-              <a href="#">{item.activistWallet}</a>
+              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>{item.activistWallet}</a>
             </td>
             <td>{item.name}</td>
             <td>
