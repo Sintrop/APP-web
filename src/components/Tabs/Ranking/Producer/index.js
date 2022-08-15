@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
 import './producer.css'
-export default function ProducerRanking({ wallet }) {
+export default function ProducerRanking({ wallet, setTab }) {
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([])
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ProducerRanking({ wallet }) {
         {producers.map(item => (
           <tr key={item.producerWallet}>
             <td>{item.id}</td>
-            <td><a href={`/producer-page/${item.producerWallet}`}>{item.producerWallet}</a></td>
+            <td><a href='#' onClick={() => setTab('producer-page', item.producerWallet)}>{item.producerWallet}</a></td>
             <td>{item.name}</td>
             <td>{item.propertyAddress.map(address => <p>{address}</p>)}</td>
             <td>{item.totalRequests}</td>

@@ -1,9 +1,11 @@
 .container__producer-page{
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 100%;
+    height: calc(100vh - 110px);
     background-color: #fff;
     align-items: center;
+    overflow: auto;
 }
 
 .header__producer-page{
@@ -23,7 +25,7 @@
 }
 
 .content__producer-page{
-    width: 60%;
+    width: 90%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -43,6 +45,16 @@
 .area-avatar__producer-page{
     display: flex;
     align-items: center;
+}
+
+.area-avatar__btn-report{
+    background-color: #fff;
+    border: 2px solid red;
+    border-radius: 8px;
+    padding: 8px;
+    color: red;
+    font-weight: red;
+    cursor: pointer;
 }
 
 .avatar__producer-page{

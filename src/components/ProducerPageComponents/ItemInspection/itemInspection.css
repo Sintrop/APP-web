@@ -3,8 +3,8 @@
     border: 1px solid #aaa;
     flex-direction: column;
     padding: 10px;
-    height: 190px;
-    overflow: hidden;
+    height: 400px;
+    overflow: auto;
     margin-bottom: 20px;
 }
 
@@ -56,21 +56,20 @@
     font-weight: bold;
 }
 
-.content-inspections__area-btn_more{
+.content-inspections__area-btn-report{
     display: flex;
     justify-content: end;
     margin-bottom: 15px;
 }
 
-.area-btn-more__btn-more{
+.area-btn-report__btn-report{
     background-color: #fff;
-    border: 2px solid purple;
-    font-weight: bold;
-    color: purple;
-    padding: 5px;
+    border: 2px solid red;
     border-radius: 8px;
+    padding: 8px;
+    color: red;
+    font-weight: red;
     cursor: pointer;
-    font-size: 12px
 }
 
 @media  screen and (max-width: 320px) {

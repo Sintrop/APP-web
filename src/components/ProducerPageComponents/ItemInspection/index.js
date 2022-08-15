@@ -57,13 +57,10 @@ export default function ItemInspection({data}){
                 </div>
             </div>
             <div className='item-inspection__content-inspections'>
-                <div className='content-inspections__area-btn_more'>
+                <div className='content-inspections__area-btn-report'>
                     <button
-                        className='area-btn-more__btn-more'
-                        onClick={() => toggleMoreDetails()}
-                    >
-                        {showMoreDetails ? 'Less Details' : 'More Details'}
-                    </button>
+                        className='area-btn-report__btn-report'
+                    >Report Inspection</button>
                 </div>
                 {isas.map((item) => {
                     return(

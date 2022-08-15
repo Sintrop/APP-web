@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import './producerPage.css';
 
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 
@@ -11,7 +10,7 @@ import {GetInspections} from '../../services/manageInspectionsService';
 //components
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
 
-export default function ProducerPage(){
+export default function AccountProducer(){
     const {walletAddress} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);

@@ -3,6 +3,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
+    text-decoration: overline;
 }
 
 .container-modal-actions{
