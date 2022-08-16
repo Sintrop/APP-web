@@ -38,7 +38,9 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 </a>
             </td>
             <td>
-                <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                    <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                </a>
             </td>
             <td>
                 <p>{data.createdAt}</p>

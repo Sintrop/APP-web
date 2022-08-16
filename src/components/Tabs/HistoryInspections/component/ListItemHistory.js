@@ -6,7 +6,7 @@ import ModalSeeResult from '../../../ManageInspectionsComponents/ModalSeeResult'
 import ModalRealize from '../../../ManageInspectionsComponents/ModalRealize';
 import ModalActions from '../../../ManageInspectionsComponents/ModalActions';
 
-export default function ListItemHistory({data, user, walletAddress, reloadInspections}){
+export default function ListItemHistory({data, user, walletAddress, reloadInspections, setTab}){
     const [showActions, setShowActions] = useState(false);
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
@@ -16,12 +16,14 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     return(
         <tr key={data.id}>
             <td>
-                <a href={`/producer-page/${data.createdBy}`}>
+                <a href='#' onClick={() => setTab('producer-page', data.createdBy)}>
                 <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
                 </a>
             </td>
             <td>
-                <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                    <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                </a>
             </td>
             <td>
                 <p>{data.createdAt}</p>

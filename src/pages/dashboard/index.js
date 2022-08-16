@@ -13,6 +13,9 @@ import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
 import ProducerRanking from '../../components/Tabs/Ranking/Producer';
 import ProducerPage from '../../components/Tabs/ProducerPage';
+import ActivistPage from '../../components/Tabs/ActivistPage';
+import MyAccount from '../../components/Tabs/MyAccount';
+
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
@@ -85,7 +88,14 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab === 'inspection-history' && (
-                    <HistoryInspections user={user} walletAddress={walletAddress}/>
+                    <HistoryInspections 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'producers' && (
                     <ProducerRanking 
@@ -98,10 +108,23 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab === 'activists' && (
-                    <ActivistRanking user={user} walletAddress={walletAddress}/>
+                    <ActivistRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab ===  'producer-page' && (
                     <ProducerPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'activist-page' && (
+                    <ActivistPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'my-account' && (
+                    <MyAccount wallet={walletAddress} userType={user}/>
                 )}
             </div>
         </div>

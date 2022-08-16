@@ -16,6 +16,14 @@ class ActivistService {
           return activists;
         } 
     }
+
+    async getAtivist(walletAdd){
+        if (this.activistContractAddress && this.activistDataNetwork) {
+            const ActivistContract = new this.web3.eth.Contract(this.activistABI, this.activistContractAddress);
+            const activist = await ActivistContract.methods.getActivist(walletAdd).call()
+            return activist;
+        } 
+    }
 }
 
 

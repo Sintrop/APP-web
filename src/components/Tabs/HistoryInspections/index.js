@@ -5,7 +5,7 @@ import '../manageInspections.css'
 import ListItemHistory from "./component/ListItemHistory";
 
 
-function HistoryInspections({ walletAddress, user } ) {
+function HistoryInspections({ walletAddress, user, setTab } ) {
     const [inspections, setInspections ] = useState([]);
     const [loading, setLoading] = useState(false);
     const inspection = new InspectionsService(walletAddress);
@@ -67,6 +67,7 @@ function HistoryInspections({ walletAddress, user } ) {
                                             walletAddress={walletAddress}
                                             key={item.id}
                                             reloadInspections={() => loadInspections()}
+                                            setTab={(tab, wallet) => setTab(tab, wallet)}
                                         />
                                     )
                                 })}
