@@ -15,6 +15,7 @@ import ProducerRanking from '../../components/Tabs/Ranking/Producer';
 import ProducerPage from '../../components/Tabs/ProducerPage';
 import ActivistPage from '../../components/Tabs/ActivistPage';
 import MyAccount from '../../components/Tabs/MyAccount';
+import Certificate from '../../components/Tabs/Certificate';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -125,6 +126,9 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'my-account' && (
                     <MyAccount wallet={walletAddress} userType={user}/>
+                )}
+                {activeTab === 'certificate' && (
+                    <Certificate userType={user} wallet={walletAddress}/>
                 )}
             </div>
         </div>
