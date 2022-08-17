@@ -39,6 +39,28 @@ function Register({ wallet }) {
           cep
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
+      case "contributor":
+        registerService.addContributor(
+          name,
+          documetNumber,
+          documetType,
+          country,
+          state,
+          city,
+          cep
+        ).then(res => console.log(res)).catch(err => console.log(err));
+        break;
+      case "investor":
+        registerService.addInvestor(
+          name,
+          documetNumber,
+          documetType,
+          country,
+          state,
+          city,
+          cep
+        ).then(res => console.log(res)).catch(err => console.log(err));
+        break;                 
       default:
         break;
     }
@@ -57,6 +79,8 @@ function Register({ wallet }) {
               <option selected value=""></option>
               <option value="producer">PRODUCER</option>
               <option value="activist">ACTIVIST</option>
+              <option value="activist">CONTRIBUTOR</option>
+              <option value="activist">INVESTOR</option>
             </select>
           </div>
         </div>
