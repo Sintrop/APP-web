@@ -79,8 +79,8 @@ function Register({ wallet }) {
               <option selected value=""></option>
               <option value="producer">PRODUCER</option>
               <option value="activist">ACTIVIST</option>
-              <option value="activist">CONTRIBUTOR</option>
-              <option value="activist">INVESTOR</option>
+              <option value="contributor">CONTRIBUTOR</option>
+              <option value="investor">INVESTOR</option>
             </select>
           </div>
         </div>
