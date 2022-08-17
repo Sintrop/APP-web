@@ -1,7 +1,6 @@
 .certificate__container{
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     margin-right: 10px;
     border: solid 1px #aaa;
     padding: 10px;
@@ -37,7 +36,6 @@
 .container__certificate-container{
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
     background-color: #fff;
     padding: 20px;
 }
@@ -47,7 +45,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
     border: solid 1px #aaa;
     padding: 10px;
     width: 270px;
@@ -66,7 +63,7 @@
 }
 
 .hash-qrcode{
-    margin: 0;
+    margin: 10px 0 0 0;
     font-size: 12px;
 }
 

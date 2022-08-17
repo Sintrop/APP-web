@@ -12,6 +12,7 @@
     height: 80px;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding-left: 20px;
     border-bottom: 1px solid #aaa;
     margin-bottom: 15px;
