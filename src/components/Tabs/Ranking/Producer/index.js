@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
-import './producer.css'
+import '../../Ranking/ranking.css';
 export default function ProducerRanking({ wallet, setTab }) {
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([])

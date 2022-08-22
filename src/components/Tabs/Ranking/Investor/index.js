@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import ActivistService from "../../../../services/activistService";
+import InvestorService from "../../../../services/investorService";
 import '../../Ranking/ranking.css';
-export default function ActivistRanking({ wallet, setTab }) {
-  const activistService = new ActivistService(wallet);
-  const [activist, setActivist] = useState([]);
+export default function InvestorRanking({ wallet, setTab }) {
+  const investorService = new InvestorService(wallet);
+  const [investor, setInvestor] = useState([]);
   useEffect(() => {
-    activistService
-      .getAtivistRanking()
+    investorService
+      .getInvestorRanking()
       .then((res) => {
         if(res.length > 0){
-          let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
-          setActivist(activistSort);
+          let investorSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
+          setInvestor(investorSort);
         }
       })
       .catch((err) => console.log(err));
@@ -29,11 +29,11 @@ export default function ActivistRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>
-              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>{item.activistWallet}</a>
+              <a href="#" onClick={() => setTab('investor-page', item.investorWallet)}>{item.investorWallet}</a>
             </td>
             <td>{item.name}</td>
             <td>
-              {item.activistAddress.map((address) => (
+              {item.investorAddress.map((address) => (
                 <p>{address}</p>
               ))}
             </td>

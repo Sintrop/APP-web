@@ -60,7 +60,40 @@ function Register({ wallet }) {
           city,
           cep
         ).then(res => console.log(res)).catch(err => console.log(err));
-        break;                 
+        break;
+      case "developer":
+        registerService.addDeveloper(
+          name,
+          documetNumber,
+          documetType,
+          country,
+          state,
+          city,
+          cep
+        ).then(res => console.log(res)).catch(err => console.log(err));
+        break;
+      case "researcher":
+        registerService.addResearcher(
+          name,
+          documetNumber,
+          documetType,
+          country,
+          state,
+          city,
+          cep
+        ).then(res => console.log(res)).catch(err => console.log(err));
+        break;
+      case "advisor":
+        registerService.addAdvisor(
+          name,
+          documetNumber,
+          documetType,
+          country,
+          state,
+          city,
+          cep
+        ).then(res => console.log(res)).catch(err => console.log(err));
+        break;                                                  
       default:
         break;
     }
@@ -81,6 +114,9 @@ function Register({ wallet }) {
               <option value="activist">ACTIVIST</option>
               <option value="contributor">CONTRIBUTOR</option>
               <option value="investor">INVESTOR</option>
+              <option value="developer">DEVELOPER</option>
+              <option value="researcher">RESEARCHER</option>
+              <option value="advisor">ADVISOR</option>
             </select>
           </div>
         </div>
