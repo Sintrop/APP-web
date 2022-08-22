@@ -48,7 +48,6 @@ export default function ISA({user, walletAddress}){
             </div>
 
             <div className='area-categories-isa'>
-                <p className='tit-categories-isa'>Categories</p>
                 {categories.length === 0 ? (
                     <h1>No category registered</h1>
                 ) : (
