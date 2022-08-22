@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
-import "./activist.css";
+import '../../Ranking/ranking.css';
 export default function ActivistRanking({ wallet, setTab }) {
   const activistService = new ActivistService(wallet);
   const [activist, setActivist] = useState([]);

@@ -1,13 +1,37 @@
 import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import './onlyOwner.css';
 
 //services
 import {NewAllowedResearcher} from '../../services/onlyOwnerService';
 
 export default function OnlyOwner(){
+    const navigate = useNavigate();
     const [wallet, setWallet] = useState('');
     const [walletDeveloperPool, setWalletDeveloperPool] = useState('');
+    const [walletConnected, setWalletConnected] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        async function checkConnection(){
+            if(window.ethereum){
+                await window.ethereum.request({
+                    method: 'eth_accounts'
+                })
+                .then((accounts) => {
+                    if(accounts.length == 0){
+                        navigate('/')
+                    }else{
+                        setWalletConnected(accounts[0]);
+                    }
+                })
+                .catch(() => {
+                    console.log('error')
+                })
+            }
+        }
+        checkConnection();
+    },[])
 
     async function addAllowedUser(type){
         if(wallet == ''){
@@ -15,7 +39,7 @@ export default function OnlyOwner(){
         }
         if(type == 'researcher'){
             setLoading(true);
-            await NewAllowedResearcher(wallet, '0x7Fc819D7387350b2A0494b7Fc00ee1A5e036D62A');
+            await NewAllowedResearcher(wallet, walletConnected);
             setLoading(false);
         }
     }
