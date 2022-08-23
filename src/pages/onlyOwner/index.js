@@ -4,6 +4,7 @@ import './onlyOwner.css';
 
 //services
 import {
+    NewAllowedUser,
     NewAllowedResearcher, 
     NewAllowedContributor, 
     NewAllowedAdvisor, 
@@ -45,6 +46,11 @@ export default function OnlyOwner(){
             console.log(walletConnected)
             return;
         }
+        if(type == 'user'){
+            setLoading(true);
+            await NewAllowedUser(wallet, walletConnected);
+            setLoading(false);
+        }
         if(type == 'researcher'){
             setLoading(true);
             await NewAllowedResearcher(wallet, walletConnected);
@@ -52,7 +58,7 @@ export default function OnlyOwner(){
         }
         if(type == 'contributor'){
             setLoading(true);
-            await NewAllowedContributor(wallet, '0xbBd63273de2984e16791425E1D3bb7aF82cf8C11');
+            await NewAllowedContributor(wallet, walletConnected);
             setLoading(false);
         }
         if(type == 'advisor'){
@@ -95,6 +101,12 @@ export default function OnlyOwner(){
                 />
 
                 <div className='container__area-btn'>
+                    <button
+                        className='area-btn__btn-add'
+                        onClick={() => addAllowedUser('user')}
+                    >
+                        Add User
+                    </button>
                     <button
                         className='area-btn__btn-add'
                         onClick={() => addAllowedUser('researcher')}
