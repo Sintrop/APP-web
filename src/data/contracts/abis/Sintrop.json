@@ -30513,8 +30513,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x66693a4A38aFa90E3243C145072527eDcf90F83A",
-      "transactionHash": "0xa1bfc9ac1299cc165f08ddab5f80b12114b20901e1df694dd8bbd0206963080a"
+      "address": "0x805AFD777C05CEd5bD28798736CaB78b0518D110",
+      "transactionHash": "0xd5580b227e54483eb28daf15ba6d3b90e0ea7e3d875531d5266bbbaac1cfb468"
     },
     "1643929708091": {
       "events": {},
@@ -30524,7 +30524,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:42.130Z",
+  "updatedAt": "2022-08-22T19:21:44.092Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Sintrop application to certificated a rural producer",

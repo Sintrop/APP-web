@@ -21148,12 +21148,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xca46C9AE5D1D2631009F22303694b14Af77Cf9e0",
-      "transactionHash": "0x3c931ab5897e7088bb72255d16a57184a80af484d8a0a233616a3fae0332b6f3"
+      "address": "0xE7609B2c61433CB3A5560D121500c63AFE4116E0",
+      "transactionHash": "0x662935f4a5e1cf5c03388da929e4520b86cd1819a8334f0471353c1ca8140f47"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:42.148Z",
+  "updatedAt": "2022-08-22T19:21:44.125Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Producer resource that represent a user that can request a inspection",

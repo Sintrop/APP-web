@@ -7470,7 +7470,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:21.195Z",
+  "updatedAt": "2022-08-22T19:21:09.526Z",
   "devdoc": {
     "author": "Sintrop",
     "details": "Blockable is a contract to manage blocks eras",

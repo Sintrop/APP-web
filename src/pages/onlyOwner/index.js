@@ -3,7 +3,14 @@ import {useNavigate} from 'react-router-dom';
 import './onlyOwner.css';
 
 //services
-import {NewAllowedResearcher} from '../../services/onlyOwnerService';
+import {
+    NewAllowedResearcher, 
+    NewAllowedContributor, 
+    NewAllowedAdvisor, 
+    NewAllowedDeveloper,
+    AddLevel,
+    UndoLevel
+} from '../../services/onlyOwnerService';
 
 export default function OnlyOwner(){
     const navigate = useNavigate();
@@ -35,11 +42,43 @@ export default function OnlyOwner(){
 
     async function addAllowedUser(type){
         if(wallet == ''){
+            console.log(walletConnected)
             return;
         }
         if(type == 'researcher'){
             setLoading(true);
             await NewAllowedResearcher(wallet, walletConnected);
+            setLoading(false);
+        }
+        if(type == 'contributor'){
+            setLoading(true);
+            await NewAllowedContributor(wallet, '0xbBd63273de2984e16791425E1D3bb7aF82cf8C11');
+            setLoading(false);
+        }
+        if(type == 'advisor'){
+            setLoading(true);
+            await NewAllowedAdvisor(wallet, walletConnected);
+            setLoading(false);
+        }
+        if(type == 'developer'){
+            setLoading(true);
+            await NewAllowedDeveloper(wallet, walletConnected);
+            setLoading(false);
+        }
+    }
+
+    async function changeLevelDeveloper(type){
+        if(walletDeveloperPool == ''){
+            return;
+        }
+        if(type == 'addlevel'){
+            setLoading(true);
+            await AddLevel(walletDeveloperPool, walletConnected);
+            setLoading(false);
+        }
+        if(type == 'undolevel'){
+            setLoading(true);
+            await UndoLevel(walletDeveloperPool, walletConnected);
             setLoading(false);
         }
     }
@@ -64,19 +103,19 @@ export default function OnlyOwner(){
                     </button>
                     <button
                         className='area-btn__btn-add'
-                        onClick={() => {}}
+                        onClick={() => addAllowedUser('contributor')}
                     >
                         Add Contributor
                     </button>
                     <button
                         className='area-btn__btn-add'
-                        onClick={() => {}}
+                        onClick={() => addAllowedUser('advisor')}
                     >
                         Add Advisor
                     </button>
                     <button
                         className='area-btn__btn-add'
-                        onClick={() => {}}
+                        onClick={() => addAllowedUser('developer')}
                     >
                         Add Developer
                     </button>
@@ -95,13 +134,13 @@ export default function OnlyOwner(){
                     <div className='container__area-btn'>
                         <button
                             className='area-btn__btn-add'
-                            onClick={() => {}}
+                            onClick={() => changeLevelDeveloper('undolevel')}
                         >
                             Undo Level
                         </button>
                         <button
                             className='area-btn__btn-add'
-                            onClick={() => {}}
+                            onClick={() => changeLevelDeveloper('addlevel')}
                         >
                             Up Level
                         </button>

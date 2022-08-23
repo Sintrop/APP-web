@@ -16925,8 +16925,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xA8D1788EBa6724Ee4c919818Ab4Ad3db693cbD7d",
-      "transactionHash": "0xed60a99569b0cbf1c96bd0faf297cca1cd5b80fa5488807c57a3d927479a2cb4"
+      "address": "0x5D1BbcA7a9391200e5959082E25a5cc7ACc4A4b3",
+      "transactionHash": "0xfb1fac46575f6ab4aa243b11924cedf1e05402ef67d021ccd4d345b5cb86764c"
     },
     "1643929708091": {
       "events": {},
@@ -16936,7 +16936,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:42.112Z",
+  "updatedAt": "2022-08-22T19:21:44.069Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Everson B. Silva",

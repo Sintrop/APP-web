@@ -16196,12 +16196,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xDe7E987b680176a28F7DD9946291FF235380844e",
-      "transactionHash": "0xb25b69e3422f546e8299a43be489407095925fa8ebe67609870c6c7cf623bfa9"
+      "address": "0x19Dbf6d7F0D2082039dDca8Afc868A94D32D9E25",
+      "transactionHash": "0x5a49612e22530e20bc0e1c25c1c2e067500bbabd8fcf4599671814eabf5a9a6f"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:42.100Z",
+  "updatedAt": "2022-08-22T19:21:44.049Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Sintrop",

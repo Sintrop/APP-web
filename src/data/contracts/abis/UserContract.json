@@ -7098,12 +7098,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x7184eD18e1fd1F3367A317EFfbC1A5096411c9C0",
-      "transactionHash": "0x3c27af8fde42bf726a9d932d0e2bb96f7f5e2890858093c0f2da588d04930cd9"
+      "address": "0x60b24F645f4bb6038B7e9e99B0f2EdD0673ad5eC",
+      "transactionHash": "0x85dcfe65db9020cebc36f7291b7505cbc13b49f340b5fdaa28355edecbdf2286"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T15:35:42.239Z",
+  "updatedAt": "2022-08-22T19:21:44.233Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "This contract work as a centralized user's system, where all users has your userType here",

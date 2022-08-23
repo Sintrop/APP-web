@@ -182,7 +182,7 @@ class RegisterService {
 
       if (advisorContract) {
         await advisorContract.methods
-          .addDeveloper(name, document, documentType, country, state, city, cep)
+          .addAdvisor(name, document, documentType, country, state, city, cep)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Advisor registered!")
