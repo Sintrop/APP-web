@@ -1,9 +1,11 @@
 .container-create-category{
     display: flex;
     justify-content: center;
+    align-items: center;
     background-color: rgba(128, 0, 128, 0.273);
     width: 100vw;
     height: 100%;
+    overflow: auto;
     position: absolute;
     top: 0;
     left: 0;
@@ -12,7 +14,7 @@
 
 .card-create-category{
     width: 50vw;
-    height: auto;
+    height: 100vh;
     background-color: #fff;
     border-radius: 10px;
     display: flex;

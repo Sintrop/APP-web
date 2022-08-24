@@ -1,6 +1,7 @@
 .container_realize_inspection{
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .card_category_realize_inspection{
