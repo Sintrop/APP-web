@@ -1,0 +1,39 @@
+.only-owner__container{
+    padding: 15px;
+}
+
+.container__title-wallet{
+    margin: 0;
+}
+
+.only-owner__input-wallet{
+    width: 350px;
+    height: 35px;
+    font-size: 14px;
+}
+
+.container__area-btn{
+    display: flex;
+    margin-top: 15px;
+}
+
+.area-btn__btn-add{
+    padding: 10px;
+    background-color: #fff;
+    border: 2px solid purple;
+    color: purple;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-right: 10px;
+    transition: 0.5s all;
+}
+
+.area-btn__btn-add:hover{
+    cursor: pointer;
+    background-color: purple;
+    color: #fff;
+}
+
+.container__area-developer-pool{
+    margin-top: 15px;
+}

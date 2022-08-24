@@ -69,16 +69,18 @@ export default function ManageInpections({user, walletAddress, setTab}){
                             </thead>
                             <tbody>
                                 {inspections.map(item => {
-                                    return(
-                                        <ItemListInspections
-                                            data={item}
-                                            user={user}
-                                            walletAddress={walletAddress}
-                                            key={item.id}
-                                            reloadInspections={() => getInspections()}
-                                            setTab={(tab, wallet) => setTab(tab, wallet)}
-                                        />
-                                    )
+                                    if(item.status != '2'){
+                                        return(
+                                            <ItemListInspections
+                                                data={item}
+                                                user={user}
+                                                walletAddress={walletAddress}
+                                                key={item.id}
+                                                reloadInspections={() => getInspections()}
+                                                setTab={(tab, wallet) => setTab(tab, wallet)}
+                                            />
+                                        )
+                                    }
                                 })}
                             </tbody>
                         </table>

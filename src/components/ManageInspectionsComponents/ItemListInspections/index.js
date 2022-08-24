@@ -38,9 +38,13 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 </a>
             </td>
             <td>
-                <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
-                    <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
-                </a>
+                {data.status == 0 ? (
+                    <p>No accepted</p>
+                ) : (
+                    <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                        <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                    </a>
+                )}
             </td>
             <td>
                 <p>{data.createdAt}</p>

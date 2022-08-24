@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
-import './producer.css'
+import '../../Ranking/ranking.css';
 export default function ProducerRanking({ wallet, setTab }) {
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([])
@@ -20,6 +20,9 @@ export default function ProducerRanking({ wallet, setTab }) {
 
   return (
     <>
+      <div className='header-isa'>
+        <h1>Producers</h1>          
+      </div>
       <table border="1">
         <tr>
           <th>#</th>
@@ -33,9 +36,21 @@ export default function ProducerRanking({ wallet, setTab }) {
         {producers.map(item => (
           <tr key={item.producerWallet}>
             <td>{item.id}</td>
-            <td><a href='#' onClick={() => setTab('producer-page', item.producerWallet)}>{item.producerWallet}</a></td>
+            <td id='createdByIsaTable'>
+              <a href='#' onClick={() => setTab('producer-page', item.producerWallet)}>
+                <p className="p-wallet" title={item.producerWallet}>
+                  {item.producerWallet}
+                </p>
+              </a>
+            </td>
             <td>{item.name}</td>
-            <td>{item.propertyAddress.map(address => <p>{address}</p>)}</td>
+            <td>
+              <div className="div-address">
+                {item.propertyAddress.map((address) => (
+                  <p>{address},</p>
+                ))}
+              </div>
+            </td>
             <td>{item.totalRequests}</td>
             <td>{item.isa.isaScore}</td>
             <td>{item.isa.isaAverage}</td>

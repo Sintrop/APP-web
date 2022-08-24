@@ -1,0 +1,32 @@
+
+table {
+  width: 98%;
+  margin: 15px;
+  border: 1px solid gray;
+}
+
+th {
+  padding: 5px;
+  background: rgb(201, 201, 201);
+  color: green;
+  border-bottom: 2px solid purple;
+  text-align: left;
+}
+
+td {
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #fff;
+}
+
+.p-wallet{
+  max-width: 15ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.div-address{
+  display: flex;
+}

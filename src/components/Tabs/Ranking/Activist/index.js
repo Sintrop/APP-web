@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
-import "./activist.css";
+import '../../Ranking/ranking.css';
 export default function ActivistRanking({ wallet, setTab }) {
   const activistService = new ActivistService(wallet);
   const [activist, setActivist] = useState([]);
@@ -17,6 +17,9 @@ export default function ActivistRanking({ wallet, setTab }) {
   }, []);
   return (
     <>
+      <div className='header-isa'>
+        <h1>Activists</h1>          
+      </div>
       <table border="1">
         <tr>
           <th>#</th>
@@ -28,14 +31,20 @@ export default function ActivistRanking({ wallet, setTab }) {
         {activist.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>
-              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>{item.activistWallet}</a>
+            <td id='createdByIsaTable'>
+              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>
+                <p className="p-wallet" title={item.activistWallet}>
+                  {item.activistWallet}
+                </p>
+              </a>
             </td>
             <td>{item.name}</td>
             <td>
-              {item.activistAddress.map((address) => (
-                <p>{address}</p>
-              ))}
+              <div className="div-address">
+                {item.activistAddress.map((address) => (
+                  <p>{address},</p>
+                ))}
+              </div>
             </td>
             <td>{item.totalInspections}</td>
           </tr>
