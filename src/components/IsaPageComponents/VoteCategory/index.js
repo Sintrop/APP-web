@@ -6,7 +6,7 @@ import './voteCategory.css';
 import Loading from '../../Loading';
 
 //services
-import {Vote, GetTokensBalance} from '../../../services/voteService';
+import {Vote, Unvote, GetTokensBalance} from '../../../services/voteService';
 
 export default function VoteCategory({close, walletAddress, data, reloadCategories, type}){
     const [tokensBalance, setTokensBalance] = useState(0);
@@ -39,6 +39,15 @@ export default function VoteCategory({close, walletAddress, data, reloadCategori
         reloadCategories();
         close();
     }
+
+    async function unVote(){
+        setLoading(true);
+        await Unvote(data.id, walletAddress);
+        setLoading(false);
+        reloadCategories();
+        close();
+    }
+
     return(
         <div className="container-create-category">
             <div className="card-vote-category">
@@ -55,15 +64,21 @@ export default function VoteCategory({close, walletAddress, data, reloadCategori
                     {type === 'vote' && (
                         <p className='tit-your-balance'>Your balance: {tokensBalance} SAC Tokens</p>
                     )}
-                    
-                    <p>Amount of tokens you want to {type}</p>
-                    <input 
-                        type='number' 
-                        value={sendTokens}
-                        className='input-amount-tokens-vote'
-                        onChange={(e) => setSendTokens(e.target.value)}
-                        placeholder='Amount of tokens'
-                    />
+
+                    {type === 'vote' ? (
+                        <p>Amount of tokens you want to vote</p>
+                    ) : (
+                        <p>Want to withdraw your vote and your tokens from the category?</p>
+                    )}
+                    {type === 'vote' && (
+                        <input 
+                            type='number' 
+                            value={sendTokens}
+                            className='input-amount-tokens-vote'
+                            onChange={(e) => setSendTokens(e.target.value)}
+                            placeholder='Amount of tokens'
+                        />
+                    )}
 
                     {type === 'vote' ? (
                         <button
@@ -75,7 +90,7 @@ export default function VoteCategory({close, walletAddress, data, reloadCategori
                     ) : (
                         <button
                             className='btn-unvote-of-category'
-                            onClick={() => {}}
+                            onClick={() => unVote()}
                         >
                             Unvote
                         </button>

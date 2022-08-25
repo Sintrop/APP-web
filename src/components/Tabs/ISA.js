@@ -30,7 +30,7 @@ export default function ISA({user, walletAddress}){
             <div className='header-isa'>
                 <h1>Sustainable Agriculture Index</h1>
                 <div className='area-btn-header-isa-page'>
-                    {user == 2 && (
+                    {user == 3 && (
                         <button
                             className='btn-new-category-isa'
                             onClick={() => setIsCreateCategory(true)}

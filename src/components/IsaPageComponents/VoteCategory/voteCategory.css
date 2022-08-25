@@ -1,6 +1,6 @@
 .card-vote-category{
     width: 450px;
-    height: 250px;
+    height: auto;
     background-color: #fff;
     display: flex;
     flex-direction: column;

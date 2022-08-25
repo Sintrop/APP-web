@@ -7,7 +7,7 @@ import VoteCategory from '../VoteCategory';
 import Loading from '../../Loading';
 
 //services
-import {IsVoted} from '../../../services/voteService';
+import {IsVoted, GetTokensCategory} from '../../../services/voteService';
 
 export default function ItemsListISA({data, walletAddress, reloadCategories}){
     const [showDetails, setShowDetails] = useState(false);
@@ -15,9 +15,11 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
     const [loading, setLoading] = useState(false);
     const [categoryVoted, setCategoryVoted] = useState(false);
     const [typeModal, setTypeModal] = useState('vote');
+    const [tokens, setTokens] = useState('0');
 
     useEffect(() => {
         checkIsVoted();
+        getTokensCategory();
     },[])
 
     async function checkIsVoted(){
@@ -27,6 +29,11 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
         }else{
             setCategoryVoted(false);
         }
+    }
+
+    async function getTokensCategory(){
+        const response = await GetTokensCategory(data.id);
+        setTokens(response);
     }
 
 
@@ -48,7 +55,7 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
             <td>
                 <p>{data.description}</p>    
             </td>
-            <td>{data.votesCount}</td>
+            <td>{tokens}</td>
             <td id='td-vote-table-isa'>
                 {categoryVoted && (
                     <button
@@ -58,7 +65,7 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
                         }}
                         className='btn-unvote'
                     >
-                        - Unvote
+                        Unvote
                     </button>
                 )}
                 <button

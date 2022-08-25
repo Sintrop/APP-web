@@ -55,3 +55,16 @@ export const IsVoted = async (walletAddress, idCategory) => {
 
     return isVoted;
 }
+
+export const GetTokensCategory = async (idCategory) => {
+    let tokens = '';
+    const web3js = new Web3(window.ethereum);
+    const contractAddress = CategoryContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress);
+    await contract.methods.votes(idCategory).call({from: contractAddress})
+    .then((res) => {
+        tokens = res;
+    })
+
+    return tokens;
+}
