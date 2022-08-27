@@ -21,6 +21,7 @@ import Certificate from '../../components/Tabs/Certificate';
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
 import ActivistRanking from '../../components/Tabs/Ranking/Activist';
+import DevelopersRanking from '../../components/Tabs/Ranking/Developers';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -110,6 +111,16 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'activists' && (
                     <ActivistRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'developers' && (
+                    <DevelopersRanking 
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {

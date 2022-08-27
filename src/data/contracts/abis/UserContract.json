@@ -342,7 +342,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "validator_revert_t_enum$_UserType_$5870",
+                      "name": "validator_revert_t_enum$_UserType_$5897",
                       "nodeType": "YulIdentifier",
                       "src": "265:39:40"
                     },
@@ -354,7 +354,7 @@
                 }
               ]
             },
-            "name": "abi_decode_t_enum$_UserType_$5870",
+            "name": "abi_decode_t_enum$_UserType_$5897",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -776,7 +776,7 @@
                           }
                         ],
                         "functionName": {
-                          "name": "abi_decode_t_enum$_UserType_$5870",
+                          "name": "abi_decode_t_enum$_UserType_$5897",
                           "nodeType": "YulIdentifier",
                           "src": "941:33:40"
                         },
@@ -795,7 +795,7 @@
                 }
               ]
             },
-            "name": "abi_decode_tuple_t_addresst_enum$_UserType_$5870",
+            "name": "abi_decode_tuple_t_addresst_enum$_UserType_$5897",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -971,7 +971,7 @@
                           }
                         ],
                         "functionName": {
-                          "name": "convert_t_enum$_UserType_$5870_to_t_uint8",
+                          "name": "convert_t_enum$_UserType_$5897_to_t_uint8",
                           "nodeType": "YulIdentifier",
                           "src": "1367:41:40"
                         },
@@ -992,7 +992,7 @@
                 }
               ]
             },
-            "name": "abi_encode_t_enum$_UserType_$5870_to_t_uint8_fromStack",
+            "name": "abi_encode_t_enum$_UserType_$5897_to_t_uint8_fromStack",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -2122,7 +2122,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "abi_encode_t_enum$_UserType_$5870_to_t_uint8_fromStack",
+                      "name": "abi_encode_t_enum$_UserType_$5897_to_t_uint8_fromStack",
                       "nodeType": "YulIdentifier",
                       "src": "4381:54:40"
                     },
@@ -2134,7 +2134,7 @@
                 }
               ]
             },
-            "name": "abi_encode_tuple_t_enum$_UserType_$5870__to_t_uint8__fromStack_reversed",
+            "name": "abi_encode_tuple_t_enum$_UserType_$5897__to_t_uint8__fromStack_reversed",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -4138,7 +4138,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "validator_assert_t_enum$_UserType_$5870",
+                      "name": "validator_assert_t_enum$_UserType_$5897",
                       "nodeType": "YulIdentifier",
                       "src": "9123:39:40"
                     },
@@ -4150,7 +4150,7 @@
                 }
               ]
             },
-            "name": "cleanup_t_enum$_UserType_$5870",
+            "name": "cleanup_t_enum$_UserType_$5897",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -4291,7 +4291,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "cleanup_t_enum$_UserType_$5870",
+                      "name": "cleanup_t_enum$_UserType_$5897",
                       "nodeType": "YulIdentifier",
                       "src": "9490:30:40"
                     },
@@ -4308,7 +4308,7 @@
                 }
               ]
             },
-            "name": "convert_t_enum$_UserType_$5870_to_t_uint8",
+            "name": "convert_t_enum$_UserType_$5897_to_t_uint8",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -5447,7 +5447,7 @@
                 }
               ]
             },
-            "name": "validator_assert_t_enum$_UserType_$5870",
+            "name": "validator_assert_t_enum$_UserType_$5897",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -5640,7 +5640,7 @@
                 }
               ]
             },
-            "name": "validator_revert_t_enum$_UserType_$5870",
+            "name": "validator_revert_t_enum$_UserType_$5897",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -5654,7 +5654,7 @@
           }
         ]
       },
-      "contents": "{\n\n    function abi_decode_t_address(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_address(value)\n    }\n\n    function abi_decode_t_enum$_UserType_$5870(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_enum$_UserType_$5870(value)\n    }\n\n    function abi_decode_tuple_t_address(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert(0, 0) }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function abi_decode_tuple_t_addresst_enum$_UserType_$5870(headStart, dataEnd) -> value0, value1 {\n        if slt(sub(dataEnd, headStart), 64) { revert(0, 0) }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address(add(headStart, offset), dataEnd)\n        }\n\n        {\n\n            let offset := 32\n\n            value1 := abi_decode_t_enum$_UserType_$5870(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function abi_encode_t_address_to_t_address_fromStack(value, pos) {\n        mstore(pos, cleanup_t_address(value))\n    }\n\n    function abi_encode_t_bool_to_t_bool_fromStack(value, pos) {\n        mstore(pos, cleanup_t_bool(value))\n    }\n\n    function abi_encode_t_enum$_UserType_$5870_to_t_uint8_fromStack(value, pos) {\n        mstore(pos, convert_t_enum$_UserType_$5870_to_t_uint8(value))\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length)\n        copy_memory_to_memory(add(value, 0x20), pos, length)\n        end := add(pos, round_up_to_mul_of_32(length))\n    }\n\n    function abi_encode_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 38)\n        store_literal_in_memory_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe(pos)\n        end := add(pos, 64)\n    }\n\n    function abi_encode_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 17)\n        store_literal_in_memory_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 19)\n        store_literal_in_memory_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 32)\n        store_literal_in_memory_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 18)\n        store_literal_in_memory_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_uint256_to_t_uint256_fromStack(value, pos) {\n        mstore(pos, cleanup_t_uint256(value))\n    }\n\n    function abi_encode_tuple_t_address__to_t_address__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_address_to_t_address_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_bool_to_t_bool_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_enum$_UserType_$5870__to_t_uint8__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_enum$_UserType_$5870_to_t_uint8_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr__to_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr__fromStack_reversed(headStart , value7, value6, value5, value4, value3, value2, value1, value0) -> tail {\n        tail := add(headStart, 256)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value0,  tail)\n\n        mstore(add(headStart, 32), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value1,  tail)\n\n        mstore(add(headStart, 64), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value2,  tail)\n\n        mstore(add(headStart, 96), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value3,  tail)\n\n        mstore(add(headStart, 128), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value4,  tail)\n\n        mstore(add(headStart, 160), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value5,  tail)\n\n        mstore(add(headStart, 192), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value6,  tail)\n\n        mstore(add(headStart, 224), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value7,  tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_uint256__to_t_uint256__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function array_length_t_string_memory_ptr(value) -> length {\n\n        length := mload(value)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length) -> updated_pos {\n        mstore(pos, length)\n        updated_pos := add(pos, 0x20)\n    }\n\n    function cleanup_t_address(value) -> cleaned {\n        cleaned := cleanup_t_uint160(value)\n    }\n\n    function cleanup_t_bool(value) -> cleaned {\n        cleaned := iszero(iszero(value))\n    }\n\n    function cleanup_t_enum$_UserType_$5870(value) -> cleaned {\n        cleaned := value validator_assert_t_enum$_UserType_$5870(value)\n    }\n\n    function cleanup_t_uint160(value) -> cleaned {\n        cleaned := and(value, 0xffffffffffffffffffffffffffffffffffffffff)\n    }\n\n    function cleanup_t_uint256(value) -> cleaned {\n        cleaned := value\n    }\n\n    function convert_t_enum$_UserType_$5870_to_t_uint8(value) -> converted {\n        converted := cleanup_t_enum$_UserType_$5870(value)\n    }\n\n    function copy_memory_to_memory(src, dst, length) {\n        let i := 0\n        for { } lt(i, length) { i := add(i, 32) }\n        {\n            mstore(add(dst, i), mload(add(src, i)))\n        }\n        if gt(i, length)\n        {\n            // clear end\n            mstore(add(dst, length), 0)\n        }\n    }\n\n    function increment_t_uint256(value) -> ret {\n        value := cleanup_t_uint256(value)\n        if eq(value, 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) { panic_error_0x11() }\n        ret := add(value, 1)\n    }\n\n    function panic_error_0x11() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n\n    function panic_error_0x21() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x21)\n        revert(0, 0x24)\n    }\n\n    function round_up_to_mul_of_32(value) -> result {\n        result := and(add(value, 31), not(31))\n    }\n\n    function store_literal_in_memory_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe(memPtr) {\n\n        mstore(add(memPtr, 0), \"Ownable: new owner is the zero a\")\n\n        mstore(add(memPtr, 32), \"ddress\")\n\n    }\n\n    function store_literal_in_memory_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca(memPtr) {\n\n        mstore(add(memPtr, 0), \"Invalid user type\")\n\n    }\n\n    function store_literal_in_memory_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd(memPtr) {\n\n        mstore(add(memPtr, 0), \"User already exists\")\n\n    }\n\n    function store_literal_in_memory_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe(memPtr) {\n\n        mstore(add(memPtr, 0), \"Ownable: caller is not the owner\")\n\n    }\n\n    function store_literal_in_memory_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455(memPtr) {\n\n        mstore(add(memPtr, 0), \"Not allowed caller\")\n\n    }\n\n    function validator_assert_t_enum$_UserType_$5870(value) {\n        if iszero(lt(value, 8)) { panic_error_0x21() }\n    }\n\n    function validator_revert_t_address(value) {\n        if iszero(eq(value, cleanup_t_address(value))) { revert(0, 0) }\n    }\n\n    function validator_revert_t_enum$_UserType_$5870(value) {\n        if iszero(lt(value, 8)) { revert(0, 0) }\n    }\n\n}\n",
+      "contents": "{\n\n    function abi_decode_t_address(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_address(value)\n    }\n\n    function abi_decode_t_enum$_UserType_$5897(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_enum$_UserType_$5897(value)\n    }\n\n    function abi_decode_tuple_t_address(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert(0, 0) }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function abi_decode_tuple_t_addresst_enum$_UserType_$5897(headStart, dataEnd) -> value0, value1 {\n        if slt(sub(dataEnd, headStart), 64) { revert(0, 0) }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address(add(headStart, offset), dataEnd)\n        }\n\n        {\n\n            let offset := 32\n\n            value1 := abi_decode_t_enum$_UserType_$5897(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function abi_encode_t_address_to_t_address_fromStack(value, pos) {\n        mstore(pos, cleanup_t_address(value))\n    }\n\n    function abi_encode_t_bool_to_t_bool_fromStack(value, pos) {\n        mstore(pos, cleanup_t_bool(value))\n    }\n\n    function abi_encode_t_enum$_UserType_$5897_to_t_uint8_fromStack(value, pos) {\n        mstore(pos, convert_t_enum$_UserType_$5897_to_t_uint8(value))\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length)\n        copy_memory_to_memory(add(value, 0x20), pos, length)\n        end := add(pos, round_up_to_mul_of_32(length))\n    }\n\n    function abi_encode_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 38)\n        store_literal_in_memory_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe(pos)\n        end := add(pos, 64)\n    }\n\n    function abi_encode_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 17)\n        store_literal_in_memory_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 19)\n        store_literal_in_memory_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 32)\n        store_literal_in_memory_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 18)\n        store_literal_in_memory_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_t_uint256_to_t_uint256_fromStack(value, pos) {\n        mstore(pos, cleanup_t_uint256(value))\n    }\n\n    function abi_encode_tuple_t_address__to_t_address__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_address_to_t_address_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_bool__to_t_bool__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_bool_to_t_bool_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_enum$_UserType_$5897__to_t_uint8__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_enum$_UserType_$5897_to_t_uint8_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function abi_encode_tuple_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr__to_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr_t_string_memory_ptr__fromStack_reversed(headStart , value7, value6, value5, value4, value3, value2, value1, value0) -> tail {\n        tail := add(headStart, 256)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value0,  tail)\n\n        mstore(add(headStart, 32), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value1,  tail)\n\n        mstore(add(headStart, 64), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value2,  tail)\n\n        mstore(add(headStart, 96), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value3,  tail)\n\n        mstore(add(headStart, 128), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value4,  tail)\n\n        mstore(add(headStart, 160), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value5,  tail)\n\n        mstore(add(headStart, 192), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value6,  tail)\n\n        mstore(add(headStart, 224), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value7,  tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function abi_encode_tuple_t_uint256__to_t_uint256__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function array_length_t_string_memory_ptr(value) -> length {\n\n        length := mload(value)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length) -> updated_pos {\n        mstore(pos, length)\n        updated_pos := add(pos, 0x20)\n    }\n\n    function cleanup_t_address(value) -> cleaned {\n        cleaned := cleanup_t_uint160(value)\n    }\n\n    function cleanup_t_bool(value) -> cleaned {\n        cleaned := iszero(iszero(value))\n    }\n\n    function cleanup_t_enum$_UserType_$5897(value) -> cleaned {\n        cleaned := value validator_assert_t_enum$_UserType_$5897(value)\n    }\n\n    function cleanup_t_uint160(value) -> cleaned {\n        cleaned := and(value, 0xffffffffffffffffffffffffffffffffffffffff)\n    }\n\n    function cleanup_t_uint256(value) -> cleaned {\n        cleaned := value\n    }\n\n    function convert_t_enum$_UserType_$5897_to_t_uint8(value) -> converted {\n        converted := cleanup_t_enum$_UserType_$5897(value)\n    }\n\n    function copy_memory_to_memory(src, dst, length) {\n        let i := 0\n        for { } lt(i, length) { i := add(i, 32) }\n        {\n            mstore(add(dst, i), mload(add(src, i)))\n        }\n        if gt(i, length)\n        {\n            // clear end\n            mstore(add(dst, length), 0)\n        }\n    }\n\n    function increment_t_uint256(value) -> ret {\n        value := cleanup_t_uint256(value)\n        if eq(value, 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) { panic_error_0x11() }\n        ret := add(value, 1)\n    }\n\n    function panic_error_0x11() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n\n    function panic_error_0x21() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x21)\n        revert(0, 0x24)\n    }\n\n    function round_up_to_mul_of_32(value) -> result {\n        result := and(add(value, 31), not(31))\n    }\n\n    function store_literal_in_memory_245f15ff17f551913a7a18385165551503906a406f905ac1c2437281a7cd0cfe(memPtr) {\n\n        mstore(add(memPtr, 0), \"Ownable: new owner is the zero a\")\n\n        mstore(add(memPtr, 32), \"ddress\")\n\n    }\n\n    function store_literal_in_memory_64fa55d775d2c4b3380ffb5ec6eb8eb8b12f404cce863d4118e97b9acf3a5fca(memPtr) {\n\n        mstore(add(memPtr, 0), \"Invalid user type\")\n\n    }\n\n    function store_literal_in_memory_72a6a651fb4cd9ff87b3ff041092e509401f47f92bb4122586fcb66064d104bd(memPtr) {\n\n        mstore(add(memPtr, 0), \"User already exists\")\n\n    }\n\n    function store_literal_in_memory_9924ebdf1add33d25d4ef888e16131f0a5687b0580a36c21b5c301a6c462effe(memPtr) {\n\n        mstore(add(memPtr, 0), \"Ownable: caller is not the owner\")\n\n    }\n\n    function store_literal_in_memory_9d898125dc05c77250301953367fc2dc589e7e9fca218c1a9c762d89c5fae455(memPtr) {\n\n        mstore(add(memPtr, 0), \"Not allowed caller\")\n\n    }\n\n    function validator_assert_t_enum$_UserType_$5897(value) {\n        if iszero(lt(value, 8)) { panic_error_0x21() }\n    }\n\n    function validator_revert_t_address(value) {\n        if iszero(eq(value, cleanup_t_address(value))) { revert(0, 0) }\n    }\n\n    function validator_revert_t_enum$_UserType_$5897(value) {\n        if iszero(lt(value, 8)) { revert(0, 0) }\n    }\n\n}\n",
       "id": 40,
       "language": "Yul",
       "name": "#utility.yul"
@@ -5663,7 +5663,7 @@
   "sourceMap": "321:1556:28:-:0;;;;;;;;;;;;;921:32:0;940:12;:10;;;:12;;:::i;:::-;921:18;;;:32;;:::i;:::-;321:1556:28;;640:96:4;693:7;719:10;712:17;;640:96;:::o;2270:187:0:-;2343:16;2362:6;;;;;;;;;;;2343:25;;2387:8;2378:6;;:17;;;;;;;;;;;;;;;;;;2441:8;2410:40;;2431:8;2410:40;;;;;;;;;;;;2270:187;;:::o;321:1556:28:-;;;;;;;",
   "deployedSourceMap": "321:1556:28:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1085:428;;;:::i;:::-;;;;;;;;;;;;;;:::i;:::-;;;;;;;;419:25;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;921:93;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;1668:101:0;;;:::i;:::-;;165:46:9;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;1036:85:0;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;218:103:9;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;604:177:28;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;327:110:9;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;1918:198:0;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;1085:428:28;1150:13;1172;1194;1216;1238;1260;1282;1304;1335:172;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1085:428;;;;;;;;:::o;419:25::-;;;;:::o;921:93::-;973:8;997:5;:11;1003:4;997:11;;;;;;;;;;;;;;;;;;;;;;;;;990:18;;921:93;;;:::o;1668:101:0:-;1259:12;:10;:12::i;:::-;1248:23;;:7;:5;:7::i;:::-;:23;;;1240:68;;;;;;;;;;;;:::i;:::-;;;;;;;;;1732:30:::1;1759:1;1732:18;:30::i;:::-;1668:101::o:0;165:46:9:-;;;;;;;;;;;;;;;;;;;;;;:::o;1036:85:0:-;1082:7;1108:6;;;;;;;;;;;1101:13;;1036:85;:::o;218:103:9:-;1259:12:0;:10;:12::i;:::-;1248:23;;:7;:5;:7::i;:::-;:23;;;1240:68;;;;;;;;;;;;:::i;:::-;;;;;;;;;311:4:9::1;285:14:::0;:23:::1;300:7;285:23;;;;;;;;;;;;;;;;:30;;;;;;;;;;;;;;;;;;218:103:::0;:::o;604:177:28:-;489:14:9;:26;504:10;489:26;;;;;;;;;;;;;;;;;;;;;;;;;481:57;;;;;;;;;;;;:::i;:::-;;;;;;;;;695:4:28::1;1603:18;1588:33;;;;;;;;;;;;;;;;:5;:11;1594:4;1588:11;;;;;;;;;;;;;;;;;;;;;;;;;:33;;;;;;;;;;;;;;;;;1580:65;;;;;;;;;;;;:::i;:::-;;;;;;;;;717:8:::2;1819:18;1807:30;;;;;;;;;;;;;;;;:8;:30;;;;;;;;;;;;;;;;;;1799:60;;;;;;;;;;;;:::i;:::-;;;;;;;;;748:8:::3;734:5;:11;740:4;734:11;;;;;;;;;;;;;;;;:22;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;763:10;;:12;;;;;;;;;:::i;:::-;;;;;;1652:1:::2;545::9::1;604:177:28::0;;:::o;327:110:9:-;389:4;409:14;:22;424:6;409:22;;;;;;;;;;;;;;;;;;;;;;;;;402:29;;327:110;;;:::o;1918:198:0:-;1259:12;:10;:12::i;:::-;1248:23;;:7;:5;:7::i;:::-;:23;;;1240:68;;;;;;;;;;;;:::i;:::-;;;;;;;;;2026:1:::1;2006:22;;:8;:22;;;;1998:73;;;;;;;;;;;;:::i;:::-;;;;;;;;;2081:28;2100:8;2081:18;:28::i;:::-;1918:198:::0;:::o;640:96:4:-;693:7;719:10;712:17;;640:96;:::o;2270:187:0:-;2343:16;2362:6;;;;;;;;;;;2343:25;;2387:8;2378:6;;:17;;;;;;;;;;;;;;;;;;2441:8;2410:40;;2431:8;2410:40;;;;;;;;;;;;2270:187;;:::o;7:139:40:-;;91:6;78:20;69:29;;107:33;134:5;107:33;:::i;:::-;59:87;;;;:::o;152:165::-;;249:6;236:20;227:29;;265:46;305:5;265:46;:::i;:::-;217:100;;;;:::o;323:262::-;;431:2;419:9;410:7;406:23;402:32;399:2;;;447:1;444;437:12;399:2;490:1;515:53;560:7;551:6;540:9;536:22;515:53;:::i;:::-;505:63;;461:117;389:196;;;;:::o;591:433::-;;;729:2;717:9;708:7;704:23;700:32;697:2;;;745:1;742;735:12;697:2;788:1;813:53;858:7;849:6;838:9;834:22;813:53;:::i;:::-;803:63;;759:117;915:2;941:66;999:7;990:6;979:9;975:22;941:66;:::i;:::-;931:76;;886:131;687:337;;;;;:::o;1030:118::-;1117:24;1135:5;1117:24;:::i;:::-;1112:3;1105:37;1095:53;;:::o;1154:109::-;1235:21;1250:5;1235:21;:::i;:::-;1230:3;1223:34;1213:50;;:::o;1269:153::-;1367:48;1409:5;1367:48;:::i;:::-;1362:3;1355:61;1345:77;;:::o;1428:364::-;;1544:39;1577:5;1544:39;:::i;:::-;1599:71;1663:6;1658:3;1599:71;:::i;:::-;1592:78;;1679:52;1724:6;1719:3;1712:4;1705:5;1701:16;1679:52;:::i;:::-;1756:29;1778:6;1756:29;:::i;:::-;1751:3;1747:39;1740:46;;1520:272;;;;;:::o;1798:366::-;;1961:67;2025:2;2020:3;1961:67;:::i;:::-;1954:74;;2037:93;2126:3;2037:93;:::i;:::-;2155:2;2150:3;2146:12;2139:19;;1944:220;;;:::o;2170:366::-;;2333:67;2397:2;2392:3;2333:67;:::i;:::-;2326:74;;2409:93;2498:3;2409:93;:::i;:::-;2527:2;2522:3;2518:12;2511:19;;2316:220;;;:::o;2542:366::-;;2705:67;2769:2;2764:3;2705:67;:::i;:::-;2698:74;;2781:93;2870:3;2781:93;:::i;:::-;2899:2;2894:3;2890:12;2883:19;;2688:220;;;:::o;2914:366::-;;3077:67;3141:2;3136:3;3077:67;:::i;:::-;3070:74;;3153:93;3242:3;3153:93;:::i;:::-;3271:2;3266:3;3262:12;3255:19;;3060:220;;;:::o;3286:366::-;;3449:67;3513:2;3508:3;3449:67;:::i;:::-;3442:74;;3525:93;3614:3;3525:93;:::i;:::-;3643:2;3638:3;3634:12;3627:19;;3432:220;;;:::o;3658:118::-;3745:24;3763:5;3745:24;:::i;:::-;3740:3;3733:37;3723:53;;:::o;3782:222::-;;3913:2;3902:9;3898:18;3890:26;;3926:71;3994:1;3983:9;3979:17;3970:6;3926:71;:::i;:::-;3880:124;;;;:::o;4010:210::-;;4135:2;4124:9;4120:18;4112:26;;4148:65;4210:1;4199:9;4195:17;4186:6;4148:65;:::i;:::-;4102:118;;;;:::o;4226:244::-;;4368:2;4357:9;4353:18;4345:26;;4381:82;4460:1;4449:9;4445:17;4436:6;4381:82;:::i;:::-;4335:135;;;;:::o;4476:1725::-;;4963:3;4952:9;4948:19;4940:27;;5013:9;5007:4;5003:20;4999:1;4988:9;4984:17;4977:47;5041:78;5114:4;5105:6;5041:78;:::i;:::-;5033:86;;5166:9;5160:4;5156:20;5151:2;5140:9;5136:18;5129:48;5194:78;5267:4;5258:6;5194:78;:::i;:::-;5186:86;;5319:9;5313:4;5309:20;5304:2;5293:9;5289:18;5282:48;5347:78;5420:4;5411:6;5347:78;:::i;:::-;5339:86;;5472:9;5466:4;5462:20;5457:2;5446:9;5442:18;5435:48;5500:78;5573:4;5564:6;5500:78;:::i;:::-;5492:86;;5626:9;5620:4;5616:20;5610:3;5599:9;5595:19;5588:49;5654:78;5727:4;5718:6;5654:78;:::i;:::-;5646:86;;5780:9;5774:4;5770:20;5764:3;5753:9;5749:19;5742:49;5808:78;5881:4;5872:6;5808:78;:::i;:::-;5800:86;;5934:9;5928:4;5924:20;5918:3;5907:9;5903:19;5896:49;5962:78;6035:4;6026:6;5962:78;:::i;:::-;5954:86;;6088:9;6082:4;6078:20;6072:3;6061:9;6057:19;6050:49;6116:78;6189:4;6180:6;6116:78;:::i;:::-;6108:86;;4930:1271;;;;;;;;;;;:::o;6207:419::-;;6411:2;6400:9;6396:18;6388:26;;6460:9;6454:4;6450:20;6446:1;6435:9;6431:17;6424:47;6488:131;6614:4;6488:131;:::i;:::-;6480:139;;6378:248;;;:::o;6632:419::-;;6836:2;6825:9;6821:18;6813:26;;6885:9;6879:4;6875:20;6871:1;6860:9;6856:17;6849:47;6913:131;7039:4;6913:131;:::i;:::-;6905:139;;6803:248;;;:::o;7057:419::-;;7261:2;7250:9;7246:18;7238:26;;7310:9;7304:4;7300:20;7296:1;7285:9;7281:17;7274:47;7338:131;7464:4;7338:131;:::i;:::-;7330:139;;7228:248;;;:::o;7482:419::-;;7686:2;7675:9;7671:18;7663:26;;7735:9;7729:4;7725:20;7721:1;7710:9;7706:17;7699:47;7763:131;7889:4;7763:131;:::i;:::-;7755:139;;7653:248;;;:::o;7907:419::-;;8111:2;8100:9;8096:18;8088:26;;8160:9;8154:4;8150:20;8146:1;8135:9;8131:17;8124:47;8188:131;8314:4;8188:131;:::i;:::-;8180:139;;8078:248;;;:::o;8332:222::-;;8463:2;8452:9;8448:18;8440:26;;8476:71;8544:1;8533:9;8529:17;8520:6;8476:71;:::i;:::-;8430:124;;;;:::o;8560:99::-;;8646:5;8640:12;8630:22;;8619:40;;;:::o;8665:169::-;;8783:6;8778:3;8771:19;8823:4;8818:3;8814:14;8799:29;;8761:73;;;;:::o;8840:96::-;;8906:24;8924:5;8906:24;:::i;:::-;8895:35;;8885:51;;;:::o;8942:90::-;;9019:5;9012:13;9005:21;8994:32;;8984:48;;;:::o;9038:137::-;;9117:5;9106:16;;9123:46;9163:5;9123:46;:::i;:::-;9096:79;;;:::o;9181:126::-;;9258:42;9251:5;9247:54;9236:65;;9226:81;;;:::o;9313:77::-;;9379:5;9368:16;;9358:32;;;:::o;9396:137::-;;9490:37;9521:5;9490:37;:::i;:::-;9477:50;;9467:66;;;:::o;9539:307::-;9607:1;9617:113;9631:6;9628:1;9625:13;9617:113;;;9716:1;9711:3;9707:11;9701:18;9697:1;9692:3;9688:11;9681:39;9653:2;9650:1;9646:10;9641:15;;9617:113;;;9748:6;9745:1;9742:13;9739:2;;;9828:1;9819:6;9814:3;9810:16;9803:27;9739:2;9588:258;;;;:::o;9852:233::-;;9914:24;9932:5;9914:24;:::i;:::-;9905:33;;9960:66;9953:5;9950:77;9947:2;;;10030:18;;:::i;:::-;9947:2;10077:1;10070:5;10066:13;10059:20;;9895:190;;;:::o;10091:180::-;10139:77;10136:1;10129:88;10236:4;10233:1;10226:15;10260:4;10257:1;10250:15;10277:180;10325:77;10322:1;10315:88;10422:4;10419:1;10412:15;10446:4;10443:1;10436:15;10463:102;;10555:2;10551:7;10546:2;10539:5;10535:14;10531:28;10521:38;;10511:54;;;:::o;10571:225::-;10711:34;10707:1;10699:6;10695:14;10688:58;10780:8;10775:2;10767:6;10763:15;10756:33;10677:119;:::o;10802:167::-;10942:19;10938:1;10930:6;10926:14;10919:43;10908:61;:::o;10975:169::-;11115:21;11111:1;11103:6;11099:14;11092:45;11081:63;:::o;11150:182::-;11290:34;11286:1;11278:6;11274:14;11267:58;11256:76;:::o;11338:168::-;11478:20;11474:1;11466:6;11462:14;11455:44;11444:62;:::o;11512:118::-;11598:1;11591:5;11588:12;11578:2;;11604:18;;:::i;:::-;11578:2;11568:62;:::o;11636:122::-;11709:24;11727:5;11709:24;:::i;:::-;11702:5;11699:35;11689:2;;11748:1;11745;11738:12;11689:2;11679:79;:::o;11764:112::-;11850:1;11843:5;11840:12;11830:2;;11866:1;11863;11856:12;11830:2;11820:56;:::o",
   "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity >=0.7.0 <=0.9.0;\r\n\r\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\r\nimport \"./types/UserTypes.sol\";\r\nimport \"./Callable.sol\";\r\n\r\n/**\r\n * @title UserContract\r\n * @dev This contract work as a centralized user's system, where all users has your userType here\r\n */\r\ncontract UserContract is Ownable, Callable {\r\n  mapping(address => UserType) internal users;\r\n\r\n  uint256 public usersCount;\r\n\r\n  /**\r\n   * @dev Add new user in the system\r\n   * @param addr The address of the user\r\n   * @param userType The type of the user - enum UserType\r\n   */\r\n  function addUser(address addr, UserType userType) public mustBeAllowedCaller mustNotExists(addr) mustBeValidType(userType) {\r\n    users[addr] = userType;\r\n    usersCount++;\r\n  }\r\n\r\n  /**\r\n   * @dev Returns the user type if the user is registered\r\n   * @param addr the user address that want check if exists\r\n   */\r\n  function getUser(address addr) public view returns (UserType) {\r\n    return users[addr];\r\n  }\r\n\r\n  /**\r\n   * @dev Returns the enum UserType of the system\r\n   */\r\n  function userTypes()\r\n    public\r\n    pure\r\n    returns (\r\n      string memory,\r\n      string memory,\r\n      string memory,\r\n      string memory,\r\n      string memory,\r\n      string memory,\r\n      string memory,\r\n      string memory\r\n    )\r\n  {\r\n    return (\r\n      \"UNDEFINED\",\r\n      \"PRODUCER\",\r\n      \"ACTIVIST\",\r\n      \"RESEARCHER\",\r\n      \"DEVELOPER\",\r\n      \"ADVISOR\",\r\n      \"CONTRIBUTOR\",\r\n      \"INVESTOR\"\r\n    );\r\n  }\r\n\r\n  // MODIFIER\r\n\r\n  modifier mustNotExists(address addr) {\r\n    require(users[addr] == UserType.UNDEFINED, \"User already exists\");\r\n    _;\r\n  }\r\n\r\n  /**\r\n   * @dev Modifier to check if user type is UNDEFINED when register\r\n   */\r\n  modifier mustBeValidType(UserType userType) {\r\n    require(userType != UserType.UNDEFINED, \"Invalid user type\");\r\n     _;\r\n  }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\emano\\Documents\\Sintrop\\Testes Branchs\\core-contracts\\contracts\\UserContract.sol",
+  "sourcePath": "C:\\Users\\Bruno\\OneDrive\\Área de Trabalho\\sintrop-projects\\core-contracts\\contracts\\UserContract.sol",
   "ast": {
     "absolutePath": "project:/contracts/UserContract.sol",
     "exportedSymbols": {
@@ -5677,18 +5677,18 @@
         104
       ],
       "UserContract": [
-        5541
+        5568
       ],
       "UserType": [
-        5870
+        5897
       ]
     },
-    "id": 5542,
+    "id": 5569,
     "license": "GPL-3.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5421,
+        "id": 5448,
         "literals": [
           "solidity",
           ">=",
@@ -5704,10 +5704,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 5422,
+        "id": 5449,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5542,
+        "scope": 5569,
         "sourceUnit": 105,
         "src": "73:52:28",
         "symbolAliases": [],
@@ -5716,11 +5716,11 @@
       {
         "absolutePath": "project:/contracts/types/UserTypes.sol",
         "file": "./types/UserTypes.sol",
-        "id": 5423,
+        "id": 5450,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5542,
-        "sourceUnit": 5871,
+        "scope": 5569,
+        "sourceUnit": 5898,
         "src": "127:31:28",
         "symbolAliases": [],
         "unitAlias": ""
@@ -5728,10 +5728,10 @@
       {
         "absolutePath": "project:/contracts/Callable.sol",
         "file": "./Callable.sol",
-        "id": 5424,
+        "id": 5451,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5542,
+        "scope": 5569,
         "sourceUnit": 1819,
         "src": "160:24:28",
         "symbolAliases": [],
@@ -5742,25 +5742,25 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5426,
+              "id": 5453,
               "name": "Ownable",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 104,
               "src": "346:7:28"
             },
-            "id": 5427,
+            "id": 5454,
             "nodeType": "InheritanceSpecifier",
             "src": "346:7:28"
           },
           {
             "baseName": {
-              "id": 5428,
+              "id": 5455,
               "name": "Callable",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 1818,
               "src": "355:8:28"
             },
-            "id": 5429,
+            "id": 5456,
             "nodeType": "InheritanceSpecifier",
             "src": "355:8:28"
           }
@@ -5772,15 +5772,15 @@
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 5425,
+          "id": 5452,
           "nodeType": "StructuredDocumentation",
           "src": "188:131:28",
           "text": " @title UserContract\n @dev This contract work as a centralized user's system, where all users has your userType here"
         },
         "fullyImplemented": true,
-        "id": 5541,
+        "id": 5568,
         "linearizedBaseContracts": [
-          5541,
+          5568,
           1818,
           104,
           817
@@ -5791,23 +5791,23 @@
         "nodes": [
           {
             "constant": false,
-            "id": 5434,
+            "id": 5461,
             "mutability": "mutable",
             "name": "users",
             "nameLocation": "407:5:28",
             "nodeType": "VariableDeclaration",
-            "scope": 5541,
+            "scope": 5568,
             "src": "369:43:28",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5870_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5897_$",
               "typeString": "mapping(address => enum UserType)"
             },
             "typeName": {
-              "id": 5433,
+              "id": 5460,
               "keyType": {
-                "id": 5430,
+                "id": 5457,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "377:7:28",
@@ -5819,23 +5819,23 @@
               "nodeType": "Mapping",
               "src": "369:28:28",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5870_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5897_$",
                 "typeString": "mapping(address => enum UserType)"
               },
               "valueType": {
-                "id": 5432,
+                "id": 5459,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 5431,
+                  "id": 5458,
                   "name": "UserType",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 5870,
+                  "referencedDeclaration": 5897,
                   "src": "388:8:28"
                 },
-                "referencedDeclaration": 5870,
+                "referencedDeclaration": 5897,
                 "src": "388:8:28",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_UserType_$5870",
+                  "typeIdentifier": "t_enum$_UserType_$5897",
                   "typeString": "enum UserType"
                 }
               }
@@ -5845,12 +5845,12 @@
           {
             "constant": false,
             "functionSelector": "6ba13a82",
-            "id": 5436,
+            "id": 5463,
             "mutability": "mutable",
             "name": "usersCount",
             "nameLocation": "434:10:28",
             "nodeType": "VariableDeclaration",
-            "scope": 5541,
+            "scope": 5568,
             "src": "419:25:28",
             "stateVariable": true,
             "storageLocation": "default",
@@ -5859,7 +5859,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 5435,
+              "id": 5462,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "419:7:28",
@@ -5872,37 +5872,37 @@
           },
           {
             "body": {
-              "id": 5462,
+              "id": 5489,
               "nodeType": "Block",
               "src": "727:54:28",
               "statements": [
                 {
                   "expression": {
-                    "id": 5457,
+                    "id": 5484,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 5453,
+                        "id": 5480,
                         "name": "users",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5434,
+                        "referencedDeclaration": 5461,
                         "src": "734:5:28",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5870_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5897_$",
                           "typeString": "mapping(address => enum UserType)"
                         }
                       },
-                      "id": 5455,
+                      "id": 5482,
                       "indexExpression": {
-                        "id": 5454,
+                        "id": 5481,
                         "name": "addr",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5439,
+                        "referencedDeclaration": 5466,
                         "src": "740:4:28",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -5916,37 +5916,37 @@
                       "nodeType": "IndexAccess",
                       "src": "734:11:28",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_UserType_$5870",
+                        "typeIdentifier": "t_enum$_UserType_$5897",
                         "typeString": "enum UserType"
                       }
                     },
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5456,
+                      "id": 5483,
                       "name": "userType",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5442,
+                      "referencedDeclaration": 5469,
                       "src": "748:8:28",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_UserType_$5870",
+                        "typeIdentifier": "t_enum$_UserType_$5897",
                         "typeString": "enum UserType"
                       }
                     },
                     "src": "734:22:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   },
-                  "id": 5458,
+                  "id": 5485,
                   "nodeType": "ExpressionStatement",
                   "src": "734:22:28"
                 },
                 {
                   "expression": {
-                    "id": 5460,
+                    "id": 5487,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5956,11 +5956,11 @@
                     "prefix": false,
                     "src": "763:12:28",
                     "subExpression": {
-                      "id": 5459,
+                      "id": 5486,
                       "name": "usersCount",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5436,
+                      "referencedDeclaration": 5463,
                       "src": "763:10:28",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5972,27 +5972,27 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 5461,
+                  "id": 5488,
                   "nodeType": "ExpressionStatement",
                   "src": "763:12:28"
                 }
               ]
             },
             "documentation": {
-              "id": 5437,
+              "id": 5464,
               "nodeType": "StructuredDocumentation",
               "src": "451:149:28",
               "text": " @dev Add new user in the system\n @param addr The address of the user\n @param userType The type of the user - enum UserType"
             },
             "functionSelector": "9c3eead9",
-            "id": 5463,
+            "id": 5490,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5445,
+                "id": 5472,
                 "modifierName": {
-                  "id": 5444,
+                  "id": 5471,
                   "name": "mustBeAllowedCaller",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 1817,
@@ -6004,11 +6004,11 @@
               {
                 "arguments": [
                   {
-                    "id": 5447,
+                    "id": 5474,
                     "name": "addr",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 5439,
+                    "referencedDeclaration": 5466,
                     "src": "695:4:28",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -6016,12 +6016,12 @@
                     }
                   }
                 ],
-                "id": 5448,
+                "id": 5475,
                 "modifierName": {
-                  "id": 5446,
+                  "id": 5473,
                   "name": "mustNotExists",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 5524,
+                  "referencedDeclaration": 5551,
                   "src": "681:13:28"
                 },
                 "nodeType": "ModifierInvocation",
@@ -6030,24 +6030,24 @@
               {
                 "arguments": [
                   {
-                    "id": 5450,
+                    "id": 5477,
                     "name": "userType",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 5442,
+                    "referencedDeclaration": 5469,
                     "src": "717:8:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   }
                 ],
-                "id": 5451,
+                "id": 5478,
                 "modifierName": {
-                  "id": 5449,
+                  "id": 5476,
                   "name": "mustBeValidType",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 5540,
+                  "referencedDeclaration": 5567,
                   "src": "701:15:28"
                 },
                 "nodeType": "ModifierInvocation",
@@ -6058,17 +6058,17 @@
             "nameLocation": "613:7:28",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5443,
+              "id": 5470,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5439,
+                  "id": 5466,
                   "mutability": "mutable",
                   "name": "addr",
                   "nameLocation": "629:4:28",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5463,
+                  "scope": 5490,
                   "src": "621:12:28",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6077,7 +6077,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5438,
+                    "id": 5465,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "621:7:28",
@@ -6091,33 +6091,33 @@
                 },
                 {
                   "constant": false,
-                  "id": 5442,
+                  "id": 5469,
                   "mutability": "mutable",
                   "name": "userType",
                   "nameLocation": "644:8:28",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5463,
+                  "scope": 5490,
                   "src": "635:17:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_UserType_$5870",
+                    "typeIdentifier": "t_enum$_UserType_$5897",
                     "typeString": "enum UserType"
                   },
                   "typeName": {
-                    "id": 5441,
+                    "id": 5468,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 5440,
+                      "id": 5467,
                       "name": "UserType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 5870,
+                      "referencedDeclaration": 5897,
                       "src": "635:8:28"
                     },
-                    "referencedDeclaration": 5870,
+                    "referencedDeclaration": 5897,
                     "src": "635:8:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   },
@@ -6127,12 +6127,12 @@
               "src": "620:33:28"
             },
             "returnParameters": {
-              "id": 5452,
+              "id": 5479,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "727:0:28"
             },
-            "scope": 5541,
+            "scope": 5568,
             "src": "604:177:28",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -6140,31 +6140,31 @@
           },
           {
             "body": {
-              "id": 5476,
+              "id": 5503,
               "nodeType": "Block",
               "src": "983:31:28",
               "statements": [
                 {
                   "expression": {
                     "baseExpression": {
-                      "id": 5472,
+                      "id": 5499,
                       "name": "users",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5434,
+                      "referencedDeclaration": 5461,
                       "src": "997:5:28",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5870_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5897_$",
                         "typeString": "mapping(address => enum UserType)"
                       }
                     },
-                    "id": 5474,
+                    "id": 5501,
                     "indexExpression": {
-                      "id": 5473,
+                      "id": 5500,
                       "name": "addr",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5466,
+                      "referencedDeclaration": 5493,
                       "src": "1003:4:28",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -6178,25 +6178,25 @@
                     "nodeType": "IndexAccess",
                     "src": "997:11:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   },
-                  "functionReturnParameters": 5471,
-                  "id": 5475,
+                  "functionReturnParameters": 5498,
+                  "id": 5502,
                   "nodeType": "Return",
                   "src": "990:18:28"
                 }
               ]
             },
             "documentation": {
-              "id": 5464,
+              "id": 5491,
               "nodeType": "StructuredDocumentation",
               "src": "787:130:28",
               "text": " @dev Returns the user type if the user is registered\n @param addr the user address that want check if exists"
             },
             "functionSelector": "6f77926b",
-            "id": 5477,
+            "id": 5504,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -6204,17 +6204,17 @@
             "nameLocation": "930:7:28",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5467,
+              "id": 5494,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5466,
+                  "id": 5493,
                   "mutability": "mutable",
                   "name": "addr",
                   "nameLocation": "946:4:28",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5477,
+                  "scope": 5504,
                   "src": "938:12:28",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6223,7 +6223,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5465,
+                    "id": 5492,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "938:7:28",
@@ -6239,38 +6239,38 @@
               "src": "937:14:28"
             },
             "returnParameters": {
-              "id": 5471,
+              "id": 5498,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5470,
+                  "id": 5497,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5477,
+                  "scope": 5504,
                   "src": "973:8:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_UserType_$5870",
+                    "typeIdentifier": "t_enum$_UserType_$5897",
                     "typeString": "enum UserType"
                   },
                   "typeName": {
-                    "id": 5469,
+                    "id": 5496,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 5468,
+                      "id": 5495,
                       "name": "UserType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 5870,
+                      "referencedDeclaration": 5897,
                       "src": "973:8:28"
                     },
-                    "referencedDeclaration": 5870,
+                    "referencedDeclaration": 5897,
                     "src": "973:8:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   },
@@ -6279,7 +6279,7 @@
               ],
               "src": "972:10:28"
             },
-            "scope": 5541,
+            "scope": 5568,
             "src": "921:93:28",
             "stateMutability": "view",
             "virtual": false,
@@ -6287,7 +6287,7 @@
           },
           {
             "body": {
-              "id": 5507,
+              "id": 5534,
               "nodeType": "Block",
               "src": "1328:185:28",
               "statements": [
@@ -6296,7 +6296,7 @@
                     "components": [
                       {
                         "hexValue": "554e444546494e4544",
-                        "id": 5497,
+                        "id": 5524,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6312,7 +6312,7 @@
                       },
                       {
                         "hexValue": "50524f4455434552",
-                        "id": 5498,
+                        "id": 5525,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6328,7 +6328,7 @@
                       },
                       {
                         "hexValue": "4143544956495354",
-                        "id": 5499,
+                        "id": 5526,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6344,7 +6344,7 @@
                       },
                       {
                         "hexValue": "52455345415243484552",
-                        "id": 5500,
+                        "id": 5527,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6360,7 +6360,7 @@
                       },
                       {
                         "hexValue": "444556454c4f504552",
-                        "id": 5501,
+                        "id": 5528,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6376,7 +6376,7 @@
                       },
                       {
                         "hexValue": "41445649534f52",
-                        "id": 5502,
+                        "id": 5529,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6392,7 +6392,7 @@
                       },
                       {
                         "hexValue": "434f4e5452494255544f52",
-                        "id": 5503,
+                        "id": 5530,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6408,7 +6408,7 @@
                       },
                       {
                         "hexValue": "494e564553544f52",
-                        "id": 5504,
+                        "id": 5531,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6423,7 +6423,7 @@
                         "value": "INVESTOR"
                       }
                     ],
-                    "id": 5505,
+                    "id": 5532,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -6436,21 +6436,21 @@
                       "typeString": "tuple(literal_string \"UNDEFINED\",literal_string \"PRODUCER\",literal_string \"ACTIVIST\",literal_string \"RESEARCHER\",literal_string \"DEVELOPER\",literal_string \"ADVISOR\",literal_string \"CONTRIBUTOR\",literal_string \"INVESTOR\")"
                     }
                   },
-                  "functionReturnParameters": 5496,
-                  "id": 5506,
+                  "functionReturnParameters": 5523,
+                  "id": 5533,
                   "nodeType": "Return",
                   "src": "1335:172:28"
                 }
               ]
             },
             "documentation": {
-              "id": 5478,
+              "id": 5505,
               "nodeType": "StructuredDocumentation",
               "src": "1020:61:28",
               "text": " @dev Returns the enum UserType of the system"
             },
             "functionSelector": "2fadee0a",
-            "id": 5508,
+            "id": 5535,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -6458,23 +6458,23 @@
             "nameLocation": "1094:9:28",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5479,
+              "id": 5506,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1103:2:28"
             },
             "returnParameters": {
-              "id": 5496,
+              "id": 5523,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5481,
+                  "id": 5508,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1150:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6483,7 +6483,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5480,
+                    "id": 5507,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1150:6:28",
@@ -6496,12 +6496,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5483,
+                  "id": 5510,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1172:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6510,7 +6510,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5482,
+                    "id": 5509,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1172:6:28",
@@ -6523,12 +6523,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5485,
+                  "id": 5512,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1194:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6537,7 +6537,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5484,
+                    "id": 5511,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1194:6:28",
@@ -6550,12 +6550,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5487,
+                  "id": 5514,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1216:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6564,7 +6564,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5486,
+                    "id": 5513,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1216:6:28",
@@ -6577,12 +6577,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5489,
+                  "id": 5516,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1238:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6591,7 +6591,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5488,
+                    "id": 5515,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1238:6:28",
@@ -6604,12 +6604,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5491,
+                  "id": 5518,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1260:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6618,7 +6618,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5490,
+                    "id": 5517,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1260:6:28",
@@ -6631,12 +6631,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5493,
+                  "id": 5520,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1282:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6645,7 +6645,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5492,
+                    "id": 5519,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1282:6:28",
@@ -6658,12 +6658,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5495,
+                  "id": 5522,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5508,
+                  "scope": 5535,
                   "src": "1304:13:28",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6672,7 +6672,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5494,
+                    "id": 5521,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1304:6:28",
@@ -6686,7 +6686,7 @@
               ],
               "src": "1141:183:28"
             },
-            "scope": 5541,
+            "scope": 5568,
             "src": "1085:428:28",
             "stateMutability": "pure",
             "virtual": false,
@@ -6694,7 +6694,7 @@
           },
           {
             "body": {
-              "id": 5523,
+              "id": 5550,
               "nodeType": "Block",
               "src": "1573:86:28",
               "statements": [
@@ -6703,34 +6703,34 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_UserType_$5870",
+                          "typeIdentifier": "t_enum$_UserType_$5897",
                           "typeString": "enum UserType"
                         },
-                        "id": 5518,
+                        "id": 5545,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "baseExpression": {
-                            "id": 5513,
+                            "id": 5540,
                             "name": "users",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5434,
+                            "referencedDeclaration": 5461,
                             "src": "1588:5:28",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5870_$",
+                              "typeIdentifier": "t_mapping$_t_address_$_t_enum$_UserType_$5897_$",
                               "typeString": "mapping(address => enum UserType)"
                             }
                           },
-                          "id": 5515,
+                          "id": 5542,
                           "indexExpression": {
-                            "id": 5514,
+                            "id": 5541,
                             "name": "addr",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5510,
+                            "referencedDeclaration": 5537,
                             "src": "1594:4:28",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -6744,7 +6744,7 @@
                           "nodeType": "IndexAccess",
                           "src": "1588:11:28",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_UserType_$5870",
+                            "typeIdentifier": "t_enum$_UserType_$5897",
                             "typeString": "enum UserType"
                           }
                         },
@@ -6752,28 +6752,28 @@
                         "operator": "==",
                         "rightExpression": {
                           "expression": {
-                            "id": 5516,
+                            "id": 5543,
                             "name": "UserType",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5870,
+                            "referencedDeclaration": 5897,
                             "src": "1603:8:28",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_UserType_$5870_$",
+                              "typeIdentifier": "t_type$_t_enum$_UserType_$5897_$",
                               "typeString": "type(enum UserType)"
                             }
                           },
-                          "id": 5517,
+                          "id": 5544,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "UNDEFINED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5862,
+                          "referencedDeclaration": 5889,
                           "src": "1603:18:28",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_UserType_$5870",
+                            "typeIdentifier": "t_enum$_UserType_$5897",
                             "typeString": "enum UserType"
                           }
                         },
@@ -6785,7 +6785,7 @@
                       },
                       {
                         "hexValue": "5573657220616c726561647920657869737473",
-                        "id": 5519,
+                        "id": 5546,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6811,7 +6811,7 @@
                           "typeString": "literal_string \"User already exists\""
                         }
                       ],
-                      "id": 5512,
+                      "id": 5539,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -6825,7 +6825,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5520,
+                    "id": 5547,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -6840,33 +6840,33 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5521,
+                  "id": 5548,
                   "nodeType": "ExpressionStatement",
                   "src": "1580:65:28"
                 },
                 {
-                  "id": 5522,
+                  "id": 5549,
                   "nodeType": "PlaceholderStatement",
                   "src": "1652:1:28"
                 }
               ]
             },
-            "id": 5524,
+            "id": 5551,
             "name": "mustNotExists",
             "nameLocation": "1545:13:28",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5511,
+              "id": 5538,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5510,
+                  "id": 5537,
                   "mutability": "mutable",
                   "name": "addr",
                   "nameLocation": "1567:4:28",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5524,
+                  "scope": 5551,
                   "src": "1559:12:28",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6875,7 +6875,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5509,
+                    "id": 5536,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1559:7:28",
@@ -6896,7 +6896,7 @@
           },
           {
             "body": {
-              "id": 5539,
+              "id": 5566,
               "nodeType": "Block",
               "src": "1792:82:28",
               "statements": [
@@ -6905,23 +6905,23 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_UserType_$5870",
+                          "typeIdentifier": "t_enum$_UserType_$5897",
                           "typeString": "enum UserType"
                         },
-                        "id": 5534,
+                        "id": 5561,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 5531,
+                          "id": 5558,
                           "name": "userType",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5528,
+                          "referencedDeclaration": 5555,
                           "src": "1807:8:28",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_UserType_$5870",
+                            "typeIdentifier": "t_enum$_UserType_$5897",
                             "typeString": "enum UserType"
                           }
                         },
@@ -6929,28 +6929,28 @@
                         "operator": "!=",
                         "rightExpression": {
                           "expression": {
-                            "id": 5532,
+                            "id": 5559,
                             "name": "UserType",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5870,
+                            "referencedDeclaration": 5897,
                             "src": "1819:8:28",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_UserType_$5870_$",
+                              "typeIdentifier": "t_type$_t_enum$_UserType_$5897_$",
                               "typeString": "type(enum UserType)"
                             }
                           },
-                          "id": 5533,
+                          "id": 5560,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "UNDEFINED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5862,
+                          "referencedDeclaration": 5889,
                           "src": "1819:18:28",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_UserType_$5870",
+                            "typeIdentifier": "t_enum$_UserType_$5897",
                             "typeString": "enum UserType"
                           }
                         },
@@ -6962,7 +6962,7 @@
                       },
                       {
                         "hexValue": "496e76616c696420757365722074797065",
-                        "id": 5535,
+                        "id": 5562,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6988,7 +6988,7 @@
                           "typeString": "literal_string \"Invalid user type\""
                         }
                       ],
-                      "id": 5530,
+                      "id": 5557,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -7002,7 +7002,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5536,
+                    "id": 5563,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7017,60 +7017,60 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5537,
+                  "id": 5564,
                   "nodeType": "ExpressionStatement",
                   "src": "1799:60:28"
                 },
                 {
-                  "id": 5538,
+                  "id": 5565,
                   "nodeType": "PlaceholderStatement",
                   "src": "1867:1:28"
                 }
               ]
             },
             "documentation": {
-              "id": 5525,
+              "id": 5552,
               "nodeType": "StructuredDocumentation",
               "src": "1665:79:28",
               "text": " @dev Modifier to check if user type is UNDEFINED when register"
             },
-            "id": 5540,
+            "id": 5567,
             "name": "mustBeValidType",
             "nameLocation": "1757:15:28",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5529,
+              "id": 5556,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5528,
+                  "id": 5555,
                   "mutability": "mutable",
                   "name": "userType",
                   "nameLocation": "1782:8:28",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5540,
+                  "scope": 5567,
                   "src": "1773:17:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_UserType_$5870",
+                    "typeIdentifier": "t_enum$_UserType_$5897",
                     "typeString": "enum UserType"
                   },
                   "typeName": {
-                    "id": 5527,
+                    "id": 5554,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 5526,
+                      "id": 5553,
                       "name": "UserType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 5870,
+                      "referencedDeclaration": 5897,
                       "src": "1773:8:28"
                     },
-                    "referencedDeclaration": 5870,
+                    "referencedDeclaration": 5897,
                     "src": "1773:8:28",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserType_$5870",
+                      "typeIdentifier": "t_enum$_UserType_$5897",
                       "typeString": "enum UserType"
                     }
                   },
@@ -7084,7 +7084,7 @@
             "visibility": "internal"
           }
         ],
-        "scope": 5542,
+        "scope": 5569,
         "src": "321:1556:28"
       }
     ],
@@ -7098,12 +7098,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x60b24F645f4bb6038B7e9e99B0f2EdD0673ad5eC",
-      "transactionHash": "0x85dcfe65db9020cebc36f7291b7505cbc13b49f340b5fdaa28355edecbdf2286"
+      "address": "0x2B655D8215eE36Fa8a3c78B04B3449BC5A186902",
+      "transactionHash": "0x681d179cf0f625af8a4c0bd86034995dcb3b47d77ed868c9818af2f9c2f798f8"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-22T19:21:44.233Z",
+  "updatedAt": "2022-08-27T13:34:08.583Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "This contract work as a centralized user's system, where all users has your userType here",
