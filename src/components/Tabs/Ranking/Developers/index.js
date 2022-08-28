@@ -9,8 +9,8 @@ export default function DevelopersRanking({ wallet, setTab }) {
       .getDeveloperRanking()
       .then((res) => {
         if(res.length > 0){
-          // let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
-          setActivist(res);
+          let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.level[0]) - parseInt(a.level[0]))
+          setActivist(activistSort);
         }
         console.log(res)
       })
@@ -33,21 +33,21 @@ export default function DevelopersRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>
-                <p className="p-wallet" title={item.activistWallet}>
-                  {item.activistWallet}
+              <a href="#" onClick={() => setTab('activist-page', item.developerWallet)}>
+                <p className="p-wallet" title={item.developerWallet}>
+                  {item.developerWallet}
                 </p>
               </a>
             </td>
             <td>{item.name}</td>
             <td>
               <div className="div-address">
-                {item.activistAddress.map((address) => (
-                  <p>{address},</p>
+                {item.userAddress.map((address) => (
+                  <p key={`${item.cep}-${Math.random()}`}>{address},</p>
                 ))}
               </div>
             </td>
-            <td>{item.totalInspections}</td>
+            <td>{item.level[0]}</td>
           </tr>
         ))}
       </table>
