@@ -131,7 +131,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity >=0.7.0 <=0.9.0;\r\n\r\ninterface SacTokenInterface {\r\n  function balanceOf(address tokenOwner) external view returns (uint256);\r\n\r\n  function allowance(address owner, address delegate) external view returns (uint256);\r\n\r\n  function approveWith(address delegate, uint256 numTokens) external returns (uint256);\r\n\r\n  function transferWith(address tokenOwner, uint256 numTokens) external returns (bool);\r\n\r\n  function transferFrom(\r\n    address owner,\r\n    address to,\r\n    uint256 numTokens\r\n  ) external returns (bool);\r\n}\r\n",
-  "sourcePath": "C:\\Users\\Bruno\\OneDrive\\Área de Trabalho\\sintrop-projects\\core-contracts\\contracts\\SacTokenInterface.sol",
+  "sourcePath": "C:\\Users\\bruno.mestres\\Desktop\\Nova pasta (2)\\core-contracts\\contracts\\SacTokenInterface.sol",
   "ast": {
     "absolutePath": "project:/contracts/SacTokenInterface.sol",
     "exportedSymbols": {
@@ -740,8 +740,8 @@
     "version": "0.8.2+commit.661d1103.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-27T13:33:38.858Z",
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-08-29T17:23:59.961Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

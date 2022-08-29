@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import InvestorService from "../../../../services/investorService";
+import ResearchersService from "../../../../services/researchersService";
 import '../../Ranking/ranking.css';
-export default function InvestorRanking({ wallet, setTab }) {
-  const investorService = new InvestorService(wallet);
-  const [investor, setInvestor] = useState([]);
+export default function ResearchersRanking({ wallet, setTab }) {
+  const researchersService = new ResearchersService(wallet);
+  const [researchers, setResearchers] = useState([]);
   useEffect(() => {
-    investorService
-      .getInvestorRanking()
+    researchersService
+      .getResearcherRanking()
       .then((res) => {
         if(res.length > 0){
-          let investorSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
-          setInvestor(investorSort);
+        //   let investorSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
+          setResearchers(res);
+          console.log(res)
         }
       })
       .catch((err) => console.log(err));
@@ -25,7 +26,7 @@ export default function InvestorRanking({ wallet, setTab }) {
           <th>Address</th>
           <th>Inspections Realized</th>
         </tr>
-        {investor.map((item) => (
+        {researchers.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>

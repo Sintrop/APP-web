@@ -22,6 +22,9 @@ import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
 import ActivistRanking from '../../components/Tabs/Ranking/Activist';
 import DevelopersRanking from '../../components/Tabs/Ranking/Developers';
+import ContributorsRanking from '../../components/Tabs/Ranking/Contributors';
+import InvestorRanking from '../../components/Tabs/Ranking/Investor';
+import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -121,6 +124,36 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'developers' && (
                     <DevelopersRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'contributors' && (
+                    <ContributorsRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'investors' && (
+                    <InvestorRanking 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'researchers' && (
+                    <ResearchersRanking
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {

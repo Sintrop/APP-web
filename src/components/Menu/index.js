@@ -39,9 +39,10 @@ export default function Menu({ changeTab }) {
       subItem: [
         { id: "producers", label: "Producers" },
         { id: "activists", label: "Activists" },
+        { id: "investors", label: "Investor" },
         { id: "developers", label: "Developers" },
         { id: "contributors", label: "Contributors" },
-        { id: "researchers ", label: "Researchers " },
+        { id: "researchers", label: "Researchers" },
       ],
     },
     { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
