@@ -12,7 +12,6 @@ export default function AdvisorsRanking({ wallet, setTab }) {
         //   let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.level[0]) - parseInt(a.level[0]))
         setAdvisors(res);
         }
-        console.log(res)
       })
       .catch((err) => console.log(err));
   }, []);
@@ -27,27 +26,27 @@ export default function AdvisorsRanking({ wallet, setTab }) {
           <th>Wallet</th>
           <th>Name</th>
           <th>Address</th>
-          <th>Developer Level</th>
+          {/* <th>Developer Level</th> */}
         </tr>
         {advisors.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('activist-page', item.developerWallet)}>
-                <p className="p-wallet" title={item.developerWallet}>
-                  {item.developerWallet}
+              <a href="#" onClick={() => setTab('activist-page', item.advisorWallet)}>
+                <p className="p-wallet" title={item.advisorWallet}>
+                  {item.advisorWallet}
                 </p>
               </a>
             </td>
             <td>{item.name}</td>
             <td>
               <div className="div-address">
-                {item.userAddress.map((address) => (
+                {item.advisorAddress.map((address) => (
                   <p key={`${item.cep}-${Math.random()}`}>{address},</p>
                 ))}
               </div>
             </td>
-            <td></td>
+            {/* <td></td> */}
           </tr>
         ))}
       </table>

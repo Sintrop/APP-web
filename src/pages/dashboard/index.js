@@ -25,6 +25,7 @@ import DevelopersRanking from '../../components/Tabs/Ranking/Developers';
 import ContributorsRanking from '../../components/Tabs/Ranking/Contributors';
 import InvestorRanking from '../../components/Tabs/Ranking/Investor';
 import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
+import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -154,6 +155,16 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'researchers' && (
                     <ResearchersRanking
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'advisors' && (
+                    <AdvisorsRanking
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {
