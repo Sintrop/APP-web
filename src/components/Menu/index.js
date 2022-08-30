@@ -29,12 +29,12 @@ export default function Menu({ changeTab }) {
       icon: IconAcceptedInspection,
       action: "",
     },
-    { id: "producers", title: "Producers", icon: IconProducers, action: "" },
-    { id: "activists", title: "Activists", icon: IconActivists, action: "" },
+    // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
+    // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
     {
       id: "rankings",
       title: "Ranking",
-      icon: "",
+      icon: IconActivists,
       action: "",
       subItem: [
         { id: "producers", label: "Producers" },
