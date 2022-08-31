@@ -26,7 +26,7 @@ export default function ContributorsRanking({ wallet, setTab }) {
           <th>Wallet</th>
           <th>Name</th>
           <th>Address</th>
-         // <th>Developer Level</th>
+         {/* <th>Developer Level</th> */}
         </tr>
         {activist.map((item) => (
           <tr key={item.id}>
