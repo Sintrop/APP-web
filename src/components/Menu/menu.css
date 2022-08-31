@@ -35,3 +35,14 @@
     font-weight: bold;
     color: green;
 }
+
+.subItem {
+    color: green;
+    margin-left: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.subItem:hover {
+    background-color: #ddd;
+}
