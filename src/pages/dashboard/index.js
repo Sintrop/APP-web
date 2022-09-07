@@ -16,6 +16,7 @@ import ProducerPage from '../../components/Tabs/ProducerPage';
 import ActivistPage from '../../components/Tabs/ActivistPage';
 import MyAccount from '../../components/Tabs/MyAccount';
 import Certificate from '../../components/Tabs/Certificate';
+import DevelopersPool from '../../components/Tabs/Pools/Developers';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -184,6 +185,10 @@ export default function Dashboard(){
                 )}
                 {activeTab === 'certificate' && (
                     <Certificate userType={user} wallet={walletAddress}/>
+                )}
+
+                {activeTab === 'developers-pool' && (
+                    <DevelopersPool user={user} wallet={walletAddress}/>
                 )}
             </div>
         </div>

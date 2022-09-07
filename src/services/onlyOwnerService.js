@@ -5,6 +5,7 @@ import ContributorContract from '../data/contracts/abis/ContributorContract.json
 import AdvisorContract from '../data/contracts/abis/AdvisorContract.json';
 import DeveloperContract from '../data/contracts/abis/DeveloperContract.json';
 import DeveloperPool from '../data/contracts/abis/DeveloperPool.json';
+import SACTokenContract from '../data/contracts/abis/SacToken.json';
 
 export const NewAllowedUser = async (walletUser, walletAdm) => {
     const web3js = new Web3(window.ethereum);
@@ -95,6 +96,20 @@ export const UndoLevel = async (walletDeveloper, walletAdm) => {
     const contractAddress = DeveloperPool.networks[5777].address;
     const contract = new web3js.eth.Contract(DeveloperPool.abi, contractAddress);
     await contract.methods.undoLevel(walletDeveloper).send({from: walletAdm})
+    .on('transactionHash', hash => {
+        if(hash){
+            return hash
+        }else{
+            return false
+        }
+    })
+}
+
+export const AddContractPool = async (walletAdm, addressContract, numTokens) => {
+    const web3js = new Web3(window.ethereum);
+    const contractAddress = SACTokenContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(SACTokenContract.abi, contractAddress);
+    await contract.methods.addContractPool(addressContract, numTokens).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash

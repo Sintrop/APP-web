@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './producerPage.css';
 
+import AvatarDefault from '../../../assets/img/avatar02.png';
+
 //services
 import {GetProducer} from '../../../services/producerService';
 import {GetInspections} from '../../../services/manageInspectionsService';
@@ -32,9 +34,7 @@ export default function ProducerPage({wallet}){
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
                     <div className='area-avatar__producer-page'>
-                        <div className='avatar__producer-page'>
-
-                        </div>
+                        <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Producer Wallet: </h1>
                             <a className='description-cards-info__producer-page' href='/producer-page'>
