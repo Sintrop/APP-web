@@ -26,7 +26,7 @@ export default function DetailsCategoryIsa({data, close}){
                     <p className='title-details-category-isa'>Category Description</p>
                     <p className='description-details-category-isa'>{data.description}</p>
 
-                    <p className='title-details-category-isa'>Category Tutorialy</p>
+                    <p className='title-details-category-isa'>Category Tutorial</p>
                     <p className='description-details-category-isa'>{data.tutorial}</p>
 
                     <p className='title-details-category-isa'>Totally Sustainable</p>

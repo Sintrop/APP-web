@@ -35,7 +35,7 @@ export default function ResearchersRanking({ wallet, setTab }) {
             <td>
               <a
                 href="#"
-                onClick={() => setTab("investor-page", item.researcherWallet)}
+                onClick={() => setTab("researcher-page", item.researcherWallet)}
               >
                 {item.researcherWallet}
               </a>

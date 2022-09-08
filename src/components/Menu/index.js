@@ -34,7 +34,7 @@ export default function Menu({ changeTab }) {
     // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
     {
       id: "rankings",
-      title: "Ranking",
+      title: "Community",
       icon: IconActivists,
       action: "",
       subItem: [

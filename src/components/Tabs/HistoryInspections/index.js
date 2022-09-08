@@ -54,7 +54,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Inspected At</th>
+                                <th>Updated At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

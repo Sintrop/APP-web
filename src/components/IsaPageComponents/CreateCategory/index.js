@@ -86,14 +86,14 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
                         placeholder='Description of category'
                     />
 
-                    <label for='description-category-isa'>Tutorialy</label>
+                    <label for='description-category-isa'>Tutorial</label>
                     <input
                         type='text'
                         id='description-category-isa'
                         value={tutorial}
                         onChange={(e) => setTutorial(e.target.value)}
                         className='input-form-isa'
-                        placeholder='Category assessment tutorialy'
+                        placeholder='Category assessment tutorial'
                     />
 
                     <label for='totally-sustainable-category-isa'>Totally Sustainable</label>

@@ -53,7 +53,9 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
                 </p>
             </td>
             <td>
-                <p>{data.description}</p>    
+                <p className='p-description-category-isa'>
+                    {data.description}
+                </p>    
             </td>
             <td>{tokens}</td>
             <td id='td-vote-table-isa'>

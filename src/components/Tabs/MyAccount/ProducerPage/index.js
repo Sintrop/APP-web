@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import './producerPage.css';
 
-import AvatarDefault from '../../../assets/img/avatar02.png';
+import AvatarDefault from '../../../../assets/img/avatar02.png';
 
 //services
-import {GetProducer} from '../../../services/producerService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import {GetProducer} from '../../../../services/producerService';
+import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
-import ItemInspection from '../../ProducerPageComponents/ItemInspection';
+import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ProducerPage({wallet}){
     const [producerData, setProducerData] = useState([]);
@@ -37,7 +37,7 @@ export default function ProducerPage({wallet}){
                         <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Producer Wallet: </h1>
-                            <a className='description-cards-info__producer-page' href='/producer-page'>
+                            <a className='description-cards-info__producer-page' href={`/account-producer/${producerData.producerWallet}`}>
                                 {producerData === [] ? '' : producerData.producerWallet}
                             </a>
                         </div>

@@ -167,30 +167,6 @@ export default function OnlyOwner(){
                         </button>
                     </div>
                 </div>
-
-                <div className='container__area-developer-pool'>
-                    <h3 className='container__title-wallet'>Add Contract Pool</h3>
-                    <input
-                        className='only-owner__input-wallet' 
-                        type='text' 
-                        placeholder='Address Contract'
-                        value={addressContract}
-                        onChange={(e) => setAddressContract(e.target.value)}
-                    />
-                    <input
-                        className='only-owner__input-wallet' 
-                        type='numeric' 
-                        placeholder='Num Tokens'
-                        value={numTokens}
-                        onChange={(e) => setNumTokens(e.target.value)}
-                    />
-                    <button
-                        className='area-btn__btn-add'
-                        onClick={() => addContractPool()}
-                    >
-                        Add Contract Pool
-                    </button>
-                </div>
         </div>
     )
 }

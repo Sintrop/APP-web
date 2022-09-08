@@ -1,5 +1,6 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import '../../../ManageInspectionsComponents/ItemListInspections/itemListInspections.css';
+import {format} from 'date-fns';
 
 import Loading from '../../../Loading';
 import ModalSeeResult from '../../../ManageInspectionsComponents/ModalSeeResult';
@@ -11,7 +12,17 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [updatedAt, setUpdatedAt] = useState('');
 
+    useEffect(() => {
+        timestampToDate();
+    }, []);
+
+    function timestampToDate(){
+        const time = parseInt(data.updatedAt);
+        let date = new Date(time*1000);
+        setUpdatedAt(format(date, "dd/MM/yyyy - kk:mm"))
+    }
 
     return(
         <tr key={data.id}>
@@ -21,15 +32,19 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 </a>
             </td>
             <td>
-                <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
-                    <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
-                </a>
+                {data.status == 0 ? (
+                    <p>No accepted</p>
+                ) : (
+                    <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                        <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
+                    </a>
+                )}
             </td>
             <td>
                 <p>{data.createdAt}</p>
             </td>
             <td>
-                
+            
             </td>
             <td>
                 {data.status == '0' && (
@@ -49,7 +64,7 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 )}
             </td>
             <td>
-
+                <p>{updatedAt}</p>
             </td>
             <td>
                 <p>{data.isaScore}</p>

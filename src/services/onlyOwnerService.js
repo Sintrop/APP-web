@@ -79,8 +79,8 @@ export const NewAllowedDeveloper = async (walletDeveloper, walletAdm) => {
 
 export const AddLevel = async (walletDeveloper, walletAdm) => {
     const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperPool.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperPool.abi, contractAddress);
+    const contractAddress = DeveloperContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
     await contract.methods.addLevel(walletDeveloper).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
@@ -93,9 +93,9 @@ export const AddLevel = async (walletDeveloper, walletAdm) => {
 
 export const UndoLevel = async (walletDeveloper, walletAdm) => {
     const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperPool.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperPool.abi, contractAddress);
-    await contract.methods.undoLevel(walletDeveloper).send({from: walletAdm})
+    const contractAddress = DeveloperContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
+    await contract.methods.removeLevel(walletDeveloper, 1).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash

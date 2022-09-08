@@ -11,16 +11,19 @@ import {
     GetBalanceDeveloper,
     AproveTokens,
     WithdrawTokens,
-    GetDevelopers
+    GetDevelopers,
+    TokensPerEra
 } from '../../../../services/developersPoolService';
 import DevelopersService from '../../../../services/developersService';
 
 import DeveloperItem from './DeveloperItem';
+import Loading from '../../../Loading';
 
 export default function DevelopersPool({user, wallet}){
     const developerService = new DevelopersService(wallet);
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
+    const [tokensPerEra, setTokensPerEra] = useState('0');
     const [currentEra, setCurrentEra] = useState('0');
     const [eraInfo, setEraInfo] = useState([]);
     const [developerInfo, setDeveloperInfo] = useState([]);
@@ -34,10 +37,13 @@ export default function DevelopersPool({user, wallet}){
     },[]);
 
     async function getInfosPool(){
+        setLoading(true);
         const developers = await GetDevelopers();
         setDevelopersList(developers);
         const totalTokens = await GetBalancePool();
         setTotalSACTokens(totalTokens);
+        const tokensPerEra = await TokensPerEra();
+        setTokensPerEra(tokensPerEra);
         const currentEra = await GetEraContract();
         setCurrentEra(currentEra);
         const eraInfo = await GetEra(parseFloat(currentEra));
@@ -51,19 +57,23 @@ export default function DevelopersPool({user, wallet}){
             setTokensAllowed(tokensAllowed);
             const balanceDeveloper = await GetBalanceDeveloper(wallet);
             setBalanceDeveloper(balanceDeveloper);
+            setLoading(false);
         }
+        setLoading(false);
     }
 
     async function aproveTokens(){
         setLoading(true);
         await AproveTokens(wallet)
         setLoading(false);
+        getInfosPool();
     }
 
     async function withdraw(){
         setLoading(true);
         await WithdrawTokens(wallet, tokensAllowed);
         setLoading(false);
+        getInfosPool();
     }
 
     return(
@@ -75,26 +85,35 @@ export default function DevelopersPool({user, wallet}){
             {user === '4' && (
                 <div className='area-stats-developer'>
                     <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>My Level</h1>
-                        <p className='card__title p-level'>
-                            {developerInfo.level === undefined ? '0' : developerInfo.level.level}
+                        <h1 className='card__title'>Your Status</h1>
+                        <p className='p'>
+                            Level: {developerInfo.level === undefined ? '0' : developerInfo.level.level}
+                        </p>
+                        <p className='p'>
+                            Current Era: {developerInfo.level === undefined ? '0' : developerInfo.level.currentEra}
                         </p>
                     </div>
                     <div className='stats-developer__card card-stats'>
                         <h1 className='card__title'>Balance</h1>
-                        <p className='p'>Allowed: {parseFloat(tokensAllowed) / 1000000000000000000}</p>
-                        <p className='p'>Cleared: {parseFloat(balanceDeveloper) / 1000000000000000000}</p>
-                        <p className='p'>Total: {parseFloat(tokensAllowed) / 1000000000000000000 + parseFloat(balanceDeveloper) / 1000000000000000000}</p>
+                        <p className='p'>Allowed: {parseFloat(tokensAllowed) / 10**18}</p>
+                        <p className='p'>Cleared: {parseFloat(balanceDeveloper) / 10**18}</p>
+                        <p className='p'>Total: {parseFloat(tokensAllowed) / 10**18 + parseFloat(balanceDeveloper) / 10**18}</p>
                     </div>
 
-                    <button 
-                        className="btn-create-create-category"
-                        onClick={() => aproveTokens()}
-                    >Aprove</button>
-                    <button 
-                        className='btn-new-category-isa'
-                        onClick={() => withdraw()}
-                    >Withdraw</button>
+                    {parseFloat(nextAprove) < 1 && (
+                        <button 
+                            className="btn-create-create-category"
+                            onClick={() => aproveTokens()}
+                        >Aprove Tokens</button>
+                    )}
+
+                    {parseFloat(tokensAllowed) > 0 && (
+                        <button 
+                            className='btn-new-category-isa'
+                            onClick={() => withdraw()}
+                        >Withdraw</button>
+                    )}
+                    
                 </div>
             )}
             
@@ -102,10 +121,10 @@ export default function DevelopersPool({user, wallet}){
                 <div className='stats-developer__card card-pool'>
                     <h1 className='card__title'>Developers Pool 1.0</h1>
                     <h2 className='card__subtitle'>Total SAC Tokens</h2>
-                    <p className='p'>{parseFloat(totalSACTokens) / 1000000000000000000}</p>
+                    <p className='p'>{parseFloat(totalSACTokens) / 10**18}</p>
 
                     <h2 className='card__subtitle'>Tokens Per ERA</h2>
-                    <p className='p'>{eraInfo.tokens}</p>
+                    <p className='p'>{parseFloat(tokensPerEra) / 10**18}</p>
 
                     <h2 className='card__subtitle'>Current ERA</h2>
                     <p className='p'>{currentEra}</p>
@@ -133,6 +152,9 @@ export default function DevelopersPool({user, wallet}){
                     </table>
                 </div>
             </div>
+            {loading && (
+                <Loading/>
+            )}
         </div>
     )
 }

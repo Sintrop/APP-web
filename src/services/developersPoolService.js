@@ -108,6 +108,18 @@ export const GetDevelopers = async () => {
     return developersList;
 }
 
+export const TokensPerEra = async () => {
+    let tokens = 0;
+    const web3js = new Web3(window.ethereum);
+    const contractAddress = DevelopersPoolContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
+    await contract.methods.TOKENS_PER_ERA().call({from: contractAddress})
+    .then((res) => {
+        tokens = res;
+    })
+    return tokens;
+}
+
 export const WithdrawTokens = async (wallet, numTokens) => {
     const web3js = new Web3(window.ethereum);
     const contractAddress = SacTokenContract.networks[5777].address;

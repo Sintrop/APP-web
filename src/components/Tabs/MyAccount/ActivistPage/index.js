@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import AvatarDefault from '../../../assets/img/avatar03.png';
-import ActivistService from '../../../services/activistService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import AvatarDefault from '../../../../assets/img/avatar03.png';
+import ActivistService from '../../../../services/activistService';
+import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
-import ItemInspection from '../../ProducerPageComponents/ItemInspection';
+import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ActivistPage({wallet}){
     const activistService = new ActivistService(wallet)

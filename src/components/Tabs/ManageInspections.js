@@ -22,6 +22,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
         const res = await GetInspections();
         setInpections(res);
         setLoading(false);
+        console.log(res);
     }
 
     async function requestInspection(){
@@ -63,7 +64,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Inspected At</th>
+                                <th>Updated At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

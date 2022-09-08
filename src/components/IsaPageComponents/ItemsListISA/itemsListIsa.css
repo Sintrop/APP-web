@@ -20,6 +20,13 @@ tr p{
     white-space: nowrap;
 }
 
+.p-description-category-isa{
+    max-width: 60ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 #createdByContentIsa button{
     font-weight: bold;
     color: green;
