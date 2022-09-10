@@ -10,7 +10,7 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
-export default function ProducerPage({wallet}){
+export default function ProducerPage({wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
 
@@ -89,7 +89,8 @@ export default function ProducerPage({wallet}){
                             return(
                                 <ItemInspection 
                                     data={item}
-                                    key={item.id}    
+                                    key={item.id} 
+                                    setTab={(tab, wallet) => setTab(tab, wallet)}  
                                 />
                             )
                         }

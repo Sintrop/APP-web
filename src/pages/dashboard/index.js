@@ -187,7 +187,13 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab ===  'producer-page' && (
-                    <ProducerPage wallet={walletSelect}/>
+                    <ProducerPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'activist-page' && (
                     <ActivistPage wallet={walletSelect}/>
