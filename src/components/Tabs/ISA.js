@@ -9,7 +9,7 @@ import Loading from '../Loading';
 //services
 import {GetCategories} from '../../services/isaService';
 
-export default function ISA({user, walletAddress}){
+export default function ISA({user, walletAddress, setTab}){
     const [categories, setCategories] = useState([]);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -47,35 +47,33 @@ export default function ISA({user, walletAddress}){
                 </div>
             </div>
 
-            <div className='area-categories-isa'>
-                {categories.length === 0 ? (
-                    <h1>No category registered</h1>
-                ) : (
-                    <div className='container-table-categories'>
-                        <table>
-                            <thead>
-                                <th id='createdByIsaTable'>Created By</th>
-                                <th id='categories-isa-table'>Categories</th>
-                                <th>Description</th>
-                                <th id='votes-isa-table'>Number Of Votes</th>
-                                <th id='config-isa-table'>Config</th>
-                            </thead>
-                            <tbody>
-                                {categories.map(item => {
-                                    return(
-                                        <ItemsListISA 
-                                            data={item} 
-                                            key={item.id} 
-                                            walletAddress={walletAddress}
-                                            reloadCategories={() => getCategories()}
-                                        />
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </div>
+            {categories.length === 0 ? (
+                <h1>No category registered</h1>
+            ) : (                
+                <table>
+                    <thead>
+                        <th className='th-info-isa'>Info</th>
+                        <th id='createdByIsaTable'>Created By</th>
+                        <th id='categories-isa-table'>Name</th>
+                        <th className='description-isa-table'>Description</th>
+                        <th id='votes-isa-table'>Number Of Votes</th>
+                        <th id='config-isa-table'>Actions</th>
+                    </thead>
+                    <tbody>
+                        {categories.map(item => {
+                            return(
+                                <ItemsListISA 
+                                    data={item} 
+                                    key={item.id} 
+                                    walletAddress={walletAddress}
+                                    reloadCategories={() => getCategories()}
+                                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                                />
+                            )
+                        })}
+                    </tbody>
+                </table>                
+            )}
            
             {isCreateCategory && (
                 <CreateCategory 

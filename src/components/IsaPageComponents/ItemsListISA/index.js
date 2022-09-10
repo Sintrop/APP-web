@@ -9,7 +9,7 @@ import Loading from '../../Loading';
 //services
 import {IsVoted, GetTokensCategory} from '../../../services/voteService';
 
-export default function ItemsListISA({data, walletAddress, reloadCategories}){
+export default function ItemsListISA({data, walletAddress, reloadCategories, setTab}){
     const [showDetails, setShowDetails] = useState(false);
     const [showVoteCard, setShowVoteCard] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -39,13 +39,18 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
 
     return(
         <tr key={data.id}>
-            <td id='createdByContentIsa'>
+            <td>
                 <button
                     onClick={() => setShowDetails(true)}
+                    className='btn-details-isa'
                 >
                     ...
                 </button>
-                <p>{data.createdBy}</p>    
+            </td>
+            <td id='createdByContentIsa'>
+                <a href='#' onClick={() => setTab('researcher-page', data.createdBy)}>
+                    <p>{data.createdBy}</p>    
+                </a>
             </td>
             <td>
                 <p>
@@ -59,7 +64,7 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
             </td>
             <td>{tokens}</td>
             <td id='td-vote-table-isa'>
-                {categoryVoted && (
+                {!categoryVoted && (
                     <button
                         onClick={() => {
                             setTypeModal('unvote')
@@ -77,7 +82,7 @@ export default function ItemsListISA({data, walletAddress, reloadCategories}){
                     }}
                     className='btn-vote'
                 >
-                    + Vote
+                    Vote
                 </button>
             </td>
 

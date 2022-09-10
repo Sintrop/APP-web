@@ -1,10 +1,3 @@
-#createdByContentIsa{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
-
 tr:nth-child(even){
     background: #eee;
 }
@@ -21,13 +14,13 @@ tr p{
 }
 
 .p-description-category-isa{
-    max-width: 60ch;
+    max-width: 40ch;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-#createdByContentIsa button{
+.btn-details-isa{
     font-weight: bold;
     color: green;
     background: none;
@@ -39,6 +32,7 @@ tr p{
 #td-vote-table-isa{
     display: flex;
     justify-content: end;
+    background-color: #fff;
 }
 
 .btn-unvote{

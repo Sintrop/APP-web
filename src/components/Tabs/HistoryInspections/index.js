@@ -24,7 +24,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     <>
       <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Inspections</h1>
+                <h1>History Inspections</h1>
                 <div className='area-btn-header-isa-page'>
                     {/* {user == 1 && (
                         <button
@@ -42,11 +42,11 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                     </button>
                 </div>
             </div>
-            <div className='area-categories-isa'>
+           
                 {inspections.length === 0 ? (
                     <h3>No open inspection</h3>
                 ) : (
-                    <div className='container-table-categories'>
+                    
                         <table>
                             <thead>
                                 <th className='th-wallet'>Requested By</th>
@@ -73,9 +73,9 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 })}
                             </tbody>
                         </table>
-                    </div>
+                   
                 )}
-            </div>
+          
 
             {loading && (
                 <Loading/>

@@ -1,8 +1,11 @@
-
 table {
-  width: 98%;
+  width: auto;
   margin: 15px;
   border: 1px solid gray;
+}
+
+tr{
+  background-color: #fff;
 }
 
 th {
@@ -17,7 +20,7 @@ td {
   align-items: center;
   justify-content: center;
   padding: 8px;
-  background: #fff;
+  background-color: #fff;
 }
 
 .p-wallet{

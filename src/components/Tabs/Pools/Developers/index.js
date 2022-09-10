@@ -19,7 +19,7 @@ import DevelopersService from '../../../../services/developersService';
 import DeveloperItem from './DeveloperItem';
 import Loading from '../../../Loading';
 
-export default function DevelopersPool({user, wallet}){
+export default function DevelopersPool({user, wallet, setTab}){
     const developerService = new DevelopersService(wallet);
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
@@ -147,7 +147,10 @@ export default function DevelopersPool({user, wallet}){
                         <th>Developer Level</th>
                         </tr>
                         {developersList.map((item) => (
-                            <DeveloperItem data={item}/>
+                            <DeveloperItem 
+                                data={item}
+                                setTab={(tab, wallet) => setTab(tab, wallet)}
+                            />
                         ))}
                     </table>
                 </div>

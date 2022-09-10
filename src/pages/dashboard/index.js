@@ -86,7 +86,14 @@ export default function Dashboard(){
                 )}
 
                 {activeTab === 'isa' && (
-                    <ISA user={user} walletAddress={walletAddress}/>
+                    <ISA 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
 
                 {activeTab === 'manage-inspections' && (
@@ -208,7 +215,14 @@ export default function Dashboard(){
                 )}
 
                 {activeTab === 'developers-pool' && (
-                    <DevelopersPool user={user} wallet={walletAddress}/>
+                    <DevelopersPool 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
             </div>
         </div>
