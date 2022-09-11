@@ -6,7 +6,7 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
-export default function ActivistPage({wallet}){
+export default function ActivistPage({wallet, setTab}){
     const activistService = new ActivistService(wallet)
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
@@ -72,7 +72,9 @@ export default function ActivistPage({wallet}){
                             return(
                                 <ItemInspection 
                                     data={item}
-                                    key={item.id}    
+                                    key={item.id} 
+                                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                                    typeAccount='activist'     
                                 />
                             )
                         }

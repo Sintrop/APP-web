@@ -196,7 +196,13 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab === 'activist-page' && (
-                    <ActivistPage wallet={walletSelect}/>
+                    <ActivistPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'developer-page' && (
                     <DeveloperPage wallet={walletSelect}/>
@@ -214,7 +220,14 @@ export default function Dashboard(){
                     <InvestorPage wallet={walletSelect}/>
                 )}
                 {activeTab === 'my-account' && (
-                    <MyAccount wallet={walletAddress} userType={user}/>
+                    <MyAccount 
+                        wallet={walletAddress} 
+                        userType={user}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'certificate' && (
                     <Certificate userType={user} wallet={walletAddress}/>

@@ -8,7 +8,7 @@ import {GetIsa} from '../../../services/manageInspectionsService';
 //components
 import ItemCategory from '../ItemCategory';
 
-export default function ItemInspection({data, setTab}){
+export default function ItemInspection({data, setTab, typeAccount}){
     const [isas, setIsas] = useState([]);
     const [moreDetails, setMoreDetails] = useState('item-inpection__container');
     const [showMoreDetails, setShowMoreDetails] = useState(false);
@@ -45,12 +45,20 @@ export default function ItemInspection({data, setTab}){
             <h1 className='item-inspection__title-inspection'>Inspection {data.id} result</h1>
             <div className='item-inspection__content-inspection-info'>
                     <div className='item-inspection__card-info card-wallet'>
-                        <h1 className='item-inspection__tit-cards-info'>Activist Wallet</h1>
+                        <h1 className='item-inspection__tit-cards-info'>
+                            {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
+                        </h1>
                         <a 
-                            onClick={() => setTab('activist-page', data.acceptedBy)}
+                            onClick={() => {
+                                if(typeAccount === 'producer'){
+                                    setTab('activist-page', data.acceptedBy);
+                                }else{
+                                    setTab('producer-page', data.createdBy);
+                                }
+                            }}
                             href='#' 
                             className='item-inspection__description-cards-info'
-                        > {data.acceptedBy}</a>
+                        >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Isa Score: </h1>

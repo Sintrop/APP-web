@@ -64,7 +64,7 @@ export default function ItemsListISA({data, walletAddress, reloadCategories, set
             </td>
             <td>{tokens}</td>
             <td id='td-vote-table-isa'>
-                {!categoryVoted && (
+                {categoryVoted && (
                     <button
                         onClick={() => {
                             setTypeModal('unvote')

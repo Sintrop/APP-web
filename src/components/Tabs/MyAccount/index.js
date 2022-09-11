@@ -8,11 +8,14 @@ import AdvisorPage from './AdvisorPage';
 import ContributorPage from './ContributorPage';
 import InvestorPage from './InvestorPage';
 
-export default function MyAccount({wallet, userType}){
+export default function MyAccount({wallet, userType, setTab}){
     return(
         <div>
             {userType === '1' && (
-                <ProducerPage wallet={wallet}/>
+                <ProducerPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '2' && (

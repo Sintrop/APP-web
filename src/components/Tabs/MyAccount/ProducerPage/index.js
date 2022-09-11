@@ -91,6 +91,7 @@ export default function ProducerPage({wallet, setTab}){
                                     data={item}
                                     key={item.id} 
                                     setTab={(tab, wallet) => setTab(tab, wallet)}  
+                                    typeAccount='producer'
                                 />
                             )
                         }
