@@ -136,13 +136,15 @@ function Register({ wallet }) {
         <div className="inputGroup">
           <div className="inputControl">
             <label htmlFor="documetType">Document Type</label>
-            <input
-              type="text"
-              name="documetType"
+            <select 
               value={documetType}
               onChange={(e) => setDocumentType(e.target.value)}
-              required
-            />
+            >
+              <option selected value=""></option>
+              <option value="rg">RG</option>
+              <option value="cpf">CPF</option>
+              <option value="cnpj">CNPJ</option>
+            </select>
           </div>
 
           <div className="inputControl">
