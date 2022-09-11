@@ -12,10 +12,16 @@ import ManageInspections from '../../components/Tabs/ManageInspections';
 import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
 import ProducerRanking from '../../components/Tabs/Ranking/Producer';
-import ProducerPage from '../../components/Tabs/ProducerPage';
-import ActivistPage from '../../components/Tabs/ActivistPage';
+import ProducerPage from '../../components/Tabs/MyAccount/ProducerPage';
+import ActivistPage from '../../components/Tabs/MyAccount/ActivistPage';
+import DeveloperPage from '../../components/Tabs/MyAccount/DeveloperPage';
+import ResearcherPage from '../../components/Tabs/MyAccount/ResearcherPage';
+import InvestorPage from '../../components/Tabs/MyAccount/InvestorPage';
+import ContributorPage from '../../components/Tabs/MyAccount/ContributorPage';
+import AdvisorPage from '../../components/Tabs/MyAccount/AdvisorPage';
 import MyAccount from '../../components/Tabs/MyAccount';
 import Certificate from '../../components/Tabs/Certificate';
+import DevelopersPool from '../../components/Tabs/Pools/Developers';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -80,7 +86,14 @@ export default function Dashboard(){
                 )}
 
                 {activeTab === 'isa' && (
-                    <ISA user={user} walletAddress={walletAddress}/>
+                    <ISA 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
 
                 {activeTab === 'manage-inspections' && (
@@ -174,16 +187,61 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab ===  'producer-page' && (
-                    <ProducerPage wallet={walletSelect}/>
+                    <ProducerPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'activist-page' && (
-                    <ActivistPage wallet={walletSelect}/>
+                    <ActivistPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'developer-page' && (
+                    <DeveloperPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'researcher-page' && (
+                    <ResearcherPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'advisor-page' && (
+                    <AdvisorPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'contributor-page' && (
+                    <ContributorPage wallet={walletSelect}/>
+                )}
+                {activeTab === 'investor-page' && (
+                    <InvestorPage wallet={walletSelect}/>
                 )}
                 {activeTab === 'my-account' && (
-                    <MyAccount wallet={walletAddress} userType={user}/>
+                    <MyAccount 
+                        wallet={walletAddress} 
+                        userType={user}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'certificate' && (
                     <Certificate userType={user} wallet={walletAddress}/>
+                )}
+
+                {activeTab === 'developers-pool' && (
+                    <DevelopersPool 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
             </div>
         </div>

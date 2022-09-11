@@ -20,8 +20,8 @@
 }
 
 .logo__account-producer-page{
-    width: 120px;
-    height: 50px;
+    width: 100px;
+    height: 33px;
 }
 
 .content__account-producer-page{
@@ -59,7 +59,7 @@
 }
 
 .avatar__account-producer-page{
-    background-color: aqua;
+    border: 4px solid green;
     width: 100px;
     height: 100px;
     border-radius: 100%;

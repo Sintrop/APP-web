@@ -10,7 +10,8 @@ import {
     NewAllowedAdvisor, 
     NewAllowedDeveloper,
     AddLevel,
-    UndoLevel
+    UndoLevel,
+    AddContractPool
 } from '../../services/onlyOwnerService';
 
 export default function OnlyOwner(){
@@ -18,6 +19,8 @@ export default function OnlyOwner(){
     const [wallet, setWallet] = useState('');
     const [walletDeveloperPool, setWalletDeveloperPool] = useState('');
     const [walletConnected, setWalletConnected] = useState('');
+    const [addressContract, setAddressContract] = useState('');
+    const [numTokens, setNumTokens] = useState(0);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -87,6 +90,12 @@ export default function OnlyOwner(){
             await UndoLevel(walletDeveloperPool, walletConnected);
             setLoading(false);
         }
+    }
+
+    async function addContractPool(){
+        setLoading(true);
+        await AddContractPool(walletConnected, addressContract, numTokens);
+        setLoading(false);
     }
 
     return(

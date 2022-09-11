@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './itemListInspections.css';
+import {format} from 'date-fns';
 
 //components
 import ModalActions from '../ModalActions';
@@ -16,14 +17,22 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     const [showSeeResult, setShowSeeResult] = useState(false);
     const [inspection, setInspection] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [updatedAt, setUpdatedAt] = useState('');
 
     useEffect(() => {
         getInspection();
+        timestampToDate();
     },[]);
 
     async function getInspection(){
         const response = await GetInspection(data.id);
         setInspection(response);
+    }
+
+    function timestampToDate(){
+        const time = parseInt(data.updatedAt);
+        let date = new Date(time*1000);
+        setUpdatedAt(format(date, "dd/MM/yyyy - kk:mm"))
     }
 
     return(
@@ -70,7 +79,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 )}
             </td>
             <td>
-
+                {updatedAt}
             </td>
             <td>
                 <p>{data.isaScore}</p>

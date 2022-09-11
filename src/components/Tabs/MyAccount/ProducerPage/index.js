@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import './producerPage.css';
 
+import AvatarDefault from '../../../../assets/img/avatar02.png';
+
 //services
-import {GetProducer} from '../../../services/producerService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import {GetProducer} from '../../../../services/producerService';
+import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
-import ItemInspection from '../../ProducerPageComponents/ItemInspection';
+import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
-export default function ProducerPage({wallet}){
+export default function ProducerPage({wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
 
@@ -32,12 +34,10 @@ export default function ProducerPage({wallet}){
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
                     <div className='area-avatar__producer-page'>
-                        <div className='avatar__producer-page'>
-
-                        </div>
+                        <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Producer Wallet: </h1>
-                            <a className='description-cards-info__producer-page' href='/producer-page'>
+                            <a className='description-cards-info__producer-page' href={`/account-producer/${producerData.producerWallet}`}>
                                 {producerData === [] ? '' : producerData.producerWallet}
                             </a>
                         </div>
@@ -89,7 +89,9 @@ export default function ProducerPage({wallet}){
                             return(
                                 <ItemInspection 
                                     data={item}
-                                    key={item.id}    
+                                    key={item.id} 
+                                    setTab={(tab, wallet) => setTab(tab, wallet)}  
+                                    typeAccount='producer'
                                 />
                             )
                         }

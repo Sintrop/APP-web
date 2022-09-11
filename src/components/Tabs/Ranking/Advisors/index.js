@@ -32,7 +32,7 @@ export default function AdvisorsRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('activist-page', item.advisorWallet)}>
+              <a href="#" onClick={() => setTab('advisor-page', item.advisorWallet)}>
                 <p className="p-wallet" title={item.advisorWallet}>
                   {item.advisorWallet}
                 </p>

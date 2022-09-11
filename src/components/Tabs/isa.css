@@ -86,12 +86,20 @@ table {
     color: green;
 }
 
+.th-info-isa{
+    width: 20px;
+}
+
 #createdByIsaTable{
     width: 100px;
 }
 
 #categories-isa-table{
     width: 200px;
+}
+
+.description-isa-table{
+    width: 50px;
 }
 
 #votes-isa-table, #config-isa-table{

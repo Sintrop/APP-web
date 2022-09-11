@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-
-import ActivistService from '../../../services/activistService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import AvatarDefault from '../../../../assets/img/avatar03.png';
+import ActivistService from '../../../../services/activistService';
+import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
-import ItemInspection from '../../ProducerPageComponents/ItemInspection';
+import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
-export default function ActivistPage({wallet}){
+export default function ActivistPage({wallet, setTab}){
     const activistService = new ActivistService(wallet)
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
@@ -31,9 +31,7 @@ export default function ActivistPage({wallet}){
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
                     <div className='area-avatar__producer-page'>
-                        <div className='avatar__producer-page'>
-
-                        </div>
+                        <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Activist Wallet: </h1>
                             <a className='description-cards-info__producer-page' href='/producer-page'>
@@ -74,7 +72,9 @@ export default function ActivistPage({wallet}){
                             return(
                                 <ItemInspection 
                                     data={item}
-                                    key={item.id}    
+                                    key={item.id} 
+                                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                                    typeAccount='activist'     
                                 />
                             )
                         }

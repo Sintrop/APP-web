@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import './accountProducer.css';
 
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import AvatarDefault from '../../assets/img/avatar02.png';
 
 //services
 import {GetProducer} from '../../services/producerService';
@@ -40,9 +41,7 @@ export default function AccountProducer(){
             <div className='content__account-producer-page'>
                 <div className='account-producer-area-info__account-producer-page'>
                     <div className='area-avatar__account-producer-page'>
-                        <div className='avatar__account-producer-page'>
-
-                        </div>
+                        <img src={AvatarDefault} className='avatar__account-producer-page'/>
                         <div className='producer-cards-info__account-producer-page card-wallet'>
                             <h1 className='tit-cards-info__account-producer-page'>Producer Wallet: </h1>
                             <a className='description-cards-info__account-producer-page' href={`/account-producer/${producerData.producerWallet}`}>

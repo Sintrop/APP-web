@@ -1,17 +1,45 @@
 import React, {useEffect, useState} from 'react';
 
-import ProducerPage from '../ProducerPage';
-import ActvistPage from '../ActivistPage';
+import ProducerPage from './ProducerPage';
+import ActvistPage from './ActivistPage';
+import DeveloperPage from './DeveloperPage';
+import ResearcherPage from './ResearcherPage';
+import AdvisorPage from './AdvisorPage';
+import ContributorPage from './ContributorPage';
+import InvestorPage from './InvestorPage';
 
-export default function MyAccount({wallet, userType}){
+export default function MyAccount({wallet, userType, setTab}){
     return(
         <div>
-            {userType == 1 && (
-                <ProducerPage wallet={wallet}/>
+            {userType === '1' && (
+                <ProducerPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
-            {userType == 2 && (
+            {userType === '2' && (
                 <ActvistPage wallet={wallet}/>
+            )}
+
+            {userType === '3' && (
+                <ResearcherPage wallet={wallet}/>
+            )}
+
+            {userType === '4' && (
+                <DeveloperPage wallet={wallet}/>
+            )}
+
+            {userType === '5' && (
+                <AdvisorPage wallet={wallet}/>
+            )}
+
+            {userType === '6' && (
+                <ContributorPage wallet={wallet}/>
+            )}
+
+            {userType === '7' && (
+                <InvestorPage wallet={wallet}/>
             )}
         </div>
     )

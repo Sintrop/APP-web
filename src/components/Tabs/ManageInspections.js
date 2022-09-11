@@ -22,6 +22,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
         const res = await GetInspections();
         setInpections(res);
         setLoading(false);
+        console.log(res);
     }
 
     async function requestInspection(){
@@ -33,7 +34,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Inspections</h1>
+                <h1>Manage Inspections</h1>
                 <div className='area-btn-header-isa-page'>
                     {user == 1 && (
                         <button
@@ -51,11 +52,11 @@ export default function ManageInpections({user, walletAddress, setTab}){
                     </button>
                 </div>
             </div>
-            <div className='area-categories-isa'>
+            
                 {inspections.length === 0 ? (
                     <h3>No open inspection</h3>
                 ) : (
-                    <div className='container-table-categories'>
+                    
                         <table>
                             <thead>
                                 <th className='th-wallet'>Requested By</th>
@@ -63,7 +64,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Inspected At</th>
+                                <th>Updated At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>
@@ -84,9 +85,9 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 })}
                             </tbody>
                         </table>
-                    </div>
+                
                 )}
-            </div>
+           
 
             {loading && (
                 <Loading/>

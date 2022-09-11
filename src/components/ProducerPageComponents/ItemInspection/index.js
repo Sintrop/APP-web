@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './itemInspection.css';
+import {format} from 'date-fns';
 
 //services
 import {GetIsa} from '../../../services/manageInspectionsService';
@@ -7,14 +8,22 @@ import {GetIsa} from '../../../services/manageInspectionsService';
 //components
 import ItemCategory from '../ItemCategory';
 
-export default function ItemInspection({data}){
+export default function ItemInspection({data, setTab, typeAccount}){
     const [isas, setIsas] = useState([]);
     const [moreDetails, setMoreDetails] = useState('item-inpection__container');
     const [showMoreDetails, setShowMoreDetails] = useState(false);
+    const [updatedAt, setUpdatedAt] = useState('');
 
     useEffect(() => {
-        getIsa()
+        getIsa();
+        timestampToDate();
     }, []);
+
+    function timestampToDate(){
+        const time = parseFloat(data.updatedAt) * 1000;
+        const date = new Date(time);
+        setUpdatedAt(format(date, 'dd/MM/yyyy - kk:mm'));
+    }
 
     async function getIsa(){
         const response = await GetIsa(data.id);
@@ -36,8 +45,20 @@ export default function ItemInspection({data}){
             <h1 className='item-inspection__title-inspection'>Inspection {data.id} result</h1>
             <div className='item-inspection__content-inspection-info'>
                     <div className='item-inspection__card-info card-wallet'>
-                        <h1 className='item-inspection__tit-cards-info'>Activist Wallet</h1>
-                        <a href='#' className='item-inspection__description-cards-info'> {data.acceptedBy}</a>
+                        <h1 className='item-inspection__tit-cards-info'>
+                            {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
+                        </h1>
+                        <a 
+                            onClick={() => {
+                                if(typeAccount === 'producer'){
+                                    setTab('activist-page', data.acceptedBy);
+                                }else{
+                                    setTab('producer-page', data.createdBy);
+                                }
+                            }}
+                            href='#' 
+                            className='item-inspection__description-cards-info'
+                        >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Isa Score: </h1>
@@ -53,7 +74,7 @@ export default function ItemInspection({data}){
 
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Updated At: </h1>
-                    <p className='item-inspection__description-cards-info'> {data.updatedAt}</p>
+                    <p className='item-inspection__description-cards-info'> {updatedAt}</p>
                 </div>
             </div>
             <div className='item-inspection__content-inspections'>

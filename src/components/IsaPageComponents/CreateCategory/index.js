@@ -13,6 +13,7 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [tutorial, setTutorial] = useState('');
     const [totallySustainable, setTotallySustainable] = useState('');
     const [partiallySustainable, setPartiallySustainable] = useState('');
     const [neutro, setNeutro] = useState('');
@@ -22,6 +23,7 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
     function close(){
         setName('');
         setDescription('');
+        setTutorial('');
         setTotallySustainable('');
         setPartiallySustainable('');
         setNeutro('');
@@ -36,7 +38,8 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
         const contract = new web3.eth.Contract(CategoryContract.abi, contractAddress);
         contract.methods.addCategory(
             name, 
-            description, 
+            description,
+            tutorial, 
             totallySustainable, 
             partiallySustainable,
             neutro,
@@ -81,6 +84,16 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
                         onChange={(e) => setDescription(e.target.value)}
                         className='input-form-isa'
                         placeholder='Description of category'
+                    />
+
+                    <label for='description-category-isa'>Tutorial</label>
+                    <input
+                        type='text'
+                        id='description-category-isa'
+                        value={tutorial}
+                        onChange={(e) => setTutorial(e.target.value)}
+                        className='input-form-isa'
+                        placeholder='Category assessment tutorial'
                     />
 
                     <label for='totally-sustainable-category-isa'>Totally Sustainable</label>
