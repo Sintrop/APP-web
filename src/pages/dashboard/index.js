@@ -35,7 +35,7 @@ import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 
 export default function Dashboard(){
     const navigate = useNavigate();
-    const {walletAddress} = useParams();
+    const {walletAddress, tabActive} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
     const {user} = CheckUserRegister({walletAddress: walletAddress});
     const [walletSelect, setWalletSelect] = useState('');
@@ -68,13 +68,16 @@ export default function Dashboard(){
             setActiveTab('register');
             return;
         }
-        setActiveTab('isa');
+        setActiveTab(tabActive);
     }, [user]);
 
     return(
         <div className='container-dashboard'>
             <Menu 
-                changeTab={(tab) => setActiveTab(tab)}
+                changeTab={(tab) => {
+                    setActiveTab(tab)
+                    navigate(`/dashboard/${walletAddress}/${tab}`)
+                }}
             />
 
             <div className='content-dashboard'>
