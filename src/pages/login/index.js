@@ -14,7 +14,7 @@ function Login(){
         const wallet = await ConnectWallet();
 
         if(wallet.connectedStatus){
-            navigate(`/dashboard/${wallet.address}`)
+            navigate(`/dashboard/${wallet.address}/isa`)
         }
     }
 
