@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import RegisterService from "../../../services/registerService";
+import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
+import InputMask from 'react-input-mask';
+import RegisterService from "../../../services/registerService";
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import "./register.css";
@@ -13,6 +14,7 @@ function Register({ wallet }) {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  let formatDocument = useRef('')
   const registerService = new RegisterService(wallet);
   function handleClick(e) {
     e.preventDefault();
@@ -99,6 +101,23 @@ function Register({ wallet }) {
     }
   }
 
+  useEffect(() => {
+    switch (documetType) {
+      case 'cpf':
+        formatDocument.current = '999.999.999-99'
+        break;
+      case 'cnpj':
+        formatDocument.current = '99.999.999/9999-99'
+        break;
+      case 'rg':
+        formatDocument.current = '99.999.999-9'
+        break;
+    
+      default:
+        break;
+    }
+  }, [documetType])
+
   return (
     <div className="container">
       <form>
@@ -149,8 +168,9 @@ function Register({ wallet }) {
 
           <div className="inputControl">
             <label htmlFor="documetNumber">Document Number</label>
-            <input
-              type="number"
+            <InputMask
+              type="text"
+              mask={formatDocument.current}
               value={documetNumber}
               name="documetNumber"
               onChange={(e) => setDocumentNumber(e.target.value)}
@@ -161,10 +181,12 @@ function Register({ wallet }) {
         <div className="inputGroup">
           <div className="inputControl">
             <label htmlFor="cep">CEP</label>
-            <input
+            <InputMask
+              type="text"
               name="cep"
               value={cep}
               onChange={(e) => setCep(e.target.value)}
+              mask='99999-999'
               required
             />
           </div>
