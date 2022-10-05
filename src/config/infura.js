@@ -14,8 +14,6 @@ const client = create({
   }
 })
 
-export const exec = () => {
-  client.pin.add('QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn').then((res) => {
-    console.log(res);
-  });
+export const save = async (file) => {
+  return client.pin.add(file)
 }

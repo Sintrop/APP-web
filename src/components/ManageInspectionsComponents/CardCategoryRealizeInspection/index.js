@@ -5,7 +5,7 @@ export default function CardCategoryRealizeInspection({data, pushResult}){
     const [result, setResult] = useState('');
     const [report, setReport] = useState('');
     const [proofPhoto, setProofPhoto] = useState('hash');
-
+    
     return(
         <div className="card_category_realize_inspection" key={data.id}>
             <h3>{data.name}</h3>
@@ -46,7 +46,12 @@ export default function CardCategoryRealizeInspection({data, pushResult}){
 
             <div className='area_upload_photo_realize_inspection'>
                 <p>Upload proof photo:</p>
-                <input type='file'/>
+                <input type='file' 
+                onChange={(e) => {
+                    setProofPhoto(e.target.value);
+                    pushResult(data.id, result, report, e.target.value);
+                }}
+                />
             </div>
         </div>
     )
