@@ -48,6 +48,14 @@ export default function CardCategoryRealizeInspection({data, pushResult}){
                 <p>Upload proof photo:</p>
                 <input type='file' 
                 onChange={(e) => {
+
+                    const file = e.target.files[0]
+                    const reader = new window.FileReader()
+                    reader.readAsArrayBuffer(file)
+                    reader.onload = () => { 
+                        const buf = Buffer.from(reader.result)
+                        console.log(buf)
+                    }
                     setProofPhoto(e.target.value);
                     pushResult(data.id, result, report, e.target.value);
                 }}

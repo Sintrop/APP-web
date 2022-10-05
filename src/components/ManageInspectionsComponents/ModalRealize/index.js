@@ -38,20 +38,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
     async function finishInspection(){
         setLoading(true);
-        let reader = new FileReader();
-        let image = '';
-        const blob = new Blob([isas[0].proofPhoto], { type: 'image/*'})
-        reader.readAsDataURL(blob);
-        reader.onload = function () {
-            image = reader.result.split(',')[1];
-            console.log(reader.result.split(',')[1]);
-            
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-            return;
-        };
-        save(image).then(res => console.log(res)).catch(err => console.log(err))
+        
         // save(isas[0].proofPhoto)
         // await RealizeInspection(inspectionID, isas, walletAddress);
         setLoading(false);
