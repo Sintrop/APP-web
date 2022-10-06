@@ -38,8 +38,10 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
     async function finishInspection(){
         setLoading(true);
-        
-        // save(isas[0].proofPhoto)
+        console.log(isas)
+        isas.foreach(item => {
+            save(item.proofPhoto).then(res => console.log(res)).catch(err => console.log(err))
+        })
         // await RealizeInspection(inspectionID, isas, walletAddress);
         setLoading(false);
         reloadInspections();

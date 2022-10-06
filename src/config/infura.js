@@ -15,5 +15,5 @@ const client = create({
 })
 
 export const save = async (file) => {
-  return client.pin.add(file)
+  return await client.add(file)
 }

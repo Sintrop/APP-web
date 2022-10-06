@@ -51,13 +51,14 @@ export default function CardCategoryRealizeInspection({data, pushResult}){
 
                     const file = e.target.files[0]
                     const reader = new window.FileReader()
-                    reader.readAsArrayBuffer(file)
+                    console.log(reader)
+                    reader.readAsDataURL(file)
                     reader.onload = () => { 
                         const buf = Buffer.from(reader.result)
                         console.log(buf)
+                        setProofPhoto(buf);
+                        pushResult(data.id, result, report, file);
                     }
-                    setProofPhoto(e.target.value);
-                    pushResult(data.id, result, report, e.target.value);
                 }}
                 />
             </div>
