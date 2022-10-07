@@ -38,11 +38,13 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
     async function finishInspection(){
         setLoading(true);
-        console.log(isas)
-        isas.foreach(item => {
-            save(item.proofPhoto).then(res => console.log(res)).catch(err => console.log(err))
+        
+        isas.forEach(item => {
+            save(item.proofPhoto).then(res => {
+                attResults(item.categoryId,item.isaIndex, item.report, res.path)
+            }).catch(err => console.log(err))
         })
-        // await RealizeInspection(inspectionID, isas, walletAddress);
+        await RealizeInspection(inspectionID, isas, walletAddress);
         setLoading(false);
         reloadInspections();
         close();
@@ -59,6 +61,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
         let array = newArray;
         array.push(object);
         setIsas(array);
+        console.log(isas)
     }
 
     return(
