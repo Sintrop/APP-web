@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../IsaPageComponents/CreateCategory/createCategory.css';
 import './modalSeeResult.css';
-
 //components
 import Loading from '../../Loading';
 import ItemCategoryResult from '../ItemCategoryResult';
