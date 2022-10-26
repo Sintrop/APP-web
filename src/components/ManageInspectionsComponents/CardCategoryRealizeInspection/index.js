@@ -51,7 +51,6 @@ export default function CardCategoryRealizeInspection({ data, pushResult }) {
           onChange={(e) => {
             const file = e.target.files[0];
             const reader = new window.FileReader();
-            console.log(reader);
             reader.readAsArrayBuffer(file);
             reader.onload = () => {
               const arrayBuffer = reader.result
