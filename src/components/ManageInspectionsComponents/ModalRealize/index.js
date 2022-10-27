@@ -9,7 +9,7 @@ import CardCategoryRealizeInspection from "../CardCategoryRealizeInspection";
 //services
 import {GetCategories} from '../../../services/isaService';
 import {RealizeInspection} from '../../../services/manageInspectionsService';
-
+import { save } from '../../../config/infura'
 export default function ModalRealize({close, inspectionID, walletAddress, reloadInspections}){
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -38,7 +38,23 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
     async function finishInspection(){
         setLoading(true);
-        await RealizeInspection(inspectionID, isas, walletAddress);
+        
+        const isasSave  = await Promise.all(
+            isas.map(async (item) => {
+                let object = {}
+                const path = await save(item.proofPhoto)
+                object = {
+                    categoryId: item.categoryId,
+                    isaIndex: item.isaIndex,
+                    report: item.report,
+                    proofPhoto: path
+                };
+                
+                return object;
+            })
+        ) 
+        console.log(isasSave)
+        await RealizeInspection(inspectionID, isasSave, walletAddress);
         setLoading(false);
         reloadInspections();
         close();

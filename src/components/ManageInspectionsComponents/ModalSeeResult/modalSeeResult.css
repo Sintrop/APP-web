@@ -36,3 +36,14 @@
 .created_score:nth-child(1){
     margin-right: 10px;
 }
+
+.proofPhoto{
+    width: 400px;
+    height: 50%;
+    border-radius: 4px;
+    margin: 5px;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+}

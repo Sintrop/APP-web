@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './itemCategory.css';
-
+import { get } from '../../../config/infura'
 //services
 import {GetCategories} from '../../../services/isaService';
 
@@ -9,7 +9,8 @@ export default function ItemCategory({data}){
     const [description, setDescription] = useState('');
     const [categoryResult, setCategoryResult] = useState('');
     const [resultDescription, setResultDescription] = useState('');
-
+    const [proofPhoto, setProofPhoto] = useState('')
+    console.log(data)
     useEffect(() => {
         checkResult();
         getCategory();
@@ -31,6 +32,7 @@ export default function ItemCategory({data}){
 
     async function getCategory(){
         const response = await GetCategories();
+        getProofPhoto();
         response.forEach((item) => {
             if(item.id === data.categoryId){
                 setTitle(item.name);
@@ -50,14 +52,17 @@ export default function ItemCategory({data}){
         })
     }
 
-
+    const getProofPhoto = async () => {
+        const res =  await get(data.proofPhoto)
+        setProofPhoto(res)
+     }
     return(
         <div className='item-category__container'>
             <div className='item-category__area-top-card'>
                 <div className='area-top-card__container-proof-photo'>
                     <p className='container-proof-photo__title-category'>{title}</p>
                     <div className='proof-photo'>
-
+                        <img src={`data:image/*;base64,${proofPhoto}`} alt='ProofPhoto' />
                     </div>
                     <p className='container-proof-photo__title-proof-photo'>Proof Photo</p>
                 </div>
