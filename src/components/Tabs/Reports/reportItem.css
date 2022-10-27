@@ -1,0 +1,39 @@
+.report-item__container{
+    display: flex;
+    width: '100%';
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.report-item__card-info{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.report-item__title-cards{
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.report-item__description-report{
+    display: flex;
+}
+
+.report-item__card-description-report{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.report-item__text-testemony{
+    margin: 5px 0 0 0;
+}
+
+.report-item__photo{
+    width: 300px;
+    height: 250px;
+    margin-top: 5px
+}
