@@ -248,7 +248,7 @@ export default function Dashboard(){
                     />
                 )}
 
-                {activeTab === 'reports' && (
+                {activeTab === 'delations' && (
                     <ReportsPage 
                         user={user} 
                         wallet={walletAddress}

@@ -64,8 +64,8 @@ export default function Menu({ changeTab }) {
       ] 
     },
     { 
-      id: "reports", 
-      title: "Reports", 
+      id: "delations", 
+      title: "Delations", 
       icon: IconInspections, 
       action: ""
     },

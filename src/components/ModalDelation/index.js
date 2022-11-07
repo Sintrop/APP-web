@@ -64,7 +64,7 @@ export default function ModalDelation({reportedWallet}){
                         required
                     />
 
-                    <label htmlFor='testemony' className='modal-delation__label'>Testemony:</label>
+                    <label htmlFor='testemony' className='modal-delation__label'>Testimony:</label>
                     <textarea
                         style={{resize:'none', height: '100px'}}
                         className='modal-delation__input'
