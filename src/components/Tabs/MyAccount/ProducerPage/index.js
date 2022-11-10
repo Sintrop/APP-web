@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './producerPage.css';
+import * as Dialog from '@radix-ui/react-dialog';
+import ModalDelation from '../../../ModalDelation';
 
 import AvatarDefault from '../../../../assets/img/avatar02.png';
 
@@ -42,9 +44,12 @@ export default function ProducerPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <button
-                            className='area-avatar__btn-report'
-                        >Report Producer</button>
+                        <Dialog.Root>
+                            <Dialog.Trigger className='area-avatar__btn-report'>
+                                Report Producer
+                            </Dialog.Trigger>
+                            <ModalDelation reportedWallet={wallet}/>
+                        </Dialog.Root>
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>

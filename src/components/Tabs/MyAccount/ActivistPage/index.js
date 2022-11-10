@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import AvatarDefault from '../../../../assets/img/avatar03.png';
 import ActivistService from '../../../../services/activistService';
 import {GetInspections} from '../../../../services/manageInspectionsService';
+import * as Dialog from '@radix-ui/react-dialog';
+import ModalDelation from '../../../ModalDelation';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
@@ -39,9 +41,12 @@ export default function ActivistPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <button
-                            className='area-avatar__btn-report'
-                        >Report Activist</button>
+                        <Dialog.Root>
+                            <Dialog.Trigger className='area-avatar__btn-report'>
+                                Report Activist
+                            </Dialog.Trigger>
+                            <ModalDelation reportedWallet={wallet}/>
+                        </Dialog.Root>
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>

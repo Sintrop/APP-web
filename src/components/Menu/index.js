@@ -63,6 +63,12 @@ export default function Menu({ changeTab }) {
         {id: 'developers-pool', label: 'Developers'}
       ] 
     },
+    { 
+      id: "delations", 
+      title: "Delations", 
+      icon: IconInspections, 
+      action: ""
+    },
   ]);
   const toggleSubItem = (id) => {
     if(id === 'rankings'){

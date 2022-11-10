@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import AvatarDefault from '../../../../assets/img/avatar03.png';
 import AdvisorsService from '../../../../services/advisorsService';
+import * as Dialog from '@radix-ui/react-dialog';
+import ModalDelation from '../../../ModalDelation';
 
 export default function AdvisorPage({wallet}){
     const advisorService = new AdvisorsService(wallet)
@@ -28,9 +30,12 @@ export default function AdvisorPage({wallet}){
                             </a>
                         </div>
 
-                        <button
-                            className='area-avatar__btn-report'
-                        >Report Advisor</button>
+                        <Dialog.Root>
+                            <Dialog.Trigger className='area-avatar__btn-report'>
+                                Report Advisor
+                            </Dialog.Trigger>
+                            <ModalDelation reportedWallet={wallet}/>
+                        </Dialog.Root>
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>

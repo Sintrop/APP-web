@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import AvatarDefault from '../../../../assets/img/avatar03.png';
 import DevelopersService from '../../../../services/developersService';
+import * as Dialog from '@radix-ui/react-dialog';
+import ModalDelation from '../../../ModalDelation';
 
 export default function DeveloperPage({wallet}){
     const developersService = new DevelopersService(wallet)
@@ -28,9 +30,12 @@ export default function DeveloperPage({wallet}){
                             </a>
                         </div>
 
-                        <button
-                            className='area-avatar__btn-report'
-                        >Report Developer</button>
+                        <Dialog.Root>
+                            <Dialog.Trigger className='area-avatar__btn-report'>
+                                Report Developer
+                            </Dialog.Trigger>
+                            <ModalDelation reportedWallet={wallet}/>
+                        </Dialog.Root>
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>

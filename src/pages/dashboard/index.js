@@ -22,6 +22,7 @@ import AdvisorPage from '../../components/Tabs/MyAccount/AdvisorPage';
 import MyAccount from '../../components/Tabs/MyAccount';
 import Certificate from '../../components/Tabs/Certificate';
 import DevelopersPool from '../../components/Tabs/Pools/Developers';
+import ReportsPage from '../../components/Tabs/Reports';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -238,6 +239,17 @@ export default function Dashboard(){
 
                 {activeTab === 'developers-pool' && (
                     <DevelopersPool 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'delations' && (
+                    <ReportsPage 
                         user={user} 
                         wallet={walletAddress}
                         setTab={(tab, wallet) => {
