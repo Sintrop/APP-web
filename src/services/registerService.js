@@ -20,7 +20,7 @@ class RegisterService {
     this.address = wallet;
   }
 
-  async addActivist(name, document, documentType, country, state, city, cep) {
+  async addActivist(name, document, documentType, country, state, city, cep, proofPhoto) {
     const activistDataNetwork = ActivistContract.networks["5777"];
     const activistContractAddress = activistDataNetwork.address;
     const activistABI = ActivistContract.abi;
@@ -32,7 +32,7 @@ class RegisterService {
 
       if (activistContract) {
         await activistContract.methods
-          .addActivist(name, document, documentType, country, state, city, cep)
+          .addActivist(name, proofPhoto, document, documentType, country, state, city, cep)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Activist registered!")
@@ -45,7 +45,7 @@ class RegisterService {
     }
   }
 
-  async addProducer(name, document, documentType, country, state, city, cep) {
+  async addProducer(name, document, documentType, country, state, city, cep, street, complement, proofPhoto) {
     const producerDataNetwork = ProducerContract.networks["5777"];
     const producerContractAddress = producerDataNetwork.address;
     const producerABI = ProducerContract.abi;
@@ -57,7 +57,7 @@ class RegisterService {
 
       if (producerContract) {
         producerContract.methods
-          .addProducer(name, document, documentType, country, state, city, cep)
+          .addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Producer registered!")

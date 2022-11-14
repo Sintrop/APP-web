@@ -86,6 +86,7 @@ export default function ModalDelation({reportedWallet}){
                             reader.onload = () => {
                                 const arrayBuffer = reader.result
                                 const file = new Uint8Array(arrayBuffer);
+                                console.log(reader)
                                 getPath(file);
                             };
                         }}
