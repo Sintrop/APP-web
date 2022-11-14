@@ -45,6 +45,7 @@ export default function ActivistPage({wallet, setTab}){
                         <img 
                             src={`data:image/png;base64,${base64}`}
                             className='avatar__activist-page'
+                            
                         />
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Activist Wallet: </h1>
