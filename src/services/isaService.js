@@ -10,6 +10,6 @@ export const GetCategories = async () => {
     .then((res) => {
         categories = res;
     })
-
-    return categories;
+    let categoriesSorted = categories.map(item => item).sort((a, b) => parseInt(b.votesCount) - parseInt(a.votesCount))
+    return categoriesSorted;
 }
