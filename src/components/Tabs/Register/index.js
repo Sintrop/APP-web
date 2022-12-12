@@ -134,11 +134,19 @@ function Register({ wallet }) {
   }, [documetType]);
 
   async function handleProofPhoto(data){
-    setProofPhotoBase64(data)
-    const res = await save(data);
-    setProofPhoto(res);
-    const get = await get(res);
-    //setProofPhotoBase64(get)
+    const encoder = new TextEncoder();
+    const string = data.split(',')
+    const stringEncoded = string.map(string => encoder.encode(string));
+    const stringBuffers = stringEncoded.map(uint8 => uint8.buffer);
+
+    const file = new Uint8Array(stringBuffers[1]);
+  
+    const hashPhoto = await save(file);
+    setProofPhoto(hashPhoto);
+
+    const base64Hash = await get(hashPhoto);
+    setProofPhotoBase64(base64Hash);
+
   } 
 
   return (
@@ -165,7 +173,7 @@ function Register({ wallet }) {
 
             {proofPhoto != '' && (
                 <img
-                    src={String(proofPhotoBase64)}
+                    src={`data:image/png;base64,${proofPhotoBase64}`}
                     className="register__proofPhoto"
                 />
             )}
