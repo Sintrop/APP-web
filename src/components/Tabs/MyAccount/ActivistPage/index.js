@@ -44,7 +44,7 @@ export default function ActivistPage({wallet, setTab}){
                     <div className='area-avatar__producer-page'>
                         <img 
                             src={`data:image/png;base64,${base64}`}
-                            className='avatar__activist-page'
+                            className='avatar__producer-page'
                             
                         />
                         <div className='producer-cards-info__producer-page card-wallet'>

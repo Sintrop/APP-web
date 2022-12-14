@@ -24,3 +24,10 @@
     margin: auto auto;
     inset: 0;
 }
+
+.webcam__area-confirm{
+    display: flex;
+    justify-content:center;
+    gap: 10px;
+    margin-top: 10px;
+}

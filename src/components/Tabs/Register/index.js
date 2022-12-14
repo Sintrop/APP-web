@@ -6,9 +6,11 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import {WebcamComponent} from '../../Webcam';
 import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../../config/infura';
+import Loading from '../../Loading';
 
 import "./register.css";
 function Register({ wallet }) {
+  const [loading, setLoading] = useState(false);
   const [type, setType] = useState("");
   const [name, setName] = useState("");
   const [documetType, setDocumentType] = useState("");
@@ -26,7 +28,7 @@ function Register({ wallet }) {
   const registerService = new RegisterService(wallet);
   function handleClick(e) {
     e.preventDefault();
-    if(proofPhoto === ''){
+    if(proofPhoto === '' && type !== 'investor'){
         return;
     }
     switch (type) {
@@ -47,8 +49,6 @@ function Register({ wallet }) {
       case "activist":
         registerService.addActivist(
           name,
-          documetNumber,
-          documetType,
           country,
           state,
           city,
@@ -59,56 +59,30 @@ function Register({ wallet }) {
       case "contributor":
         registerService.addContributor(
           name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep
+          proofPhoto
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "investor":
         registerService.addInvestor(
-          name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep
+          name
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "developer":
         registerService.addDeveloper(
           name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep
+          proofPhoto
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "researcher":
         registerService.addResearcher(
           name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep
+          proofPhoto
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;
       case "advisor":
         registerService.addAdvisor(
           name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep
+          proofPhoto
         ).then(res => console.log(res)).catch(err => console.log(err));
         break;                                                  
       default:
@@ -134,19 +108,16 @@ function Register({ wallet }) {
   }, [documetType]);
 
   async function handleProofPhoto(data){
-    const encoder = new TextEncoder();
-    const string = data.split(',')
-    const stringEncoded = string.map(string => encoder.encode(string));
-    const stringBuffers = stringEncoded.map(uint8 => uint8.buffer);
-
-    const file = new Uint8Array(stringBuffers[1]);
+    setLoading(true);
+    let res = await fetch(data);
+    let myBlob = await res.blob();
   
-    const hashPhoto = await save(file);
+    const hashPhoto = await save(myBlob);
     setProofPhoto(hashPhoto);
 
     const base64Hash = await get(hashPhoto);
     setProofPhotoBase64(base64Hash);
-
+    setLoading(false);
   } 
 
   return (
@@ -177,25 +148,17 @@ function Register({ wallet }) {
                     className="register__proofPhoto"
                 />
             )}
-            {type === 'producer' && (
-                <button
-                    className='register__btn-takePhoto'
-                    onClick={() => setOpenWebcam(true)} 
-                    type="button"
-                >
-                    Take Photo
-                </button>
-            )}
-            {type === 'activist' && (
-                <button
-                    className='register__btn-takePhoto'
-                    onClick={() => setOpenWebcam(true)} 
-                    type="button"
-                >
-                    Take Photo
-                </button>
-            )}
             
+            {type !== 'investor' && (
+                <button
+                    className='register__btn-takePhoto'
+                    onClick={() => setOpenWebcam(true)} 
+                    type="button"
+                >
+                    Take Photo
+                </button>
+            )}
+      
             <div className="inputGroup">
             <div className="inputControl">
                 <label>Name</label>
@@ -210,96 +173,154 @@ function Register({ wallet }) {
             </div>
             </div>
             <div className="inputGroup">
-            <div className="inputControl">
-                <label htmlFor="documetType">Document Type</label>
-                <select 
-                value={documetType}
-                onChange={(e) => setDocumentType(e.target.value)}
-                >
-                <option selected value=""></option>
-                <option value="rg">RG</option>
-                <option value="cpf">CPF</option>
-                <option value="cnpj">CNPJ</option>
-                </select>
+                {type === 'producer'&& (
+                    <>
+                        <div className="inputControl">
+                            <label htmlFor="documetType">Document Type</label>
+                            <select 
+                            value={documetType}
+                            onChange={(e) => setDocumentType(e.target.value)}
+                            >
+                            <option selected value=""></option>
+                            <option value="rg">RG</option>
+                            <option value="cpf">CPF</option>
+                            <option value="cnpj">CNPJ</option>
+                            </select>
+                        </div>
+
+                        <div className="inputControl">
+                            <label htmlFor="documetNumber">Document Number</label>
+                            <InputMask
+                            type="text"
+                            mask={formatDocument.current}
+                            value={documetNumber}
+                            name="documetNumber"
+                            onChange={(e) => setDocumentNumber(e.target.value)}
+                            required
+                            />
+                        </div>
+                    </>
+                )}
             </div>
 
-            <div className="inputControl">
-                <label htmlFor="documetNumber">Document Number</label>
-                <InputMask
-                type="text"
-                mask={formatDocument.current}
-                value={documetNumber}
-                name="documetNumber"
-                onChange={(e) => setDocumentNumber(e.target.value)}
-                required
-                />
-            </div>
-            </div>
-            <div className="inputGroup">
-            <div className="inputControl">
-                <label htmlFor="cep">CEP</label>
-                <InputMask
-                type="text"
-                name="cep"
-                value={cep}
-                onChange={(e) => setCep(e.target.value)}
-                mask='99999-999'
-                required
-                />
-            </div>
-            </div>
-            <div className="inputGroup">
-            <div className="inputControl">
-                <label htmlFor="state">State</label>
-                <input
-                name="state"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-                />
-            </div>
-            <div className="inputControl">
-                <label htmlFor="city">City</label>
-                <input
-                name="city"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                />
-            </div>
-            <div className="inputControl">
-                <label>Country</label>
-                <input
-                name="country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                required
-                />
-            </div>
-            </div>
+            {type === 'producer' && (
+                <>
+                    <div className="inputGroup">
+                        <div className="inputControl">
+                            <label htmlFor="cep">CEP</label>
+                            <InputMask
+                            type="text"
+                            name="cep"
+                            value={cep}
+                            onChange={(e) => setCep(e.target.value)}
+                            mask='99999-999'
+                            required
+                            />
+                        </div>
+                    </div>
+                    <div className="inputGroup">
+                        <div className="inputControl">
+                            <label htmlFor="state">State</label>
+                            <input
+                            name="state"
+                            value={state}
+                            onChange={(e) => setState(e.target.value)}
+                            required
+                            />
+                        </div>
+                        <div className="inputControl">
+                            <label htmlFor="city">City</label>
+                            <input
+                            name="city"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            required
+                            />
+                        </div>
+                        <div className="inputControl">
+                            <label>Country</label>
+                            <input
+                            name="country"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            required
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {type === 'activist' && (
+                <>
+                    <div className="inputGroup">
+                        <div className="inputControl">
+                            <label htmlFor="cep">CEP</label>
+                            <InputMask
+                            type="text"
+                            name="cep"
+                            value={cep}
+                            onChange={(e) => setCep(e.target.value)}
+                            mask='99999-999'
+                            required
+                            />
+                        </div>
+                    </div>
+                    <div className="inputGroup">
+                        <div className="inputControl">
+                            <label htmlFor="state">State</label>
+                            <input
+                            name="state"
+                            value={state}
+                            onChange={(e) => setState(e.target.value)}
+                            required
+                            />
+                        </div>
+                        <div className="inputControl">
+                            <label htmlFor="city">City</label>
+                            <input
+                            name="city"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            required
+                            />
+                        </div>
+                        <div className="inputControl">
+                            <label>Country</label>
+                            <input
+                            name="country"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            required
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
             <div className="inputGroup">
             {type === 'producer' && (
-                <div className="inputControl">
-                <label htmlFor="street">Street</label>
-                <input
-                    name="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    required
-                />
-                </div>
+                <>
+                    <div className="inputControl">
+                        <label htmlFor="street">Street</label>
+                        <input
+                            name="street"
+                            value={street}
+                            onChange={(e) => setStreet(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="inputControl">
+                        <label htmlFor="complement">Complement</label>
+                        <input
+                            name="complement"
+                            value={complement}
+                            onChange={(e) => setComplement(e.target.value)}
+                            required
+                        />
+                    </div>
+                </>
             )}
-            {type === 'producer' && (
-                <div className="inputControl">
-                <label htmlFor="complement">Complement</label>
-                <input
-                    name="complement"
-                    value={complement}
-                    onChange={(e) => setComplement(e.target.value)}
-                    required
-                />
-                </div>
-            )}
+
             </div>
             <button className="buttonRegister" type="submit" onClick={handleClick}>
             Register
@@ -324,6 +345,8 @@ function Register({ wallet }) {
             draggable
             pauseOnHover
         />
+
+        {loading && <Loading/>}
         </div>
     );
 }
