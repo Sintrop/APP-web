@@ -28,9 +28,9 @@ function Register({ wallet }) {
   const registerService = new RegisterService(wallet);
   function handleClick(e) {
     e.preventDefault();
-    if(proofPhoto === '' && type !== 'investor'){
-        return;
-    }
+    // if(proofPhoto === '' && type !== 'investor'){
+    //     return;
+    // }
     switch (type) {
       case "producer":
         registerService.addProducer(
