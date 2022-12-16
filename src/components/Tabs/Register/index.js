@@ -90,22 +90,22 @@ function Register({ wallet }) {
     }
   }
 
-  useEffect(() => {
-    switch (documetType) {
-      case 'cpf':
-        formatDocument.current = '999.999.999-99'
-        break;
-      case 'cnpj':
-        formatDocument.current = '99.999.999/9999-99'
-        break;
-      case 'rg':
-        formatDocument.current = '99.999.999-9'
-        break;
-    
-      default:
-        break;
-    }
-  }, [documetType]);
+    useEffect(() => {
+        switch (documetType) {
+        case 'cpf':
+            formatDocument.current = '999.999.999-99'
+            break;
+        case 'cnpj':
+            formatDocument.current = '99.999.999/9999-99'
+            break;
+        case 'rg':
+            formatDocument.current = '99.999.999-9'
+            break;
+        
+        default:
+            break;
+        }
+    }, [documetType]);
 
   async function handleProofPhoto(data){
     setLoading(true);
