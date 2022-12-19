@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import AvatarDefault from '../../../../assets/img/avatar03.png';
 import DevelopersService from '../../../../services/developersService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
+import {get} from '../../../../config/infura';
 
 export default function DeveloperPage({wallet}){
     const developersService = new DevelopersService(wallet)
     const [developerData, setDeveloperData] = useState([]);
+    const [base64, setBase64] = useState('');
 
     useEffect(() => {
         getDeveloper();
@@ -14,7 +15,14 @@ export default function DeveloperPage({wallet}){
 
     async function getDeveloper(){
         const response = await developersService.getDeveloper(wallet);
+        getBase64(response.proofPhoto)
         setDeveloperData(response);
+    }
+
+    async function getBase64(data){
+        const res = await get(data);
+        console.log(res)
+        setBase64(res);
     }
 
     return(
@@ -22,7 +30,7 @@ export default function DeveloperPage({wallet}){
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
                     <div className='area-avatar__producer-page'>
-                        <img src={AvatarDefault} className='avatar__producer-page'/>
+                        <img src={`data:image/png;base64,${base64}`} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Developer Wallet: </h1>
                             <a className='description-cards-info__producer-page' href='#'>
