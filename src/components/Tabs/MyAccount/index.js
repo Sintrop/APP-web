@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 
 import ProducerPage from './ProducerPage';
 import ActvistPage from './ActivistPage';
@@ -9,6 +10,12 @@ import ContributorPage from './ContributorPage';
 import InvestorPage from './InvestorPage';
 
 export default function MyAccount({wallet, userType, setTab}){
+    const {tabActive} = useParams();
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive]);
+    
     return(
         <div>
             {userType === '1' && (

@@ -3,6 +3,7 @@ import './producerPage.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
 import AvatarDefault from '../../../../assets/img/avatar02.png';
 
@@ -17,10 +18,15 @@ export default function ProducerPage({wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getProducer();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getProducer(){
         const response = await GetProducer(wallet);

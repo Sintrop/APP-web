@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DeveloperService from "../../../../services/developersService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function DevelopersRanking({ wallet, setTab }) {
   const developerService = new DeveloperService(wallet);
   const [activist, setActivist] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     developerService
       .getDeveloperRanking()

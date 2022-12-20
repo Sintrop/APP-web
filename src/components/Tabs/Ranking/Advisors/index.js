@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import AdvisorsService from "../../../../services/advisorsService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function AdvisorsRanking({ wallet, setTab }) {
   const advisorsService = new AdvisorsService(wallet);
   const [advisors, setAdvisors] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     advisorsService
       .getAdvisorsRanking()

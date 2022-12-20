@@ -3,9 +3,11 @@ import InspectionsService from "../../../services/inspectionsHistoryService";
 import Loading from "../../Loading";
 import '../manageInspections.css'
 import ListItemHistory from "./component/ListItemHistory";
+import {useParams} from 'react-router-dom';
 
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
+    const {tabActive} = useParams();
     const [inspections, setInspections ] = useState([]);
     const [loading, setLoading] = useState(false);
     const inspection = new InspectionsService(walletAddress);
@@ -13,6 +15,10 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     useEffect(() => {
         loadInspections()
     }, [])
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
     
   const loadInspections = () => {
     inspection.getAllInspections().then( res => {

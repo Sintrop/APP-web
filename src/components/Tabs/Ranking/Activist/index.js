@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function ActivistRanking({ wallet, setTab }) {
-  const activistService = new ActivistService(wallet);
-  const [activist, setActivist] = useState([]);
-  useEffect(() => {
-    activistService
-      .getAtivistRanking()
-      .then((res) => {
-        if(res.length > 0){
-          let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
-          setActivist(activistSort);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    const activistService = new ActivistService(wallet);
+    const [activist, setActivist] = useState([]);
+    const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
+    useEffect(() => {
+        activistService
+        .getAtivistRanking()
+        .then((res) => {
+            if(res.length > 0){
+            let activistSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
+            setActivist(activistSort);
+            }
+        })
+        .catch((err) => console.log(err));
+    }, []);
   return (
     <>
       <div className='header-isa'>
