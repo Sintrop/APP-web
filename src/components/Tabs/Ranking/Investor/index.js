@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import InvestorService from "../../../../services/investorService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function InvestorRanking({ wallet, setTab }) {
   const investorService = new InvestorService(wallet);
   const [investor, setInvestor] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+  
   useEffect(() => {
     investorService
       .getInvestorRanking()

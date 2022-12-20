@@ -5,6 +5,7 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
@@ -14,10 +15,15 @@ export default function ActivistPage({wallet, setTab}){
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getActivist();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getActivist(){
         const response = await activistService.getAtivist(wallet);

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './isa.css';
+import {useParams} from 'react-router-dom';
 
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
@@ -13,6 +14,12 @@ export default function ISA({user, walletAddress, setTab}){
     const [categories, setCategories] = useState([]);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
 
     useEffect(() => {
         getCategories()

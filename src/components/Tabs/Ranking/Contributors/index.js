@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ContributorsService from "../../../../services/contributorService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function ContributorsRanking({ wallet, setTab }) {
   const contributorsService = new ContributorsService(wallet);
   const [activist, setActivist] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+  
   useEffect(() => {
     contributorsService
       .getContributorsRanking()

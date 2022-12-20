@@ -3,15 +3,21 @@ import AdvisorsService from '../../../../services/advisorsService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
-export default function AdvisorPage({wallet}){
+export default function AdvisorPage({wallet, setTab}){
     const advisorService = new AdvisorsService(wallet)
     const [advisorData, setAdvisorData] = useState([]);
     const [base64, setBase64] = useState('');
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getAdvisor();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getAdvisor(){
         const response = await advisorService.getAdvisors(wallet);

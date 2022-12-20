@@ -3,15 +3,21 @@ import DevelopersService from '../../../../services/developersService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
-export default function DeveloperPage({wallet}){
+export default function DeveloperPage({wallet, setTab}){
     const developersService = new DevelopersService(wallet)
     const [developerData, setDeveloperData] = useState([]);
     const [base64, setBase64] = useState('');
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getDeveloper();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getDeveloper(){
         const response = await developersService.getDeveloper(wallet);

@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ResearchersService from "../../../../services/researchersService";
 import "../../Ranking/ranking.css";
+import {useParams} from 'react-router-dom';
+
 export default function ResearchersRanking({ wallet, setTab }) {
   const researchersService = new ResearchersService(wallet);
   const [researchers, setResearchers] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     researchersService
       .getResearcherRanking()

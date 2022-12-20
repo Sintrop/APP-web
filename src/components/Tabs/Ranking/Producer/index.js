@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function ProducerRanking({ wallet, setTab }) {
   const producerService = new ProducerService(wallet);
-  const [producers, setProducers] = useState([])
+  const [producers, setProducers] = useState([]);
+  const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     producerService
       .getProducerRanking()

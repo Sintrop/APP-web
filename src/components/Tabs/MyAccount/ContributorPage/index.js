@@ -3,15 +3,21 @@ import ContributorsService from '../../../../services/contributorService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
-export default function ContributorPage({wallet}){
+export default function ContributorPage({wallet, setTab}){
     const contributorService = new ContributorsService(wallet)
     const [contributorData, setContributorData] = useState([]);
     const [base64, setBase64] = useState('');
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getContributor();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getContributor(){
         const response = await contributorService.getContributors(wallet);

@@ -3,14 +3,20 @@ import AvatarDefault from '../../../../assets/img/avatar03.png';
 import ResearchersService from '../../../../services/researchersService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
+import {useParams} from 'react-router-dom';
 
-export default function ResearcherPage({wallet}){
+export default function ResearcherPage({wallet, setTab}){
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
+    const {tabActive} = useParams();
 
     useEffect(() => {
         getResearcher();
     },[]);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     async function getResearcher(){
         const response = await researchersService.getResearchers(wallet);
