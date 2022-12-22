@@ -60,7 +60,8 @@ export default function Menu({ changeTab }) {
       icon: IconPools, 
       action: "",
       subItem: [
-        {id: 'developers-pool', label: 'Developers'}
+        {id: 'developers-pool', label: 'Developers'},
+        {id: 'producers-pool', label: 'Producers'}
       ] 
     },
     { 

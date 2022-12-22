@@ -15,6 +15,19 @@ export const GetProducer = async (wallet) => {
     return dataProducer;
 }
 
+export const WithdrawTokens = async (wallet) => {
+    const web3js = new Web3(window.ethereum);
+    const contractAddress = ProducerContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(ProducerContract.abi, contractAddress);
+    await contract.methods.withdraw().send({from: wallet})
+    .then((res) => {
+        return res
+    })
+    .catch((err) => {
+        return false
+    })
+}
+
 class ProducerService {
     constructor(wallet) {
         this.web3 = new Web3(window.ethereum);

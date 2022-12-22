@@ -12,16 +12,23 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [updatedAt, setUpdatedAt] = useState('');
+    const [acceptedAt, setAcceptedAt] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
 
     useEffect(() => {
         timestampToDate();
     }, []);
 
     function timestampToDate(){
-        const time = parseInt(data.updatedAt);
-        let date = new Date(time*1000);
-        setUpdatedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        const acceptedAtTime = parseInt(data.acceptedAtTimestamp);
+        const createdAtTime = new Date(parseInt(data.createdAtTimestamp)*1000);
+        setCreatedAt(format(createdAtTime, "dd/MM/yyyy - kk:mm"))
+        if(acceptedAtTime === 0){
+            setAcceptedAt('Not Accepted')
+        }else{
+            const date = new Date(acceptedAtTime*1000);
+            setAcceptedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        }
     }
 
     return(
@@ -41,7 +48,7 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 )}
             </td>
             <td>
-                <p>{data.createdAt}</p>
+                <p>{createdAt}</p>
             </td>
             <td>
             
@@ -64,7 +71,7 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 )}
             </td>
             <td>
-                <p>{updatedAt}</p>
+                <p>{acceptedAt}</p>
             </td>
             <td>
                 <p>{data.isaScore}</p>
