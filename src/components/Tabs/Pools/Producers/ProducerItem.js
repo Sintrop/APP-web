@@ -7,6 +7,7 @@ export default function ProducerItem({data, setTab}){
 
     useEffect(() => {
         getBalance();
+        console.log(data)
     },[]);
 
     async function getBalance(){
@@ -18,7 +19,7 @@ export default function ProducerItem({data, setTab}){
         <tr key={data.id}>
             <td>{data.id}</td>
             <td id='createdByIsaTable'>
-                <a href="#" onClick={() => setTab('developer-page', data.producerWallet)}>
+                <a href="#" onClick={() => setTab('producer-page', data.producerWallet)}>
                     <p className="p-wallet" title={data.producerWallet}>
                         {data.producerWallet}
                     </p>
@@ -26,6 +27,7 @@ export default function ProducerItem({data, setTab}){
             </td>
             <td>{data.name}</td>
             <td>{parseFloat(balanceProducer) / 10**18}</td>
+            <td>{data.isa.isaScore}</td>
         </tr>
     )
 }

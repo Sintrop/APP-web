@@ -56,12 +56,12 @@ export default function Menu({ changeTab }) {
     },
     { 
       id: "pools", 
-      title: "Pools", 
+      title: "Token", 
       icon: IconPools, 
       action: "",
       subItem: [
+        {id: 'producers-pool', label: 'Producers'},
         {id: 'developers-pool', label: 'Developers'},
-        {id: 'producers-pool', label: 'Producers'}
       ] 
     },
     { 

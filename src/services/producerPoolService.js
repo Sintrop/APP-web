@@ -51,3 +51,15 @@ export const GetBalanceProducer = async (walletProducer) => {
 
     return balance;
 }
+
+export const CheckNextAprove = async (era) => {
+    let eras = 0;
+    const web3js = new Web3(window.ethereum);
+    const contract = new web3js.eth.Contract(contractAbi, contractAddress);
+    await contract.methods.nextApproveIn(era).call({from: contractAddress})
+    .then((res) => {
+        eras = res;
+    })
+
+    return eras;
+}

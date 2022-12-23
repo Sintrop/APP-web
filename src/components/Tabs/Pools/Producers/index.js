@@ -3,8 +3,14 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 //services
-import {GetTokensPerEra, GetCurrentContractEra, GetBalanceContract, GetBalanceProducer} from '../../../../services/producerPoolService';
-import ProducerService, {GetProducer, WithdrawTokens} from '../../../../services/producerService';
+import {
+    GetTokensPerEra, 
+    GetCurrentContractEra, 
+    GetBalanceContract, 
+    GetBalanceProducer, 
+    CheckNextAprove
+} from '../../../../services/producerPoolService';
+import ProducerService, {GetProducer, WithdrawTokens, GetTotalScoreProducers} from '../../../../services/producerService';
 import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
 
@@ -16,6 +22,8 @@ export default function ProducersPool({user, wallet, setTab}){
     const [currentEra, setCurrentEra] = useState('0');
     const [producerInfo, setProducerInfo] = useState([]);
     const [balanceProducer, setBalanceProducer] = useState('0');
+    const [scoresProducers, setScoreProducers] = useState('0');
+    const [nextAprove, setNextAprove] = useState('0');
     const [producersList, setProducersList] = useState([]);
     const {tabActive} = useParams();
     
@@ -27,6 +35,20 @@ export default function ProducersPool({user, wallet, setTab}){
         getInfosPool();
     },[]);
 
+    useEffect(() => {
+        producerService
+        .getProducerRanking()
+        .then((res) =>{
+            if(res.length > 0){
+
+            let producerSort = res.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
+            
+            setProducersList(producerSort)
+            } 
+        })
+        .catch((err) => console.log(err));
+    },[])
+
 
     async function getInfosPool(){
         const tokensEra = await GetTokensPerEra();
@@ -35,14 +57,17 @@ export default function ProducersPool({user, wallet, setTab}){
         setCurrentEra(eraContract);
         const balanceContract = await GetBalanceContract();
         setBalanceContract(balanceContract);
+        const scoreProducers = await GetTotalScoreProducers();
+        setScoreProducers(scoreProducers);
         if(user === '1'){
             const producer = await GetProducer(wallet);
             setProducerInfo(producer);
             const balanceProducer = await GetBalanceProducer(wallet);
             setBalanceProducer(balanceProducer);
+            const nextAprove = await CheckNextAprove(producerInfo.pool.currentEra);
+            setNextAprove(nextAprove);
         }
-        const producersRanking = await producerService.getProducerRanking();
-        setProducersList(producersRanking);
+        
     }
 
 
@@ -56,7 +81,7 @@ export default function ProducersPool({user, wallet, setTab}){
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Producers Pool</h1>
+                <h1>Producers distribution pool</h1>
                 <div className='area-btn-header-isa-page'></div>
             </div>
             {user === '1' && (
@@ -65,6 +90,10 @@ export default function ProducersPool({user, wallet, setTab}){
                         <h1 className='card__title'>Your Status</h1>
                         <p className='p'>
                             Current Era: {producerInfo.pool === undefined ? '0' : producerInfo.pool.currentEra}
+                        </p>
+
+                        <p className='p'>
+                            Next Aprove In: {nextAprove}
                         </p>
                     </div>
                     <div className='stats-developer__card card-stats'>
@@ -95,6 +124,9 @@ export default function ProducersPool({user, wallet, setTab}){
                     <h2 className='card__subtitle'>Current ERA</h2>
                     <p className='p'>{currentEra}</p>
 
+                    <h2 className='card__subtitle'>Producers total score</h2>
+                    <p className='p'>{scoresProducers}</p>
+
                 </div>
 
                 <div className='stats-developer__card card-developers-list'>
@@ -105,6 +137,7 @@ export default function ProducersPool({user, wallet, setTab}){
                         <th>Wallet</th>
                         <th>Name</th>
                         <th>Balance</th>
+                        <th>Score</th>
                         </tr>
                         {producersList.map((item) => (
                             <ProducerItem 
