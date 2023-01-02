@@ -12,17 +12,33 @@ export default function ItemInspection({data, setTab, typeAccount}){
     const [isas, setIsas] = useState([]);
     const [moreDetails, setMoreDetails] = useState('item-inpection__container');
     const [showMoreDetails, setShowMoreDetails] = useState(false);
-    const [updatedAt, setUpdatedAt] = useState('');
+    const [inspectedAt, setInspectedAt] = useState('');
+    const [acceptedAt, setAcceptedAt] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
 
     useEffect(() => {
         getIsa();
-        timestampToDate();
+        timestampToDate()
+        console.log(data)
     }, []);
 
     function timestampToDate(){
-        const time = parseFloat(data.updatedAt) * 1000;
-        const date = new Date(time);
-        setUpdatedAt(format(date, 'dd/MM/yyyy - kk:mm'));
+        const acceptedAtTime = parseInt(data.acceptedAtTimestamp);
+        const createdAtTime = new Date(parseInt(data.createdAtTimestamp)*1000);
+        const inspectedAtTime = new Date(parseInt(data.inspectedAtTimestamp)*1000);
+        setCreatedAt(format(createdAtTime, "dd/MM/yyyy - kk:mm"))
+        if(acceptedAtTime === 0){
+            setAcceptedAt('Not Accepted')
+        }else{
+            const date = new Date(acceptedAtTime*1000);
+            setAcceptedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        }
+        if(inspectedAtTime === 0){
+            setInspectedAt('Not inspected')
+        }else{
+            const date = new Date(acceptedAtTime*1000);
+            setInspectedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        }
     }
 
     async function getIsa(){
@@ -69,12 +85,17 @@ export default function ItemInspection({data, setTab, typeAccount}){
 
                 <div className='item-inspection__card-info'>
                     <h1 className='item-inspection__tit-cards-info'>Requested At: </h1>
-                    <p className='item-inspection__description-cards-info'> {data.createdAt}</p>
+                    <p className='item-inspection__description-cards-info'> {createdAt}</p>
                 </div>
 
                 <div className='item-inspection__card-info'>
-                    <h1 className='item-inspection__tit-cards-info'>Updated At: </h1>
-                    <p className='item-inspection__description-cards-info'> {updatedAt}</p>
+                    <h1 className='item-inspection__tit-cards-info'>Accepted At: </h1>
+                    <p className='item-inspection__description-cards-info'> {acceptedAt}</p>
+                </div>
+
+                <div className='item-inspection__card-info'>
+                    <h1 className='item-inspection__tit-cards-info'>Inspected At: </h1>
+                    <p className='item-inspection__description-cards-info'> {inspectedAt}</p>
                 </div>
             </div>
             <div className='item-inspection__content-inspections'>
