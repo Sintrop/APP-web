@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 export default function ActivistRanking({ wallet, setTab }) {
     const activistService = new ActivistService(wallet);
     const [activist, setActivist] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress} = useParams();
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -40,7 +40,7 @@ export default function ActivistRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('activist-page', item.activistWallet)}>
+              <a href={`/dashboard/${walletAddress}/activist-page/${item.activistWallet}`}>
                 <p className="p-wallet" title={item.activistWallet}>
                   {item.activistWallet}
                 </p>

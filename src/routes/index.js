@@ -13,7 +13,7 @@ export default function Router(){
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<Login/>}/>
-                <Route exact path="/dashboard/:walletAddress/:tabActive" element={<Dashboard/>}/>
+                <Route path="/dashboard/:walletAddress/:tabActive/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/register" element={<Register/>}/>
                 <Route exact path="/account-producer/:walletAddress" element={<AccountProducer/>}/>

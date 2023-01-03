@@ -9,7 +9,7 @@ export default function DeveloperPage({wallet, setTab}){
     const developersService = new DevelopersService(wallet)
     const [developerData, setDeveloperData] = useState([]);
     const [base64, setBase64] = useState('');
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getDeveloper();
@@ -20,7 +20,7 @@ export default function DeveloperPage({wallet, setTab}){
     }, [tabActive])
 
     async function getDeveloper(){
-        const response = await developersService.getDeveloper(wallet);
+        const response = await developersService.getDeveloper(walletSelected);
         getBase64(response.proofPhoto)
         setDeveloperData(response);
     }

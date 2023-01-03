@@ -78,7 +78,11 @@ export default function Dashboard(){
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
-                    navigate(`/dashboard/${walletAddress}/${tab}`)
+                    if(tab === 'my-account'){
+                        navigate(`/dashboard/${walletAddress}/${tab}/${walletAddress}`)
+                    }else{
+                        navigate(`/dashboard/${walletAddress}/${tab}/main`)
+                    }
                 }}
             />
 
@@ -193,7 +197,7 @@ export default function Dashboard(){
                 )}
                 {activeTab ===  'producer-page' && (
                     <ProducerPage 
-                        wallet={walletSelect}
+                        wallet={walletAddress}
                         setTab={(tab, wallet) => {
                             setWalletSelect(wallet)
                             setActiveTab(tab)

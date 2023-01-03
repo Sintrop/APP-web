@@ -9,7 +9,7 @@ export default function ContributorPage({wallet, setTab}){
     const contributorService = new ContributorsService(wallet)
     const [contributorData, setContributorData] = useState([]);
     const [base64, setBase64] = useState('');
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getContributor();
@@ -20,7 +20,7 @@ export default function ContributorPage({wallet, setTab}){
     }, [tabActive])
 
     async function getContributor(){
-        const response = await contributorService.getContributors(wallet);
+        const response = await contributorService.getContributors(walletSelected);
         getBase64(response.proofPhoto)
         setContributorData(response);
     }

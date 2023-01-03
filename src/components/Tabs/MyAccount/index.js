@@ -10,10 +10,10 @@ import ContributorPage from './ContributorPage';
 import InvestorPage from './InvestorPage';
 
 export default function MyAccount({wallet, userType, setTab}){
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress} = useParams();
 
     useEffect(() => {
-        setTab(tabActive, '')
+        setTab(tabActive, '');
     }, [tabActive]);
     
     return(

@@ -9,7 +9,7 @@ export default function AdvisorPage({wallet, setTab}){
     const advisorService = new AdvisorsService(wallet)
     const [advisorData, setAdvisorData] = useState([]);
     const [base64, setBase64] = useState('');
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getAdvisor();
@@ -20,7 +20,7 @@ export default function AdvisorPage({wallet, setTab}){
     }, [tabActive])
 
     async function getAdvisor(){
-        const response = await advisorService.getAdvisors(wallet);
+        const response = await advisorService.getAdvisors(walletSelected);
         getBase64(response.proofPhoto)
         setAdvisorData(response);
     }

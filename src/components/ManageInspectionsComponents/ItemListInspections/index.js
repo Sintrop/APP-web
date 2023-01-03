@@ -45,9 +45,8 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     return(
         <tr key={data.id}>
             <td>
-                <a href='#'>
-                    <p 
-                        onClick={() => setTab('producer-page', data.createdBy)} 
+                <a href={`/dashboard/${walletAddress}/producer-page/${data.createdBy}`}>
+                    <p  
                         className='id-wallets' 
                         title={data.createdBy}
                     >{data.createdBy}</p>
@@ -57,7 +56,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 {data.status == 0 ? (
                     <p>Not accepted</p>
                 ) : (
-                    <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                    <a href={`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`}>
                         <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
                     </a>
                 )}

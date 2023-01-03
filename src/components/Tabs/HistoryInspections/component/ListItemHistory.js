@@ -34,7 +34,7 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     return(
         <tr key={data.id}>
             <td>
-                <a href='#' onClick={() => setTab('producer-page', data.createdBy)}>
+                <a href={`/dashboard/${walletAddress}/producer-page/${data.createdBy}`}>
                 <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
                 </a>
             </td>
@@ -42,7 +42,7 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 {data.status == 0 ? (
                     <p>No accepted</p>
                 ) : (
-                    <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                    <a href={`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`}>
                         <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
                     </a>
                 )}

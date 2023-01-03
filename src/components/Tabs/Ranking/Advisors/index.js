@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 export default function AdvisorsRanking({ wallet, setTab }) {
   const advisorsService = new AdvisorsService(wallet);
   const [advisors, setAdvisors] = useState([]);
-  const {tabActive} = useParams();
+  const {tabActive, walletAddress} = useParams();
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -33,27 +33,19 @@ export default function AdvisorsRanking({ wallet, setTab }) {
           <th>#</th>
           <th>Wallet</th>
           <th>Name</th>
-          <th>Address</th>
           {/* <th>Developer Level</th> */}
         </tr>
         {advisors.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('advisor-page', item.advisorWallet)}>
+              <a href={`/dashboard/${walletAddress}/advisor-page/${item.advisorWallet}`}>
                 <p className="p-wallet" title={item.advisorWallet}>
                   {item.advisorWallet}
                 </p>
               </a>
             </td>
             <td>{item.name}</td>
-            <td>
-              <div className="div-address">
-                {item.advisorAddress.map((address) => (
-                  <p key={`${item.cep}-${Math.random()}`}>{address},</p>
-                ))}
-              </div>
-            </td>
             {/* <td></td> */}
           </tr>
         ))}

@@ -8,18 +8,18 @@ import {useParams} from 'react-router-dom';
 export default function ResearcherPage({wallet, setTab}){
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getResearcher();
     },[]);
 
     useEffect(() => {
-        setTab(tabActive, '')
+        setTab(tabActive, '');
     }, [tabActive])
 
     async function getResearcher(){
-        const response = await researchersService.getResearchers(wallet);
+        const response = await researchersService.getResearchers(walletSelected);
         setResearcherData(response);
     }
 

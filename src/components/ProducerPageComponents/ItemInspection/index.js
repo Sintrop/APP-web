@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './itemInspection.css';
 import {format} from 'date-fns';
+import { useParams } from 'react-router-dom';
 
 //services
 import {GetIsa} from '../../../services/manageInspectionsService';
@@ -8,7 +9,8 @@ import {GetIsa} from '../../../services/manageInspectionsService';
 //components
 import ItemCategory from '../ItemCategory';
 
-export default function ItemInspection({data, setTab, typeAccount}){
+export default function ItemInspection({data, setTab, typeAccount, wallet}){
+    const {walletAddress} = useParams();
     const [isas, setIsas] = useState([]);
     const [moreDetails, setMoreDetails] = useState('item-inpection__container');
     const [showMoreDetails, setShowMoreDetails] = useState(false);
@@ -65,14 +67,7 @@ export default function ItemInspection({data, setTab, typeAccount}){
                             {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
                         </h1>
                         <a 
-                            onClick={() => {
-                                if(typeAccount === 'producer'){
-                                    setTab('activist-page', data.acceptedBy);
-                                }else{
-                                    setTab('producer-page', data.createdBy);
-                                }
-                            }}
-                            href='#' 
+                            href={typeAccount === 'producer' ? `/dashboard/${walletAddress}/activist-page/${data.createdBy}` : `/dashboard/${walletAddress}/producer-page/${data.createdBy}`} 
                             className='item-inspection__description-cards-info'
                         >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>
