@@ -67,7 +67,7 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
                             {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
                         </h1>
                         <a 
-                            href={typeAccount === 'producer' ? `/dashboard/${walletAddress}/activist-page/${data.createdBy}` : `/dashboard/${walletAddress}/producer-page/${data.createdBy}`} 
+                            href={typeAccount === 'producer' ? `/dashboard/${walletAddress}/activist-page/${data.acceptedBy}` : `/dashboard/${walletAddress}/producer-page/${data.createdBy}`} 
                             className='item-inspection__description-cards-info'
                         >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>

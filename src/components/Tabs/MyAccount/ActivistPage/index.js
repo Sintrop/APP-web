@@ -39,7 +39,6 @@ export default function ActivistPage({wallet, setTab}){
 
     async function getBase64(data){
         const res = await get(data);
-        console.log(res)
         setBase64(res);
     }
 

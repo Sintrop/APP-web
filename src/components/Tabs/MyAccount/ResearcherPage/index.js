@@ -50,13 +50,6 @@ export default function ResearcherPage({wallet, setTab}){
                             {researcherData === [] ? '' : researcherData.name}
                         </p>
                     </div>
-
-                    <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
-                        <p className='description-cards-info__producer-page'>
-                            {researcherData.researcherAddress === undefined ? '' : `${researcherData.researcherAddress.city}/${researcherData.researcherAddress.state}, ${researcherData.researcherAddress.country}`}
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
