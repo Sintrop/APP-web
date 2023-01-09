@@ -18,7 +18,7 @@ export default function ProducerPage({wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getProducer();
@@ -29,7 +29,7 @@ export default function ProducerPage({wallet, setTab}){
     }, [tabActive])
 
     async function getProducer(){
-        const response = await GetProducer(wallet);
+        const response = await GetProducer(walletSelected);
         getBase64(response.proofPhoto)
         setProducerData(response);
         getInspections();
@@ -115,6 +115,7 @@ export default function ProducerPage({wallet, setTab}){
                                     key={item.id} 
                                     setTab={(tab, wallet) => setTab(tab, wallet)}  
                                     typeAccount='producer'
+                                    wallet={wallet}
                                 />
                             )
                         }

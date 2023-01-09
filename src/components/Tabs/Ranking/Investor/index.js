@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 export default function InvestorRanking({ wallet, setTab }) {
   const investorService = new InvestorService(wallet);
   const [investor, setInvestor] = useState([]);
-  const {tabActive} = useParams();
+  const {tabActive, walletAddress} = useParams();
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -39,7 +39,7 @@ export default function InvestorRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>
-              <a href="#" onClick={() => setTab('investor-page', item.investorWallet)}>{item.investorWallet}</a>
+              <a href={`/dashboard/${walletAddress}/investor-page/${item.investorWallet}`}>{item.investorWallet}</a>
             </td>
             <td>{item.name}</td>
             <td>

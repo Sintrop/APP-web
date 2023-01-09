@@ -17,7 +17,8 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     const [showSeeResult, setShowSeeResult] = useState(false);
     const [inspection, setInspection] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [updatedAt, setUpdatedAt] = useState('');
+    const [acceptedAt, setAcceptedAt] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
 
     useEffect(() => {
         getInspection();
@@ -30,17 +31,22 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     }
 
     function timestampToDate(){
-        const time = parseInt(data.updatedAt);
-        let date = new Date(time*1000);
-        setUpdatedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        const acceptedAtTime = parseInt(data.acceptedAtTimestamp);
+        const createdAtTime = new Date(parseInt(data.createdAtTimestamp)*1000);
+        setCreatedAt(format(createdAtTime, "dd/MM/yyyy - kk:mm"))
+        if(acceptedAtTime === 0){
+            setAcceptedAt('Not Accepted')
+        }else{
+            const date = new Date(acceptedAtTime*1000);
+            setAcceptedAt(format(date, "dd/MM/yyyy - kk:mm"))
+        }
     }
 
     return(
         <tr key={data.id}>
             <td>
-                <a href='#'>
-                    <p 
-                        onClick={() => setTab('producer-page', data.createdBy)} 
+                <a href={`/dashboard/${walletAddress}/producer-page/${data.createdBy}`}>
+                    <p  
                         className='id-wallets' 
                         title={data.createdBy}
                     >{data.createdBy}</p>
@@ -48,15 +54,15 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
             </td>
             <td>
                 {data.status == 0 ? (
-                    <p>No accepted</p>
+                    <p>Not accepted</p>
                 ) : (
-                    <a href='#' onClick={() => setTab('activist-page', data.acceptedBy)}>
+                    <a href={`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`}>
                         <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
                     </a>
                 )}
             </td>
             <td>
-                <p>{data.createdAt}</p>
+                <p>{createdAt}</p>
             </td>
             <td>
                 
@@ -79,7 +85,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 )}
             </td>
             <td>
-                {updatedAt}
+                {acceptedAt}
             </td>
             <td>
                 <p>{data.isaScore}</p>

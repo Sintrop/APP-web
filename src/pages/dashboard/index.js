@@ -23,6 +23,7 @@ import MyAccount from '../../components/Tabs/MyAccount';
 import Certificate from '../../components/Tabs/Certificate';
 import DevelopersPool from '../../components/Tabs/Pools/Developers';
 import ReportsPage from '../../components/Tabs/Reports';
+import ProducersPool from '../../components/Tabs/Pools/Producers';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -77,7 +78,11 @@ export default function Dashboard(){
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
-                    navigate(`/dashboard/${walletAddress}/${tab}`)
+                    if(tab === 'my-account'){
+                        navigate(`/dashboard/${walletAddress}/${tab}/${walletAddress}`)
+                    }else{
+                        navigate(`/dashboard/${walletAddress}/${tab}/main`)
+                    }
                 }}
             />
 
@@ -192,7 +197,7 @@ export default function Dashboard(){
                 )}
                 {activeTab ===  'producer-page' && (
                     <ProducerPage 
-                        wallet={walletSelect}
+                        wallet={walletAddress}
                         setTab={(tab, wallet) => {
                             setWalletSelect(wallet)
                             setActiveTab(tab)
@@ -275,6 +280,17 @@ export default function Dashboard(){
 
                 {activeTab === 'developers-pool' && (
                     <DevelopersPool 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'producers-pool' && (
+                    <ProducersPool 
                         user={user} 
                         wallet={walletAddress}
                         setTab={(tab, wallet) => {

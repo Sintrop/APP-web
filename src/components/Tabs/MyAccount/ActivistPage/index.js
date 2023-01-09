@@ -15,7 +15,7 @@ export default function ActivistPage({wallet, setTab}){
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getActivist();
@@ -26,7 +26,7 @@ export default function ActivistPage({wallet, setTab}){
     }, [tabActive])
 
     async function getActivist(){
-        const response = await activistService.getAtivist(wallet);
+        const response = await activistService.getAtivist(walletSelected);
         setActivistData(response)
         getBase64(response.proofPhoto)
         getInspections();
@@ -39,7 +39,6 @@ export default function ActivistPage({wallet, setTab}){
 
     async function getBase64(data){
         const res = await get(data);
-        console.log(res)
         setBase64(res);
     }
 
@@ -55,7 +54,7 @@ export default function ActivistPage({wallet, setTab}){
                         />
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Activist Wallet: </h1>
-                            <a className='description-cards-info__producer-page' href='/producer-page'>
+                            <a className='description-cards-info__producer-page'>
                                 {activistData === [] ? '' : activistData.activistWallet}
                             </a>
                         </div>

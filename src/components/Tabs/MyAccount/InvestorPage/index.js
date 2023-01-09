@@ -9,7 +9,7 @@ import {useParams} from 'react-router-dom';
 export default function InvestorPage({wallet, setTab}){
     const investorService = new InvestorService(wallet)
     const [investorData, setInvestorData] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getInvestor();
@@ -20,7 +20,7 @@ export default function InvestorPage({wallet, setTab}){
     }, [tabActive])
 
     async function getInvestor(){
-        const response = await investorService.getInvestor(wallet);
+        const response = await investorService.getInvestor(walletSelected);
         setInvestorData(response);
     }
 

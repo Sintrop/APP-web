@@ -70,7 +70,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Updated At</th>
+                                <th>Accepted At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

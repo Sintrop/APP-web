@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 export default function ProducerRanking({ wallet, setTab }) {
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([]);
-  const {tabActive} = useParams();
+  const {tabActive, walletAddress} = useParams();
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -45,7 +45,7 @@ export default function ProducerRanking({ wallet, setTab }) {
           <tr key={item.producerWallet}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href='#' onClick={() => setTab('producer-page', item.producerWallet)}>
+              <a href={`/dashboard/${walletAddress}/producer-page/${item.producerWallet}`}>
                 <p className="p-wallet" title={item.producerWallet}>
                   {item.producerWallet}
                 </p>
