@@ -17,10 +17,25 @@ export default function Menu({ changeTab }) {
   const [open, setOpen] = useState(false);
   const [openPools, setOpenPools] = useState(false);
   const [itemsMenu, setItemsMenu] = useState([
-    { id: "isa", title: "ISA", icon: IconISA, action: "" },
+    {
+      id: "rankings",
+      title: "Community",
+      icon: IconActivists,
+      action: "",
+      subItem: [
+        { id: "producers", label: "Producers" },
+        { id: "activists", label: "Activists" },
+        { id: "advisors", label: "Advisors" },
+        { id: "investors", label: "Investors" },
+        { id: "developers", label: "Developers" },
+        { id: "contributors", label: "Contributors" },
+        { id: "researchers", label: "Researchers" },
+      ],
+    },
+    { id: "isa", title: "Sustainable Agriculture Index", icon: IconISA, action: "" },
     {
       id: "inspection-history",
-      title: "Inspection History",
+      title: "Inspections History",
       icon: IconInspections,
       action: "",
     },
@@ -33,30 +48,14 @@ export default function Menu({ changeTab }) {
     // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
     // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
     {
-      id: "rankings",
-      title: "Community",
-      icon: IconActivists,
-      action: "",
-      subItem: [
-        { id: "producers", label: "Producers" },
-        { id: "activists", label: "Activists" },
-        { id: "advisors", label: "Advisors" },
-        { id: "investors", label: "Investor" },
-        { id: "developers", label: "Developers" },
-        { id: "contributors", label: "Contributors" },
-        { id: "researchers", label: "Researchers" },
-      ],
-    },
-    { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
-    {
       id: "certificate",
-      title: "Certificate",
+      title: "Certificates",
       icon: IconCertificate,
       action: "",
     },
     { 
       id: "pools", 
-      title: "Token", 
+      title: "SAC Token", 
       icon: IconPools, 
       action: "",
       subItem: [
@@ -64,12 +63,13 @@ export default function Menu({ changeTab }) {
         {id: 'developers-pool', label: 'Developers'},
       ] 
     },
-    { 
-      id: "delations", 
-      title: "Delations", 
-      icon: IconInspections, 
-      action: ""
-    },
+    //{ 
+    //  id: "delations", 
+    //  title: "Delations", 
+    //  icon: IconInspections, 
+    //  action: ""
+    //},
+    { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
   ]);
   const toggleSubItem = (id) => {
     if(id === 'rankings'){

@@ -26,7 +26,7 @@ export default function InvestorRanking({ wallet, setTab }) {
   return (
     <>
     <div className='header-isa'>
-        <h1>Investor</h1>          
+        <h1>Investors</h1>          
       </div>
       <table border="1">
         <tr>

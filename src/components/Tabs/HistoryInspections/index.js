@@ -30,7 +30,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     <>
       <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>History Inspections</h1>
+                <h1>Inspections History</h1>
                 <div className='area-btn-header-isa-page'>
                     {/* {user == 1 && (
                         <button
