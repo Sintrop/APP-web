@@ -18,7 +18,7 @@ import {GetProducer} from '../../../services/producerService';
 //components
 import Loading from '../../Loading';
 
-export default function Certificate({userType, wallet, setTab}){
+export default function ProducerCertificate({userType, wallet, setTab}){
     const {tabActive} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);

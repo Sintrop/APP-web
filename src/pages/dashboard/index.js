@@ -20,7 +20,8 @@ import InvestorPage from '../../components/Tabs/MyAccount/InvestorPage';
 import ContributorPage from '../../components/Tabs/MyAccount/ContributorPage';
 import AdvisorPage from '../../components/Tabs/MyAccount/AdvisorPage';
 import MyAccount from '../../components/Tabs/MyAccount';
-import Certificate from '../../components/Tabs/Certificate';
+import ProducerCertificate from '../../components/Tabs/Certificate';
+import InvestorCertificate from '../../components/Tabs/Certificate/Investor';
 import DevelopersPool from '../../components/Tabs/Pools/Developers';
 import ReportsPage from '../../components/Tabs/Reports';
 import ProducersPool from '../../components/Tabs/Pools/Producers';
@@ -268,8 +269,17 @@ export default function Dashboard(){
                         }}
                     />
                 )}
-                {activeTab === 'certificate' && (
-                    <Certificate 
+                {activeTab === 'producer-certificate' && (
+                    <ProducerCertificate 
+                        userType={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'investor-certificate' && (
+                    <InvestorCertificate 
                         userType={user} 
                         wallet={walletAddress}
                         setTab={(tab, wallet) => {

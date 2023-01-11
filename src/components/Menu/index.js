@@ -16,6 +16,7 @@ import ItemsList from "./itemsList";
 export default function Menu({ changeTab }) {
   const [open, setOpen] = useState(false);
   const [openPools, setOpenPools] = useState(false);
+  const [openCertificates, setOpenCertificates] = useState(false);
   const [itemsMenu, setItemsMenu] = useState([
     {
       id: "rankings",
@@ -48,10 +49,14 @@ export default function Menu({ changeTab }) {
     // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
     // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
     {
-      id: "certificate",
+      id: "certificates",
       title: "Certificates",
       icon: IconCertificate,
       action: "",
+      subItem:[
+        {id: 'producer-certificate', label: 'Producer'},
+        {id: 'investor-certificate', label: 'Investor'},
+      ]
     },
     { 
       id: "pools", 
@@ -78,6 +83,9 @@ export default function Menu({ changeTab }) {
     if(id === 'pools'){
       setOpenPools((oldValue) => !oldValue);
     }
+    if(id === 'certificates'){
+      setOpenCertificates((oldValue) => !oldValue);
+    }
   };
   return (
     <div className="container-menu">
@@ -90,6 +98,7 @@ export default function Menu({ changeTab }) {
             changeTab={(tab) => changeTab(tab)}
             key={item.id}
             subItem={item.subItem}
+            openCertificates={openCertificates}
             openPools={openPools}
             open={open}
             toggle={(id) => toggleSubItem(id)}
