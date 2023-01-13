@@ -3,7 +3,7 @@ import '../certificate.css';
 import '../../isa.css';
 
 import {useParams} from 'react-router-dom';
-
+import * as Dialog from '@radix-ui/react-dialog';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import QRCode from "react-qr-code";
 import * as htmlToImage from 'html-to-image';
@@ -14,10 +14,11 @@ import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png'
 
 //services
 import InvestorService from '../../../../services/investorService';
-import {GetCertificateTokens, BurnTokens} from '../../../../services/sacTokenService';
+import {GetCertificateTokens} from '../../../../services/sacTokenService';
 
 //components
 import Loading from '../../../Loading';
+import { ModalContribute } from "./ModalContribute";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const investorService = new InvestorService(wallet);
@@ -25,6 +26,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     const [investorData, setInvestorData] = useState([]);
     const [tokensBurned, setTokensBurned] = useState('');
     const [loading, setLoading] = useState(false);
+    const [modalContribute, setModalContribute] = useState(false);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -45,14 +47,6 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         setLoading(false);
     }
 
-    async function handleBurnTokens(){
-        setLoading(true);
-        const response = await BurnTokens(wallet, 50);
-        console.log(response);
-        getInvestor();
-        setLoading(false);
-    }
-
     function downloadCertificate(){
         setLoading(true);
         const fileNameShort = `Certificate_Short_${wallet}`;
@@ -65,14 +59,6 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         .catch((error) => {
             console.log(error);
         })    
-    }
-
-    if(userType != 7){
-        return(
-            <div>
-                <h1>This account is not a investor.</h1>
-            </div>
-        )
     }
 
     return(
@@ -105,7 +91,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     <p className="hash-qrcode">{investorData === [] ? '' : investorData.investorWallet}</p>
                     <p style={{textAlign: 'center'}}>
                         The investor 
-                        <span style={{fontWeight: 'bold', color: 'green'}}>{investorData === [] ? '' : investorData.name}</span> contributed to the agroecological transition with a total of:
+                        <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> contributed to the agroecological transition with a total of:
                     </p>
                     <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
                         <p style={{fontWeight: 'bold'}}>{tokensBurned} SAC Tokens</p>
@@ -123,9 +109,16 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         </p>
                     )}
 
-                    <button
-                        onClick={handleBurnTokens}
-                    >{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</button>
+                    <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
+                        <Dialog.Trigger>{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</Dialog.Trigger>
+                        <ModalContribute 
+                            wallet={wallet} 
+                            onFinished={() => {
+                                getInvestor();
+                                setModalContribute(false)
+                            }}
+                        />
+                    </Dialog.Root>
 
                     <p style={{textAlign: 'center'}}>Read our documentation to understand better</p>
                 </div>
