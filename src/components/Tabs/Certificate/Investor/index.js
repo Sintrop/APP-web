@@ -43,7 +43,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         const response = await investorService.getInvestor(wallet);
         setInvestorData(response);
         const tokens = await GetCertificateTokens(wallet);
-        setTokensBurned(tokens);
+        setTokensBurned(Number(tokens) / 10**18);
         setLoading(false);
     }
 
@@ -94,7 +94,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> contributed to the agroecological transition with a total of:
                     </p>
                     <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
-                        <p style={{fontWeight: 'bold'}}>{tokensBurned} SAC Tokens</p>
+                        <p style={{fontWeight: 'bold'}}>{String(tokensBurned).replace('e-12', '').replace('e-9', '')} SAC Tokens</p>
                     </div>
                 </div>
 
@@ -109,8 +109,19 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         </p>
                     )}
 
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <p style={{margin: 0}}>My impact:</p>
+                        <ul style={{margin: 0}}>
+                            <li>0 TONS of CO2 captured</li>
+                            <li>0 TONS of CO2 prevented</li>
+                            <li>0 increased biodiversity</li>
+                        </ul>
+                    </div>
+
                     <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
-                        <Dialog.Trigger>{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</Dialog.Trigger>
+                        <Dialog.Trigger
+                            className="investor-certificate__btn-donate"
+                        >{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</Dialog.Trigger>
                         <ModalContribute 
                             wallet={wallet} 
                             onFinished={() => {
@@ -119,6 +130,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                             }}
                         />
                     </Dialog.Root>
+
+                    <button
+                        className="investor-certificate__btn-calculator"
+                    >Agriculture Footprint Calculator</button>
 
                     <p style={{textAlign: 'center'}}>Read our documentation to understand better</p>
                 </div>

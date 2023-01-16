@@ -91,3 +91,23 @@
 .color-red{
     color: red;
 }
+
+.investor-certificate__btn-donate{
+    background-color: rgb(249,236,67);
+    color: '#000';
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-color: rgb(249,236,67);
+}
+
+.investor-certificate__btn-calculator{
+    background-color: green;
+    color: '#000';
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-color: green;
+}

@@ -7,7 +7,7 @@ import Loading from '../../../Loading';
 
 export function ModalContribute({wallet, onFinished}){
     const [balanceTokens, setBalanceTokens] = useState(0);
-    const [inputTokens, setInputTokens] = useState(0);
+    const [inputTokens, setInputTokens] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -16,7 +16,8 @@ export function ModalContribute({wallet, onFinished}){
 
     async function getTokensWallet(){
         const response = await GetTokensBalance(wallet);
-        setBalanceTokens(parseFloat(response) / 10**18);
+        setBalanceTokens(Number(response) / 10**18);
+        console.log(response);
     }
 
     async function burnTokens(){
@@ -28,6 +29,8 @@ export function ModalContribute({wallet, onFinished}){
         }
         setLoading(true);
         await BurnTokens(wallet, inputTokens);
+        getTokensWallet();
+        setInputTokens('');
         onFinished();
         setLoading(false);
     }
