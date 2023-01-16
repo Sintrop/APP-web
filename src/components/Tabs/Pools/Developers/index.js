@@ -69,13 +69,6 @@ export default function DevelopersPool({user, wallet, setTab}){
         setLoading(false);
     }
 
-    async function aproveTokens(){
-        setLoading(true);
-        await AproveTokens(wallet)
-        setLoading(false);
-        getInfosPool();
-    }
-
     async function withdraw(){
         setLoading(true);
         await WithdrawTokens(wallet, tokensAllowed);
@@ -108,13 +101,6 @@ export default function DevelopersPool({user, wallet, setTab}){
                     </div>
 
                     {parseFloat(nextAprove) < 1 && (
-                        <button 
-                            className="btn-create-create-category"
-                            onClick={() => aproveTokens()}
-                        >Aprove Tokens</button>
-                    )}
-
-                    {parseFloat(tokensAllowed) > 0 && (
                         <button 
                             className='btn-new-category-isa'
                             onClick={() => withdraw()}
