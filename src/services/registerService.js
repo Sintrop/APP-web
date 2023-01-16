@@ -46,27 +46,36 @@ class RegisterService {
   }
 
   async addProducer(name, document, documentType, country, state, city, cep) {
-    const producerDataNetwork = ProducerContract.networks["5777"];
-    const producerContractAddress = producerDataNetwork.address;
-    const producerABI = ProducerContract.abi;
-    if (producerContractAddress && producerDataNetwork) {
-      const producerContract = new this.web3.eth.Contract(
-        producerABI,
-        producerContractAddress
-      );
-
-      if (producerContract) {
-        producerContract.methods
-          .addProducer(name, document, documentType, country, state, city, cep)
-          .send({ from: this.address, gas: 1500000 })
-          .on("confirmation", (receipt) =>
-            toast.success("Producer registered!")
-          )
-          .on("error", (error) => {
-            if (error.stack.includes("This producer already exist"))
-              toast.error("This producer already exist");
-          });
+    try {
+      
+      const producerDataNetwork = ProducerContract.networks["5777"];
+      const producerContractAddress = producerDataNetwork.address;
+      const producerABI = ProducerContract.abi;
+      if (producerContractAddress && producerDataNetwork) {
+        const producerContract = new this.web3.eth.Contract(
+          producerABI,
+          producerContractAddress
+        );
+  
+        if (producerContract) {
+          producerContract.methods
+            .addProducer(name, document, documentType, country, state, city, cep)
+            .send({ from: this.address, gas: 1500000 })
+            .on("confirmation", (receipt) =>
+              toast.success("Producer registered!")
+            )
+            .catch((error) => {
+              
+              const serializedError = serializeError(error);
+              console.log({ serializedError });
+              console.log(error.stack)
+              if (error.stack.includes("This producer already exist"))
+                toast.error("This producer already exist");
+            });
+        }
       }
+    } catch (error) {
+      console.log(error)
     }
   }
 
