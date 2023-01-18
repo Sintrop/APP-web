@@ -28,7 +28,7 @@ export function ModalContribute({wallet, onFinished}){
             return;
         }
         setLoading(true);
-        await BurnTokens(wallet, inputTokens);
+        await BurnTokens(wallet, inputTokens + '000000000000000000');
         getTokensWallet();
         setInputTokens('');
         onFinished();

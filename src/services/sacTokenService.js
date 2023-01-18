@@ -21,7 +21,7 @@ export const GetCertificateTokens = async (wallet) => {
 export const BurnTokens = async (wallet, tokens) => {
     const web3js = new Web3(window.ethereum);
     const contract = new web3js.eth.Contract(contractAbi, contractAddress);
-    await contract.methods.burnTokens(Number(tokens)).send({from: wallet})
+    await contract.methods.burnTokens(String(tokens)).send({from: wallet})
     .then((res) => {
         return res;
     })
