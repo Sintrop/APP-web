@@ -71,7 +71,7 @@ export default function DevelopersPool({user, wallet, setTab}){
 
     async function withdraw(){
         setLoading(true);
-        await WithdrawTokens(wallet, tokensAllowed);
+        await WithdrawTokens(wallet, developerInfo.level.level, developerInfo.level.currentEra);
         setLoading(false);
         getInfosPool();
     }

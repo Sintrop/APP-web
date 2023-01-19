@@ -120,17 +120,28 @@ export const TokensPerEra = async () => {
     return tokens;
 }
 
-export const WithdrawTokens = async (wallet, numTokens) => {
+export const WithdrawTokens = async (wallet, level, currentEra) => {
     const web3js = new Web3(window.ethereum);
-    const contractAddress = SacTokenContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(SacTokenContract.abi, contractAddress);
-    await contract.methods.transferFrom(DevelopersPoolContract.networks[5777].address, wallet, numTokens)
-    .send({from: wallet})
-    .on('transactionHash', (hash) => {
-        if(hash){
-            return hash;
-        }else{
-            return false;
-        }
+    const contractAddress = DeveloperContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
+    contract.methods.withdraw().send({from: wallet})
+    .then((res) => {
+        return res;
+    })
+    .catch((err) => {
+        return err
+    })
+}
+
+export const WithdrawTokens1 = async (wallet, level, currentEra) => {
+    const web3js = new Web3(window.ethereum);
+    const contractAddress = DevelopersPoolContract.networks[5777].address;
+    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
+    contract.methods.withdraw(wallet, level, currentEra).call({from: contractAddress})
+    .then((res) => {
+        return res;
+    })
+    .catch((err) => {
+        return err;
     })
 }

@@ -33,7 +33,6 @@ export default function InvestorRanking({ wallet, setTab }) {
           <th>#</th>
           <th>Wallet</th>
           <th>Name</th>
-          <th>Address</th>
         </tr>
         {investor.map((item) => (
           <tr key={item.id}>
@@ -42,13 +41,6 @@ export default function InvestorRanking({ wallet, setTab }) {
               <a href={`/dashboard/${walletAddress}/investor-page/${item.investorWallet}`}>{item.investorWallet}</a>
             </td>
             <td>{item.name}</td>
-            <td>
-              <div className="div-address">
-                {item.investorAddress.map((address) => (
-                  <p>{address},</p>
-                ))}
-              </div>
-            </td>
           </tr>
         ))}
       </table>

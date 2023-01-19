@@ -9,7 +9,6 @@ import QRCode from "react-qr-code";
 import * as htmlToImage from 'html-to-image';
 import {toJpeg} from 'html-to-image';
 import { saveAs } from 'file-saver';
-
 import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png';
 
 //services
@@ -22,7 +21,7 @@ import { ModalContribute } from "./ModalContribute";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const investorService = new InvestorService(wallet);
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress} = useParams();
     const [investorData, setInvestorData] = useState([]);
     const [tokensBurned, setTokensBurned] = useState('');
     const [loading, setLoading] = useState(false);
@@ -33,23 +32,21 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     }, [tabActive])
 
     useEffect(() => {
-        if(userType == 7){
-            getInvestor();
-        }
+        getInvestor();
     }, []);
 
     async function getInvestor(){
         setLoading(true);
-        const response = await investorService.getInvestor(wallet);
+        const response = await investorService.getInvestor(walletAddress);
         setInvestorData(response);
-        const tokens = await GetCertificateTokens(wallet);
+        const tokens = await GetCertificateTokens(walletAddress);
         setTokensBurned(Number(tokens) / 10**18);
         setLoading(false);
     }
 
     function downloadCertificate(){
         setLoading(true);
-        const fileNameShort = `Certificate_Short_${wallet}`;
+        const fileNameShort = `Certificate_Short_${walletAddress}`;
         var certificateShort = document.querySelector(".container__certificate-container-short");
         htmlToImage.toJpeg(certificateShort)
         .then((dataUrlShort) => {
@@ -73,7 +70,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         Download Certificate
                     </button>
 
-                    <CopyToClipboard text={`${window.location.host}/account-producer/${wallet}`}>
+                    <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
                         <button
                             className='btn-new-category-isa'
                             onClick={() => alert('URL copied to clipboard')}
@@ -87,10 +84,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
             <div className="area-certificates">
                 <div className="container__certificate-container-short">
                     <img src={Logo} className='img-logo-certificate'/>
-                    <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={190}/>
-                    <p className="hash-qrcode">{investorData === [] ? '' : investorData.investorWallet}</p>
+                    <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={190}/>
+                    <p className="hash-qrcode">{walletAddress}</p>
                     <p style={{textAlign: 'center'}}>
-                        The investor 
+                        {userType === '7' ? 'The investor' : 'You'}
                         <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> contributed to the agroecological transition with a total of:
                     </p>
                     <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
