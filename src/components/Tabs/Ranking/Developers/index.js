@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DeveloperService from "../../../../services/developersService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function DevelopersRanking({ wallet, setTab }) {
   const developerService = new DeveloperService(wallet);
   const [activist, setActivist] = useState([]);
+  const {tabActive, walletAddress} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     developerService
       .getDeveloperRanking()
@@ -26,27 +34,19 @@ export default function DevelopersRanking({ wallet, setTab }) {
           <th>#</th>
           <th>Wallet</th>
           <th>Name</th>
-          <th>Address</th>
           <th>Developer Level</th>
         </tr>
         {activist.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href='#' onClick={() => setTab('developer-page', item.developerWallet)}>
+              <a href={`/dashboard/${walletAddress}/developer-page/${item.developerWallet}`}>
                 <p className="p-wallet" title={item.developerWallet}>
                   {item.developerWallet}
                 </p>
               </a>
             </td>
             <td>{item.name}</td>
-            <td>
-              <div className="div-address">
-                {item.userAddress.map((address) => (
-                  <p key={`${item.cep}-${Math.random()}`}>{address},</p>
-                ))}
-              </div>
-            </td>
             <td>{item.level[0]}</td>
           </tr>
         ))}

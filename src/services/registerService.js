@@ -1,10 +1,4 @@
 import Web3 from "web3";
-import {
-  ethErrors,
-  serializeError,
-  errorCodes,
-  getMessageFromCode,
-} from "eth-rpc-errors";
 import ProducerContract from "../data/contracts/abis/ProducerContract.json";
 import ActivistContract from "../data/contracts/abis/ActivistContract.json";
 import ContributorContract from "../data/contracts/abis/ContributorContract.json";
@@ -20,7 +14,7 @@ class RegisterService {
     this.address = wallet;
   }
 
-  async addActivist(name, document, documentType, country, state, city, cep) {
+  async addActivist(name, country, state, city, cep, proofPhoto) {
     const activistDataNetwork = ActivistContract.networks["5777"];
     const activistContractAddress = activistDataNetwork.address;
     const activistABI = ActivistContract.abi;
@@ -32,7 +26,7 @@ class RegisterService {
 
       if (activistContract) {
         await activistContract.methods
-          .addActivist(name, document, documentType, country, state, city, cep)
+          .addActivist(name, proofPhoto, country, state, city, cep)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Activist registered!")
@@ -44,42 +38,32 @@ class RegisterService {
       }
     }
   }
+  async addProducer(name, document, documentType, country, state, city, cep, street, complement, proofPhoto) {
+    const producerDataNetwork = ProducerContract.networks["5777"];
+    const producerContractAddress = producerDataNetwork.address;
+    const producerABI = ProducerContract.abi;
+    if (producerContractAddress && producerDataNetwork) {
+      const producerContract = new this.web3.eth.Contract(
+        producerABI,
+        producerContractAddress
+      );
 
-  async addProducer(name, document, documentType, country, state, city, cep) {
-    try {
-      
-      const producerDataNetwork = ProducerContract.networks["5777"];
-      const producerContractAddress = producerDataNetwork.address;
-      const producerABI = ProducerContract.abi;
-      if (producerContractAddress && producerDataNetwork) {
-        const producerContract = new this.web3.eth.Contract(
-          producerABI,
-          producerContractAddress
-        );
-  
-        if (producerContract) {
-          producerContract.methods
-            .addProducer(name, document, documentType, country, state, city, cep)
-            .send({ from: this.address, gas: 1500000 })
-            .on("confirmation", (receipt) =>
-              toast.success("Producer registered!")
-            )
-            .catch((error) => {
-              
-              const serializedError = serializeError(error);
-              console.log({ serializedError });
-              console.log(error.stack)
-              if (error.stack.includes("This producer already exist"))
-                toast.error("This producer already exist");
-            });
-        }
+      if (producerContract) {
+        producerContract.methods
+          .addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
+          .send({ from: this.address, gas: 1500000 })
+          .on("confirmation", (receipt) =>
+            toast.success("Producer registered!")
+          )
+          .on("error", (error) => {
+            if (error.stack.includes("This producer already exist"))
+              toast.error("This producer already exist");
+          });
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } 
   }
 
-  async addContributor(name, document, documentType, country, state, city, cep) {
+  async addContributor(name, proofPhoto) {
     const contributorDataNetwork = ContributorContract.networks["5777"];
     const contributorContractAddress = contributorDataNetwork.address;
     const contributorABI = ContributorContract.abi;
@@ -91,7 +75,7 @@ class RegisterService {
 
       if (contributorContract) {
         await contributorContract.methods
-          .addContributor(name, document, documentType, country, state, city, cep)
+          .addContributor(name, proofPhoto)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Contributor registered!")
@@ -104,7 +88,7 @@ class RegisterService {
     }    
   }
 
-  async addInvestor(name, document, documentType, country, state, city, cep) {
+  async addInvestor(name) {
     const investorDataNetwork = InvestorContract.networks["5777"];
     const investorContractAddress = investorDataNetwork.address;
     const investorABI = InvestorContract.abi;
@@ -116,7 +100,7 @@ class RegisterService {
 
       if (investorContract) {
         await investorContract.methods
-          .addInvestor(name, document, documentType, country, state, city, cep)
+          .addInvestor(name)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Investor registered!")
@@ -129,7 +113,7 @@ class RegisterService {
     }    
   }
 
-  async addDeveloper(name, document, documentType, country, state, city, cep) {
+  async addDeveloper(name, proofPhoto) {
     const developerDataNetwork = DeveloperContract.networks["5777"];
     const developerContractAdress = developerDataNetwork.address;
     const developerABI = DeveloperContract.abi;
@@ -141,7 +125,7 @@ class RegisterService {
 
       if (developerContract) {
         await developerContract.methods
-          .addDeveloper(name, document, documentType, country, state, city, cep)
+          .addDeveloper(name, proofPhoto)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Developer registered!")
@@ -154,7 +138,7 @@ class RegisterService {
     }    
   }
 
-  async addResearcher(name, document, documentType, country, state, city, cep) {
+  async addResearcher(name, proofPhoto) {
     const researcherDataNetwork = ResearcherContract.networks["5777"];
     const researcherContractAddress = researcherDataNetwork.address;
     const researcherABI = ResearcherContract.abi;
@@ -166,7 +150,7 @@ class RegisterService {
 
       if (researcherContract) {
         await researcherContract.methods
-          .addResearcher(name, document, documentType, country, state, city, cep)
+          .addResearcher(name, proofPhoto)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Researcher registered!")
@@ -179,7 +163,7 @@ class RegisterService {
     }    
   }
 
-  async addAdvisor(name, document, documentType, country, state, city, cep) {
+  async addAdvisor(name, proofPhoto) {
     const advisorDataNetwork = AdvisorContract.networks["5777"];
     const advisorContractAddress = advisorDataNetwork.address;
     const advisorABI = AdvisorContract.abi;
@@ -191,7 +175,7 @@ class RegisterService {
 
       if (advisorContract) {
         await advisorContract.methods
-          .addAdvisor(name, document, documentType, country, state, city, cep)
+          .addAdvisor(name, proofPhoto)
           .send({ from: this.address, gas: 1500000 })
           .on("confirmation", (receipt) =>
             toast.success("Advisor registered!")

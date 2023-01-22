@@ -3,17 +3,24 @@ import AvatarDefault from '../../../../assets/img/avatar03.png';
 import InvestorService from '../../../../services/investorService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
+import {useParams} from 'react-router-dom';
 
-export default function InvestorPage({wallet}){
+
+export default function InvestorPage({wallet, setTab}){
     const investorService = new InvestorService(wallet)
     const [investorData, setInvestorData] = useState([]);
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getInvestor();
     },[]);
 
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
     async function getInvestor(){
-        const response = await investorService.getInvestor(wallet);
+        const response = await investorService.getInvestor(walletSelected);
         setInvestorData(response);
     }
 

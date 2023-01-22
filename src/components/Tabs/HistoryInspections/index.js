@@ -3,9 +3,11 @@ import InspectionsService from "../../../services/inspectionsHistoryService";
 import Loading from "../../Loading";
 import '../manageInspections.css'
 import ListItemHistory from "./component/ListItemHistory";
+import {useParams} from 'react-router-dom';
 
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
+    const {tabActive} = useParams();
     const [inspections, setInspections ] = useState([]);
     const [loading, setLoading] = useState(false);
     const inspection = new InspectionsService(walletAddress);
@@ -13,6 +15,10 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     useEffect(() => {
         loadInspections()
     }, [])
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
     
   const loadInspections = () => {
     inspection.getAllInspections().then( res => {
@@ -24,7 +30,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     <>
       <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>History Inspections</h1>
+                <h1>Inspections History</h1>
                 <div className='area-btn-header-isa-page'>
                     {/* {user == 1 && (
                         <button
@@ -54,7 +60,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Updated At</th>
+                                <th>Accepted At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

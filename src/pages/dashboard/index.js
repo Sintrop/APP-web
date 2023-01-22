@@ -20,9 +20,11 @@ import InvestorPage from '../../components/Tabs/MyAccount/InvestorPage';
 import ContributorPage from '../../components/Tabs/MyAccount/ContributorPage';
 import AdvisorPage from '../../components/Tabs/MyAccount/AdvisorPage';
 import MyAccount from '../../components/Tabs/MyAccount';
-import Certificate from '../../components/Tabs/Certificate';
+import ProducerCertificate from '../../components/Tabs/Certificate';
+import InvestorCertificate from '../../components/Tabs/Certificate/Investor';
 import DevelopersPool from '../../components/Tabs/Pools/Developers';
 import ReportsPage from '../../components/Tabs/Reports';
+import ProducersPool from '../../components/Tabs/Pools/Producers';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -77,7 +79,11 @@ export default function Dashboard(){
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
-                    navigate(`/dashboard/${walletAddress}/${tab}`)
+                    if(tab === 'my-account'){
+                        navigate(`/dashboard/${walletAddress}/${tab}/${walletAddress}`)
+                    }else{
+                        navigate(`/dashboard/${walletAddress}/${tab}/main`)
+                    }
                 }}
             />
 
@@ -192,7 +198,7 @@ export default function Dashboard(){
                 )}
                 {activeTab ===  'producer-page' && (
                     <ProducerPage 
-                        wallet={walletSelect}
+                        wallet={walletAddress}
                         setTab={(tab, wallet) => {
                             setWalletSelect(wallet)
                             setActiveTab(tab)
@@ -209,19 +215,49 @@ export default function Dashboard(){
                     />
                 )}
                 {activeTab === 'developer-page' && (
-                    <DeveloperPage wallet={walletSelect}/>
+                    <DeveloperPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'researcher-page' && (
-                    <ResearcherPage wallet={walletSelect}/>
+                    <ResearcherPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'advisor-page' && (
-                    <AdvisorPage wallet={walletSelect}/>
+                    <AdvisorPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'contributor-page' && (
-                    <ContributorPage wallet={walletSelect}/>
+                    <ContributorPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'investor-page' && (
-                    <InvestorPage wallet={walletSelect}/>
+                    <InvestorPage 
+                        wallet={walletSelect}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
                 {activeTab === 'my-account' && (
                     <MyAccount 
@@ -233,12 +269,38 @@ export default function Dashboard(){
                         }}
                     />
                 )}
-                {activeTab === 'certificate' && (
-                    <Certificate userType={user} wallet={walletAddress}/>
+                {activeTab === 'producer-certificate' && (
+                    <ProducerCertificate 
+                        userType={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+                {activeTab === 'investor-certificate' && (
+                    <InvestorCertificate 
+                        userType={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
 
                 {activeTab === 'developers-pool' && (
                     <DevelopersPool 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'producers-pool' && (
+                    <ProducersPool 
                         user={user} 
                         wallet={walletAddress}
                         setTab={(tab, wallet) => {

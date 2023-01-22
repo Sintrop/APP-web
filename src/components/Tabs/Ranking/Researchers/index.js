@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ResearchersService from "../../../../services/researchersService";
 import "../../Ranking/ranking.css";
+import {useParams} from 'react-router-dom';
+
 export default function ResearchersRanking({ wallet, setTab }) {
   const researchersService = new ResearchersService(wallet);
   const [researchers, setResearchers] = useState([]);
+  const {tabActive, walletAddress} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
   useEffect(() => {
     researchersService
       .getResearcherRanking()
@@ -26,7 +34,6 @@ export default function ResearchersRanking({ wallet, setTab }) {
           <th>#</th>
           <th>Wallet</th>
           <th>Name</th>
-          <th>Address</th>
           <th>Votes Received</th>
         </tr>
         {researchers?.map((item) => (
@@ -34,20 +41,12 @@ export default function ResearchersRanking({ wallet, setTab }) {
             <td>{item.id}</td>
             <td>
               <a
-                href="#"
-                onClick={() => setTab("researcher-page", item.researcherWallet)}
+                href={`/dashboard/${walletAddress}/researcher-page/${item.researcherWallet}`}
               >
                 {item.researcherWallet}
               </a>
             </td>
             <td>{item.name}</td>
-            <td>
-              <div className="div-address">
-                {item.researcherAddress.map((address) => (
-                  <p>{address},</p>
-                ))}
-              </div>
-            </td>
             {/* <td>{item.totalInspections}</td> */}
           </tr>
         ))}

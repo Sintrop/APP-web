@@ -68,7 +68,7 @@ export default function ModalDelation({reportedWallet}){
                     <textarea
                         style={{resize:'none', height: '100px'}}
                         className='modal-delation__input'
-                        name='testemony'
+                        name='testimony'
                         type='text'
                         value={testemony}
                         onChange={(e) => setTestemony(e.target.value)}

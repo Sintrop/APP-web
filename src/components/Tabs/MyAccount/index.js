@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 
 import ProducerPage from './ProducerPage';
 import ActvistPage from './ActivistPage';
@@ -9,6 +10,12 @@ import ContributorPage from './ContributorPage';
 import InvestorPage from './InvestorPage';
 
 export default function MyAccount({wallet, userType, setTab}){
+    const {tabActive, walletAddress} = useParams();
+
+    useEffect(() => {
+        setTab(tabActive, '');
+    }, [tabActive]);
+    
     return(
         <div>
             {userType === '1' && (
@@ -19,27 +26,45 @@ export default function MyAccount({wallet, userType, setTab}){
             )}
 
             {userType === '2' && (
-                <ActvistPage wallet={wallet}/>
+                <ActvistPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '3' && (
-                <ResearcherPage wallet={wallet}/>
+                <ResearcherPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '4' && (
-                <DeveloperPage wallet={wallet}/>
+                <DeveloperPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '5' && (
-                <AdvisorPage wallet={wallet}/>
+                <AdvisorPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '6' && (
-                <ContributorPage wallet={wallet}/>
+                <ContributorPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
 
             {userType === '7' && (
-                <InvestorPage wallet={wallet}/>
+                <InvestorPage 
+                    wallet={wallet}
+                    setTab={(tab, wallet) => setTab(tab, wallet)}
+                />
             )}
         </div>
     )

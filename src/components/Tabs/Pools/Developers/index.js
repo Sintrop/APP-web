@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './developersPool.css';
+import {useParams} from 'react-router-dom';
 
 //services
 import {
@@ -31,10 +32,16 @@ export default function DevelopersPool({user, wallet, setTab}){
     const [tokensAllowed, setTokensAllowed] = useState('0');
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const [developersList, setDevelopersList] = useState([]);
-
+    const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+    
     useEffect(() => {
         getInfosPool();
     },[]);
+
 
     async function getInfosPool(){
         setLoading(true);
@@ -62,16 +69,9 @@ export default function DevelopersPool({user, wallet, setTab}){
         setLoading(false);
     }
 
-    async function aproveTokens(){
-        setLoading(true);
-        await AproveTokens(wallet)
-        setLoading(false);
-        getInfosPool();
-    }
-
     async function withdraw(){
         setLoading(true);
-        await WithdrawTokens(wallet, tokensAllowed);
+        await WithdrawTokens(wallet, developerInfo.level.level, developerInfo.level.currentEra);
         setLoading(false);
         getInfosPool();
     }
@@ -101,13 +101,6 @@ export default function DevelopersPool({user, wallet, setTab}){
                     </div>
 
                     {parseFloat(nextAprove) < 1 && (
-                        <button 
-                            className="btn-create-create-category"
-                            onClick={() => aproveTokens()}
-                        >Aprove Tokens</button>
-                    )}
-
-                    {parseFloat(tokensAllowed) > 0 && (
                         <button 
                             className='btn-new-category-isa'
                             onClick={() => withdraw()}

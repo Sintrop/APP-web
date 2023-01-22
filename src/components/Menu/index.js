@@ -16,11 +16,27 @@ import ItemsList from "./itemsList";
 export default function Menu({ changeTab }) {
   const [open, setOpen] = useState(false);
   const [openPools, setOpenPools] = useState(false);
+  const [openCertificates, setOpenCertificates] = useState(false);
   const [itemsMenu, setItemsMenu] = useState([
-    { id: "isa", title: "ISA", icon: IconISA, action: "" },
+    {
+      id: "rankings",
+      title: "Community",
+      icon: IconActivists,
+      action: "",
+      subItem: [
+        { id: "producers", label: "Producers" },
+        { id: "activists", label: "Activists" },
+        { id: "advisors", label: "Advisors" },
+        { id: "investors", label: "Investors" },
+        { id: "developers", label: "Developers" },
+        { id: "contributors", label: "Contributors" },
+        { id: "researchers", label: "Researchers" },
+      ],
+    },
+    { id: "isa", title: "Sustainable Agriculture Index", icon: IconISA, action: "" },
     {
       id: "inspection-history",
-      title: "Inspection History",
+      title: "Inspections History",
       icon: IconInspections,
       action: "",
     },
@@ -33,42 +49,32 @@ export default function Menu({ changeTab }) {
     // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
     // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
     {
-      id: "rankings",
-      title: "Community",
-      icon: IconActivists,
-      action: "",
-      subItem: [
-        { id: "producers", label: "Producers" },
-        { id: "activists", label: "Activists" },
-        { id: "advisors", label: "Advisors" },
-        { id: "investors", label: "Investor" },
-        { id: "developers", label: "Developers" },
-        { id: "contributors", label: "Contributors" },
-        { id: "researchers", label: "Researchers" },
-      ],
-    },
-    { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
-    {
-      id: "certificate",
-      title: "Certificate",
+      id: "certificates",
+      title: "Certificates",
       icon: IconCertificate,
       action: "",
+      subItem:[
+        {id: 'producer-certificate', label: 'Producer'},
+        {id: 'investor-certificate', label: 'Investor'},
+      ]
     },
     { 
       id: "pools", 
-      title: "Pools", 
+      title: "SAC Token", 
       icon: IconPools, 
       action: "",
       subItem: [
-        {id: 'developers-pool', label: 'Developers'}
+        {id: 'producers-pool', label: 'Producers'},
+        {id: 'developers-pool', label: 'Developers'},
       ] 
     },
-    { 
-      id: "delations", 
-      title: "Delations", 
-      icon: IconInspections, 
-      action: ""
-    },
+    //{ 
+    //  id: "delations", 
+    //  title: "Delations", 
+    //  icon: IconInspections, 
+    //  action: ""
+    //},
+    { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
   ]);
   const toggleSubItem = (id) => {
     if(id === 'rankings'){
@@ -76,6 +82,9 @@ export default function Menu({ changeTab }) {
     }
     if(id === 'pools'){
       setOpenPools((oldValue) => !oldValue);
+    }
+    if(id === 'certificates'){
+      setOpenCertificates((oldValue) => !oldValue);
     }
   };
   return (
@@ -89,6 +98,7 @@ export default function Menu({ changeTab }) {
             changeTab={(tab) => changeTab(tab)}
             key={item.id}
             subItem={item.subItem}
+            openCertificates={openCertificates}
             openPools={openPools}
             open={open}
             toggle={(id) => toggleSubItem(id)}

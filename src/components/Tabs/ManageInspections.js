@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './isa.css';
-import './manageInspections.css'
+import './manageInspections.css';
+import {useParams} from 'react-router-dom';
 
 //components
 import Loading from '../Loading';
@@ -12,6 +13,11 @@ import {GetInspections, RequestInspection} from '../../services/manageInspection
 export default function ManageInpections({user, walletAddress, setTab}){
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
+    const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     useEffect(() => {
         getInspections();
@@ -64,7 +70,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Updated At</th>
+                                <th>Accepted At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

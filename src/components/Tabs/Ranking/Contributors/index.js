@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ContributorsService from "../../../../services/contributorService";
 import '../../Ranking/ranking.css';
+import {useParams} from 'react-router-dom';
+
 export default function ContributorsRanking({ wallet, setTab }) {
   const contributorsService = new ContributorsService(wallet);
   const [activist, setActivist] = useState([]);
+  const {tabActive, walletAddress} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+  
   useEffect(() => {
     contributorsService
       .getContributorsRanking()
@@ -25,27 +33,19 @@ export default function ContributorsRanking({ wallet, setTab }) {
           <th>#</th>
           <th>Wallet</th>
           <th>Name</th>
-          <th>Address</th>
          {/* <th>Developer Level</th> */}
         </tr>
         {activist.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href="#" onClick={() => setTab('contributor-page', item.contributorWallet)}>
+              <a href={`/dashboard/${walletAddress}/contributor-page/${item.contributorWallet}`}>
                 <p className="p-wallet" title={item.contributorWallet}>
                   {item.contributorWallet}
                 </p>
               </a>
             </td>
             <td>{item.name}</td>
-            <td>
-              <div className="div-address">
-                {item.contributorAddress.map((address) => (
-                  <p key={`${item.cep}-${Math.random()}`}>{address},</p>
-                ))}
-              </div>
-            </td>
             {/* <td>{item.level[0]}</td> */}
           </tr>
         ))}

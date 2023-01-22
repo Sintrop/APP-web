@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import './producerPage.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
+import {get} from '../../../../config/infura';
+import {useParams} from 'react-router-dom';
 
 import AvatarDefault from '../../../../assets/img/avatar02.png';
 
@@ -15,13 +17,20 @@ import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 export default function ProducerPage({wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
+    const [base64, setBase64] = useState('');
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getProducer();
     },[]);
 
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
+
     async function getProducer(){
-        const response = await GetProducer(wallet);
+        const response = await GetProducer(walletSelected);
+        getBase64(response.proofPhoto)
         setProducerData(response);
         getInspections();
     }
@@ -31,12 +40,21 @@ export default function ProducerPage({wallet, setTab}){
         setInspections(response);
     }
 
+    async function getBase64(data){
+        const res = await get(data);
+        console.log(res)
+        setBase64(res);
+    }
+
     return(
         <div className='container__producer-page'>
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
                     <div className='area-avatar__producer-page'>
-                        <img src={AvatarDefault} className='avatar__producer-page'/>
+                        <img 
+                            src={`data:image/png;base64,${base64}`}
+                            className='avatar__producer-page'
+                        />
                         <div className='producer-cards-info__producer-page card-wallet'>
                             <h1 className='tit-cards-info__producer-page'>Producer Wallet: </h1>
                             <a className='description-cards-info__producer-page' href={`/account-producer/${producerData.producerWallet}`}>
@@ -97,6 +115,7 @@ export default function ProducerPage({wallet, setTab}){
                                     key={item.id} 
                                     setTab={(tab, wallet) => setTab(tab, wallet)}  
                                     typeAccount='producer'
+                                    wallet={wallet}
                                 />
                             )
                         }

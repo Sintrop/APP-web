@@ -3,17 +3,23 @@ import AvatarDefault from '../../../../assets/img/avatar03.png';
 import ResearchersService from '../../../../services/researchersService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
+import {useParams} from 'react-router-dom';
 
-export default function ResearcherPage({wallet}){
+export default function ResearcherPage({wallet, setTab}){
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
+    const {tabActive, walletSelected} = useParams();
 
     useEffect(() => {
         getResearcher();
     },[]);
 
+    useEffect(() => {
+        setTab(tabActive, '');
+    }, [tabActive])
+
     async function getResearcher(){
-        const response = await researchersService.getResearchers(wallet);
+        const response = await researchersService.getResearchers(walletSelected);
         setResearcherData(response);
     }
 
@@ -42,13 +48,6 @@ export default function ResearcherPage({wallet}){
                         <h1 className='tit-cards-info__producer-page'>Name: </h1>
                         <p className='description-cards-info__producer-page'>
                             {researcherData === [] ? '' : researcherData.name}
-                        </p>
-                    </div>
-
-                    <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
-                        <p className='description-cards-info__producer-page'>
-                            {researcherData.researcherAddress === undefined ? '' : `${researcherData.researcherAddress.city}/${researcherData.researcherAddress.state}, ${researcherData.researcherAddress.country}`}
                         </p>
                     </div>
                 </div>

@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import './certificate.css';
 import '../isa.css';
 
+import {useParams} from 'react-router-dom';
+
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import QRCode from "react-qr-code";
 import * as htmlToImage from 'html-to-image';
@@ -16,9 +18,14 @@ import {GetProducer} from '../../../services/producerService';
 //components
 import Loading from '../../Loading';
 
-export default function Certificate({userType, wallet}){
+export default function ProducerCertificate({userType, wallet, setTab}){
+    const {tabActive} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     useEffect(() => {
         if(userType == 1){

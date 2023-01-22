@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './itemsListIsa.css';
-
+import { useNavigate } from 'react-router-dom';
 //components
 import DetailsCategoryIsa from '../DetailsCategoryIsa';
 import VoteCategory from '../VoteCategory';
@@ -10,6 +10,7 @@ import Loading from '../../Loading';
 import {IsVoted, GetTokensCategory} from '../../../services/voteService';
 
 export default function ItemsListISA({data, walletAddress, reloadCategories, setTab}){
+    const {navigate} = useNavigate();
     const [showDetails, setShowDetails] = useState(false);
     const [showVoteCard, setShowVoteCard] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -48,7 +49,10 @@ export default function ItemsListISA({data, walletAddress, reloadCategories, set
                 </button>
             </td>
             <td id='createdByContentIsa'>
-                <a href='#' onClick={() => setTab('researcher-page', data.createdBy)}>
+                <a href={`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`} onClick={() => {
+                    //setTab('researcher-page', data.createdBy)
+                    //navigate(`/dashboard/${walletAddress}/researcher-page`)
+                }}>
                     <p>{data.createdBy}</p>    
                 </a>
             </td>
