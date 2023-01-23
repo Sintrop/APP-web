@@ -67,7 +67,7 @@ export default function Dashboard(){
     },[]);
 
     useEffect(() => {
-        if(user !== 0){
+        if(user == 0){
             setActiveTab('register');
             return;
         }
