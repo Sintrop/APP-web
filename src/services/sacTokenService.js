@@ -19,13 +19,40 @@ export const GetCertificateTokens = async (wallet) => {
 }
 
 export const BurnTokens = async (wallet, tokens) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = '';
+
     const web3js = new Web3(window.ethereum);
     const contract = new web3js.eth.Contract(contractAbi, contractAddress);
     await contract.methods.burnTokens(String(tokens)).send({from: wallet})
-    .then((res) => {
-        return res;
+    .on("confirmation", (receipt) =>
+        type = 'success',
+        message = "Contributor registered!"
+    )
+    .on('transactionHash', hash => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Contributor registered!"
+        }
     })
-    .catch((err) => {
-        return false;
+    .on("error", (error, receipt) => {
+        if(error.stack.includes("Not allowed user")){
+            return{
+                type: 'error',
+                message: 'Not allowed user!'
+            }
+        }
+        if (error.stack.includes("User already exists")){
+            type = 'error'
+            message = 'User already exists'
+        }
     });
+
+    return{
+        type,
+        message,
+        hashTransaction,
+    }
 }

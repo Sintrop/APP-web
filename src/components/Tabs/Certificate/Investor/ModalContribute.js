@@ -22,13 +22,24 @@ export function ModalContribute({wallet, onFinished}){
 
     async function burnTokens(){
         if(balanceTokens === 0){
-            return;
+            //return;
         }
         if(loading){
             return;
         }
         setLoading(true);
-        await BurnTokens(wallet, inputTokens + '000000000000000000');
+        await BurnTokens(wallet, inputTokens + '000000000000000000')
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            const message = String(err.message);
+            if(message.includes("Burn amount exceeds balance")){
+                alert('Burn amount exceeds balance');
+                return
+            }
+        })
+        
         getTokensWallet();
         setInputTokens('');
         onFinished();
