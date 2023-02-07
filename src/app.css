@@ -1,0 +1,22 @@
+.background {
+  background: rgb(205, 198, 198);
+  min-height: 100vh;
+  padding-top: 50px;
+}
+.network_wrong {
+  width: 80%;
+  height: 140px;
+  background: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 30px;
+  text-align: center;
+  padding: 5px;
+}
+
+.title{
+  font-size: 1.5em;
+  line-height: 1.6em;
+  color: rgb(166, 162, 162);
+}
+

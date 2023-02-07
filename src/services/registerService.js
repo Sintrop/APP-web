@@ -1,10 +1,4 @@
 import Web3 from "web3";
-import {
-  ethErrors,
-  serializeError,
-  errorCodes,
-  getMessageFromCode,
-} from "eth-rpc-errors";
 import ProducerContract from "../data/contracts/abis/ProducerContract.json";
 import ActivistContract from "../data/contracts/abis/ActivistContract.json";
 import ContributorContract from "../data/contracts/abis/ContributorContract.json";
@@ -44,7 +38,6 @@ class RegisterService {
       }
     }
   }
-
   async addProducer(name, document, documentType, country, state, city, cep, street, complement, proofPhoto) {
     const producerDataNetwork = ProducerContract.networks["5777"];
     const producerContractAddress = producerDataNetwork.address;
@@ -67,7 +60,7 @@ class RegisterService {
               toast.error("This producer already exist");
           });
       }
-    }
+    } 
   }
 
   async addContributor(name, proofPhoto) {
