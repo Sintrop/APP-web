@@ -8,6 +8,8 @@ import AdvisorContract from "../data/contracts/abis/AdvisorContract.json";
 import InvestorContract from "../data/contracts/abis/InvestorContract.json";
 import { toast } from "react-toastify";
 
+const ContributorContractAddress = ContributorContract.networks[5777].address;
+
 class RegisterService {
   constructor(wallet) {
     this.web3 = new Web3(window.ethereum);
@@ -64,28 +66,35 @@ class RegisterService {
   }
 
   async addContributor(name, proofPhoto) {
-    const contributorDataNetwork = ContributorContract.networks["5777"];
-    const contributorContractAddress = contributorDataNetwork.address;
-    const contributorABI = ContributorContract.abi;
-    if (contributorContractAddress && contributorDataNetwork) {
-      const contributorContract = new this.web3.eth.Contract(
-        contributorABI,
-        contributorContractAddress
-      );
+        let type = '';
+        let message = '';
+        let hashTransaction = ''; 
 
-      if (contributorContract) {
-        await contributorContract.methods
-          .addContributor(name, proofPhoto)
-          .send({ from: this.address, gas: 1500000 })
-          .on("confirmation", (receipt) =>
-            toast.success("Contributor registered!")
-          )
-          .on("error", (error, receipt) => {
-            if (error.stack.includes("User already exists"))
-              toast.error("User already exists");
-          });
-      }
-    }    
+        const contributorDataNetwork = ContributorContract.networks["5777"];
+        const contributorContractAddress = contributorDataNetwork.address;
+        const contributorABI = ContributorContract.abi;
+        
+        const contributorContract = new this.web3.eth.Contract( contributorABI, contributorContractAddress);
+        await contributorContract.methods.addContributor(name, proofPhoto).send({ from: this.address, gas: 1500000 })
+        .on('transactionHash', hash => {
+            if(hash){
+                hashTransaction = hash
+                type = 'success'
+                message = "Contributor registered!"
+            }
+        })
+        .on("error", (error, receipt) => {
+            if(error.stack.includes("Not allowed user")){
+                type = 'error'
+                message = 'Not allowed user!'
+            }
+            if (error.stack.includes("User already exists")){
+                type = 'error'
+                message = 'User already exists'
+            }
+        });
+        
+        return {type, message, hashTransaction}
   }
 
   async addInvestor(name) {
@@ -191,3 +200,35 @@ class RegisterService {
 
 export default RegisterService;
 
+export const addContributor = async (wallet, name, proofPhoto) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
+    const web3js = new Web3(window.ethereum);
+    const contract = new web3js.eth.Contract( ContributorContract.abi, ContributorContractAddress);
+    await contract.methods.addContributor(name, proofPhoto).send({ from: wallet, gas: 1500000 })
+    .on('transactionHash', hash => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Contributor registered!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        if(error.stack.includes("Not allowed user")){
+            type = 'error'
+            message = 'Not allowed user!'
+            alert(message)
+        }
+        if (error.stack.includes("User already exists")){
+            type = 'error'
+            message = 'User already exists'
+        }
+    });
+        
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+}

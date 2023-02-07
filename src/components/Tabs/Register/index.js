@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import InputMask from 'react-input-mask';
-import RegisterService from "../../../services/registerService";
+import RegisterService, {addContributor} from "../../../services/registerService";
 import 'react-toastify/dist/ReactToastify.min.css';
 import {WebcamComponent} from '../../Webcam';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -10,86 +10,23 @@ import Loading from '../../Loading';
 
 import "./register.css";
 function Register({ wallet }) {
-  const [loading, setLoading] = useState(false);
-  const [type, setType] = useState("");
-  const [name, setName] = useState("");
-  const [documetType, setDocumentType] = useState("");
-  const [documetNumber, setDocumentNumber] = useState("");
-  const [cep, setCep] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [complement, setComplement] = useState("");
-  const [proofPhoto, setProofPhoto] = useState("");
-  const [proofPhotoBase64, setProofPhotoBase64] = useState("");
-  const [country, setCountry] = useState("");
-  const [openWebcam, setOpenWebcam] = useState(false);
-  let formatDocument = useRef('')
-  const registerService = new RegisterService(wallet);
-  function handleClick(e) {
-    e.preventDefault();
-    // if(proofPhoto === '' && type !== 'investor'){
-    //     return;
-    // }
-    switch (type) {
-      case "producer":
-        registerService.addProducer(
-          name,
-          documetNumber,
-          documetType,
-          country,
-          state,
-          city,
-          cep,
-          street,
-          complement,
-          proofPhoto
-          ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "activist":
-        registerService.addActivist(
-          name,
-          country,
-          state,
-          city,
-          cep,
-          proofPhoto
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "contributor":
-        registerService.addContributor(
-          name,
-          proofPhoto
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "investor":
-        registerService.addInvestor(
-          name
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "developer":
-        registerService.addDeveloper(
-          name,
-          proofPhoto
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "researcher":
-        registerService.addResearcher(
-          name,
-          proofPhoto
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;
-      case "advisor":
-        registerService.addAdvisor(
-          name,
-          proofPhoto
-        ).then(res => console.log(res)).catch(err => console.log(err));
-        break;                                                  
-      default:
-        break;
-    }
-  }
-
+    const [loading, setLoading] = useState(false);
+    const [type, setType] = useState("");
+    const [name, setName] = useState("");
+    const [documetType, setDocumentType] = useState("");
+    const [documetNumber, setDocumentNumber] = useState("");
+    const [cep, setCep] = useState("");
+    const [state, setState] = useState("");
+    const [city, setCity] = useState("");
+    const [street, setStreet] = useState("");
+    const [complement, setComplement] = useState("");
+    const [proofPhoto, setProofPhoto] = useState("");
+    const [proofPhotoBase64, setProofPhotoBase64] = useState("");
+    const [country, setCountry] = useState("");
+    const [openWebcam, setOpenWebcam] = useState(false);
+    let formatDocument = useRef('')
+    const registerService = new RegisterService(wallet);
+    
     useEffect(() => {
         switch (documetType) {
         case 'cpf':
@@ -106,19 +43,90 @@ function Register({ wallet }) {
             break;
         }
     }, [documetType]);
+      
 
-  async function handleProofPhoto(data){
-    setLoading(true);
-    let res = await fetch(data);
-    let myBlob = await res.blob();
-  
-    const hashPhoto = await save(myBlob);
-    setProofPhoto(hashPhoto);
+    async function handleClick(e) {
+        e.preventDefault();
+        // if(proofPhoto === '' && type !== 'investor'){
+        //     return;
+        // }
+        if(type === 'producer'){
+            const producer = await registerService.addProducer(name, documetNumber, documetType, country, state, city, cep,
+                street, complement, proofPhoto
+            ).then(res => console.log(res)).catch(err => console.log(err));
+        }
 
-    const base64Hash = await get(hashPhoto);
-    setProofPhotoBase64(base64Hash);
-    setLoading(false);
-  } 
+        if(type === 'activist'){
+            registerService.addActivist(name, country, state, city, cep, proofPhoto).then(res => console.log(res)).catch(err => console.log(err));
+        }
+
+        if(type === 'contributor'){
+            setLoading(true);
+            addContributor(wallet, name, proofPhoto)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    alert('Not alowed User')
+                }
+            })
+        }
+        
+        // case "investor":
+        //     registerService.addInvestor(
+        //     name
+        //     ).then(res => console.log(res)).catch(err => console.log(err));
+        //     break;
+        // case "developer":
+        //     registerService.addDeveloper(
+        //     name,
+        //     proofPhoto
+        //     ).then(res => console.log(res)).catch(err => console.log(err));
+        //     break;
+        // case "researcher":
+        //     registerService.addResearcher(
+        //     name,
+        //     proofPhoto
+        //     ).then(res => console.log(res)).catch(err => console.log(err));
+        //     break;
+        // case "advisor":
+        //     registerService.addAdvisor(
+        //     name,
+        //     proofPhoto
+        //     ).then(res => console.log(res)).catch(err => console.log(err));
+        //     break;                                                  
+        // default:
+        //     break;
+        // }
+    }
+
+    async function AddContributor(){
+        alert('ok')
+        setLoading(true);
+        addContributor(wallet, name, proofPhoto)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(res => {
+            console.log(res)
+        }) 
+    } 
+
+
+    async function handleProofPhoto(data){
+        setLoading(true);
+        let res = await fetch(data);
+        let myBlob = await res.blob();
+    
+        const hashPhoto = await save(myBlob);
+        setProofPhoto(hashPhoto);
+
+        const base64Hash = await get(hashPhoto);
+        setProofPhotoBase64(base64Hash);
+        setLoading(false);
+    } 
 
   return (
         <div className="container">
