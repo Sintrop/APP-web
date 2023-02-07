@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import InputMask from 'react-input-mask';
-import RegisterService, {addContributor} from "../../../services/registerService";
+import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, addAdvisor, addResearcher} from "../../../services/registerService";
 import 'react-toastify/dist/ReactToastify.min.css';
 import {WebcamComponent} from '../../Webcam';
 import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../../config/infura';
-import Loading from '../../Loading';
+import { LoadingTransaction } from "../../LoadingTransaction";
 
 import "./register.css";
 function Register({ wallet }) {
     const [loading, setLoading] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+
     const [type, setType] = useState("");
     const [name, setName] = useState("");
     const [documetType, setDocumentType] = useState("");
@@ -25,7 +28,7 @@ function Register({ wallet }) {
     const [country, setCountry] = useState("");
     const [openWebcam, setOpenWebcam] = useState(false);
     let formatDocument = useRef('')
-    const registerService = new RegisterService(wallet);
+    
     
     useEffect(() => {
         switch (documetType) {
@@ -51,55 +54,279 @@ function Register({ wallet }) {
         //     return;
         // }
         if(type === 'producer'){
-            const producer = await registerService.addProducer(name, documetNumber, documetType, country, state, city, cep,
-                street, complement, proofPhoto
-            ).then(res => console.log(res)).catch(err => console.log(err));
+            setModalTransaction(true);
+            setLoading(true);
+            addProducer(wallet, name, documetNumber, documetType, country, state, city, cep, street, complement, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                console.log(message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This producer already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This producer already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
         }
 
         if(type === 'activist'){
-            registerService.addActivist(name, country, state, city, cep, proofPhoto).then(res => console.log(res)).catch(err => console.log(err));
+            setModalTransaction(true);
+            setLoading(true);
+            addActivist(wallet, name, country, state, city, cep, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                console.log(message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This activist already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This activist already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
         }
 
         if(type === 'contributor'){
+            setModalTransaction(true);
             setLoading(true);
             addContributor(wallet, name, proofPhoto)
             .then(res => {
-                console.log(res);
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
             })
             .catch(err => {
+                setLoading(false);
                 const message = String(err.message);
                 if(message.includes("Not allowed user")){
-                    alert('Not alowed User')
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
                 }
+                if(message.includes("This contributor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This contributor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
             })
         }
+
+        if(type === 'investor'){
+            setModalTransaction(true);
+            setLoading(true);
+            addInvestor(wallet, name)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This investor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This investor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'developer'){
+            setModalTransaction(true);
+            setLoading(true);
+            addDeveloper(wallet, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This developer already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This developer already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
         
-        // case "investor":
-        //     registerService.addInvestor(
-        //     name
-        //     ).then(res => console.log(res)).catch(err => console.log(err));
-        //     break;
-        // case "developer":
-        //     registerService.addDeveloper(
-        //     name,
-        //     proofPhoto
-        //     ).then(res => console.log(res)).catch(err => console.log(err));
-        //     break;
-        // case "researcher":
-        //     registerService.addResearcher(
-        //     name,
-        //     proofPhoto
-        //     ).then(res => console.log(res)).catch(err => console.log(err));
-        //     break;
-        // case "advisor":
-        //     registerService.addAdvisor(
-        //     name,
-        //     proofPhoto
-        //     ).then(res => console.log(res)).catch(err => console.log(err));
-        //     break;                                                  
-        // default:
-        //     break;
-        // }
+        if(type === 'researcher'){
+            setModalTransaction(true);
+            setLoading(true);
+            addResearcher(wallet, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This researcher already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This researcher already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'advisor'){
+            setModalTransaction(true);
+            setLoading(true);
+            addAdvisor(wallet, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoading(false);
+            })
+            .catch(err => {
+                setLoading(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This advisor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This advisor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
     }
 
     async function AddContributor(){
@@ -341,7 +568,7 @@ function Register({ wallet }) {
                     setOpenWebcam(false)
                 }}
             />
-            </Dialog.Root>
+        </Dialog.Root>
         <ToastContainer
             position="top-left"
             autoClose={5000}
@@ -354,7 +581,13 @@ function Register({ wallet }) {
             pauseOnHover
         />
 
-        {loading && <Loading/>}
+        <Dialog.Root open={modalTransaction} onOpenChange={(open) => {if(!loading)setModalTransaction(open)}}>
+            <LoadingTransaction
+                loading={loading}
+                logTransaction={logTransaction}
+            />
+        </Dialog.Root>
+        
         </div>
     );
 }
