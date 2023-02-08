@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import './isa.css';
 import './manageInspections.css';
 import {useParams} from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
+import { LoadingTransaction } from '../LoadingTransaction';
 
 //components
 import Loading from '../Loading';
@@ -13,7 +15,10 @@ import {GetInspections, RequestInspection} from '../../services/manageInspection
 export default function ManageInpections({user, walletAddress, setTab}){
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const {tabActive} = useParams();
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -32,10 +37,45 @@ export default function ManageInpections({user, walletAddress, setTab}){
     }
 
     async function requestInspection(){
-        setLoading(true);
-        const res = await RequestInspection(walletAddress);
-        setLoading(false);
-        getInspections()
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        RequestInspection(walletAddress)
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+            getInspections();
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Request OPEN or ACCEPTED")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Request OPEN or ACCEPTED',
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Recent inspection")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Recent inspection!',
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
+        
     }
     return(
         <div className='container-isa-page'>
@@ -94,7 +134,20 @@ export default function ManageInpections({user, walletAddress, setTab}){
                 
                 )}
            
-
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        getInspections();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
             {loading && (
                 <Loading/>
             )}

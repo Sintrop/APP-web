@@ -18,16 +18,28 @@ export const GetProducer = async (wallet) => {
 }
 
 export const WithdrawTokens = async (wallet) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = '';
     const web3js = new Web3(window.ethereum);
-    const contractAddress = ProducerContract.networks[5777].address;
     const contract = new web3js.eth.Contract(ProducerContract.abi, contractAddress);
     await contract.methods.withdraw().send({from: wallet})
-    .then((res) => {
-        return res
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Token withdrawal successful!!"
+        }
     })
-    .catch((err) => {
-        return false
+    .on("error", (error, receipt) => {
+        
     })
+
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
 }
 
 export const GetTotalScoreProducers = async () => {

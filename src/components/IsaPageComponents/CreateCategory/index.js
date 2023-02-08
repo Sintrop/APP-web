@@ -1,16 +1,16 @@
 import React, {useState} from "react";
-import Web3 from "web3";
 import './createCategory.css';
-
-import CategoryContract from '../../../data/contracts/abis/CategoryContract.json';
-
+import {AddCategory} from '../../../services/isaService';
+import * as Dialog from '@radix-ui/react-dialog';
 //components
 import Loading from '../../Loading';
+import {LoadingTransaction} from '../../LoadingTransaction'; 
 
 export default function CreateCategory({closeCreateCategory, walletAddress, reloadCategories}){
-    const contractAddress = CategoryContract.networks[5777].address;
     const [loading, setLoading] = useState(false);
-
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [tutorial, setTutorial] = useState('');
@@ -33,10 +33,10 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
     }
     
     function addCategory(){
-        setLoading(true);
-        const web3 = new Web3(window.ethereum);
-        const contract = new web3.eth.Contract(CategoryContract.abi, contractAddress);
-        contract.methods.addCategory(
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        AddCategory(
+            walletAddress,
             name, 
             description,
             tutorial, 
@@ -45,11 +45,32 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
             neutro,
             partiallyNotSustainable,
             totallyNotSustainable
-        ).send({from: walletAddress})
-        .on('transactionHash', (hash) => {
-            setLoading(false);
-            reloadCategories();
-            close();
+        )
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            if(message.includes("Can't accept yet")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Can't accept yet",
+                    hash: ''
+                })
+                return;
+            }
+            
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
         })
     }
 
@@ -162,6 +183,20 @@ export default function CreateCategory({closeCreateCategory, walletAddress, relo
                     </button>
                 </div>
             </div>
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        close();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
             {loading && (
                 <Loading/>
             )}

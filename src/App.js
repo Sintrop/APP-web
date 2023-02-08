@@ -5,7 +5,7 @@ import "./app.css";
 import { useNetwork } from "./hooks/useNetwork";
 function App() {
   const {  data, isSupported } = useNetwork()
-  console.log(data)
+  
   if (isSupported) {
     return <Router />;
   } else {
