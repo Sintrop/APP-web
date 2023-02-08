@@ -5,30 +5,59 @@ import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../config/infura';
 import Loading from '../Loading';
 import {AddDelation, GetDelation} from '../../services/userService';
+import { LoadingTransaction } from '../LoadingTransaction';
 
-export default function ModalDelation({reportedWallet}){
-    const {walletAddress} = useParams();
+export default function ModalDelation(){
+    const {walletAddress, walletSelected} = useParams();
     const [title, setTitle] = useState('');
     const [testemony, setTestemony] = useState('');
     const [photo, setPhoto] = useState('');
     const [base64, setBase64] = useState('');
     const [loading, setLoading] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
 
     async function handleReport(e){
         e.preventDefault();
         if(title === '' || testemony === '' || photo === ''){
             return;
         }
-        setLoading(true);
-        await AddDelation(
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        AddDelation(
             walletAddress,
-            reportedWallet,
+            walletSelected,
             title,
             testemony,
             photo
         )
-        setLoading(false);
-        
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+        }) 
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Can't accept yet")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Can't accept yet",
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
     }
 
     async function getPath(file){
@@ -110,6 +139,24 @@ export default function ModalDelation({reportedWallet}){
                         Report
                     </button>
                 </div>
+
+                <Dialog.Root 
+                    open={modalTransaction} 
+                    onOpenChange={(open) => {
+                        if(!loadingTransaction){
+                            setModalTransaction(open);
+                            setTitle('');
+                            setTestemony('');
+                            setBase64('');
+                            setPhoto('');
+                        }
+                    }}
+                >
+                    <LoadingTransaction
+                        loading={loadingTransaction}
+                        logTransaction={logTransaction}
+                    />
+                </Dialog.Root>
             </Dialog.Content>
 
             {loading && (

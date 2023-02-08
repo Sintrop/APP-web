@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './developersPool.css';
 import {useParams} from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
 
 //services
 import {
@@ -10,7 +11,6 @@ import {
     CheckNextAprove, 
     CheckAllowanceTokens,
     GetBalanceDeveloper,
-    AproveTokens,
     WithdrawTokens,
     GetDevelopers,
     TokensPerEra
@@ -19,6 +19,7 @@ import DevelopersService from '../../../../services/developersService';
 
 import DeveloperItem from './DeveloperItem';
 import Loading from '../../../Loading';
+import { LoadingTransaction } from '../../../LoadingTransaction';
 
 export default function DevelopersPool({user, wallet, setTab}){
     const developerService = new DevelopersService(wallet);
@@ -33,6 +34,9 @@ export default function DevelopersPool({user, wallet, setTab}){
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const [developersList, setDevelopersList] = useState([]);
     const {tabActive} = useParams();
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(true);
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -69,11 +73,67 @@ export default function DevelopersPool({user, wallet, setTab}){
         setLoading(false);
     }
 
-    async function withdraw(){
-        setLoading(true);
-        await WithdrawTokens(wallet, developerInfo.level.level, developerInfo.level.currentEra);
-        setLoading(false);
-        getInfosPool();
+    function withdraw(){
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        WithdrawTokens(wallet)
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            if(message.includes("You can't withdraw yet")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "You can't withdraw yet",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("You don't have SAC Tokens")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "You don't have SAC Tokens",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Not a contract pool")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Not a contract pool",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Insufficient balance.")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Insufficient balance.",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Insufficient allowance.")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Insufficient allowance.",
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
     }
 
     return(
@@ -100,13 +160,13 @@ export default function DevelopersPool({user, wallet, setTab}){
                         <p className='p'>Total: {parseFloat(tokensAllowed) / 10**18 + parseFloat(balanceDeveloper) / 10**18}</p>
                     </div>
 
-                    {parseFloat(nextAprove) < 1 && (
+                    
                         <button 
                             className='btn-new-category-isa'
-                            onClick={() => withdraw()}
+                            onClick={() => {withdraw()}}
                         >Withdraw</button>
-                    )}
                     
+
                 </div>
             )}
             
@@ -148,6 +208,20 @@ export default function DevelopersPool({user, wallet, setTab}){
                     </table>
                 </div>
             </div>
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        getInfosPool();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
             {loading && (
                 <Loading/>
             )}

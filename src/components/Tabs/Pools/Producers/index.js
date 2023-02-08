@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 //import './developersPool.css';
 import {useParams} from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
 
 //services
 import {
@@ -13,6 +14,7 @@ import {
 import ProducerService, {GetProducer, WithdrawTokens, GetTotalScoreProducers} from '../../../../services/producerService';
 import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
+import { LoadingTransaction } from '../../../LoadingTransaction';
 
 export default function ProducersPool({user, wallet, setTab}){
     const producerService = new ProducerService(wallet);
@@ -26,6 +28,9 @@ export default function ProducersPool({user, wallet, setTab}){
     const [nextAprove, setNextAprove] = useState('0');
     const [producersList, setProducersList] = useState([]);
     const {tabActive} = useParams();
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -72,10 +77,66 @@ export default function ProducersPool({user, wallet, setTab}){
 
 
     async function withdraw(){
-        setLoading(true);
-        await WithdrawTokens(wallet);
-        setLoading(false);
-        getInfosPool();
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        WithdrawTokens(wallet)
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            if(message.includes("Minimum inspections")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Minimum inspections",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("You don't have SAC Tokens")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "You don't have SAC Tokens",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Not a contract pool")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Not a contract pool",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Insufficient balance.")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Insufficient balance.",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Insufficient allowance.")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Insufficient allowance.",
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
     }
 
     return(
@@ -149,6 +210,20 @@ export default function ProducersPool({user, wallet, setTab}){
                     </table>
                 </div>
             </div>
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        getInfosPool();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
             {loading && (
                 <Loading/>
             )}

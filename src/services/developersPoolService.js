@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import DevelopersPoolContract from '../data/contracts/abis/DeveloperPool.json';
 import DeveloperContract from '../data/contracts/abis/DeveloperContract.json';
 import SacTokenContract from '../data/contracts/abis/SacToken.json';
+const DeveloperContractAddress = DeveloperContract.networks[5777].address;
 
 export const GetBalancePool = async () => {
     let tokens = 0;
@@ -81,20 +82,6 @@ export const GetBalanceDeveloper = async (wallet) => {
     return balance;
 }
 
-export const AproveTokens = async (wallet) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    await contract.methods.approve().send({from: wallet})
-    .on('transactionHash', (hash) => {
-        if(hash){
-            return hash;
-        }else{
-            return false;
-        }
-    })
-}
-
 export const GetDevelopers = async () => {
     let developersList = [];
     const web3js = new Web3(window.ethereum);
@@ -120,28 +107,27 @@ export const TokensPerEra = async () => {
     return tokens;
 }
 
-export const WithdrawTokens = async (wallet, level, currentEra) => {
+export const WithdrawTokens = async (wallet) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
     const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    contract.methods.withdraw().send({from: wallet})
-    .then((res) => {
-        return res;
+    const contract = new web3js.eth.Contract(DeveloperContract.abi, DeveloperContractAddress);
+    await contract.methods.withdraw().send({from: wallet})
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Token withdrawal successful!"
+        }
     })
-    .catch((err) => {
-        return err
+    .on("error", (error, receipt) => {
+        
     })
-}
 
-export const WithdrawTokens1 = async (wallet, level, currentEra) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    contract.methods.withdraw(wallet, level, currentEra).call({from: contractAddress})
-    .then((res) => {
-        return res;
-    })
-    .catch((err) => {
-        return err;
-    })
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
 }

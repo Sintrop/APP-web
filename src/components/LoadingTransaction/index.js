@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import './loadingTransaction.css';
 
 export function LoadingTransaction({loading, logTransaction}){
+    
     return(
         <Dialog.Portal className='loading-transaction__portal'>
             <Dialog.Overlay className='loading-transaction__overlay'/>
@@ -24,8 +25,10 @@ export function LoadingTransaction({loading, logTransaction}){
                         </a>
                     </div>
                 )}
-               
-                <Dialog.Close>Close</Dialog.Close>
+
+                {!loading && (
+                    <Dialog.Close>Close</Dialog.Close>
+                )}
             </Dialog.Content>
         </Dialog.Portal>
     )

@@ -4,11 +4,15 @@ import './modalContribute.css';
 import {GetTokensBalance} from '../../../../services/voteService';
 import {BurnTokens} from '../../../../services/sacTokenService';
 import Loading from '../../../Loading';
+import { LoadingTransaction } from '../../../LoadingTransaction';
 
 export function ModalContribute({wallet, onFinished}){
     const [balanceTokens, setBalanceTokens] = useState(0);
     const [inputTokens, setInputTokens] = useState('');
     const [loading, setLoading] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
 
     useEffect(() => {
         getTokensWallet();
@@ -27,23 +31,51 @@ export function ModalContribute({wallet, onFinished}){
         if(loading){
             return;
         }
-        setLoading(true);
-        await BurnTokens(wallet, inputTokens + '000000000000000000')
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        BurnTokens(wallet, inputTokens + '000000000000000000')
         .then(res => {
-            console.log(res);
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
         })
         .catch(err => {
+            setLoadingTransaction(false);
             const message = String(err.message);
+            console.log(message);
             if(message.includes("Burn amount exceeds balance")){
-                alert('Burn amount exceeds balance');
-                return
+                setLogTransaction({
+                    type: 'error',
+                    message: "Burn amount exceeds balance",
+                    hash: ''
+                })
+                return;
             }
+            if(message.includes("Burn from the zero address")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Burn from the zero address",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("You don't have SAC Tokens")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "You don't have SAC Tokens",
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
         })
-        
-        getTokensWallet();
-        setInputTokens('');
-        onFinished();
-        setLoading(false);
     }
 
     return(
@@ -72,6 +104,22 @@ export function ModalContribute({wallet, onFinished}){
                         onClick={burnTokens}    
                     >Contribute</button>
                 </div>
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        getTokensWallet();
+                        setInputTokens('');
+                        onFinished();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
             </Dialog.Content>
             {loading && (
                 <Loading/>

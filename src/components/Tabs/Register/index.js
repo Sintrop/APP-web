@@ -85,6 +85,14 @@ function Register({ wallet }) {
                     })
                     return;
                 }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
                     message: 'Something went wrong with the transaction, please try again!',
@@ -121,6 +129,14 @@ function Register({ wallet }) {
                     setLogTransaction({
                         type: 'error',
                         message: 'This activist already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
                         hash: ''
                     })
                     return;
@@ -164,6 +180,14 @@ function Register({ wallet }) {
                     })
                     return;
                 }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
                     message: 'Something went wrong with the transaction, please try again!',
@@ -199,6 +223,14 @@ function Register({ wallet }) {
                     setLogTransaction({
                         type: 'error',
                         message: 'This investor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
                         hash: ''
                     })
                     return;
@@ -242,6 +274,14 @@ function Register({ wallet }) {
                     })
                     return;
                 }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
                     message: 'Something went wrong with the transaction, please try again!',
@@ -277,6 +317,14 @@ function Register({ wallet }) {
                     setLogTransaction({
                         type: 'error',
                         message: 'This researcher already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
                         hash: ''
                     })
                     return;
@@ -320,6 +368,14 @@ function Register({ wallet }) {
                     })
                     return;
                 }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
                     message: 'Something went wrong with the transaction, please try again!',
@@ -328,19 +384,6 @@ function Register({ wallet }) {
             });
         }
     }
-
-    async function AddContributor(){
-        alert('ok')
-        setLoading(true);
-        addContributor(wallet, name, proofPhoto)
-        .then(res => {
-            console.log(res);
-        })
-        .catch(res => {
-            console.log(res)
-        }) 
-    } 
-
 
     async function handleProofPhoto(data){
         setLoading(true);
