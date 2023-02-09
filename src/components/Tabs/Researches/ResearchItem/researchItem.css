@@ -1,0 +1,48 @@
+.research-item__container{
+    border: 1px solid #aaa;
+    padding: 10px;
+    width: 750px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.research-item__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.research-item__card-header{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+}
+
+.research-item__label{
+    margin: 0;
+    font-weight: bold;
+    color: #000
+}
+
+.research-item__description{
+    margin: 0 0 15px 0;
+    color: #000
+}
+
+.research-item__title{
+    margin: 0;
+    font-weight: bold;
+    color: green;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.research-item__area-btn-pdf{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 10px
+}

@@ -25,6 +25,7 @@ import InvestorCertificate from '../../components/Tabs/Certificate/Investor';
 import DevelopersPool from '../../components/Tabs/Pools/Developers';
 import ReportsPage from '../../components/Tabs/Reports';
 import ProducersPool from '../../components/Tabs/Pools/Producers';
+import ResearchesPage from '../../components/Tabs/Researches';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -312,6 +313,17 @@ export default function Dashboard(){
 
                 {activeTab === 'delations' && (
                     <ReportsPage 
+                        user={user} 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'researches' && (
+                    <ResearchesPage 
                         user={user} 
                         wallet={walletAddress}
                         setTab={(tab, wallet) => {
