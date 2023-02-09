@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 
 import loginImg from '../../assets/img/sintrop_login_alpha.png';
 import logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
-
+import { MainContext } from "../../contexts/main";
 import ConnectWallet from "../../services/connectWallet";
 
 function Login(){
+    const {Sync} = useContext(MainContext);
     const navigate = useNavigate();
 
     async function handleSync(){
-        const wallet = await ConnectWallet();
-
-        if(wallet.connectedStatus){
-            navigate(`/dashboard/${wallet.address}/isa/main`)
+        const response = await Sync();
+        if(response.status === 'connected'){
+            navigate(`/dashboard/${response.wallet}/isa/main`)
         }
     }
 

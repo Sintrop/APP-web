@@ -1,13 +1,36 @@
 import { useEffect, useState, createContext } from "react";
+import {useParams} from 'react-router-dom';
+import {CheckUser} from '../services/checkUserRegister';
+import ConnectWallet from "../services/connectWallet";
 
 export const MainContext = createContext({})
 
 export default function MainProvider({children}){
-    const [teste, setTeste] = useState('ok');
+    const [user, setUser] = useState('0');
+    const [walletConnected, setWalletConnected] = useState(''); 
 
+    async function Sync(){
+        const wallet = await ConnectWallet();
+
+        if(wallet.connectedStatus){
+            return {
+                status: 'connected',
+                wallet: wallet.address
+            }
+        }
+    }
+
+    async function checkUser(wallet){
+        const response = await CheckUser(String(wallet));
+        setUser(response);
+        if(response !== '0'){
+            setWalletConnected(wallet);
+        }
+    }
+    
     return(
         <MainContext.Provider
-            value={{teste}}
+            value={{user, Sync, checkUser, walletConnected}}
         >
             {children}
         </MainContext.Provider>

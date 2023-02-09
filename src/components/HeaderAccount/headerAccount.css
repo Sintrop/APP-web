@@ -8,3 +8,48 @@
     font-weight: bold;
     color: purple;
 }
+
+.header-account__area-right{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-account__area-balance{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-account__title-balance{
+    margin: 0;
+    font-weight: bold;
+    color: #000;
+    font-size: 16px;
+}
+
+.header-account__balance{
+    font-weight: bold;
+    font-size: 16px;
+    color: purple;
+    margin: 0 0 0 5px;
+}
+
+.header-account__choose-visibility{
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    cursor: pointer;
+    margin: 0 5px 0 5px;
+}
+
+.header-account__btn-options-account{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
