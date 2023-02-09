@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import './dashboard.css';
+import { MainContext } from '../../contexts/main';
 
 //Components
 import Menu from '../../components/Menu';
@@ -38,6 +39,7 @@ import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 
 export default function Dashboard(){
+    const {checkUser} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -68,12 +70,8 @@ export default function Dashboard(){
     },[]);
 
     useEffect(() => {
-        if(user === 0){
-            setActiveTab('register');
-            return;
-        }
-        setActiveTab(tabActive);
-    }, [user]);
+        checkUser(walletAddress)
+    }, []);
 
     return(
         <div className='container-dashboard'>

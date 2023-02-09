@@ -22,7 +22,7 @@
 }
 
 .header-account__title-balance{
-    margin: -8px 0 0 0;
+    margin: 0;
     font-weight: bold;
     color: #000;
     font-size: 16px;
@@ -32,10 +32,11 @@
     font-weight: bold;
     font-size: 16px;
     color: purple;
-    margin: -8px 0 0 5px;
+    margin: 0 0 0 5px;
 }
 
 .header-account__choose-visibility{
+    display: flex;
     background-color: transparent;
     align-items: center;
     justify-content: center;
@@ -45,6 +46,7 @@
 }
 
 .header-account__btn-options-account{
+    display: flex;
     align-items: center;
     justify-content: center;
     background-color: transparent;

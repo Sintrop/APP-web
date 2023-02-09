@@ -6,13 +6,13 @@ import ConnectWallet from "../services/connectWallet";
 export const MainContext = createContext({})
 
 export default function MainProvider({children}){
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState('0');
+    const [walletConnected, setWalletConnected] = useState(''); 
 
     async function Sync(){
         const wallet = await ConnectWallet();
 
         if(wallet.connectedStatus){
-            checkUser(wallet.address)
             return {
                 status: 'connected',
                 wallet: wallet.address
@@ -21,13 +21,16 @@ export default function MainProvider({children}){
     }
 
     async function checkUser(wallet){
-        const response = await CheckUser(wallet);
-        alert(response);
+        const response = await CheckUser(String(wallet));
+        setUser(response);
+        if(response !== '0'){
+            setWalletConnected(wallet);
+        }
     }
     
     return(
         <MainContext.Provider
-            value={{user, Sync}}
+            value={{user, Sync, checkUser, walletConnected}}
         >
             {children}
         </MainContext.Provider>

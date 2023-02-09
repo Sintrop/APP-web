@@ -1,0 +1,46 @@
+.modal-account-options__portal{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    inset: 0;
+}
+
+.modal-account-options__overlay{
+    position: fixed;
+    inset: 0;
+}
+
+.modal-account-options__content{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    height: 40px;
+    background-color: white;
+    border-radius: 8px;
+    inset: 50px 91vw;
+    border: 3px solid #ddd
+}
+
+.modal-account-options__option-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+    border: 0
+}
+
+.modal-account-options__option-container:hover{
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.modal-account-options__option-container-label{
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}

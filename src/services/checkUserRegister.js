@@ -39,10 +39,9 @@ export const CheckUser = async (walletAddress) => {
     let user = '';
     const web3js = new Web3(window.ethereum);
     const contract = new web3js.eth.Contract(UserContract.abi, UserContractAddress);
-    await contract.methods.getUser('0xB36F12504C23d0BeDb9f7A7F3677094CB4E04024').call({from: UserContractAddress})
+    await contract.methods.getUser(walletAddress).call({from: UserContractAddress})
     .then((res) => {
         user = res;
-        console.log(res)
     })
 
     return user;
