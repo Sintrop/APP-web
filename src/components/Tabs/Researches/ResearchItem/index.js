@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import './researchItem.css';
 import {format} from 'date-fns';
 import { saveAs } from 'file-saver';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export function ResearchItem({data}){
+    const navigate = useNavigate();
     const {walletAddress} = useParams();
     const [date, setDate] = useState('');
     useEffect(() => {
@@ -36,7 +37,8 @@ export function ResearchItem({data}){
                 <div className='research-item__card-header'>
                     <label className="research-item__label">CreatedBy</label>
                     <a
-                        href={`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`}
+                        onClick={() => navigate(`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`)}
+                        style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
                     >
                         {data.createdBy}
                     </a>

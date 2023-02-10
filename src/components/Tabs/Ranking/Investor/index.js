@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import InvestorService from "../../../../services/investorService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function InvestorRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const investorService = new InvestorService(wallet);
   const [investor, setInvestor] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -38,7 +39,12 @@ export default function InvestorRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>
-              <a href={`/dashboard/${walletAddress}/investor-page/${item.investorWallet}`}>{item.investorWallet}</a>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/investor-page/${item.investorWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
+                {item.investorWallet}
+              </a>
             </td>
             <td>{item.name}</td>
           </tr>

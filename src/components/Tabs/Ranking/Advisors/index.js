@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import AdvisorsService from "../../../../services/advisorsService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function AdvisorsRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const advisorsService = new AdvisorsService(wallet);
   const [advisors, setAdvisors] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -39,7 +40,10 @@ export default function AdvisorsRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href={`/dashboard/${walletAddress}/advisor-page/${item.advisorWallet}`}>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/advisor-page/${item.advisorWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
                 <p className="p-wallet" title={item.advisorWallet}>
                   {item.advisorWallet}
                 </p>

@@ -8,6 +8,7 @@ export const MainContext = createContext({})
 export default function MainProvider({children}){
     const [user, setUser] = useState('0');
     const [walletConnected, setWalletConnected] = useState(''); 
+    const [modalRegister, setModalRegister] = useState(false);
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -20,17 +21,20 @@ export default function MainProvider({children}){
         }
     }
 
+    function chooseModalRegister(){
+        setModalRegister(!modalRegister);
+    }
+
     async function checkUser(wallet){
         const response = await CheckUser(String(wallet));
         setUser(response);
-        if(response !== '0'){
-            setWalletConnected(wallet);
-        }
+        setWalletConnected(wallet);
+        return response;
     }
     
     return(
         <MainContext.Provider
-            value={{user, Sync, checkUser, walletConnected}}
+            value={{user, Sync, checkUser, walletConnected, chooseModalRegister, modalRegister}}
         >
             {children}
         </MainContext.Provider>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function ProducerRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -45,7 +46,10 @@ export default function ProducerRanking({ wallet, setTab }) {
           <tr key={item.producerWallet}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href={`/dashboard/${walletAddress}/producer-page/${item.producerWallet}`}>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/producer-page/${item.producerWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
                 <p className="p-wallet" title={item.producerWallet}>
                   {item.producerWallet}
                 </p>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ResearchersService from "../../../../services/researchersService";
 import "../../Ranking/ranking.css";
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function ResearchersRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const researchersService = new ResearchersService(wallet);
   const [researchers, setResearchers] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -41,7 +42,8 @@ export default function ResearchersRanking({ wallet, setTab }) {
             <td>{item.id}</td>
             <td>
               <a
-                href={`/dashboard/${walletAddress}/researcher-page/${item.researcherWallet}`}
+                onClick={() => navigate(`/dashboard/${walletAddress}/researcher-page/${item.researcherWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
               >
                 {item.researcherWallet}
               </a>

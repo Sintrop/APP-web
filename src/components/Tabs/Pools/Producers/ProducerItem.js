@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {GetBalanceProducer} from '../../../../services/producerPoolService';
 
 export default function ProducerItem({data, setTab}){
+    const navigate = useNavigate();
     const [balanceProducer, setBalanceProducer] = useState('0');
     const {walletAddress} = useParams();
 
@@ -20,7 +21,10 @@ export default function ProducerItem({data, setTab}){
         <tr key={data.id}>
             <td>{data.id}</td>
             <td id='createdByIsaTable'>
-                <a href={`/dashboard/${walletAddress}/producer-page/${data.producerWallet}`}>
+                <a
+                    onClick={() => navigate(`/dashboard/${walletAddress}/producer-page/${data.producerWallet}`)}
+                    style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+                >
                     <p className="p-wallet" title={data.producerWallet}>
                         {data.producerWallet}
                     </p>
