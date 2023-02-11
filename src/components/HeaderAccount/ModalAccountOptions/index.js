@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './modalAccountOptions.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import {BiLogOut} from 'react-icons/bi';
 import {BsPersonPlus} from 'react-icons/bs';
 import { useNavigate } from 'react-router';
+import { MainContext } from '../../../contexts/main';
 
 export function ModalAccountOptions({user, walletConnected, close}){
+    const {chooseModalRegister} = useContext(MainContext)
     const navigate = useNavigate();
 
     return(
@@ -16,7 +18,7 @@ export function ModalAccountOptions({user, walletConnected, close}){
                     onClick={() => {
                         if(user === '0'){
                             close();
-                            navigate(`/dashboard/${walletConnected}/register/main`);
+                            chooseModalRegister()
                         }else{
                             close();
                             navigate('/');

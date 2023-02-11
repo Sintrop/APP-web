@@ -9,13 +9,15 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-export function WebcamComponent({onTake}){
+export function WebcamComponent({onTake, check}){
     const [imageSrc, setImageSrc] = useState('');
     const [haveWebcam, setHaveWebcam] = useState(false);
 
     useEffect(() => {
-        checkWebcam();
-    },[])
+        if(check){
+            checkWebcam();
+        }
+    },[check])
 
     function checkWebcam(){
         navigator.mediaDevices.getUserMedia({video: true})
@@ -37,7 +39,7 @@ export function WebcamComponent({onTake}){
                     </div>
                 ) : (
                     <>
-                        {imageSrc === '' ? (
+                        {imageSrc === '' || !check ? (
                             <Webcam
                                 className="webcam"
                                 audio={false}
