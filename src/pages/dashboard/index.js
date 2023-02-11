@@ -349,7 +349,6 @@ export default function Dashboard(){
             <Dialog.Root
                 open={modalRegister}
                 onOpenChange={(open) => {
-                    navigate(`/dashboard/${walletAddress}/isa/main`)
                     chooseModalRegister()
                 }}  
             >

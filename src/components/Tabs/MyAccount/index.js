@@ -22,7 +22,13 @@ export default function MyAccount({wallet, userType, setTab}){
         if(user === '0'){
             chooseModalRegister()
         }
-    },[])
+    },[]);
+
+    if(user === '0'){
+        return(
+            <h1>Account not registered!</h1>
+        )
+    }
     
     return(
         <div>

@@ -1,17 +1,26 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { useParams } from 'react-router';
+import React, {useState, useEffect, useRef, useContext} from 'react';
+import { MainContext } from '../../contexts/main';
+import { useParams, useNavigate } from 'react-router';
 import './modalRegister.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../LoadingTransaction';
+import Loading from '../Loading';
 import { WebcamComponent } from '../Webcam';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
+import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 
 export default function ModalRegister(){
+    const navigate = useNavigate();
+    const {walletConnected, chooseModalRegister} = useContext(MainContext);
     const {walletAddress, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+
     const [checkWebcam, setCheckWebcam] = useState(false);
     const [step, setStep] = useState(1);
     const [type, setType] = useState("");
@@ -56,12 +65,20 @@ export default function ModalRegister(){
         setLoading(true);
         try{
             const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
-            setState(response.data.uf);
-            setCity(response.data.localidade);
-            setStreet(response.data.logradouro);
-            setCountry('Brasil')
+            if(response.data.erro === true){
+                toast.error('No address found with that zip code!');
+                setState('');
+                setCity('');
+                setStreet('');
+                setCountry('');
+            }else{
+                setState(response.data.uf);
+                setCity(response.data.localidade);
+                setStreet(response.data.logradouro);
+                setCountry('Brasil');
+            }
         }catch(err){
-            console.log(err);
+            console.log(err)
         }finally{
             setLoading(false);
         }
@@ -73,7 +90,7 @@ export default function ModalRegister(){
             toast.error('Select a user type!')
             return;
         }
-        if(step === 2 && type !== 'investor'){
+        if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
             toast.error('It is necessary to send a photo!')
             return;
         }
@@ -108,6 +125,392 @@ export default function ModalRegister(){
         setProofPhotoBase64(base64Hash);
         setLoading(false);
     } 
+
+    function validateData(){
+        if(!name.trim()) {
+            toast.error('Fill in the name field!');
+            return;
+        }
+
+        if(type === 'producer'){
+            if(documetType === ''){
+                toast.error('Select document type!');
+                return;
+            }
+
+            if(!documetNumber.trim()){
+                toast.error('Fill in the document field!');
+                return;
+            }
+
+            if(state === '' || !cep.trim()){
+                toast.error('Enter a valid zip code!');
+                return;
+            }
+
+            if(!street.trim()){
+                toast.error('Fill in the street field!');
+                return;
+            }
+
+            if(!complement.trim()){
+                toast.error('Fill in the complement field!');
+                return;
+            }
+        }
+
+        if(type === 'activist'){
+            if(state === '' || !cep.trim()){
+                toast.error('Enter a valid zip code!');
+                return;
+            }
+
+            if(!street.trim()){
+                toast.error('Fill in the street field!');
+                return;
+            }
+
+            if(!complement.trim()){
+                toast.error('Fill in the complement field!');
+                return;
+            }
+        }
+
+        register();
+    }
+
+    async function register() {
+        if(type === 'producer'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addProducer(walletConnected, name, documetNumber, documetType, country, state, city, cep, street, complement, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This producer already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This producer already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'activist'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addActivist(walletConnected, name, country, state, city, cep, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This activist already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This activist already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'contributor'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addContributor(walletConnected, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This contributor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This contributor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            })
+        }
+
+        if(type === 'investor'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addInvestor(walletConnected, name)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This investor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This investor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'developer'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addDeveloper(walletConnected, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This developer already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This developer already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+        
+        if(type === 'researcher'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addResearcher(walletConnected, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This researcher already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This researcher already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
+        if(type === 'advisor'){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addAdvisor(walletConnected, name, proofPhoto)
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This advisor already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This advisor already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+    }
 
     return(
         <Dialog.Portal className='modal-register__portal'>
@@ -327,7 +730,13 @@ export default function ModalRegister(){
                         </button>
                     )}
                     <button 
-                        onClick={handleNextStep}
+                        onClick={() => {
+                            if(step === 3){
+                                validateData();
+                            }else{
+                                handleNextStep();
+                            }
+                        }}
                     >
                         {step === 3 ? 'Register' : 'Next step'}
                     </button>
@@ -346,10 +755,26 @@ export default function ModalRegister(){
                             handleProofPhoto(data);
                             setModalWebcam(false);
                             setCheckWebcam(false);
-                        }}
+                        }}  
                     />
                 </Dialog.Root>
             </Dialog.Content>
+
+            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                if(!loadingTransaction){
+                    setModalTransaction(open)
+                    if(logTransaction.type === 'success'){
+                        chooseModalRegister();
+                        navigate(0)
+                    }
+                }
+            }}>
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
+            {loading && <Loading/>}
             <ToastContainer/>
         </Dialog.Portal>
     )

@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {MainContext} from '../../../../contexts/main';
 import AvatarDefault from '../../../../assets/img/avatar03.png';
 import ActivistService from '../../../../services/activistService';
 import {GetInspections} from '../../../../services/manageInspectionsService';
@@ -11,11 +12,13 @@ import {useParams} from 'react-router-dom';
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ActivistPage({wallet, setTab}){
+    const {user, chooseModalRegister} = useContext(MainContext);
     const activistService = new ActivistService(wallet)
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         getActivist();
@@ -59,11 +62,24 @@ export default function ActivistPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
-                            <Dialog.Trigger className='area-avatar__btn-report'>
-                                Report Activist
-                            </Dialog.Trigger>
-                            <ModalDelation reportedWallet={wallet}/>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => {
+                                setModalDelation(open);
+                            }}
+                        >
+                            {user === '0' ? (
+                                <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
+                                    Report Activist
+                                </button>
+                            ) : (
+                                <Dialog.Trigger className='area-avatar__btn-report'>
+                                    Report Activist
+                                </Dialog.Trigger>
+                            )}
+                            <ModalDelation 
+                                close={() => setModalDelation(false)}
+                            />
                         </Dialog.Root>
                     </div>  
 
