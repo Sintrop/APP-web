@@ -1,3 +1,44 @@
+.modal-realize__portal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+}
+
+.modal-realize__overlay{
+    background-color: rgba(0,0,0,0.6);
+    position: fixed;
+    inset: 0;
+}
+
+.modal-realize__content{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 700px;
+    height: 530px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    margin: auto auto;
+    inset: 0;
+}
+
+.modal-realize__title{
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal-realize__area-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5px;
+    align-items: center;
+}
+
 .container_realize_inspection{
     display: flex;
     flex-direction: column;
@@ -24,7 +65,7 @@
 .area-description{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
 }
 
 .area-description h4{

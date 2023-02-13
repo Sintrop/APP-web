@@ -19,6 +19,11 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [step, setStep] = useState(1);
+    const [proofPhoto, setProofPhoto] = useState("");
+    const [proofPhotoBase64, setProofPhotoBase64] = useState("");
+    const [checkWebcam, setCheckWebcam] = useState(false);
+    const [modalWebcam, setModalWebcam] = useState(false);
 
     useEffect(() => {
         getCategories();
@@ -140,38 +145,73 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
         setIsas(array);
     }
 
+    function handleNextStep(){
+        setStep(step + 1);
+    }
+
+    function handlePreviousStep(){
+        if(step > 1){
+            setStep(step - 1);
+        }
+    }
+
     return(
-        <div className="container-create-category">
-            <div className="card-create-category">
-                <div className="header-create-category">
-                    <p className='tit-categories-isa'>Scoring the Categories</p>
-                    <button
-                        className="btn-close-create-category"
-                        onClick={() => close()}
-                    >
-                        X
-                    </button>
-                </div>
-                <div className="container_realize_inspection">
-                    {categories.map(item => {
-                        return(
-                            <CardCategoryRealizeInspection 
-                                data={item}
-                                pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                            />
-                        )
-                    })}
-                </div>
-                <div className="footer_realize_inspection">
-                    <button
-                        className="btn-finish-inspection"
-                        onClick={() => validates()}
-                    >
-                        Finish inspection
-                    </button>
+        <Dialog.Portal className='modal-realize__portal'>
+            <Dialog.Overlay className='modal-realize__overlay'/>
+            <Dialog.Content className='modal-realize__content'>
+                <Dialog.Title className='modal-realize__title'>
+                    Realize inspection
+                </Dialog.Title>
+                
+                <div style={{overflow: 'scroll'}}>
+                    {step === 1 && (
+                        <div className='modal-register__container-content'>
+                            <h1 className='modal-register__title'>Proof Photo</h1>
+
+                            {proofPhoto != '' && (
+                                <img
+                                    src={`data:image/png;base64,${proofPhotoBase64}`}
+                                    className="register__proofPhoto"
+                                />
+                            )}
+                            
+                            <button
+                                onClick={() => {
+                                    setCheckWebcam(true);
+                                    setTimeout(() => {
+                                        setModalWebcam(true);
+                                    }, 1000)
+                                }}
+                            >
+                                Take photo
+                            </button>
+                        </div>
+                    )}
+
+                    {step > 1 && (
+                        <>
+                            {step === 2 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step -2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                />
+                            )}
+                            {step === 3 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                />
+                            )}
+                        </>
+                    )}
                 </div>
 
-            </div>
+                <div className="modal-realize__area-btn">
+                    <button onClick={handlePreviousStep}>Previous</button>
+                    <button onClick={handleNextStep}>Next Step</button>
+                </div>
+
+            </Dialog.Content>
 
             {loading && (
                 <Loading/>
@@ -192,6 +232,6 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                     logTransaction={logTransaction}
                 />
             </Dialog.Root>
-        </div>
+        </Dialog.Portal>
     )
 }
