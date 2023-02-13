@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { MainContext } from '../../../../contexts/main';
 import './producerPage.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
@@ -15,6 +16,7 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ProducerPage({wallet, setTab}){
+    const {user, chooseModalRegister} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
@@ -63,9 +65,15 @@ export default function ProducerPage({wallet, setTab}){
                         </div>
 
                         <Dialog.Root>
-                            <Dialog.Trigger className='area-avatar__btn-report'>
-                                Report Producer
-                            </Dialog.Trigger>
+                            {user === '0' ? (
+                                <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
+                                    Report Producer
+                                </button>
+                            ) : (
+                                <Dialog.Trigger className='area-avatar__btn-report'>
+                                    Report Producer
+                                </Dialog.Trigger>
+                            )}
                             <ModalDelation reportedWallet={wallet}/>
                         </Dialog.Root>
                     </div>  

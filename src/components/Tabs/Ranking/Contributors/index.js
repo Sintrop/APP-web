@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ContributorsService from "../../../../services/contributorService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function ContributorsRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const contributorsService = new ContributorsService(wallet);
   const [activist, setActivist] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -39,7 +40,10 @@ export default function ContributorsRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href={`/dashboard/${walletAddress}/contributor-page/${item.contributorWallet}`}>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/contributor-page/${item.contributorWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
                 <p className="p-wallet" title={item.contributorWallet}>
                   {item.contributorWallet}
                 </p>

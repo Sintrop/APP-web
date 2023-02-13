@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {GetBalanceDeveloper} from '../../../../services/developersPoolService';
 
 export default function DeveloperItem({data, setTab}){
+    const navigate = useNavigate();
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const {walletAddress} = useParams();
     useEffect(() => {
@@ -18,7 +19,10 @@ export default function DeveloperItem({data, setTab}){
         <tr key={data.id}>
             <td>{data.id}</td>
             <td id='createdByIsaTable'>
-                <a href={`/dashboard/${walletAddress}/developer-page/${data.developerWallet}`}>
+                <a
+                    onClick={() => navigate(`/dashboard/${walletAddress}/developer-page/${data.developerWallet}`)}
+                    style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+                >
                     <p className="p-wallet" title={data.developerWallet}>
                         {data.developerWallet}
                     </p>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function ActivistRanking({ wallet, setTab }) {
+    const navigate = useNavigate(); 
     const activistService = new ActivistService(wallet);
     const [activist, setActivist] = useState([]);
     const {tabActive, walletAddress} = useParams();
@@ -40,7 +41,10 @@ export default function ActivistRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href={`/dashboard/${walletAddress}/activist-page/${item.activistWallet}`}>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/activist-page/${item.activistWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
                 <p className="p-wallet" title={item.activistWallet}>
                   {item.activistWallet}
                 </p>

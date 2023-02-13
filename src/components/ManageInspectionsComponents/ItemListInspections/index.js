@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './itemListInspections.css';
 import {format} from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 //components
 import ModalActions from '../ModalActions';
@@ -12,6 +13,7 @@ import Loading from '../../Loading';
 import {GetInspection} from '../../../services/manageInspectionsService';
 
 export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
+    const navigate = useNavigate();
     const [showActions, setShowActions] = useState(false);
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
@@ -45,7 +47,10 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     return(
         <tr key={data.id}>
             <td>
-                <a href={`/dashboard/${walletAddress}/producer-page/${data.createdBy}`}>
+                <a 
+                    onClick={() => navigate(`/dashboard/${walletAddress}/producer-page/${data.createdBy}`)}
+                    style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
+                >
                     <p  
                         className='id-wallets' 
                         title={data.createdBy}
@@ -56,7 +61,10 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 {data.status == 0 ? (
                     <p>Not accepted</p>
                 ) : (
-                    <a href={`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`}>
+                    <a 
+                        onClick={() => navigate(`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`)}
+                        style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
+                    >
                         <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
                     </a>
                 )}

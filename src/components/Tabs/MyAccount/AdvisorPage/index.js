@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import {MainContext} from '../../../../contexts/main';
 import AdvisorsService from '../../../../services/advisorsService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
@@ -6,6 +7,7 @@ import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
 
 export default function AdvisorPage({wallet, setTab}){
+    const {user, chooseModalRegister} = useContext(MainContext);
     const advisorService = new AdvisorsService(wallet)
     const [advisorData, setAdvisorData] = useState([]);
     const [base64, setBase64] = useState('');
@@ -45,9 +47,15 @@ export default function AdvisorPage({wallet, setTab}){
                         </div>
 
                         <Dialog.Root>
-                            <Dialog.Trigger className='area-avatar__btn-report'>
-                                Report Advisor
-                            </Dialog.Trigger>
+                            {user === '0' ? (
+                                <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
+                                    Report Advisor
+                                </button>
+                            ) : (
+                                <Dialog.Trigger className='area-avatar__btn-report'>
+                                    Report Advisor
+                                </Dialog.Trigger>
+                            )}
                             <ModalDelation reportedWallet={wallet}/>
                         </Dialog.Root>
                     </div>  

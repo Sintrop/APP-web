@@ -75,7 +75,7 @@ export default function Menu({ changeTab }) {
     //  action: ""
     //},
     { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
-    { id: "researches", title: "Researches", icon: IconISA, action: "" },
+    { id: "researches", title: "Research Center", icon: IconISA, action: "" },
   ]);
   const toggleSubItem = (id) => {
     if(id === 'rankings'){

@@ -10,7 +10,7 @@ import Loading from '../../Loading';
 import {IsVoted, GetTokensCategory} from '../../../services/voteService';
 
 export default function ItemsListISA({data, walletAddress, reloadCategories, setTab}){
-    const {navigate} = useNavigate();
+    const navigate = useNavigate();
     const [showDetails, setShowDetails] = useState(false);
     const [showVoteCard, setShowVoteCard] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -49,10 +49,12 @@ export default function ItemsListISA({data, walletAddress, reloadCategories, set
                 </button>
             </td>
             <td id='createdByContentIsa'>
-                <a href={`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`} onClick={() => {
-                    //setTab('researcher-page', data.createdBy)
-                    //navigate(`/dashboard/${walletAddress}/researcher-page`)
-                }}>
+                <a 
+                    style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
+                    onClick={() => {
+                        navigate(`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`)
+                    }}
+                >
                     <p>{data.createdBy}</p>    
                 </a>
             </td>

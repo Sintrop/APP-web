@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { ToastContainer } from "react-toastify";
 import InputMask from 'react-input-mask';
 import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, addAdvisor, addResearcher} from "../../../services/registerService";
@@ -7,9 +7,14 @@ import {WebcamComponent} from '../../Webcam';
 import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../../config/infura';
 import { LoadingTransaction } from "../../LoadingTransaction";
+import {useParams, useNavigate} from 'react-router-dom';
+import { MainContext } from "../../../contexts/main";
 
 import "./register.css";
-function Register({ wallet }) {
+function Register({ wallet, setTab }) {
+    const {walletConnected} = useContext(MainContext);
+    const {tabActive} = useParams()
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
@@ -28,8 +33,7 @@ function Register({ wallet }) {
     const [country, setCountry] = useState("");
     const [openWebcam, setOpenWebcam] = useState(false);
     let formatDocument = useRef('')
-    
-    
+
     useEffect(() => {
         switch (documetType) {
         case 'cpf':
@@ -47,6 +51,14 @@ function Register({ wallet }) {
         }
     }, [documetType]);
       
+    function handleContinue(){
+        setTab('isa', '')
+        navigate(`/dashboard/${walletConnected}/isa/main`)
+    }
+
+    useEffect(() => {
+        setTab(tabActive, '');
+    }, [tabActive]);
 
     async function handleClick(e) {
         e.preventDefault();
@@ -601,9 +613,12 @@ function Register({ wallet }) {
 
             </div>
             <button className="buttonRegister" type="submit" onClick={handleClick}>
-            Register
+                Register
             </button>
         </form>
+            <button className="buttonRegister" onClick={handleContinue}>
+                Continue without registration
+            </button>
         <Dialog.Root open={openWebcam} onOpenChange={(open) => setOpenWebcam(open)}>
             <WebcamComponent
                 onTake={(data) => {

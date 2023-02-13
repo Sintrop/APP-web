@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DeveloperService from "../../../../services/developersService";
 import '../../Ranking/ranking.css';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 export default function DevelopersRanking({ wallet, setTab }) {
+  const navigate = useNavigate();
   const developerService = new DeveloperService(wallet);
   const [activist, setActivist] = useState([]);
   const {tabActive, walletAddress} = useParams();
@@ -40,7 +41,10 @@ export default function DevelopersRanking({ wallet, setTab }) {
           <tr key={item.id}>
             <td>{item.id}</td>
             <td id='createdByIsaTable'>
-              <a href={`/dashboard/${walletAddress}/developer-page/${item.developerWallet}`}>
+              <a
+                onClick={() => navigate(`/dashboard/${walletAddress}/developer-page/${item.developerWallet}`)}
+                style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+              >
                 <p className="p-wallet" title={item.developerWallet}>
                   {item.developerWallet}
                 </p>

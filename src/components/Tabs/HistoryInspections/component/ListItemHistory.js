@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import '../../../ManageInspectionsComponents/ItemListInspections/itemListInspections.css';
 import {format} from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../../../Loading';
 import ModalSeeResult from '../../../ManageInspectionsComponents/ModalSeeResult';
@@ -8,6 +9,7 @@ import ModalRealize from '../../../ManageInspectionsComponents/ModalRealize';
 import ModalActions from '../../../ManageInspectionsComponents/ModalActions';
 
 export default function ListItemHistory({data, user, walletAddress, reloadInspections, setTab}){
+    const navigate = useNavigate();
     const [showActions, setShowActions] = useState(false);
     const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
@@ -34,7 +36,10 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
     return(
         <tr key={data.id}>
             <td>
-                <a href={`/dashboard/${walletAddress}/producer-page/${data.createdBy}`}>
+                <a 
+                    onClick={() => navigate(`/dashboard/${walletAddress}/producer-page/${data.createdBy}`)}
+                    style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
+                >
                 <p className='id-wallets' title={data.createdBy}>{data.createdBy}</p>
                 </a>
             </td>
@@ -42,7 +47,10 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 {data.status == 0 ? (
                     <p>No accepted</p>
                 ) : (
-                    <a href={`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`}>
+                    <a 
+                        onClick={() => navigate(`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`)}
+                        style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}
+                    >
                         <p className='id-wallets' title={data.acceptedBy}>{data.acceptedBy}</p>
                     </a>
                 )}

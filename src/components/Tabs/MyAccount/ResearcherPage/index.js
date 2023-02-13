@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { MainContext } from '../../../../contexts/main';
 import AvatarDefault from '../../../../assets/img/avatar03.png';
 import ResearchersService from '../../../../services/researchersService';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -6,6 +7,7 @@ import ModalDelation from '../../../ModalDelation';
 import {useParams} from 'react-router-dom';
 
 export default function ResearcherPage({wallet, setTab}){
+    const {user, chooseModalRegister} = useContext(MainContext);
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
     const {tabActive, walletSelected} = useParams();
@@ -37,9 +39,15 @@ export default function ResearcherPage({wallet, setTab}){
                         </div>
 
                         <Dialog.Root>
-                            <Dialog.Trigger className='area-avatar__btn-report'>
-                                Report Researcher
-                            </Dialog.Trigger>
+                            {user === '0' ? (
+                                <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
+                                    Report Researcher
+                                </button>
+                            ) : (
+                                <Dialog.Trigger className='area-avatar__btn-report'>
+                                    Report Researcher
+                                </Dialog.Trigger>
+                            )}
                             <ModalDelation reportedWallet={wallet}/>
                         </Dialog.Root>
                     </div>  

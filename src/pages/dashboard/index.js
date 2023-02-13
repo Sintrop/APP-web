@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import './dashboard.css';
 import { MainContext } from '../../contexts/main';
+import * as Dialog from '@radix-ui/react-dialog';
 
 //Components
 import Menu from '../../components/Menu';
@@ -37,9 +38,10 @@ import ContributorsRanking from '../../components/Tabs/Ranking/Contributors';
 import InvestorRanking from '../../components/Tabs/Ranking/Investor';
 import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
+import ModalRegister from '../../components/ModalRegister';
 
 export default function Dashboard(){
-    const {checkUser} = useContext(MainContext);
+    const {checkUser, walletConnected, modalRegister, chooseModalRegister} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -70,7 +72,13 @@ export default function Dashboard(){
     },[]);
 
     useEffect(() => {
-        checkUser(walletAddress)
+        async function check() {
+            const response = await checkUser(walletAddress);
+            if(response === '0'){
+                chooseModalRegister()
+            }
+        }
+        check();
     }, []);
 
     return(
@@ -91,7 +99,13 @@ export default function Dashboard(){
                 <TabIndicator activeTab={activeTab} wallet={walletAddress}/>
 
                 {activeTab === 'register' && (
-                    <Register wallet={walletAddress}/>
+                    <Register 
+                        wallet={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
                 )}
 
                 {activeTab === 'isa' && (
@@ -331,6 +345,15 @@ export default function Dashboard(){
                     />
                 )}
             </div>
+
+            <Dialog.Root
+                open={modalRegister}
+                onOpenChange={(open) => {
+                    chooseModalRegister()
+                }}  
+            >
+                <ModalRegister/>
+            </Dialog.Root>
         </div>
     )
 }

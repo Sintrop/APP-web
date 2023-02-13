@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './itemInspection.css';
 import {format} from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 //services
 import {GetIsa} from '../../../services/manageInspectionsService';
@@ -10,6 +10,7 @@ import {GetIsa} from '../../../services/manageInspectionsService';
 import ItemCategory from '../ItemCategory';
 
 export default function ItemInspection({data, setTab, typeAccount, wallet}){
+    const navigate = useNavigate();
     const {walletAddress} = useParams();
     const [isas, setIsas] = useState([]);
     const [moreDetails, setMoreDetails] = useState('item-inpection__container');
@@ -67,7 +68,14 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
                             {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
                         </h1>
                         <a 
-                            href={typeAccount === 'producer' ? `/dashboard/${walletAddress}/activist-page/${data.acceptedBy}` : `/dashboard/${walletAddress}/producer-page/${data.createdBy}`} 
+                            onClick={() => {
+                                if(typeAccount === 'producer'){
+                                    navigate(`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`)
+                                }else{
+                                    navigate(`/dashboard/${walletAddress}/producer-page/${data.createdBy}`)
+                                }
+                            }}
+                            style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
                             className='item-inspection__description-cards-info'
                         >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>

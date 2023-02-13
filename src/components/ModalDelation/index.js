@@ -7,7 +7,7 @@ import Loading from '../Loading';
 import {AddDelation, GetDelation} from '../../services/userService';
 import { LoadingTransaction } from '../LoadingTransaction';
 
-export default function ModalDelation(){
+export default function ModalDelation({close}){
     const {walletAddress, walletSelected} = useParams();
     const [title, setTitle] = useState('');
     const [testemony, setTestemony] = useState('');

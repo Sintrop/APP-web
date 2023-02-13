@@ -9,20 +9,26 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-export function WebcamComponent({onTake}){
+export function WebcamComponent({onTake, check}){
     const [imageSrc, setImageSrc] = useState('');
     const [haveWebcam, setHaveWebcam] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        checkWebcam();
-    },[])
+        if(check){
+            checkWebcam();
+        }
+    },[check])
 
     function checkWebcam(){
+        setLoading(true);
         navigator.mediaDevices.getUserMedia({video: true})
         .then(() => {
+            setLoading(false);
             setHaveWebcam(true);
         })
         .catch(err => {
+            setLoading(false);
             setHaveWebcam(false);
         })
     }
@@ -33,11 +39,15 @@ export function WebcamComponent({onTake}){
             <Dialog.Content className='webcam__content'>
                 {!haveWebcam ? (
                     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center'}}>
-                        <h1>Seu dispositivo não possui câmera, ou foi negada a permissão para acessá-la</h1>
+                        {loading ? (
+                            <h1>Loading camera</h1>
+                        ) : (
+                            <h1>Seu dispositivo não possui câmera, ou foi negada a permissão para acessá-la</h1>
+                        )}
                     </div>
                 ) : (
                     <>
-                        {imageSrc === '' ? (
+                        {imageSrc === '' || !check ? (
                             <Webcam
                                 className="webcam"
                                 audio={false}
