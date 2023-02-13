@@ -781,7 +781,9 @@ export default function ModalRegister(){
                 />
             </Dialog.Root>
             {loading && <Loading/>}
-            <ToastContainer/>
+            <ToastContainer
+                position='top-center'
+            />
         </Dialog.Portal>
     )
 }
