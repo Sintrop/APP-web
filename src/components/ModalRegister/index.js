@@ -546,7 +546,7 @@ export default function ModalRegister(){
 
                 {step === 2 && (
                     <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>Now we need a picture of you, would you?</h1>
+                        <h1 className='modal-register__title'>Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo.</h1>
 
                         {proofPhoto != '' && (
                             <img
@@ -570,19 +570,24 @@ export default function ModalRegister(){
 
                 {step === 3 && (
                     <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>We will need your details now.</h1>
+                        <h1 className='modal-register__title'>
+                            Now provide your details.
+                            {type === 'producer' && ' Make sure that in address is correct, it can not be changed in the future.'}
+                        </h1>
 
-                        <label style={{fontWeight: 'bold', color: 'green'}}>Your name</label>
-                        <input
-                            placeholder='Type here'
-                            type="text"
-                            name="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            style={{ width: '300px', height: 25}}
-                        />
-
+                        <div style={{width: '400px'}}>
+                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                                <label style={{fontWeight: 'bold', color: 'green'}}>Your name</label>
+                                <input
+                                    placeholder='Type here'
+                                    type="text"
+                                    name="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required
+                                    style={{ width: '400px', height: 25}}
+                                />
+                            </div>
                         {type === 'producer'&& (
                             <>
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
@@ -608,7 +613,7 @@ export default function ModalRegister(){
                                             name="documetNumber"
                                             onChange={(e) => setDocumentNumber(e.target.value)}
                                             required
-                                            style={{width: '180px', height: 22}}
+                                            style={{width: '192px', height: 22}}
                                         />
                                     </div>
                                 </div>
@@ -624,7 +629,7 @@ export default function ModalRegister(){
                                             onChange={(e) => setCep(e.target.value)}
                                             mask='99999-999'
                                             required
-                                            style={{width: '180px', height: 22}}
+                                            style={{width: '192px', height: 22}}
                                         />
                                     </div>
                                 
@@ -643,7 +648,7 @@ export default function ModalRegister(){
                                             name="street"
                                             value={street}
                                             onChange={(e) => setStreet(e.target.value)}
-                                            style={{width: '180px', height: 22}}
+                                            style={{width: '192px', height: 22}}
                                             required
                                         />
                                     </div>
@@ -655,7 +660,7 @@ export default function ModalRegister(){
                                             name="complement"
                                             value={complement}
                                             onChange={(e) => setComplement(e.target.value)}
-                                            style={{width: '180px', height: 22}}
+                                            style={{width: '192px', height: 22}}
                                             required
                                         />
                                     </div>
@@ -715,6 +720,7 @@ export default function ModalRegister(){
                             </>
                         )}
                         </div>
+                    </div>
                     
                 )}
 

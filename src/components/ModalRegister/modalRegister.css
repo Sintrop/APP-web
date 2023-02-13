@@ -29,6 +29,7 @@
 .modal-register__title{
     font-size: large;
     font-weight: bold;
+    text-align: center;
 }
 
 .modal-register__container-content{
