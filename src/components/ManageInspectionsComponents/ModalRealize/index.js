@@ -202,117 +202,185 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                                     step={step}
                                 />
                             )}
-                            {step === 3 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+                            {categories.length > 1 && (
+                                <>
+                                    {step === 3 && (
+                                        <CardCategoryRealizeInspection 
+                                            data={categories[step - 2]}
+                                            pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                            isas={isas}
+                                            step={step}
+                                        />
+                                    )}
+                                </>
                             )}
-                            {step === 4 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+                            {categories.length > 2 && (
+                                <>
+                                    {step === 4 && (
+                                        <CardCategoryRealizeInspection 
+                                            data={categories[step - 2]}
+                                            pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                            isas={isas}
+                                            step={step}
+                                        />
+                                    )}
+                                </>
                             )}
-                            {step === 5 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 3 && (
+                                <>
+                                {step === 5 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 6 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 4 &&(
+                                <>
+                                {step === 6 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 7 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 5 &&(
+                                <>
+                                {step === 7 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 8 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 6 &&(
+                                <>
+                                {step === 8 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 9 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 7 &&(
+                                <>
+                                {step === 9 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 10 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 8 &&(
+                                <>
+                                {step === 10 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 11 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 9 &&(
+                                <>
+                                {step === 11 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 12 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 10 &&(
+                                <>
+                                {step === 12 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 13 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 11 &&(
+                                <>
+                                {step === 13 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 14 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 12 &&(
+                                <>
+                                {step === 14 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 15 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 13 &&(
+                                <>
+                                {step === 15 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
-                            {step === 16 && (
-                                <CardCategoryRealizeInspection 
-                                    data={categories[step - 2]}
-                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
-                                    isas={isas}
-                                    step={step}
-                                />
+
+                            {categories.length > 14 &&(
+                                <>
+                                {step === 16 && (
+                                    <CardCategoryRealizeInspection 
+                                        data={categories[step - 2]}
+                                        pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                        isas={isas}
+                                        step={step}
+                                    />
+                                )}
+                                </>
                             )}
                             
                         </>
@@ -323,14 +391,14 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                     <button onClick={handlePreviousStep}>Previous</button>
                     <button 
                         onClick={() => {
-                            if(step === 16){
+                            if(step === categories.length + 1){
                                 validates();
                             }else{
                                 handleNextStep();
                             }
                         }}
                     >
-                        {step === 16 ? 'Finish Inspection' : 'Next Step'}
+                        {step === categories.length + 1 ? 'Finish Inspection' : 'Next Step'}
                     </button>
                 </div>
 
