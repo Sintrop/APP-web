@@ -16,7 +16,7 @@ import {GetInspection} from '../../../services/manageInspectionsService';
 export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
     const navigate = useNavigate();
     const [showActions, setShowActions] = useState(false);
-    const [showModalRealize, setShowModalRealize] = useState(true);
+    const [showModalRealize, setShowModalRealize] = useState(false);
     const [showSeeResult, setShowSeeResult] = useState(false);
     const [inspection, setInspection] = useState([]);
     const [loading, setLoading] = useState(false);

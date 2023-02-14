@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../../IsaPageComponents/CreateCategory/createCategory.css';
 import './modalRealize.css';
 import * as Dialog from '@radix-ui/react-dialog';
+import {ToastContainer, toast} from 'react-toastify';
 
 //components
 import Loading from '../../Loading';
@@ -11,7 +12,7 @@ import { LoadingTransaction } from "../../LoadingTransaction";
 //services
 import {GetCategories} from '../../../services/isaService';
 import {RealizeInspection} from '../../../services/manageInspectionsService';
-import { save } from '../../../config/infura'
+
 export default function ModalRealize({close, inspectionID, walletAddress, reloadInspections}){
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -32,35 +33,21 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
     async function getCategories(){
         setLoading(true);
         const response = await GetCategories();
-        setCategories(response);
+        setCategories(response.slice(0, 15));
         setLoading(false);
     }
 
     function validates(){
         if(isas == []){
-            alert('Select result options for each category!');
+            toast.error('Select result options for each category!');
         }else if(isas.length != categories.length){
-            alert('Select result options for each category!');
+            toast.error('Select result options for each category!');
         }else{
             finishInspection();
         }
     }
 
     async function finishInspection(){
-        // const isasSave  = await Promise.all(
-        //     isas.map(async (item) => {
-        //         let object = {}
-        //         const path = await save(item.proofPhoto)
-        //         object = {
-        //             categoryId: item.categoryId,
-        //             isaIndex: item.isaIndex,
-        //             report: item.report,
-        //             proofPhoto: path
-        //         };
-                
-        //         return object;
-        //     })
-        // ) 
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(inspectionID, isas, walletAddress)
@@ -75,6 +62,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
         .catch(err => {
             setLoadingTransaction(false);
             const message = String(err.message);
+            console.log(message)
             if(message.includes("Can't accept yet")){
                 setLogTransaction({
                     type: 'error',
@@ -119,6 +107,22 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                 setLogTransaction({
                     type: 'error',
                     message: "You not accepted this inspection!",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Cannot read properties of undefined (reading 'length')")){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Fill in all category data!",
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes('invalid BigNumber string (argument="value", value="", code=INVALID_ARGUMENT, version=bignumber/5.6.2)')){
+                setLogTransaction({
+                    type: 'error',
+                    message: "Fill in all category data!",
                     hash: ''
                 })
                 return;
@@ -206,6 +210,111 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                                     step={step}
                                 />
                             )}
+                            {step === 4 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 5 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 6 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 7 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 8 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 9 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 10 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 11 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 12 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 13 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 14 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 15 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            {step === 16 && (
+                                <CardCategoryRealizeInspection 
+                                    data={categories[step - 2]}
+                                    pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
+                                />
+                            )}
+                            
                         </>
                     )}
                 </div>
@@ -214,14 +323,14 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                     <button onClick={handlePreviousStep}>Previous</button>
                     <button 
                         onClick={() => {
-                            if(step === 4){
+                            if(step === 16){
                                 validates();
                             }else{
                                 handleNextStep();
                             }
                         }}
                     >
-                        {step === 4 ? 'Finish Inspection' : 'Next Step'}
+                        {step === 16 ? 'Finish Inspection' : 'Next Step'}
                     </button>
                 </div>
 
@@ -246,6 +355,10 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                     logTransaction={logTransaction}
                 />
             </Dialog.Root>
+
+            <ToastContainer
+                position="top-center"
+            />
         </Dialog.Portal>
     )
 }
