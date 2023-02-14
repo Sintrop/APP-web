@@ -47,23 +47,23 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
     }
 
     async function finishInspection(){
-        const isasSave  = await Promise.all(
-            isas.map(async (item) => {
-                let object = {}
-                const path = await save(item.proofPhoto)
-                object = {
-                    categoryId: item.categoryId,
-                    isaIndex: item.isaIndex,
-                    report: item.report,
-                    proofPhoto: path
-                };
+        // const isasSave  = await Promise.all(
+        //     isas.map(async (item) => {
+        //         let object = {}
+        //         const path = await save(item.proofPhoto)
+        //         object = {
+        //             categoryId: item.categoryId,
+        //             isaIndex: item.isaIndex,
+        //             report: item.report,
+        //             proofPhoto: path
+        //         };
                 
-                return object;
-            })
-        ) 
+        //         return object;
+        //     })
+        // ) 
         setModalTransaction(true);
         setLoadingTransaction(true);
-        RealizeInspection(inspectionID, isasSave, walletAddress)
+        RealizeInspection(inspectionID, isas, walletAddress)
         .then(res => {
             setLogTransaction({
                 type: res.type,
@@ -163,7 +163,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                     Realize inspection
                 </Dialog.Title>
                 
-                <div style={{overflow: 'scroll'}}>
+                <div style={{overflow: 'auto'}}>
                     {step === 1 && (
                         <div className='modal-register__container-content'>
                             <h1 className='modal-register__title'>Proof Photo</h1>
@@ -194,12 +194,16 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                                 <CardCategoryRealizeInspection 
                                     data={categories[step -2]}
                                     pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
                                 />
                             )}
                             {step === 3 && (
                                 <CardCategoryRealizeInspection 
                                     data={categories[step - 2]}
                                     pushResult={(id, isaIndex, report, proofPhoto) => attResults(id, isaIndex, report, proofPhoto)}
+                                    isas={isas}
+                                    step={step}
                                 />
                             )}
                         </>
@@ -208,7 +212,17 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
                 <div className="modal-realize__area-btn">
                     <button onClick={handlePreviousStep}>Previous</button>
-                    <button onClick={handleNextStep}>Next Step</button>
+                    <button 
+                        onClick={() => {
+                            if(step === 4){
+                                validates();
+                            }else{
+                                handleNextStep();
+                            }
+                        }}
+                    >
+                        {step === 4 ? 'Finish Inspection' : 'Next Step'}
+                    </button>
                 </div>
 
             </Dialog.Content>
