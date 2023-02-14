@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './itemListInspections.css';
 import {format} from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
 
 //components
 import ModalActions from '../ModalActions';
@@ -124,7 +125,10 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 </div>
             )}
 
-            {showModalRealize && (
+            <Dialog.Root
+                open={showModalRealize}
+                onOpenChange={(open) => setShowModalRealize(open)}
+            >
                 <ModalRealize
                     close={() => setShowModalRealize(false)}
                     inspectionID={data.id}
@@ -134,7 +138,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                         reloadInspections();
                     }}
                 />
-            )}
+            </Dialog.Root>
 
             {showSeeResult && (
                 <ModalSeeResult
