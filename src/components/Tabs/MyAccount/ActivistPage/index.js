@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {MainContext} from '../../../../contexts/main';
-import AvatarDefault from '../../../../assets/img/avatar03.png';
+import {FaLock, FaCheck} from 'react-icons/fa';
 import ActivistService from '../../../../services/activistService';
-import {GetInspections} from '../../../../services/manageInspectionsService';
+import {GetInspections, CanAcceptInspection} from '../../../../services/manageInspectionsService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
@@ -12,21 +12,30 @@ import {useParams} from 'react-router-dom';
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ActivistPage({wallet, setTab}){
-    const {user, chooseModalRegister} = useContext(MainContext);
-    const activistService = new ActivistService(wallet)
+    const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
+    const activistService = new ActivistService(walletConnected)
     const [activistData, setActivistData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
     const [modalDelation, setModalDelation] = useState(false);
+    const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
 
     useEffect(() => {
         getActivist();
+        if(user === '2'){
+            isActivist();
+        }
     },[]);
 
     useEffect(() => {
         setTab(tabActive, '')
-    }, [tabActive])
+    }, [tabActive]);
+
+    async function isActivist() {
+        const mayRequest = await CanAcceptInspection(walletConnected);
+        setMayAcceptInspection(mayRequest);
+    }
 
     async function getActivist(){
         const response = await activistService.getAtivist(walletSelected);
@@ -103,6 +112,38 @@ export default function ActivistPage({wallet, setTab}){
                             {activistData === [] ? '' : activistData.totalInspections}
                         </p>
                     </div>
+                            
+                    {user === '2' && (
+                        <div className='producer-cards-info__producer-page'>
+                            <h1 className='tit-cards-info__producer-page'>Prox Accept: </h1>
+                            {mayAcceptInspection ? (
+                                <div style={{
+                                        display: 'flex', 
+                                        flexDirection: 'row', 
+                                        marginLeft: 5, 
+                                        color: 'green', 
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <FaCheck size={15} style={{marginRight: 5}}/>
+                                    Your may accept inspection
+                                </div>
+                            ) : (
+                                <div style={{
+                                        display: 'flex', 
+                                        flexDirection: 'row', 
+                                        marginLeft: 5, 
+                                        color: 'red', 
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <FaLock size={15} style={{marginRight: 5}}/>
+                                    Wait {(Number(activistData?.lastAcceptedAt) + 1000) - Number(blockNumber)} blocks to accept.
+                                </div>
+                            )}
+                            
+                        </div>
+                    )}
                 </div>
 
                 <div className='inspections-area__producer-page'> 

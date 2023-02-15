@@ -6,29 +6,40 @@ import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
 
-import AvatarDefault from '../../../../assets/img/avatar02.png';
+import {FaLock, FaCheck} from 'react-icons/fa';
 
 //services
 import {GetProducer} from '../../../../services/producerService';
-import {GetInspections} from '../../../../services/manageInspectionsService';
+import {GetInspections, CanRequestInspection } from '../../../../services/manageInspectionsService';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ProducerPage({wallet, setTab}){
-    const {user, chooseModalRegister} = useContext(MainContext);
+    const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
+    const [mayRequestInspection, setMayRequestInspection] = useState(false);
+    const [lastRequested, setLastRequested] = useState('');
 
     useEffect(() => {
         getProducer();
+        if(user === '1'){
+            isProducer();
+        }
     },[]);
 
     useEffect(() => {
         setTab(tabActive, '')
-    }, [tabActive])
+    }, [tabActive]);
+
+    async function isProducer() {
+        console.log('block: '+ blockNumber);
+        const mayRequest = await CanRequestInspection(walletConnected);
+        setMayRequestInspection(mayRequest);
+    }
 
     async function getProducer(){
         const response = await GetProducer(walletSelected);
@@ -112,6 +123,38 @@ export default function ProducerPage({wallet, setTab}){
                             {producerData.isa === undefined ? '' : producerData.isa.isaAverage}
                         </p>
                     </div>
+                    
+                    {user === '1' && (
+                        <div className='producer-cards-info__producer-page'>
+                            <h1 className='tit-cards-info__producer-page'>Prox Request: </h1>
+                            {mayRequestInspection ? (
+                                <div style={{
+                                        display: 'flex', 
+                                        flexDirection: 'row', 
+                                        marginLeft: 5, 
+                                        color: 'green', 
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <FaCheck size={15} style={{marginRight: 5}}/>
+                                    Your may request inspection
+                                </div>
+                            ) : (
+                                <div style={{
+                                        display: 'flex', 
+                                        flexDirection: 'row', 
+                                        marginLeft: 5, 
+                                        color: 'red', 
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <FaLock size={15} style={{marginRight: 5}}/>
+                                    Wait {(Number(producerData?.lastRequestAt) + 1000) - Number(blockNumber)} blocks to request
+                                </div>
+                            )}
+                            
+                        </div>
+                    )}
                 </div>
 
                 <div className='inspections-area__producer-page'> 

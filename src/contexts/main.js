@@ -1,4 +1,5 @@
 import { useEffect, useState, createContext } from "react";
+import Web3 from 'web3';
 import {useParams} from 'react-router-dom';
 import {CheckUser} from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
@@ -9,6 +10,11 @@ export default function MainProvider({children}){
     const [user, setUser] = useState('0');
     const [walletConnected, setWalletConnected] = useState(''); 
     const [modalRegister, setModalRegister] = useState(false);
+    const [blockNumber, setBlockNumber] = useState(0);
+
+    useEffect(() => {
+        getAtualBlockNumber()
+    }, [])
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -31,10 +37,27 @@ export default function MainProvider({children}){
         setWalletConnected(wallet);
         return response;
     }
+
+    async function getAtualBlockNumber(){
+        const web3js = new Web3(window.ethereum);
+        await web3js.eth.getBlockNumber()
+        .then(res => {
+            setBlockNumber(res)
+        })
+    }
     
     return(
         <MainContext.Provider
-            value={{user, Sync, checkUser, walletConnected, chooseModalRegister, modalRegister}}
+            value={{
+                user, 
+                Sync, 
+                checkUser, 
+                walletConnected, 
+                chooseModalRegister, 
+                modalRegister, 
+                blockNumber, 
+                getAtualBlockNumber
+            }}
         >
             {children}
         </MainContext.Provider>

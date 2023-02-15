@@ -1,32 +1,52 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import './isa.css';
 import './manageInspections.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../LoadingTransaction';
+import { MainContext } from '../../contexts/main';
+import {FaLock} from 'react-icons/fa';
 
 //components
 import Loading from '../Loading';
 import ItemListInspections from '../ManageInspectionsComponents/ItemListInspections';
 
 //services
-import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
+import {GetProducer} from '../../services/producerService';
+import {GetInspections, RequestInspection, CanRequestInspection} from '../../services/manageInspectionsService';
 
-export default function ManageInpections({user, walletAddress, setTab}){
+export default function ManageInpections({walletAddress, setTab}){
+    const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const {tabActive} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [mayRequestInspection, setMayRequestInspection] = useState(false);
+    const [lastResquested, setLastRequested] = useState('');
+    const [btnRequestHover, setBtnRequestHover] = useState(false);
     
     useEffect(() => {
         setTab(tabActive, '')
     }, [tabActive])
 
     useEffect(() => {
+        getAtualBlockNumber()
         getInspections();
-    }, [])
+        if(user === '1'){
+            isProducer()
+        }
+    }, []);
+
+    async function isProducer() {
+        console.log('block: '+ blockNumber);
+        const mayRequest = await CanRequestInspection(walletConnected);
+        setMayRequestInspection(mayRequest);
+        const producer = await GetProducer(walletConnected);
+        setLastRequested(producer.lastRequestAt);
+        console.log('producer last request' + producer.lastRequestAt);
+    }
 
     async function getInspections(){
         setLoading(true);
@@ -77,6 +97,10 @@ export default function ManageInpections({user, walletAddress, setTab}){
         })
         
     }
+
+    async function comparaBlocksToRequest(){
+
+    }
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
@@ -84,10 +108,34 @@ export default function ManageInpections({user, walletAddress, setTab}){
                 <div className='area-btn-header-isa-page'>
                     {user == 1 && (
                         <button
+                            
                             className='btn-new-category-isa'
-                            onClick={() => requestInspection()}
+                            onClick={() => {
+                                if(mayRequestInspection){
+                                    requestInspection()
+                                }
+                            }}
+                            onMouseEnter={() => setBtnRequestHover(true)}
+                            onMouseOut={() => setBtnRequestHover(false)}
                         >
-                            Request New Inspection
+                            {mayRequestInspection ? (
+                                'Request New Inspection'
+                            ) : (
+                                <>
+                                    {btnRequestHover ? (
+                                        <>
+                                            <FaLock 
+                                                size={25}
+                                                onMouseEnter={() => setBtnRequestHover(true)}
+                                                onMouseOut={() => setBtnRequestHover(false)}
+                                            />
+                                            Wait {(Number(lastResquested) + 1000) - Number(blockNumber)} blocks to request
+                                        </>
+                                    ) : 'Request new inspection'}
+                                </>
+                                
+                            )}
+                            
                         </button>
                     )}
                     <button
