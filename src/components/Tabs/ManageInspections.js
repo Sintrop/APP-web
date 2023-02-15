@@ -98,9 +98,6 @@ export default function ManageInpections({walletAddress, setTab}){
         
     }
 
-    async function comparaBlocksToRequest(){
-
-    }
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
