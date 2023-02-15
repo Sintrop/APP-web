@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from "react";
 import Web3 from 'web3';
-import {useParams} from 'react-router-dom';
+import {CanAcceptInspection} from '../services/manageInspectionsService';
 import {CheckUser} from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 
@@ -11,10 +11,16 @@ export default function MainProvider({children}){
     const [walletConnected, setWalletConnected] = useState(''); 
     const [modalRegister, setModalRegister] = useState(false);
     const [blockNumber, setBlockNumber] = useState(0);
+    const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
 
     useEffect(() => {
         getAtualBlockNumber()
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if(user === '2'){
+        }
+    },[user]);
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -44,6 +50,11 @@ export default function MainProvider({children}){
         .then(res => {
             setBlockNumber(res)
         })
+    }
+
+    async function getCanAcceptInspection(){
+        const response = await CanAcceptInspection(walletConnected);
+        alert(response)
     }
     
     return(

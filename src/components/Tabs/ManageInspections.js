@@ -13,7 +13,7 @@ import ItemListInspections from '../ManageInspectionsComponents/ItemListInspecti
 
 //services
 import {GetProducer} from '../../services/producerService';
-import {GetInspections, RequestInspection, CanRequestInspection} from '../../services/manageInspectionsService';
+import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 
 export default function ManageInpections({walletAddress, setTab}){
     const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
@@ -23,7 +23,6 @@ export default function ManageInpections({walletAddress, setTab}){
     const {tabActive} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
-    const [mayRequestInspection, setMayRequestInspection] = useState(false);
     const [lastResquested, setLastRequested] = useState('');
     const [btnRequestHover, setBtnRequestHover] = useState(false);
     
@@ -32,7 +31,6 @@ export default function ManageInpections({walletAddress, setTab}){
     }, [tabActive])
 
     useEffect(() => {
-        getAtualBlockNumber()
         getInspections();
         if(user === '1'){
             isProducer()
@@ -40,12 +38,8 @@ export default function ManageInpections({walletAddress, setTab}){
     }, []);
 
     async function isProducer() {
-        console.log('block: '+ blockNumber);
-        const mayRequest = await CanRequestInspection(walletConnected);
-        setMayRequestInspection(mayRequest);
         const producer = await GetProducer(walletConnected);
         setLastRequested(producer.lastRequestAt);
-        console.log('producer last request' + producer.lastRequestAt);
     }
 
     async function getInspections(){
@@ -108,14 +102,14 @@ export default function ManageInpections({walletAddress, setTab}){
                             
                             className='btn-new-category-isa'
                             onClick={() => {
-                                if(mayRequestInspection){
+                                if((Number(lastResquested) + 1000) - Number(blockNumber) < 0){
                                     requestInspection()
                                 }
                             }}
                             onMouseEnter={() => setBtnRequestHover(true)}
                             onMouseOut={() => setBtnRequestHover(false)}
                         >
-                            {mayRequestInspection ? (
+                            {(Number(lastResquested) + 1000) - Number(blockNumber) < 0 ? (
                                 'Request New Inspection'
                             ) : (
                                 <>

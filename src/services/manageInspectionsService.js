@@ -28,12 +28,13 @@ export const CanRequestInspection = async (wallet) => {
 }
 
 export const CanAcceptInspection = async (wallet) => {
-    let may = false;
+    let may = '';
     const web3js = new Web3(window.ethereum);
     const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress)
-    await contract.methods.canAcceptInspection().call({from: wallet})
+    await contract.methods.calculateBlocksToExpire('2').call()
     .then((res) => {
         may = res;
+        console.log(res)
     })
 
     return may;

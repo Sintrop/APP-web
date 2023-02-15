@@ -19,7 +19,6 @@ export default function ActivistPage({wallet, setTab}){
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
     const [modalDelation, setModalDelation] = useState(false);
-    const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
 
     useEffect(() => {
         getActivist();
@@ -33,8 +32,7 @@ export default function ActivistPage({wallet, setTab}){
     }, [tabActive]);
 
     async function isActivist() {
-        const mayRequest = await CanAcceptInspection(walletConnected);
-        setMayAcceptInspection(mayRequest);
+        
     }
 
     async function getActivist(){
@@ -116,7 +114,7 @@ export default function ActivistPage({wallet, setTab}){
                     {user === '2' && (
                         <div className='producer-cards-info__producer-page'>
                             <h1 className='tit-cards-info__producer-page'>Prox Accept: </h1>
-                            {mayAcceptInspection ? (
+                            {(Number(activistData?.lastAcceptedAt) + 1000) - Number(blockNumber) < 0 ? (
                                 <div style={{
                                         display: 'flex', 
                                         flexDirection: 'row', 

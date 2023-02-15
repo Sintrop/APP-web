@@ -9,11 +9,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import {AcceptInspection} from '../../../services/manageInspectionsService';
 
 export default function ModalActions({close, item, walletAddress, showRealize, reloadInspection, showSeeResult, setLoading}){
-    const {user} = useContext(MainContext);
+    const {user, walletConnected} = useContext(MainContext);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
-    
+
     async function acceptInspection(){
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -77,11 +77,39 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
             toast.error('This account is not activist!');
             return;
         }
+        if(item.status === '2'){
+            toast.error('This inspection has been inspected!');
+            return;
+        }
         if(item.status === '1'){
             toast.error('This inspection has been accepted!')
             return;
         }
         acceptInspection();
+    }
+
+    function handleRealize(){
+        if(item.status === '0'){
+            toast.error('It is necessary to accept the inspection before!')
+            return;
+        }
+        if(item.status === '1' && String(walletConnected).toUpperCase() !== String(item.acceptedBy).toUpperCase()){
+            toast.error('You cannot carry out this inspection, another activist has already accepted it!');
+            return
+        }
+        if(item.status === '2'){
+            toast.error('This inspection has been inspected!');
+            return;
+        }
+        showRealize();
+    }
+
+    function handleSeeResult(){
+        showSeeResult();
+        if(item.status !== '2'){
+            toast.error('Inspection not realized!');
+            return;
+        }
     }
     return(
         <Dialog.Portal className='modal-actions__portal'>
@@ -105,7 +133,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                         
                         <button 
                             className='btn-action-options'
-                            onClick={() => showRealize()}
+                            onClick={handleRealize}
                         >
                             <FaEdit size={20}/>
                             Realize
@@ -113,7 +141,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                         
                 
                         <button className='btn-action-options'
-                            onClick={() => showSeeResult()}
+                            onClick={handleSeeResult}
                         >
                             <FaClipboardList size={20}/>
                             See result

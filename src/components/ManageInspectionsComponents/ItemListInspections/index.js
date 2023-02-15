@@ -146,12 +146,15 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 />
             </Dialog.Root>
 
-            {showSeeResult && (
+            <Dialog.Root
+                open={showSeeResult}
+                onOpenChange={(open) => setShowSeeResult(open)}
+            >
                 <ModalSeeResult
                     close={() => setShowSeeResult(false)}
                     inspectionData={inspection}
                 />
-            )}
+            </Dialog.Root>
 
             {loading && (
                 <Loading/>

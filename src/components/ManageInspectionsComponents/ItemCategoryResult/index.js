@@ -49,7 +49,7 @@ export default function ItemCategoryResult({data, isas}){
 
 
     return(
-        <div className='container'>
+        <div className='item-category__container'>
             <div>
                 <h3 className='title_category_result'>{category}</h3>
                 <p className='labels'>Category Description</p>
@@ -61,7 +61,9 @@ export default function ItemCategoryResult({data, isas}){
                 <p className='labels'>Report</p>
                 <p className='title_descriptions'>{data.report}</p>
             </div>
-                <img className='proofPhoto' alt='proofPhoto' src={`data:image/*;base64,${proofPhoto}`}/> 
+            <div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
+                <img className='item-category__proofPhoto' alt='proofPhoto' src={`data:image/*;base64,${proofPhoto}`}/> 
+            </div>
         </div>
     )
 }

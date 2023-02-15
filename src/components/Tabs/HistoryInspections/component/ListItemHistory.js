@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react';
 import '../../../ManageInspectionsComponents/ItemListInspections/itemListInspections.css';
 import {format} from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
 
 import Loading from '../../../Loading';
 import ModalSeeResult from '../../../ManageInspectionsComponents/ModalSeeResult';
@@ -99,23 +100,24 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 </button>
             </td>
 
-            {showActions && (
-                <div className='container-modal-actions'>
-                    <ModalActions 
-                        close={() => setShowActions(false)}
-                        user={user}
-                        item={data}
-                        walletAddress={walletAddress}
-                        showRealize={() => setShowModalRealize(true)}
-                        showSeeResult={() => setShowSeeResult(true)}
-                        reloadInspection={() => {
-                            setLoading(false);
-                            reloadInspections();
-                        }}
-                        setLoading={() => setLoading(!loading)}
-                    />
-                </div>
-            )}
+            <Dialog.Root
+                open={showActions}
+                onOpenChange={(open) => setShowActions(open)}
+            >
+                <ModalActions 
+                    close={() => setShowActions(false)}
+                    user={user}
+                    item={data}
+                    walletAddress={walletAddress}
+                    showRealize={() => setShowModalRealize(true)}
+                    showSeeResult={() => setShowSeeResult(true)}
+                    reloadInspection={() => {
+                        setLoading(false);
+                        reloadInspections();
+                    }}
+                    setLoading={() => setLoading(!loading)}
+                />
+            </Dialog.Root>
 
             {showModalRealize && (
                 <ModalRealize
@@ -129,12 +131,15 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 />
             )}
 
-            {showSeeResult && (
+            <Dialog.Root
+                open={showSeeResult}
+                onOpenChange={(open) => setShowSeeResult(open)}
+            >
                 <ModalSeeResult
                     close={() => setShowSeeResult(false)}
                     inspectionData={data}
                 />
-            )}
+            </Dialog.Root>
 
             {loading && (
                 <Loading/>

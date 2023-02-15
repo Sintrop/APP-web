@@ -10,7 +10,7 @@ import {FaLock, FaCheck} from 'react-icons/fa';
 
 //services
 import {GetProducer} from '../../../../services/producerService';
-import {GetInspections, CanRequestInspection } from '../../../../services/manageInspectionsService';
+import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
@@ -21,25 +21,14 @@ export default function ProducerPage({wallet, setTab}){
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
-    const [mayRequestInspection, setMayRequestInspection] = useState(false);
-    const [lastRequested, setLastRequested] = useState('');
-
-    useEffect(() => {
-        getProducer();
-        if(user === '1'){
-            isProducer();
-        }
-    },[]);
 
     useEffect(() => {
         setTab(tabActive, '')
     }, [tabActive]);
 
-    async function isProducer() {
-        console.log('block: '+ blockNumber);
-        const mayRequest = await CanRequestInspection(walletConnected);
-        setMayRequestInspection(mayRequest);
-    }
+    useEffect(() => {
+        getProducer()
+    }, [])
 
     async function getProducer(){
         const response = await GetProducer(walletSelected);
@@ -127,7 +116,7 @@ export default function ProducerPage({wallet, setTab}){
                     {user === '1' && (
                         <div className='producer-cards-info__producer-page'>
                             <h1 className='tit-cards-info__producer-page'>Prox Request: </h1>
-                            {mayRequestInspection ? (
+                            {(Number(producerData?.lastRequestAt) + 1000) - Number(blockNumber) < 0 ? (
                                 <div style={{
                                         display: 'flex', 
                                         flexDirection: 'row', 
