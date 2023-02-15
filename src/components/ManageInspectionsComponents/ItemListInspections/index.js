@@ -107,21 +107,27 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 </button>
             </td>
 
+            <Dialog.Root
+                open={showActions}
+                onOpenChange={(open) => setShowActions(open)}
+            >
+                <ModalActions 
+                    close={() => setShowActions(false)}
+                    user={user}
+                    item={data}
+                    walletAddress={walletAddress}
+                    showRealize={() => setShowModalRealize(true)}
+                    showSeeResult={() => setShowSeeResult(true)}
+                    reloadInspection={() => {
+                        setLoading(false);
+                        reloadInspections();
+                    }}
+                    setLoading={() => setLoading(!loading)}
+                />
+            </Dialog.Root>
+
             {showActions && (
                 <div className='container-modal-actions'>
-                    <ModalActions 
-                        close={() => setShowActions(false)}
-                        user={user}
-                        item={data}
-                        walletAddress={walletAddress}
-                        showRealize={() => setShowModalRealize(true)}
-                        showSeeResult={() => setShowSeeResult(true)}
-                        reloadInspection={() => {
-                            setLoading(false);
-                            reloadInspections();
-                        }}
-                        setLoading={() => setLoading(!loading)}
-                    />
                 </div>
             )}
 

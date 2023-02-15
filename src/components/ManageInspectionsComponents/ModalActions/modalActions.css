@@ -1,37 +1,56 @@
+.modal-actions__portal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+}
+
+.modal-actions__overlay{
+    background-color: rgba(0,0,0,0.6);
+    position: fixed;
+    inset: 0;
+}
+
+.modal-actions__content{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    border-radius: 8px;
+    margin: auto auto;
+    inset: 0;
+}
+
+.modal-actions__title{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .container_modal_options{
     display: flex;
     flex-direction: column;
     padding: 8px;
 }
 
-.container__options{
-
-}
-
-.header-options{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.header-options p {
-    margin: 0
-}
-
-.btn-close-modal:hover{
-    cursor: pointer;
-}
-
 .btn-action-options{
-    background: none;
     border: 0;
     font-weight: bold;
     color: #000;
     font-size: 16px;
-    margin-bottom: 5px;
+    padding: 10px 10px;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    gap: 5px
 }
 
 .btn-action-options:hover{
     cursor: pointer;
-    color: green;
+    background-color: #EEE;
 }

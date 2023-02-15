@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import  './modalActions.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../../LoadingTransaction';
-
+import {FaCheck, FaClipboardList, FaEdit} from 'react-icons/fa';
+import {MainContext} from '../../../contexts/main';
+import { ToastContainer, toast } from 'react-toastify';
 //services
 import {AcceptInspection} from '../../../services/manageInspectionsService';
 
-export default function ModalActions({close, user, item, walletAddress, showRealize, reloadInspection, showSeeResult, setLoading}){
+export default function ModalActions({close, item, walletAddress, showRealize, reloadInspection, showSeeResult, setLoading}){
+    const {user} = useContext(MainContext);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
@@ -69,50 +72,72 @@ export default function ModalActions({close, user, item, walletAddress, showReal
         })
     }
 
+    function handleAccept(){
+        if(user !== '2'){
+            toast.error('This account is not activist!');
+            return;
+        }
+        if(item.status === '1'){
+            toast.error('This inspection has been accepted!')
+            return;
+        }
+        acceptInspection();
+    }
     return(
-        <div className='container_modal_options'>
-            <div className='header-options'>
-                <p>Options</p>
-                <button
-                    className='btn-close-modal'
-                    onClick={() => close()}
-                >X</button>
-            </div>
-            <div className='container__options'>            
-                {user == '2' && item.status == '0' &&(
-                    <button 
-                        className='btn-action-options'
-                        onClick={() => acceptInspection()}
-                    >Accept</button>
-                )}
+        <Dialog.Portal className='modal-actions__portal'>
+            <Dialog.Overlay className='modal-actions__overlay'/>
+            <Dialog.Content className='modal-actions__content'>
+                <Dialog.Title className='modal-actions__title'>
+                    Options inspection
+                </Dialog.Title>
+                <div className='container_modal_options'>
+                    <div className='container__options'>            
+                        
+                        <button 
+                            className='btn-action-options'
+                            onClick={handleAccept}
+                        >
+                            <FaCheck size={20}/>
+                            Accept
+                        </button>
+                        
 
-                {item.acceptedBy.toUpperCase() == walletAddress.toUpperCase() && user == '2' && item.status == '1' &&(
-                    <button 
-                        className='btn-action-options'
-                        onClick={() => showRealize()}
-                    >Realize</button>
-                )}
-            
-                <button className='btn-action-options'
-                    onClick={() => showSeeResult()}
-                >See Result</button>
-            </div>
+                        
+                        <button 
+                            className='btn-action-options'
+                            onClick={() => showRealize()}
+                        >
+                            <FaEdit size={20}/>
+                            Realize
+                        </button>
+                        
+                
+                        <button className='btn-action-options'
+                            onClick={() => showSeeResult()}
+                        >
+                            <FaClipboardList size={20}/>
+                            See result
+                        </button>
+                    </div>
 
-            <Dialog.Root 
-                open={modalTransaction} 
-                onOpenChange={(open) => {
-                    if(!loadingTransaction){
-                        setModalTransaction(open);
-                        reloadInspection();
-                        close();
-                    }
-                }}
-            >
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
-                />
-            </Dialog.Root>
-        </div>
+                    <Dialog.Root 
+                        open={modalTransaction} 
+                        onOpenChange={(open) => {
+                            if(!loadingTransaction){
+                                setModalTransaction(open);
+                                reloadInspection();
+                                close();
+                            }
+                        }}
+                    >
+                        <LoadingTransaction
+                            loading={loadingTransaction}
+                            logTransaction={logTransaction}
+                        />
+                    </Dialog.Root>
+                </div>
+            </Dialog.Content>
+            <ToastContainer position='top-center'/>
+        </Dialog.Portal>
     )
 }
