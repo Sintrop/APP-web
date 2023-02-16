@@ -11,7 +11,7 @@ import InvestorPage from './InvestorPage';
 
 export default function MyAccount({wallet, userType, setTab}){
     const navigate = useNavigate();
-    const {user, walletConnected, chooseModalRegister} = useContext(MainContext);
+    const {user, walletConnected, chooseModalRegister, checkUser} = useContext(MainContext);
     const {tabActive, walletAddress} = useParams();
 
     useEffect(() => {
@@ -19,9 +19,15 @@ export default function MyAccount({wallet, userType, setTab}){
     }, [tabActive]);
 
     useEffect(() => {
-        if(user === '0'){
-            chooseModalRegister()
+        async function check() {
+            const response = await checkUser(walletAddress);
+            setTimeout(() => {
+                if(response === '0'){
+                    chooseModalRegister()
+                }
+            }, 1000)
         }
+        check();
     },[]);
 
     if(user === '0'){

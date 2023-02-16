@@ -114,7 +114,7 @@ export default function ActivistPage({wallet, setTab}){
                     {user === '2' && (
                         <div className='producer-cards-info__producer-page'>
                             <h1 className='tit-cards-info__producer-page'>Prox Accept: </h1>
-                            {(Number(activistData?.lastAcceptedAt) + 1000) - Number(blockNumber) < 0 ? (
+                            {Number(activistData?.lastAcceptedAt) === 0 ? (
                                 <div style={{
                                         display: 'flex', 
                                         flexDirection: 'row', 
@@ -127,17 +127,33 @@ export default function ActivistPage({wallet, setTab}){
                                     Your may accept inspection
                                 </div>
                             ) : (
-                                <div style={{
-                                        display: 'flex', 
-                                        flexDirection: 'row', 
-                                        marginLeft: 5, 
-                                        color: 'red', 
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <FaLock size={15} style={{marginRight: 5}}/>
-                                    Wait {(Number(activistData?.lastAcceptedAt) + 1000) - Number(blockNumber)} blocks to accept.
-                                </div>
+                                <>
+                                {(Number(activistData?.lastAcceptedAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'green', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaCheck size={15} style={{marginRight: 5}}/>
+                                        Your may accept inspection
+                                    </div>
+                                ) : (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'red', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaLock size={15} style={{marginRight: 5}}/>
+                                        Wait {(Number(activistData?.lastAcceptedAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to accept.
+                                    </div>
+                                )}
+                                </>
                             )}
                             
                         </div>

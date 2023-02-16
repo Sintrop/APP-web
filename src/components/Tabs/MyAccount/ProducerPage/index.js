@@ -115,7 +115,7 @@ export default function ProducerPage({wallet, setTab}){
                     {user === '1' && (
                         <div className='producer-cards-info__producer-page'>
                             <h1 className='tit-cards-info__producer-page'>Prox Request: </h1>
-                            {(Number(producerData?.lastRequestAt) + 1000) - Number(blockNumber) < 0 ? (
+                            {Number(producerData?.lastRequestAt) === 0 ? (
                                 <div style={{
                                         display: 'flex', 
                                         flexDirection: 'row', 
@@ -127,18 +127,35 @@ export default function ProducerPage({wallet, setTab}){
                                     <FaCheck size={15} style={{marginRight: 5}}/>
                                     Your may request inspection
                                 </div>
+                                
                             ) : (
-                                <div style={{
-                                        display: 'flex', 
-                                        flexDirection: 'row', 
-                                        marginLeft: 5, 
-                                        color: 'red', 
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <FaLock size={15} style={{marginRight: 5}}/>
-                                    Wait {(Number(producerData?.lastRequestAt) + 1000) - Number(blockNumber)} blocks to request
-                                </div>
+                                <>
+                                {(Number(producerData?.lastRequestAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'green', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaCheck size={15} style={{marginRight: 5}}/>
+                                        Your may request inspection
+                                    </div>
+                                ) : (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'red', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaLock size={15} style={{marginRight: 5}}/>
+                                        Wait {(Number(producerData?.lastRequestAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to request
+                                    </div>
+                                )}
+                                </>
                             )}
                             
                         </div>

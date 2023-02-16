@@ -102,17 +102,26 @@ export default function ManageInpections({walletAddress, setTab}){
                             
                             className='btn-new-category-isa'
                             onClick={() => {
-                                if((Number(lastResquested) + 1000) - Number(blockNumber) < 0){
+                                if(Number(lastResquested) === 0){
                                     requestInspection()
+                                }
+                                if(Number(lastResquested) !== 0){
+                                    if((Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0){
+                                        requestInspection()
+                                    }
                                 }
                             }}
                             onMouseEnter={() => setBtnRequestHover(true)}
                             onMouseOut={() => setBtnRequestHover(false)}
                         >
-                            {(Number(lastResquested) + 1000) - Number(blockNumber) < 0 ? (
+                            {Number(lastResquested) === 0 ? (
                                 'Request New Inspection'
                             ) : (
                                 <>
+                                {(Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                    'Request new inspection'
+                                ) : (
+                                    <>
                                     {btnRequestHover ? (
                                         <>
                                             <FaLock 
@@ -120,13 +129,13 @@ export default function ManageInpections({walletAddress, setTab}){
                                                 onMouseEnter={() => setBtnRequestHover(true)}
                                                 onMouseOut={() => setBtnRequestHover(false)}
                                             />
-                                            Wait {(Number(lastResquested) + 1000) - Number(blockNumber)} blocks to request
+                                            Wait {(Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to request
                                         </>
                                     ) : 'Request new inspection'}
+                                    </>
+                                )}
                                 </>
-                                
                             )}
-                            
                         </button>
                     )}
                     <button

@@ -74,9 +74,11 @@ export default function Dashboard(){
     useEffect(() => {
         async function check() {
             const response = await checkUser(walletAddress);
-            if(response === '0'){
-                chooseModalRegister()
-            }
+            setTimeout(() => {
+                if(response === '0'){
+                    chooseModalRegister()
+                }
+            }, 1000)
         }
         check();
     }, []);
