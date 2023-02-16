@@ -27,7 +27,7 @@ export default function ProducerPage({wallet, setTab}){
     }, [tabActive]);
 
     useEffect(() => {
-        getProducer()
+        getProducer();
     }, [])
 
     async function getProducer(){
@@ -44,7 +44,6 @@ export default function ProducerPage({wallet, setTab}){
 
     async function getBase64(data){
         const res = await get(data);
-        console.log(res)
         setBase64(res);
     }
 
@@ -95,7 +94,7 @@ export default function ProducerPage({wallet, setTab}){
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>Inspections Reiceved: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData === [] ? '' : producerData.totalRequests}
+                            {producerData === [] ? '' : producerData.totalInspections}
                         </p>
                     </div>
 
@@ -109,7 +108,7 @@ export default function ProducerPage({wallet, setTab}){
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>Isa Average: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData.isa === undefined ? '' : producerData.isa.isaAverage}
+                            {producerData?.isa?.isaScore / producerData?.totalInspections}
                         </p>
                     </div>
                     

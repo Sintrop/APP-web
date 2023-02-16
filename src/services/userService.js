@@ -29,8 +29,10 @@ export const AddDelation = async (informed, reported, title, testemony, proofPho
 }
 
 export const GetDelation = async (wallet) => {
+    let delations = []
     await contract.methods.getUserDelations(wallet).call({from: ContractAddress})
     .then((res) => {
-        console.log(res)
+        delations = res;
     })
+    return delations;
 }
