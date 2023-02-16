@@ -80,9 +80,6 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                 )}
             </td>
             <td>
-                <p>{acceptedAt}</p>
-            </td>
-            <td>
                 <p>{data.isaScore}</p>
             </td>
             <td className='td-actions-manage-inspections'>

@@ -2,8 +2,8 @@ import React , { useEffect, useState } from "react";
 import InspectionsService from "../../../services/inspectionsHistoryService";
 import Loading from "../../Loading";
 import '../manageInspections.css'
-import ListItemHistory from "./component/ListItemHistory";
 import {useParams} from 'react-router-dom';
+import ItemListInspections from "../../ManageInspectionsComponents/ItemListInspections";
 
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
@@ -60,19 +60,18 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Accepted At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>
                             <tbody>
                                 {inspections.map(item => {
                                     return(
-                                        <ListItemHistory
+                                        <ItemListInspections
                                             data={item}
                                             user={user}
                                             walletAddress={walletAddress}
                                             key={item.id}
-                                            reloadInspections={() => loadInspections()}
+                                            reloadInspections={() => {}}
                                             setTab={(tab, wallet) => setTab(tab, wallet)}
                                         />
                                     )
