@@ -108,7 +108,11 @@ export default function ProducerPage({wallet, setTab}){
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>Isa Average: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData?.isa?.isaScore / producerData?.totalInspections}
+                            {producerData?.totalInspections === 0 ? (
+                                <>
+                                    {producerData?.isa?.isaScore / producerData?.totalInspections}
+                                </>
+                            ) : ('0')}
                         </p>
                     </div>
                     
@@ -130,7 +134,7 @@ export default function ProducerPage({wallet, setTab}){
                                 
                             ) : (
                                 <>
-                                {(Number(producerData?.lastRequestAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                {(Number(producerData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
                                     <div style={{
                                             display: 'flex', 
                                             flexDirection: 'row', 
@@ -152,7 +156,7 @@ export default function ProducerPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaLock size={15} style={{marginRight: 5}}/>
-                                        Wait {(Number(producerData?.lastRequestAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to request
+                                        Wait {(Number(producerData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
                                     </div>
                                 )}
                                 </>

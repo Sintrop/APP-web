@@ -106,7 +106,7 @@ export default function ManageInpections({walletAddress, setTab}){
                                     requestInspection()
                                 }
                                 if(Number(lastResquested) !== 0){
-                                    if((Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0){
+                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
                                         requestInspection()
                                     }
                                 }
@@ -118,7 +118,7 @@ export default function ManageInpections({walletAddress, setTab}){
                                 'Request New Inspection'
                             ) : (
                                 <>
-                                {(Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
                                     'Request new inspection'
                                 ) : (
                                     <>
@@ -129,7 +129,7 @@ export default function ManageInpections({walletAddress, setTab}){
                                                 onMouseEnter={() => setBtnRequestHover(true)}
                                                 onMouseOut={() => setBtnRequestHover(false)}
                                             />
-                                            Wait {(Number(lastResquested) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to request
+                                            Wait {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
                                         </>
                                     ) : 'Request new inspection'}
                                     </>

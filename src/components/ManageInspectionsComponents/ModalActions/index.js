@@ -66,8 +66,6 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                 hash: res.hashTransaction
             })
             setLoadingTransaction(false);
-            reloadInspection();
-            close();
         })
         .catch(err => {
             setLoadingTransaction(false);

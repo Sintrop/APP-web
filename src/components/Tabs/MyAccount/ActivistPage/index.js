@@ -22,23 +22,16 @@ export default function ActivistPage({wallet, setTab}){
 
     useEffect(() => {
         getActivist();
-        if(user === '2'){
-            isActivist();
-        }
     },[]);
 
     useEffect(() => {
         setTab(tabActive, '')
     }, [tabActive]);
 
-    async function isActivist() {
-        
-    }
-
     async function getActivist(){
         const response = await activistService.getAtivist(walletSelected);
         setActivistData(response)
-        getBase64(response.proofPhoto)
+        getBase64(response.proofPhoto);
         getInspections();
     }
 
@@ -80,9 +73,13 @@ export default function ActivistPage({wallet, setTab}){
                                     Report Activist
                                 </button>
                             ) : (
-                                <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Activist
-                                </Dialog.Trigger>
+                                <>
+                                {String(activistData?.activistWallet).toUpperCase() !== String(walletConnected).toUpperCase() && (
+                                    <Dialog.Trigger className='area-avatar__btn-report'>
+                                        Report Activist
+                                    </Dialog.Trigger>
+                                )}
+                                </>
                             )}
                             <ModalDelation 
                                 close={() => setModalDelation(false)}
@@ -111,7 +108,7 @@ export default function ActivistPage({wallet, setTab}){
                         </p>
                     </div>
                             
-                    {user === '2' && (
+                    {String(activistData?.activistWallet).toUpperCase() === String(walletConnected).toUpperCase() && (
                         <div className='producer-cards-info__producer-page'>
                             <h1 className='tit-cards-info__producer-page'>Prox Accept: </h1>
                             {Number(activistData?.lastAcceptedAt) === 0 ? (
@@ -128,7 +125,7 @@ export default function ActivistPage({wallet, setTab}){
                                 </div>
                             ) : (
                                 <>
-                                {(Number(activistData?.lastAcceptedAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber) < 0 ? (
+                                {(Number(activistData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber) < 0 ? (
                                     <div style={{
                                             display: 'flex', 
                                             flexDirection: 'row', 
@@ -150,7 +147,7 @@ export default function ActivistPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaLock size={15} style={{marginRight: 5}}/>
-                                        Wait {(Number(activistData?.lastAcceptedAt) + process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS) - Number(blockNumber)} blocks to accept.
+                                        Wait {(Number(activistData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks to accept.
                                     </div>
                                 )}
                                 </>

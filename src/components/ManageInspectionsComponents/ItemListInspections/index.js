@@ -31,7 +31,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
         getInspection();
         timestampToDate();
         validateStatus(data.status);
-    },[]);
+    },[data]);
 
     function validateStatus(status){
         if(status === '0' || status === '2'){
