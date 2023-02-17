@@ -10,6 +10,7 @@ import * as htmlToImage from 'html-to-image';
 import {toJpeg} from 'html-to-image';
 import { saveAs } from 'file-saver';
 import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import axios from 'axios';
 
 //services
 import InvestorService from '../../../../services/investorService';
@@ -18,6 +19,7 @@ import {GetCertificateTokens} from '../../../../services/sacTokenService';
 //components
 import Loading from '../../../Loading';
 import { ModalContribute } from "./ModalContribute";
+import { ItemReceipt } from "./ItemReceipt";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const investorService = new InvestorService(wallet);
@@ -26,6 +28,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     const [tokensBurned, setTokensBurned] = useState('');
     const [loading, setLoading] = useState(false);
     const [modalContribute, setModalContribute] = useState(false);
+    const [receipts, setReceipts] = useState([]);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -33,7 +36,15 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
     useEffect(() => {
         getInvestor();
+        getReceipts();
     }, []);
+
+    async function getReceipts(){
+        //add try catch in future
+        const receipts = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&contractaddress=0x3b25db3d9853ef80f60079ab38e5739cd1543b34&address=0x49b85e2d9f48252bf32ba35221b361da77aac683&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
+
+        setReceipts(receipts.data.result);
+    }
 
     async function getInvestor(){
         setLoading(true);
@@ -81,6 +92,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
+            <div style={{overflow: 'scroll', height: '70vh'}}>
             <div className="area-certificates">
                 <div className="container__certificate-container-short">
                     <img src={Logo} className='img-logo-certificate'/>
@@ -134,6 +146,17 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
                     <p style={{textAlign: 'center'}}>Read our documentation to understand better</p>
                 </div>
+            </div>
+
+            <div className="investor-certificate__area-receipts">
+                {receipts.map(receipt => {
+                    if(receipt.to === '0x0000000000000000000000000000000000000000'){
+                        return(
+                            <ItemReceipt key={receipt.hash} data={receipt}/>
+                        )
+                    }
+                })}            
+            </div>
             </div>
 
             {loading && (

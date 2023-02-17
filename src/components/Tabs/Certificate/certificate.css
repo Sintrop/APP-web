@@ -111,3 +111,11 @@
     cursor: pointer;
     border-color: green;
 }
+
+.investor-certificate__area-receipts{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
