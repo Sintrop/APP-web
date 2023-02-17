@@ -56,6 +56,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         <table>
                             <thead>
                                 <th className='th-wallet'>Requested By</th>
+                                <th>Address Producer</th>
                                 <th className='th-wallet'>Inspected By</th>
                                 <th>Created At</th>
                                 <th>Expires In</th>

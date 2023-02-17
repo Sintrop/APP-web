@@ -58,14 +58,20 @@ export default function ProducerRanking({ wallet, setTab }) {
             <td>{item.name}</td>
             <td>
               <div className="div-address">
-                {item.propertyAddress.map((address) => (
-                  <p>{address},</p>
-                ))}
+                {item.propertyAddress.street}, {item.propertyAddress.complement}, {item.propertyAddress.city}-{item.propertyAddress.state}
               </div>
             </td>
-            <td>{item.totalRequests}</td>
+            <td>{item.totalInspections}</td>
             <td>{item.isa.isaScore}</td>
-            <td>{item.isa.isaAverage}</td>
+            <td>
+              {item.totalInspections !== '0' ? (
+                <>
+                {Number(item.isa.isaScore) / Number(item?.totalInspections)}
+                </>
+              ) : (
+                '0'
+              )}
+            </td>
           </tr>
         ))}
       </table>

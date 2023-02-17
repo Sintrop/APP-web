@@ -14,6 +14,7 @@ import Loading from '../../Loading';
 
 //services
 import {GetInspection} from '../../../services/manageInspectionsService';
+import {GetProducer} from '../../../services/producerService';
 
 export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
     const {blockNumber} = useContext(MainContext);
@@ -26,12 +27,20 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     const [acceptedAt, setAcceptedAt] = useState('');
     const [createdAt, setCreatedAt] = useState('');
     const [status, setStatus] = useState('0');
+    const [producerData, setProducerData] = useState({});
 
     useEffect(() => {
+        getProducer()
         getInspection();
         timestampToDate();
         validateStatus(data.status);
     },[data]);
+
+    async function getProducer() {
+        const producer = await GetProducer(data?.createdBy);
+        setProducerData(producer);
+        console.log(producer)
+    }
 
     function validateStatus(status){
         if(status === '0' || status === '2'){
@@ -77,6 +86,9 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 </a>
             </td>
             <td>
+                {producerData?.propertyAddress?.street}, {producerData?.propertyAddress?.city}-{producerData?.propertyAddress?.state}.
+            </td>
+            <td>
                 {data.status == 0 ? (
                     <p>Not accepted</p>
                 ) : (
@@ -97,6 +109,9 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 )}
                 {status === '1' && (
                     <p>Expires in {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
+                )}
+                {status === '2' && (
+                    <p>Inspected</p>
                 )}
                 {status === '3' && (
                     <p>Expired ago {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
@@ -127,7 +142,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
             <td>
                 <p>{data.isaScore}</p>
             </td>
-            <td className='td-actions-manage-inspections'>
+            <td style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', height: 70}}>
                 <button 
                     onClick={() => setShowActions(true)} 
                     className='btn-show-actions'

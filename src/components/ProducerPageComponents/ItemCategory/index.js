@@ -62,7 +62,7 @@ export default function ItemCategory({data}){
                 <div className='area-top-card__container-proof-photo'>
                     <p className='container-proof-photo__title-category'>{title}</p>
                     <div className='proof-photo'>
-                        <img src={`data:image/*;base64,${proofPhoto}`} alt='ProofPhoto' />
+                        <img src={`data:image/*;base64,${proofPhoto}`} alt='ProofPhoto' style={{objectFit: 'cover'}} />
                     </div>
                     <p className='container-proof-photo__title-proof-photo'>Proof Photo</p>
                 </div>
