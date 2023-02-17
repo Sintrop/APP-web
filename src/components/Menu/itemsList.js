@@ -12,7 +12,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                 <p>{title}</p>
             </div>
             { subItem && (
-                subItem.map(item => (<div className='subItem' style={{ display: `${open ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${open ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
             )}
         </>
         )
@@ -26,7 +26,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                 <p>{title}</p>
             </div>
             { subItem && (
-                subItem.map(item => (<div className='subItem' style={{ display: `${openPools ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openPools ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
             )}
         </>
         )
@@ -40,7 +40,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                 <p>{title}</p>
             </div>
             { subItem && (
-                subItem.map(item => (<div className='subItem' style={{ display: `${openCertificates ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openCertificates ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
             )}
         </>
         )

@@ -10,7 +10,7 @@ export default function ItemCategory({data}){
     const [categoryResult, setCategoryResult] = useState('');
     const [resultDescription, setResultDescription] = useState('');
     const [proofPhoto, setProofPhoto] = useState('')
-    console.log(data)
+    
     useEffect(() => {
         checkResult();
         getCategory();

@@ -27,6 +27,10 @@
     margin: 0 10px;
     width: 200px;
     transition: 0.5s all;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-new-category-isa:hover{

@@ -22,7 +22,6 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
     useEffect(() => {
         getIsa();
         timestampToDate()
-        console.log(data)
     }, []);
 
     function timestampToDate(){

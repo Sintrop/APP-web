@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../../IsaPageComponents/CreateCategory/createCategory.css';
 import './modalSeeResult.css';
+import * as Dialog from '@radix-ui/react-dialog';
 //components
 import Loading from '../../Loading';
 import ItemCategoryResult from '../ItemCategoryResult';
@@ -24,49 +25,29 @@ export default function ModalSeeResult({close, inspectionData}){
     };
 
     return(
-        <div className="container-create-category">
-            <div className="card-create-category">
-                <div className="header-create-category">
-                    <p className='tit-categories-isa'>Inspection Result</p>
-                    <button
-                        className="btn-close-create-category"
-                        onClick={() => close()}
-                    >
-                        X
-                    </button>
-                </div>
-                <div className='area_data_inspection'>
-                    <div className='card_data_inspection'>
-                        <h3 className='title_card_data_inspection'>Produccer wallet</h3>
-                        <p className='description_card_data_inspection'>{inspectionData.createdBy}</p>
-                        <h3 className='title_card_data_inspection'>Activist wallet</h3>
-                        <p className='description_card_data_inspection'>{inspectionData.acceptedBy}</p>
-                    </div>
-                    <div className='area_data_2_inspection'>
-                        <div className='card_data_inspection created_score'>
-                            <h3 className='title_card_data_inspection'>Created At</h3>
-                            <p className='description_card_data_inspection'>{inspectionData.createdAt}</p>
-                        </div>
-                        <div className='card_data_inspection created_score'>
-                            <h3 className='title_card_data_inspection'>Isa Score</h3>
-                            <p className='description_card_data_inspection'>{inspectionData.isaScore}</p>
-                        </div>
-                    </div>
-                    <div className='area_categories_result'>
-                        {isas.map((item) => {
-                            return(
-                                <div className='card_data_inspection' key={item.categoryId}>
+        <Dialog.Portal className='modal-see-result__portal'>
+            <Dialog.Overlay className='modal-see-result__overlay'/>
+            <Dialog.Content className='modal-see-result__content'>
+                <Dialog.Title className='modal-see-result__title'>
+                    Result inspection
+                </Dialog.Title>
+                        <div className='area_data_inspection'>
+                            {isas.map(item => (
+                                <div className='card_data_inspection' key={item.id}>
                                     <ItemCategoryResult data={item} isas={isas}/>
                                 </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            </div>
-
+                            ))}
+                        </div>
+                        
+                        <div className='modal-see-result__area-btn'>
+                            <Dialog.Close>
+                                Close
+                            </Dialog.Close>
+                        </div>
+            </Dialog.Content>
             {loading && (
                 <Loading/>
             )}
-        </div>
+        </Dialog.Portal>
     )
 }

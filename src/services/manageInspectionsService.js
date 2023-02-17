@@ -15,6 +15,31 @@ export const GetInspections = async () => {
     return inspections;
 }
 
+export const CanRequestInspection = async (wallet) => {
+    let may = false;
+    const web3js = new Web3(window.ethereum);
+    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress)
+    await contract.methods.canRequestInspection().call({from: wallet})
+    .then((res) => {
+        may = res;
+    })
+
+    return may;
+}
+
+export const CanAcceptInspection = async (wallet) => {
+    let may = '';
+    const web3js = new Web3(window.ethereum);
+    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress)
+    await contract.methods.calculateBlocksToExpire('2').call()
+    .then((res) => {
+        may = res;
+        console.log(res)
+    })
+
+    return may;
+}
+
 export const RequestInspection = async (walletAddress) => {
     let type = '';
     let message = '';

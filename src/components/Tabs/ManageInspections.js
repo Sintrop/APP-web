@@ -1,24 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import './isa.css';
 import './manageInspections.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../LoadingTransaction';
+import { MainContext } from '../../contexts/main';
+import {FaLock} from 'react-icons/fa';
 
 //components
 import Loading from '../Loading';
 import ItemListInspections from '../ManageInspectionsComponents/ItemListInspections';
 
 //services
+import {GetProducer} from '../../services/producerService';
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 
-export default function ManageInpections({user, walletAddress, setTab}){
+export default function ManageInpections({walletAddress, setTab}){
+    const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const {tabActive} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [lastResquested, setLastRequested] = useState('');
+    const [btnRequestHover, setBtnRequestHover] = useState(false);
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -26,7 +32,15 @@ export default function ManageInpections({user, walletAddress, setTab}){
 
     useEffect(() => {
         getInspections();
-    }, [])
+        if(user === '1'){
+            isProducer()
+        }
+    }, []);
+
+    async function isProducer() {
+        const producer = await GetProducer(walletConnected);
+        setLastRequested(producer.lastRequestAt);
+    }
 
     async function getInspections(){
         setLoading(true);
@@ -77,6 +91,7 @@ export default function ManageInpections({user, walletAddress, setTab}){
         })
         
     }
+
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
@@ -84,10 +99,43 @@ export default function ManageInpections({user, walletAddress, setTab}){
                 <div className='area-btn-header-isa-page'>
                     {user == 1 && (
                         <button
+                            
                             className='btn-new-category-isa'
-                            onClick={() => requestInspection()}
+                            onClick={() => {
+                                if(Number(lastResquested) === 0){
+                                    requestInspection()
+                                }
+                                if(Number(lastResquested) !== 0){
+                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
+                                        requestInspection()
+                                    }
+                                }
+                            }}
+                            onMouseEnter={() => setBtnRequestHover(true)}
+                            onMouseOut={() => setBtnRequestHover(false)}
                         >
-                            Request New Inspection
+                            {Number(lastResquested) === 0 ? (
+                                'Request New Inspection'
+                            ) : (
+                                <>
+                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                    'Request new inspection'
+                                ) : (
+                                    <>
+                                    {btnRequestHover ? (
+                                        <>
+                                            <FaLock 
+                                                size={25}
+                                                onMouseEnter={() => setBtnRequestHover(true)}
+                                                onMouseOut={() => setBtnRequestHover(false)}
+                                            />
+                                            Wait {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
+                                        </>
+                                    ) : 'Request new inspection'}
+                                    </>
+                                )}
+                                </>
+                            )}
                         </button>
                     )}
                     <button
@@ -110,7 +158,6 @@ export default function ManageInpections({user, walletAddress, setTab}){
                                 <th>Created At</th>
                                 <th>Expires In</th>
                                 <th className='th-wallet'>Status</th>
-                                <th>Accepted At</th>
                                 <th className='th-wallet'>Isa Score</th>
                                 <th className='th-wallet'>Actions</th>
                             </thead>

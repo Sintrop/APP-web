@@ -1,3 +1,8 @@
+.item-category__container{
+    display: flex;
+    flex-direction: column;
+}
+
 .title_category_result{
     margin: 0;
     color: green;
@@ -15,4 +20,10 @@
     margin: 0;
     color: #000;
     margin-bottom: 8px;
+}
+
+.item-category__proofPhoto{
+    width: 400px;
+    height: 250px;
+    object-fit: cover;
 }

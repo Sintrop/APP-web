@@ -8,6 +8,7 @@ import AvatarDefault from '../../assets/img/avatar02.png';
 //services
 import {GetProducer} from '../../services/producerService';
 import {GetInspections} from '../../services/manageInspectionsService';
+import {GetDelation} from '../../services/userService';
 
 //components
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
@@ -16,6 +17,7 @@ export default function AccountProducer(){
     const {walletAddress} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
+    const [delationsReiceved, setDelationsReiceved] = useState('0');
 
     useEffect(() => {
         getProducer();
@@ -24,6 +26,8 @@ export default function AccountProducer(){
     async function getProducer(){
         const response = await GetProducer(walletAddress);
         setProducerData(response);
+        const delations = await GetDelation(response.producerWallet);
+        setDelationsReiceved(delations.length);
         getInspections();
     }
 
@@ -71,7 +75,7 @@ export default function AccountProducer(){
                     <div className='producer-cards-info__account-producer-page'>
                         <h1 className='tit-cards-info__account-producer-page'>Inspections Reiceved: </h1>
                         <p className='description-cards-info__account-producer-page'>
-                            {producerData === [] ? '' : producerData.totalRequests}
+                            {producerData === [] ? '' : producerData.totalInspections}
                         </p>
                     </div>
 
@@ -85,7 +89,14 @@ export default function AccountProducer(){
                     <div className='producer-cards-info__account-producer-page'>
                         <h1 className='tit-cards-info__account-producer-page'>Isa Average: </h1>
                         <p className='description-cards-info__account-producer-page'>
-                            {producerData.isa === undefined ? '' : producerData.isa.isaAverage}
+                            {producerData?.isa?.isaScore / producerData?.totalInspections}
+                        </p>
+                    </div>
+
+                    <div className='producer-cards-info__account-producer-page'>
+                        <h1 className='tit-cards-info__account-producer-page'>Delations Received: </h1>
+                        <p className='description-cards-info__account-producer-page'>
+                            {delationsReiceved}
                         </p>
                     </div>
                 </div>
@@ -96,7 +107,8 @@ export default function AccountProducer(){
                             return(
                                 <ItemInspection 
                                     data={item}
-                                    key={item.id}    
+                                    key={item.id}  
+                                    typeAccount='producer'  
                                 />
                             )
                         }

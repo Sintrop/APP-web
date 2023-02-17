@@ -14,6 +14,7 @@ import Logo from '../../../assets/img/262543420-sintrop-logo-com-degrade.png';
 
 //services
 import {GetProducer} from '../../../services/producerService';
+import {GetDelation} from '../../../services/userService';
 
 //components
 import Loading from '../../Loading';
@@ -22,6 +23,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
     const {tabActive} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [delationsReceived, setDelationsReceived] = useState('0');
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -37,6 +39,8 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         setLoading(true);
         const response = await GetProducer(wallet);
         setProducerData(response);
+        const delations = await GetDelation(response.producerWallet);
+        setDelationsReceived(delations.length);
         setLoading(false);
     }
 
@@ -124,9 +128,9 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                                 Sustainability Score: {producerData.isa === undefined ? '' : producerData.isa.isaScore}
                             </p>
                             <p className="producer-score-info__description">
-                                Total Requests: {producerData === [] ? '' : producerData.totalRequests}
+                                Total Inspections: {producerData === [] ? '' : producerData.totalInspections}
                             </p>
-                            <p className="producer-score-info__description color-red">Delations Reiceved: 0</p>
+                            <p className="producer-score-info__description color-red">Delations Reiceved: {delationsReceived}</p>
                         </div>
                     </div>
                 </div>

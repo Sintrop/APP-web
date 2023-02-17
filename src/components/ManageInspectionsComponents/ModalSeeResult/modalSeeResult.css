@@ -1,6 +1,49 @@
+.modal-see-result__portal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+}
+
+.modal-see-result__overlay{
+    background-color: rgba(0,0,0,0.6);
+    position: fixed;
+    inset: 0;
+}
+
+.modal-see-result__content{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 570px;
+    height: 530px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    margin: auto auto;
+    inset: 0;
+}
+
+.modal-see-result__title{
+    font-size: large;
+    font-weight: bold;
+}
+
 .area_data_inspection{
     display: flex;
     flex-direction: column;
+    width: '100%';
+    overflow: auto;
+}
+
+.modal-see-result__area-btn{
+    display: flex;
+    flex-direction: row;
+    width: '100%';
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .card_data_inspection{

@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import './itemListInspections.css';
 import {format} from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
+import {BsGearFill} from 'react-icons/bs';
+import { MainContext } from '../../../contexts/main';
 
 //components
 import ModalActions from '../ModalActions';
@@ -14,6 +16,7 @@ import Loading from '../../Loading';
 import {GetInspection} from '../../../services/manageInspectionsService';
 
 export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
+    const {blockNumber} = useContext(MainContext);
     const navigate = useNavigate();
     const [showActions, setShowActions] = useState(false);
     const [showModalRealize, setShowModalRealize] = useState(false);
@@ -22,11 +25,26 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
     const [loading, setLoading] = useState(false);
     const [acceptedAt, setAcceptedAt] = useState('');
     const [createdAt, setCreatedAt] = useState('');
+    const [status, setStatus] = useState('0');
 
     useEffect(() => {
         getInspection();
         timestampToDate();
-    },[]);
+        validateStatus(data.status);
+    },[data]);
+
+    function validateStatus(status){
+        if(status === '0' || status === '2'){
+            setStatus(status)
+        }
+        if(status === '1'){
+            if(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) < Number(blockNumber)){
+                setStatus('3')
+            }else{
+                setStatus('1')
+            }
+        }
+    }
 
     async function getInspection(){
         const response = await GetInspection(data.id);
@@ -74,27 +92,37 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 <p>{createdAt}</p>
             </td>
             <td>
-                
+                {status === '0' && (
+                    <p>Not accepted</p>
+                )}
+                {status === '1' && (
+                    <p>Expires in {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
+                )}
+                {status === '3' && (
+                    <p>Expired ago {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                )}
             </td>
             <td>
-                {data.status == '0' && (
+                {status == '0' && (
                     <div className='status-open'>
                         <p className='tit-status'>OPEN</p>
                     </div>
                 )}
-                {data.status == '1' && (
+                {status == '1' && (
                     <div className='status-accepted'>
                         <p className='tit-status'>ACCEPTED</p>
                     </div>
                 )}
-                {data.status == '2' && (
+                {status == '2' && (
                     <div className='status-inspected'>
                         <p className='tit-status'>INSPECTED</p>
                     </div>
                 )}
-            </td>
-            <td>
-                {acceptedAt}
+                {status == '3' && (
+                    <div className='status-expired'>
+                        <p className='tit-status'>EXPIRED</p>
+                    </div>
+                )}
             </td>
             <td>
                 <p>{data.isaScore}</p>
@@ -102,26 +130,34 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
             <td className='td-actions-manage-inspections'>
                 <button 
                     onClick={() => setShowActions(true)} 
-                    className='btn-show-actions'>
-                    ...
+                    className='btn-show-actions'
+                >
+                    <BsGearFill size={20}/>
                 </button>
             </td>
 
+            <Dialog.Root
+                open={showActions}
+                onOpenChange={(open) => setShowActions(open)}
+            >
+                <ModalActions 
+                    close={() => setShowActions(false)}
+                    user={user}
+                    item={data}
+                    walletAddress={walletAddress}
+                    showRealize={() => setShowModalRealize(true)}
+                    showSeeResult={() => setShowSeeResult(true)}
+                    reloadInspection={() => {
+                        setLoading(false);
+                        reloadInspections();
+                    }}
+                    setLoading={() => setLoading(!loading)}
+                    status={status}
+                />
+            </Dialog.Root>
+
             {showActions && (
                 <div className='container-modal-actions'>
-                    <ModalActions 
-                        close={() => setShowActions(false)}
-                        user={user}
-                        item={data}
-                        walletAddress={walletAddress}
-                        showRealize={() => setShowModalRealize(true)}
-                        showSeeResult={() => setShowSeeResult(true)}
-                        reloadInspection={() => {
-                            setLoading(false);
-                            reloadInspections();
-                        }}
-                        setLoading={() => setLoading(!loading)}
-                    />
                 </div>
             )}
 
@@ -140,12 +176,15 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
                 />
             </Dialog.Root>
 
-            {showSeeResult && (
+            <Dialog.Root
+                open={showSeeResult}
+                onOpenChange={(open) => setShowSeeResult(open)}
+            >
                 <ModalSeeResult
                     close={() => setShowSeeResult(false)}
-                    inspectionData={inspection}
+                    inspectionData={data}
                 />
-            )}
+            </Dialog.Root>
 
             {loading && (
                 <Loading/>

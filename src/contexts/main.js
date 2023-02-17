@@ -1,5 +1,6 @@
 import { useEffect, useState, createContext } from "react";
-import {useParams} from 'react-router-dom';
+import Web3 from 'web3';
+import {CanAcceptInspection} from '../services/manageInspectionsService';
 import {CheckUser} from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 
@@ -9,6 +10,17 @@ export default function MainProvider({children}){
     const [user, setUser] = useState('0');
     const [walletConnected, setWalletConnected] = useState(''); 
     const [modalRegister, setModalRegister] = useState(false);
+    const [blockNumber, setBlockNumber] = useState(0);
+    const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
+
+    useEffect(() => {
+        getAtualBlockNumber()
+    }, []);
+
+    useEffect(() => {
+        if(user === '2'){
+        }
+    },[user]);
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -31,10 +43,32 @@ export default function MainProvider({children}){
         setWalletConnected(wallet);
         return response;
     }
+
+    async function getAtualBlockNumber(){
+        const web3js = new Web3(window.ethereum);
+        await web3js.eth.getBlockNumber()
+        .then(res => {
+            setBlockNumber(res)
+        })
+    }
+
+    async function getCanAcceptInspection(){
+        const response = await CanAcceptInspection(walletConnected);
+        alert(response)
+    }
     
     return(
         <MainContext.Provider
-            value={{user, Sync, checkUser, walletConnected, chooseModalRegister, modalRegister}}
+            value={{
+                user, 
+                Sync, 
+                checkUser, 
+                walletConnected, 
+                chooseModalRegister, 
+                modalRegister, 
+                blockNumber, 
+                getAtualBlockNumber
+            }}
         >
             {children}
         </MainContext.Provider>

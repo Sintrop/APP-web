@@ -1,5 +1,9 @@
 import Web3 from "web3";
 import Activist from  '../data/contracts/abis/ActivistContract.json';
+const ActivistContractAddress = Activist.networks[5777].address;
+const web3js = new Web3(window.ethereum);
+const ActivistContract = new web3js.eth.Contract(Activist.abi, ActivistContractAddress);
+
 class ActivistService {
     constructor(wallet) {
         this.web3 = new Web3(window.ethereum);
@@ -26,6 +30,9 @@ class ActivistService {
     }
 }
 
-
+export const GetActivist = async (wallet) => {
+    const activist = await ActivistContract.methods.getActivist(wallet).call();
+    return activist
+}
 
 export default ActivistService; 
