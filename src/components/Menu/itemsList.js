@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './menu.css';
 
-export default function ItemsList({data, changeTab, toggle,  open, openPools, openCertificates}){
+export default function ItemsList({data, changeTab, toggle,  open, openPools, openCertificates, menuOpen}){
     const {id, title, icon, action, subItem} = data;
 
     if(subItem && data.id === 'rankings') {
@@ -9,7 +9,9 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
                 <img className='icon-list' src={icon}/>
-                <p>{title}</p>
+                {menuOpen && (
+                    <p>{title}</p>
+                )}
             </div>
             { subItem && (
                 subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${open ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
@@ -23,7 +25,9 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
                 <img className='icon-list' src={icon}/>
-                <p>{title}</p>
+                {menuOpen && (
+                    <p>{title}</p>
+                )}
             </div>
             { subItem && (
                 subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openPools ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
@@ -37,7 +41,9 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
                 <img className='icon-list' src={icon}/>
-                <p>{title}</p>
+                {menuOpen && (
+                    <p>{title}</p>
+                )}
             </div>
             { subItem && (
                 subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openCertificates ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
@@ -48,7 +54,9 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
     return(
         <div className='container-item-list' onClick={() => changeTab(id)}>
             <img className='icon-list' src={icon}/>
-            <p>{title}</p>
+            {menuOpen && (
+                <p>{title}</p>
+            )}
         </div>
     )
 }

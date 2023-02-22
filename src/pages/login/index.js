@@ -1,13 +1,14 @@
 import React, {useState, useEffect, useContext} from "react";
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-
+import { useNetwork } from "../../hooks/useNetwork";
 import loginImg from '../../assets/img/sintrop_login_alpha.png';
 import logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import { MainContext } from "../../contexts/main";
-import ConnectWallet from "../../services/connectWallet";
+import { UnsupportedNetwork } from "../../components/UnsupportedNetwork";
 
 function Login(){
+    const {isSupported} = useNetwork();
     const {Sync} = useContext(MainContext);
     const navigate = useNavigate();
 
@@ -16,6 +17,12 @@ function Login(){
         if(response.status === 'connected'){
             navigate(`/dashboard/${response.wallet}/isa/main`)
         }
+    }
+
+    if(!isSupported){
+        return(
+            <UnsupportedNetwork/>
+        )
     }
 
     return(

@@ -3,12 +3,14 @@ import {useParams, useNavigate} from 'react-router-dom';
 import './dashboard.css';
 import { MainContext } from '../../contexts/main';
 import * as Dialog from '@radix-ui/react-dialog';
+import { useNetwork } from '../../hooks/useNetwork';
 
 //Components
 import Menu from '../../components/Menu';
 import HeaderAccount from '../../components/HeaderAccount';
 import TabIndicator from '../../components/TabIndicator';
 import ManageInspections from '../../components/Tabs/ManageInspections';
+import { UnsupportedNetwork } from '../../components/UnsupportedNetwork';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -41,6 +43,7 @@ import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 import ModalRegister from '../../components/ModalRegister';
 
 export default function Dashboard(){
+    const {isSupported} = useNetwork();
     const {checkUser, walletConnected, modalRegister, chooseModalRegister} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive} = useParams();
@@ -82,6 +85,12 @@ export default function Dashboard(){
         }
         check();
     }, []);
+
+    if(!isSupported){
+        return(
+            <UnsupportedNetwork/>
+        )
+    }
 
     return(
         <div className='container-dashboard'>

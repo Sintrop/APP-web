@@ -11,11 +11,16 @@
     margin-bottom: 25px;
 }
 
+.img-logo-simple{
+    width: 40px;
+    height: 40px;
+    margin: 10px 0 20px 10px;
+}
+
 .container-item-list{
     display: flex;
     border-top: 1px solid #ddd;
-    width: 200px;
-    padding: 1px 15px;
+    padding: 10px 15px;
     align-items: center;
     transition: 0.3s all;
 }
@@ -34,6 +39,7 @@
 .container-item-list p {
     font-weight: bold;
     color: green;
+    margin: 0
 }
 
 .subItem {
