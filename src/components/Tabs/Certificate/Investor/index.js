@@ -42,8 +42,9 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     async function getReceipts(){
         //add try catch in future
         const receipts = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&contractaddress=0x3b25db3d9853ef80f60079ab38e5739cd1543b34&address=0x49b85e2d9f48252bf32ba35221b361da77aac683&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
-
-        setReceipts(receipts.data.result);
+        if(receipts.data.status === '1'){
+            setReceipts(receipts.data.result);
+        }
     }
 
     async function getInvestor(){
