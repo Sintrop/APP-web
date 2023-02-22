@@ -1,17 +1,30 @@
 import Web3 from "web3";
-import UserContract from '../data/contracts/abis/UserContract.json';
-import ResearcherContract from '../data/contracts/abis/ResearcherContract.json';
-import ContributorContract from '../data/contracts/abis/ContributorContract.json';
-import AdvisorContract from '../data/contracts/abis/AdvisorContract.json';
-import DeveloperContract from '../data/contracts/abis/DeveloperContract.json';
-import DeveloperPool from '../data/contracts/abis/DeveloperPool.json';
-import SACTokenContract from '../data/contracts/abis/SacToken.json';
+import UserContractJson from '../data/contracts/abis/UserContract.json';
+import ResearcherContractJson from '../data/contracts/abis/ResearcherContract.json';
+import ContributorContractJson from '../data/contracts/abis/ContributorContract.json';
+import AdvisorContractJson from '../data/contracts/abis/AdvisorContract.json';
+import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
+import SACTokenContractJson from '../data/contracts/abis/SacToken.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const userContractAddress = UserContractJson.networks[5777].address;
+const researcherContractAddress = ResearcherContractJson.networks[5777].address;
+const contributorContractAddress = ContributorContractJson.networks[5777].address;
+const advisorContractAddress = AdvisorContractJson.networks[5777].address;
+const developerContractAddress = DeveloperContractJson.networks[5777].address;
+const SACTokenContractAddress = SACTokenContractJson.networks[5777].address;
+
+//initializing contract
+const UserContract = new web3.eth.Contract(UserContractJson.abi, userContractAddress);
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
+const ContributorContract = new web3.eth.Contract(ContributorContractJson.abi, contributorContractAddress);
+const AdvisorContract = new web3.eth.Contract(AdvisorContractJson.abi, advisorContractAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
+const SACTokenContract = new web3.eth.Contract(SACTokenContractJson.abi, SACTokenContractAddress);
 
 export const NewAllowedUser = async (walletUser, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = UserContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(UserContract.abi, contractAddress);
-    await contract.methods.newAllowedCaller(walletUser).send({from: walletAdm})
+    await UserContract.methods.newAllowedCaller(walletUser).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -22,10 +35,7 @@ export const NewAllowedUser = async (walletUser, walletAdm) => {
 }
 
 export const NewAllowedResearcher = async (walletResearcher, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = ResearcherContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(ResearcherContract.abi, contractAddress);
-    await contract.methods.newAllowedUser(walletResearcher).send({from: walletAdm})
+    await ResearcherContract.methods.newAllowedUser(walletResearcher).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -36,10 +46,7 @@ export const NewAllowedResearcher = async (walletResearcher, walletAdm) => {
 }
 
 export const NewAllowedContributor = async (walletContributor, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = ContributorContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(ContributorContract.abi, contractAddress);
-    await contract.methods.newAllowedUser(walletContributor).send({from: walletAdm})
+    await ContributorContract.methods.newAllowedUser(walletContributor).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -50,10 +57,7 @@ export const NewAllowedContributor = async (walletContributor, walletAdm) => {
 }
 
 export const NewAllowedAdvisor = async (walletAdvisor, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = AdvisorContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(AdvisorContract.abi, contractAddress);
-    await contract.methods.newAllowedUser(walletAdvisor).send({from: walletAdm})
+    await AdvisorContract.methods.newAllowedUser(walletAdvisor).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -64,10 +68,7 @@ export const NewAllowedAdvisor = async (walletAdvisor, walletAdm) => {
 }
 
 export const NewAllowedDeveloper = async (walletDeveloper, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    await contract.methods.newAllowedUser(walletDeveloper).send({from: walletAdm})
+    await DeveloperContract.methods.newAllowedUser(walletDeveloper).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -78,10 +79,7 @@ export const NewAllowedDeveloper = async (walletDeveloper, walletAdm) => {
 }
 
 export const AddLevel = async (walletDeveloper, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    await contract.methods.addLevel(walletDeveloper).send({from: walletAdm})
+    await DeveloperContract.methods.addLevel(walletDeveloper).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -92,10 +90,7 @@ export const AddLevel = async (walletDeveloper, walletAdm) => {
 }
 
 export const UndoLevel = async (walletDeveloper, walletAdm) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    await contract.methods.removeLevel(walletDeveloper, 1).send({from: walletAdm})
+    await DeveloperContract.methods.removeLevel(walletDeveloper, 1).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash
@@ -106,10 +101,7 @@ export const UndoLevel = async (walletDeveloper, walletAdm) => {
 }
 
 export const AddContractPool = async (walletAdm, addressContract, numTokens) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = SACTokenContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(SACTokenContract.abi, contractAddress);
-    await contract.methods.addContractPool(addressContract, numTokens).send({from: walletAdm})
+    await SACTokenContract.methods.addContractPool(addressContract, numTokens).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash

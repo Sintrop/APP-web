@@ -1,12 +1,18 @@
 import Web3 from "web3";
-import CategoryContract from '../data/contracts/abis/CategoryContract.json';
-import IsaPoolContract from '../data/contracts/abis/IsaPool.json';
+import CategoryContractJson from '../data/contracts/abis/CategoryContract.json';
+import IsaPoolContractJson from '../data/contracts/abis/IsaPool.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const categoryContractAddress = CategoryContractJson.networks[5777].address;
+const isaPoolContractAddress = IsaPoolContractJson.networks[5777].address;
+
+//initializing contract
+const CategoryContract = new web3.eth.Contract(CategoryContractJson.abi, categoryContractAddress);
+const IsaPoolContract = new web3.eth.Contract(IsaPoolContractJson.abi, isaPoolContractAddress);
 
 export const Vote = async (id, tokens, walletAddress) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = CategoryContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress);
-    await contract.methods.vote(parseInt(id), parseInt(tokens)).send({from: walletAddress})
+    await CategoryContract.methods.vote(parseInt(id), parseInt(tokens)).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             return hash;
@@ -17,10 +23,7 @@ export const Vote = async (id, tokens, walletAddress) => {
 }
 
 export const Unvote = async (idCategory, walletAddress) => {
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = CategoryContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress);
-    await contract.methods.unvote(idCategory).send({from: walletAddress})
+    await CategoryContract.methods.unvote(idCategory).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             return hash;
@@ -32,39 +35,27 @@ export const Unvote = async (idCategory, walletAddress) => {
 
 export const GetTokensBalance = async (walletAddress) => {
     let balance = '';
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = IsaPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(IsaPoolContract.abi, contractAddress);
-    await contract.methods.balanceOf(walletAddress).call({from: contractAddress})
+    await IsaPoolContract.methods.balanceOf(walletAddress).call({from: isaPoolContractAddress})
     .then((res) => {
         balance = res;
     })
-
     return balance;
 }
 
 export const IsVoted = async (walletAddress, idCategory) => {
     let isVoted = '';
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = CategoryContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress);
-    await contract.methods.voted(walletAddress, idCategory).call({from: contractAddress})
+    await CategoryContract.methods.voted(walletAddress, idCategory).call({from: categoryContractAddress})
     .then((res) => {
         isVoted = res;
     })
-
     return isVoted;
 }
 
 export const GetTokensCategory = async (idCategory) => {
     let tokens = '';
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = CategoryContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress);
-    await contract.methods.votes(idCategory).call({from: contractAddress})
+    await CategoryContract.methods.votes(idCategory).call({from: categoryContractAddress})
     .then((res) => {
         tokens = res;
     })
-
     return tokens;
 }
