@@ -167,7 +167,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
             <Dialog.Overlay className='modal-actions__overlay'/>
             <Dialog.Content className='modal-actions__content'>
                 <Dialog.Title className='modal-actions__title'>
-                    Options inspection
+                    Inspection options
                 </Dialog.Title>
                     <>
                     <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>

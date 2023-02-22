@@ -1,42 +1,28 @@
 import Web3 from 'web3';
-import SintropContract from '../data/contracts/abis/Sintrop.json';
-const SintropContractAddress = SintropContract.networks[5777].address;
+import SintropContractJson from '../data/contracts/abis/Sintrop.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const sintropContractAddress = SintropContractJson.networks[5777].address;
+
+//initializing contract
+const SintropContract = new web3.eth.Contract(SintropContractJson.abi, sintropContractAddress);
 
 export const GetInspections = async () => {
     let inspections = [];
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = SintropContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(SintropContract.abi, contractAddress);
-    await contract.methods.getInspections().call({from: contractAddress})
+    await SintropContract.methods.getInspections().call({from: sintropContractAddress})
     .then((res) => {
         inspections = res;
     })
-
     return inspections;
 }
 
 export const CanRequestInspection = async (wallet) => {
     let may = false;
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress)
-    await contract.methods.canRequestInspection().call({from: wallet})
+    await SintropContract.methods.canRequestInspection().call({from: wallet})
     .then((res) => {
         may = res;
     })
-
-    return may;
-}
-
-export const CanAcceptInspection = async (wallet) => {
-    let may = '';
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress)
-    await contract.methods.calculateBlocksToExpire('2').call()
-    .then((res) => {
-        may = res;
-        console.log(res)
-    })
-
     return may;
 }
 
@@ -44,9 +30,7 @@ export const RequestInspection = async (walletAddress) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress);
-    await contract.methods.requestInspection().send({from: walletAddress})
+    await SintropContract.methods.requestInspection().send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -57,7 +41,6 @@ export const RequestInspection = async (walletAddress) => {
     .on("error", (error, receipt) => {
         
     })
-
     return {
         type, 
         message,
@@ -69,9 +52,7 @@ export const AcceptInspection = async (inspectionID, walletAddress) => {
     let type = '';
     let message = '';
     let hashTransaction = '';
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress);
-    await contract.methods.acceptInspection(inspectionID).send({from: walletAddress})
+    await SintropContract.methods.acceptInspection(inspectionID).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -79,11 +60,6 @@ export const AcceptInspection = async (inspectionID, walletAddress) => {
             message = "Inspection successfully accepted!"
         }
     })
-    // .on('onfirmation', (receipt) => {
-    //     hashTransaction = hash
-    //     type = 'success'
-    //     message = "Inspection successfully accepted!"
-    // })
     .on("error", (error, receipt) => {
         
     })
@@ -98,9 +74,7 @@ export const RealizeInspection = async (inspectionID, isas, walletAddress) => {
     let type = '';
     let message = '';
     let hashTransaction = '';
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(SintropContract.abi, SintropContractAddress);
-    await contract.methods.realizeInspection(inspectionID, isas).send({from: walletAddress})
+    await SintropContract.methods.realizeInspection(inspectionID, isas).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -120,23 +94,16 @@ export const RealizeInspection = async (inspectionID, isas, walletAddress) => {
 
 export const GetInspection = async (inspectionID) => {
     let inspection = [];
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = SintropContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(SintropContract.abi, contractAddress);
-    await contract.methods.getInspection(inspectionID).call({from: contractAddress})
+    await SintropContract.methods.getInspection(inspectionID).call({from: sintropContractAddress})
     .then((res) => {
         inspection = res;
     })
-
     return inspection;
 }
 
 export const GetIsa = async (inspectionId) => {
     let isas = []
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = SintropContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(SintropContract.abi, contractAddress);
-    await contract.methods.getIsa(inspectionId).call({from: contractAddress})
+    await SintropContract.methods.getIsa(inspectionId).call({from: sintropContractAddress})
     .then((res) => {
         isas = res;
     })

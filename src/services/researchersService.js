@@ -1,29 +1,28 @@
 import Web3 from "web3";
-import Researchers from  '../data/contracts/abis/ResearcherContract.json';
-const ResearchersContractAddress = Researchers.networks[5777].address;
+import ResearcherContractJson from  '../data/contracts/abis/ResearcherContract.json';
+const web3 = new Web3(window.ethereum);
+
+//contract addres
+const researcherContractAddress = ResearcherContractJson.networks[5777].address;
+
+//initializing contract
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
+
 class ResearchersService {
     constructor(wallet) {
-        this.web3 = new Web3(window.ethereum);
+        this.web3 = web3;
         this.wallet = wallet;
-        this.researchersDataNetwork = Researchers.networks["5777"];
-        this.researchersContractAddress = this.researchersDataNetwork.address;
-        this.researchersABI = Researchers.abi;
+        this.researchersContractAddress = researcherContractAddress;
     }
 
     async getResearcherRanking(){
-      if (this.researchersContractAddress && this.researchersDataNetwork) {
-          const ResearchersContract = new this.web3.eth.Contract(this.researchersABI, this.researchersContractAddress);
-          const researchers = await ResearchersContract.methods.getResearchers().call()
-          return researchers;
-        } 
+        const researchers = await ResearcherContract.methods.getResearchers().call()
+        return researchers; 
     }
 
     async getResearchers(walletAdd){
-        if (this.researchersContractAddress && this.researchersDataNetwork) {
-            const ResearchersContract = new this.web3.eth.Contract(this.researchersABI, this.researchersContractAddress);
-            const researchers = await ResearchersContract.methods.getResearcher(walletAdd).call()
-            return researchers;
-        } 
+        const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()
+        return researchers;
     }
 }
 export default ResearchersService; 
@@ -32,9 +31,7 @@ export const PublishResearch = async (walletAddress, title, thesis, filePath) =>
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(Researchers.abi, ResearchersContractAddress);
-    await contract.methods.addWork(title, thesis, filePath).send({from: walletAddress})
+    await ResearcherContract.methods.addWork(title, thesis, filePath).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -55,9 +52,7 @@ export const PublishResearch = async (walletAddress, title, thesis, filePath) =>
 
 export const GetResearches = async () => {
     let researches = [];
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(Researchers.abi, ResearchersContractAddress);
-    await contract.methods.getWorks().call({from: ResearchersContractAddress})
+    await ResearcherContract.methods.getWorks().call({from: researcherContractAddress})
     .then(res => {
         researches = res;
     })

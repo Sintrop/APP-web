@@ -1,27 +1,36 @@
 import Web3 from "web3";
-import ProducerContract from "../data/contracts/abis/ProducerContract.json";
-import ActivistContract from "../data/contracts/abis/ActivistContract.json";
-import ContributorContract from "../data/contracts/abis/ContributorContract.json";
-import ResearcherContract from "../data/contracts/abis/ResearcherContract.json";
-import DeveloperContract from "../data/contracts/abis/DeveloperContract.json";
-import AdvisorContract from "../data/contracts/abis/AdvisorContract.json";
-import InvestorContract from "../data/contracts/abis/InvestorContract.json";
+import ProducerContractJson from "../data/contracts/abis/ProducerContract.json";
+import ActivistContractJson from "../data/contracts/abis/ActivistContract.json";
+import ContributorContractJson from "../data/contracts/abis/ContributorContract.json";
+import ResearcherContractJson from "../data/contracts/abis/ResearcherContract.json";
+import DeveloperContractJson from "../data/contracts/abis/DeveloperContract.json";
+import AdvisorContractJson from "../data/contracts/abis/AdvisorContract.json";
+import InvestorContractJson from "../data/contracts/abis/InvestorContract.json";
+const web3 = new Web3(window.ethereum);
 
-const ContributorContractAddress = ContributorContract.networks[5777].address;
-const ProducerContractAddress = ProducerContract.networks[5777].address;
-const ActivistContractAddress = ActivistContract.networks[5777].address;
-const ResearcherContractAddress = ResearcherContract.networks[5777].address;
-const DeveloperContractAddress = DeveloperContract.networks[5777].address;
-const AdvisorContractAddress = AdvisorContract.networks[5777].address;
-const InvestorContractAddress = InvestorContract.networks[5777].address;
+//contract address
+const contributorContractAddress = ContributorContractJson.networks[5777].address;
+const producerContractAddress = ProducerContractJson.networks[5777].address;
+const activistContractAddress = ActivistContractJson.networks[5777].address;
+const researcherContractAddress = ResearcherContractJson.networks[5777].address;
+const developerContractAddress = DeveloperContractJson.networks[5777].address;
+const advisorContractAddress = AdvisorContractJson.networks[5777].address;
+const investorContractAddress = InvestorContractJson.networks[5777].address;
+
+//initializing contract
+const ProducerContract = new web3.eth.Contract(ProducerContractJson.abi, producerContractAddress);
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
+const ContributorContract = new web3.eth.Contract(ContributorContractJson.abi, contributorContractAddress);
+const AdvisorContract = new web3.eth.Contract(AdvisorContractJson.abi, advisorContractAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
+const ActivistContract = new web3.eth.Contract(ActivistContractJson.abi, activistContractAddress);
+const InvestorContract = new web3.eth.Contract(InvestorContractJson.abi, investorContractAddress);
 
 export const addProducer = async (wallet, name, document, documentType, country, state, city, cep, street, complement, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( ProducerContract.abi, ProducerContractAddress);
-    await contract.methods.addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
+    await ProducerContract.methods.addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
@@ -52,9 +61,7 @@ export const addActivist = async (wallet, name, country, state, city, cep, proof
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( ActivistContract.abi, ActivistContractAddress);
-    await contract.methods.addActivist(name, proofPhoto, country, state, city, cep)
+    await ActivistContract.methods.addActivist(name, proofPhoto, country, state, city, cep)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
@@ -85,9 +92,7 @@ export const addInvestor = async (wallet, name) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( InvestorContract.abi, InvestorContractAddress);
-    await contract.methods.addInvestor(name)
+    await InvestorContract.methods.addInvestor(name)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
@@ -118,9 +123,7 @@ export const addDeveloper = async (wallet, name, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( DeveloperContract.abi, DeveloperContractAddress);
-    await contract.methods.addDeveloper(name, proofPhoto)
+    await DeveloperContract.methods.addDeveloper(name, proofPhoto)
     .send({ from: wallet})
     .on('transactionHash', hash => {
         if(hash){
@@ -151,9 +154,7 @@ export const addResearcher = async (wallet, name, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( ResearcherContract.abi, ResearcherContractAddress);
-    await contract.methods.addResearcher(name, proofPhoto)
+    await ResearcherContract.methods.addResearcher(name, proofPhoto)
     .send({ from: wallet})
     .on('transactionHash', hash => {
         if(hash){
@@ -184,9 +185,7 @@ export const addAdvisor = async (wallet, name, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( AdvisorContract.abi, AdvisorContractAddress);
-    await contract.methods.addAdvisor(name, proofPhoto)
+    await AdvisorContract.methods.addAdvisor(name, proofPhoto)
     .send({ from: wallet})
     .on('transactionHash', hash => {
         if(hash){
@@ -217,9 +216,7 @@ export const addContributor = async (wallet, name, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract( ContributorContract.abi, ContributorContractAddress);
-    await contract.methods.addContributor(name, proofPhoto).send({ from: wallet })
+    await ContributorContract.methods.addContributor(name, proofPhoto).send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
             hashTransaction = hash

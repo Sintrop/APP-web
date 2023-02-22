@@ -1,15 +1,18 @@
 import Web3 from 'web3';
-import UserContract from '../data/contracts/abis/UserContract.json';
-const ContractAbi = UserContract.abi;
-const ContractAddress = UserContract.networks[5777].address;
-const web3js = new Web3(window.ethereum);
-const contract = new web3js.eth.Contract(ContractAbi, ContractAddress)
+import UserContractJson from '../data/contracts/abis/UserContract.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const userContractAddress = UserContractJson.networks[5777].address;
+
+//initializing contract
+const UserContract = new web3.eth.Contract(UserContractJson.abi, userContractAddress)
 
 export const AddDelation = async (informed, reported, title, testemony, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    await contract.methods.addDelation(reported, title, testemony, proofPhoto).send({from: informed})
+    await UserContract.methods.addDelation(reported, title, testemony, proofPhoto).send({from: informed})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -30,7 +33,7 @@ export const AddDelation = async (informed, reported, title, testemony, proofPho
 
 export const GetDelation = async (wallet) => {
     let delations = []
-    await contract.methods.getUserDelations(wallet).call({from: ContractAddress})
+    await UserContract.methods.getUserDelations(wallet).call({from: userContractAddress})
     .then((res) => {
         delations = res;
     })

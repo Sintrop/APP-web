@@ -1,13 +1,16 @@
 import Web3 from "web3";
-import CategoryContract from '../data/contracts/abis/CategoryContract.json';
-const CategoryContractAddress = CategoryContract.networks[5777].address;
+import CategoryContractJson from '../data/contracts/abis/CategoryContract.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const categoryContractAddress = CategoryContractJson.networks[5777].address;
+
+//initializing contract
+const CategoryContract = new web3.eth.Contract(CategoryContractJson.abi, categoryContractAddress);
 
 export const GetCategories = async () => {
     let categories = [];
-    const contractAddress = CategoryContract.networks[5777].address;
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(CategoryContract.abi, contractAddress)
-    await contract.methods.getCategories().call({from: contractAddress})
+    await CategoryContract.methods.getCategories().call({from: categoryContractAddress})
     .then((res) => {
         categories = res;
     })
@@ -16,14 +19,20 @@ export const GetCategories = async () => {
 }
 
 export const AddCategory = async (
-    walletAddress, name, description, tutorial, totallySustainable, partiallySustainable, neutro, partiallyNotSustainable, totallyNotSustainable 
+        walletAddress, 
+        name, 
+        description, 
+        tutorial, 
+        totallySustainable, 
+        partiallySustainable, 
+        neutro, 
+        partiallyNotSustainable, 
+        totallyNotSustainable 
     ) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(CategoryContract.abi, CategoryContractAddress);
-    await contract.methods.addCategory(
+    await CategoryContract.methods.addCategory(
         name, 
         description,
         tutorial, 

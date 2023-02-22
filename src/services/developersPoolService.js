@@ -1,41 +1,37 @@
 import Web3 from 'web3';
-import DevelopersPoolContract from '../data/contracts/abis/DeveloperPool.json';
-import DeveloperContract from '../data/contracts/abis/DeveloperContract.json';
-import SacTokenContract from '../data/contracts/abis/SacToken.json';
-const DeveloperContractAddress = DeveloperContract.networks[5777].address;
+import DevelopersPoolJson from '../data/contracts/abis/DeveloperPool.json';
+import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const developerContractAddress = DeveloperContractJson.networks[5777].address;
+const developersPoolAddress = DevelopersPoolJson.networks[5777].address;
+
+//initializing contract
+const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson.abi, developersPoolAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
 
 export const GetBalancePool = async () => {
     let tokens = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.balance().call({from: contractAddress})
+    await DevelopersPoolContract.methods.balance().call({from: developersPoolAddress})
     .then((res) => {
         tokens = res;
     })
-
     return tokens;
 }
 
 export const GetEraContract = async () => {
     let era = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.currentContractEra().call({from: contractAddress})
+    await DevelopersPoolContract.methods.currentContractEra().call({from: developersPoolAddress})
     .then((res) => {
         era = res;
     })
-
     return era;
 }
 
 export const GetEra = async (era) => {
     let eraInfo = [];
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.getEra(era).call({from: contractAddress})
+    await DevelopersPoolContract.methods.getEra(era).call({from: developersPoolAddress})
     .then((res) => {
         eraInfo = res;
     })
@@ -45,36 +41,25 @@ export const GetEra = async (era) => {
 
 export const CheckNextAprove = async (era) => {
     let eras = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.nextApproveIn(era).call({from: contractAddress})
+    await DevelopersPoolContract.methods.nextApproveIn(era).call({from: developersPoolAddress})
     .then((res) => {
         eras = res;
     })
-
     return eras;
 }
 
 export const CheckAllowanceTokens = async (wallet) => {
     let tokensAllowed = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.allowance().call({from: wallet})
+    await DevelopersPoolContract.methods.allowance().call({from: wallet})
     .then((res) => {
         tokensAllowed = res;
     })
-
     return tokensAllowed;
 }
 
 export const GetBalanceDeveloper = async (wallet) => {
     let balance = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.balanceOf(wallet).call({from: contractAddress})
+    await DevelopersPoolContract.methods.balanceOf(wallet).call({from: developersPoolAddress})
     .then((res) => {
         balance = res;
     })
@@ -84,10 +69,7 @@ export const GetBalanceDeveloper = async (wallet) => {
 
 export const GetDevelopers = async () => {
     let developersList = [];
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DeveloperContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, contractAddress);
-    await contract.methods.getDevelopers().call({from: contractAddress})
+    await DeveloperContract.methods.getDevelopers().call({from: developerContractAddress})
     .then((res) => {
         developersList = res;
     })
@@ -97,10 +79,7 @@ export const GetDevelopers = async () => {
 
 export const TokensPerEra = async () => {
     let tokens = 0;
-    const web3js = new Web3(window.ethereum);
-    const contractAddress = DevelopersPoolContract.networks[5777].address;
-    const contract = new web3js.eth.Contract(DevelopersPoolContract.abi, contractAddress);
-    await contract.methods.TOKENS_PER_ERA().call({from: contractAddress})
+    await DevelopersPoolContract.methods.TOKENS_PER_ERA().call({from: developersPoolAddress})
     .then((res) => {
         tokens = res;
     })
@@ -111,9 +90,7 @@ export const WithdrawTokens = async (wallet) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(DeveloperContract.abi, DeveloperContractAddress);
-    await contract.methods.withdraw().send({from: wallet})
+    await DeveloperContract.methods.withdraw().send({from: wallet})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash

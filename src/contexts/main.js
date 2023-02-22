@@ -1,6 +1,5 @@
 import { useEffect, useState, createContext } from "react";
 import Web3 from 'web3';
-import {CanAcceptInspection} from '../services/manageInspectionsService';
 import {CheckUser} from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 
@@ -50,11 +49,6 @@ export default function MainProvider({children}){
         .then(res => {
             setBlockNumber(res)
         })
-    }
-
-    async function getCanAcceptInspection(){
-        const response = await CanAcceptInspection(walletConnected);
-        alert(response)
     }
     
     return(

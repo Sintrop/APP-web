@@ -1,21 +1,17 @@
-import Web3 from 'web3';
-import UserContract from '../data/contracts/abis/UserContract.json';
 import { useCallback, useEffect, useState } from 'react';
-const UserContractAddress = UserContract.networks[5777].address;
+import Web3 from 'web3';
+import UserContractJson from '../data/contracts/abis/UserContract.json';
+const web3 = new Web3(window.ethereum);
 
+const userContractAddress = UserContractJson.networks[5777].address;
+const UserContract = new web3.eth.Contract(UserContractJson.abi, userContractAddress)
 
 function CheckUserRegister({walletAddress}) {
-    const contractAddress = UserContract.networks[5777].address
     const [user, setUser] = useState(null);
 
     const getUser = useCallback(async () => {
         try{
-            //Connection web3
-            const web3 = new Web3(window.ethereum);
-
-            //Connection contract
-            const contract = new web3.eth.Contract(UserContract.abi, contractAddress);
-            contract.methods.getUser(walletAddress).call({from: contractAddress})
+            UserContract.methods.getUser(walletAddress).call({from: userContractAddress})
             .then((res) => {
                 //Response type of user
                 setUser(res)
@@ -37,12 +33,9 @@ export default CheckUserRegister;
 
 export const CheckUser = async (walletAddress) => {
     let user = '';
-    const web3js = new Web3(window.ethereum);
-    const contract = new web3js.eth.Contract(UserContract.abi, UserContractAddress);
-    await contract.methods.getUser(walletAddress).call({from: UserContractAddress})
+    await UserContract.methods.getUser(walletAddress).call({from: userContractAddress})
     .then((res) => {
         user = res;
     })
-
     return user;
 }

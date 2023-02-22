@@ -1,27 +1,24 @@
-
 import Web3 from "web3";
-import Sintrop from  '../data/contracts/abis/Sintrop.json';
+import SintropContractJson from  '../data/contracts/abis/Sintrop.json';
+const web3 = new Web3(window.ethereum);
+
+//contract address
+const sintropContractAddress = SintropContractJson.networks[5777].address;
+
+//initializing contract
+const SintropContract = new web3.eth.Contract(SintropContractJson.abi, sintropContractAddress);
+
 class InspectionsHistoryService {
     constructor(wallet) {
-        this.web3 = new Web3(window.ethereum);
+        this.web3 = web3;
         this.wallet = wallet;
-        this.sintropDataNetwork = Sintrop.networks["5777"];
-        this.sintropContractAddress = this.sintropDataNetwork.address;
-        this.sintroptABI = Sintrop.abi;
+        this.sintropContractAddress = sintropContractAddress;
     }
-
 
     async getAllInspections(){
-
-        if (this.sintropContractAddress && this.sintropDataNetwork) {
-            const SintropContract = new this.web3.eth.Contract(this.sintroptABI, this.sintropContractAddress);
-            const inspections = await SintropContract.methods.getInspections().call()
-
-            return inspections;
-          } 
+        const inspections = await SintropContract.methods.getInspections().call()
+        return inspections;
     }
 }
-
-
 
 export default InspectionsHistoryService; 
