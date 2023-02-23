@@ -53,7 +53,7 @@ export default function ISA({user, walletAddress, setTab}){
                     </button>
                 </div>
             </div>
-
+            
             {categories.length === 0 ? (
                 <h1>No category registered</h1>
             ) : (                

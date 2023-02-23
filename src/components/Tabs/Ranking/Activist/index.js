@@ -28,7 +28,7 @@ export default function ActivistRanking({ wallet, setTab }) {
     <>
       <div className='header-isa'>
         <h1>Activists</h1>          
-      </div>
+      </div> 
       <table border="1">
         <tr>
           <th>#</th>

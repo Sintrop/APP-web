@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import './accountProducer.css';
-
+import {get} from '../../config/infura';
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import AvatarDefault from '../../assets/img/avatar02.png';
 
 //services
-import {GetProducer} from '../../services/producerService';
-import {GetInspections} from '../../services/manageInspectionsService';
-import {GetDelation} from '../../services/userService';
+import {GetDelation, GetInspections, GetProducer} from '../../services/accountProducerService';
 
 //components
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
@@ -18,6 +16,7 @@ export default function AccountProducer(){
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [delationsReiceved, setDelationsReiceved] = useState('0');
+    const [proofPhotoBase64, setProofPhotoBase64] = useState('');
 
     useEffect(() => {
         getProducer();
@@ -26,6 +25,7 @@ export default function AccountProducer(){
     async function getProducer(){
         const response = await GetProducer(walletAddress);
         setProducerData(response);
+        getBase64(response.proofPhoto);
         const delations = await GetDelation(response.producerWallet);
         setDelationsReiceved(delations.length);
         getInspections();
@@ -34,6 +34,11 @@ export default function AccountProducer(){
     async function getInspections(){
         const response = await GetInspections();
         setInspections(response);
+    }
+
+    async function getBase64(path){
+        const base64 = await get(path);
+        setProofPhotoBase64(base64);
     }
 
     return(
@@ -45,7 +50,7 @@ export default function AccountProducer(){
             <div className='content__account-producer-page'>
                 <div className='account-producer-area-info__account-producer-page'>
                     <div className='area-avatar__account-producer-page'>
-                        <img src={AvatarDefault} className='avatar__account-producer-page'/>
+                        <img src={`data:image/png;base64,${proofPhotoBase64}`} className='avatar__account-producer-page'/>
                         <div className='producer-cards-info__account-producer-page card-wallet'>
                             <h1 className='tit-cards-info__account-producer-page'>Producer Wallet: </h1>
                             <a className='description-cards-info__account-producer-page' href={`/account-producer/${producerData.producerWallet}`}>
@@ -68,7 +73,7 @@ export default function AccountProducer(){
                     <div className='producer-cards-info__account-producer-page'>
                         <h1 className='tit-cards-info__account-producer-page'>Address: </h1>
                         <p className='description-cards-info__account-producer-page'>
-                            {producerData.propertyAddress === undefined ? '' : `${producerData.propertyAddress.city}/${producerData.propertyAddress.state}, ${producerData.propertyAddress.country}`}
+                            {producerData.propertyAddress === undefined ? '' : `${producerData?.propertyAddress.street}, ${producerData.propertyAddress.city}-${producerData.propertyAddress.state}`}
                         </p>
                     </div>
 
@@ -89,7 +94,7 @@ export default function AccountProducer(){
                     <div className='producer-cards-info__account-producer-page'>
                         <h1 className='tit-cards-info__account-producer-page'>Isa Average: </h1>
                         <p className='description-cards-info__account-producer-page'>
-                            {producerData?.isa?.isaScore / producerData?.totalInspections}
+                            {producerData?.totalInspections === '0' ? '0' : Number(producerData?.isa?.isaScore) / Number(producerData?.totalInspections)}
                         </p>
                     </div>
 

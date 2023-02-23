@@ -11,6 +11,7 @@ export default function MainProvider({children}){
     const [modalRegister, setModalRegister] = useState(false);
     const [blockNumber, setBlockNumber] = useState(0);
     const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(true);
 
     useEffect(() => {
         getAtualBlockNumber()
@@ -50,6 +51,10 @@ export default function MainProvider({children}){
             setBlockNumber(res)
         })
     }
+
+    function toggleMenu(){
+        setMenuOpen(!menuOpen);
+    }
     
     return(
         <MainContext.Provider
@@ -61,7 +66,9 @@ export default function MainProvider({children}){
                 chooseModalRegister, 
                 modalRegister, 
                 blockNumber, 
-                getAtualBlockNumber
+                getAtualBlockNumber,
+                menuOpen,
+                toggleMenu
             }}
         >
             {children}

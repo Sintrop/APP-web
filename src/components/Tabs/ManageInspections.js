@@ -181,7 +181,7 @@ export default function ManageInpections({walletAddress, setTab}){
                         </table>
                 
                 )}
-           
+            
             <Dialog.Root 
                 open={modalTransaction} 
                 onOpenChange={(open) => {

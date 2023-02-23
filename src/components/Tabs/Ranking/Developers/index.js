@@ -29,7 +29,7 @@ export default function DevelopersRanking({ wallet, setTab }) {
     <>
       <div className='header-isa'>
         <h1>Developers</h1>          
-      </div>
+      </div> 
       <table border="1">
         <tr>
           <th>#</th>

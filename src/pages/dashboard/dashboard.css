@@ -1,5 +1,6 @@
 .container-dashboard{
     display: flex;
+    flex-direction: column;
 }
 
 .content-dashboard{
@@ -7,5 +8,4 @@
     flex-direction: column;
     width: 100%;
     padding: 0 15px;
-    overflow: auto;
 }

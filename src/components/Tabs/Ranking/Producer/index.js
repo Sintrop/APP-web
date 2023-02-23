@@ -31,7 +31,7 @@ export default function ProducerRanking({ wallet, setTab }) {
     <>
       <div className='header-isa'>
         <h1>Producers</h1>          
-      </div>
+      </div>  
       <table border="1">
         <tr>
           <th>#</th>

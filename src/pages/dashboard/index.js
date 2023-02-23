@@ -3,12 +3,14 @@ import {useParams, useNavigate} from 'react-router-dom';
 import './dashboard.css';
 import { MainContext } from '../../contexts/main';
 import * as Dialog from '@radix-ui/react-dialog';
+import { useNetwork } from '../../hooks/useNetwork';
 
 //Components
 import Menu from '../../components/Menu';
 import HeaderAccount from '../../components/HeaderAccount';
 import TabIndicator from '../../components/TabIndicator';
 import ManageInspections from '../../components/Tabs/ManageInspections';
+import { UnsupportedNetwork } from '../../components/UnsupportedNetwork';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -41,7 +43,8 @@ import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 import ModalRegister from '../../components/ModalRegister';
 
 export default function Dashboard(){
-    const {checkUser, walletConnected, modalRegister, chooseModalRegister} = useContext(MainContext);
+    const {isSupported} = useNetwork();
+    const {checkUser, walletConnected, modalRegister, chooseModalRegister, menuOpen} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -83,8 +86,14 @@ export default function Dashboard(){
         check();
     }, []);
 
+    if(!isSupported){
+        return(
+            <UnsupportedNetwork/>
+        )
+    }
+
     return(
-        <div className='container-dashboard'>
+        <div style={{display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh'}}>
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
@@ -95,6 +104,7 @@ export default function Dashboard(){
                     }
                 }}
             />
+        <div className='container-dashboard' style={{marginLeft: menuOpen ? '300px' : '80px', width: menuOpen ? '77vw' : '91vw'}}>
 
             <div className='content-dashboard'>
                 <HeaderAccount wallet={walletAddress}/>
@@ -356,6 +366,7 @@ export default function Dashboard(){
             >
                 <ModalRegister/>
             </Dialog.Root>
+        </div>
         </div>
     )
 }
