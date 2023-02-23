@@ -93,7 +93,6 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div style={{overflow: 'scroll', height: '70vh'}}>
             <div className="area-certificates">
                 <div className="container__certificate-container-short">
                     <img src={Logo} className='img-logo-certificate'/>
@@ -157,7 +156,6 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         )
                     }
                 })}            
-            </div>
             </div>
 
             {loading && (

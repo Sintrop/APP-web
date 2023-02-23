@@ -44,7 +44,7 @@ import ModalRegister from '../../components/ModalRegister';
 
 export default function Dashboard(){
     const {isSupported} = useNetwork();
-    const {checkUser, walletConnected, modalRegister, chooseModalRegister} = useContext(MainContext);
+    const {checkUser, walletConnected, modalRegister, chooseModalRegister, menuOpen} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -93,7 +93,7 @@ export default function Dashboard(){
     }
 
     return(
-        <div className='container-dashboard'>
+        <div style={{display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh'}}>
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
@@ -104,6 +104,7 @@ export default function Dashboard(){
                     }
                 }}
             />
+        <div className='container-dashboard' style={{marginLeft: menuOpen ? '300px' : '80px', width: menuOpen ? '77vw' : '91vw'}}>
 
             <div className='content-dashboard'>
                 <HeaderAccount wallet={walletAddress}/>
@@ -365,6 +366,7 @@ export default function Dashboard(){
             >
                 <ModalRegister/>
             </Dialog.Root>
+        </div>
         </div>
     )
 }

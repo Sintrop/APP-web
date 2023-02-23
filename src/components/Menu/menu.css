@@ -4,6 +4,7 @@
     height: 100vh;
     overflow: auto;
     scrollbar-width: none;
+    position: fixed;
 }
 
 .img-logo{
@@ -48,7 +49,6 @@
 .subItem {
     display: flex;
     padding: 0 0 0 10px;
-    justify-content: space-between;
     color: green;
     margin-left: 10px;
     height: 35px;

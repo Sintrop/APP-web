@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./menu.css";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from 'react-icons/bs';
-
+import { MainContext } from "../../contexts/main";
 import Logo from "../../assets/img/262543420-sintrop-logo-com-degrade.png";
 import LogoSimple from '../../assets/img/logo-simple.png'
 import IconISA from "../../assets/img/263926603-6.png";
@@ -16,10 +16,10 @@ import IconPools from "../../assets/img/263926606-7.png";
 import ItemsList from "./itemsList";
 
 export default function Menu({ changeTab }) {
+    const {menuOpen, toggleMenu} = useContext(MainContext);
     const [open, setOpen] = useState(false);
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(true);
     const [itemsMenu, setItemsMenu] = useState([
         {
         id: "rankings",
@@ -112,7 +112,19 @@ export default function Menu({ changeTab }) {
                     toggle={(id) => {
                         toggleSubItem(id)
                         if(!menuOpen){
-                            setMenuOpen(true)
+                            toggleMenu()
+                        }
+                        if(id === 'certificates'){
+                            setOpenPools(false);
+                            setOpen(false);
+                        }
+                        if(id === 'rankings'){
+                            setOpenPools(false);
+                            setOpenCertificates(false);
+                        }
+                        if(id === 'pools'){
+                            setOpen(false);
+                            setOpenCertificates(false);
                         }
                     }}
                     menuOpen={menuOpen}
@@ -122,7 +134,7 @@ export default function Menu({ changeTab }) {
 
             <button
                 onClick={() => {
-                    setMenuOpen(!menuOpen)
+                    toggleMenu()
                     if(menuOpen){
                         setOpen(false);
                         setOpenCertificates(false);

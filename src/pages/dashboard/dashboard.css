@@ -1,5 +1,6 @@
 .container-dashboard{
     display: flex;
+    flex-direction: column;
 }
 
 .content-dashboard{

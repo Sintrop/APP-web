@@ -35,7 +35,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                         onClick={() => changeTab(item.id)} 
                     > 
                         <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
-                        <div className={`${tabActive === item.id && 'border-right-green'}`} /> 
+                         
                     </div>
                 ))
             )}
@@ -71,7 +71,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                         onClick={() => changeTab(item.id)} 
                     > 
                         <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
-                        <div className={`${tabActive === item.id && 'border-right-green'}`} />
+                        
                     </div>
                 ))
             )}
@@ -107,7 +107,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
                         onClick={() => changeTab(item.id)} 
                     > 
                         <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
-                        <div className={`${tabActive === item.id && 'border-right-green'}`} /> 
+                         
                     </div>
                 ))
             )}
@@ -116,7 +116,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
     }
     return(
         <div 
-            className={`container-item-list ${tabActive === data.id && 'border-right-green'}`} 
+            className='container-item-list' 
             onClick={() => changeTab(id)}
             style={{backgroundColor: tabActive === data.id && '#ddd',}}
         >

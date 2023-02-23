@@ -29,8 +29,7 @@ export default function DevelopersRanking({ wallet, setTab }) {
     <>
       <div className='header-isa'>
         <h1>Developers</h1>          
-      </div>
-      <div style={{overflowY: 'auto', display: 'flex', flexDirection: 'column', height: '70vh'}}>   
+      </div> 
       <table border="1">
         <tr>
           <th>#</th>
@@ -56,7 +55,6 @@ export default function DevelopersRanking({ wallet, setTab }) {
           </tr>
         ))}
       </table>
-      </div>
     </>
   );
 }
