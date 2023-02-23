@@ -29,6 +29,7 @@ export default function ContributorsRanking({ wallet, setTab }) {
       <div className='header-isa'>
         <h1>Contributors</h1>          
       </div>
+      <div style={{overflowY: 'scroll', display: 'flex', flexDirection: 'column', height: '70vh'}}>   
       <table border="1">
         <tr>
           <th>#</th>
@@ -54,6 +55,7 @@ export default function ContributorsRanking({ wallet, setTab }) {
           </tr>
         ))}
       </table>
+      </div>
     </>
   );
 }

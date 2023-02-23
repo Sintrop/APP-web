@@ -53,7 +53,8 @@ export default function ISA({user, walletAddress, setTab}){
                     </button>
                 </div>
             </div>
-
+            
+            <div style={{overflowY: 'scroll', display: 'flex', flexDirection: 'column', height: '70vh'}}>
             {categories.length === 0 ? (
                 <h1>No category registered</h1>
             ) : (                
@@ -81,6 +82,7 @@ export default function ISA({user, walletAddress, setTab}){
                     </tbody>
                 </table>                
             )}
+            </div>
            
             {isCreateCategory && (
                 <CreateCategory 

@@ -3,7 +3,7 @@ import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
 import SintropContractJson from '../data/contracts/abis/Sintrop.json';
 import UserContractJson from '../data/contracts/abis/UserContract.json';
 
-const provider = 'https://goerli.infura.io/v3/e46d8ac23f55416a9c93c0efa005450a'
+const provider = `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`
 const web3 = new Web3(window.ethereum);
 
 //contract address

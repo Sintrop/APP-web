@@ -132,9 +132,9 @@ export default function Menu({ changeTab }) {
                 className='menu__btn-change-open'
             >
                 {menuOpen ? (
-                    <BsChevronDoubleLeft color='green' size={25}/>
+                    <BsChevronDoubleLeft color='green' size={20}/>
                 ) : (
-                    <BsChevronDoubleRight color='green' size={25}/>
+                    <BsChevronDoubleRight color='green' size={20}/>
                 )}
             </button>
         </div>

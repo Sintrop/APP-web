@@ -29,6 +29,7 @@ export default function InvestorRanking({ wallet, setTab }) {
     <div className='header-isa'>
         <h1>Investors</h1>          
       </div>
+      <div style={{overflowY: 'scroll', display: 'flex', flexDirection: 'column', height: '70vh'}}>   
       <table border="1">
         <tr>
           <th>#</th>
@@ -50,6 +51,7 @@ export default function InvestorRanking({ wallet, setTab }) {
           </tr>
         ))}
       </table>
+      </div>
     </>
   );
 }
