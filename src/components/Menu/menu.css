@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 100vh;
     overflow: auto;
+    scrollbar-width: none;
 }
 
 .img-logo{
@@ -25,6 +26,7 @@
     padding: 10px 15px;
     align-items: center;
     transition: 0.3s all;
+    justify-content: space-between;
 }
 
 .container-item-list:hover{
@@ -44,9 +46,12 @@
 }
 
 .subItem {
+    display: flex;
+    padding: 0 0 0 10px;
+    justify-content: space-between;
     color: green;
     margin-left: 10px;
-    padding: 5px;
+    height: 35px;
     cursor: pointer;
 }
 
@@ -68,4 +73,8 @@
 
 .menu__btn-change-open:hover{
     background-color: #ddd
+}
+
+.border-right-green{
+    border-right: 5px solid green;
 }

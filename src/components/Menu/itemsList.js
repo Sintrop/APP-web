@@ -1,20 +1,43 @@
 import React, { useState } from 'react';
 import './menu.css';
+import {useParams} from 'react-router-dom';
+import {BsChevronDown, BsChevronUp} from 'react-icons/bs';
 
 export default function ItemsList({data, changeTab, toggle,  open, openPools, openCertificates, menuOpen}){
+    const {tabActive} = useParams();
     const {id, title, icon, action, subItem} = data;
 
     if(subItem && data.id === 'rankings') {
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' alt={title} title={title} src={icon}/>
-                {menuOpen && (
-                    <p>{title}</p>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <img className='icon-list' alt={title} title={title} src={icon}/>
+                    {menuOpen && (
+                        <p>{title}</p>
+                    )}
+                </div>
+                {open ? (
+                    <BsChevronUp size={15} color='green'/>
+                ) : (
+                    <BsChevronDown size={15} color='green' style={{marginLeft: 10}}/>
                 )}
             </div>
             { subItem && (
-                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${open ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (
+                    <div 
+                        key={item.id} 
+                        className='subItem' 
+                        style={{ 
+                            display: `${open ? '' : 'none'}`,
+                            backgroundColor: tabActive === item.id && '#ddd'
+                        }}  
+                        onClick={() => changeTab(item.id)} 
+                    > 
+                        <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
+                        <div className={`${tabActive === item.id && 'border-right-green'}`} /> 
+                    </div>
+                ))
             )}
         </>
         )
@@ -24,13 +47,33 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' alt={title} title={title} src={icon}/>
-                {menuOpen && (
-                    <p>{title}</p>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <img className='icon-list' alt={title} title={title} src={icon}/>
+                    {menuOpen && (
+                        <p>{title}</p>
+                    )}
+                </div>
+                {openPools ? (
+                    <BsChevronUp size={15} color='green'/>
+                ) : (
+                    <BsChevronDown size={15} color='green' style={{marginLeft: 10}}/>
                 )}
             </div>
             { subItem && (
-                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openPools ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (
+                    <div 
+                        key={item.id} 
+                        className='subItem' 
+                        style={{ 
+                            display: `${openPools ? '' : 'none'}`,
+                            backgroundColor: tabActive === item.id && '#ddd'
+                        }}  
+                        onClick={() => changeTab(item.id)} 
+                    > 
+                        <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
+                        <div className={`${tabActive === item.id && 'border-right-green'}`} />
+                    </div>
+                ))
             )}
         </>
         )
@@ -40,23 +83,50 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' alt={title} title={title} src={icon}/>
-                {menuOpen && (
-                    <p>{title}</p>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <img className='icon-list' alt={title} title={title} src={icon}/>
+                    {menuOpen && (
+                        <p>{title}</p>
+                    )}
+                </div>
+                {openCertificates ? (
+                    <BsChevronUp size={15} color='green'/>
+                ) : (
+                    <BsChevronDown size={15} color='green' style={{marginLeft: 10}}/>
                 )}
             </div>
             { subItem && (
-                subItem.map(item => (<div key={item.id} className='subItem' style={{ display: `${openCertificates ? '' : 'none'}`}}  onClick={() => changeTab(item.id)} > {item.label} </div>))
+                subItem.map(item => (
+                    <div 
+                        key={item.id} 
+                        className='subItem' 
+                        style={{ 
+                            display: `${openCertificates ? '' : 'none'}`, 
+                            backgroundColor: tabActive === item.id && '#ddd'
+                        }}  
+                        onClick={() => changeTab(item.id)} 
+                    > 
+                        <p style={{margin: 0, marginTop: 5}}>{item.label}</p>
+                        <div className={`${tabActive === item.id && 'border-right-green'}`} /> 
+                    </div>
+                ))
             )}
         </>
         )
     }
     return(
-        <div className='container-item-list' onClick={() => changeTab(id)}>
-            <img className='icon-list' alt={title} title={title} src={icon}/>
-            {menuOpen && (
-                <p>{title}</p>
-            )}
+        <div 
+            className={`container-item-list ${tabActive === data.id && 'border-right-green'}`} 
+            onClick={() => changeTab(id)}
+            style={{backgroundColor: tabActive === data.id && '#ddd',}}
+        >
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                <img className='icon-list' alt={title} title={title} src={icon}/>
+                {menuOpen && (
+                    <p>{title}</p>
+                )}
+            </div>
+            <div/>
         </div>
     )
 }

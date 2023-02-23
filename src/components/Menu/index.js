@@ -109,14 +109,26 @@ export default function Menu({ changeTab }) {
                     openCertificates={openCertificates}
                     openPools={openPools}
                     open={open}
-                    toggle={(id) => toggleSubItem(id)}
+                    toggle={(id) => {
+                        toggleSubItem(id)
+                        if(!menuOpen){
+                            setMenuOpen(true)
+                        }
+                    }}
                     menuOpen={menuOpen}
                 />
                 );
             })}
 
             <button
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => {
+                    setMenuOpen(!menuOpen)
+                    if(menuOpen){
+                        setOpen(false);
+                        setOpenCertificates(false);
+                        setOpenPools(false)
+                    }
+                }}
                 className='menu__btn-change-open'
             >
                 {menuOpen ? (
