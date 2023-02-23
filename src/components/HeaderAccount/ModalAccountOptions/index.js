@@ -13,32 +13,30 @@ export function ModalAccountOptions({user, walletConnected, close}){
     return(
         <Dialog.Portal className='modal-account-options__portal'>
             <Dialog.Overlay className='modal-account-options__overlay'/>
-            <Dialog.Content className='modal-account-options__content'>
-                <button 
+            <Dialog.Content className='modal-account-options__content' style={{height: user === '0' && '80px'}}>
+                {user === '0' && (
+                    <button 
+                        onClick={() => {
+                            close();
+                            chooseModalRegister();
+                        }}
+                        className='modal-account-options__option-container'
+                    >
+                        <BsPersonPlus color='#000' size={25}/>
+                        <p className='modal-account-options__option-container-label'>Register</p>
+                    </button>
+                )}
+
+                <button
                     onClick={() => {
-                        if(user === '0'){
-                            close();
-                            chooseModalRegister()
-                        }else{
-                            close();
-                            navigate('/');
-                        }
+                        close();
+                        navigate('/');
                     }}
                     className='modal-account-options__option-container'
                 >
-                    {user === '0' ? (
-                        <>
-                            <BsPersonPlus color='#000' size={25}/>
-                            <p className='modal-account-options__option-container-label'>Register</p>
-                        </>
-                    ) : (
-                        <>
-                            <BiLogOut color='#000' size={25}/>
-                            <p className='modal-account-options__option-container-label'>Logout</p>
-                        </>
-                    )}
+                    <BiLogOut color='#000' size={25}/>
+                    <p className='modal-account-options__option-container-label'>Logout</p>
                 </button>
-                
             </Dialog.Content>
         </Dialog.Portal>
     )

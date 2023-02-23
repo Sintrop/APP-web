@@ -19,7 +19,7 @@ export default function Menu({ changeTab }) {
     const [open, setOpen] = useState(false);
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(true);
     const [itemsMenu, setItemsMenu] = useState([
         {
         id: "rankings",
