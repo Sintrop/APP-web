@@ -48,7 +48,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                     </button>
                 </div>
             </div>
-            <div style={{overflowY: 'scroll', display: 'flex', flexDirection: 'column', height: '70vh'}}>       
+            <div style={{overflowY: 'auto', display: 'flex', flexDirection: 'column', height: '70vh'}}>       
                 {inspections.length === 0 ? (
                     <h3>No open inspection</h3>
                 ) : (

@@ -30,7 +30,7 @@ export default function ResearchersRanking({ wallet, setTab }) {
     <div className='header-isa'>
         <h1>Researchers</h1>          
       </div>
-      <div style={{overflowY: 'scroll', display: 'flex', flexDirection: 'column', height: '70vh'}}>   
+      <div style={{overflowY: 'auto', display: 'flex', flexDirection: 'column', height: '70vh'}}>   
       <table border="1">
         <tr>
           <th>#</th>
