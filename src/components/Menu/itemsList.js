@@ -8,7 +8,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' src={icon}/>
+                <img className='icon-list' alt={title} title={title} src={icon}/>
                 {menuOpen && (
                     <p>{title}</p>
                 )}
@@ -24,7 +24,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' src={icon}/>
+                <img className='icon-list' alt={title} title={title} src={icon}/>
                 {menuOpen && (
                     <p>{title}</p>
                 )}
@@ -40,7 +40,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         return (
         <>
             <div className='container-item-list' onClick={() => toggle(data.id)}>
-                <img className='icon-list' src={icon}/>
+                <img className='icon-list' alt={title} title={title} src={icon}/>
                 {menuOpen && (
                     <p>{title}</p>
                 )}
@@ -53,7 +53,7 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
     }
     return(
         <div className='container-item-list' onClick={() => changeTab(id)}>
-            <img className='icon-list' src={icon}/>
+            <img className='icon-list' alt={title} title={title} src={icon}/>
             {menuOpen && (
                 <p>{title}</p>
             )}

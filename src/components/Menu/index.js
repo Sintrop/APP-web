@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./menu.css";
+import {BsChevronDoubleLeft, BsChevronDoubleRight} from 'react-icons/bs';
 
 import Logo from "../../assets/img/262543420-sintrop-logo-com-degrade.png";
-import LogoSimple from '../../assets/img/icone.png'
+import LogoSimple from '../../assets/img/logo-simple.png'
 import IconISA from "../../assets/img/263926603-6.png";
 import IconInspections from "../../assets/img/263926582-4.png";
 import IconAcceptedInspection from "../../assets/img/263926589-5.png";
@@ -113,6 +114,17 @@ export default function Menu({ changeTab }) {
                 />
                 );
             })}
+
+            <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className='menu__btn-change-open'
+            >
+                {menuOpen ? (
+                    <BsChevronDoubleLeft color='green' size={25}/>
+                ) : (
+                    <BsChevronDoubleRight color='green' size={25}/>
+                )}
+            </button>
         </div>
     );
 }
