@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 //import './developersPool.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
-
+import { useTranslation } from 'react-i18next';
 //services
 import {
     GetTokensPerEra, 
@@ -17,6 +17,7 @@ import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 
 export default function ProducersPool({user, wallet, setTab}){
+    const {t} = useTranslation();
     const producerService = new ProducerService(wallet);
     const [loading, setLoading] = useState(false);
     const [balanceContract, setBalanceContract] = useState('0');
@@ -142,23 +143,23 @@ export default function ProducersPool({user, wallet, setTab}){
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Producers distribution pool</h1>
+                <h1>{t('Producers Distribution Pool')}</h1>
                 <div className='area-btn-header-isa-page'></div>
             </div>
             {user === '1' && (
                 <div className='area-stats-developer'>
                     <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>Your Status</h1>
+                        <h1 className='card__title'>{t('Your Status')}</h1>
                         <p className='p'>
-                            Current Era: {producerInfo.pool === undefined ? '0' : producerInfo.pool.currentEra}
+                            {t('Current Era')}: {producerInfo.pool === undefined ? '0' : producerInfo.pool.currentEra}
                         </p>
 
                         <p className='p'>
-                            Next Aprove In: {nextAprove}
+                            {t('Next Aprove In')}: {nextAprove}
                         </p>
                     </div>
                     <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>Balance</h1>
+                        <h1 className='card__title'>{t('Balance')}</h1>
                         <p className='p'>Total: {parseFloat(balanceProducer) / 10**18}</p>
                     </div>
 
@@ -166,7 +167,7 @@ export default function ProducersPool({user, wallet, setTab}){
                         <button 
                             className='btn-new-category-isa'
                             onClick={() => withdraw()}
-                        >Withdraw</button>
+                        >{t('Withdraw')}</button>
                     )}
                     
                 </div>
@@ -174,31 +175,31 @@ export default function ProducersPool({user, wallet, setTab}){
             
             <div className='area-pool'>
                 <div className='stats-developer__card card-pool'>
-                    <h1 className='card__title'>Producers Pool 1.0</h1>
+                    <h1 className='card__title'>{t('Producers Pool')}</h1>
 
-                    <h2 className='card__subtitle'>Contract Balance</h2>
+                    <h2 className='card__subtitle'>{t('Contract Balance')}</h2>
                     <p className='p'>{parseFloat(balanceContract) / 10**18}</p>
 
-                    <h2 className='card__subtitle'>Tokens Per ERA</h2>
+                    <h2 className='card__subtitle'>Tokens {t('Per')} ERA</h2>
                     <p className='p'>{parseFloat(tokensPerEra) / 10**18}</p>
 
-                    <h2 className='card__subtitle'>Current ERA</h2>
+                    <h2 className='card__subtitle'>{t('Current Era')}</h2>
                     <p className='p'>{currentEra}</p>
 
-                    <h2 className='card__subtitle'>Producers total score</h2>
+                    <h2 className='card__subtitle'>{t('Producers Total Score')}</h2>
                     <p className='p'>{scoresProducers}</p>
 
                 </div>
 
                 <div className='stats-developer__card card-developers-list'>
-                    <h1 className='card__title'>Producers List</h1>
+                    <h1 className='card__title'>{t('Producers List')}</h1>
                     <table border="1">
                         <tr>
                         <th>#</th>
-                        <th>Wallet</th>
-                        <th>Name</th>
-                        <th>Balance</th>
-                        <th>Score</th>
+                        <th>{t('Wallet')}</th>
+                        <th>{t('Name')}</th>
+                        <th>{t('Balance')}</th>
+                        <th>{t('Score')}</th>
                         </tr>
                         {producersList.map((item) => (
                             <ProducerItem 

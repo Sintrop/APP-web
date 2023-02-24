@@ -108,7 +108,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
 
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 300}}>
-                    {tokensBurned === '0' ? (
+                    {tokensBurned === 0 ? (
                         <p style={{textAlign: 'center'}}>
                             {t("You haven't contributed to the agroecological transition yet")}
                         </p>
@@ -130,7 +130,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
                         <Dialog.Trigger
                             className="investor-certificate__btn-donate"
-                        >{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</Dialog.Trigger>
+                        >{tokensBurned === 0 ? `${t('Contribute')}` : `${t('Contribute More')}`}</Dialog.Trigger>
                         <ModalContribute 
                             wallet={wallet} 
                             onFinished={() => {
