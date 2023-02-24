@@ -1,0 +1,25 @@
+{
+    "translation":{
+        "Welcome": "Seja bem-vindo",
+        "Our mission is to make agriculture sustainable in the world through technology.": "Nossa missão é tornar a agricultura sustentável no mundo através da tecnologia.",
+        "Click the button above to sync your Metamask wallet": "Clique no botão acima para sicronizar sua carteira Metamask",
+        "Synchronize": "Sincronizar",
+        "We want to make the world a sustainable place where living beings and nature can live in harmony. Our project consists of a decentralized certification of rural producers, with a sustainability token reward system, using blockchain technology and the Ethereum platform.": "Queremos tornar o mundo um lugar sustentável onde seres vivos e natureza possam viver em harmonia. Nosso projeto consiste em uma certificação descentralizada de produtores rurais, com sistema de recompensas de tokens de sustentabilidade, usando tecnologia blockchain e a plataforma Ethereum.",
+        
+        "__menu__": "Translations of menu",
+        "Community": "Comunidade",
+        "Producers": "Produtores",
+        "Activists": "Ativistas",
+        "Advisors": "Conselheiros",
+        "Investors": "Investidores",
+        "Developers": "Desenvolvedores",
+        "Contributors": "Contribuidores",
+        "Researchers": "Pesquisadores",
+        "Sustainable Agriculture Index": "Índice de Sustentabilidade na Agricultura",
+        "Inspections History": "Histórico de Inspeções",
+        "Manage Inspections": "Gerenciar inspeções",
+        "Certificates": "Certificados",
+        "Producer": "Produtor",
+        "Investor": "Investidor"
+    }
+}

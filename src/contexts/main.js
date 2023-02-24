@@ -12,6 +12,7 @@ export default function MainProvider({children}){
     const [blockNumber, setBlockNumber] = useState(0);
     const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
     const [menuOpen, setMenuOpen] = useState(true);
+    const [language, setLanguage] = useState('en-us');
 
     useEffect(() => {
         getAtualBlockNumber()
@@ -55,6 +56,10 @@ export default function MainProvider({children}){
     function toggleMenu(){
         setMenuOpen(!menuOpen);
     }
+
+    function chooseLanguage(lang){
+        setLanguage(lang);
+    }
     
     return(
         <MainContext.Provider
@@ -68,7 +73,9 @@ export default function MainProvider({children}){
                 blockNumber, 
                 getAtualBlockNumber,
                 menuOpen,
-                toggleMenu
+                toggleMenu,
+                language,
+                chooseLanguage
             }}
         >
             {children}
