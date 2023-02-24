@@ -5,8 +5,10 @@ import {BiLogOut} from 'react-icons/bi';
 import {BsPersonPlus} from 'react-icons/bs';
 import { useNavigate } from 'react-router';
 import { MainContext } from '../../../contexts/main';
+import { useTranslation } from 'react-i18next';
 
 export function ModalAccountOptions({user, walletConnected, close}){
+    const {t} = useTranslation();
     const {chooseModalRegister} = useContext(MainContext)
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ export function ModalAccountOptions({user, walletConnected, close}){
                         className='modal-account-options__option-container'
                     >
                         <BsPersonPlus color='#000' size={25}/>
-                        <p className='modal-account-options__option-container-label'>Register</p>
+                        <p className='modal-account-options__option-container-label'>{t('Register')}</p>
                     </button>
                 )}
 
@@ -35,7 +37,7 @@ export function ModalAccountOptions({user, walletConnected, close}){
                     className='modal-account-options__option-container'
                 >
                     <BiLogOut color='#000' size={25}/>
-                    <p className='modal-account-options__option-container-label'>Logout</p>
+                    <p className='modal-account-options__option-container-label'>{t('Logout')}</p>
                 </button>
             </Dialog.Content>
         </Dialog.Portal>

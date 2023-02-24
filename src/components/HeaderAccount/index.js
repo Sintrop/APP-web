@@ -7,8 +7,10 @@ import { MainContext } from '../../contexts/main';
 import {GetTokensBalance} from '../../services/voteService';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './ModalAccountOptions';
+import { useTranslation } from 'react-i18next';
 
 export default function HeaderAccount({wallet}){
+    const {t} = useTranslation();
     const {user, walletConnected} = useContext(MainContext);
     const [visibilityBalance, setVisibilityBalance] = useState(false);
     const [balanceUser, setBalanceUser] = useState(0);
@@ -31,12 +33,12 @@ export default function HeaderAccount({wallet}){
     
     return(
         <div className='container-header-account'>
-            <p>ACCOUNT: {wallet}</p>
+            <p>{t('Account')}: {wallet}</p>
 
             <div className='header-account__area-right'>
                 
                     <div className='header-account__area-balance'>
-                        <h1 className='header-account__title-balance'>Balance: </h1>
+                        <h1 className='header-account__title-balance'>{t('Balance')}: </h1>
                         <p className='header-account__balance'>{visibilityBalance ? balanceUser : '******'} SAC Tokens</p>
                         <button 
                             className='header-account__choose-visibility'

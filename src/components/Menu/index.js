@@ -92,7 +92,7 @@ export default function Menu({ changeTab }) {
         }
     };
     return (
-        <div className="container-menu">
+        <div className="container-menu" style={{width: menuOpen ? '300px' : '90px'}}>
             {menuOpen ? (
                 <img className="img-logo" src={Logo} />
             ) : (
