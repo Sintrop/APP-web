@@ -195,7 +195,6 @@ export default function ModalRegister(){
             .catch(err => {
                 setLoadingTransaction(false);
                 const message = String(err.message);
-                console.log(message);
                 if(message.includes("Not allowed user")){
                     setLogTransaction({
                         type: 'error',

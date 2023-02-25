@@ -131,7 +131,7 @@ export default function ManageInpections({walletAddress, setTab}){
                                                 onMouseEnter={() => setBtnRequestHover(true)}
                                                 onMouseOut={() => setBtnRequestHover(false)}
                                             />
-                                            Wait {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
+                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
                                         </>
                                     ) : `${t('Request New Inspection')}`}
                                     </>
