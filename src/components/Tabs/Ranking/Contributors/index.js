@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ContributorsService from "../../../../services/contributorService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function ContributorsRanking({ wallet, setTab }) {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const contributorsService = new ContributorsService(wallet);
   const [activist, setActivist] = useState([]);
@@ -27,13 +29,13 @@ export default function ContributorsRanking({ wallet, setTab }) {
   return (
     <>
       <div className='header-isa'>
-        <h1>Contributors</h1>          
+        <h1>{t('Contributors')}</h1>          
       </div>
       <table border="1">
         <tr>
           <th>#</th>
-          <th>Wallet</th>
-          <th>Name</th>
+          <th>{t('Wallet')}</th>
+          <th>{t('Name')}</th>
          {/* <th>Developer Level</th> */}
         </tr>
         {activist.map((item) => (

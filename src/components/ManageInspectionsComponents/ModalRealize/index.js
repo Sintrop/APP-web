@@ -3,6 +3,7 @@ import '../../IsaPageComponents/CreateCategory/createCategory.css';
 import './modalRealize.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import {ToastContainer, toast} from 'react-toastify';
+import { useTranslation } from "react-i18next";
 
 //components
 import Loading from '../../Loading';
@@ -14,6 +15,7 @@ import {GetCategories} from '../../../services/isaService';
 import {RealizeInspection} from '../../../services/manageInspectionsService';
 
 export default function ModalRealize({close, inspectionID, walletAddress, reloadInspections}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
     const [isas, setIsas] = useState([]);
@@ -39,9 +41,9 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
 
     function validates(){
         if(isas == []){
-            toast.error('Select result options for each category!');
+            toast.error(`${t('Select result options for each category')}!`);
         }else if(isas.length != categories.length){
-            toast.error('Select result options for each category!');
+            toast.error(`${t('Select result options for each category')}!`);
         }else{
             finishInspection();
         }
@@ -164,13 +166,13 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
             <Dialog.Overlay className='modal-realize__overlay'/>
             <Dialog.Content className='modal-realize__content'>
                 <Dialog.Title className='modal-realize__title'>
-                    Realize inspection
+                    {t('Realize Inspection')}
                 </Dialog.Title>
                 
                 <div style={{overflow: 'auto'}}>
                     {step === 1 && (
                         <div className='modal-register__container-content'>
-                            <h1 className='modal-register__title'>Proof Photo</h1>
+                            <h1 className='modal-register__title'>{t('Proof Photo')}</h1>
 
                             {proofPhoto != '' && (
                                 <img
@@ -187,7 +189,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                                     }, 1000)
                                 }}
                             >
-                                Take photo
+                                {t('Take Photo')}
                             </button>
                         </div>
                     )}
@@ -388,7 +390,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                 </div>
 
                 <div className="modal-realize__area-btn">
-                    <button onClick={handlePreviousStep}>Previous</button>
+                    <button onClick={handlePreviousStep}>{t('Previous')}</button>
                     <button 
                         onClick={() => {
                             if(step === categories.length + 1){
@@ -398,7 +400,7 @@ export default function ModalRealize({close, inspectionID, walletAddress, reload
                             }
                         }}
                     >
-                        {step === categories.length + 1 ? 'Finish Inspection' : 'Next Step'}
+                        {step === categories.length + 1 ? `${t('Finish Inspection')}` : `${t('Next Step')}`}
                     </button>
                 </div>
 

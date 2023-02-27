@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import './itemCategoryResult.css';
+import { useTranslation } from 'react-i18next';
 
 //services
 import {GetCategories} from '../../../services/isaService';
 import { get } from '../../../config/infura'
 export default function ItemCategoryResult({data, isas}){
+    const {t} = useTranslation();
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
@@ -56,13 +58,13 @@ export default function ItemCategoryResult({data, isas}){
         <div className='item-category__container'>
             <div>
                 <h3 className='title_category_result'>{category}</h3>
-                <p className='labels'>Category Description</p>
+                <p className='labels'>{t('Category Description')}</p>
                 <p className='title_descriptions'>{description}</p>
 
-                <p className='labels'>Result of Inspection</p>
+                <p className='labels'>{t('Result of Inspection')}</p>
                 <p className='title_descriptions'>{result}</p>
 
-                <p className='labels'>Report</p>
+                <p className='labels'>{t('Report')}</p>
                 <p className='title_descriptions'>{data.report}</p>
             </div>
             <div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>

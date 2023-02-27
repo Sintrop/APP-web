@@ -11,8 +11,10 @@ import axios from 'axios';
 import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 export default function ModalRegister(){
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {walletConnected, chooseModalRegister} = useContext(MainContext);
     const {walletAddress, walletSelected} = useParams();
@@ -66,7 +68,7 @@ export default function ModalRegister(){
         try{
             const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
             if(response.data.erro === true){
-                toast.error('No address found with that zip code!');
+                toast.error(`${t('No address found with that zip code')}!`);
                 setState('');
                 setCity('');
                 setStreet('');
@@ -128,50 +130,50 @@ export default function ModalRegister(){
 
     function validateData(){
         if(!name.trim()) {
-            toast.error('Fill in the name field!');
+            toast.error(`${t('Fill in the name field')}!`);
             return;
         }
 
         if(type === 'producer'){
             if(documetType === ''){
-                toast.error('Select document type!');
+                toast.error(`${t('Select document type')}!`);
                 return;
             }
 
             if(!documetNumber.trim()){
-                toast.error('Fill in the document field!');
+                toast.error(`${t('Fill in the document field')}!`);
                 return;
             }
 
             if(state === '' || !cep.trim()){
-                toast.error('Enter a valid zip code!');
+                toast.error(`${t('Enter a valid zip code')}!`);
                 return;
             }
 
             if(!street.trim()){
-                toast.error('Fill in the street field!');
+                toast.error(`${t('Fill in the street field')}!`);
                 return;
             }
 
             if(!complement.trim()){
-                toast.error('Fill in the complement field!');
+                toast.error(`${t('Fill in the complement field')}!`);
                 return;
             }
         }
 
         if(type === 'activist'){
             if(state === '' || !cep.trim()){
-                toast.error('Enter a valid zip code!');
+                toast.error(`${t('Enter a valid zip code')}!`);
                 return;
             }
 
             if(!street.trim()){
-                toast.error('Fill in the street field!');
+                toast.error(`${t('Fill in the street field')}!`);
                 return;
             }
 
             if(!complement.trim()){
-                toast.error('Fill in the complement field!');
+                toast.error(`${t('Fill in the complement field')}!`);
                 return;
             }
         }
@@ -517,7 +519,7 @@ export default function ModalRegister(){
             <Dialog.Content className='modal-register__content'>
                 {step === 1 ? (
                     <Dialog.Title className='modal-register__title'>
-                        Register
+                        {t('Register')}
                     </Dialog.Title>
                 ) : (
                     <div/>
@@ -525,27 +527,27 @@ export default function ModalRegister(){
 
                 {step === 1 && (
                     <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>Do you want to register as one?</h1>
+                        <h1 className='modal-register__title'>{t('Do you want to register as one')}?</h1>
                         
                         <select
                             defaultValue={type}
                             onChange={(e) => setType(e.target.value)}
                         >
-                            <option selected value="">Select the type of user you want to register</option>
-                            <option value="producer">PRODUCER</option>
-                            <option value="activist">ACTIVIST</option>
-                            <option value="contributor">CONTRIBUTOR</option>
-                            <option value="investor">INVESTOR</option>
-                            <option value="developer">DEVELOPER</option>
-                            <option value="researcher">RESEARCHER</option>
-                            <option value="advisor">ADVISOR</option>
+                            <option selected value="">{t('Select the type of user you want to register')}</option>
+                            <option value="producer">{t('Producer')}</option>
+                            <option value="activist">{t('Activist')}</option>
+                            <option value="contributor">{t('Contributor')}</option>
+                            <option value="investor">{t('Investor')}</option>
+                            <option value="developer">{t('Developer')}</option>
+                            <option value="researcher">{t('Researcher')}</option>
+                            <option value="advisor">{t('Advisor')}</option>
                         </select>
                     </div>
                 )}
 
                 {step === 2 && (
                     <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo.</h1>
+                        <h1 className='modal-register__title'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
 
                         {proofPhoto != '' && (
                             <img
@@ -562,7 +564,7 @@ export default function ModalRegister(){
                                 }, 1000)
                             }}
                         >
-                            Take photo
+                            {t('Take Photo')}
                         </button>
                     </div>
                 )}
@@ -570,13 +572,13 @@ export default function ModalRegister(){
                 {step === 3 && (
                     <div className='modal-register__container-content'>
                         <h1 className='modal-register__title'>
-                            Now provide your details.
-                            {type === 'producer' && ' Make sure that in address is correct, it can not be changed in the future.'}
+                            {t('Now provide your details')}.
+                            {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1>
 
                         <div style={{width: '400px'}}>
                             <div style={{display: 'flex', flexDirection: 'column'}}>
-                                <label style={{fontWeight: 'bold', color: 'green'}}>Your name</label>
+                                <label style={{fontWeight: 'bold', color: 'green'}}>{t('Your Name')}</label>
                                 <input
                                     placeholder='Type here'
                                     type="text"
@@ -591,7 +593,7 @@ export default function ModalRegister(){
                             <>
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="documetType" style={{fontWeight: 'bold', color: 'green'}}>Document Type</label>
+                                        <label htmlFor="documetType" style={{fontWeight: 'bold', color: 'green'}}>{t('Document Type')}</label>
                                         <select 
                                             value={documetType}
                                             onChange={(e) => setDocumentType(e.target.value)}
@@ -604,7 +606,7 @@ export default function ModalRegister(){
                                     </div>
                                 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="documetNumber" style={{fontWeight: 'bold', color: 'green'}}>Document Number</label>
+                                        <label htmlFor="documetNumber" style={{fontWeight: 'bold', color: 'green'}}>{t('Document Number')}</label>
                                         <InputMask
                                             type="text"
                                             mask={formatDocument.current}
@@ -619,7 +621,7 @@ export default function ModalRegister(){
 
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>CEP</label>
+                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>{t('ZIP Code')}</label>
                                         <InputMask
                                             placeholder='Type here'
                                             type="text"
@@ -641,7 +643,7 @@ export default function ModalRegister(){
 
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>Street</label>
+                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>{t('Street')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="street"
@@ -653,7 +655,7 @@ export default function ModalRegister(){
                                     </div>
 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>Complement</label>
+                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>{t('Complement')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="complement"
@@ -671,7 +673,7 @@ export default function ModalRegister(){
                             <>
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>CEP</label>
+                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>{t('ZIP Code')}</label>
                                         <InputMask
                                             placeholder='Type here'
                                             type="text"
@@ -693,7 +695,7 @@ export default function ModalRegister(){
 
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>Street</label>
+                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>{t('Street')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="street"
@@ -705,7 +707,7 @@ export default function ModalRegister(){
                                     </div>
 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>Complement</label>
+                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>{t('Complement')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="complement"
@@ -725,13 +727,13 @@ export default function ModalRegister(){
 
                 <div className='modal-register__area-btn'>
                     <Dialog.Close>
-                        Continue without register
+                        {t('Continue Without Register')}
                     </Dialog.Close>
                     {step > 1 && (
                         <button 
                             onClick={handlePreviousStep}
                         >
-                            Previous
+                            {t('Previous')}
                         </button>
                     )}
                     <button 
@@ -743,7 +745,7 @@ export default function ModalRegister(){
                             }
                         }}
                     >
-                        {step === 3 ? 'Register' : 'Next step'}
+                        {step === 3 ? `${t('Register')}` : `${t('Next Step')}`}
                     </button>
                 </div>
 

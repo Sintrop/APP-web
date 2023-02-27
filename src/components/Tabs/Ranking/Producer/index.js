@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ProducerService from "../../../../services/producerService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function ProducerRanking({ wallet, setTab }) {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const producerService = new ProducerService(wallet);
   const [producers, setProducers] = useState([]);
@@ -30,17 +32,17 @@ export default function ProducerRanking({ wallet, setTab }) {
   return (
     <>
       <div className='header-isa'>
-        <h1>Producers</h1>          
+        <h1>{t('Producers')}</h1>          
       </div>  
       <table border="1">
         <tr>
           <th>#</th>
-          <th>Wallet</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Inspections Received</th>
-          <th>Isa score</th>
-          <th>Isa average</th>
+          <th>{t('Wallet')}</th>
+          <th>{t('Name')}</th>
+          <th>{t('Address')}</th>
+          <th>{t('Inspections Received')}</th>
+          <th>{t('ISA Score')}</th>
+          <th>{t('ISA Average')}</th>
         </tr>
         {producers.map(item => (
           <tr key={item.producerWallet}>
