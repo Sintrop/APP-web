@@ -7,12 +7,13 @@ import logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import { MainContext } from "../../contexts/main";
 import { UnsupportedNetwork } from "../../components/UnsupportedNetwork";
 import {useTranslation} from 'react-i18next';
-import { ChooseLang } from "../../components/ChooseLang";
+import { ModalChooseLang } from "../../components/ModalChooseLang";
+import * as Dialog from '@radix-ui/react-dialog';
 
 function Login(){
     const {t} = useTranslation();
     const {isSupported} = useNetwork();
-    const {Sync, chooseLanguage, language} = useContext(MainContext);
+    const {Sync, modalChooseLang, toggleModalChooseLang} = useContext(MainContext);
     const navigate = useNavigate();
 
     async function handleSync(){
@@ -46,11 +47,15 @@ function Login(){
                         {t('Synchronize')}
                     </button>
                     <p style={{margin: 0}}>{t('Click the button above to sync your Metamask wallet')}</p>
-                    <div style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
-                        <ChooseLang/>
-                    </div>
                 </div>
             </div>
+
+            <Dialog.Root
+                open={modalChooseLang}
+                onOpenChange={() => toggleModalChooseLang()}
+            >
+                <ModalChooseLang/>
+            </Dialog.Root>
         </div>
     )
 }

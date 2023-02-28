@@ -15,6 +15,7 @@ export default function MainProvider({children}){
     const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
     const [menuOpen, setMenuOpen] = useState(true);
     const [language, setLanguage] = useState('en-us');
+    const [modalChooseLang, setModalChooseLang] = useState(false);
 
     useEffect(() => {
         getAtualBlockNumber();
@@ -60,6 +61,10 @@ export default function MainProvider({children}){
         setMenuOpen(!menuOpen);
     }
 
+    function toggleModalChooseLang(){
+        setModalChooseLang(!modalChooseLang);
+    }
+
     function chooseLanguage(lang){
         setLanguage(lang);
         setStorageLanguage(lang);
@@ -75,6 +80,8 @@ export default function MainProvider({children}){
         if(lang){
             setLanguage(lang);
             i18n.changeLanguage(lang);
+        }else{
+            setModalChooseLang(true)
         }
     }
     
@@ -92,7 +99,9 @@ export default function MainProvider({children}){
                 menuOpen,
                 toggleMenu,
                 language,
-                chooseLanguage
+                chooseLanguage,
+                modalChooseLang,
+                toggleModalChooseLang
             }}
         >
             {children}
