@@ -18,13 +18,13 @@ export function ChooseLang(){
         >
             {language === 'en-us' && (
                 <img
-                    style={{width: 40, height: 30, objectFit: 'cover'}}
+                    style={{width: 35, height: 25, objectFit: 'cover'}}
                     src={IconBR}
                 />
             )}
             {language === 'pt-BR' && (
                 <img
-                    style={{width: 40, height: 30, objectFit: 'cover'}}
+                    style={{width: 35, height: 25, objectFit: 'cover'}}
                     src={IconUS}
                 />
             )}
