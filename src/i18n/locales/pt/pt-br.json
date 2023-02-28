@@ -5,8 +5,6 @@
         "Click the button above to sync your Metamask wallet": "Clique no botão acima para sicronizar sua carteira Metamask",
         "Synchronize": "Sincronizar",
         "We want to make the world a sustainable place where living beings and nature can live in harmony. Our project consists of a decentralized certification of rural producers, with a sustainability token reward system, using blockchain technology and the Ethereum platform.": "Queremos tornar o mundo um lugar sustentável onde seres vivos e natureza possam viver em harmonia. Nosso projeto consiste em uma certificação descentralizada de produtores rurais, com sistema de recompensas de tokens de sustentabilidade, usando tecnologia blockchain e a plataforma Ethereum.",
-        
-        "__menu__": "Translations of menu",
         "Community": "Comunidade",
         "Producers": "Produtores",
         "Activists": "Ativistas",
@@ -97,8 +95,6 @@
         "Contributor": "Contribuidor",
         "Researches": "Pesquisas",
         "Publish Research": "Publicar Pesquisa",
-
-        "__error-transactions__": "",
         "Your transaction is being processed... Be patient, this transaction can take a few minutes": "Sua transação está sendo processada... Tenha paciência, esta transação pode levar alguns minutos",
         "Transaction error": "Erro na transação",
         "Successful transaction": "Transação bem-sucedida",

@@ -7,11 +7,12 @@ import logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import { MainContext } from "../../contexts/main";
 import { UnsupportedNetwork } from "../../components/UnsupportedNetwork";
 import {useTranslation} from 'react-i18next';
+import { ChooseLang } from "../../components/ChooseLang";
 
 function Login(){
     const {t} = useTranslation();
     const {isSupported} = useNetwork();
-    const {Sync, chooseLanguage} = useContext(MainContext);
+    const {Sync, chooseLanguage, language} = useContext(MainContext);
     const navigate = useNavigate();
 
     async function handleSync(){
@@ -44,7 +45,10 @@ function Login(){
                     <button className="btn-sync-wallet" onClick={handleSync}>
                         {t('Synchronize')}
                     </button>
-                    <p>{t('Click the button above to sync your Metamask wallet')}</p>
+                    <p style={{margin: 0}}>{t('Click the button above to sync your Metamask wallet')}</p>
+                    <div style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
+                        <ChooseLang/>
+                    </div>
                 </div>
             </div>
         </div>

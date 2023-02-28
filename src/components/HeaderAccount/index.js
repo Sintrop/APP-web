@@ -8,6 +8,7 @@ import {GetTokensBalance} from '../../services/voteService';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './ModalAccountOptions';
 import { useTranslation } from 'react-i18next';
+import { ChooseLang } from '../ChooseLang';
 
 export default function HeaderAccount({wallet}){
     const {t} = useTranslation();
@@ -38,6 +39,7 @@ export default function HeaderAccount({wallet}){
             <div className='header-account__area-right'>
                 
                     <div className='header-account__area-balance'>
+                        <ChooseLang/>
                         <h1 className='header-account__title-balance'>{t('Balance')}: </h1>
                         <p className='header-account__balance'>{visibilityBalance ? balanceUser : '******'} SAC Tokens</p>
                         <button 
