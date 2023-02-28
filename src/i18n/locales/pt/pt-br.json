@@ -200,6 +200,11 @@
         "Inspection": "Inspeção",
         "Activist Wallet": "Carteira do Ativista",
         "Producer Wallet": "Carteira do Produtor",
-        "Delations Received": "Denúncias Recebidas"
+        "Delations Received": "Denúncias Recebidas",
+        "Your device does not have a camera, or has been denied permission to access it": "Seu dispositivo não possui câmera, ou foi negada a permissão para acessá-la",
+        "Loading camera": "Carregando câmera",
+        "Capture photo": "Capturar foto",
+        "Take another": "Tirar outra",
+        "Confirm": "Confirmar"
     }
 }
