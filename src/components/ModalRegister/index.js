@@ -12,6 +12,9 @@ import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, add
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import { Map } from '../Map';
+import * as htmlToImage from 'html-to-image';
+import { saveAs } from 'file-saver';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -100,7 +103,7 @@ export default function ModalRegister(){
             setStep(3)
             return;
         }
-        if(step < 3){
+        if(step < 4){
             setStep(step + 1)
         }
     }
@@ -155,10 +158,10 @@ export default function ModalRegister(){
                 return;
             }
 
-            if(!complement.trim()){
-                toast.error(`${t('Fill in the complement field')}!`);
-                return;
-            }
+            // if(!complement.trim()){
+            //     toast.error(`${t('Fill in the complement field')}!`);
+            //     return;
+            // }
         }
 
         if(type === 'activist'){
@@ -513,6 +516,18 @@ export default function ModalRegister(){
         }
     }
 
+    function printMap(){
+        console.log(complement)
+        setLoading(true);
+        var mapviewimg = document.querySelector("#mapview");
+        htmlToImage.toBlob(mapviewimg)
+        .then(async (imgBlob) => {
+            const path = await save(imgBlob);
+            setCountry(path);
+            setLoading(false)
+        })
+    }
+
     return(
         <Dialog.Portal className='modal-register__portal'>
             <Dialog.Overlay className='modal-register__overlay'/>
@@ -725,6 +740,20 @@ export default function ModalRegister(){
                     
                 )}
 
+                {step === 4 && (
+                    <div className='modal-register__container-content'>
+                        <h1 className='modal-register__title'>{t('Mark the center of your property, then circle the entire area')}.</h1>
+                        
+                        <div id='mapview'>
+                            <Map
+                                setCenter={(position) => {setComplement(position)}}
+                                editable={true}
+                                setPolyline={() => printMap()}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div className='modal-register__area-btn'>
                     <Dialog.Close>
                         {t('Continue Without Register')}
@@ -738,14 +767,14 @@ export default function ModalRegister(){
                     )}
                     <button 
                         onClick={() => {
-                            if(step === 3){
+                            if(step === 4){
                                 validateData();
                             }else{
                                 handleNextStep();
                             }
                         }}
                     >
-                        {step === 3 ? `${t('Register')}` : `${t('Next Step')}`}
+                        {step === 4 ? `${t('Register')}` : `${t('Next Step')}`}
                     </button>
                 </div>
 

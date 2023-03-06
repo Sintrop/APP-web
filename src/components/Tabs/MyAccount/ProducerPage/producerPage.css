@@ -25,7 +25,7 @@
 }
 
 .content__producer-page{
-    width: 90%;
+    width: 95%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -34,11 +34,11 @@
 
 .producer-area-info__producer-page{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border: 1px solid #aaa;
     padding: 10px;
     margin-bottom: 15px;
-    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
 }
 

@@ -14,14 +14,18 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
+import { Map } from '../../../Map';
 
 export default function ProducerPage({wallet, setTab}){
+    const [loading, setLoading] = useState(true)
     const {t} = useTranslation();
     const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
+    const [base64Map, setBase64Map] = useState('');
     const {tabActive, walletSelected} = useParams();
+    const [viewMap, setViewMap] = useState(true);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -32,10 +36,12 @@ export default function ProducerPage({wallet, setTab}){
     }, [])
 
     async function getProducer(){
+        setLoading(true)
         const response = await GetProducer(walletSelected);
-        getBase64(response.proofPhoto)
+        getBase64(response)
         setProducerData(response);
         getInspections();
+        setLoading(false)
     }
 
     async function getInspections(){
@@ -44,14 +50,17 @@ export default function ProducerPage({wallet, setTab}){
     }
 
     async function getBase64(data){
-        const res = await get(data);
+        const res = await get(data.proofPhoto);
         setBase64(res);
+        const map64 = await get(data.propertyAddress.country);
+        setBase64Map(map64);
     }
 
     return(
         <div className='container__producer-page'>
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
                     <div className='area-avatar__producer-page'>
                         <img 
                             src={`data:image/png;base64,${base64}`}
@@ -163,6 +172,32 @@ export default function ProducerPage({wallet, setTab}){
                                 </>
                             )}
                             
+                        </div>
+                    )}
+                    </div>
+                    
+                    {!loading && (
+                        <div style={{display: 'flex', flexDirection: 'column', marginLeft: 10, marginTop: 10}}>
+                            {viewMap ? (
+                                <Map
+                                    editable={false}
+                                    position={producerData?.propertyAddress?.complement}
+                                />
+                            ) : (
+                                <img
+                                    style={{width: '450px', height: '400px'}}
+                                    src={`data:image/png;base64,${base64Map}`}
+                                />
+                            )}
+
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <button
+                                    onClick={() => setViewMap(!viewMap)}
+                                >{t('View Map')}</button>
+                                <button
+                                    onClick={() => setViewMap(!viewMap)}
+                                >{t('View Print')}</button>
+                            </div>
                         </div>
                     )}
                 </div>
