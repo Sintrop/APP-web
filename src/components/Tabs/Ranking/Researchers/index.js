@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ResearchersService from "../../../../services/researchersService";
 import "../../Ranking/ranking.css";
 import {useParams, useNavigate} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function ResearchersRanking({ wallet, setTab }) {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const researchersService = new ResearchersService(wallet);
   const [researchers, setResearchers] = useState([]);
@@ -28,14 +30,14 @@ export default function ResearchersRanking({ wallet, setTab }) {
   return (
     <>
     <div className='header-isa'>
-        <h1>Researchers</h1>          
+        <h1>{t('Researchers')}</h1>          
       </div>
       <table border="1">
         <tr>
           <th>#</th>
-          <th>Wallet</th>
-          <th>Name</th>
-          <th>Votes Received</th>
+          <th>{t('Wallet')}</th>
+          <th>{t('Name')}</th>
+          <th>{t('Votes Received')}</th>
         </tr>
         {researchers?.map((item) => (
           <tr key={item.id}>

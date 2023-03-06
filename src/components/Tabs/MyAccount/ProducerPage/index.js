@@ -5,7 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 import {FaLock, FaCheck} from 'react-icons/fa';
 
 //services
@@ -16,6 +16,7 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ProducerPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
@@ -57,7 +58,7 @@ export default function ProducerPage({wallet, setTab}){
                             className='avatar__producer-page'
                         />
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Producer Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page' href={`/account-producer/${producerData.producerWallet}`}>
                                 {producerData === [] ? '' : producerData.producerWallet}
                             </a>
@@ -66,11 +67,11 @@ export default function ProducerPage({wallet, setTab}){
                         <Dialog.Root>
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Producer
+                                    {t('Report')} {t('Producer')}
                                 </button>
                             ) : (
                                 <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Producer
+                                    {t('Report')} {t('Producer')}
                                 </Dialog.Trigger>
                             )}
                             <ModalDelation reportedWallet={wallet}/>
@@ -78,35 +79,35 @@ export default function ProducerPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {producerData === [] ? '' : producerData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {producerData.propertyAddress === undefined ? '' : `${producerData.propertyAddress.city}/${producerData.propertyAddress.state}, ${producerData.propertyAddress.country}`}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Inspections Reiceved: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Inspections Reiceved')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {producerData === [] ? '' : producerData.totalInspections}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Isa Score: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('ISA Score')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {producerData.isa === undefined ? '' : producerData.isa.isaScore}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Isa Average: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('ISA Average')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {producerData?.totalInspections === 0 ? (
                                 <>
@@ -118,7 +119,7 @@ export default function ProducerPage({wallet, setTab}){
                     
                     {user === '1' && (
                         <div className='producer-cards-info__producer-page'>
-                            <h1 className='tit-cards-info__producer-page'>Prox Request: </h1>
+                            <h1 className='tit-cards-info__producer-page'>Prox. Request: </h1>
                             {Number(producerData?.lastRequestAt) === 0 ? (
                                 <div style={{
                                         display: 'flex', 
@@ -129,7 +130,7 @@ export default function ProducerPage({wallet, setTab}){
                                     }}
                                 >
                                     <FaCheck size={15} style={{marginRight: 5}}/>
-                                    Your may request inspection
+                                    {t('You Can Request Inspections')}
                                 </div>
                                 
                             ) : (
@@ -144,7 +145,7 @@ export default function ProducerPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaCheck size={15} style={{marginRight: 5}}/>
-                                        Your may request inspection
+                                        {t('You Can Request Inspections')}
                                     </div>
                                 ) : (
                                     <div style={{
@@ -156,7 +157,7 @@ export default function ProducerPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaLock size={15} style={{marginRight: 5}}/>
-                                        Wait {(Number(producerData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
+                                        {t('Wait')} {(Number(producerData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t("blocks to request")}
                                     </div>
                                 )}
                                 </>

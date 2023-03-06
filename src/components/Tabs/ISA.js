@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './isa.css';
 import {useParams} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
@@ -11,6 +12,7 @@ import Loading from '../Loading';
 import {GetCategories} from '../../services/isaService';
 
 export default function ISA({user, walletAddress, setTab}){
+    const {t} = useTranslation();
     const [categories, setCategories] = useState([]);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -35,36 +37,36 @@ export default function ISA({user, walletAddress, setTab}){
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Sustainable Agriculture Index</h1>
+                <h1>{t('Sustainable Agriculture Index')}</h1>
                 <div className='area-btn-header-isa-page'>
                     {user == 3 && (
                         <button
                             className='btn-new-category-isa'
                             onClick={() => setIsCreateCategory(true)}
                         >
-                            Create New Category
+                            {t('Create New Category')}
                         </button>
                     )}
                     <button
                         className='btn-load-categories-isa'
                         onClick={() => getCategories()}
                     >
-                        Load Categories
+                        {t('Load Categories')}
                     </button>
                 </div>
             </div>
             
             {categories.length === 0 ? (
-                <h1>No category registered</h1>
+                <h1>{t('No category registered')}</h1>
             ) : (                
                 <table>
                     <thead>
-                        <th className='th-info-isa'>Info</th>
-                        <th id='createdByIsaTable'>Created By</th>
-                        <th id='categories-isa-table'>Name</th>
-                        <th className='description-isa-table'>Description</th>
-                        <th id='votes-isa-table'>Number Of Votes</th>
-                        <th id='config-isa-table'>Actions</th>
+                        <th className='th-info-isa'>{t('Info')}</th>
+                        <th id='createdByIsaTable'>{t('Created By')}</th>
+                        <th id='categories-isa-table'>{t('Name')}</th>
+                        <th className='description-isa-table'>{t('Description')}</th>
+                        <th id='votes-isa-table'>{t('Number Of Votes')}</th>
+                        <th id='config-isa-table'>{t('Actions')}</th>
                     </thead>
                     <tbody>
                         {categories.map(item => {

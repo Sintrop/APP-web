@@ -6,8 +6,10 @@ import { ModalPublish } from './ModalPublish';
 import Loading from '../../Loading';
 import {GetResearches} from '../../../services/researchersService';
 import { ResearchItem } from './ResearchItem';
+import { useTranslation } from 'react-i18next';
 
 export default function ResearchesPage({user, wallet, setTab}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const {tabActive, walletAddress} = useParams();
     const [modalPublish, setModalPublish] = useState(false);
@@ -31,14 +33,14 @@ export default function ResearchesPage({user, wallet, setTab}){
     return(
         <div className='reports__container'>
             <div className='header-isa'>
-                <h1>Researches</h1>
+                <h1>{t('Researches')}</h1>
                 <div className='area-btn-header-isa-page'>
                     {user === '3' && (
                         <button
                             className='btn-new-category-isa'
                             onClick={() => setModalPublish(true)}
                         >
-                            Publish research
+                            {t('Publish research')}
                         </button>
                     )}
                 </div>

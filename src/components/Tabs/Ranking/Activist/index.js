@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ActivistService from "../../../../services/activistService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function ActivistRanking({ wallet, setTab }) {
+    const {t} = useTranslation();
     const navigate = useNavigate(); 
     const activistService = new ActivistService(wallet);
     const [activist, setActivist] = useState([]);
@@ -27,15 +29,15 @@ export default function ActivistRanking({ wallet, setTab }) {
   return (
     <>
       <div className='header-isa'>
-        <h1>Activists</h1>          
+        <h1>{t('Activists')}</h1>          
       </div> 
       <table border="1">
         <tr>
           <th>#</th>
-          <th>Wallet</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Inspections Realized</th>
+          <th>{t('Wallet')}</th>
+          <th>{t('Name')}</th>
+          <th>{t('Address')}</th>
+          <th>{t('Inspections Realized')}</th>
         </tr>
         {activist.map((item) => (
           <tr key={item.id}>

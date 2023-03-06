@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import './accountProducer.css';
 import {get} from '../../config/infura';
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
-import AvatarDefault from '../../assets/img/avatar02.png';
+import { useTranslation } from 'react-i18next';
 
 //services
 import {GetDelation, GetInspections, GetProducer} from '../../services/accountProducerService';
@@ -12,6 +12,7 @@ import {GetDelation, GetInspections, GetProducer} from '../../services/accountPr
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
 
 export default function AccountProducer(){
+    const {t} = useTranslation();
     const {walletAddress} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
@@ -52,7 +53,7 @@ export default function AccountProducer(){
                     <div className='area-avatar__account-producer-page'>
                         <img src={`data:image/png;base64,${proofPhotoBase64}`} className='avatar__account-producer-page'/>
                         <div className='producer-cards-info__account-producer-page card-wallet'>
-                            <h1 className='tit-cards-info__account-producer-page'>Producer Wallet: </h1>
+                            <h1 className='tit-cards-info__account-producer-page'>{t('Producer Wallet')}: </h1>
                             <a className='description-cards-info__account-producer-page' href={`/account-producer/${producerData.producerWallet}`}>
                                 {producerData === [] ? '' : producerData.producerWallet}
                             </a>
@@ -60,46 +61,46 @@ export default function AccountProducer(){
 
                         <button
                             className='area-avatar__btn-report'
-                        >Report Producer</button>
+                        >{t('Report Producer')}</button>
                     </div>  
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {producerData === [] ? '' : producerData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {producerData.propertyAddress === undefined ? '' : `${producerData?.propertyAddress.street}, ${producerData.propertyAddress.city}-${producerData.propertyAddress.state}`}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Inspections Reiceved: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('Inspections Reiceved')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {producerData === [] ? '' : producerData.totalInspections}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Isa Score: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('ISA Score')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {producerData.isa === undefined ? '' : producerData.isa.isaScore}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Isa Average: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('ISA Average')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {producerData?.totalInspections === '0' ? '0' : Number(producerData?.isa?.isaScore) / Number(producerData?.totalInspections)}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__account-producer-page'>
-                        <h1 className='tit-cards-info__account-producer-page'>Delations Received: </h1>
+                        <h1 className='tit-cards-info__account-producer-page'>{t('Delations Received')}: </h1>
                         <p className='description-cards-info__account-producer-page'>
                             {delationsReiceved}
                         </p>

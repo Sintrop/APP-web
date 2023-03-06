@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
 import '../certificate.css';
 import '../../isa.css';
-
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import QRCode from "react-qr-code";
 import * as htmlToImage from 'html-to-image';
-import {toJpeg} from 'html-to-image';
 import { saveAs } from 'file-saver';
 import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 
 //services
 import InvestorService from '../../../../services/investorService';
@@ -22,6 +21,7 @@ import { ModalContribute } from "./ModalContribute";
 import { ItemReceipt } from "./ItemReceipt";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
+    const {t} = useTranslation();
     const investorService = new InvestorService(wallet);
     const {tabActive, walletAddress} = useParams();
     const [investorData, setInvestorData] = useState([]);
@@ -73,13 +73,13 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     return(
         <div className="container-isa-page">
             <div className='header-isa'>
-                <h1>Investor Certificate</h1>
+                <h1>{t('Investor Certificate')}</h1>
                 <div className='area-btn-header-isa-page'>
                     <button
                         className='btn-new-category-isa'
                         onClick={() => downloadCertificate()}
                     >
-                        Download Certificate
+                        {t('Download')} {t('Certificate')}
                     </button>
 
                     <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
@@ -87,7 +87,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                             className='btn-new-category-isa'
                             onClick={() => alert('URL copied to clipboard')}
                         >
-                            Copy URL
+                            {t('Copy')} URL
                         </button>
                     </CopyToClipboard>
                 </div>
@@ -99,8 +99,8 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={190}/>
                     <p className="hash-qrcode">{walletAddress}</p>
                     <p style={{textAlign: 'center'}}>
-                        {userType === '7' ? 'The investor' : 'You'}
-                        <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> contributed to the agroecological transition with a total of:
+                        {userType === '7' ? `${t('The investor')}` : `${t('You')}`}
+                        <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> {t('contributed to the agroecological transition with a total of')}:
                     </p>
                     <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
                         <p style={{fontWeight: 'bold'}}>{String(tokensBurned).replace('e-12', '').replace('e-9', '')} SAC Tokens</p>
@@ -108,29 +108,29 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
 
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 300}}>
-                    {tokensBurned === '0' ? (
+                    {tokensBurned === 0 ? (
                         <p style={{textAlign: 'center'}}>
-                            You haven't contributed to the agroecological transition yet
+                            {t("You haven't contributed to the agroecological transition yet")}
                         </p>
                     ) : (
                         <p style={{color: 'green', textAlign: 'center'}}>
-                            The earth thanks your contribution. Together we will make agriculture sustainable!
+                            {t('The earth thanks your contribution. Together we will make agriculture sustainable')}!
                         </p>
                     )}
 
                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <p style={{margin: 0}}>My impact:</p>
+                        <p style={{margin: 0}}>{t('My impact')}:</p>
                         <ul style={{margin: 0}}>
-                            <li>0 TONS of CO2 captured</li>
-                            <li>0 TONS of CO2 prevented</li>
-                            <li>0 increased biodiversity</li>
+                            <li>0 TONS {t('of')} CO2 {t('captured')}</li>
+                            <li>0 TONS {t('of')} CO2 {t('prevented')}</li>
+                            <li>0 {t('increased biodiversity')}</li>
                         </ul>
                     </div>
 
                     <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
                         <Dialog.Trigger
                             className="investor-certificate__btn-donate"
-                        >{tokensBurned === '0' ? 'Contribute' : 'Contribute more'}</Dialog.Trigger>
+                        >{tokensBurned === 0 ? `${t('Contribute')}` : `${t('Contribute More')}`}</Dialog.Trigger>
                         <ModalContribute 
                             wallet={wallet} 
                             onFinished={() => {
@@ -142,9 +142,9 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
                     <button
                         className="investor-certificate__btn-calculator"
-                    >Agriculture Footprint Calculator</button>
+                    >{t('Agriculture Footprint Calculator')}</button>
 
-                    <p style={{textAlign: 'center'}}>Read our documentation to understand better</p>
+                    <p style={{textAlign: 'center'}}>{t('Read our documentation to understand better')}</p>
                 </div>
             </div>
 

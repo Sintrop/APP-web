@@ -5,9 +5,10 @@ import InvestorService from '../../../../services/investorService';
 import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {useParams} from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 
 export default function InvestorPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister} = useContext(MainContext);
     const investorService = new InvestorService(wallet)
     const [investorData, setInvestorData] = useState([]);
@@ -33,7 +34,7 @@ export default function InvestorPage({wallet, setTab}){
                     <div className='area-avatar__producer-page'>
                         <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Investor Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page' href='#'>
                                 {investorData === [] ? '' : investorData.investorWallet}
                             </a>
@@ -42,11 +43,11 @@ export default function InvestorPage({wallet, setTab}){
                         <Dialog.Root>
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Investor
+                                    {t('Report')} {t('Investor')}
                                 </button>
                             ) : (
                                 <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Investor
+                                    {t('Report')} {t('Investor')}
                                 </Dialog.Trigger>
                             )}
                             <ModalDelation reportedWallet={wallet}/>
@@ -54,14 +55,14 @@ export default function InvestorPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {investorData === [] ? '' : investorData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {investorData.investorAddress === undefined ? '' : `${investorData.investorAddress.city}/${investorData.investorAddress.state}, ${investorData.investorAddress.country}`}
                         </p>

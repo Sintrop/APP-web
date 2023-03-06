@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
 import Webcam from "react-webcam";
 import * as Dialog from '@radix-ui/react-dialog';
-import './webcam.css'
+import './webcam.css';
+import { useTranslation } from "react-i18next";
 
 const videoConstraints = {
     width: 1280,
@@ -10,6 +11,7 @@ const videoConstraints = {
 };
 
 export function WebcamComponent({onTake, check}){
+    const {t} = useTranslation();
     const [imageSrc, setImageSrc] = useState('');
     const [haveWebcam, setHaveWebcam] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -40,9 +42,9 @@ export function WebcamComponent({onTake, check}){
                 {!haveWebcam ? (
                     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center'}}>
                         {loading ? (
-                            <h1>Loading camera</h1>
+                            <h1>{t('Loading camera')}</h1>
                         ) : (
-                            <h1>Seu dispositivo não possui câmera, ou foi negada a permissão para acessá-la</h1>
+                            <h1>{t('Your device does not have a camera, or has been denied permission to access it')}</h1>
                         )}
                     </div>
                 ) : (
@@ -64,7 +66,7 @@ export function WebcamComponent({onTake, check}){
                                                 setImageSrc(imageSrc)
                                             }}
                                         >
-                                            Capture photo
+                                            {t('Capture photo')}
                                         </button>
                                     )}
                                     </>
@@ -81,13 +83,13 @@ export function WebcamComponent({onTake, check}){
                             <div className="webcam__area-confirm">
                                 <button
                                     onClick={() => setImageSrc('')}
-                                >Take another</button>
+                                >{t('Take another')}</button>
         
                                 <button
                                     onClick={() => {
                                         onTake(imageSrc)
                                     }}
-                                >Confirm</button>
+                                >{t('Confirm')}</button>
                             </div>
                         )}
                     </>

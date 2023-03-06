@@ -5,8 +5,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 export default function DeveloperPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister} = useContext(MainContext);
     const developersService = new DevelopersService(wallet)
     const [developerData, setDeveloperData] = useState([]);
@@ -40,7 +42,7 @@ export default function DeveloperPage({wallet, setTab}){
                     <div className='area-avatar__producer-page'>
                         <img src={`data:image/png;base64,${base64}`} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Developer Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page' href='#'>
                                 {developerData === [] ? '' : developerData.developerWallet}
                             </a>
@@ -49,11 +51,11 @@ export default function DeveloperPage({wallet, setTab}){
                         <Dialog.Root>
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Developer
+                                    {t('Report')} {t('Developer')}
                                 </button>
                             ) : (
                                 <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Developer
+                                    {t('Report')} {t('Developer')}
                                 </Dialog.Trigger>
                             )}
                             <ModalDelation reportedWallet={wallet}/>
@@ -61,28 +63,28 @@ export default function DeveloperPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {developerData === [] ? '' : developerData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {developerData.userAddress === undefined ? '' : `${developerData.userAddress.city}/${developerData.userAddress.state}, ${developerData.userAddress.country}`}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Level:</h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Level')}:</h1>
                         <p className='description-cards-info__producer-page'>
                             {developerData.level === undefined ? '' : developerData.level.level}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Current Era:</h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Current ERA')}:</h1>
                         <p className='description-cards-info__producer-page'>
                             {developerData.level === undefined ? '' : developerData.level.currentEra}
                         </p>

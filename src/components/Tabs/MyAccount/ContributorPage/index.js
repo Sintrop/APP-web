@@ -5,8 +5,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function ContributorPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister} = useContext(MainContext);
     const contributorService = new ContributorsService(wallet)
     const [contributorData, setContributorData] = useState([]);
@@ -40,7 +42,7 @@ export default function ContributorPage({wallet, setTab}){
                     <div className='area-avatar__producer-page'>
                         <img src={`data:image/png;base64,${base64}`} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Contributor Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page' href='#'>
                                 {contributorData === [] ? '' : contributorData.contributorWallet}
                             </a>
@@ -49,11 +51,11 @@ export default function ContributorPage({wallet, setTab}){
                         <Dialog.Root>
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Contributor
+                                    {t('Report')} {t('Contributor')}
                                 </button>
                             ) : (
                                 <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Contributor
+                                    {t('Report')} {t('Contributor')}
                                 </Dialog.Trigger>
                             )}
                             <ModalDelation reportedWallet={wallet}/>
@@ -61,14 +63,14 @@ export default function ContributorPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {contributorData === [] ? '' : contributorData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {contributorData.contributorAddress === undefined ? '' : `${contributorData.contributorAddress.city}/${contributorData.contributorAddress.state}, ${contributorData.contributorAddress.country}`}
                         </p>

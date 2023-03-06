@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import {BsGearFill} from 'react-icons/bs';
 import { MainContext } from '../../../contexts/main';
+import { useTranslation } from 'react-i18next';
 
 //components
 import ModalActions from '../ModalActions';
@@ -17,6 +18,7 @@ import {GetInspection} from '../../../services/manageInspectionsService';
 import {GetProducer} from '../../../services/producerService';
 
 export default function ItemListInspections({data, user, walletAddress, reloadInspections, setTab}){
+    const {t} = useTranslation();
     const {blockNumber} = useContext(MainContext);
     const navigate = useNavigate();
     const [showActions, setShowActions] = useState(false);
@@ -90,7 +92,7 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
             </td>
             <td>
                 {data.status == 0 ? (
-                    <p>Not accepted</p>
+                    <p>{t('Not accepted')}</p>
                 ) : (
                     <a 
                         onClick={() => navigate(`/dashboard/${walletAddress}/activist-page/${data.acceptedBy}`)}
@@ -105,37 +107,37 @@ export default function ItemListInspections({data, user, walletAddress, reloadIn
             </td>
             <td>
                 {status === '0' && (
-                    <p>Not accepted</p>
+                    <p>{t('Not accepted')}</p>
                 )}
                 {status === '1' && (
-                    <p>Expires in {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
+                    <p>{t('Expires in')} {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
                 )}
                 {status === '2' && (
-                    <p>Inspected</p>
+                    <p>{t('Inspected')}</p>
                 )}
                 {status === '3' && (
-                    <p>Expired ago {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                    <p>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
                 )}
             </td>
             <td>
                 {status == '0' && (
                     <div className='status-open'>
-                        <p className='tit-status'>OPEN</p>
+                        <p className='tit-status'>{t('OPEN')}</p>
                     </div>
                 )}
                 {status == '1' && (
                     <div className='status-accepted'>
-                        <p className='tit-status'>ACCEPTED</p>
+                        <p className='tit-status'>{t('ACCEPTED')}</p>
                     </div>
                 )}
                 {status == '2' && (
                     <div className='status-inspected'>
-                        <p className='tit-status'>INSPECTED</p>
+                        <p className='tit-status'>{t('INSPECTED')}</p>
                     </div>
                 )}
                 {status == '3' && (
                     <div className='status-expired'>
-                        <p className='tit-status'>EXPIRED</p>
+                        <p className='tit-status'>{t('EXPIRED')}</p>
                     </div>
                 )}
             </td>

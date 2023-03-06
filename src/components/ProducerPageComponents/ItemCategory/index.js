@@ -3,8 +3,10 @@ import './itemCategory.css';
 import { get } from '../../../config/infura'
 //services
 import {GetCategories} from '../../../services/isaService';
+import { useTranslation } from 'react-i18next';
 
 export default function ItemCategory({data}){
+    const {t} = useTranslation();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [categoryResult, setCategoryResult] = useState('');
@@ -67,18 +69,18 @@ export default function ItemCategory({data}){
                     
                 </div>
                 <div className='area-top-card__category-info'>
-                    <h3 className='category-info__titles'>Category description</h3>
+                    <h3 className='category-info__titles'>{t('Description')}</h3>
                     <p className='category-info__description'>{description}</p>
 
-                    <h3 className='category-info__titles'>Category Result</h3>
+                    <h3 className='category-info__titles'>{t('Result')}</h3>
                     <p className='category-info__description'>{categoryResult}</p>
 
-                    <h3 className='category-info__titles'>Result Description</h3>
+                    <h3 className='category-info__titles'>{t('Result Description')}</h3>
                     <p className='category-info__description'>{resultDescription}</p>
                 </div>
             </div>
             <div className='container__area-actvist-report'>
-                <h3 className='category-info__titles'>Activist Report</h3>
+                <h3 className='category-info__titles'>{t('Report')}</h3>
                 <p className='category-info__description'>{data.report}</p>
             </div>
         </div>

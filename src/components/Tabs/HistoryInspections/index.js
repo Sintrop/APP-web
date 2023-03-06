@@ -4,9 +4,10 @@ import Loading from "../../Loading";
 import '../manageInspections.css'
 import {useParams} from 'react-router-dom';
 import ItemListInspections from "../../ManageInspectionsComponents/ItemListInspections";
-
+import { useTranslation } from "react-i18next";
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
+    const {t} = useTranslation();
     const {tabActive} = useParams();
     const [inspections, setInspections ] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     <>
       <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Inspections History</h1>
+                <h1>{t('Inspections History')}</h1>
                 <div className='area-btn-header-isa-page'>
                     {/* {user == 1 && (
                         <button
@@ -44,25 +45,24 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         className='btn-load-categories-isa'
                         onClick={() => loadInspections()}
                     >
-                        Load Inspections
+                        {t('Load Inspections')}
                     </button>
                 </div>
-            </div>
-            <div style={{overflowY: 'auto', display: 'flex', flexDirection: 'column', height: '70vh'}}>       
+            </div>     
                 {inspections.length === 0 ? (
-                    <h3>No open inspection</h3>
+                    <h3>{t('No open inspection')}</h3>
                 ) : (
                     
                         <table>
                             <thead>
-                                <th className='th-wallet'>Requested By</th>
-                                <th>Address Producer</th>
-                                <th className='th-wallet'>Inspected By</th>
-                                <th>Created At</th>
-                                <th>Expires In</th>
+                                <th className='th-wallet'>{t('Requested By')}</th>
+                                <th>{t('Producer Address')}</th>
+                                <th className='th-wallet'>{t('Inspected By')}</th>
+                                <th>{t('Created At')}</th>
+                                <th>{t('Expires In')}</th>
                                 <th className='th-wallet'>Status</th>
-                                <th className='th-wallet'>Isa Score</th>
-                                <th className='th-wallet'>Actions</th>
+                                <th className='th-wallet'>Isa {t('Score')}</th>
+                                <th className='th-wallet'>{t('Actions')}</th>
                             </thead>
                             <tbody>
                                 {inspections.map(item => {
@@ -81,7 +81,6 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         </table>
                    
                 )}
-            </div> 
 
             {loading && (
                 <Loading/>

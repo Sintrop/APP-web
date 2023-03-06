@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './itemInspection.css';
 import {format} from 'date-fns';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //services
 import {GetIsa} from '../../../services/manageInspectionsService';
@@ -10,6 +11,7 @@ import {GetIsa} from '../../../services/manageInspectionsService';
 import ItemCategory from '../ItemCategory';
 
 export default function ItemInspection({data, setTab, typeAccount, wallet}){
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {walletAddress} = useParams();
     const [isas, setIsas] = useState([]);
@@ -60,11 +62,11 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
 
     return(
         <div className={moreDetails}>
-            <h1 className='item-inspection__title-inspection'>Inspection {data.id} result</h1>
+            <h1 className='item-inspection__title-inspection'>{t('Inspection')} #{data.id} {t('Result')}</h1>
             <div className='item-inspection__content-inspection-info'>
                     <div className='item-inspection__card-info card-wallet'>
                         <h1 className='item-inspection__tit-cards-info'>
-                            {typeAccount === 'producer' ? 'Activist Wallet' : 'Producer Wallet'}
+                            {typeAccount === 'producer' ? `${t('Activist Wallet')}` : `${t('Producer Wallet')}`}
                         </h1>
                         <a 
                             onClick={() => {
@@ -79,24 +81,24 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
                         >{typeAccount === 'producer' ? `${data.acceptedBy}` : `${data.createdBy}`}</a>
                     </div>
                 <div className='item-inspection__card-info'>
-                    <h1 className='item-inspection__tit-cards-info'>Isa Score: </h1>
+                    <h1 className='item-inspection__tit-cards-info'>{t('ISA Score')}: </h1>
                     <p className='item-inspection__description-cards-info'>
                         {data.isaScore}
                     </p>
                 </div>
 
                 <div className='item-inspection__card-info'>
-                    <h1 className='item-inspection__tit-cards-info'>Requested At: </h1>
+                    <h1 className='item-inspection__tit-cards-info'>{t('Requested At')}: </h1>
                     <p className='item-inspection__description-cards-info'> {createdAt}</p>
                 </div>
 
                 <div className='item-inspection__card-info'>
-                    <h1 className='item-inspection__tit-cards-info'>Accepted At: </h1>
+                    <h1 className='item-inspection__tit-cards-info'>{t('Accepted At')}: </h1>
                     <p className='item-inspection__description-cards-info'> {acceptedAt}</p>
                 </div>
 
                 <div className='item-inspection__card-info'>
-                    <h1 className='item-inspection__tit-cards-info'>Inspected At: </h1>
+                    <h1 className='item-inspection__tit-cards-info'>{t('Inspected At')}: </h1>
                     <p className='item-inspection__description-cards-info'> {inspectedAt}</p>
                 </div>
             </div>
@@ -104,7 +106,7 @@ export default function ItemInspection({data, setTab, typeAccount, wallet}){
                 <div className='content-inspections__area-btn-report'>
                     <button
                         className='area-btn-report__btn-report'
-                    >Report Inspection</button>
+                    >{t('Report Inspection')}</button>
                 </div>
                 {isas.map((item) => {
                     return(

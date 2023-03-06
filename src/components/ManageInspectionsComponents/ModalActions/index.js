@@ -11,8 +11,10 @@ import {format} from 'date-fns';
 import {AcceptInspection} from '../../../services/manageInspectionsService';
 import {GetProducer} from '../../../services/producerService';
 import {GetActivist} from '../../../services/activistService';
+import {useTranslation} from 'react-i18next';
 
 export default function ModalActions({close, item, walletAddress, showRealize, reloadInspection, showSeeResult, setLoading, status}){
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {user, walletConnected} = useContext(MainContext);
     const [modalTransaction, setModalTransaction] = useState(false);
@@ -113,19 +115,19 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
 
     function handleAccept(){
         if(user !== '2'){
-            toast.error('This account is not activist!');
+            toast.error(`${t('This account is not activist')}!`);
             return;
         }
         if(status === '2'){
-            toast.error('This inspection has been inspected!');
+            toast.error(`${t('This inspection has been inspected')}!`);
             return;
         }
         if(status === '3'){
-            toast.error('This inspection has been expired!');
+            toast.error(`${t('This inspection has been expired')}!`);
             return;
         }
         if(status === '1'){
-            toast.error('This inspection has been accepted!')
+            toast.error(`${t('This inspection has been accepted')}!`);
             return;
         }
         acceptInspection();
@@ -133,23 +135,23 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
 
     function handleRealize(){
         if(user !== '2'){
-            toast.error('This account is not activist!');
+            toast.error(`${t('This account is not activist')}!`);
             return;
         }
         if(status === '3'){
-            toast.error('This inspection has been expired!');
+            toast.error(`${t('This inspection has been expired')}!`);
             return;
         }
         if(status === '0'){
-            toast.error('It is necessary to accept the inspection before!')
+            toast.error(`${t('It is necessary to accept the inspection before')}!`);
             return;
         }
         if(status === '1' && String(walletConnected).toUpperCase() !== String(item.acceptedBy).toUpperCase()){
-            toast.error('You cannot carry out this inspection, another activist has already accepted it!');
+            toast.error(`${t('You cannot carry out this inspection, another activist has already accepted it')}!`);
             return
         }
         if(status === '2'){
-            toast.error('This inspection has been inspected!');
+            toast.error(`${t('This inspection has been inspected')}!`);
             return;
         }
         showRealize();
@@ -157,22 +159,23 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
 
     function handleSeeResult(){
         if(item.status !== '2'){
-            toast.error('Inspection not realized!');
+            toast.error(`${t('Inspection Not Realized')}!`);
             return;
         }
         showSeeResult();
     }
+
     return(
         <Dialog.Portal className='modal-actions__portal'>
             <Dialog.Overlay className='modal-actions__overlay'/>
             <Dialog.Content className='modal-actions__content'>
                 <Dialog.Title className='modal-actions__title'>
-                    Inspection options
+                    {t('Inspection options')}
                 </Dialog.Title>
                     <>
                     <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
                         <div style={{display: 'flex', flexDirection: 'column'}}>
-                            <p className='modal-actions__label'>Producer</p>
+                            <p className='modal-actions__label'>{t('Producer')}</p>
                             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
                                 <div className='modal-action__area-photo'>
                                     <img
@@ -196,7 +199,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                         </div>
                         {Number(item.status) > 0 && (
                             <div style={{display: 'flex', flexDirection: 'column'}}>
-                                <p className='modal-actions__label'>Activist</p>
+                                <p className='modal-actions__label'>{t('Activist')}</p>
                                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
                                     <div className='modal-action__area-photo'>
                                         <img
@@ -223,18 +226,18 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
 
                     <div style={{display: 'flex', flexDirection: 'column', gap: 5}}>
                         <p style={{margin: 0, display: 'flex', flexDirection: 'row'}}>
-                            <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>Created At:</p> 
+                            <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>{t('Created At')}:</p> 
                             {createdDate}
                         </p>
                         {Number(item.status) > 0 && (
                             <p style={{margin: 0, display: 'flex', flexDirection: 'row'}}>
-                                <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>Accepted At:</p> 
+                                <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>{t('Accepted At')}:</p> 
                                 {acceptedDate}
                             </p>
                         )}
                         {Number(item.status) > 1 && (
                             <p style={{margin: 0, display: 'flex', flexDirection: 'row'}}>
-                                <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>Inspected At:</p> 
+                                <p style={{fontWeight: 'bold', color: 'green', margin: 0}}>{t('Inspected At')}:</p> 
                                 {inspectedDate}
                             </p>
                         )}
@@ -245,7 +248,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                         <button 
                             onClick={handleAccept}
                         >
-                            Accept
+                            {t('Accept')}
                         </button>
                         
 
@@ -253,14 +256,14 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
                         <button 
                             onClick={handleRealize}
                         >
-                            Realize
+                            {t('Realize')}
                         </button>
                         
                 
                         <button 
                             onClick={handleSeeResult}
                         >
-                            See result
+                            {t('See Result')}
                         </button>
                     </div>
 

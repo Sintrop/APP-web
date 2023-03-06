@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../IsaPageComponents/CreateCategory/createCategory.css';
 import './modalSeeResult.css';
 import * as Dialog from '@radix-ui/react-dialog';
+import { useTranslation } from 'react-i18next';
 //components
 import Loading from '../../Loading';
 import ItemCategoryResult from '../ItemCategoryResult';
@@ -10,6 +11,7 @@ import ItemCategoryResult from '../ItemCategoryResult';
 import {GetIsa} from '../../../services/manageInspectionsService';
 
 export default function ModalSeeResult({close, inspectionData}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [isas, setIsas] = useState([]);
 
@@ -29,7 +31,7 @@ export default function ModalSeeResult({close, inspectionData}){
             <Dialog.Overlay className='modal-see-result__overlay'/>
             <Dialog.Content className='modal-see-result__content'>
                 <Dialog.Title className='modal-see-result__title'>
-                    Result inspection
+                    {t('Result Inspection')}
                 </Dialog.Title>
                         <div className='area_data_inspection'>
                             {isas.map(item => (
@@ -41,7 +43,7 @@ export default function ModalSeeResult({close, inspectionData}){
                         
                         <div className='modal-see-result__area-btn'>
                             <Dialog.Close>
-                                Close
+                                {t('Close')}
                             </Dialog.Close>
                         </div>
             </Dialog.Content>

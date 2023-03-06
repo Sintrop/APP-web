@@ -7,11 +7,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
 
 export default function ActivistPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const activistService = new ActivistService(walletConnected)
     const [activistData, setActivistData] = useState([]);
@@ -56,7 +58,7 @@ export default function ActivistPage({wallet, setTab}){
                             
                         />
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Activist Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page'>
                                 {activistData === [] ? '' : activistData.activistWallet}
                             </a>
@@ -70,13 +72,13 @@ export default function ActivistPage({wallet, setTab}){
                         >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Activist
+                                    {t('Report')} {t('Activist')}
                                 </button>
                             ) : (
                                 <>
                                 {String(activistData?.activistWallet).toUpperCase() !== String(walletConnected).toUpperCase() && (
                                     <Dialog.Trigger className='area-avatar__btn-report'>
-                                        Report Activist
+                                        {t('Report')} {t('Activist')}
                                     </Dialog.Trigger>
                                 )}
                                 </>
@@ -88,21 +90,21 @@ export default function ActivistPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {activistData === [] ? '' : activistData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {activistData.activistAddress === undefined ? '' : `${activistData.activistAddress.city}/${activistData.activistAddress.state}, ${activistData.activistAddress.country}`}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Total Inspections:</h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Total Inspections')}:</h1>
                         <p className='description-cards-info__producer-page'>
                             {activistData === [] ? '' : activistData.totalInspections}
                         </p>
@@ -110,7 +112,7 @@ export default function ActivistPage({wallet, setTab}){
                             
                     {String(activistData?.activistWallet).toUpperCase() === String(walletConnected).toUpperCase() && (
                         <div className='producer-cards-info__producer-page'>
-                            <h1 className='tit-cards-info__producer-page'>Prox Accept: </h1>
+                            <h1 className='tit-cards-info__producer-page'>Prox. Accept: </h1>
                             {Number(activistData?.lastAcceptedAt) === 0 ? (
                                 <div style={{
                                         display: 'flex', 
@@ -121,7 +123,7 @@ export default function ActivistPage({wallet, setTab}){
                                     }}
                                 >
                                     <FaCheck size={15} style={{marginRight: 5}}/>
-                                    Your may accept inspection
+                                    {t('You Can Accept Inspections')}
                                 </div>
                             ) : (
                                 <>
@@ -135,7 +137,7 @@ export default function ActivistPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaCheck size={15} style={{marginRight: 5}}/>
-                                        Your may accept inspection
+                                        {t('You Can Accept Inspections')}
                                     </div>
                                 ) : (
                                     <div style={{
@@ -147,7 +149,7 @@ export default function ActivistPage({wallet, setTab}){
                                         }}
                                     >
                                         <FaLock size={15} style={{marginRight: 5}}/>
-                                        Wait {(Number(activistData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks to accept.
+                                        {t('Wait')} {(Number(activistData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} {t('blocks to accept')}.
                                     </div>
                                 )}
                                 </>

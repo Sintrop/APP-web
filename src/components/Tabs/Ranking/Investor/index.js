@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import InvestorService from "../../../../services/investorService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function InvestorRanking({ wallet, setTab }) {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const investorService = new InvestorService(wallet);
   const [investor, setInvestor] = useState([]);
@@ -27,13 +29,13 @@ export default function InvestorRanking({ wallet, setTab }) {
   return (
     <>
     <div className='header-isa'>
-        <h1>Investors</h1>          
+        <h1>{t('Investors')}</h1>          
       </div> 
       <table border="1">
         <tr>
           <th>#</th>
-          <th>Wallet</th>
-          <th>Name</th>
+          <th>{t('Wallet')}</th>
+          <th>{t('Name')}</th>
         </tr>
         {investor.map((item) => (
           <tr key={item.id}>

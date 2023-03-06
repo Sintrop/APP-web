@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../ModalRealize/modalRealize.css";
 import {save, get} from '../../../config/infura';
+import { useTranslation } from "react-i18next";
 
 export default function CardCategoryRealizeInspection({ data, pushResult, isas, step }) {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState("");
     const [report, setReport] = useState("");
@@ -42,7 +44,7 @@ export default function CardCategoryRealizeInspection({ data, pushResult, isas, 
         <div className="card_category_realize_inspection" key={data?.id}>
             <h3>{data?.name}</h3>
             <div className="area-description">
-                <h4>Description:</h4>
+                <h4>{t('Description')}:</h4>
                 <p>{data?.description}</p>
             </div>
         
@@ -52,7 +54,7 @@ export default function CardCategoryRealizeInspection({ data, pushResult, isas, 
             </div>
 
             <div className="area-result">
-                <p style={{marginTop: 10}}>Result:</p>
+                <p style={{marginTop: 10}}>{t('Result')}:</p>
                 <select
                     value={result}
                     onChange={(e) => {
@@ -60,16 +62,16 @@ export default function CardCategoryRealizeInspection({ data, pushResult, isas, 
                         setResult(e.target.value);
                     }}
                 >
-                    <option value="">Select an option</option>
-                    <option value="0">Totally Sustainable</option>
-                    <option value="1">Partially Sustainable</option>
+                    <option value="">{t('Select an option')}</option>
+                    <option value="0">{t('Totally Sustainable')}</option>
+                    <option value="1">{t('Partially Sustainable')}</option>
                     <option value="2">Neutro</option>
-                    <option value="3">Partially Not Sustainable</option>
-                    <option value="4">Totally Not Sustainable</option>
+                    <option value="3">{t('Partially Not Sustainable')}</option>
+                    <option value="4">{t('Totally Not Sustainable')}</option>
                 </select>
             </div>
             <div className="area_report_realize_inspection">
-                <p>Report:</p>
+                <p>{t('Report')}:</p>
                 <textarea
                 value={report}
                 onChange={(e) => {
@@ -81,7 +83,7 @@ export default function CardCategoryRealizeInspection({ data, pushResult, isas, 
             </div>
 
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <p style={{fontWeight: 'bold'}}>Upload proof photo:</p>
+                <p style={{fontWeight: 'bold'}}>{t('Upload Proof Photo')}:</p>
                 {loading ? (
                     <>
                         <h3>Loading proofPhoto</h3>
@@ -111,7 +113,7 @@ export default function CardCategoryRealizeInspection({ data, pushResult, isas, 
                                 <button onClick={() => {
                                     setExistsPhoto(false);
                                     setProofPhotoBase64('');
-                                }}>Select another photo</button>
+                                }}>{t('Select Another Photo')}</button>
                             </>
                         )}
                     </>

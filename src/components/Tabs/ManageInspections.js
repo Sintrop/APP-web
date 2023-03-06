@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../LoadingTransaction';
 import { MainContext } from '../../contexts/main';
 import {FaLock} from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 //components
 import Loading from '../Loading';
@@ -16,6 +17,7 @@ import {GetProducer} from '../../services/producerService';
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 
 export default function ManageInpections({walletAddress, setTab}){
+    const {t} = useTranslation();
     const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
@@ -95,7 +97,7 @@ export default function ManageInpections({walletAddress, setTab}){
     return(
         <div className='container-isa-page'>
             <div className='header-isa'>
-                <h1>Manage Inspections</h1>
+                <h1>{t('Manage Inspections')}</h1>
                 <div className='area-btn-header-isa-page'>
                     {user == 1 && (
                         <button
@@ -115,11 +117,11 @@ export default function ManageInpections({walletAddress, setTab}){
                             onMouseOut={() => setBtnRequestHover(false)}
                         >
                             {Number(lastResquested) === 0 ? (
-                                'Request New Inspection'
+                                `${t('Request New Inspection')}`
                             ) : (
                                 <>
                                 {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
-                                    'Request new inspection'
+                                    `${t('Request New Inspection')}`
                                 ) : (
                                     <>
                                     {btnRequestHover ? (
@@ -129,9 +131,9 @@ export default function ManageInpections({walletAddress, setTab}){
                                                 onMouseEnter={() => setBtnRequestHover(true)}
                                                 onMouseOut={() => setBtnRequestHover(false)}
                                             />
-                                            Wait {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} blocks to request
+                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
                                         </>
-                                    ) : 'Request new inspection'}
+                                    ) : `${t('Request New Inspection')}`}
                                     </>
                                 )}
                                 </>
@@ -142,25 +144,25 @@ export default function ManageInpections({walletAddress, setTab}){
                         className='btn-load-categories-isa'
                         onClick={() => getInspections()}
                     >
-                        Load Inspections
+                        {t('Load Inspections')}
                     </button>
                 </div>
             </div>
             
                 {inspections.length === 0 ? (
-                    <h3>No open inspection</h3>
+                    <h3>{t('There are no open inspections')}</h3>
                 ) : (
                     
                         <table>
                             <thead>
-                                <th className='th-wallet'>Requested By</th>
-                                <th>Address Producer</th>
-                                <th className='th-wallet'>Inspected By</th>
-                                <th>Created At</th>
-                                <th>Expires In</th>
+                                <th className='th-wallet'>{t('Requested By')}</th>
+                                <th>{t('Producer Address')}</th>
+                                <th className='th-wallet'>{t('Inspected By')}</th>
+                                <th>{t('Created At')}</th>
+                                <th>{t('Expires In')}</th>
                                 <th className='th-wallet'>Status</th>
-                                <th className='th-wallet'>Isa Score</th>
-                                <th className='th-wallet'>Actions</th>
+                                <th className='th-wallet'>Isa {t('Score')}</th>
+                                <th className='th-wallet'>{t('Actions')}</th>
                             </thead>
                             <tbody>
                                 {inspections.map(item => {

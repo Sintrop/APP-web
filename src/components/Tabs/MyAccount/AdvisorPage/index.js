@@ -5,8 +5,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import ModalDelation from '../../../ModalDelation';
 import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function AdvisorPage({wallet, setTab}){
+    const {t} = useTranslation();
     const {user, chooseModalRegister} = useContext(MainContext);
     const advisorService = new AdvisorsService(wallet)
     const [advisorData, setAdvisorData] = useState([]);
@@ -40,7 +42,7 @@ export default function AdvisorPage({wallet, setTab}){
                     <div className='area-avatar__producer-page'>
                         <img src={`data:image/png;base64,${base64}`} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
-                            <h1 className='tit-cards-info__producer-page'>Advisor Wallet: </h1>
+                            <h1 className='tit-cards-info__producer-page'>{t('Wallet')}: </h1>
                             <a className='description-cards-info__producer-page' href='#'>
                                 {advisorData === [] ? '' : advisorData.advisorWallet}
                             </a>
@@ -49,11 +51,11 @@ export default function AdvisorPage({wallet, setTab}){
                         <Dialog.Root>
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
-                                    Report Advisor
+                                    {t('Report')} {t('Advisor')}
                                 </button>
                             ) : (
                                 <Dialog.Trigger className='area-avatar__btn-report'>
-                                    Report Advisor
+                                    {t('Report')} {t('Advisor')}
                                 </Dialog.Trigger>
                             )}
                             <ModalDelation reportedWallet={wallet}/>
@@ -61,14 +63,14 @@ export default function AdvisorPage({wallet, setTab}){
                     </div>  
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Name: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {advisorData === [] ? '' : advisorData.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>Address: </h1>
+                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
                             {advisorData.advisorAddress === undefined ? '' : `${advisorData.advisorAddress.city}/${advisorData.advisorAddress.state}, ${advisorData.advisorAddress.country}`}
                         </p>
