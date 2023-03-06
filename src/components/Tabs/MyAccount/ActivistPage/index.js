@@ -50,7 +50,7 @@ export default function ActivistPage({wallet, setTab}){
     return(
         <div className='container__producer-page'>
             <div className='content__producer-page'>
-                <div className='producer-area-info__producer-page'>
+                <div className='producer-area-info__producer-page' style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                     <div className='area-avatar__producer-page'>
                         <img 
                             src={`data:image/png;base64,${base64}`}
