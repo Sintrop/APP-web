@@ -12,9 +12,10 @@ import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, add
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import { Map } from '../Map';
+import Map from '../Map';
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
+import {api} from '../../services/api';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -41,6 +42,8 @@ export default function ModalRegister(){
     const [proofPhoto, setProofPhoto] = useState("");
     const [proofPhotoBase64, setProofPhotoBase64] = useState("");
     const [country, setCountry] = useState("");
+    const [geoLocation, setGeolocation] = useState('');
+    const [propertyGeolocation, setPropertyGeolocation] = useState('');
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -95,15 +98,18 @@ export default function ModalRegister(){
             toast.error('Select a user type!')
             return;
         }
-        if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
-            toast.error('It is necessary to send a photo!')
-            return;
-        }
+        // if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
+        //     toast.error('It is necessary to send a photo!')
+        //     return;
+        // }
         if(step === 1 && type === 'investor'){
             setStep(3)
             return;
         }
-        if(step < 4){
+        if(type === 'producer' && step === 3){
+            setStep(4)
+        }
+        if(step < 3){
             setStep(step + 1)
         }
     }
@@ -196,6 +202,20 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 1,
+                        geoLocation,
+                        propertyGeolocation
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -243,6 +263,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 2
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -291,6 +323,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 6
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -338,6 +382,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 7
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -385,6 +441,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 4
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -432,6 +500,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 3
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -479,6 +559,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: walletConnected,
+                        userType: 5
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -514,18 +606,6 @@ export default function ModalRegister(){
                 })
             });
         }
-    }
-
-    function printMap(){
-        console.log(complement)
-        setLoading(true);
-        var mapviewimg = document.querySelector("#mapview");
-        htmlToImage.toBlob(mapviewimg)
-        .then(async (imgBlob) => {
-            const path = await save(imgBlob);
-            setCountry(path);
-            setLoading(false)
-        })
     }
 
     return(
@@ -746,9 +826,9 @@ export default function ModalRegister(){
                         
                         <div id='mapview'>
                             <Map
-                                setCenter={(position) => {setComplement(position)}}
+                                setCenter={(position) => {setGeolocation(position)}}
                                 editable={true}
-                                setPolyline={() => printMap()}
+                                setPolyline={(path) => setPropertyGeolocation(path)}
                             />
                         </div>
                     </div>
@@ -769,12 +849,22 @@ export default function ModalRegister(){
                         onClick={() => {
                             if(step === 4){
                                 validateData();
+                            }else if(step === 3 && type !== 'producer'){
+                                validateData();
                             }else{
                                 handleNextStep();
                             }
                         }}
                     >
-                        {step === 4 ? `${t('Register')}` : `${t('Next Step')}`}
+                        {step === 4 && `${t('Register')}`}
+                        {step === 3 && (
+                            <>
+                                {type === 'producer' && `${t('Next Step')}`}
+                                {type !== 'producer' && `${t('Register')}`}
+                            </>
+                        )}
+                        {step === 1 && `${t('Next Step')}`}
+                        {step === 2 && `${t('Next Step')}`}
                     </button>
                 </div>
 

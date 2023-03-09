@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { MapView } from './Map';
+import  MapView  from './Map';
 
-export function Map({setCenter, editable, position, setPolyline}) {
+function Map({setCenter, editable, position, setPolyline, pathPolyline}) {
     const [loading, setLoading] = useState(false);
     const [lat, setLat] = useState(0);
     const [lng, setLng] = useState(0);
@@ -31,6 +31,21 @@ export function Map({setCenter, editable, position, setPolyline}) {
         setLng(Number(arrayPosition[1]));
     }
 
+    function convertToPath(path){
+        let array = [];
+
+        for(var i = 0; i < path.length; i++){
+            let data = {
+                lat: path[i].lat(),
+                lng: path[i].lng()
+            }
+
+            array.push(data);
+        }
+
+        setPolyline(JSON.stringify(array));
+    }
+
     return(
         <MapView 
             center={{lat, lng}}
@@ -41,7 +56,10 @@ export function Map({setCenter, editable, position, setPolyline}) {
                 setLng(Number(arrayPosition[1]));
             }}
             editable={editable}
-            setPolyline={() => setPolyline()}
+            setPolyline={(path) => convertToPath(path)}
+            pathPolyline={pathPolyline}
         />
     )
 }
+
+export default Map

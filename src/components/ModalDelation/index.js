@@ -1,14 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import './modalDelation.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../config/infura';
 import Loading from '../Loading';
 import {AddDelation, GetDelation} from '../../services/userService';
 import { LoadingTransaction } from '../LoadingTransaction';
+import { ToastContainer, toast} from 'react-toastify';
+import {api} from '../../services/api';
+import { useMainContext } from '../../hooks/useMainContext';
 
-export default function ModalDelation({close}){
-    const {walletAddress, walletSelected} = useParams();
+export default function ModalDelation({close, anonymousReport}){
+    const {walletConnected} = useMainContext();
+    const navigate = useNavigate();
+    const {walletSelected} = useParams();
     const [title, setTitle] = useState('');
     const [testemony, setTestemony] = useState('');
     const [photo, setPhoto] = useState('');
@@ -20,13 +25,46 @@ export default function ModalDelation({close}){
 
     async function handleReport(e){
         e.preventDefault();
+        if(anonymousReport){
+            reportAnonymous();
+        }else{
+            reportBlockchain();
+        }
+    }
+
+    async function reportAnonymous(){
+        if(title === '' || testemony === '' || photo === ''){
+            return;
+        }
+        try{
+            setLoading(true);
+            await api.post('/delations', {
+                reportedUser: walletSelected,
+                title: title,
+                testimony: testemony,
+                proofPhoto: photo
+            })
+            toast.success('Denúncia enviada com sucesso!');
+            setTitle('');
+            setTestemony('');
+            setPhoto('');
+            setBase64('');
+        }catch(err){
+            console.log(err);
+            toast.error('Algo deu errado, tente novamente!')
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    async function reportBlockchain(){
         if(title === '' || testemony === '' || photo === ''){
             return;
         }
         setModalTransaction(true);
         setLoadingTransaction(true);
         AddDelation(
-            walletAddress,
+            walletConnected,
             walletSelected,
             title,
             testemony,
@@ -162,6 +200,10 @@ export default function ModalDelation({close}){
             {loading && (
                 <Loading/>
             )}
+
+            <ToastContainer
+                position='top-center'
+            />
         </Dialog.Portal>
     )
 }

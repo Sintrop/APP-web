@@ -101,7 +101,8 @@ export default function MainProvider({children}){
                 language,
                 chooseLanguage,
                 modalChooseLang,
-                toggleModalChooseLang
+                toggleModalChooseLang,
+                setWalletConnected
             }}
         >
             {children}

@@ -7,6 +7,7 @@ import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {FaLock, FaCheck} from 'react-icons/fa';
+import { api } from '../../../../services/api';
 
 //services
 import {GetProducer} from '../../../../services/producerService';
@@ -14,13 +15,18 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
-import { Map } from '../../../Map';
+import  Map  from '../../../Map';
+import axios from 'axios';
 
 export default function ProducerPage({wallet, setTab}){
     const [loading, setLoading] = useState(true)
+    const [loadingApi, setLoadingApi] = useState(true)
     const {t} = useTranslation();
     const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
+    const [producerDataApi, setProducerDataApi] = useState({});
+    const [propertyPath, setPropertyPath] = useState([]);
+    const [areaProperty, setAreaProperty] = useState(0);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
     const [base64Map, setBase64Map] = useState('');
@@ -33,7 +39,53 @@ export default function ProducerPage({wallet, setTab}){
 
     useEffect(() => {
         getProducer();
-    }, [])
+        getApiProducer();
+    }, []);
+
+    async function getApiProducer(){
+        try{
+            setLoadingApi(true);
+            const response = await api.get(`/user/${wallet}`);
+            setProducerDataApi(response.data.user)
+            setPropertyPath(JSON.parse(response.data.user.propertyGeolocation))
+            calculateArea(JSON.parse(response.data.user.propertyGeolocation))
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingApi(false);
+        }
+    }
+
+    async function calculateArea(coords){
+        let coordsUTM = [];
+        for(var i = 0; i < coords.length; i++){
+            let object = {}
+            const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
+            object = response.data.results[0]
+            coordsUTM.push(object)
+        }
+
+        let areaX = 0;
+        let areaY = 0;
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product1 = coordsUTM[i-1].y * coordsUTM[i].x;
+            areaX += product1
+        }
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product2 = coordsUTM[i-1].x * coordsUTM[i].y;
+            areaY += product2
+        }
+
+        let repeatX = coordsUTM[coordsUTM.length - 1].y * coordsUTM[0].x; 
+        let repeatY = coordsUTM[coordsUTM.length - 1].x * coordsUTM[0].y; 
+
+        areaX += repeatX;
+        areaY += repeatY;
+
+        let D = areaX - areaY;
+        let areaM2 = 0.5 * D;
+        setAreaProperty(areaM2);
+    }
 
     async function getProducer(){
         setLoading(true)
@@ -177,28 +229,19 @@ export default function ProducerPage({wallet, setTab}){
                     </div>
                     
                     {!loading && (
-                        <div style={{display: 'flex', flexDirection: 'column', marginLeft: 10, marginTop: 10}}>
-                            {viewMap ? (
+                        <>
+                            {!loadingApi && (
+                                <>
                                 <Map
                                     editable={false}
-                                    position={producerData?.propertyAddress?.complement}
+                                    //position={producerData?.propertyAddress?.complement}
+                                    position={"-23.648088032964072,-46.56503617923737"}
+                                    pathPolyline={propertyPath}
                                 />
-                            ) : (
-                                <img
-                                    style={{width: '450px', height: '400px'}}
-                                    src={`data:image/png;base64,${base64Map}`}
-                                />
+                                <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {areaProperty.toFixed(2)}m²</p>
+                                </>
                             )}
-
-                            <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <button
-                                    onClick={() => setViewMap(!viewMap)}
-                                >{t('View Map')}</button>
-                                <button
-                                    onClick={() => setViewMap(!viewMap)}
-                                >{t('View Print')}</button>
-                            </div>
-                        </div>
+                        </>
                     )}
                 </div>
 

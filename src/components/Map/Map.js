@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, LoadScript, DrawingManager, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '450px',
@@ -11,7 +11,7 @@ const containerStyle = {
 //   lng: -38.523
 // };
 
-export function MapView({center, setCenter, editable, setPolyline}){
+function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
     return(
         <LoadScript
             googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
@@ -31,7 +31,7 @@ export function MapView({center, setCenter, editable, setPolyline}){
                                 setCenter(`${e.position.lat()}, ${e.position.lng()}`)
                             }}
                             onPolylineComplete={(e) => {
-                                setPolyline()
+                                setPolyline(e.latLngs.h[0].h)
                             }}
                         />
                     )}
@@ -40,7 +40,15 @@ export function MapView({center, setCenter, editable, setPolyline}){
                 {!editable && (
                     <Marker position={center}/>
                 )}
+
+                {/* {!editable && (
+                    <Polyline
+                        path={pathPolyline}
+                    />
+                )} */}
             </GoogleMap>
         </LoadScript>
     )
 }
+
+export default React.memo(MapView)
