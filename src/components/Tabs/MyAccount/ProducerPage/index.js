@@ -32,6 +32,7 @@ export default function ProducerPage({wallet, setTab}){
     const [base64Map, setBase64Map] = useState('');
     const {tabActive, walletSelected} = useParams();
     const [viewMap, setViewMap] = useState(true);
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -45,7 +46,7 @@ export default function ProducerPage({wallet, setTab}){
     async function getApiProducer(){
         try{
             setLoadingApi(true);
-            const response = await api.get(`/user/${wallet}`);
+            const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
             setProducerDataApi(response.data.user)
             setPropertyPath(JSON.parse(response.data.user.propertyGeolocation))
             calculateArea(JSON.parse(response.data.user.propertyGeolocation))
@@ -125,7 +126,10 @@ export default function ProducerPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Producer')}
@@ -135,7 +139,7 @@ export default function ProducerPage({wallet, setTab}){
                                     {t('Report')} {t('Producer')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 
@@ -228,7 +232,7 @@ export default function ProducerPage({wallet, setTab}){
                     )}
                     </div>
                     
-                    {!loading && (
+                    {producerDataApi && (
                         <>
                             {!loadingApi && (
                                 <div style={{display: 'flex', flexDirection: 'column', marginLeft: 10}}>

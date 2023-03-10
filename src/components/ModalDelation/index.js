@@ -9,8 +9,10 @@ import { LoadingTransaction } from '../LoadingTransaction';
 import { ToastContainer, toast} from 'react-toastify';
 import {api} from '../../services/api';
 import { useMainContext } from '../../hooks/useMainContext';
+import { useTranslation } from 'react-i18next';
 
 export default function ModalDelation({close, anonymousReport}){
+    const {t} = useTranslation();
     const {walletConnected} = useMainContext();
     const navigate = useNavigate();
     const {walletSelected} = useParams();
@@ -39,7 +41,7 @@ export default function ModalDelation({close, anonymousReport}){
         try{
             setLoading(true);
             await api.post('/delations', {
-                reportedUser: walletSelected,
+                reportedUser: walletSelected.toUpperCase(),
                 title: title,
                 testimony: testemony,
                 proofPhoto: photo
@@ -49,6 +51,9 @@ export default function ModalDelation({close, anonymousReport}){
             setTestemony('');
             setPhoto('');
             setBase64('');
+            setTimeout(() => {
+                close();
+            }, 2000)
         }catch(err){
             console.log(err);
             toast.error('Algo deu errado, tente novamente!')
@@ -82,10 +87,10 @@ export default function ModalDelation({close, anonymousReport}){
             setLoadingTransaction(false);
             const message = String(err.message);
             console.log(message);
-            if(message.includes("Can't accept yet")){
+            if(message.includes("Caller must be registered")){
                 setLogTransaction({
                     type: 'error',
-                    message: "Can't accept yet",
+                    message: "You must register on the Sintrop platform before",
                     hash: ''
                 })
                 return;
@@ -116,11 +121,11 @@ export default function ModalDelation({close, anonymousReport}){
             <Dialog.Overlay className='modal-delation__overlay'/>
             <Dialog.Content className='modal-delation__content'>
                 <Dialog.Title className='modal-delation__title'>
-                    Delation of user
+                    {t('Delation of user')}
                 </Dialog.Title>
 
                 <form onSubmit={handleReport} className='modal-delation__form'>
-                    <label htmlFor='title' className='modal-delation__label'>Title of report:</label>
+                    <label htmlFor='title' className='modal-delation__label'>{t('Title of report')}:</label>
                     <input
                         className='modal-delation__input'
                         name='title'
@@ -131,7 +136,7 @@ export default function ModalDelation({close, anonymousReport}){
                         required
                     />
 
-                    <label htmlFor='testemony' className='modal-delation__label'>Testimony:</label>
+                    <label htmlFor='testemony' className='modal-delation__label'>{t('Testimony')}:</label>
                     <textarea
                         style={{resize:'none', height: '100px'}}
                         className='modal-delation__input'
@@ -143,7 +148,7 @@ export default function ModalDelation({close, anonymousReport}){
                         required
                     />
 
-                    <label htmlFor='photo' className='modal-delation__label'>Photo:</label>
+                    <label htmlFor='photo' className='modal-delation__label'>{t('Proof Photo')}:</label>
                     <input 
                         type='file' 
                         onChange={(e) => {
@@ -168,13 +173,13 @@ export default function ModalDelation({close, anonymousReport}){
                     <Dialog.Close
                         className='modal-delation__btn-cancel'
                     >
-                        Cancel
+                        {t('Cancel')}
                     </Dialog.Close>
                     <button
                         className='modal-delation__btn-report'
                         onClick={handleReport}
                     >
-                        Report
+                        {t('Denounce')}
                     </button>
                 </div>
 
@@ -187,6 +192,7 @@ export default function ModalDelation({close, anonymousReport}){
                             setTestemony('');
                             setBase64('');
                             setPhoto('');
+                            close()
                         }
                     }}
                 >

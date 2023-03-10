@@ -14,6 +14,7 @@ export default function AdvisorPage({wallet, setTab}){
     const [advisorData, setAdvisorData] = useState([]);
     const [base64, setBase64] = useState('');
     const {tabActive, walletSelected} = useParams();
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         getAdvisor();
@@ -48,7 +49,10 @@ export default function AdvisorPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Advisor')}
@@ -58,7 +62,7 @@ export default function AdvisorPage({wallet, setTab}){
                                     {t('Report')} {t('Advisor')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 

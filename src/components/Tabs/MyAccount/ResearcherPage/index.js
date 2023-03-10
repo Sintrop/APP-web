@@ -13,6 +13,7 @@ export default function ResearcherPage({wallet, setTab}){
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
     const {tabActive, walletSelected} = useParams();
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         getResearcher();
@@ -40,7 +41,10 @@ export default function ResearcherPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Researcher')}
@@ -50,7 +54,7 @@ export default function ResearcherPage({wallet, setTab}){
                                     {t('Report')} {t('Researcher')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 

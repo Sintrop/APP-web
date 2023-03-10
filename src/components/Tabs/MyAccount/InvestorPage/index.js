@@ -13,6 +13,7 @@ export default function InvestorPage({wallet, setTab}){
     const investorService = new InvestorService(wallet)
     const [investorData, setInvestorData] = useState([]);
     const {tabActive, walletSelected} = useParams();
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         getInvestor();
@@ -40,7 +41,10 @@ export default function InvestorPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Investor')}
@@ -50,7 +54,7 @@ export default function InvestorPage({wallet, setTab}){
                                     {t('Report')} {t('Investor')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 

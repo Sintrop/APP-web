@@ -176,6 +176,7 @@ export default function ModalRegister(){
 
             if(geoLocation === ''){
                 toast.error(t('Mark the center of your property'))
+                return;
             }
         }
 
@@ -215,7 +216,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 1,
                         geoLocation,
                         propertyGeolocation
@@ -276,7 +277,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 2
                     })
                 }catch(err){
@@ -336,7 +337,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 6
                     })
                 }catch(err){
@@ -395,7 +396,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 7
                     })
                 }catch(err){
@@ -454,7 +455,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 4
                     })
                 }catch(err){
@@ -513,7 +514,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 3
                     })
                 }catch(err){
@@ -572,7 +573,7 @@ export default function ModalRegister(){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: walletConnected,
+                        wallet: String(walletConnected).toUpperCase(),
                         userType: 5
                     })
                 }catch(err){

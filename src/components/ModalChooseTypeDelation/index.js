@@ -20,6 +20,7 @@ export function ModalChooseTypeDelation(){
         setWalletConnected(sync.wallet[0]);
         console.log(sync.wallet[0])
         setModalDelation(true)
+        setAnonymousReport(false);
     }
 
     return(
