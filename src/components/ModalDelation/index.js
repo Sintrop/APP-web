@@ -1,14 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import './modalDelation.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import {save, get} from '../../config/infura';
 import Loading from '../Loading';
 import {AddDelation, GetDelation} from '../../services/userService';
 import { LoadingTransaction } from '../LoadingTransaction';
+import { ToastContainer, toast} from 'react-toastify';
+import {api} from '../../services/api';
+import { useMainContext } from '../../hooks/useMainContext';
+import { useTranslation } from 'react-i18next';
 
-export default function ModalDelation({close}){
-    const {walletAddress, walletSelected} = useParams();
+export default function ModalDelation({close, anonymousReport}){
+    const {t} = useTranslation();
+    const {walletConnected} = useMainContext();
+    const navigate = useNavigate();
+    const {walletSelected} = useParams();
     const [title, setTitle] = useState('');
     const [testemony, setTestemony] = useState('');
     const [photo, setPhoto] = useState('');
@@ -20,13 +27,49 @@ export default function ModalDelation({close}){
 
     async function handleReport(e){
         e.preventDefault();
+        if(anonymousReport){
+            reportAnonymous();
+        }else{
+            reportBlockchain();
+        }
+    }
+
+    async function reportAnonymous(){
+        if(title === '' || testemony === '' || photo === ''){
+            return;
+        }
+        try{
+            setLoading(true);
+            await api.post('/delations', {
+                reportedUser: walletSelected.toUpperCase(),
+                title: title,
+                testimony: testemony,
+                proofPhoto: photo
+            })
+            toast.success('Denúncia enviada com sucesso!');
+            setTitle('');
+            setTestemony('');
+            setPhoto('');
+            setBase64('');
+            setTimeout(() => {
+                close();
+            }, 2000)
+        }catch(err){
+            console.log(err);
+            toast.error('Algo deu errado, tente novamente!')
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    async function reportBlockchain(){
         if(title === '' || testemony === '' || photo === ''){
             return;
         }
         setModalTransaction(true);
         setLoadingTransaction(true);
         AddDelation(
-            walletAddress,
+            walletConnected,
             walletSelected,
             title,
             testemony,
@@ -44,10 +87,10 @@ export default function ModalDelation({close}){
             setLoadingTransaction(false);
             const message = String(err.message);
             console.log(message);
-            if(message.includes("Can't accept yet")){
+            if(message.includes("Caller must be registered")){
                 setLogTransaction({
                     type: 'error',
-                    message: "Can't accept yet",
+                    message: "You must register on the Sintrop platform before",
                     hash: ''
                 })
                 return;
@@ -78,11 +121,11 @@ export default function ModalDelation({close}){
             <Dialog.Overlay className='modal-delation__overlay'/>
             <Dialog.Content className='modal-delation__content'>
                 <Dialog.Title className='modal-delation__title'>
-                    Delation of user
+                    {t('Delation of user')}
                 </Dialog.Title>
 
                 <form onSubmit={handleReport} className='modal-delation__form'>
-                    <label htmlFor='title' className='modal-delation__label'>Title of report:</label>
+                    <label htmlFor='title' className='modal-delation__label'>{t('Title of report')}:</label>
                     <input
                         className='modal-delation__input'
                         name='title'
@@ -93,7 +136,7 @@ export default function ModalDelation({close}){
                         required
                     />
 
-                    <label htmlFor='testemony' className='modal-delation__label'>Testimony:</label>
+                    <label htmlFor='testemony' className='modal-delation__label'>{t('Testimony')}:</label>
                     <textarea
                         style={{resize:'none', height: '100px'}}
                         className='modal-delation__input'
@@ -105,7 +148,7 @@ export default function ModalDelation({close}){
                         required
                     />
 
-                    <label htmlFor='photo' className='modal-delation__label'>Photo:</label>
+                    <label htmlFor='photo' className='modal-delation__label'>{t('Proof Photo')}:</label>
                     <input 
                         type='file' 
                         onChange={(e) => {
@@ -130,13 +173,13 @@ export default function ModalDelation({close}){
                     <Dialog.Close
                         className='modal-delation__btn-cancel'
                     >
-                        Cancel
+                        {t('Cancel')}
                     </Dialog.Close>
                     <button
                         className='modal-delation__btn-report'
                         onClick={handleReport}
                     >
-                        Report
+                        {t('Denounce')}
                     </button>
                 </div>
 
@@ -149,6 +192,7 @@ export default function ModalDelation({close}){
                             setTestemony('');
                             setBase64('');
                             setPhoto('');
+                            close()
                         }
                     }}
                 >
@@ -162,6 +206,10 @@ export default function ModalDelation({close}){
             {loading && (
                 <Loading/>
             )}
+
+            <ToastContainer
+                position='top-center'
+            />
         </Dialog.Portal>
     )
 }

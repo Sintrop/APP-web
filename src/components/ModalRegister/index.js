@@ -12,6 +12,10 @@ import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, add
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import Map from '../Map';
+import * as htmlToImage from 'html-to-image';
+import { saveAs } from 'file-saver';
+import {api} from '../../services/api';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -22,6 +26,7 @@ export default function ModalRegister(){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [areaProperty, setAreaProperty] = useState(0);
 
     const [checkWebcam, setCheckWebcam] = useState(false);
     const [step, setStep] = useState(1);
@@ -38,6 +43,8 @@ export default function ModalRegister(){
     const [proofPhoto, setProofPhoto] = useState("");
     const [proofPhotoBase64, setProofPhotoBase64] = useState("");
     const [country, setCountry] = useState("");
+    const [geoLocation, setGeolocation] = useState('');
+    const [propertyGeolocation, setPropertyGeolocation] = useState('');
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -92,13 +99,16 @@ export default function ModalRegister(){
             toast.error('Select a user type!')
             return;
         }
-        if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
-            toast.error('It is necessary to send a photo!')
-            return;
-        }
+        // if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
+        //     toast.error('It is necessary to send a photo!')
+        //     return;
+        // }
         if(step === 1 && type === 'investor'){
             setStep(3)
             return;
+        }
+        if(type === 'producer' && step === 3){
+            setStep(4)
         }
         if(step < 3){
             setStep(step + 1)
@@ -155,8 +165,17 @@ export default function ModalRegister(){
                 return;
             }
 
-            if(!complement.trim()){
-                toast.error(`${t('Fill in the complement field')}!`);
+            // if(!complement.trim()){
+            //     toast.error(`${t('Fill in the complement field')}!`);
+            //     return;
+            // }
+
+            if(areaProperty < 5000){
+                toast.error(t('Your property must be at least 5,000m²'))
+            }
+
+            if(geoLocation === ''){
+                toast.error(t('Mark the center of your property'))
                 return;
             }
         }
@@ -193,6 +212,20 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 1,
+                        geoLocation,
+                        propertyGeolocation
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -240,6 +273,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 2
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -288,6 +333,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 6
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -335,6 +392,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 7
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -382,6 +451,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 4
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -429,6 +510,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 3
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -476,6 +569,18 @@ export default function ModalRegister(){
                     hash: res.hashTransaction
                 })
                 setLoadingTransaction(false);
+                try{
+                    setLoading(true);
+                    api.post('/users', {
+                        name,
+                        wallet: String(walletConnected).toUpperCase(),
+                        userType: 5
+                    })
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -510,6 +615,40 @@ export default function ModalRegister(){
                     hash: ''
                 })
             });
+        }
+    }
+
+    async function calculateArea(coords){
+        let coordsUTM = [];
+        for(var i = 0; i < coords.length; i++){
+            let object = {}
+            const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
+            object = response.data.results[0]
+            coordsUTM.push(object)
+        }
+
+        let areaX = 0;
+        let areaY = 0;
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product1 = coordsUTM[i-1].y * coordsUTM[i].x;
+            areaX += product1
+        }
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product2 = coordsUTM[i-1].x * coordsUTM[i].y;
+            areaY += product2
+        }
+
+        let repeatX = coordsUTM[coordsUTM.length - 1].y * coordsUTM[0].x; 
+        let repeatY = coordsUTM[coordsUTM.length - 1].x * coordsUTM[0].y; 
+
+        areaX += repeatX;
+        areaY += repeatY;
+
+        let D = areaX - areaY;
+        let areaM2 = 0.5 * D;
+        setAreaProperty(areaM2);
+        if(areaM2 < 5000){
+            toast.error(t('Your property must be at least 5,000m²'))
         }
     }
 
@@ -725,6 +864,23 @@ export default function ModalRegister(){
                     
                 )}
 
+                {step === 4 && (
+                    <div className='modal-register__container-content'>
+                        <h1 className='modal-register__title'>{t('Mark the center of your property, then circle the entire area')}.</h1>
+                        
+                        <div id='mapview'>
+                            <Map
+                                setCenter={(position) => {setGeolocation(position)}}
+                                editable={true}
+                                setPolyline={(path) => {
+                                    setPropertyGeolocation(path)
+                                    calculateArea(JSON.parse(path))
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div className='modal-register__area-btn'>
                     <Dialog.Close>
                         {t('Continue Without Register')}
@@ -738,14 +894,24 @@ export default function ModalRegister(){
                     )}
                     <button 
                         onClick={() => {
-                            if(step === 3){
+                            if(step === 4){
+                                validateData();
+                            }else if(step === 3 && type !== 'producer'){
                                 validateData();
                             }else{
                                 handleNextStep();
                             }
                         }}
                     >
-                        {step === 3 ? `${t('Register')}` : `${t('Next Step')}`}
+                        {step === 4 && `${t('Register')}`}
+                        {step === 3 && (
+                            <>
+                                {type === 'producer' && `${t('Next Step')}`}
+                                {type !== 'producer' && `${t('Register')}`}
+                            </>
+                        )}
+                        {step === 1 && `${t('Next Step')}`}
+                        {step === 2 && `${t('Next Step')}`}
                     </button>
                 </div>
 

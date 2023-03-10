@@ -2,8 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import './accountProducer.css';
 import {get} from '../../config/infura';
+import * as Dialog from '@radix-ui/react-dialog';
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import { useTranslation } from 'react-i18next';
+import { ModalChooseTypeDelation } from '../../components/ModalChooseTypeDelation';
 
 //services
 import {GetDelation, GetInspections, GetProducer} from '../../services/accountProducerService';
@@ -13,18 +15,19 @@ import ItemInspection from '../../components/ProducerPageComponents/ItemInspecti
 
 export default function AccountProducer(){
     const {t} = useTranslation();
-    const {walletAddress} = useParams();
+    const {walletSelected} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [delationsReiceved, setDelationsReiceved] = useState('0');
     const [proofPhotoBase64, setProofPhotoBase64] = useState('');
+    const [modalChooseTypeDelation, setModalChooseTypeDelation] = useState(false);
 
     useEffect(() => {
         getProducer();
     },[]);
 
     async function getProducer(){
-        const response = await GetProducer(walletAddress);
+        const response = await GetProducer(walletSelected);
         setProducerData(response);
         getBase64(response.proofPhoto);
         const delations = await GetDelation(response.producerWallet);
@@ -59,9 +62,14 @@ export default function AccountProducer(){
                             </a>
                         </div>
 
-                        <button
-                            className='area-avatar__btn-report'
-                        >{t('Report Producer')}</button>
+                        <Dialog.Root open={modalChooseTypeDelation} onOpenChange={(open) => setModalChooseTypeDelation(open)}>
+                            <ModalChooseTypeDelation/>
+                            <Dialog.Trigger
+                                className='area-avatar__btn-report'
+                            >
+                                {t('Report Producer')}
+                            </Dialog.Trigger>
+                        </Dialog.Root>
                     </div>  
 
                     <div className='producer-cards-info__account-producer-page'>

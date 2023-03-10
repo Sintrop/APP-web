@@ -16,7 +16,7 @@ export default function Router(){
                 <Route path="/dashboard/:walletAddress/:tabActive/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/register" element={<Register/>}/>
-                <Route exact path="/account-producer/:walletAddress" element={<AccountProducer/>}/>
+                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
 
                 <Route exact path="/producers-ranking" element={ <ProducerRanking />}/>

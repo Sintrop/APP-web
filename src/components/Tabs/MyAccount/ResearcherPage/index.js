@@ -13,6 +13,7 @@ export default function ResearcherPage({wallet, setTab}){
     const researchersService = new ResearchersService(wallet);
     const [researcherData, setResearcherData] = useState([]);
     const {tabActive, walletSelected} = useParams();
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         getResearcher();
@@ -30,7 +31,7 @@ export default function ResearcherPage({wallet, setTab}){
     return(
         <div className='container__producer-page'>
             <div className='content__producer-page'>
-                <div className='producer-area-info__producer-page'>
+                <div className='producer-area-info__producer-page' style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                     <div className='area-avatar__producer-page'>
                         <img src={AvatarDefault} className='avatar__producer-page'/>
                         <div className='producer-cards-info__producer-page card-wallet'>
@@ -40,7 +41,10 @@ export default function ResearcherPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Researcher')}
@@ -50,7 +54,7 @@ export default function ResearcherPage({wallet, setTab}){
                                     {t('Report')} {t('Researcher')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 

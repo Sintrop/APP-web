@@ -205,6 +205,21 @@
         "Loading camera": "Carregando câmera",
         "Capture photo": "Capturar foto",
         "Take another": "Tirar outra",
-        "Confirm": "Confirmar"
+        "Confirm": "Confirmar",
+        "Mark the center of your property, then circle the entire area": "Marque o centro da sua propriedade, e depois circule toda a área",
+        "Choose the type of denunciation": "Escolha o tipo de denúncia",
+        "Anonymous Delation": "Denúncia Anônima",
+        "In the anonymous complaint, you register the complaint without identifying yourself, this record will later be analyzed by one of the validators of the system, if the complaint is valid, the validator will register it in the Blockchain": "Na denúncia anônima, você registra a denúncia sem se identificar, esse registro posteriormente será analisado por um dos validadores do sistema, se a denúncia for procedente, o validador registrará na Blockchain",
+        "Blockchain Dealing": "Delação na Blockchain",
+        "It is necessary that you are registered on the Sintrop platform, in this way you will register the complaint directly on the Blockchain": "É necessário que você esteja cadastrado na plataforma da Sintrop, dessa maneira você registrará a denúncia direto na Blockchain",
+        "Your property must be at least 5,000m²": "Sua propriedade deve ter no mínimo 5.000m²",
+        "Mark the center of your property": "Marque o centro da sua propriedade",
+        "You must register on the Sintrop platform before": "Você deve se cadastrar na plataforma da Sintrop antes",
+        "Cancel": "Cancelar",
+        "Delation of user": "Denunciar Usuário",
+        "Title of report": "Titulo da denúncia",
+        "Testimony": "Testemunho",
+        "Denounce": "Denunciar",
+        "": ""
     }
 }

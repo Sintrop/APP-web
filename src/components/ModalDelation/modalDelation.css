@@ -17,7 +17,7 @@
     flex-direction: column;
     align-items: center;
     width: 500px;
-    height: 530px;
+    height: 540px;
     padding: 10px;
     background-color: white;
     border-radius: 8px;
@@ -50,10 +50,11 @@
 }
 
 .modal-delation__photo{
-    width: 200px;
-    height: 150px;
+    width: 250px;
+    height: 170px;
     align-self: center;
     margin-top: 10px;
+    object-fit: cover;
 }
 
 .modal-delation__area-btn{

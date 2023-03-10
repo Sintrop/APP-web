@@ -7,6 +7,7 @@ import {get} from '../../../../config/infura';
 import {useParams} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {FaLock, FaCheck} from 'react-icons/fa';
+import { api } from '../../../../services/api';
 
 //services
 import {GetProducer} from '../../../../services/producerService';
@@ -14,14 +15,24 @@ import {GetInspections} from '../../../../services/manageInspectionsService';
 
 //components
 import ItemInspection from '../../../ProducerPageComponents/ItemInspection';
+import  Map  from '../../../Map';
+import axios from 'axios';
 
 export default function ProducerPage({wallet, setTab}){
+    const [loading, setLoading] = useState(true)
+    const [loadingApi, setLoadingApi] = useState(true)
     const {t} = useTranslation();
     const {user, chooseModalRegister, blockNumber, walletConnected} = useContext(MainContext);
     const [producerData, setProducerData] = useState([]);
+    const [producerDataApi, setProducerDataApi] = useState({});
+    const [propertyPath, setPropertyPath] = useState([]);
+    const [areaProperty, setAreaProperty] = useState(0);
     const [inspections, setInspections] = useState([]);
     const [base64, setBase64] = useState('');
+    const [base64Map, setBase64Map] = useState('');
     const {tabActive, walletSelected} = useParams();
+    const [viewMap, setViewMap] = useState(true);
+    const [modalDelation, setModalDelation] = useState(false);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -29,13 +40,61 @@ export default function ProducerPage({wallet, setTab}){
 
     useEffect(() => {
         getProducer();
-    }, [])
+        getApiProducer();
+    }, []);
+
+    async function getApiProducer(){
+        try{
+            setLoadingApi(true);
+            const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
+            setProducerDataApi(response.data.user)
+            setPropertyPath(JSON.parse(response.data.user.propertyGeolocation))
+            calculateArea(JSON.parse(response.data.user.propertyGeolocation))
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingApi(false);
+        }
+    }
+
+    async function calculateArea(coords){
+        let coordsUTM = [];
+        for(var i = 0; i < coords.length; i++){
+            let object = {}
+            const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
+            object = response.data.results[0]
+            coordsUTM.push(object)
+        }
+
+        let areaX = 0;
+        let areaY = 0;
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product1 = coordsUTM[i-1].y * coordsUTM[i].x;
+            areaX += product1
+        }
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product2 = coordsUTM[i-1].x * coordsUTM[i].y;
+            areaY += product2
+        }
+
+        let repeatX = coordsUTM[coordsUTM.length - 1].y * coordsUTM[0].x; 
+        let repeatY = coordsUTM[coordsUTM.length - 1].x * coordsUTM[0].y; 
+
+        areaX += repeatX;
+        areaY += repeatY;
+
+        let D = areaX - areaY;
+        let areaM2 = 0.5 * D;
+        setAreaProperty(areaM2);
+    }
 
     async function getProducer(){
+        setLoading(true)
         const response = await GetProducer(walletSelected);
-        getBase64(response.proofPhoto)
+        getBase64(response)
         setProducerData(response);
         getInspections();
+        setLoading(false)
     }
 
     async function getInspections(){
@@ -44,14 +103,17 @@ export default function ProducerPage({wallet, setTab}){
     }
 
     async function getBase64(data){
-        const res = await get(data);
+        const res = await get(data.proofPhoto);
         setBase64(res);
+        const map64 = await get(data.propertyAddress.country);
+        setBase64Map(map64);
     }
 
     return(
         <div className='container__producer-page'>
             <div className='content__producer-page'>
                 <div className='producer-area-info__producer-page'>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
                     <div className='area-avatar__producer-page'>
                         <img 
                             src={`data:image/png;base64,${base64}`}
@@ -64,7 +126,10 @@ export default function ProducerPage({wallet, setTab}){
                             </a>
                         </div>
 
-                        <Dialog.Root>
+                        <Dialog.Root
+                            open={modalDelation}
+                            onOpenChange={(open) => setModalDelation(open)}
+                        >
                             {user === '0' ? (
                                 <button className='area-avatar__btn-report' onClick={chooseModalRegister}>
                                     {t('Report')} {t('Producer')}
@@ -74,7 +139,7 @@ export default function ProducerPage({wallet, setTab}){
                                     {t('Report')} {t('Producer')}
                                 </Dialog.Trigger>
                             )}
-                            <ModalDelation reportedWallet={wallet}/>
+                            <ModalDelation reportedWallet={wallet} close={() => setModalDelation(false)}/>
                         </Dialog.Root>
                     </div>  
 
@@ -164,6 +229,23 @@ export default function ProducerPage({wallet, setTab}){
                             )}
                             
                         </div>
+                    )}
+                    </div>
+                    
+                    {producerDataApi && (
+                        <>
+                            {!loadingApi && (
+                                <div style={{display: 'flex', flexDirection: 'column', marginLeft: 10}}>
+                                    <Map
+                                        editable={false}
+                                        //position={producerData?.propertyAddress?.complement}
+                                        position={producerDataApi?.geoLocation}
+                                        pathPolyline={propertyPath}
+                                    />
+                                    <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {areaProperty.toFixed(2)}m²</p>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
