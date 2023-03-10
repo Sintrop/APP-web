@@ -27,6 +27,7 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                 <>
                     {editable && (
                         <DrawingManager
+                            drawingMode='polyline'
                             onMarkerComplete={e => {
                                 setCenter(`${e.position.lat()}, ${e.position.lng()}`)
                             }}
@@ -41,11 +42,11 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                     <Marker position={center}/>
                 )}
 
-                {/* {!editable && (
+                {!editable && (
                     <Polyline
                         path={pathPolyline}
                     />
-                )} */}
+                )}
             </GoogleMap>
         </LoadScript>
     )

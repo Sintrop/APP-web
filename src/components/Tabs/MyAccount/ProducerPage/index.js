@@ -231,15 +231,15 @@ export default function ProducerPage({wallet, setTab}){
                     {!loading && (
                         <>
                             {!loadingApi && (
-                                <>
-                                <Map
-                                    editable={false}
-                                    //position={producerData?.propertyAddress?.complement}
-                                    position={"-23.648088032964072,-46.56503617923737"}
-                                    pathPolyline={propertyPath}
-                                />
-                                <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {areaProperty.toFixed(2)}m²</p>
-                                </>
+                                <div style={{display: 'flex', flexDirection: 'column', marginLeft: 10}}>
+                                    <Map
+                                        editable={false}
+                                        //position={producerData?.propertyAddress?.complement}
+                                        position={producerDataApi?.geoLocation}
+                                        pathPolyline={propertyPath}
+                                    />
+                                    <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {areaProperty.toFixed(2)}m²</p>
+                                </div>
                             )}
                         </>
                     )}

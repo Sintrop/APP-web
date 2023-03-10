@@ -26,6 +26,7 @@ export default function ModalRegister(){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [areaProperty, setAreaProperty] = useState(0);
 
     const [checkWebcam, setCheckWebcam] = useState(false);
     const [step, setStep] = useState(1);
@@ -168,6 +169,14 @@ export default function ModalRegister(){
             //     toast.error(`${t('Fill in the complement field')}!`);
             //     return;
             // }
+
+            if(areaProperty < 5000){
+                toast.error(t('Your property must be at least 5,000m²'))
+            }
+
+            if(geoLocation === ''){
+                toast.error(t('Mark the center of your property'))
+            }
         }
 
         if(type === 'activist'){
@@ -608,6 +617,40 @@ export default function ModalRegister(){
         }
     }
 
+    async function calculateArea(coords){
+        let coordsUTM = [];
+        for(var i = 0; i < coords.length; i++){
+            let object = {}
+            const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
+            object = response.data.results[0]
+            coordsUTM.push(object)
+        }
+
+        let areaX = 0;
+        let areaY = 0;
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product1 = coordsUTM[i-1].y * coordsUTM[i].x;
+            areaX += product1
+        }
+        for(var i = 1; i < coordsUTM.length; i++){
+            let product2 = coordsUTM[i-1].x * coordsUTM[i].y;
+            areaY += product2
+        }
+
+        let repeatX = coordsUTM[coordsUTM.length - 1].y * coordsUTM[0].x; 
+        let repeatY = coordsUTM[coordsUTM.length - 1].x * coordsUTM[0].y; 
+
+        areaX += repeatX;
+        areaY += repeatY;
+
+        let D = areaX - areaY;
+        let areaM2 = 0.5 * D;
+        setAreaProperty(areaM2);
+        if(areaM2 < 5000){
+            toast.error(t('Your property must be at least 5,000m²'))
+        }
+    }
+
     return(
         <Dialog.Portal className='modal-register__portal'>
             <Dialog.Overlay className='modal-register__overlay'/>
@@ -828,7 +871,10 @@ export default function ModalRegister(){
                             <Map
                                 setCenter={(position) => {setGeolocation(position)}}
                                 editable={true}
-                                setPolyline={(path) => setPropertyGeolocation(path)}
+                                setPolyline={(path) => {
+                                    setPropertyGeolocation(path)
+                                    calculateArea(JSON.parse(path))
+                                }}
                             />
                         </div>
                     </div>
