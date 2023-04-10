@@ -26,9 +26,8 @@ function Map({setCenter, editable, position, setPolyline, pathPolyline}) {
     }
 
     function setLocale(){
-        const arrayPosition = position.split(',');
-        setLat(Number(arrayPosition[0]));
-        setLng(Number(arrayPosition[1]));
+        setLat(Number(position.lat));
+        setLng(Number(position.lng));
     }
 
     function convertToPath(path){
@@ -51,9 +50,8 @@ function Map({setCenter, editable, position, setPolyline, pathPolyline}) {
             center={{lat, lng}}
             setCenter={(position) => {
                 setCenter(position)
-                const arrayPosition = position.split(',');
-                setLat(Number(arrayPosition[0]));
-                setLng(Number(arrayPosition[1]));
+                setLat(Number(position.lat));
+                setLng(Number(position.lng));
             }}
             editable={editable}
             setPolyline={(path) => convertToPath(path)}

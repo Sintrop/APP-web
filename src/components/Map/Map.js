@@ -29,7 +29,11 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                         <DrawingManager
                             drawingMode='polyline'
                             onMarkerComplete={e => {
-                                setCenter(`${e.position.lat()}, ${e.position.lng()}`)
+                                const center = {
+                                    lat: e.position.lat(),
+                                    lng: e.position.lng()
+                                }
+                                setCenter(center)
                             }}
                             onPolylineComplete={(e) => {
                                 setPolyline(e.latLngs.h[0].h)

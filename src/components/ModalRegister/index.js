@@ -45,6 +45,8 @@ export default function ModalRegister(){
     const [country, setCountry] = useState("");
     const [geoLocation, setGeolocation] = useState('');
     const [propertyGeolocation, setPropertyGeolocation] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -64,11 +66,17 @@ export default function ModalRegister(){
         }
     }, [documetType]);
 
-     useEffect(() => {
+    useEffect(() => {
         if(cep.replace('_','').replace('-','').length === 8){
             handleSearchAddress()
         }
-     }, [cep]);
+    }, [cep]);
+
+    useEffect(() => {
+        if(step === 3 && type === 'activist'){
+            getLocale()
+        }
+    },[step])
 
     async function handleSearchAddress(){
         setLoading(true);
@@ -181,18 +189,18 @@ export default function ModalRegister(){
         }
 
         if(type === 'activist'){
-            if(state === '' || !cep.trim()){
-                toast.error(`${t('Enter a valid zip code')}!`);
+            if(!password.trim()){
+                toast.error(`${t('Fill in the password field')}!`);
                 return;
             }
 
-            if(!street.trim()){
-                toast.error(`${t('Fill in the street field')}!`);
+            if(!confirmPassword.trim()){
+                toast.error(`${t('Fill in the confirm password field')}!`);
                 return;
             }
 
-            if(!complement.trim()){
-                toast.error(`${t('Fill in the complement field')}!`);
+            if(password !== confirmPassword){
+                toast.error(`${t("Passwords don't match")}!`);
                 return;
             }
         }
@@ -201,10 +209,18 @@ export default function ModalRegister(){
     }
 
     async function register() {
+        let address = {
+            zipCode: cep,
+            state,
+            city,
+            complement,
+            street,
+            country
+        }
         if(type === 'producer'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addProducer(walletConnected, name, documetNumber, documetType, country, state, city, cep, street, complement, proofPhoto)
+            addProducer(walletConnected, name, proofPhoto, geoLocation, areaProperty)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -219,7 +235,9 @@ export default function ModalRegister(){
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 1,
                         geoLocation,
-                        propertyGeolocation
+                        propertyGeolocation,
+                        imgProfileUrl: proofPhoto,
+                        address: JSON.stringify(address)
                     })
                 }catch(err){
                     console.log(err);
@@ -265,7 +283,7 @@ export default function ModalRegister(){
         if(type === 'activist'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addActivist(walletConnected, name, country, state, city, cep, proofPhoto)
+            addActivist(walletConnected, name, proofPhoto, geoLocation)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -278,7 +296,10 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 2
+                        userType: 2,
+                        password,
+                        geoLocation: geoLocation,
+                        imgProfileUrl: proofPhoto
                     })
                 }catch(err){
                     console.log(err);
@@ -624,7 +645,7 @@ export default function ModalRegister(){
             let object = {}
             const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
             object = response.data.results[0]
-            coordsUTM.push(object)
+            coordsUTM.push(object);
         }
 
         let areaX = 0;
@@ -646,10 +667,20 @@ export default function ModalRegister(){
 
         let D = areaX - areaY;
         let areaM2 = 0.5 * D;
-        setAreaProperty(areaM2);
-        if(areaM2 < 5000){
+        setAreaProperty(Math.abs(areaM2));
+        if(Math.abs(areaM2) < 5000){
             toast.error(t('Your property must be at least 5,000m²'))
         }
+    }
+
+    function getLocale(){
+        navigator.geolocation.getCurrentPosition(res => {
+            const data = {
+                lat: res.coords.latitude,
+                lng: res.coords.longitude
+            }
+            setGeolocation(JSON.stringify(data))
+        })
     }
 
     return(
@@ -812,48 +843,28 @@ export default function ModalRegister(){
                             <>
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>{t('ZIP Code')}</label>
-                                        <InputMask
-                                            placeholder='Type here'
-                                            type="text"
-                                            name="cep"
-                                            value={cep}
-                                            onChange={(e) => setCep(e.target.value)}
-                                            mask='99999-999'
-                                            required
-                                            style={{width: '180px', height: 22}}
-                                        />
-                                    </div>
-                                
-                                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                                        <p style={{margin: 0, marginTop: 15, fontWeight: 'bold'}}>
-                                            {state === '' ? '' : `${city}-${state}, ${country}.`}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
-                                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>{t('Street')}</label>
+                                        <label htmlFor="password" style={{fontWeight: 'bold', color: 'green'}}>{t('Password')}</label>
                                         <input
                                             placeholder='Type here'
-                                            name="street"
-                                            value={street}
-                                            onChange={(e) => setStreet(e.target.value)}
+                                            name="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
                                             style={{width: '180px', height: 22}}
                                             required
+                                            type='password'
                                         />
                                     </div>
 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>{t('Complement')}</label>
+                                        <label htmlFor="confirmPassword" style={{fontWeight: 'bold', color: 'green'}}>{t('Confirm Password')}</label>
                                         <input
                                             placeholder='Type here'
-                                            name="complement"
-                                            value={complement}
-                                            onChange={(e) => setComplement(e.target.value)}
+                                            name="confirmPassword"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
                                             style={{width: '180px', height: 22}}
                                             required
+                                            type='password'
                                         />
                                     </div>
                                 </div>
@@ -870,7 +881,7 @@ export default function ModalRegister(){
                         
                         <div id='mapview'>
                             <Map
-                                setCenter={(position) => {setGeolocation(position)}}
+                                setCenter={(position) => {setGeolocation(JSON.stringify(position))}}
                                 editable={true}
                                 setPolyline={(path) => {
                                     setPropertyGeolocation(path)

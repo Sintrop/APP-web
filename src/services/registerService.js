@@ -26,11 +26,11 @@ const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, devel
 const ActivistContract = new web3.eth.Contract(ActivistContractJson.abi, activistContractAddress);
 const InvestorContract = new web3.eth.Contract(InvestorContractJson.abi, investorContractAddress);
 
-export const addProducer = async (wallet, name, document, documentType, country, state, city, cep, street, complement, proofPhoto) => {
+export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaProperty) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    await ProducerContract.methods.addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
+    await ProducerContract.methods.addProducer(Number(areaProperty).toFixed(0), name, proofPhoto, geoLocation)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
@@ -57,11 +57,11 @@ export const addProducer = async (wallet, name, document, documentType, country,
     }
 }
 
-export const addActivist = async (wallet, name, country, state, city, cep, proofPhoto) => {
+export const addActivist = async (wallet, name, proofPhoto, coordinate) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    await ActivistContract.methods.addActivist(name, proofPhoto, country, state, city, cep)
+    await ActivistContract.methods.addActivist(name, proofPhoto, coordinate)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){

@@ -31,6 +31,7 @@ export default function ISA({user, walletAddress, setTab}){
         setLoading(true);
         const response = await GetCategories();
         setCategories(response);
+        console.log(response)
         setLoading(false);
     }
 

@@ -92,21 +92,14 @@ export default function ActivistPage({wallet, setTab}){
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {activistData === [] ? '' : activistData.name}
-                        </p>
-                    </div>
-
-                    <div className='producer-cards-info__producer-page'>
-                        <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
-                        <p className='description-cards-info__producer-page'>
-                            {activistData.activistAddress === undefined ? '' : `${activistData.activistAddress.city}/${activistData.activistAddress.state}, ${activistData.activistAddress.country}`}
+                            {activistData?.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('Total Inspections')}:</h1>
                         <p className='description-cards-info__producer-page'>
-                            {activistData === [] ? '' : activistData.totalInspections}
+                            {activistData?.totalInspections}
                         </p>
                     </div>
                             

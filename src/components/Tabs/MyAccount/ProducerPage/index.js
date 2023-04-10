@@ -49,43 +49,11 @@ export default function ProducerPage({wallet, setTab}){
             const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
             setProducerDataApi(response.data.user)
             setPropertyPath(JSON.parse(response.data.user.propertyGeolocation))
-            calculateArea(JSON.parse(response.data.user.propertyGeolocation))
         }catch(err){
             console.log(err);
         }finally{
             setLoadingApi(false);
         }
-    }
-
-    async function calculateArea(coords){
-        let coordsUTM = [];
-        for(var i = 0; i < coords.length; i++){
-            let object = {}
-            const response = await axios.get(`https://epsg.io/srs/transform/${coords[i].lng},${coords[i].lat}.json?key=default&s_srs=4326&t_srs=3857`)
-            object = response.data.results[0]
-            coordsUTM.push(object)
-        }
-
-        let areaX = 0;
-        let areaY = 0;
-        for(var i = 1; i < coordsUTM.length; i++){
-            let product1 = coordsUTM[i-1].y * coordsUTM[i].x;
-            areaX += product1
-        }
-        for(var i = 1; i < coordsUTM.length; i++){
-            let product2 = coordsUTM[i-1].x * coordsUTM[i].y;
-            areaY += product2
-        }
-
-        let repeatX = coordsUTM[coordsUTM.length - 1].y * coordsUTM[0].x; 
-        let repeatY = coordsUTM[coordsUTM.length - 1].x * coordsUTM[0].y; 
-
-        areaX += repeatX;
-        areaY += repeatY;
-
-        let D = areaX - areaY;
-        let areaM2 = 0.5 * D;
-        setAreaProperty(areaM2);
     }
 
     async function getProducer(){
@@ -94,7 +62,8 @@ export default function ProducerPage({wallet, setTab}){
         getBase64(response)
         setProducerData(response);
         getInspections();
-        setLoading(false)
+        setLoading(false);
+        console.log(response)
     }
 
     async function getInspections(){
@@ -105,8 +74,6 @@ export default function ProducerPage({wallet, setTab}){
     async function getBase64(data){
         const res = await get(data.proofPhoto);
         setBase64(res);
-        const map64 = await get(data.propertyAddress.country);
-        setBase64Map(map64);
     }
 
     return(
@@ -146,28 +113,28 @@ export default function ProducerPage({wallet, setTab}){
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('Name')}: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData === [] ? '' : producerData.name}
+                            {producerData?.name}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('Address')}: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData.propertyAddress === undefined ? '' : `${producerData.propertyAddress.city}/${producerData.propertyAddress.state}, ${producerData.propertyAddress.country}`}
+                            {`${producerData?.propertyAddress?.city}/${producerData?.propertyAddress?.state}, ${producerData?.propertyAddress?.country}`}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('Inspections Reiceved')}: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData === [] ? '' : producerData.totalInspections}
+                            {producerData?.totalInspections}
                         </p>
                     </div>
 
                     <div className='producer-cards-info__producer-page'>
                         <h1 className='tit-cards-info__producer-page'>{t('ISA Score')}: </h1>
                         <p className='description-cards-info__producer-page'>
-                            {producerData.isa === undefined ? '' : producerData.isa.isaScore}
+                            {producerData?.isa?.isaScore}
                         </p>
                     </div>
 
@@ -239,10 +206,10 @@ export default function ProducerPage({wallet, setTab}){
                                     <Map
                                         editable={false}
                                         //position={producerData?.propertyAddress?.complement}
-                                        position={producerDataApi?.geoLocation}
+                                        position={JSON.parse(producerDataApi?.geoLocation)}
                                         pathPolyline={propertyPath}
                                     />
-                                    <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {areaProperty.toFixed(2)}m²</p>
+                                    <p style={{margin: 0, fontWeight: "bold", textAlign: "center"}}>Área Aprox.: {producerData?.certifiedArea}m²</p>
                                 </div>
                             )}
                         </>
