@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useTranslation } from 'react-i18next';
+import {useMainContext} from '../../../../hooks/useMainContext';
 //services
 import {
     GetTokensPerEra, 
@@ -16,7 +17,8 @@ import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 
-export default function ProducersPool({user, wallet, setTab}){
+export default function ProducersPool({wallet, setTab}){
+    const {user} = useMainContext();
     const {t} = useTranslation();
     const producerService = new ProducerService(wallet);
     const [loading, setLoading] = useState(false);
@@ -139,6 +141,81 @@ export default function ProducersPool({user, wallet, setTab}){
             })
         })
     }
+
+    return(
+        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
+            <div className='flex items-center justify-between mb-10'>
+                <h1 className="font-bold text-2xl text-white">{t('Producers Pool')}</h1>
+                <div className='flex items-center gap-2'>
+                    <button
+                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                        onClick={() => {}}
+                    >
+                        {t('Withdraw')} Tokens
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+                {user === '1' && (
+                    <div className="flex items-center w-[700px] gap-3 mb-7">
+                        <div className="flex flex-col w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                            <p className="font-bold text-white">Seu Status</p>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white">ERA Atual:</p>
+                                <p className="font-bold text-[#ff9900]">10</p>
+                            </div>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white ">Próxima aprovação em:</p>
+                                <p className="font-bold text-[#ff9900]">5</p>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                            <p className="font-bold text-white">Saldo</p>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white">Total:</p>
+                                <p className="font-bold text-[#ff9900]">458796.0000</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="lg:w-[700px] bg-[#0A4303] flex flex-col border-2 border-[#3E9EF5] rounded-md">
+                    <div className="flex w-full">
+                        <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900]">Saldo do contrato</p>
+                                <p className="font-bold text-white">454585.00000</p>
+                            </div>
+
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900]">Tokens por ERA</p>
+                                <p className="font-bold text-white">456.000</p>
+                            </div>
+
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900]">ERA atual</p>
+                                <p className="font-bold text-white">123</p>
+                            </div>
+                        </div>
+
+                        <div className='flex items-center justify-center w-[50%] h-full'>
+                            <img
+                                src={require('../../../../assets/token.png')}
+                                className='w-[250px] h-[250px] object-contain'
+                            />
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col w-full px-4 py-2 bg-[#783E19] mb-3 border-2 border-[#3E9EF5]'>
+                        <p className="font-bold text-white">Pontuação total dos produtores</p>
+                        <p className="font-bold text-[#ff9900]">456</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 
     return(
         <div className='container-isa-page'>

@@ -2,16 +2,15 @@ import React, { useState, useContext } from "react";
 import "./menu.css";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from 'react-icons/bs';
 import { MainContext } from "../../contexts/main";
-import Logo from "../../assets/img/262543420-sintrop-logo-com-degrade.png";
-import LogoSimple from '../../assets/img/logo-simple.png'
-import IconISA from "../../assets/img/263926603-6.png";
-import IconInspections from "../../assets/img/263926582-4.png";
-import IconAcceptedInspection from "../../assets/img/263926589-5.png";
-import IconProducers from "../../assets/img/263926618-8.png";
-import IconActivists from "../../assets/img/263926692-20.png";
-import IconMyAccount from "../../assets/img/263926648-13.png";
-import IconCertificate from "../../assets/img/263926557-1.png";
-import IconPools from "../../assets/img/263926606-7.png";
+
+import IconCommunity from '../../assets/icon-community.png'
+import IconIndice from '../../assets/icon-indice.png';
+import IconHistory from '../../assets/icon-history.png';
+import IconManage from '../../assets/icon-manage.png';
+import IconCertificate from '../../assets/icon-certificate.png';
+import IconSac from '../../assets/icon-sac.png';
+import IconPesquisas from '../../assets/icon-pesquisas.png';
+import IconAccount from '../../assets/icon-account.png';
 
 import ItemsList from "./itemsList";
 
@@ -24,7 +23,7 @@ export default function Menu({ changeTab }) {
         {
         id: "rankings",
         title: "Community",
-        icon: IconActivists,
+        icon: IconCommunity,
         action: "",
         subItem: [
             { id: "producers", label: "Producers" },
@@ -36,17 +35,17 @@ export default function Menu({ changeTab }) {
             { id: "researchers", label: "Researchers" },
         ],
         },
-        { id: "isa", title: "Sustainable Agriculture Index", icon: IconISA, action: "" },
+        { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
         {
         id: "inspection-history",
         title: "Inspections History",
-        icon: IconInspections,
+        icon: IconHistory,
         action: "",
         },
         {
         id: "manage-inspections",
         title: "Manage Inspections",
-        icon: IconAcceptedInspection,
+        icon: IconManage,
         action: "",
         },
         // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
@@ -64,7 +63,7 @@ export default function Menu({ changeTab }) {
         { 
         id: "pools", 
         title: "SAC Token", 
-        icon: IconPools, 
+        icon: IconSac, 
         action: "",
         subItem: [
             {id: 'producers-pool', label: 'Producers'},
@@ -77,8 +76,8 @@ export default function Menu({ changeTab }) {
         //  icon: IconInspections, 
         //  action: ""
         //},
-        { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
-        { id: "researches", title: "Research Center", icon: IconISA, action: "" },
+        { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
+        { id: "researches", title: "Research Center", icon: IconPesquisas, action: "" },
     ]);
     const toggleSubItem = (id) => {
         if(id === 'rankings'){
@@ -92,12 +91,32 @@ export default function Menu({ changeTab }) {
         }
     };
     return (
-        <div className="container-menu" style={{width: menuOpen ? '300px' : '90px'}}>
-            {menuOpen ? (
-                <img className="img-logo" src={Logo} />
-            ) : (
-                <img className="img-logo-simple" src={LogoSimple} />
-            )}
+        <div className="flex flex-col overflow-auto bg-[#0A4303] mt-12 h-[95vh] fixed duration-200" style={{width: menuOpen ? '350px' : '90px'}}>
+            <div className="flex items-center justify-between">
+                {menuOpen ? (
+                    <img className="w-[120px] h-[80px] object-contain ml-4" src={require('../../assets/logo-branco.png')} />
+                ) : (
+                    <img className="w-[40px] h-[40px] object-contain ml-3 mt-4 mb-5" src={require('../../assets/logos-branco.png')} />
+                )}
+
+                <button
+                    onClick={() => {
+                        toggleMenu()
+                        if(menuOpen){
+                            setOpen(false);
+                            setOpenCertificates(false);
+                            setOpenPools(false)
+                        }
+                    }}
+                    className='px-3 py-3 hover:bg-green-950'
+                >
+                    {menuOpen ? (
+                        <BsChevronDoubleLeft color='green' size={20}/>
+                    ) : (
+                        <BsChevronDoubleRight color='green' size={20}/>
+                    )}
+                </button>
+            </div>
 
             {itemsMenu.map((item) => {
                 return (
@@ -116,7 +135,7 @@ export default function Menu({ changeTab }) {
                         }
                         if(id === 'certificates'){
                             setOpenPools(false);
-                            setOpen(false);
+                            setOpen(false);  
                         }
                         if(id === 'rankings'){
                             setOpenPools(false);
@@ -131,24 +150,6 @@ export default function Menu({ changeTab }) {
                 />
                 );
             })}
-
-            <button
-                onClick={() => {
-                    toggleMenu()
-                    if(menuOpen){
-                        setOpen(false);
-                        setOpenCertificates(false);
-                        setOpenPools(false)
-                    }
-                }}
-                className='menu__btn-change-open'
-            >
-                {menuOpen ? (
-                    <BsChevronDoubleLeft color='green' size={20}/>
-                ) : (
-                    <BsChevronDoubleRight color='green' size={20}/>
-                )}
-            </button>
         </div>
     );
 }

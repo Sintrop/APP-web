@@ -3,6 +3,7 @@ import ActivistService from "../../../../services/activistService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import { RankingItem } from "../../../RankingItem";
 
 export default function ActivistRanking({ wallet, setTab }) {
     const {t} = useTranslation();
@@ -26,7 +27,26 @@ export default function ActivistRanking({ wallet, setTab }) {
         })
         .catch((err) => console.log(err));
     }, []);
-  return (
+
+    return (
+        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
+            <div className='flex items-center justify-between mb-5'>
+                <h1 className="font-bold text-2xl text-white">{t('Activists')}</h1>
+                
+            </div>
+
+            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-10">
+                {activist.map((item, index) => (
+                    <RankingItem
+                        data={item}
+                        position={index + 1}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+
+    return (
     <>
       <div className='header-isa'>
         <h1>{t('Activists')}</h1>          

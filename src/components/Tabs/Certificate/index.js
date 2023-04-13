@@ -75,12 +75,12 @@ export default function ProducerCertificate({userType, wallet, setTab}){
     }
 
     return(
-        <div className="container-isa-page">
-            <div className='header-isa'>
-                <h1>{t('Certificate')}</h1>
-                <div className='area-btn-header-isa-page'>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
+            <div className='flex items-center justify-between mb-10'>
+                <h1 className="font-bold text-2xl text-white">{t('Certificate')}</h1>
+                <div className='flex items-center gap-2'>
                     <button
-                        className='btn-new-category-isa'
+                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
                     >
                         {t('Download')} {t('Certificate')}
@@ -88,7 +88,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
 
                     <CopyToClipboard text={`${window.location.host}/account-producer/${wallet}`}>
                         <button
-                            className='btn-new-category-isa'
+                            className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                             onClick={() => alert('URL copied to clipboard')}
                         >
                             {t('Copy')} URL
@@ -97,7 +97,54 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="area-certificates">
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+                <div className="flex flex-col">
+                    <div className="flex lg:w-[700px] lg:h-[350px] border-2 bg-[#0A4303] border-white rounded-md">
+
+                    </div>
+
+                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md">
+                        <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
+                            <div className="flex w-full h-full">
+                                <div className="flex flex-col w-[70%]">
+                                    <img
+                                        src={require('../../../assets/logo-cinza.png')}
+                                        className="w-[150px] h-[80px] object-contain"
+                                    />
+
+                                    <p className="font-bold text-black">Sítio Florbela</p>
+                                    <p className="font-bold text-black">Santo André/SP, Vila Palmares</p>
+                                    <p className="font-bold text-black">CEP:09061-120</p>
+
+                                    <div className="flex w-full mt-7">
+                                        <div className="flex flex-col w-[50%]">
+                                            <p className="text-black text-sm">Inspeções recebidas: 2</p>
+                                            <p className="text-black text-sm">Nota de sustentabilidade: 10</p>
+                                            <p className="text-black text-sm">Média: 5</p>
+                                        </div>
+
+                                        <div className="flex flex-col w-[50%]">
+                                            <p className="text-black text-sm">Saldo de Carbono: 10 Co²</p>
+                                            <p className="text-black text-sm">Saldo de Água: 25 m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: 25</p>
+                                            <p className="text-black text-sm">Saldo de Solo: 50 m²</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col items-center justify-center w-[30%]">
+                                    <p className="text-black font-bold text-center mb-5">Produtor Regenerativo</p>
+                                    <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={180}/>
+                                </div>
+                            </div>
+
+                            <p className="text-sm text-center mt-3">Wallet do produtor: {wallet}</p>
+                        </div>
+                    </div> 
+                    
+                </div>
+
+            {/* <div className="area-certificates">
                 <div className="certificate__container">
                     <div className="container__area-info-producer">
                         <div className="area-info-producer__card-info">
@@ -138,6 +185,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                     <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={190}/>
                     <p className="hash-qrcode">{producerData === [] ? '' : producerData.producerWallet}</p>
                 </div>
+            </div> */}
             </div>
 
             {loading && (

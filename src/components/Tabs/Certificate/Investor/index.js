@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from "react";
-import '../certificate.css';
-import '../../isa.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -71,20 +69,20 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     }
 
     return(
-        <div className="container-isa-page">
-            <div className='header-isa'>
-                <h1>{t('Investor Certificate')}</h1>
-                <div className='area-btn-header-isa-page'>
+        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
+            <div className='flex items-center justify-between mb-10'>
+                <h1 className="font-bold text-2xl text-white">{t('Investor Certificate')}</h1>
+                <div className='flex items-center gap-2'>
                     <button
-                        className='btn-new-category-isa'
+                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
                     >
                         {t('Download')} {t('Certificate')}
                     </button>
 
-                    <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
+                    <CopyToClipboard text={`${window.location.host}/account-producer/${wallet}`}>
                         <button
-                            className='btn-new-category-isa'
+                            className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                             onClick={() => alert('URL copied to clipboard')}
                         >
                             {t('Copy')} URL
@@ -93,69 +91,156 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="area-certificates">
-                <div className="container__certificate-container-short">
-                    <img src={Logo} className='img-logo-certificate'/>
-                    <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={190}/>
-                    <p className="hash-qrcode">{walletAddress}</p>
-                    <p style={{textAlign: 'center'}}>
-                        {userType === '7' ? `${t('The investor')}` : `${t('You')}`}
-                        <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> {t('contributed to the agroecological transition with a total of')}:
-                    </p>
-                    <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
-                        <p style={{fontWeight: 'bold'}}>{String(tokensBurned).replace('e-12', '').replace('e-9', '')} SAC Tokens</p>
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+
+            <div className="flex flex-col">
+                    <div className="flex lg:w-[700px] lg:h-[350px] border-2 bg-[#0A4303] border-white rounded-md">
+
                     </div>
+
+                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md">
+                        <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
+                            <div className="flex w-full h-full">
+                                <div className="flex flex-col w-[70%]">
+                                    <img
+                                        src={require('../../../../assets/logo-cinza.png')}
+                                        className="w-[150px] h-[80px] object-contain"
+                                    />
+
+                                    <p className="font-bold text-black">Sítio Florbela</p>
+                                    <p className="font-bold text-black">Santo André/SP, Vila Palmares</p>
+                                    <p className="font-bold text-black">CEP:09061-120</p>
+
+                                    <div className="flex w-full mt-7">
+                                        <div className="flex flex-col w-[50%]">
+                                            <p className="text-black text-sm">Inspeções recebidas: 2</p>
+                                            <p className="text-black text-sm">Nota de sustentabilidade: 10</p>
+                                            <p className="text-black text-sm">Média: 5</p>
+                                        </div>
+
+                                        <div className="flex flex-col w-[50%]">
+                                            <p className="text-black text-sm">Saldo de Carbono: 10 Co²</p>
+                                            <p className="text-black text-sm">Saldo de Água: 25 m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: 25</p>
+                                            <p className="text-black text-sm">Saldo de Solo: 50 m²</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col items-center justify-center w-[30%]">
+                                    <p className="text-black font-bold text-center mb-5">Produtor Regenerativo</p>
+                                    <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={180}/>
+                                </div>
+                            </div>
+
+                            <p className="text-sm text-center mt-3">Wallet do produtor: {wallet}</p>
+                        </div>
+                    </div> 
+                    
                 </div>
 
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 300}}>
-                    {tokensBurned === 0 ? (
-                        <p style={{textAlign: 'center'}}>
-                            {t("You haven't contributed to the agroecological transition yet")}
-                        </p>
-                    ) : (
-                        <p style={{color: 'green', textAlign: 'center'}}>
-                            {t('The earth thanks your contribution. Together we will make agriculture sustainable')}!
-                        </p>
+                <div className="flex flex-col items-center w-full mt-10">
+                    <h3 className="font-bold text-white text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
+                
+                    <div className="flex flex-col lg:w-[800px] p-4 mt-10 bg-[#0A4303] rounded-md border-2 border-[#3E9EF5]">
+                        <div className="flex w-full py-1 items-center justify-center bg-[#783E19] rounded-md">
+                            <p className="font-bold text-white text-xl">Meu impacto</p>
+
+                        </div>
+                        <div className="flex w-full justify-center flex-wrap gap-2 mt-5">
+                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col w-[30%]">
+                                    <p className="font-bold text-[#0A4303] text-2xl">Carbono</p>
+                                    <img
+                                        src={require('../../../../assets/icon-co2.png')}
+                                        className="w-[70px] h-[60px] object-cover"
+                                    />
+                                </div>
+                                <div className="flex w-[70%] h-full items-center justify-center">
+                                    <p className="font-bold text-[#0a4303] text-[50px]">25</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">ton</p>
+                                </div>
+                            </div>
+
+                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col w-[30%]">
+                                    <p className="font-bold text-[#0A4303] text-2xl">Solo</p>
+                                    <img
+                                        src={require('../../../../assets/icon-solo.png')}
+                                        className="w-[50px] h-[50px] object-contain"
+                                    />
+                                </div>
+                                <div className="flex w-[70%] h-full items-center justify-center">
+                                    <p className="font-bold text-[#0a4303] text-[50px]">50</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">m²</p>
+                                </div>
+                            </div>
+
+                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col w-[30%]">
+                                    <p className="font-bold text-[#0A4303] text-2xl">Biodiversidade</p>
+                                    <img
+                                        src={require('../../../../assets/icon-bio.png')}
+                                        className="w-[50px] h-[50px] object-contain"
+                                    />
+                                </div>
+                                <div className="flex w-[70%] h-full items-center justify-center">
+                                    <p className="font-bold text-[#0a4303] text-[50px]">35</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">uni</p>
+                                </div>
+                            </div>
+
+                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col w-[30%]">
+                                    <p className="font-bold text-[#0A4303] text-2xl">Água</p>
+                                    <img
+                                        src={require('../../../../assets/icon-agua.png')}
+                                        className="w-[50px] h-[50px] object-contain"
+                                    />
+                                </div>
+                                <div className="flex w-[70%] h-full items-center justify-center">
+                                    <p className="font-bold text-[#0a4303] text-[50px]">62</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">m³</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-10 flex items-center gap-2 lg:w-[750px]">
+                        <button
+                            className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
+                            onClick={() => {}}
+                        >
+                            {t('Contribute More')}
+                        </button>
+                        <button
+                            className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
+                            onClick={() => {}}
+                        >
+                            {t('Calculadora de Pegada Agrícola')}
+                        </button>
+                    </div>
+
+                    <a
+                        href='#'
+                        className="text-white mt-5 text-xl"
+                    >
+                        Leia nossa documentação para entender mais
+                    </a>
+                </div>
+
+                <div className="flex justify-center flex-wrap gap-10 mt-10">
+                    {receipts.length !== 0 && (
+                        <>
+                        {receipts.map((item, index) => (
+                            <ItemReceipt
+                                data={item}
+                                index={index + 1}
+                            />
+                        ))}
+                        </>
                     )}
-
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <p style={{margin: 0}}>{t('My impact')}:</p>
-                        <ul style={{margin: 0}}>
-                            <li>0 TONS {t('of')} CO2 {t('captured')}</li>
-                            <li>0 TONS {t('of')} CO2 {t('prevented')}</li>
-                            <li>0 {t('increased biodiversity')}</li>
-                        </ul>
-                    </div>
-
-                    <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
-                        <Dialog.Trigger
-                            className="investor-certificate__btn-donate"
-                        >{tokensBurned === 0 ? `${t('Contribute')}` : `${t('Contribute More')}`}</Dialog.Trigger>
-                        <ModalContribute 
-                            wallet={wallet} 
-                            onFinished={() => {
-                                getInvestor();
-                                setModalContribute(false)
-                            }}
-                        />
-                    </Dialog.Root>
-
-                    <button
-                        className="investor-certificate__btn-calculator"
-                    >{t('Agriculture Footprint Calculator')}</button>
-
-                    <p style={{textAlign: 'center'}}>{t('Read our documentation to understand better')}</p>
                 </div>
-            </div>
-
-            <div className="investor-certificate__area-receipts">
-                {receipts.map(receipt => {
-                    if(receipt.to === '0x0000000000000000000000000000000000000000'){
-                        return(
-                            <ItemReceipt key={receipt.hash} data={receipt}/>
-                        )
-                    }
-                })}            
             </div>
 
             {loading && (

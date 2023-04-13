@@ -11,6 +11,7 @@ import HeaderAccount from '../../components/HeaderAccount';
 import TabIndicator from '../../components/TabIndicator';
 import ManageInspections from '../../components/Tabs/ManageInspections';
 import { UnsupportedNetwork } from '../../components/UnsupportedNetwork';
+import { TopBarStatus } from '../../components/TopBarStatus';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -86,14 +87,9 @@ export default function Dashboard(){
         check();
     }, []);
 
-    if(!isSupported){
-        return(
-            <UnsupportedNetwork/>
-        )
-    }
-
     return(
         <div style={{display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh'}}>
+            <TopBarStatus/>
             <Menu 
                 changeTab={(tab) => {
                     setActiveTab(tab)
@@ -104,12 +100,9 @@ export default function Dashboard(){
                     }
                 }}
             />
-        <div className='container-dashboard' style={{marginLeft: menuOpen ? '300px' : '80px', width: menuOpen ? '77vw' : '91vw'}}>
+        <div className='flex flex-col mt-11 w-full overflow-hidden' style={{marginLeft: menuOpen ? '350px' : '80px'}}>
 
-            <div className='content-dashboard'>
-                <HeaderAccount wallet={walletAddress}/>
-                <TabIndicator activeTab={activeTab} wallet={walletAddress}/>
-
+            <div className='w-[100%] h-[100%]'>
                 {activeTab === 'register' && (
                     <Register 
                         wallet={walletAddress}
