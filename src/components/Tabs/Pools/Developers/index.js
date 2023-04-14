@@ -21,6 +21,7 @@ import DevelopersService from '../../../../services/developersService';
 import DeveloperItem from './DeveloperItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
+import { UserPoolItem } from '../../../UserPoolItem';
 
 export default function DevelopersPool({wallet, setTab}){
     const {user} = useMainContext();
@@ -209,7 +210,38 @@ export default function DevelopersPool({wallet, setTab}){
                         <p className="font-bold text-white">Soma total dos níveis dos desenvolvedores</p>
                         <p className="font-bold text-[#ff9900]">456</p>
                     </div>
+
                 </div>
+                    <div className='flex flex-col lg:w-[700px] bg-[#0a4303] border-2 border-[#3E9EF5] rounded-sm pl-2 pt-2 mt-10'>
+                        <div className='flex items-center justify-center w-full'>
+                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de desenvolvedores</p>
+                        </div>
+                        <div className='flex w-full items-center'>
+                            <div className='flex w-[5%] px-1 py-3'>
+                                <p className='font-bold text-white'>#</p>
+                            </div>
+                            <div className='flex justify-center w-[20%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Wallet')}</p>
+                            </div>
+                            <div className='flex justify-center w-[30%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Name')}</p>
+                            </div>
+                            <div className='flex justify-center w-[25%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Balance')}</p>
+                            </div>
+                            <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-t-2 border-l-2 border-[#3E9EF5]'>
+                                <p className='font-bold text-white'>{t('Score')}</p>
+                            </div>
+                        </div>
+                        <div className='flex flex-col'>
+                            {developersList.map((item, index) => (
+                                <UserPoolItem
+                                    data={item}
+                                    position={index + 1}
+                                />
+                            ))}
+                        </div>
+                    </div>
             </div>
         </div>
     )

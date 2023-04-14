@@ -44,24 +44,14 @@ export default function ProducerCertificate({userType, wallet, setTab}){
 
     function downloadCertificate(){
         setLoading(true);
-        const fileNameLong = `Certificate_Long_${wallet}`;
-        const fileNameShort = `Certificate_Short_${wallet}`;
-        var certificateLong = document.querySelector(".container__certificate-container");
-        var certificateShort = document.querySelector(".container__certificate-container-short");
+        const fileNameLong = `Certificate_${wallet}`;
+        var certificateLong = document.querySelector("#certificate");
         htmlToImage.toJpeg(certificateLong)
         .then((dataUrl) => {
             saveAs(dataUrl, fileNameLong)
-            htmlToImage.toJpeg(certificateShort)
-            .then((dataUrlShort) => {
-                saveAs(dataUrlShort, fileNameShort);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            setLoading(false)
         })
         .catch((error) => {
-            console.log(error);
             setLoading(false);
         })
     }
@@ -98,12 +88,12 @@ export default function ProducerCertificate({userType, wallet, setTab}){
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
-                <div className="flex flex-col">
+                <div className="flex flex-col lg:w-[715px] " id='certificate'>
                     <div className="flex lg:w-[700px] lg:h-[350px] border-2 bg-[#0A4303] border-white rounded-md">
 
                     </div>
 
-                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md">
+                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md" >
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
                             <div className="flex w-full h-full">
                                 <div className="flex flex-col w-[70%]">
@@ -112,15 +102,15 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                                         className="w-[150px] h-[80px] object-contain"
                                     />
 
-                                    <p className="font-bold text-black">Sítio Florbela</p>
-                                    <p className="font-bold text-black">Santo André/SP, Vila Palmares</p>
-                                    <p className="font-bold text-black">CEP:09061-120</p>
+                                    <p className="font-bold text-black">{producerData?.name}</p>
+                                    <p className="font-bold text-black">Data API</p>
+                                    <p className="font-bold text-black">Data API</p>
 
                                     <div className="flex w-full mt-7">
                                         <div className="flex flex-col w-[50%]">
-                                            <p className="text-black text-sm">Inspeções recebidas: 2</p>
-                                            <p className="text-black text-sm">Nota de sustentabilidade: 10</p>
-                                            <p className="text-black text-sm">Média: 5</p>
+                                            <p className="text-black text-sm">{t('Inspections Reiceved')}: {producerData?.totalInspections}</p>
+                                            <p className="text-black text-sm">ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
+                                            <p className="text-black text-sm">ISA {t('Average')}: {producerData?.isa?.isaAverage}</p>
                                         </div>
 
                                         <div className="flex flex-col w-[50%]">

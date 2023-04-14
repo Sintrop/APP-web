@@ -91,7 +91,7 @@ export default function Menu({ changeTab }) {
         }
     };
     return (
-        <div className="flex flex-col overflow-auto bg-[#0A4303] mt-12 h-[95vh] fixed duration-200" style={{width: menuOpen ? '350px' : '90px'}}>
+        <div className="hidden lg:flex flex-col overflow-auto bg-[#0A4303] mt-12 h-[95vh] fixed duration-200" style={{width: menuOpen ? '350px' : '90px'}}>
             <div className="flex items-center justify-between">
                 {menuOpen ? (
                     <img className="w-[120px] h-[80px] object-contain ml-4" src={require('../../assets/logo-branco.png')} />

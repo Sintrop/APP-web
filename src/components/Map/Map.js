@@ -3,13 +3,13 @@ import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-
 
 const containerStyle = {
   width: '450px',
-  height: '400px'
+  height: '247px'
 };
 
 // const center = {
-//   lat: -3.745,
-//   lng: -38.523
-// };
+//    lat: -3.745,
+//    lng: -38.523
+//  };
 
 function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
     return(

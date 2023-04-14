@@ -6,13 +6,13 @@ export function RankingItem({data, position}){
     console.log(data)
     return(
         
-            <div className="flex flex-col w-[300px] h-[420px] bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+            <div className="flex flex-col w-[300px] h-[400px] bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
                 <img
                     src={require('../assets/ex-producer.png')}
                     className='w-full h-[250px] object-cover rounded-t-md'
                 />
 
-                <div className="flex flex-col w-full py-5 items-center">
+                <div className="flex flex-col w-full py-1 items-center">
                     <p className='font-bold text-center text-lg text-white'>{data?.name}</p>
 
                     {data?.userType === '1' && (
@@ -32,24 +32,33 @@ export function RankingItem({data, position}){
                             <p className='font-bold text-center text-white'>.</p>  
                         </>
                     )}
+
+                    {data?.userType === '3' && (
+                        <>
+                            <p className='text-xs text-center text-white'>{data?.researcherWallet}</p> 
+                            <p className='font-bold text-center text-white mt-3'>{t('Published Works')}: {data?.publishedWorks}</p>
+                            <p className='font-bold text-center text-white'>.</p>
+                            <p className='font-bold text-center text-white'>.</p> 
+                        </>
+                    )}
                 </div>
                 {position === 1 && (
                     <img
                         src={require('../assets/med-ouro.png')}
-                        className='w-[60px] h-[60px] object-contain mt-[-420px] ml-[-10px]'
+                        className='w-[60px] h-[60px] object-contain mt-[-387px] ml-[-10px]'
                     />
                 )}
                 {position === 2 && (
                     <img
                         src={require('../assets/med-prata.png')}
-                        className='w-[60px] h-[60px] object-contain mt-[-420px] ml-[-10px]'
+                        className='w-[60px] h-[60px] object-contain mt-[-387px] ml-[-10px]'
                     />
                 )}
 
                 {position === 3 && (
                     <img
                         src={require('../assets/med-bronze.png')}
-                        className='w-[60px] h-[60px] object-contain mt-[-420px] ml-[-10px]'
+                        className='w-[60px] h-[60px] object-contain mt-[-387px] ml-[-10px]'
                     />
                 )}
             </div>

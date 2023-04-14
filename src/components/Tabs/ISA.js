@@ -35,13 +35,13 @@ export default function ISA({user, walletAddress, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-10 pt-10 overflow-auto'>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto'>
             <h1 className='font-bold text-2xl text-white'>{t('Sustainable Agriculture Index')}</h1>
             
             {categories.length === 0 ? (
                 <h1>{t('No category registered')}</h1>
             ) : (              
-                <div className="mt-10 h-[90vh] overflow-auto pb-20">  
+                <div className="mt-10 h-[90vh] lg:overflow-auto lg:pb-20">  
                     {categories.map(item => (
                         <IndiceItem
                             key={item.id}

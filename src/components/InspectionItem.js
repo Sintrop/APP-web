@@ -2,18 +2,20 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-export function InspectionItem({data}){
+export function InspectionItem({data, type}){
     const {t} = useTranslation();
-    console.log(data)
+   
     return(
         <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
             <div className='flex items-center lg:w-[300px] bg-[#0A4303] px-2'>
                 <p className='text-white max-w-[10ch] text-ellipsis overflow-hidden'>{data.createdBy}</p>
             </div>
 
-            <div className='flex items-center h-full w-full bg-[#0A4303]'>
-                <p className='text-white'>Cidade - BR, Complemento</p>
-            </div>
+            {type === 'manage' && (
+                <div className='flex items-center h-full w-full bg-[#0A4303]'>
+                    <p className='text-white'>Cidade - BR, Complemento</p>
+                </div>
+            )}
 
             <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
                 <p className='text-white max-w-[10ch] text-ellipsis overflow-hidden'>{data.acceptedBy}</p>
@@ -23,9 +25,11 @@ export function InspectionItem({data}){
                 <p className='text-white '>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
             </div>
 
-            <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
-                <p className='text-white'>0 Blocks to expire</p>
-            </div>
+            {type === 'manage' && (
+                <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
+                    <p className='text-white'>0 Blocks to expire</p>
+                </div>
+            )}
 
             <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
                 {data.status === '0' && (
@@ -52,10 +56,12 @@ export function InspectionItem({data}){
                     </div>
                 )}
             </div>
-
-            <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
-                <p className='text-white'>{data.isaScore}</p>
-            </div>
+            
+            {type === 'history' && (
+                <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
+                    <p className='text-white'>{data.isaScore}</p>
+                </div>
+            )}
 
             <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
                 <p className='text-white'>Actions</p>

@@ -88,7 +88,7 @@ export default function Dashboard(){
     }, []);
 
     return(
-        <div style={{display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh'}}>
+        <div className='flex flex-col lg:flex-row w-[100vw] h-[100vh]'>
             <TopBarStatus/>
             <Menu 
                 changeTab={(tab) => {
@@ -100,7 +100,9 @@ export default function Dashboard(){
                     }
                 }}
             />
-        <div className='flex flex-col mt-11 w-full overflow-hidden' style={{marginLeft: menuOpen ? '350px' : '80px'}}>
+        <div 
+            className={`flex flex-col mt-11 w-full ${menuOpen ? 'lg:ml-[350px]' : 'lg:ml-[80px]'} overflow-hidden`} 
+        >
 
             <div className='w-[100%] h-[100%]'>
                 {activeTab === 'register' && (

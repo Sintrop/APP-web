@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 //services
 import InvestorService from '../../../../services/investorService';
-import {GetCertificateTokens} from '../../../../services/sacTokenService';
+import {BurnTokens, GetCertificateTokens} from '../../../../services/sacTokenService';
 
 //components
 import Loading from '../../../Loading';
@@ -49,6 +49,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         setLoading(true);
         const response = await investorService.getInvestor(walletAddress);
         setInvestorData(response);
+        console.log(response)
         const tokens = await GetCertificateTokens(walletAddress);
         setTokensBurned(Number(tokens) / 10**18);
         setLoading(false);
@@ -56,8 +57,8 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
     function downloadCertificate(){
         setLoading(true);
-        const fileNameShort = `Certificate_Short_${walletAddress}`;
-        var certificateShort = document.querySelector(".container__certificate-container-short");
+        const fileNameShort = `Certificate_${walletAddress}`;
+        var certificateShort = document.querySelector("#certificate-investor");
         htmlToImage.toJpeg(certificateShort)
         .then((dataUrlShort) => {
             saveAs(dataUrlShort, fileNameShort);
@@ -65,6 +66,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         })
         .catch((error) => {
             console.log(error);
+            setLoading(false)
         })    
     }
 
@@ -93,12 +95,12 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
 
-            <div className="flex flex-col">
-                    <div className="flex lg:w-[700px] lg:h-[350px] border-2 bg-[#0A4303] border-white rounded-md">
+            <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
+                    <div className="flex lg:w-[700px] lg:h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
 
                     </div>
 
-                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md">
+                    <div className="flex w-[700px] ml-2 mt-[-320px] bg-white relative p-2 rounded-md">
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
                             <div className="flex w-full h-full">
                                 <div className="flex flex-col w-[70%]">
@@ -107,15 +109,23 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                         className="w-[150px] h-[80px] object-contain"
                                     />
 
-                                    <p className="font-bold text-black">Sítio Florbela</p>
-                                    <p className="font-bold text-black">Santo André/SP, Vila Palmares</p>
-                                    <p className="font-bold text-black">CEP:09061-120</p>
+
+                                    {investorData?.userType === '0' ? (
+                                        <>
+                                            <p className="font-bold text-black">Investidor Anônimo</p>
+                                            <p className="font-bold text-black">Você contribuiu com um total de:</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="font-bold text-black">{investorData?.name}</p>
+                                            <p className="font-bold text-black">Contribuiu com um total de:</p>
+                                        </>
+                                    )}
+
 
                                     <div className="flex w-full mt-7">
                                         <div className="flex flex-col w-[50%]">
-                                            <p className="text-black text-sm">Inspeções recebidas: 2</p>
-                                            <p className="text-black text-sm">Nota de sustentabilidade: 10</p>
-                                            <p className="text-black text-sm">Média: 5</p>
+                                            <p className="text-green-800 font-bold text-xl">{tokensBurned} SAC Tokens</p>
                                         </div>
 
                                         <div className="flex flex-col w-[50%]">
@@ -128,12 +138,12 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                 </div>
 
                                 <div className="flex flex-col items-center justify-center w-[30%]">
-                                    <p className="text-black font-bold text-center mb-5">Produtor Regenerativo</p>
-                                    <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={180}/>
+                                    <p className="text-black font-bold text-center mb-5">{t('Investor')}</p>
+                                    <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={180}/>
                                 </div>
                             </div>
 
-                            <p className="text-sm text-center mt-3">Wallet do produtor: {wallet}</p>
+                            <p className="text-sm text-center mt-3">Wallet do investidor: {wallet}</p>
                         </div>
                     </div> 
                     

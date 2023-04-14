@@ -35,13 +35,46 @@ export default function ActivistRanking({ wallet, setTab }) {
                 
             </div>
 
-            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-10">
-                {activist.map((item, index) => (
-                    <RankingItem
-                        data={item}
-                        position={index + 1}
+            <div className="flex items-center h-12 lg:w-full pl-14 pr-12">
+                <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
+                    <select
+                        className="bg-white border-0 h-full w-full cursor-pointer"
+                    >
+                        <option value="">Todos os ativistas</option>
+                        <option value="">Buscar pela wallet</option>
+                        <option value="">Buscar pelo nome</option>
+                    </select>
+                </div>
+                <div className="flex bg-white h-full w-[70%] px-3 rounded-r-md">
+                    <input
+                        className="bg-white border-0 h-full w-full"
+                        placeholder="Digite aqui"
                     />
-                ))}
+                    <button
+                        className="font-bold py-2 rounded-md bg-white"
+                    >
+                        <img
+                            src={require('../../../../assets/icon-search.png')}
+                            className="w-[30px] h-[30px] object-contain"
+                        />
+                    </button>
+                </div>
+                
+            </div>
+
+            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-3">
+                {activist.length === 0 ? (
+                    <p className="text-white font-bold text-center mt-10">Nenhum ativista cadastrado no sistema!</p>
+                ) : (
+                    <>
+                    {activist.map((item, index) => (
+                        <RankingItem
+                            data={item}
+                            position={index + 1}
+                        />
+                    ))}
+                    </>
+                )}
             </div>
         </div>
     )

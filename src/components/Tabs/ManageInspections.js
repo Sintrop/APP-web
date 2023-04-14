@@ -103,7 +103,7 @@ export default function ManageInpections({walletAddress, setTab}){
                     {user == 1 && (
                         <button
                             
-                            className='py-3 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg'
+                            className='py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg'
                             onClick={() => {
                                 if(Number(lastResquested) === 0){
                                     requestInspection()
@@ -144,6 +144,32 @@ export default function ManageInpections({walletAddress, setTab}){
                     
                 </div>
             </div>
+
+            <div className="flex items-center h-12 lg:w-full mb-3">
+                <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
+                    <select
+                        className="bg-white border-0 h-full w-full cursor-pointer"
+                    >
+                        <option value="">Todas as inspeções</option>
+                        <option value="">Buscar pela wallet do ativista</option>
+                        <option value="">Buscar pela wallet do produtor</option>
+                    </select>
+                </div>
+                <div className="flex bg-white h-full w-[70%] px-3 rounded-r-md">
+                    <input
+                        className="bg-white border-0 h-full w-full"
+                        placeholder="Digite aqui"
+                    />
+                    <button
+                        className="font-bold py-2 rounded-md bg-white"
+                    >
+                        <img
+                            src={require('../../assets/icon-search.png')}
+                            className="w-[30px] h-[30px] object-contain"
+                        />
+                    </button>
+                </div>
+            </div>
             
                 {inspections.length === 0 ? (
                     <h3>{t('There are no open inspections')}</h3>
@@ -169,9 +195,6 @@ export default function ManageInpections({walletAddress, setTab}){
                                 <p className='text-white'>Status</p>
                             </div>
                             <div className='flex items-center h-full w-[300px] px-1 font-bold'>
-                                <p className='text-white'>Isa {t('Score')}</p>
-                            </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
                                 <p className='text-white'>{t('Actions')}</p>
                             </div>
                         </div>
@@ -181,6 +204,7 @@ export default function ManageInpections({walletAddress, setTab}){
                                 <InspectionItem
                                     key={item.id}
                                     data={item}
+                                    type='manage'
                                 />
                             ))}
                         </div>

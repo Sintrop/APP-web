@@ -26,7 +26,7 @@ export function TopBarStatus({}){
     }
 
     return(
-        <div className='w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed flex items-center justify-between px-5 '>
+        <div className='hidden lg:flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center justify-between px-5 '>
             {isSupported ? (
                 <>
                 {walletConnected === '' ? (
