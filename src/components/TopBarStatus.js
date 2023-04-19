@@ -26,7 +26,7 @@ export function TopBarStatus({}){
     }
 
     return(
-        <div className='hidden lg:flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center justify-between px-5 '>
+        <div className='flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center justify-between px-2 lg:px-5 bottom-0 lg:top-0'>
             {isSupported ? (
                 <>
                 {walletConnected === '' ? (
@@ -43,7 +43,7 @@ export function TopBarStatus({}){
                 ) : (
                     <>
                     {pathname === '/' ? (
-                        <div className='flex w-full items-center gap-2 justify-center'>
+                        <div className='flex w-full lg:w-[350px] items-center gap-2 justify-center'>
                             <p className='font-bold text-white'>You are good to conect!</p>
                             
                             <button
@@ -58,17 +58,17 @@ export function TopBarStatus({}){
                         
                         {user === '0' && (
                             <div className='flex w-full items-center gap-2 justify-center'>
-                                <p className='font-bold text-white'>Your connected but not registered!</p>
+                                <p className='font-bold text-xs lg:text-lg text-white'>Your connected but not registered!</p>
                             
                                 <button
-                                    className='px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
+                                    className='px-5 lg:px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
                                     onClick={chooseModalRegister}
                                 >
                                     Click Here To Register
                                 </button>
 
                                 <button
-                                    className='px-10 py-1 rounded-md font-bold text-white bg-[#FF9900]'
+                                    className='px-5 lg:px-10 py-1 rounded-md font-bold text-white bg-[#FF9900]'
                                     onClick={() => navigate('/')}
                                 >
                                     Start Mission 1
@@ -78,12 +78,12 @@ export function TopBarStatus({}){
 
                         {user !== '0' && (
                             <>
-                                <p className='font-bold text-[#80421A] text-xl'>Era 1</p>
-                                <p className='font-bold text-white'>Conta: {walletConnected}</p> 
+                                <p className='hidden lg:flex font-bold text-[#80421A] text-xl'>Era 1</p>
+                                <p className='hidden lg:flex text-xs lg:text-lg font-bold text-white'>Conta: {walletConnected}</p> 
                                 
-                                <div className='flex items-center gap-2'>
+                                <div className='flex w-full justify-between lg:w-[300px] lg:justify-normal items-center lg:gap-2'>
                 
-                                    <div className='flex items-center justify-end gap-2 w-[300px]'>
+                                    <div className='flex items-center justify-end gap-2 lg:w-[300px]'>
                                         
                                         <h1 className='font-bold text-white'>{t('Balance')}: </h1>
                                         <p className='font-bold text-white'>{visibilityBalance ? balanceUser : '******'} SAC Tokens</p>
@@ -115,13 +115,13 @@ export function TopBarStatus({}){
                 </>
             ) : (
                 <div className='flex w-full items-center gap-2 justify-center'>
-                    <p className='font-bold text-white'>Your connected network is unsupported. Please connect to Goerli Testnet!</p>
+                    <p className='font-bold text-xs lg:text-lg text-white'>Your connected network is unsupported. Please connect to Goerli Testnet!</p>
                     <a
                         href='https://github.com/Sintrop/SMR/wiki/Como-acessar-a-v3-do-Sistema'
                         target='_blank'
                     >
                         <button
-                            className='px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
+                            className='px-5 lg:px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
                         >
                             Tutorial
                         </button>

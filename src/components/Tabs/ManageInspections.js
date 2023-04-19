@@ -48,7 +48,8 @@ export default function ManageInpections({walletAddress, setTab}){
     async function getInspections(){
         setLoading(true);
         const res = await GetInspections();
-        setInpections(res);
+        const inspections = res.filter(item => item.status !== '2')
+        setInpections(inspections);
         setLoading(false);
         console.log(res);
     }
@@ -96,14 +97,14 @@ export default function ManageInpections({walletAddress, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-10 pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-10'> 
+        <div className='flex flex-col bg-green-950 h-[95vh] px-2 lg:px-10 pt-3 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
                 <h1 className='font-bold text-2xl text-white'>{t('Manage Inspections')}</h1>
-                <div className='flex items-center gap-5'>
+                <div className='flex justify-center items-center gap-5'>
                     {user == 1 && (
                         <button
                             
-                            className='py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg'
+                            className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
                             onClick={() => {
                                 if(Number(lastResquested) === 0){
                                     requestInspection()
@@ -174,21 +175,21 @@ export default function ManageInpections({walletAddress, setTab}){
                 {inspections.length === 0 ? (
                     <h3>{t('There are no open inspections')}</h3>
                 ) : (
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-3 py-1 w-full border-2 bg-green-950">
+                    <div className="flex flex-col border-4 border-[#3E9EF5] rounded-sm">
+                        <div className="flex items-center gap-3 py-1 w-full bg-[#0a4303] border-b-2 border-[#3E9EF5]">
                             <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
                                 <p className='text-white'>{t('Requested By')}</p>
                             </div>
-                            <div className='flex items-center h-full w-full px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-full px-1 font-bold'>
                                 <p className='text-white'>{t('Producer Address')}</p>
                             </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
                                 <p className='text-white'>{t('Inspected By')}</p>
                             </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
                                 <p className='text-white'>{t('Created At')}</p>
                             </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
                                 <p className='text-white'>{t('Expires In')}</p>
                             </div>
                             <div className='flex items-center h-full w-[300px] px-1 font-bold'>
@@ -199,7 +200,7 @@ export default function ManageInpections({walletAddress, setTab}){
                             </div>
                         </div>
 
-                        <div className='flex flex-col h-[90vh] overflow-auto'>
+                        <div className='flex flex-col'>
                             {inspections.map(item => (
                                 <InspectionItem
                                     key={item.id}

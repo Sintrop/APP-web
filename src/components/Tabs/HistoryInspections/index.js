@@ -24,13 +24,14 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     
     const loadInspections = () => {
         inspection.getAllInspections().then( res => {
-        setInspections(res);
+            const inspections = res.filter(item => item.status === '2')
+            setInspections(inspections);
         });
     }
 
     return (
-        <div className='flex flex-col bg-green-950 px-10 pt-10 overflow-auto'>
-                <div className='flex items-center justify-between mb-10'> 
+        <div className='flex flex-col bg-green-950 px-2 h-[95vh] lg:px-10 pt-3 lg:pt-10 overflow-auto'>
+                <div className='flex items-center justify-between mb-5 lg:mb-10'> 
                     <h1 className='font-bold text-2xl text-white'>{t('Inspections History')}</h1>
                     <div className='flex items-center gap-5'>
                         
@@ -66,19 +67,16 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                     {inspections.length === 0 ? (
                         <h3>{t('There are no open inspections')}</h3>
                     ) : (
-                        <div className="flex flex-col">
-                            <div className="flex items-center gap-3 py-1 w-full border-2 bg-green-950">
+                        <div className="flex flex-col border-4 border-[#3E9EF5]">
+                            <div className="flex items-center gap-3 py-1 w-full bg-green-950 border-b-2 border-[#3E9EF5]">
                                 <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
                                     <p className='text-white'>{t('Requested By')}</p>
                                 </div>
                                 <div className='flex items-center h-full w-[300px] px-1 font-bold'>
                                     <p className='text-white'>{t('Inspected By')}</p>
                                 </div>
-                                <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                                <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
                                     <p className='text-white'>{t('Created At')}</p>
-                                </div>
-                                <div className='flex items-center h-full w-[300px] px-1 font-bold'>
-                                    <p className='text-white'>Status</p>
                                 </div>
                                 <div className='flex items-center h-full w-[300px] px-1 font-bold'>
                                     <p className='text-white'>Isa {t('Score')}</p>
@@ -88,7 +86,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col h-[90vh] overflow-auto'>
+                            <div className='flex flex-col'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}

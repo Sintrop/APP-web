@@ -71,10 +71,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-10'>
+        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
                 <h1 className="font-bold text-2xl text-white">{t('Investor Certificate')}</h1>
-                <div className='flex items-center gap-2'>
+                <div className='flex justify-center items-center gap-2 mt-3 lg:mt-0'>
                     <button
                         className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
@@ -82,7 +82,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         {t('Download')} {t('Certificate')}
                     </button>
 
-                    <CopyToClipboard text={`${window.location.host}/account-producer/${wallet}`}>
+                    <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
                         <button
                             className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                             onClick={() => alert('URL copied to clipboard')}
@@ -96,14 +96,14 @@ export default function InvestorCertificate({userType, wallet, setTab}){
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
 
             <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
-                    <div className="flex lg:w-[700px] lg:h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
+                    <div className="hidden lg:flex flex-col lg:flex-row lg:w-[700px] h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
 
                     </div>
 
-                    <div className="flex w-[700px] ml-2 mt-[-320px] bg-white relative p-2 rounded-md">
+                    <div className="flex flex-col lg:flex-row lg:w-[700px] lg:ml-2 lg:mt-[-320px] bg-white lg:relative p-2 rounded-md">
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
-                            <div className="flex w-full h-full">
-                                <div className="flex flex-col w-[70%]">
+                            <div className="flex flex-col lg:flex-row w-full h-full">
+                                <div className="flex flex-col lg:w-[70%]">
                                     <img
                                         src={require('../../../../assets/logo-cinza.png')}
                                         className="w-[150px] h-[80px] object-contain"
@@ -124,11 +124,11 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
 
                                     <div className="flex w-full mt-7">
-                                        <div className="flex flex-col w-[50%]">
+                                        <div className="flex flex-col lg:w-[50%]">
                                             <p className="text-green-800 font-bold text-xl">{tokensBurned} SAC Tokens</p>
                                         </div>
 
-                                        <div className="flex flex-col w-[50%]">
+                                        <div className="flex flex-col lg:w-[50%]">
                                             <p className="text-black text-sm">Saldo de Carbono: 10 Co²</p>
                                             <p className="text-black text-sm">Saldo de Água: 25 m³</p>
                                             <p className="text-black text-sm">Saldo de Biodiversidade: 25</p>
@@ -137,7 +137,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col items-center justify-center w-[30%]">
+                                <div className="flex flex-col items-center justify-center lg:w-[30%]">
                                     <p className="text-black font-bold text-center mb-5">{t('Investor')}</p>
                                     <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={180}/>
                                 </div>
@@ -149,8 +149,8 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     
                 </div>
 
-                <div className="flex flex-col items-center w-full mt-10">
-                    <h3 className="font-bold text-white text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
+                <div className="flex flex-col items-center w-full mt-5 lg:mt-10">
+                    <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
                 
                     <div className="flex flex-col lg:w-[800px] p-4 mt-10 bg-[#0A4303] rounded-md border-2 border-[#3E9EF5]">
                         <div className="flex w-full py-1 items-center justify-center bg-[#783E19] rounded-md">

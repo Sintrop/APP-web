@@ -2,6 +2,7 @@ import Web3 from "web3";
 import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
 import SintropContractJson from '../data/contracts/abis/Sintrop.json';
 import UserContractJson from '../data/contracts/abis/UserContract.json';
+import InvestorContractJson from '../data/contracts/abis/InvestorContract.json';
 
 const provider = `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`
 const web3 = new Web3(window.ethereum);
@@ -10,11 +11,13 @@ const web3 = new Web3(window.ethereum);
 const producerContractAddress = ProducerContractJson.networks[5777].address;
 const sintropContractAddress = SintropContractJson.networks[5777].address;
 const userContractAddress = UserContractJson.networks[5777].address;
+const investorContractAddress = InvestorContractJson.networks[5777].address;
 
 //initializing contract
 const ProducerContract = new web3.eth.Contract(ProducerContractJson.abi, producerContractAddress);
 const SintropContract = new web3.eth.Contract(SintropContractJson.abi, sintropContractAddress);
 const UserContract = new web3.eth.Contract(UserContractJson.abi, userContractAddress)
+const InvestorContract = new web3.eth.Contract(InvestorContractJson.abi, investorContractAddress)
 
 export const GetProducer = async (wallet) => {
     let dataProducer = []
@@ -41,4 +44,9 @@ export const GetDelation = async (wallet) => {
         delations = res;
     })
     return delations;
+}
+
+export const GetInvestor = async (wallet) => {
+    const investor = await InvestorContract.methods.getInvestor(wallet).call()
+    return investor;
 }

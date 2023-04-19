@@ -17,6 +17,7 @@ import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { UserPoolItem } from '../../../UserPoolItem';
+import { api } from '../../../../services/api';
 
 export default function ProducersPool({wallet, setTab}){
     const {user} = useMainContext();
@@ -144,10 +145,10 @@ export default function ProducersPool({wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-10'>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
                 <h1 className="font-bold text-2xl text-white">{t('Producers Pool')}</h1>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 mt-3 lg:mt-0'>
                     <button
                         className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => {}}
@@ -159,8 +160,8 @@ export default function ProducersPool({wallet, setTab}){
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
                 {user === '1' && (
-                    <div className="flex items-center w-[700px] gap-3 mb-7">
-                        <div className="flex flex-col w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                    <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
+                        <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
                             <p className="font-bold text-white">Seu Status</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">ERA Atual:</p>
@@ -172,7 +173,7 @@ export default function ProducersPool({wallet, setTab}){
                             </div>
                         </div>
 
-                        <div className="flex flex-col w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                        <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
@@ -230,10 +231,10 @@ export default function ProducersPool({wallet, setTab}){
                                 <p className='font-bold text-white'>{t('Name')}</p>
                             </div>
                             <div className='flex justify-center w-[25%] px-1 py-3'>
-                                <p className='font-bold text-white'>{t('Balance')}</p>
+                                <p className='font-bold text-white'>{t('Score')}</p>
                             </div>
                             <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-t-2 border-l-2 border-[#3E9EF5]'>
-                                <p className='font-bold text-white'>{t('Score')}</p>
+                                <p className='font-bold text-white'>{t('Balance')}</p>
                             </div>
                         </div>
                         <div className='flex flex-col'>

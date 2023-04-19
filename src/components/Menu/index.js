@@ -91,8 +91,8 @@ export default function Menu({ changeTab }) {
         }
     };
     return (
-        <div className="hidden lg:flex flex-col overflow-auto bg-[#0A4303] mt-12 h-[95vh] fixed duration-200" style={{width: menuOpen ? '350px' : '90px'}}>
-            <div className="flex items-center justify-between">
+        <div className="flex flex-col bg-[#0A4303] mt-14 lg:mt-12 fixed duration-200" style={{width: menuOpen ? '320px' : '90px'}}>
+            <div className="hidden lg:flex items-center justify-between">
                 {menuOpen ? (
                     <img className="w-[120px] h-[80px] object-contain ml-4" src={require('../../assets/logo-branco.png')} />
                 ) : (
@@ -118,38 +118,42 @@ export default function Menu({ changeTab }) {
                 </button>
             </div>
 
+            <div className="flex flex-col h-[90vh] pb-20 overflow-auto">
             {itemsMenu.map((item) => {
                 return (
-                <ItemsList
-                    data={item}
-                    changeTab={(tab) => changeTab(tab)}
-                    key={item.id}
-                    subItem={item.subItem}
-                    openCertificates={openCertificates}
-                    openPools={openPools}
-                    open={open}
-                    toggle={(id) => {
-                        toggleSubItem(id)
-                        if(!menuOpen){
-                            toggleMenu()
-                        }
-                        if(id === 'certificates'){
-                            setOpenPools(false);
-                            setOpen(false);  
-                        }
-                        if(id === 'rankings'){
-                            setOpenPools(false);
-                            setOpenCertificates(false);
-                        }
-                        if(id === 'pools'){
-                            setOpen(false);
-                            setOpenCertificates(false);
-                        }
-                    }}
-                    menuOpen={menuOpen}
-                />
+                    <div className="h-26">
+                        <ItemsList
+                            data={item}
+                            changeTab={(tab) => changeTab(tab)}
+                            key={item.id}
+                            subItem={item.subItem}
+                            openCertificates={openCertificates}
+                            openPools={openPools}
+                            open={open}
+                            toggle={(id) => {
+                                toggleSubItem(id)
+                                if(!menuOpen){
+                                    toggleMenu()
+                                }
+                                if(id === 'certificates'){
+                                    setOpenPools(false);
+                                    setOpen(false);  
+                                }
+                                if(id === 'rankings'){
+                                    setOpenPools(false);
+                                    setOpenCertificates(false);
+                                }
+                                if(id === 'pools'){
+                                    setOpen(false);
+                                    setOpenCertificates(false);
+                                }
+                            }}
+                            menuOpen={menuOpen}
+                        />
+                    </div>
                 );
             })}
+            </div>
         </div>
     );
 }

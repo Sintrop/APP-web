@@ -141,23 +141,25 @@ export default function DevelopersPool({wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-10'>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
                 <h1 className="font-bold text-2xl text-white">{t('Developers Pool')}</h1>
-                <div className='flex items-center gap-2'>
-                    <button
-                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
-                        onClick={() => {}}
-                    >
-                        {t('Withdraw')} Tokens
-                    </button>
+                <div className='flex items-center gap-2 mt-3 lg:mt-0'>
+                    {user === '4' && (
+                        <button
+                            className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                            onClick={() => {}}
+                        >
+                            {t('Withdraw')} Tokens
+                        </button>
+                    )}
                 </div>
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
-                {user === '1' && (
-                    <div className="flex items-center w-[700px] gap-3 mb-7">
-                        <div className="flex flex-col w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                {user === '4' && (
+                    <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
+                        <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
                             <p className="font-bold text-white">Seu Status</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">ERA Atual:</p>
@@ -169,7 +171,7 @@ export default function DevelopersPool({wallet, setTab}){
                             </div>
                         </div>
 
-                        <div className="flex flex-col w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                        <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>

@@ -6,7 +6,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import QRCode from "react-qr-code";
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
-import Logo from '../../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import { api } from "../../../services/api";
 import { useTranslation } from "react-i18next";
 
 //services
@@ -22,6 +22,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [delationsReceived, setDelationsReceived] = useState('0');
+    const [producerAddress, setProducerAddress] = useState({});
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -37,6 +38,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         setLoading(true);
         const response = await GetProducer(wallet);
         setProducerData(response);
+        getProducerDataApi(response.producerWallet);
         const delations = await GetDelation(response.producerWallet);
         setDelationsReceived(delations.length);
         setLoading(false);
@@ -64,11 +66,22 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         )
     }
 
+    async function getProducerDataApi(wallet){
+        try{
+            const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
+            //setProducerDataApi(response.data);
+            const address = JSON.parse(response.data.user.address);
+            setProducerAddress(address);
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     return(
-        <div className='flex flex-col h-[100vh] bg-green-950 px-10 pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-10'>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:items-center lg:justify-between mb-5 lg:mb-10 lg:flex-row'>
                 <h1 className="font-bold text-2xl text-white">{t('Certificate')}</h1>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center justify-center mt-3 gap-2 lg:mt-0'>
                     <button
                         className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
@@ -89,22 +102,22 @@ export default function ProducerCertificate({userType, wallet, setTab}){
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
                 <div className="flex flex-col lg:w-[715px] " id='certificate'>
-                    <div className="flex lg:w-[700px] lg:h-[350px] border-2 bg-[#0A4303] border-white rounded-md">
+                    <div className="hidden lg:flex flex-col w-full lg:flex-row lg:w-[700px] h-[350px] border-2 bg-[#0A4303] border-white rounded-md mr-2">
 
                     </div>
 
-                    <div className="flex w-[700px] ml-2 mt-[-340px] bg-white relative p-2 rounded-md" >
+                    <div className="flex flex-col lg:flex-row w-full lg:w-[700px] lg:ml-2 lg:mt-[-340px] bg-white lg:relative p-2 rounded-md" >
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
-                            <div className="flex w-full h-full">
-                                <div className="flex flex-col w-[70%]">
+                            <div className="flex flex-col lg:flex-row w-full h-full">
+                                <div className="flex flex-col lg:w-[70%]">
                                     <img
                                         src={require('../../../assets/logo-cinza.png')}
                                         className="w-[150px] h-[80px] object-contain"
                                     />
 
                                     <p className="font-bold text-black">{producerData?.name}</p>
-                                    <p className="font-bold text-black">Data API</p>
-                                    <p className="font-bold text-black">Data API</p>
+                                    <p className="font-bold text-black">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                                    <p className="font-bold text-black">{producerAddress?.complement}</p>
 
                                     <div className="flex w-full mt-7">
                                         <div className="flex flex-col w-[50%]">
@@ -122,7 +135,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col items-center justify-center w-[30%]">
+                                <div className="flex flex-col items-center justify-center lg:w-[30%]">
                                     <p className="text-black font-bold text-center mb-5">Produtor Regenerativo</p>
                                     <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={180}/>
                                 </div>

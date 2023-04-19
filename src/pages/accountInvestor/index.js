@@ -1,33 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import './accountProducer.css';
-import {get} from '../../config/infura';
 import * as Dialog from '@radix-ui/react-dialog';
 import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
 import { useTranslation } from 'react-i18next';
 import { ModalChooseTypeDelation } from '../../components/ModalChooseTypeDelation';
-import { api } from '../../services/api';
-import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 //services
-import {GetDelation, GetInspections, GetProducer} from '../../services/accountProducerService';
+import {GetInvestor} from '../../services/accountProducerService';
 
 //components
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
 import { InspectionItemResult } from './inspectionItemResult';
 
-const containerStyle = {
-    width: '100%',
-    height: '400px',
-    borderWidth: 4,
-    borderRadius: 8,
-    borderColor: '#3E9EF5'
-};
-
-export default function AccountProducer(){
+export default function AccountInvestor(){
     const {t} = useTranslation();
     const {walletSelected} = useParams();
-    const [producerData, setProducerData] = useState([]);
+    const [investorData, setInvestorData] = useState([]);
     const [producerAddress, setProducerAddress] = useState([]);
     const [center, setCenter] = useState({})
     const [inspections, setInspections] = useState([]);
@@ -36,39 +24,12 @@ export default function AccountProducer(){
     const [modalChooseTypeDelation, setModalChooseTypeDelation] = useState(false);
 
     useEffect(() => {
-        getProducer();
-        getProducerApi();
+        getInvestor();
     },[]);
 
-    async function getProducer(){
-        const response = await GetProducer(walletSelected);
-        setProducerData(response);
-        const centerProperty = JSON.parse(response.propertyAddress.coordinate)
-        setCenter(centerProperty);
-        getBase64(response.proofPhoto);
-        const delations = await GetDelation(response.producerWallet);
-        setDelationsReiceved(delations.length);
-        getInspections();
-    }
-
-    async function getInspections(){
-        const response = await GetInspections();
-        setInspections(response);
-    }
-
-    async function getBase64(path){
-        const base64 = await get(path);
-        setProofPhotoBase64(base64);
-    }
-
-    async function getProducerApi(){
-        try{
-            const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
-            const address = JSON.parse(response.data.user?.address)
-            setProducerAddress(address);
-        }catch(err){
-            console.log(err)
-        }
+    async function getInvestor(){
+        const response = await GetInvestor(walletSelected);
+        setInvestorData(response);
     }
 
     return(
@@ -87,65 +48,19 @@ export default function AccountProducer(){
                 />
 
                 <div className='flex flex-col'>
-                    <h1 className='font-bold text-center lg:text-left text-2xl text-white'>{producerData?.name}</h1>
-                    <p className='text-lg text-center lg:text-left text-white mt-2'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>{t('Inspections Received')}: {inspections?.length}</p>
+                    <h1 className='font-bold text-center lg:text-left text-2xl text-white'>{investorData?.name}</h1>
                 </div>
 
                 <div className='flex flex-col'>
-                    <p className='text-lg text-center lg:text-left text-white mt-2'>ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>ISA {t('Average')}: {producerData?.isa?.isaAverage}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>{t('Delations Received')}: {producerData?.isa?.isaAverage}</p>
+                    <p className='text-lg text-center lg:text-left text-white mt-2'>ISA {t('Score')}: {investorData?.isa?.isaScore}</p>
+                    <p className='text-lg text-center lg:text-left text-white'>ISA {t('Average')}: {investorData?.isa?.isaAverage}</p>
+                    <p className='text-lg text-center lg:text-left text-white'>{t('Delations Received')}: {investorData?.isa?.isaAverage}</p>
                 </div>
 
-                <div className='flex flex-col'>
-                    <Dialog.Root open={modalChooseTypeDelation} onOpenChange={(open) => setModalChooseTypeDelation(open)}>
-                        <ModalChooseTypeDelation/>
-                        <Dialog.Trigger
-                            className='px-3 lg:px-8 py-3 bg-[#FF9900] rounded-md font-bold text-[#062C01]'
-                        >
-                            {t('Report Producer')}
-                        </Dialog.Trigger>
-                    </Dialog.Root>
-                </div>
             </div>
 
-            {producerData && (
-                <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
-                    <div className='flex w-full justify-center'>
-                    <LoadScript
-                        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                        libraries={['drawing']}
-                    >
-                        <GoogleMap
-                            mapContainerStyle={containerStyle}
-                            center={center}
-                            zoom={18}
-                            mapTypeId='satellite'
-                        >
-                            { 
-                                <Marker position={center}/>
-                            }
-            
-
-                        
-                                {/* <Polyline
-                                    path={pathPolyline}
-                                /> */}
-                            
-                        </GoogleMap>
-                    </LoadScript>
-                    </div>
-                </div>
-            )}
-
             <div className="flex flex-col w-full lg:w-[1000px] mt-5 lg:mt-10">
-            {inspections.map(item => (
-                <InspectionItemResult
-                    key={item.id}
-                    data={item}
-                />
-            ))}
+            
             </div>
         </div>
     )

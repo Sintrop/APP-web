@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-
 
 const containerStyle = {
   width: '450px',
-  height: '247px'
+  height: '367px'
 };
 
 // const center = {

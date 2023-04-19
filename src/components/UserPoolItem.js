@@ -32,10 +32,10 @@ export function UserPoolItem({data, position}){
                 <p className='font-bold text-white'>{data?.name}</p>
             </div>
             <div className='flex justify-center w-[25%] px-1 py-3'>
-                <p className='font-bold text-white'>{parseFloat(balance) / 10**18}</p>
+                <p className='font-bold text-white'>{data?.isa?.isaScore}</p>
             </div>
             <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-l-2 border-[#3E9EF5]'>
-                <p className='font-bold text-white'>{data?.isa?.isaScore}</p>
+                <p className='font-bold text-white'>{parseFloat(balance) / 10**18}</p>
             </div>
         </div>
     )
