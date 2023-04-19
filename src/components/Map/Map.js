@@ -46,11 +46,11 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                     <Marker position={center}/>
                 )}
 
-                {!editable && (
+                {/* {!editable && (
                     <Polyline
                         path={pathPolyline}
                     />
-                )}
+                )} */}
             </GoogleMap>
         </LoadScript>
     )

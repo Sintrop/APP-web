@@ -6,6 +6,7 @@ import Register from "../components/Tabs/Register";
 import ProducerRanking from "../components/Tabs/Ranking/Producer";
 import ActivistRanking from "../components/Tabs/Ranking/Activist";
 import AccountProducer from "../pages/accountProducer";
+import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
 
 export default function Router(){
@@ -16,11 +17,10 @@ export default function Router(){
                 <Route path="/dashboard/:walletAddress/:tabActive/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/register" element={<Register/>}/>
-                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
-
-                <Route exact path="/producers-ranking" element={ <ProducerRanking />}/>
-                <Route exact path="/activists-ranking" element={ <ActivistRanking />}/>
+                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
+                <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
+                
             </Routes>
         </BrowserRouter>
     );

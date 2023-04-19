@@ -76,6 +76,9 @@ export default function ModalRegister(){
         if(step === 3 && type === 'activist'){
             getLocale()
         }
+        if(step === 3 && type === 'producer'){
+            getLocale()
+        }
     },[step])
 
     async function handleSearchAddress(){
@@ -178,14 +181,15 @@ export default function ModalRegister(){
             //     return;
             // }
 
-            if(areaProperty < 5000){
-                toast.error(t('Your property must be at least 5,000m²'))
-            }
+            // if(areaProperty < 5000){
+            //     toast.error(t('Your property must be at least 5,000m²'))
+            //     return
+            // }
 
-            if(geoLocation === ''){
-                toast.error(t('Mark the center of your property'))
-                return;
-            }
+            // if(geoLocation === ''){
+            //     toast.error(t('Mark the center of your property'))
+            //     return;
+            // }
         }
 
         if(type === 'activist'){

@@ -214,6 +214,16 @@ export function InspectionItem({data, type}){
                 <div className='flex justify-end pr-2 items-center h-full w-[300px] bg-[#0A4303]'>
                     {type === 'history' && (
                         <>
+                        <button
+                            onClick={() => {
+                                if(data.status === '0'){
+                                    handleAccept()
+                                }
+                            }}
+                            className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
+                        >
+                            {t('See Result')}
+                        </button>
                         </>
                     )}
 

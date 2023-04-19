@@ -19,6 +19,8 @@ import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import Map from '../../Map';
 
+import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult'
+
 export default function MyAccount({wallet, userType, setTab}){
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -97,11 +99,13 @@ export default function MyAccount({wallet, userType, setTab}){
                         {t('Request New Inspection')}
                     </button>
 
-                    <button
-                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold '
+                    <a  
+                        target='_blank'
+                        href={`${window.location.host}/account-producer/${walletAddress}`}
+                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
                     >
                         Página do Produtor
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -163,7 +167,14 @@ export default function MyAccount({wallet, userType, setTab}){
                 </div>
             </div>
 
-            
+            <div className="flex flex-col lg:mt-10 mt-5">
+                {inspections.map(item => (
+                    <InspectionItemResult
+                        key={item.id}
+                        data={item}
+                    />
+                ))}
+            </div>
 
             {loading && (
                 <Loading/>
