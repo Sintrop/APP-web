@@ -19,11 +19,11 @@ class DevelopersService {
         const developers = await DeveloperContract.methods.getDevelopers().call()
         return developers;
     }
-
-    async getDeveloper(walletAdd){
-        const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()
-        return developers;
-    }
 }
 
 export default DevelopersService; 
+
+export const GetDeveloper = async (walletAdd) => {
+    const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()
+    return developers;
+}

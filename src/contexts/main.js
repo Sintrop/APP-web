@@ -10,6 +10,7 @@ export default function MainProvider({children}){
     const {i18n} = useTranslation();
     const [user, setUser] = useState('0');
     const [walletConnected, setWalletConnected] = useState(''); 
+    const [walletSelected, setWalletSelected] = useState(''); 
     const [modalRegister, setModalRegister] = useState(false);
     const [blockNumber, setBlockNumber] = useState(0);
     const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
@@ -102,7 +103,9 @@ export default function MainProvider({children}){
                 chooseLanguage,
                 modalChooseLang,
                 toggleModalChooseLang,
-                setWalletConnected
+                setWalletConnected,
+                walletSelected,
+                setWalletSelected
             }}
         >
             {children}

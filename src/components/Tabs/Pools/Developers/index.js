@@ -144,16 +144,6 @@ export default function DevelopersPool({wallet, setTab}){
         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
             <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
                 <h1 className="font-bold text-2xl text-white">{t('Developers Pool')}</h1>
-                <div className='flex items-center gap-2 mt-3 lg:mt-0'>
-                    {user === '4' && (
-                        <button
-                            className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
-                            onClick={() => {}}
-                        >
-                            {t('Withdraw')} Tokens
-                        </button>
-                    )}
-                </div>
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
@@ -163,11 +153,11 @@ export default function DevelopersPool({wallet, setTab}){
                             <p className="font-bold text-white">Seu Status</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">ERA Atual:</p>
-                                <p className="font-bold text-[#ff9900]">10</p>
+                                <p className="font-bold text-[#ff9900]">{developerInfo?.level?.currentEra}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white ">Próxima aprovação em:</p>
-                                <p className="font-bold text-[#ff9900]">5</p>
+                                <p className="font-bold text-[#ff9900]">{nextAprove}</p>
                             </div>
                         </div>
 
@@ -175,7 +165,7 @@ export default function DevelopersPool({wallet, setTab}){
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
-                                <p className="font-bold text-[#ff9900]">458796.0000</p>
+                                <p className="font-bold text-[#ff9900]">{balanceDeveloper}</p>
                             </div>
                         </div>
                     </div>
@@ -186,17 +176,17 @@ export default function DevelopersPool({wallet, setTab}){
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
                                 <p className="font-bold text-[#ff9900]">Saldo do contrato</p>
-                                <p className="font-bold text-white">454585.00000</p>
+                                <p className="font-bold text-white">{totalSACTokens / 10 ** 18}</p>
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
                                 <p className="font-bold text-[#ff9900]">Tokens por ERA</p>
-                                <p className="font-bold text-white">456.000</p>
+                                <p className="font-bold text-white">{tokensPerEra / 10 ** 18}</p>
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
                                 <p className="font-bold text-[#ff9900]">ERA atual</p>
-                                <p className="font-bold text-white">123</p>
+                                <p className="font-bold text-white">{currentEra}</p>
                             </div>
                         </div>
 
@@ -208,9 +198,20 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
                     </div>
 
-                    <div className='flex flex-col w-full px-4 py-2 bg-[#783E19] mb-3 border-2 border-[#3E9EF5]'>
-                        <p className="font-bold text-white">Soma total dos níveis dos desenvolvedores</p>
-                        <p className="font-bold text-[#ff9900]">456</p>
+                    <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3 border-2 border-[#3E9EF5]'>
+                        <div className='flex flex-col'>
+                            <p className="font-bold text-white">Soma total dos níveis dos desenvolvedores</p>
+                            <p className="font-bold text-[#ff9900]">{eraInfo?.levels}</p>
+                        </div>
+
+                        {user === '4' && (
+                            <button
+                                className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                                onClick={() => {}}
+                            >
+                                {t('Withdraw')} Tokens
+                            </button>
+                        )}
                     </div>
 
                 </div>
@@ -245,92 +246,6 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
                     </div>
             </div>
-        </div>
-    )
-
-    return(
-        <div className='container-isa-page'>
-            <div className='header-isa'>
-                <h1>{t('Developers Distribution Pool')}</h1>
-                <div className='area-btn-header-isa-page'></div>
-            </div>
-            {user === '4' && (
-                <div className='area-stats-developer'>
-                    <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>{t('Your Status')}</h1>
-                        <p className='p'>
-                            {t('Level')}: {developerInfo.level === undefined ? '0' : developerInfo.level.level}
-                        </p>
-                        <p className='p'>
-                            {t('Current Era')}: {developerInfo.level === undefined ? '0' : developerInfo.level.currentEra}
-                        </p>
-                    </div>
-                    <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>{t('Balance')}</h1>
-                        <p className='p'>Total: {parseFloat(tokensAllowed) / 10**18 + parseFloat(balanceDeveloper) / 10**18}</p>
-                    </div>
-                        <button 
-                            className='btn-new-category-isa'
-                            onClick={() => {withdraw()}}
-                        >{t('Withdraw')}</button>
-                </div>
-            )}
-            
-            <div className='area-pool'>
-                <div className='stats-developer__card card-pool'>
-                    <h1 className='card__title'>{t('Developers Pool')}</h1>
-                    <h2 className='card__subtitle'>{t('Contract Balance')}</h2>
-                    <p className='p'>{parseFloat(totalSACTokens) / 10**18}</p>
-
-                    <h2 className='card__subtitle'>Tokens {t('Per')} ERA</h2>
-                    <p className='p'>{parseFloat(tokensPerEra) / 10**18}</p>
-
-                    <h2 className='card__subtitle'>{t('Current Era')}</h2>
-                    <p className='p'>{currentEra}</p>
-
-                    <h2 className='card__subtitle'>{t('Next Aprove In')}</h2>
-                    <p className='p'>{nextAprove}</p>
-
-                    <h2 className='card__subtitle'>{t('Developers Levels Sum')}</h2>
-                    <p className='p'>{eraInfo.levels}</p>
-                </div>
-
-                <div className='stats-developer__card card-developers-list'>
-                    <h1 className='card__title'>{t('Developers List')}</h1>
-                    <table border="1">
-                        <tr>
-                        <th>#</th>
-                        <th>{t('Wallet')}</th>
-                        <th>{t('Name')}</th>
-                        <th>{t('Balance')}</th>
-                        <th>{t('Developer Level')}</th>
-                        </tr>
-                        {developersList.map((item) => (
-                            <DeveloperItem 
-                                data={item}
-                                setTab={(tab, wallet) => setTab(tab, wallet)}
-                            />
-                        ))}
-                    </table>
-                </div>
-            </div>
-            <Dialog.Root 
-                open={modalTransaction} 
-                onOpenChange={(open) => {
-                    if(!loadingTransaction){
-                        setModalTransaction(open);
-                        getInfosPool();
-                    }
-                }}
-            >
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
-                />
-            </Dialog.Root>
-            {loading && (
-                <Loading/>
-            )}
         </div>
     )
 }

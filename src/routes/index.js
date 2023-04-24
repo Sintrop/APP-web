@@ -14,7 +14,7 @@ export default function Router(){
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<Login/>}/>
-                <Route path="/dashboard/:walletAddress/:tabActive/:walletSelected" element={<Dashboard/>}/>
+                <Route path="/dashboard/:walletAddress/:tabActive/:typeUser" element={<Dashboard/>}/>
                 
                 <Route exact path="/register" element={<Register/>}/>
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>

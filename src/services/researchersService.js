@@ -20,12 +20,14 @@ class ResearchersService {
         return researchers; 
     }
 
-    async getResearchers(walletAdd){
-        const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()
-        return researchers;
-    }
+    
 }
 export default ResearchersService; 
+
+export const GetResearcher = async (walletAdd) => {
+    const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()
+    return researchers;
+}
 
 export const PublishResearch = async (walletAddress, title, thesis, filePath) => {
     let type = '';

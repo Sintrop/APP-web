@@ -20,11 +20,13 @@ class AdvisorsService {
         return advisors;
     }
 
-    async getAdvisors(walletAdd){
-        const advisors = await AdvisorContract.methods.getAdvisor(walletAdd).call()
-        return advisors;
-    }
+    
 }
 
 
 export default AdvisorsService; 
+
+export const GetAdvisor = async (walletAdd) => {
+    const advisors = await AdvisorContract.methods.getAdvisor(walletAdd).call()
+    return advisors;
+}

@@ -175,6 +175,7 @@ export default function ManageInpections({walletAddress, setTab}){
                 {inspections.length === 0 ? (
                     <h3>{t('There are no open inspections')}</h3>
                 ) : (
+                    <div className='flex flex-col pb-24'>
                     <div className="flex flex-col border-4 border-[#3E9EF5] rounded-sm">
                         <div className="flex items-center gap-3 py-1 w-full bg-[#0a4303] border-b-2 border-[#3E9EF5]">
                             <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
@@ -206,40 +207,12 @@ export default function ManageInpections({walletAddress, setTab}){
                                     key={item.id}
                                     data={item}
                                     type='manage'
+                                    reload={getInspections}
                                 />
                             ))}
                         </div>
+                    </div> 
                     </div>
-
-                    // <table>
-                    //     <thead>
-                    //         <th className='th-wallet'>{t('Requested By')}</th>
-                    //         <th>{t('Producer Address')}</th>
-                    //         <th className='th-wallet'>{t('Inspected By')}</th>
-                    //         <th>{t('Created At')}</th>
-                    //         <th>{t('Expires In')}</th>
-                    //         <th className='th-wallet'>Status</th>
-                    //         <th className='th-wallet'>Isa {t('Score')}</th>
-                    //         <th className='th-wallet'>{t('Actions')}</th>
-                    //     </thead>
-                    //     <tbody>
-                    //         {inspections.map(item => {
-                    //             if(item.status != '2'){
-                    //                 return(
-                    //                     <ItemListInspections
-                    //                         data={item}
-                    //                         user={user}
-                    //                         walletAddress={walletAddress}
-                    //                         key={item.id}
-                    //                         reloadInspections={() => getInspections()}
-                    //                         setTab={(tab, wallet) => setTab(tab, wallet)}
-                    //                     />
-                    //                 )
-                    //             }
-                    //         })}
-                    //     </tbody>
-                    // </table>
-                
                 )}
             
             <Dialog.Root 

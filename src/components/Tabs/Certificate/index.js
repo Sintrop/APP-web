@@ -60,8 +60,8 @@ export default function ProducerCertificate({userType, wallet, setTab}){
 
     if(userType != 1){
         return(
-            <div>
-                <h1>This account is not a producer.</h1>
+            <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+                <h1 className="font-bold text-white">This account is not a producer.</h1>
             </div>
         )
     }

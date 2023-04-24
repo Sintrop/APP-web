@@ -23,7 +23,6 @@ export default function ResearchersRanking({ wallet, setTab }) {
             if (res.length > 0) {
             let researchersSort = res.map(item => item ).sort((a, b) => parseInt(b.publishedWorks) - parseInt(a.publishedWorks))
             setResearchers(researchersSort);
-            console.log(res);
             }
         })
         .catch((err) => console.log(err));
@@ -70,6 +69,7 @@ export default function ResearchersRanking({ wallet, setTab }) {
                     <>
                     {researchers.map((item, index) => (
                         <RankingItem
+                            key={item.id}
                             data={item}
                             position={index + 1}
                         />

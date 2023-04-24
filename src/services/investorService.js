@@ -19,11 +19,12 @@ class InvestorService {
         const investors = await InvestorContract.methods.getInvestors().call()
         return investors;
     }
-
-    async getInvestor(walletAdd){
-        const investor = await InvestorContract.methods.getInvestor(walletAdd).call()
-        return investor;
-    }
 }
 
+
 export default InvestorService; 
+
+export const GetInvestor = async (walletAdd) => {
+    const investor = await InvestorContract.methods.getInvestor(walletAdd).call()
+    return investor;
+}

@@ -68,6 +68,7 @@ export default function ActivistRanking({ wallet, setTab }) {
                     <>
                     {activist.map((item, index) => (
                         <RankingItem
+                            key={item.id}
                             data={item}
                             position={index + 1}
                         />

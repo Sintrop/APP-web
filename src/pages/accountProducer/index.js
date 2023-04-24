@@ -53,7 +53,8 @@ export default function AccountProducer(){
 
     async function getInspections(){
         const response = await GetInspections();
-        setInspections(response);
+        const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
+        setInspections(filterInspections);
     }
 
     async function getBase64(path){

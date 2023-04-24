@@ -14,9 +14,9 @@ export function ModalAccountOptions({user, walletConnected, close}){
     const navigate = useNavigate();
 
     return(
-        <Dialog.Portal className='modal-account-options__portal'>
-            <Dialog.Overlay className='modal-account-options__overlay'/>
-            <Dialog.Content className='modal-account-options__content' style={{height: user === '0' && '120px'}}>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between w-[120px] h-[80px] bg-white rounded-md m-auto inset-0' style={{height: user === '0' && '120px'}}>
                 <button
                     onClick={() => {toggleModalChooseLang()}}
                     className='modal-account-options__option-container'

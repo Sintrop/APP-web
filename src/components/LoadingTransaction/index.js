@@ -7,9 +7,9 @@ export function LoadingTransaction({loading, logTransaction}){
     const {t} = useTranslation();
     
     return(
-        <Dialog.Portal className='loading-transaction__portal'>
-            <Dialog.Overlay className='loading-transaction__overlay'/>
-            <Dialog.Content className='loading-transaction__content'>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between lg:w-[570px] lg:h-[300px] bg-white rounded-md m-auto inset-0'>
                 <Dialog.Title className='loading-transaction__title'>
                     {loading && `${t('Your transaction is being processed... Be patient, this transaction can take a few minutes')}`}
                     {!loading && logTransaction.type === 'error' && `${t('Transaction error')}`}

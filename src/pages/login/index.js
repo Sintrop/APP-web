@@ -27,10 +27,10 @@ function Login(){
     return(
         <div className="flex flex-col h-[100vh]">
             <TopBarStatus/>
-            <div className="flex w-full h-full items-center justify-center bg-[#0A4303] overflow-auto mt-10">
-                <div className="lg:w-[1000px] lg:h-[600px] flex">
-                    <div className='flex flex-col justify-between lg:w-[500px]'>
-                        <div className='flex flex-col w-[300px]'>
+            <div className="flex flex-col lg:flex-row w-full h-full items-center justify-center bg-[#0A4303] overflow-auto pb-16 pt-[400px] px-2 lg:px-0 lg:pt-0 lg:mt-10 lg:pb-0">
+                <div className="w-full lg:w-[1000px] lg:h-[600px] flex flex-col lg:flex-row">
+                    <div className='flex flex-col justify-between w-full lg:w-[500px]'>
+                        <div className='flex flex-col w-full lg:w-[300px]'>
                             <img
                                 src={require('../../assets/logo-branco.png')}
                                 className="w-[200px] h-[80px] object-contain"
@@ -41,7 +41,7 @@ function Login(){
                             </h1>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 my-5 lg:my-0">
                             <a>
                                 <img
                                     src={require('../../assets/icon-linkedin.png')}
@@ -69,7 +69,7 @@ function Login(){
                         <p className="font-bold text-[#F4A022] text-xl">Nossa missão é regenerar o planeta!</p>
                         <p className="text-white lg:w-[500px]">Ela não será nada fácil, porém é extremamente importante pois o futuro da humanidade depende de nós.</p>
 
-                        <div className="w-[500px] flex justify-center">
+                        <div className="lg:w-[500px] flex justify-center items-center">
                             <img
                                 src={require('../../assets/formiga.png')}
                                 className="object-contain w-[300px]"
@@ -78,9 +78,9 @@ function Login(){
 
                         <p className="text-white lg:w-[500px]">Será preciso de muita, mas muita gente nessa luta. Por isso estamos buscando pessoas do bem para fazerem parte do Exército da Regeneração. Para se juntar nessa luta, basta concluir a missão 1</p>
 
-                        <div className="w-[500px] flex justify-center">
+                        <div className="lg:w-[500px] flex flex-col lg:flex-row justify-center">
                             <button
-                                className="w-[300px] h-10 bg-[#A75722] rounded-xl font-bold text-white mt-6"
+                                className="lg:w-[300px] h-10 bg-[#A75722] rounded-xl font-bold text-white mt-6"
                                 onClick={handleSync}
                             >
                                 COMEÇAR MISSÃO 1

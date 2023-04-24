@@ -11,24 +11,44 @@ export default function ProducerRanking({ wallet, setTab }) {
     const producerService = new ProducerService(wallet);
     const [producers, setProducers] = useState([]);
     const {tabActive, walletAddress} = useParams();
+    const {inputFilter, setInputFilter} = useState('');
+    const {filterSelect, setFilterSelect} = useState('wallet');
         
-        useEffect(() => {
-            setTab(tabActive, '')
-        }, [tabActive])
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     useEffect(() => {
+        getProducers();
+    }, []);
+    
+    function getProducers(){
         producerService
         .getProducerRanking()
         .then((res) =>{
-            if(res.length > 0){
-
-            let producerSort = res.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
-            
-            setProducers(producerSort)
-            } 
+            orderRanking(res);
         })
         .catch((err) => console.log(err));
-    }, []);
+    }
+
+    function orderRanking(data){
+        if(data.length > 0){
+            let producerSort = data.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
+            setProducers(producerSort)
+        }
+    }
+
+    function filter(){
+        if(filterSelect === 'all'){
+            getProducers();
+        }
+
+        if(filterSelect === 'wallet'){
+            let users = producers;
+            const usersFilter = users.filter(item => item.producerWallet === inputFilter);
+            console.log(usersFilter)
+        }
+    }
 
     return (
         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
@@ -40,19 +60,23 @@ export default function ProducerRanking({ wallet, setTab }) {
                 <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
                     <select
                         className="bg-white border-0 h-full w-full cursor-pointer"
+                        onChange={(e) => setFilterSelect(e.target.value)}
+                        value={filterSelect}
                     >
-                        <option value="">Todos os produtores</option>
-                        <option value="">Buscar pela wallet</option>
-                        <option value="">Buscar pelo nome</option>
+                        <option value="all">Todos os produtores</option>
+                        <option value="wallet">Buscar pela wallet</option>
                     </select>
                 </div>
                 <div className="flex bg-white h-full w-[70%] px-3 rounded-r-md">
                     <input
                         className="bg-white border-0 h-full w-full"
                         placeholder="Digite aqui"
+                        value={inputFilter}
+                        onChange={(e) => setInputFilter(e.target.value)}
                     />
                     <button
                         className="font-bold py-2 rounded-md bg-white"
+                        onClick={filter}
                     >
                         <img
                             src={require('../../../../assets/icon-search.png')}
@@ -69,6 +93,7 @@ export default function ProducerRanking({ wallet, setTab }) {
                     <>
                     {producers.map((item, index) => (
                         <RankingItem
+                            key={item.id}
                             data={item}
                             position={index + 1}
                         />

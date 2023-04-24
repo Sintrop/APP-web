@@ -10,17 +10,15 @@ import axios from 'axios';
 import { useTranslation } from "react-i18next";
 
 //services
-import InvestorService from '../../../../services/investorService';
+import { GetInvestor } from "../../../../services/accountProducerService";
 import {BurnTokens, GetCertificateTokens} from '../../../../services/sacTokenService';
 
 //components
 import Loading from '../../../Loading';
 import { ModalContribute } from "./ModalContribute";
-import { ItemReceipt } from "./ItemReceipt";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
-    const investorService = new InvestorService(wallet);
     const {tabActive, walletAddress} = useParams();
     const [investorData, setInvestorData] = useState([]);
     const [tokensBurned, setTokensBurned] = useState('');
@@ -47,7 +45,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
     async function getInvestor(){
         setLoading(true);
-        const response = await investorService.getInvestor(walletAddress);
+        const response = await GetInvestor(walletAddress);
         setInvestorData(response);
         console.log(response)
         const tokens = await GetCertificateTokens(walletAddress);
@@ -93,7 +91,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+            <div className="flex flex-col h-[90vh] items-center overflow-auto pb-40">
 
             <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
                     <div className="hidden lg:flex flex-col lg:flex-row lg:w-[700px] h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
@@ -149,80 +147,24 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     
                 </div>
 
-                <div className="flex flex-col items-center w-full mt-5 lg:mt-10">
+                <div className="flex flex-col items-center w-full mt-5">
                     <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
-                
-                    <div className="flex flex-col lg:w-[800px] p-4 mt-10 bg-[#0A4303] rounded-md border-2 border-[#3E9EF5]">
-                        <div className="flex w-full py-1 items-center justify-center bg-[#783E19] rounded-md">
-                            <p className="font-bold text-white text-xl">Meu impacto</p>
 
-                        </div>
-                        <div className="flex w-full justify-center flex-wrap gap-2 mt-5">
-                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Carbono</p>
-                                    <img
-                                        src={require('../../../../assets/icon-co2.png')}
-                                        className="w-[70px] h-[60px] object-cover"
-                                    />
-                                </div>
-                                <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">25</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">ton</p>
-                                </div>
-                            </div>
-
-                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Solo</p>
-                                    <img
-                                        src={require('../../../../assets/icon-solo.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">50</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">m²</p>
-                                </div>
-                            </div>
-
-                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Biodiversidade</p>
-                                    <img
-                                        src={require('../../../../assets/icon-bio.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">35</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">uni</p>
-                                </div>
-                            </div>
-
-                            <div className="flex w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Água</p>
-                                    <img
-                                        src={require('../../../../assets/icon-agua.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">62</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">m³</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-10 flex items-center gap-2 lg:w-[750px]">
-                        <button
-                            className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
-                            onClick={() => {}}
+                    <div className="mt-5 flex items-center gap-2 lg:w-[750px]">
+                        <Dialog.Root
+                            open={modalContribute}
+                            onOpenChange={(open) => setModalContribute(open)}
                         >
-                            {t('Contribute More')}
-                        </button>
+                            <ModalContribute 
+                                wallet={walletAddress}
+                                onFinished={() => getInvestor()}
+                            />
+                            <Dialog.Trigger
+                                className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
+                            >
+                                {t('Contribute More')}
+                            </Dialog.Trigger>
+                        </Dialog.Root>
                         <button
                             className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
                             onClick={() => {}}
@@ -237,19 +179,6 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     >
                         Leia nossa documentação para entender mais
                     </a>
-                </div>
-
-                <div className="flex justify-center flex-wrap gap-10 mt-10">
-                    {receipts.length !== 0 && (
-                        <>
-                        {receipts.map((item, index) => (
-                            <ItemReceipt
-                                data={item}
-                                index={index + 1}
-                            />
-                        ))}
-                        </>
-                    )}
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import {AiFillCaretDown} from 'react-icons/ai';
+import {AiFillCaretDown, AiFillCaretUp} from 'react-icons/ai';
 import { api } from '../services/api';
 import {useMainContext} from '../hooks/useMainContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,12 +9,15 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from './LoadingTransaction';
 import { useParams } from 'react-router';
 import { AcceptInspection } from '../services/manageInspectionsService';
+import {GetProducer} from '../services/producerService';
 
 export function InspectionItem({data, type}){
     const {walletAddress} = useParams();
     const {user} = useMainContext();
     const {t} = useTranslation();
+    const [loading, setLoading] = useState(false);
     const [moreInfo, setMoreInfo] = useState(false);
+    const [producerData, setProducerData] = useState({});
     const [producerDataApi, setProducerDataApi] = useState([]);
     const [producerAddress, setProducerAddress] = useState({});
     const [modalTransaction, setModalTransaction] = useState(false);
@@ -23,7 +26,14 @@ export function InspectionItem({data, type}){
 
     useEffect(() => {
         getProducerDataApi();
+        getProducer()
     }, []);
+
+    async function getProducer() {
+        setLoading(true);
+        const response = await GetProducer(data?.createdBy)
+        setProducerData(response);
+    }
 
     async function getProducerDataApi(){
         try{
@@ -53,6 +63,11 @@ export function InspectionItem({data, type}){
             toast.error(`${t('This inspection has been accepted')}!`);
             return;
         }
+
+        if(!producerData || !producerDataApi){
+            return;
+        }
+        
         acceptInspection();
     }
 
@@ -113,41 +128,41 @@ export function InspectionItem({data, type}){
     }
 
     async function registerInspectionAPI(){
-        // const data = {
-        //     name: producerData?.name,
-        //     totalInspections: producerData?.totalInspections,
-        //     recentInspection: producerData?.recentInspection,
-        //     propertyAddress: JSON.parse(producerDataApi?.address),
-        //     propertyArea: producerData?.certifiedArea,
-        //     propertyGeolocation: producerDataApi?.propertyGeolocation,
-        //     proofPhoto: producerDataApi?.imgProfileUrl,
-        //     producerWallet: producerData?.producerWallet,
-        //     pool: {
-        //         currentEra: producerData?.pool?.currentEra
-        //     },
-        //     lastRequestAt: producerData?.lastRequestAt,
-        //     isa: {
-        //         isaAverage: producerData?.isa?.isaAverage,
-        //         isaScore: producerData?.isa?.isaScore,
-        //         sustainable: producerData?.isa?.sustainable
-        //     }
-        // }
+        const data = {
+            name: producerData?.name,
+            totalInspections: producerData?.totalInspections,
+            recentInspection: producerData?.recentInspection,
+            propertyAddress: JSON.parse(producerDataApi?.address),
+            propertyArea: producerData?.certifiedArea,
+            propertyGeolocation: producerDataApi?.propertyGeolocation,
+            proofPhoto: producerDataApi?.imgProfileUrl,
+            producerWallet: producerData?.producerWallet,
+            pool: {
+                currentEra: producerData?.pool?.currentEra
+            },
+            lastRequestAt: producerData?.lastRequestAt,
+            isa: {
+                isaAverage: producerData?.isa?.isaAverage,
+                isaScore: producerData?.isa?.isaScore,
+                sustainable: producerData?.isa?.sustainable
+            }
+        }
 
-        // const propertyData = JSON.stringify(data);
+        const propertyData = JSON.stringify(data);
 
-        // try{
-        //     await api.post('/inspections',{
-        //         inspectionId: String(item.id),
-        //         createdBy: String(item.createdBy),
-        //         createdAt: String(item.createdAtTimestamp),
-        //         userWallet: String(walletConnected).toUpperCase(),
-        //         propertyData
-        //     })
-        // }catch(err){
-        //     console.log(err);
-        // }finally{
+        try{
+            await api.post('/inspections',{
+                inspectionId: String(data.id),
+                createdBy: String(data.createdBy),
+                createdAt: String(data.createdAtTimestamp),
+                userWallet: String(walletAddress).toUpperCase(),
+                propertyData
+            })
+        }catch(err){
+            console.log(err);
+        }finally{
 
-        // }
+        }
     }
 
     return(
@@ -233,25 +248,33 @@ export function InspectionItem({data, type}){
                                 <button
                                     onClick={() => setMoreInfo(!moreInfo)}
                                 >
-                                    <AiFillCaretDown
-                                        size={30}
-                                        color='white'
-                                    />
+                                    {moreInfo ? (
+                                        <AiFillCaretUp
+                                            size={30}
+                                            color='white'
+                                        />    
+                                    ) : (
+                                        <AiFillCaretDown
+                                            size={30}
+                                            color='white'
+                                        />
+                                    )}
                                 </button>
                             </div>
                             <div className='hidden lg:flex w-full h-full'>
-                                <button
-                                    onClick={() => {
-                                        if(data.status === '0'){
-                                            handleAccept()
-                                        }
-                                    }}
-                                    className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
-                                >
-                                    {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                    {data.status === '1' && t('Realize Inspection')}
-                                    {data.status === '2' && t('See Result')}
-                                </button>
+                                {user === '2' && (
+                                    <button
+                                        onClick={() => {
+                                            if(data.status === '0'){
+                                                handleAccept()
+                                            }
+                                        }}
+                                        className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
+                                    >
+                                        {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
+                                        {data.status === '1' && t('Realize Inspection')}
+                                    </button>
+                                )}
                             </div>
                         </>
                     )}
@@ -274,6 +297,20 @@ export function InspectionItem({data, type}){
                         <>
                         <p className='font-bold text-white mt-3'>{t('Expires In')}:</p>
                         <p className='text-white'>0 Blocks to expire</p>
+
+                        <div className='w-full mt-3'>
+                            <button
+                                onClick={() => {
+                                    if(data.status === '0'){
+                                        handleAccept()
+                                    }
+                                }}
+                                className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
+                            >
+                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
+                                {data.status === '1' && t('Realize Inspection')}
+                            </button>
+                        </div>
                         </>
                     )}
                 </div>

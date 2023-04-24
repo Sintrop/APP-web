@@ -1,29 +1,27 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import {MainContext} from '../../../contexts/main';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import { useMainContext } from '../../hooks/useMainContext';
 import { useTranslation } from 'react-i18next';
 
-import {GetProducer} from '../../../services/producerService';
-import {GetInspections} from '../../../services/manageInspectionsService';
-import {GetActivist} from '../../../services/activistService';
-import { GetResearcher } from '../../../services/researchersService';
-import {GetDeveloper} from '../../../services/developersService';
-import { GetAdvisor } from '../../../services/advisorsService';
-import {GetContributor} from '../../../services/contributorService';
-import { GetInvestor } from '../../../services/investorService';
+import { api } from '../../services/api';
+import {GetProducer} from '../../services/producerService';
+import {GetInspections} from '../../services/manageInspectionsService';
+import {GetActivist} from '../../services/activistService';
+import { GetResearcher } from '../../services/researchersService';
+import {GetDeveloper} from '../../services/developersService';
+import { GetAdvisor } from '../../services/advisorsService';
+import {GetContributor} from '../../services/contributorService';
+import { GetInvestor } from '../../services/investorService';
 
-import { IndiceValueItem } from '../../IndiceValueItem';
-import Loading from '../../Loading';
-import { api } from '../../../services/api';
-import Map from '../../Map';
+import Map from '../Map';
+import Loading from '../Loading';
+import { IndiceValueItem } from '../IndiceValueItem';
+import { InspectionItemResult } from '../../pages/accountProducer/inspectionItemResult';
 
-import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult'
-
-export default function MyAccount({wallet, userType, setTab}){
+export function UserDetails({setTab}){
     const {t} = useTranslation();
-    const navigate = useNavigate();
-    const {user, walletConnected, chooseModalRegister, checkUser} = useContext(MainContext);
-    const {tabActive, walletAddress} = useParams();
+    const {walletSelected} = useMainContext();
+    const {typeUser, tabActive} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
     const [userData, setUserData] = useState([]);
@@ -34,28 +32,56 @@ export default function MyAccount({wallet, userType, setTab}){
     const [inspections, setInspections] = useState([]);
 
     useEffect(() => {
-        setTab(tabActive, '');
+        setTab(tabActive, '')
     }, [tabActive]);
 
     useEffect(() => {
-        async function check() {
-            const response = await checkUser(walletAddress);
-            setTimeout(() => {
-                if(response === '0'){
-                    chooseModalRegister()
-                }
-            }, 1000)
-        }
-        check();
-
         getUserData();
-    },[]);
+    },[])
+
+    async function getUserData(){
+        setLoading(true);
+        if(typeUser === '1'){
+            getApiProducer();
+            const response = await GetProducer(walletSelected);
+            //getBase64(response)
+            setPosition(JSON.parse(response.propertyAddress?.coordinate))
+            setUserData(response);
+            getInspections();
+        }
+        if(typeUser === '2'){
+            const response = await GetActivist(walletSelected);
+            setUserData(response)
+        }
+        if(typeUser === '3'){
+            const response = await GetResearcher(walletSelected);
+            setUserData(response)
+        }
+        if(typeUser === '4'){
+            const response = await GetDeveloper(walletSelected);
+            setUserData(response)
+        }
+        if(typeUser === '5'){
+            const response = await GetAdvisor(walletSelected);
+            setUserData(response)
+        }
+        if(typeUser === '6'){
+            const response = await GetContributor(walletSelected);
+            setUserData(response)
+        }
+        if(typeUser === '7'){
+            const response = await GetInvestor(walletSelected);
+            setUserData(response)
+        }
+        setLoading(false)
+    }
 
     async function getApiProducer(){
         try{
             setLoadingApi(true);
-            const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
-            setProducerDataApi(response.data.user)
+            const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
+            setProducerDataApi(response.data.user);
+            console.log(response)
             setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
@@ -68,56 +94,10 @@ export default function MyAccount({wallet, userType, setTab}){
 
     async function getInspections(){
         const response = await GetInspections();
-        const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
-        setInspections(filterInspections);
+        setInspections(response);
     }
 
-    async function getUserData(){
-        setLoading(true);
-        if(user === '1'){
-            getApiProducer();
-            const response = await GetProducer(walletAddress);
-            //getBase64(response)
-            setPosition(JSON.parse(response.propertyAddress?.coordinate))
-            setUserData(response);
-            getInspections();
-        }
-        if(user === '2'){
-            const response = await GetActivist(walletAddress);
-            setUserData(response)
-        }
-        if(user === '3'){
-            const response = await GetResearcher(walletAddress);
-            setUserData(response)
-        }
-        if(user === '4'){
-            const response = await GetDeveloper(walletAddress);
-            setUserData(response)
-        }
-        if(user === '5'){
-            const response = await GetAdvisor(walletAddress);
-            setUserData(response)
-        }
-        if(user === '6'){
-            const response = await GetContributor(walletAddress);
-            setUserData(response)
-        }
-        if(user === '7'){
-            const response = await GetInvestor(walletAddress);
-            setUserData(response)
-        }
-        setLoading(false)
-    }
-
-    if(user === '0'){
-        return(
-            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <h1 className='font-bold text-white'>Account is not registered</h1>
-            </div>
-        )
-    }
-
-    if(user === '1'){
+    if(typeUser === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col items-center gap-5 lg:flex-row'>
@@ -127,15 +107,9 @@ export default function MyAccount({wallet, userType, setTab}){
                     />
     
                     <div className="flex flex-col gap-3">
-                        <button
-                            className='w-52 h-10 rounded-md bg-[#ff9900] font-bold '
-                        >
-                            {t('Request New Inspection')}
-                        </button>
-    
                         <a  
                             target='_blank'
-                            href={`${window.location.host}/account-producer/${walletAddress}`}
+                            href={`https://www.sintropapp.com.br/account-producer/${walletSelected}`}
                             className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
                         >
                             Página do Produtor
@@ -217,7 +191,7 @@ export default function MyAccount({wallet, userType, setTab}){
         )
     }
 
-    if(user === '2'){
+    if(typeUser === '2'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col items-center gap-5 lg:flex-row'>
@@ -262,18 +236,18 @@ export default function MyAccount({wallet, userType, setTab}){
                     <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
                     <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
                     <p className="text-white lg:text-lg">
-                        {user === '3' && userData?.researcherWallet}
-                        {user === '4' && userData?.developerWallet}
-                        {user === '5' && userData?.advisorWallet}
-                        {user === '6' && userData?.contributorWallet}
-                        {user === '7' && userData?.investorWallet}
+                        {typeUser === '3' && userData?.researcherWallet}
+                        {typeUser === '4' && userData?.developerWallet}
+                        {typeUser === '5' && userData?.advisorWallet}
+                        {typeUser === '6' && userData?.contributorWallet}
+                        {typeUser === '7' && userData?.investorWallet}
                     </p>
                     <p className="font-bold text-[#ff9900] lg:text-lg">
-                        {user === '3' && t('Published Works')}
-                        {user === '4' && t('Developer Level')}
+                        {typeUser === '3' && t('Published Works')}
+                        {typeUser === '4' && t('Developer Level')}
                         : <span className="text-white">
-                            {user === '3' && userData?.publishedWorks}
-                            {user === '4' && userData?.level?.level}
+                            {typeUser === '3' && userData?.publishedWorks}
+                            {typeUser === '4' && userData?.level?.level}
                         </span>
                     </p>
                 </div>

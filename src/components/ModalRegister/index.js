@@ -16,6 +16,7 @@ import Map from '../Map';
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
 import {api} from '../../services/api';
+import {FiCamera} from 'react-icons/fi';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -688,26 +689,25 @@ export default function ModalRegister(){
     }
 
     return(
-        <Dialog.Portal className='modal-register__portal'>
-            <Dialog.Overlay className='modal-register__overlay'/>
-            <Dialog.Content className='modal-register__content'>
-                {step === 1 ? (
-                    <Dialog.Title className='modal-register__title'>
-                        {t('Register')}
-                    </Dialog.Title>
-                ) : (
-                    <div/>
-                )}
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between w-[500px] h-[530px] p-3 bg-white rounded-md m-auto inset-0'>
+                <img
+                    src={require('../../assets/logo-cinza.png')}
+                    className='w-[120px] object-contain'
+                />
 
                 {step === 1 && (
-                    <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>{t('Do you want to register as one')}?</h1>
+                    <div className='w-full flex flex-col items-center'>
+                        <h1 className='font-bold text-2xl text-[#0A4303]'>{t('Register')}</h1>
+                        <p className='font-bold text-md text-[#0A4303]'>{t('Do you want to register as one')}?</p>
                         
                         <select
                             defaultValue={type}
                             onChange={(e) => setType(e.target.value)}
+                            className='mt-10 w-[50%] h-10 bg-[#C66828] text-white font-bold'
                         >
-                            <option selected value="">{t('Select the type of user you want to register')}</option>
+                            <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
                             <option value="activist">{t('Activist')}</option>
                             <option value="contributor">{t('Contributor')}</option>
@@ -720,13 +720,13 @@ export default function ModalRegister(){
                 )}
 
                 {step === 2 && (
-                    <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                    <div className='w-full flex flex-col items-center'>
+                        <h1 className='text-lg text-center text-[#0A4303] mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
 
                         {proofPhoto != '' && (
                             <img
                                 src={`data:image/png;base64,${proofPhotoBase64}`}
-                                className="register__proofPhoto"
+                                className="w-[250px] h-[210px] object-cover mb-3"
                             />
                         )}
                         
@@ -737,22 +737,25 @@ export default function ModalRegister(){
                                     setModalWebcam(true);
                                 }, 1000)
                             }}
+
+                            className='flex items-center justify-center gap-2 px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
                         >
+                            <FiCamera size={25} color='white'/>
                             {t('Take Photo')}
                         </button>
                     </div>
                 )}
 
                 {step === 3 && (
-                    <div className='modal-register__container-content'>
-                        <h1 className='modal-register__title'>
+                    <div className='w-full flex flex-col items-center'>
+                        <h1 className='text-center text-lg text-md text-[#0A4303]'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1>
 
-                        <div style={{width: '400px'}}>
-                            <div style={{display: 'flex', flexDirection: 'column'}}>
-                                <label style={{fontWeight: 'bold', color: 'green'}}>{t('Your Name')}</label>
+                        <div className='w-[450px] mt-10'>
+                            <div className='flex items-center gap-2'>
+                                <label className='font-bold text-[#0A4303]' >{t('Name')}</label>
                                 <input
                                     placeholder='Type here'
                                     type="text"
@@ -760,17 +763,67 @@ export default function ModalRegister(){
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    style={{ width: '400px', height: 25}}
+                                    className='w-full h-10 border-2 border-[#A75722] rounded p-1'
                                 />
                             </div>
                         {type === 'producer'&& (
                             <>
-                                <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
+
+                                <div className='flex gap-3 mt-3'>
+                                    <div className='flex items-center gap-2'>
+                                        <label htmlFor="cep" className='font-bold text-[#0A4303]'>{t('ZIP Code')}</label>
+                                        <InputMask
+                                            placeholder='Type here'
+                                            type="text"
+                                            name="cep"
+                                            value={cep}
+                                            onChange={(e) => setCep(e.target.value)}
+                                            mask='99999-999'
+                                            required
+                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                        />
+                                    </div>
+                                
+                                    <div className='flex flex-col justify-center'>
+                                        <p className='font-bold text-[#0A4303]'>
+                                            {state === '' ? '' : `${city}-${state}, ${country}.`}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                
+                                <div className='flex items-center gap-5 mt-3'>
+                                    <div className='flex items-center gap-2'>
+                                        <label htmlFor="street" className='font-bold text-[#0A4303]'>{t('Street')}</label>
+                                        <input
+                                            placeholder='Type here'
+                                            name="street"
+                                            value={street}
+                                            onChange={(e) => setStreet(e.target.value)}
+                                            required
+                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                        />
+                                    </div>
+
+                                    <div className='flex items-center gap-2'>
+                                        <label htmlFor="complement" className='font-bold text-[#0A4303]'>{t('Complement')}</label>
+                                        <input
+                                            placeholder='Type here'
+                                            name="complement"
+                                            value={complement}
+                                            onChange={(e) => setComplement(e.target.value)}
+                                            required
+                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className='flex gap-3 mt-3 justify-center' >
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="documetType" style={{fontWeight: 'bold', color: 'green'}}>{t('Document Type')}</label>
                                         <select 
                                             value={documetType}
                                             onChange={(e) => setDocumentType(e.target.value)}
+                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
                                         >
                                             <option selected value="">Select Document Type</option>
                                             <option value="rg">RG</option>
@@ -780,63 +833,15 @@ export default function ModalRegister(){
                                     </div>
                                 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="documetNumber" style={{fontWeight: 'bold', color: 'green'}}>{t('Document Number')}</label>
                                         <InputMask
                                             type="text"
+                                            placeholder={t('Document Number')}
                                             mask={formatDocument.current}
                                             value={documetNumber}
                                             name="documetNumber"
                                             onChange={(e) => setDocumentNumber(e.target.value)}
                                             required
-                                            style={{width: '192px', height: 22}}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
-                                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="cep" style={{fontWeight: 'bold', color: 'green'}}>{t('ZIP Code')}</label>
-                                        <InputMask
-                                            placeholder='Type here'
-                                            type="text"
-                                            name="cep"
-                                            value={cep}
-                                            onChange={(e) => setCep(e.target.value)}
-                                            mask='99999-999'
-                                            required
-                                            style={{width: '192px', height: 22}}
-                                        />
-                                    </div>
-                                
-                                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                                        <p style={{margin: 0, marginTop: 15, fontWeight: 'bold'}}>
-                                            {state === '' ? '' : `${city}-${state}, ${country}.`}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
-                                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="street" style={{fontWeight: 'bold', color: 'green'}}>{t('Street')}</label>
-                                        <input
-                                            placeholder='Type here'
-                                            name="street"
-                                            value={street}
-                                            onChange={(e) => setStreet(e.target.value)}
-                                            style={{width: '192px', height: 22}}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="complement" style={{fontWeight: 'bold', color: 'green'}}>{t('Complement')}</label>
-                                        <input
-                                            placeholder='Type here'
-                                            name="complement"
-                                            value={complement}
-                                            onChange={(e) => setComplement(e.target.value)}
-                                            style={{width: '192px', height: 22}}
-                                            required
+                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
                                 </div>
@@ -896,18 +901,22 @@ export default function ModalRegister(){
                     </div>
                 )}
 
-                <div className='modal-register__area-btn'>
-                    <Dialog.Close>
+                <div className='flex w-full justify-center gap-2'>
+                    <Dialog.Close
+                        className='w-[200px] h-10 bg-[#C66828] rounded-md text-white'
+                    >
                         {t('Continue Without Register')}
                     </Dialog.Close>
                     {step > 1 && (
                         <button 
+                            className='w-[120px] h-10 bg-[#C66828] rounded-md text-white'
                             onClick={handlePreviousStep}
                         >
                             {t('Previous')}
                         </button>
                     )}
                     <button 
+                        className='w-[120px] h-10 bg-[#C66828] rounded-md text-white'
                         onClick={() => {
                             if(step === 4){
                                 validateData();

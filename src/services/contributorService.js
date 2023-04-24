@@ -19,12 +19,12 @@ class ContributorsService {
         const contributors = await ContributorContract.methods.getContributors().call()
         return contributors;
     }
-
-    async getContributors(walletAdd){
-        const contributors = await ContributorContract.methods.getContributor(walletAdd).call()
-        return contributors;
-    }
 }
 
 
 export default ContributorsService; 
+
+export const GetContributor = async(walletAdd) => {
+    const contributors = await ContributorContract.methods.getContributor(walletAdd).call()
+    return contributors;
+}
