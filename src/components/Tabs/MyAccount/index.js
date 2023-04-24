@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import {MainContext} from '../../../contexts/main';
 import { useTranslation } from 'react-i18next';
+import {FaCheck, FaLock} from 'react-icons/fa';
 
 import {GetProducer} from '../../../services/producerService';
 import {GetInspections} from '../../../services/manageInspectionsService';
@@ -22,7 +23,7 @@ import {InspectionItemResult} from '../../../pages/accountProducer/inspectionIte
 export default function MyAccount({wallet, userType, setTab}){
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, chooseModalRegister, checkUser} = useContext(MainContext);
+    const {user, walletConnected, blockNumber,chooseModalRegister, checkUser} = useContext(MainContext);
     const {tabActive, walletAddress} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
@@ -159,7 +160,45 @@ export default function MyAccount({wallet, userType, setTab}){
     
                         <div className="flex flex-col w-full lg:w-[70%] bg-green-950 p-2 border-2 border-[#3E9EF5] rounded-sm mt-[-65px] lg:mt-[-75px]">
                             <p className="font-bold text-[#ff9900] lg:text-lg">Prox. Request:</p>
-                            <p className="text-white lg:text-lg">{t('Your May Request Inspections')}</p>
+                            <div className='flex items-center'>
+                            {Number(userData?.lastRequestAt) === 0 ? (
+                                <div className='flex items-center text-green-500'
+                                >
+                                    <FaCheck size={15} style={{marginRight: 5}}/>
+                                    {t('You Can Request Inspections')}
+                                </div>
+                                
+                            ) : (
+                                <>
+                                {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'green', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaCheck size={15} style={{marginRight: 5}}/>
+                                        {t('You Can Request Inspections')}
+                                    </div>
+                                ) : (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'red', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaLock size={15} style={{marginRight: 5}}/>
+                                        {t('Wait')} {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t("blocks to request")}
+                                    </div>
+                                )}
+                                </>
+                            )}
+                            
+                        </div>
                         </div>
                     </div>
     
@@ -231,6 +270,44 @@ export default function MyAccount({wallet, userType, setTab}){
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
                         <p className="text-white lg:text-lg">{userData?.activistWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
+                        <div className='flex items-center'>
+                            {Number(userData?.lastAcceptedAt) === 0 ? (
+                                <div className='flex text-green-500'
+                                >
+                                    <FaCheck size={15} style={{marginRight: 5}}/>
+                                    {t('You Can Accept Inspections')}
+                                </div>
+                            ) : (
+                                <>
+                                {(Number(userData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber) < 0 ? (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'green', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaCheck size={15} style={{marginRight: 5}}/>
+                                        {t('You Can Accept Inspections')}
+                                    </div>
+                                ) : (
+                                    <div style={{
+                                            display: 'flex', 
+                                            flexDirection: 'row', 
+                                            marginLeft: 5, 
+                                            color: 'red', 
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <FaLock size={15} style={{marginRight: 5}}/>
+                                        {t('Wait')} {(Number(userData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} {t('blocks to accept')}.
+                                    </div>
+                                )}
+                                </>
+                            )}
+                            
+                        </div>                    
                     </div>
                 </div>
     

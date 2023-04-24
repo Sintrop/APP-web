@@ -11,8 +11,8 @@ export default function ProducerRanking({ wallet, setTab }) {
     const producerService = new ProducerService(wallet);
     const [producers, setProducers] = useState([]);
     const {tabActive, walletAddress} = useParams();
-    const {inputFilter, setInputFilter} = useState('');
-    const {filterSelect, setFilterSelect} = useState('wallet');
+    const [inputFilter, setInputFilter] = useState('');
+    const [filterSelect, setFilterSelect] = useState('all');
         
     useEffect(() => {
         setTab(tabActive, '')
@@ -38,15 +38,15 @@ export default function ProducerRanking({ wallet, setTab }) {
         }
     }
 
-    function filter(){
-        if(filterSelect === 'all'){
+    function filter(type){
+        if(type === 'all'){
             getProducers();
         }
 
-        if(filterSelect === 'wallet'){
+        if(type === 'wallet'){
             let users = producers;
             const usersFilter = users.filter(item => item.producerWallet === inputFilter);
-            console.log(usersFilter)
+            setProducers(usersFilter)
         }
     }
 
@@ -60,7 +60,13 @@ export default function ProducerRanking({ wallet, setTab }) {
                 <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
                     <select
                         className="bg-white border-0 h-full w-full cursor-pointer"
-                        onChange={(e) => setFilterSelect(e.target.value)}
+                        onChange={(e) => {
+                            setFilterSelect(e.target.value)
+                            if(e.target.value === 'all'){
+                                setInputFilter('');
+                                filter('all')
+                            }
+                        }}
                         value={filterSelect}
                     >
                         <option value="all">Todos os produtores</option>
@@ -76,7 +82,7 @@ export default function ProducerRanking({ wallet, setTab }) {
                     />
                     <button
                         className="font-bold py-2 rounded-md bg-white"
-                        onClick={filter}
+                        onClick={() => filter(filterSelect)}
                     >
                         <img
                             src={require('../../../../assets/icon-search.png')}
