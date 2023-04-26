@@ -24,18 +24,18 @@ export function ResearchItem({data}){
     }
 
     return(
-        <div className="research-item__container">
+        <div className="flex flex-col gap-3 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md p-3 mb-5">
             <div className="research-item__header">
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">ID</label>
-                    <p>{data.id}</p>
+                <div className='flex flex-col items-center'>
+                    <label className="font-bold text-white">ID</label>
+                    <p className="text-white">{data.id}</p>
                 </div>
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">CreatedAt</label>
-                    <p>{date}</p>
+                <div className='flex flex-col items-center'>
+                    <label className="font-bold text-white">CreatedAt</label>
+                    <p className="text-white">{date}</p>
                 </div>
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">CreatedBy</label>
+                <div className='flex flex-col items-center'>
+                    <label className="font-bold text-white">CreatedBy</label>
                     <a
                         onClick={() => navigate(`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`)}
                         style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
@@ -45,21 +45,23 @@ export function ResearchItem({data}){
                 </div>
             </div>
 
-            <h1 className='research-item__title'>{data.title}</h1>
+            <h1 className='font-bold text-white text-2xl'>{data.title}</h1>
 
-            <label className='research-item__label'>Thesis</label>
-            <p className='research-item__description'>{data.thesis}</p>
+            <label className='font-bold text-white'>Thesis</label>
+            <p className='text-white'>{data.thesis}</p>
 
-            <label className='research-item__label'>PDF Report</label>
-            <div className='research-item__area-btn-pdf'>
-                <button>
+            <label className='font-bold text-white'>PDF Report</label>
+            <div className='flex items-center gap-5'>
+                <button
+                    className='px-3 py-2 bg-[#ff9900] font-bold rounded-md'
+                >
                     <a
                         href={`https://ipfs.io/ipfs/${data.file}`}
                         target="_blank"
                         style={{textDecoration: 'none', color: '#000'}}
                     >View PDF</a>
                 </button>
-                <button onClick={handleDownloadPDF} style={{cursor: 'pointer'}}>
+                <button onClick={handleDownloadPDF} className='px-3 py-2 bg-[#ff9900] font-bold rounded-md'>
                     Download PDF
                 </button>
             </div>

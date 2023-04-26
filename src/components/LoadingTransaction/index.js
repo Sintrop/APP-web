@@ -30,7 +30,11 @@ export function LoadingTransaction({loading, logTransaction}){
                     {!loading && logTransaction.type === 'success' && (
                         <div className="loading-transaction__area-success">
                             <p>{t('Click to view transaction details')}</p>
-                            <a target='_blank' href={`https://goerli.etherscan.io/tx/${logTransaction.hash}`}>
+                            <a 
+                                target='_blank' 
+                                href={`https://goerli.etherscan.io/tx/${logTransaction.hash}`}
+                                className='max-w-[40ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
+                            >
                                 {logTransaction.hash}
                             </a>
                         </div>

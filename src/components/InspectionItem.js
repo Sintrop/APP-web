@@ -10,6 +10,7 @@ import { LoadingTransaction } from './LoadingTransaction';
 import { useParams } from 'react-router';
 import { AcceptInspection } from '../services/manageInspectionsService';
 import {GetProducer} from '../services/producerService';
+import { ModalChooseMethod } from './ModalChooseMethod';
 
 export function InspectionItem({data, type}){
     const {walletAddress} = useParams();
@@ -23,6 +24,7 @@ export function InspectionItem({data, type}){
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [openModalChooseMethod, setOpenModalChooseMethod] = useState(false);
 
     useEffect(() => {
         getProducerDataApi();
@@ -38,7 +40,7 @@ export function InspectionItem({data, type}){
     async function getProducerDataApi(){
         try{
             const response = await api.get(`/user/${String(data?.createdBy).toUpperCase()}`);
-            setProducerDataApi(response.data);
+            setProducerDataApi(response.data.user);
             const address = JSON.parse(response.data.user.address);
             setProducerAddress(address);
         }catch(err){
@@ -128,7 +130,7 @@ export function InspectionItem({data, type}){
     }
 
     async function registerInspectionAPI(){
-        const data = {
+        const producer = {
             name: producerData?.name,
             totalInspections: producerData?.totalInspections,
             recentInspection: producerData?.recentInspection,
@@ -148,7 +150,7 @@ export function InspectionItem({data, type}){
             }
         }
 
-        const propertyData = JSON.stringify(data);
+        const propertyData = JSON.stringify(producer);
 
         try{
             await api.post('/inspections',{
@@ -163,6 +165,11 @@ export function InspectionItem({data, type}){
         }finally{
 
         }
+    }
+
+    function handleRealize(){
+        //registerInspectionAPI()
+        setOpenModalChooseMethod(true);
     }
 
     return(
@@ -268,6 +275,9 @@ export function InspectionItem({data, type}){
                                             if(data.status === '0'){
                                                 handleAccept()
                                             }
+                                            if(data.status === '1'){
+                                                handleRealize()
+                                            }
                                         }}
                                         className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
                                     >
@@ -330,6 +340,13 @@ export function InspectionItem({data, type}){
                             loading={loadingTransaction}
                             logTransaction={logTransaction}
                         />
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={openModalChooseMethod}
+                    onOpenChange={(open) => setOpenModalChooseMethod(open)}
+                >
+                    <ModalChooseMethod/>
                 </Dialog.Root>
 
             <ToastContainer/>

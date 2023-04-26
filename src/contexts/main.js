@@ -17,6 +17,7 @@ export default function MainProvider({children}){
     const [menuOpen, setMenuOpen] = useState(true);
     const [language, setLanguage] = useState('en-us');
     const [modalChooseLang, setModalChooseLang] = useState(false);
+    const [modalTutorial, setModalTutorial] = useState(false);
 
     useEffect(() => {
         getAtualBlockNumber();
@@ -41,6 +42,10 @@ export default function MainProvider({children}){
 
     function chooseModalRegister(){
         setModalRegister(!modalRegister);
+    }
+
+    function chooseModalTutorial(){
+        setModalTutorial(!modalTutorial);
     }
 
     async function checkUser(wallet){
@@ -105,7 +110,9 @@ export default function MainProvider({children}){
                 toggleModalChooseLang,
                 setWalletConnected,
                 walletSelected,
-                setWalletSelected
+                setWalletSelected,
+                modalTutorial,
+                chooseModalTutorial
             }}
         >
             {children}

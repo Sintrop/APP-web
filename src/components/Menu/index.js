@@ -8,7 +8,7 @@ import IconIndice from '../../assets/icon-indice.png';
 import IconHistory from '../../assets/icon-history.png';
 import IconManage from '../../assets/icon-manage.png';
 import IconCertificate from '../../assets/icon-certificate.png';
-import IconSac from '../../assets/icon-sac.png';
+import IconSac from '../../assets/token.png';
 import IconPesquisas from '../../assets/icon-pesquisas.png';
 import IconAccount from '../../assets/icon-account.png';
 
@@ -62,7 +62,7 @@ export default function Menu({ changeTab }) {
         },
         { 
         id: "pools", 
-        title: "SAC Token", 
+        title: "Regeneration Credit", 
         icon: IconSac, 
         action: "",
         subItem: [
@@ -76,8 +76,8 @@ export default function Menu({ changeTab }) {
         //  icon: IconInspections, 
         //  action: ""
         //},
-        { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
         { id: "researches", title: "Research Center", icon: IconPesquisas, action: "" },
+        { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
     ]);
     const toggleSubItem = (id) => {
         if(id === 'rankings'){

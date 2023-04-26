@@ -140,6 +140,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
     }
 
     function handleRealize(){
+        
         finishInspection();
         return;
         if(user !== '2'){
@@ -527,7 +528,7 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
 
                         
                         <button 
-                            onClick={handleRealize}
+                            onClick={registerInspectionAPI}
                         >
                             {t('Realize')}
                         </button>

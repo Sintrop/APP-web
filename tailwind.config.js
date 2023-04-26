@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage:{
+        'folha-papiro': "url('/src/assets/bg-papiro.png')"
+      }
+    },
   },
   plugins: [],
 }

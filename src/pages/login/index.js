@@ -1,20 +1,18 @@
 import React, {useState, useEffect, useContext} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useNetwork } from "../../hooks/useNetwork";
-import loginImg from '../../assets/img/sintrop_login_alpha.png';
-import logo from '../../assets/logo-branco.png';
 import { MainContext } from "../../contexts/main";
-import { UnsupportedNetwork } from "../../components/UnsupportedNetwork";
 import {useTranslation} from 'react-i18next';
 import { ModalChooseLang } from "../../components/ModalChooseLang";
 import * as Dialog from '@radix-ui/react-dialog';
 
 import { TopBarStatus } from "../../components/TopBarStatus";
+import {ModalTutorial} from '../../components/Tutorial/ModalTutorial';
 
 function Login(){
     const {t} = useTranslation();
     const {isSupported} = useNetwork();
-    const {Sync, modalChooseLang, toggleModalChooseLang} = useContext(MainContext);
+    const {Sync, modalChooseLang, toggleModalChooseLang, modalTutorial, chooseModalTutorial} = useContext(MainContext);
     const navigate = useNavigate();
 
     async function handleSync(){
@@ -81,7 +79,7 @@ function Login(){
                         <div className="lg:w-[500px] flex flex-col lg:flex-row justify-center">
                             <button
                                 className="lg:w-[300px] h-10 bg-[#A75722] rounded-xl font-bold text-white mt-6"
-                                onClick={handleSync}
+                                onClick={chooseModalTutorial}
                             >
                                 COMEÇAR MISSÃO 1
                             </button>
@@ -94,6 +92,13 @@ function Login(){
                     onOpenChange={() => toggleModalChooseLang()}
                 >
                     <ModalChooseLang/>
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={modalTutorial}
+                    onOpenChange={chooseModalTutorial}
+                >
+                    <ModalTutorial/>
                 </Dialog.Root>
             </div>
         </div>
