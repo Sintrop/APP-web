@@ -10,7 +10,7 @@ export function InspectionItemResult({data}){
     return(
         <div className='flex flex-col w-full mb-5'>
             <div 
-                className='flex items-center justify-between w-full h-16 bg-[#ff9900] p-3 rounded-t-md cursor-pointer'
+                className='flex items-center justify-between w-full h-16 bg-gradient-to-r from-[#FFD875] to-[#461D03] p-3 rounded-t-md cursor-pointer'
                 onClick={() => setOpen(!open)}
             >
                 <div className='flex items-center gap-5'>

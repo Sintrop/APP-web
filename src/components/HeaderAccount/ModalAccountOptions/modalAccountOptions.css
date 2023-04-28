@@ -37,10 +37,12 @@
 .modal-account-options__option-container:hover{
     background-color: #ddd;
     cursor: pointer;
+    border-radius: 8px;
 }
 
 .modal-account-options__option-container-label{
     font-weight: bold;
     color: #000;
     font-size: 14px;
+    border-radius: 8px;
 }

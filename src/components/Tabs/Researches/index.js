@@ -34,12 +34,12 @@ export default function ResearchesPage({wallet, setTab}){
 
     return(
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                <div className='flex items-center justify-between mb-3 lg:mb-10'> 
                     <h1 className='font-bold text-2xl text-white'>{t('Researches')}</h1>
                     <div className='flex justify-center items-center gap-5'>
                         {user === '3' && (
                             <button
-                                className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
+                                className='flex py-2 px-5 bg-[#3E9EF5] font-bold duration-200 rounded-lg lg:mt-0 lg:px-10'
                                 onClick={() => setModalPublish(true)}
                             >
                                 {t('Publish research')}
@@ -49,12 +49,18 @@ export default function ResearchesPage({wallet, setTab}){
                 </div>
                 
                 <div className="flex flex-col h-[90vh] pb-28 overflow-auto">
-                    {researches.map(item => (
-                        <ResearchItem 
-                            key={item.id}
-                            data={item}
-                        />
-                    ))}
+                    {researches.length === 0 ? (
+                        <p className='font-bold text-white'>Nenhuma pesquisa publicada</p>
+                    ) : (
+                        <>
+                            {researches.map(item => (
+                                <ResearchItem 
+                                    key={item.id}
+                                    data={item}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
 
             {loading && (

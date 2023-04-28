@@ -14,10 +14,11 @@ import { ModalChooseMethod } from './ModalChooseMethod';
 
 export function InspectionItem({data, type}){
     const {walletAddress} = useParams();
-    const {user} = useMainContext();
+    const {user, blockNumber} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [moreInfo, setMoreInfo] = useState(false);
+    const [status, setStatus] = useState('0');
     const [producerData, setProducerData] = useState({});
     const [producerDataApi, setProducerDataApi] = useState([]);
     const [producerAddress, setProducerAddress] = useState({});
@@ -28,7 +29,8 @@ export function InspectionItem({data, type}){
 
     useEffect(() => {
         getProducerDataApi();
-        getProducer()
+        getProducer();
+        validateStatus(data.status);
     }, []);
 
     async function getProducer() {
@@ -172,6 +174,19 @@ export function InspectionItem({data, type}){
         setOpenModalChooseMethod(true);
     }
 
+    function validateStatus(status){
+        if(status === '0' || status === '2'){
+            setStatus(status)
+        }
+        if(status === '1'){
+            if(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) < Number(blockNumber)){
+                setStatus('3')
+            }else{
+                setStatus('1')
+            }
+        }
+    }
+
     return(
         <div className='flex flex-col'>
             <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
@@ -194,32 +209,43 @@ export function InspectionItem({data, type}){
                 </div>
 
                 {type === 'manage' && (
-                    <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303]'>
-                        <p className='text-white'>0 Blocks to expire</p>
+                    <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303] text-white'>
+                        {status === '0' && (
+                            <p>{t('Not accepted')}</p>
+                        )}
+                        {status === '1' && (
+                            <p>{t('Expires in')} {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
+                        )}
+                        {status === '2' && (
+                            <p>{t('Inspected')}</p>
+                        )}
+                        {status === '3' && (
+                            <p>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                        )}
                     </div>
                 )}
 
                 {type === 'manage' && (
                     <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
-                        {data.status === '0' && (
+                        {status === '0' && (
                             <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#F4A022]'>
                                 <p className='text-xs text-white font-bold'>{t('OPEN')}</p>
                             </div>
                         )}
 
-                        {data.status === '1' && (
+                        {status === '1' && (
                             <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#3E9EF5]'>
                                 <p className='text-xs text-white font-bold'>{t('ACCEPTED')}</p>
                             </div>
                         )}
 
-                        {data.status === '2' && (
+                        {status === '2' && (
                             <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#2AC230]'>
                                 <p className='text-xs text-white font-bold'>{t('INSPECTED')}</p>
                             </div>
                         )}
 
-                        {data.status === '3' && (
+                        {status === '3' && (
                             <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#C52A15]'>
                                 <p className='text-xs text-white font-bold'>{t('EXPIRED')}</p>
                             </div>

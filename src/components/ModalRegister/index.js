@@ -691,7 +691,7 @@ export default function ModalRegister(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between w-[500px] h-[530px] p-3 bg-white rounded-md m-auto inset-0'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between mx-2 lg:mx-0 lg:w-[500px] h-[530px] p-3 bg-white rounded-md m-auto inset-0'>
                 <img
                     src={require('../../assets/logo-cinza.png')}
                     className='w-[120px] object-contain'
@@ -705,7 +705,7 @@ export default function ModalRegister(){
                         <select
                             defaultValue={type}
                             onChange={(e) => setType(e.target.value)}
-                            className='mt-10 w-[50%] h-10 bg-[#C66828] text-white font-bold'
+                            className='mt-10 lg:w-[50%] h-10 bg-[#C66828] text-white font-bold'
                         >
                             <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
@@ -738,7 +738,7 @@ export default function ModalRegister(){
                                 }, 1000)
                             }}
 
-                            className='flex items-center justify-center gap-2 px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                            className='flex items-center justify-center gap-2 px-5 h-10 bg-[#2066CF] font-bold text-white rounded-md'
                         >
                             <FiCamera size={25} color='white'/>
                             {t('Take Photo')}
@@ -885,7 +885,7 @@ export default function ModalRegister(){
                 )}
 
                 {step === 4 && (
-                    <div className='modal-register__container-content'>
+                    <div className='modal-register__container-content mb-1'>
                         <h1 className='modal-register__title'>{t('Mark the center of your property, then circle the entire area')}.</h1>
                         
                         <div id='mapview'>
@@ -903,20 +903,20 @@ export default function ModalRegister(){
 
                 <div className='flex w-full justify-center gap-2'>
                     <Dialog.Close
-                        className='w-[200px] h-10 bg-[#C66828] rounded-md text-white'
+                        className='lg:w-[200px] h-10 border-[#C66828] border-2 rounded-md text-[#C66828] text-sm lg:text-base px-1'
                     >
                         {t('Continue Without Register')}
                     </Dialog.Close>
                     {step > 1 && (
                         <button 
-                            className='w-[120px] h-10 bg-[#C66828] rounded-md text-white'
+                            className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                             onClick={handlePreviousStep}
                         >
                             {t('Previous')}
                         </button>
                     )}
                     <button 
-                        className='w-[120px] h-10 bg-[#C66828] rounded-md text-white'
+                        className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                         onClick={() => {
                             if(step === 4){
                                 validateData();

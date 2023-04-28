@@ -74,7 +74,7 @@ export default function AccountProducer(){
 
     return(
         <div className="w-full flex flex-col items-center bg-[#0A4303]">
-            <div className='w-full h-20 bg-yellow-600 flex items-center justify-center lg:justify-start lg:px-16'>
+            <div className='w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] flex items-center justify-center lg:justify-start lg:px-16'>
                 <img
                     src={require('../../assets/logo-branco.png')}
                     className='w-[170px] object-contain'

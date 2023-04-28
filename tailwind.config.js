@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage:{
-        'folha-papiro': "url('/src/assets/bg-papiro.png')"
+        'folha-papiro': "url('/src/assets/bg-papiro.png')",
+        'folha-recibo': "url('/src/assets/nota.png')"
       }
     },
   },

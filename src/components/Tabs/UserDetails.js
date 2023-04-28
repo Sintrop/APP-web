@@ -7,7 +7,7 @@ import { api } from '../../services/api';
 import {GetProducer} from '../../services/producerService';
 import {GetInspections} from '../../services/manageInspectionsService';
 import {GetActivist} from '../../services/activistService';
-import { GetResearcher } from '../../services/researchersService';
+import { GetResearcher, GetResearches } from '../../services/researchersService';
 import {GetDeveloper} from '../../services/developersService';
 import { GetAdvisor } from '../../services/advisorsService';
 import {GetContributor} from '../../services/contributorService';
@@ -17,6 +17,7 @@ import Map from '../Map';
 import Loading from '../Loading';
 import { IndiceValueItem } from '../IndiceValueItem';
 import { InspectionItemResult } from '../../pages/accountProducer/inspectionItemResult';
+import { ResearchItem } from './Researches/ResearchItem';
 
 export function UserDetails({setTab}){
     const {t} = useTranslation();
@@ -30,6 +31,7 @@ export function UserDetails({setTab}){
     const [propertyPath, setPropertyPath] = useState([]);
     const [position, setPosition] = useState({});
     const [inspections, setInspections] = useState([]);
+    const [researches, setResearches] = useState([]);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -54,6 +56,7 @@ export function UserDetails({setTab}){
             setUserData(response)
         }
         if(typeUser === '3'){
+            getResearches();
             const response = await GetResearcher(walletSelected);
             setUserData(response)
         }
@@ -97,6 +100,12 @@ export function UserDetails({setTab}){
         setInspections(response);
     }
 
+    async function getResearches(){
+        const response = await GetResearches();
+        const filterResearches = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
+        setResearches(filterResearches);
+    }
+
     if(typeUser === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
@@ -122,7 +131,7 @@ export function UserDetails({setTab}){
                         <div className="flex flex-col w-full h-[330px] lg:h-[370px] bg-[#0A4303] p-2 border-2 border-[#3E9EF5] rounded-sm">
                             <h2 className="font-bold text-center text-[#A75722] text-2xl">{userData?.name}</h2>
                             <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                            <p className="text-white lg:text-lg">{userData?.producerWallet}</p>
+                            <p className="text-white lg:text-lg max-w-full overflow-hidden text-ellipsis">{userData?.producerWallet}</p>
     
                             <p className="font-bold text-white text-lg mt-2">{t('Address')}:</p>
                             <p className="text-white lg:text-lg">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
@@ -197,13 +206,13 @@ export function UserDetails({setTab}){
                 <div className='flex flex-col items-center gap-5 lg:flex-row'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                        className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
+                        className="w-[200px] h-[200px] rounded-full object-cover border-4 border-[#3e9ef5]"
                     />
     
-                    <div className="flex flex-col">
+                    <div className="flex flex-col items-center lg:items-start">
                         <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                        <p className="text-white lg:text-lg">{userData?.activistWallet}</p>
+                        <p className="text-white lg:text-lg max-w-[80%] overflow-clip lg:max-w-full">{userData?.activistWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
                     </div>
                 </div>
@@ -225,17 +234,17 @@ export function UserDetails({setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-            <div className='flex flex-col items-center gap-5 lg:flex-row'>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
+            <div className='flex flex-col items-center gap-5 lg:flex-row mb-5 lg:mb-10'>
                 <img
                     src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
                     className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
                 />
 
-                <div className="flex flex-col">
+                <div className="flex flex-col items-center lg:items-start">
                     <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
                     <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                    <p className="text-white lg:text-lg">
+                    <p className="text-white lg:text-lg max-w-[80%] lg:max-w-full overflow-hidden text-ellipsis">
                         {typeUser === '3' && userData?.researcherWallet}
                         {typeUser === '4' && userData?.developerWallet}
                         {typeUser === '5' && userData?.advisorWallet}
@@ -252,6 +261,24 @@ export function UserDetails({setTab}){
                     </p>
                 </div>
             </div>
+
+            {typeUser === '3' && (
+                <>
+                    {researches.length === 0 ? (
+                        <p className='font-bold text-white'>Nenhuma pesquisa publicada</p>
+                    ) : (
+                        <>
+                            {researches.map(item => (
+                                <ResearchItem 
+                                    key={item.id}
+                                    data={item}
+                                    myAccount
+                                />
+                            ))}
+                        </>
+                    )}
+                </>
+            )}
 
             {loading && (
                 <Loading/>

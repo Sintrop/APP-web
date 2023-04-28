@@ -7,18 +7,20 @@ import {FaCheck, FaLock} from 'react-icons/fa';
 import {GetProducer} from '../../../services/producerService';
 import {GetInspections} from '../../../services/manageInspectionsService';
 import {GetActivist} from '../../../services/activistService';
-import { GetResearcher } from '../../../services/researchersService';
+import { GetResearcher, GetResearches } from '../../../services/researchersService';
 import {GetDeveloper} from '../../../services/developersService';
 import { GetAdvisor } from '../../../services/advisorsService';
 import {GetContributor} from '../../../services/contributorService';
 import { GetInvestor } from '../../../services/investorService';
+import { RequestInspection } from '../../../services/manageInspectionsService';
 
 import { IndiceValueItem } from '../../IndiceValueItem';
 import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import Map from '../../Map';
 
-import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult'
+import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
+import { ResearchItem } from '../Researches/ResearchItem';
 
 export default function MyAccount({wallet, userType, setTab}){
     const {t} = useTranslation();
@@ -33,6 +35,7 @@ export default function MyAccount({wallet, userType, setTab}){
     const [propertyPath, setPropertyPath] = useState([]);
     const [position, setPosition] = useState({});
     const [inspections, setInspections] = useState([]);
+    const [researches, setResearches] = useState([]);
 
     useEffect(() => {
         setTab(tabActive, '');
@@ -73,6 +76,12 @@ export default function MyAccount({wallet, userType, setTab}){
         setInspections(filterInspections);
     }
 
+    async function getResearches(){
+        const response = await GetResearches();
+        const filterResearches = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
+        setResearches(filterResearches);
+    }
+
     async function getUserData(){
         setLoading(true);
         if(user === '1'){
@@ -88,6 +97,7 @@ export default function MyAccount({wallet, userType, setTab}){
             setUserData(response)
         }
         if(user === '3'){
+            getResearches();
             const response = await GetResearcher(walletAddress);
             setUserData(response)
         }
@@ -328,17 +338,17 @@ export default function MyAccount({wallet, userType, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-            <div className='flex flex-col items-center gap-5 lg:flex-row'>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
+            <div className='flex flex-col items-center gap-5 lg:flex-row mb-5 lg:mb-10'>
                 <img
                     src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
                     className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
                 />
 
-                <div className="flex flex-col">
+                <div className="flex flex-col items-center lg:items-start">
                     <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
                     <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                    <p className="text-white lg:text-lg">
+                    <p className="text-white lg:text-lg max-w-[80%] lg:max-w-full overflow-hidden text-ellipsis">
                         {user === '3' && userData?.researcherWallet}
                         {user === '4' && userData?.developerWallet}
                         {user === '5' && userData?.advisorWallet}
@@ -355,6 +365,24 @@ export default function MyAccount({wallet, userType, setTab}){
                     </p>
                 </div>
             </div>
+
+            {user === '3' && (
+                <>
+                    {researches.length === 0 ? (
+                        <p className='font-bold text-white'>Nenhuma pesquisa publicada</p>
+                    ) : (
+                        <>
+                            {researches.map(item => (
+                                <ResearchItem 
+                                    key={item.id}
+                                    data={item}
+                                    myAccount
+                                />
+                            ))}
+                        </>
+                    )}
+                </>
+            )}
 
             {loading && (
                 <Loading/>

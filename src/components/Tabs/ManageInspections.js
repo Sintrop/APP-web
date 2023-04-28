@@ -173,7 +173,7 @@ export default function ManageInpections({walletAddress, setTab}){
             </div>
             
                 {inspections.length === 0 ? (
-                    <h3>{t('There are no open inspections')}</h3>
+                    <h3 className='font-bold text-white'>{t('There are no open inspections')}</h3>
                 ) : (
                     <div className='flex flex-col pb-24'>
                     <div className="flex flex-col border-4 border-[#3E9EF5] rounded-sm">
