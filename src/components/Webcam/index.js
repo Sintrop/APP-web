@@ -38,7 +38,7 @@ export function WebcamComponent({onTake, check}){
     return (
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between w-[600px] h-[520px] p-3 bg-white rounded-md m-auto inset-0'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[600px] h-[520px] p-3 bg-white rounded-md m-auto inset-0'>
                 {!haveWebcam ? (
                     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center'}}>
                         {loading ? (
@@ -77,7 +77,7 @@ export function WebcamComponent({onTake, check}){
                             <img 
                                 src={imageSrc} 
                                 alt="Captured photo"
-                                className="w-[600px] h-[450px] object-cover"
+                                className="lg:w-[600px] h-[450px] object-contain lg:object-cover"
                             />
                         )}
                         {imageSrc !== '' && (

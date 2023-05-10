@@ -159,7 +159,7 @@ export default function MyAccount({wallet, userType, setTab}){
                         <div className="flex flex-col w-full h-[330px] lg:h-[370px] bg-[#0A4303] p-2 border-2 border-[#3E9EF5] rounded-sm">
                             <h2 className="font-bold text-center text-[#A75722] text-2xl">{userData?.name}</h2>
                             <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                            <p className="text-white lg:text-lg">{userData?.producerWallet}</p>
+                            <p className="text-white lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.producerWallet}</p>
     
                             <p className="font-bold text-white text-lg mt-2">{t('Address')}:</p>
                             <p className="text-white lg:text-lg">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
@@ -231,24 +231,6 @@ export default function MyAccount({wallet, userType, setTab}){
                         )}
                     </div>
                 </div>
-                                    
-                <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px] mt-5 lg:mt-10">
-                    <div className="flex items-center w-full bg-[#80421A]">
-                        <div className="w-[60%] px-3 py-2">
-                            <p className='font-bold text-white'>Insumos</p>
-                        </div>
-                        <div className="w-[40%] px-3 py-2">
-                            <p className='font-bold text-white'>Valor</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                    </div>
-                </div>
     
                 <div className="flex flex-col lg:mt-10 mt-5">
                     {inspections.map(item => (
@@ -275,10 +257,10 @@ export default function MyAccount({wallet, userType, setTab}){
                         className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
                     />
     
-                    <div className="flex flex-col">
+                    <div className="flex flex-col items-center lg:items-start">
                         <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                        <p className="text-white lg:text-lg">{userData?.activistWallet}</p>
+                        <p className="text-white lg:text-lg max-w-[80%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.activistWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
                         <div className='flex items-center'>
                             {Number(userData?.lastAcceptedAt) === 0 ? (

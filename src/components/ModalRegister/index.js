@@ -691,7 +691,7 @@ export default function ModalRegister(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between mx-2 lg:mx-0 lg:w-[500px] h-[530px] p-3 bg-white rounded-md m-auto inset-0'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[500px] h-[530px] p-3 bg-white rounded-md m-2 lg:m-auto inset-0'>
                 <img
                     src={require('../../assets/logo-cinza.png')}
                     className='w-[120px] object-contain'
@@ -700,7 +700,7 @@ export default function ModalRegister(){
                 {step === 1 && (
                     <div className='w-full flex flex-col items-center'>
                         <h1 className='font-bold text-2xl text-[#0A4303]'>{t('Register')}</h1>
-                        <p className='font-bold text-md text-[#0A4303]'>{t('Do you want to register as one')}?</p>
+                        <p className='font-bold lg:text-md text-[#0A4303]'>{t('Do you want to register as one')}?</p>
                         
                         <select
                             defaultValue={type}
@@ -721,7 +721,7 @@ export default function ModalRegister(){
 
                 {step === 2 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='text-lg text-center text-[#0A4303] mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                        <h1 className='lg:text-lg text-center text-[#0A4303] mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
 
                         {proofPhoto != '' && (
                             <img
@@ -748,13 +748,13 @@ export default function ModalRegister(){
 
                 {step === 3 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='text-center text-lg text-md text-[#0A4303]'>
+                        <h1 className='text-center lg:text-lg text-md text-[#0A4303]'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1>
 
-                        <div className='w-[450px] mt-10'>
-                            <div className='flex items-center gap-2'>
+                        <div className='lg:w-[450px] mt-3 lg:mt-10'>
+                            <div className='flex flex-col'>
                                 <label className='font-bold text-[#0A4303]' >{t('Name')}</label>
                                 <input
                                     placeholder='Type here'
@@ -770,7 +770,7 @@ export default function ModalRegister(){
                             <>
 
                                 <div className='flex gap-3 mt-3'>
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex flex-col'>
                                         <label htmlFor="cep" className='font-bold text-[#0A4303]'>{t('ZIP Code')}</label>
                                         <InputMask
                                             placeholder='Type here'
@@ -780,12 +780,12 @@ export default function ModalRegister(){
                                             onChange={(e) => setCep(e.target.value)}
                                             mask='99999-999'
                                             required
-                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-32 h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
                                 
                                     <div className='flex flex-col justify-center'>
-                                        <p className='font-bold text-[#0A4303]'>
+                                        <p className='text-sm lg:text-base font-bold text-[#0A4303]'>
                                             {state === '' ? '' : `${city}-${state}, ${country}.`}
                                         </p>
                                     </div>
@@ -793,7 +793,7 @@ export default function ModalRegister(){
 
                                 
                                 <div className='flex items-center gap-5 mt-3'>
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex flex-col'>
                                         <label htmlFor="street" className='font-bold text-[#0A4303]'>{t('Street')}</label>
                                         <input
                                             placeholder='Type here'
@@ -805,7 +805,7 @@ export default function ModalRegister(){
                                         />
                                     </div>
 
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex flex-col'>
                                         <label htmlFor="complement" className='font-bold text-[#0A4303]'>{t('Complement')}</label>
                                         <input
                                             placeholder='Type here'
@@ -818,7 +818,7 @@ export default function ModalRegister(){
                                     </div>
                                 </div>
 
-                                <div className='flex gap-3 mt-3 justify-center' >
+                                <div className='flex gap-5 mt-3' >
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
                                         <select 
                                             value={documetType}
@@ -886,9 +886,9 @@ export default function ModalRegister(){
 
                 {step === 4 && (
                     <div className='modal-register__container-content mb-1'>
-                        <h1 className='modal-register__title'>{t('Mark the center of your property, then circle the entire area')}.</h1>
+                        <h1 className='font-bold lg:text-lg text-center'>{t('Mark the center of your property, then circle the entire area')}.</h1>
                         
-                        <div id='mapview'>
+                        <div className='flex w-full'>
                             <Map
                                 setCenter={(position) => {setGeolocation(JSON.stringify(position))}}
                                 editable={true}

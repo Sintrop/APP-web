@@ -70,15 +70,15 @@ export function ResearchItem({data, myAccount}){
             <label className='font-bold text-[#ff9900]'>PDF Report</label>
             <div className='flex items-center gap-5'>
                 <button
-                    className='px-3 py-2 bg-[#3E9EF5] font-bold rounded-md'
+                    className='px-3 py-2 bg-[#783E19] font-bold rounded-md text-white'
                 >
                     <a
                         href={`https://ipfs.io/ipfs/${data.file}`}
                         target="_blank"
-                        style={{textDecoration: 'none', color: '#000'}}
+                        style={{textDecoration: 'none', color: '#fff'}}
                     >View PDF</a>
                 </button>
-                <button onClick={handleDownloadPDF} className='px-3 py-2 bg-[#3E9EF5] font-bold rounded-md'>
+                <button onClick={handleDownloadPDF} className='px-3 py-2 bg-[#783E19] font-bold rounded-md text-white'>
                     Download PDF
                 </button>
             </div>

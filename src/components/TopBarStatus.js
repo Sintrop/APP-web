@@ -61,14 +61,14 @@ export function TopBarStatus({}){
                                 <p className='font-bold text-xs lg:text-lg text-white'>Your connected but not registered!</p>
                             
                                 <button
-                                    className='px-5 lg:px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
+                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#0A4303]'
                                     onClick={chooseModalRegister}
                                 >
                                     Click Here To Register
                                 </button>
 
                                 <button
-                                    className='px-5 lg:px-10 py-1 rounded-md font-bold text-white bg-[#FF9900]'
+                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#FF9900]'
                                     onClick={() => navigate('/')}
                                 >
                                     Start Mission 1

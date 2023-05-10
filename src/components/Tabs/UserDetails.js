@@ -166,24 +166,6 @@ export function UserDetails({setTab}){
                     </div>
                 </div>
                                     
-                <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px] mt-5 lg:mt-10">
-                    <div className="flex items-center w-full bg-[#80421A]">
-                        <div className="w-[60%] px-3 py-2">
-                            <p className='font-bold text-white'>Insumos</p>
-                        </div>
-                        <div className="w-[40%] px-3 py-2">
-                            <p className='font-bold text-white'>Valor</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                        <IndiceValueItem/>
-                    </div>
-                </div>
-    
                 <div className="flex flex-col lg:mt-10 mt-5">
                     {inspections.map(item => (
                         <InspectionItemResult

@@ -419,21 +419,20 @@ export default function ModalActions({close, item, walletAddress, showRealize, r
     }
 
     function calculateSolo(data){
-        let result = 2;
-        return result;
-        if(data.bio >= 100){
+        let result = 0;
+        if(data.solo >= 100){
             result = 0 
         }
-        if(data.bio < 100 && data.bio > 0){
+        if(data.solo < 100 && data.solo > 0){
             result = 1
         }
-        if(data.bio === 0){
+        if(data.solo === 0){
             result = 2  
         }
-        if(data.bio < 0 && data.bio > -100){
+        if(data.solo < 0 && data.solo > -100){
             result = 3
         }
-        if(data.bio <= -100 ){
+        if(data.solo <= -100 ){
             result = 4
         }
 

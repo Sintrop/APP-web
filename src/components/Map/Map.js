@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 const containerStyle = {
-  width: '450px',
+  width: '100%',
   height: '367px'
 };
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 
-export function ModalChooseMethod(){
+export function ModalChooseMethod({finishInspection}){
     const [step, setStep] = useState(1);
 
     return(
@@ -58,7 +58,10 @@ export function ModalChooseMethod(){
                         Entendi
                     </Dialog.Close>
                     {step === 2 && (
-                        <button className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]">
+                        <button 
+                            className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"
+                            onClick={finishInspection}
+                        >
                             Finalizar Inspeção
                         </button>
                     )}
