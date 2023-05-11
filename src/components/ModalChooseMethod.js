@@ -51,12 +51,14 @@ export function ModalChooseMethod({finishInspection}){
                 )}
 
                 <div className='flex items-center gap-3'>
-                    <Dialog.Close 
-                        onClick={() => setStep(1)}
-                        className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"
-                    >
-                        Entendi
-                    </Dialog.Close>
+                    {step !== 1 && (
+                        <Dialog.Close 
+                            onClick={() => setStep(1)}
+                            className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"
+                        >
+                            Entendi
+                        </Dialog.Close>
+                    )}
                     {step === 2 && (
                         <button 
                             className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"

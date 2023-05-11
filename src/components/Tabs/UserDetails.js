@@ -83,11 +83,12 @@ export function UserDetails({setTab}){
         try{
             setLoadingApi(true);
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
-            setProducerDataApi(response.data.user);
-            console.log(response)
-            setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
+            setProducerDataApi(response.data.user); 
+            console.log(response.data.user);
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
+            return;
+            setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
         }catch(err){
             console.log(err);
         }finally{

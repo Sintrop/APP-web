@@ -11,8 +11,14 @@ import { useParams } from 'react-router';
 import { AcceptInspection, RealizeInspection } from '../services/manageInspectionsService';
 import {GetProducer} from '../services/producerService';
 import { ModalChooseMethod } from './ModalChooseMethod';
+import {ViewResultInspection} from './ViewResultInspection';
+import Loading from '../components/Loading';
+import {save} from '../config/infura';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function InspectionItem({data, type}){
+export function InspectionItem({data, type, reload}){
     const {walletAddress} = useParams();
     const {user, blockNumber} = useMainContext();
     const {t} = useTranslation();
@@ -26,17 +32,364 @@ export function InspectionItem({data, type}){
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [openModalChooseMethod, setOpenModalChooseMethod] = useState(false);
+    const [modalViewResult, setModalViewResult] = useState(false);
 
+    
     useEffect(() => {
         getProducerDataApi();
         getProducer();
         validateStatus(data.status);
-    }, []);
+    }, [data]);
+    
+    function generatePdf(inspection, indiceReport, resultCategories, resultIndices){
+        console.log(resultCategories);
+        const categoriesDegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '1')
+        const categoriesRegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '2')
+        
+        if(indiceReport === 'carbon'){
+            return {
+                content: [
+                    {
+                        text: `Inspeção #${inspection.inspectionId}`,
+                        style: 'header'
+                    },
+                    {
+                        text: `Carbon Report`,
+                        style: 'subheader'
+                    },
+                    'Producer Wallet:',
+                    {
+                        text: `${inspection.createdBy}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    'Activist Wallet:',
+                    {
+                        text: `${inspection.userWallet}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    {
+                        text: `1. Qual o saldo de carbono do produtor? Justifique sua resposta`,
+                        style: 'subheader'
+                    },
+                    {
+                        text: `${resultIndices?.carbon} kg CO2 / era`,
+                        style: 'resultIndice'
+                    },
+                    '1. Insumos de Degeneração:',
+                    `${categoriesDegeneration.map(item => {
+                        const carbonValue = Number(JSON.parse(item.categoryDetails).carbonValue)
+                        if(item){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${carbonValue} = ${Number(item.value) * carbonValue} kg Co²`,
+                                ]
+                            )
+                        }
+                        
+                    })}`,
+    
+                    '\n2. Insumos de Regeneração:',
+                    `${categoriesRegeneration.map(item => {
+                        const carbonValue = Number(JSON.parse(item.categoryDetails).carbonValue)
+                        if(item.value !== '0'){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${carbonValue} = ${Number(item.value) * carbonValue} kg Co²`,
+                                ]
+                            )
+                        }
+                        
+                    })}`
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        marginBottom: 15
+                    },
+                    subheader: {
+                        fontSize: 15,
+                        bold: true,
+                        marginTop: 10
+                    },
+                    quote: {
+                        italics: true
+                    },
+                    small: {
+                        fontSize: 8
+                    },
+                    resultIndice:{
+                        marginBottom: 15
+                    },
+                    descriptionInfo:{
+                        bold: true,
+                        color: '#0a4303',
+                        marginBottom: 5
+                    }
+                }
+                
+            }
+        }
+
+        if(indiceReport === 'solo'){
+            return {
+                content: [
+                    {
+                        text: `Inspeção #${inspection.inspectionId}`,
+                        style: 'header'
+                    },
+                    {
+                        text: `Solo Report`,
+                        style: 'subheader'
+                    },
+                    'Producer Wallet:',
+                    {
+                        text: `${inspection.createdBy}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    'Activist Wallet:',
+                    {
+                        text: `${inspection.userWallet}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    {
+                        text: `1. Qual o saldo de solo do produtor? Justifique sua resposta`,
+                        style: 'subheader'
+                    },
+                    {
+                        text: `${resultIndices?.solo} m² / era`,
+                        style: 'resultIndice'
+                    },
+                    '1. Insumos de Degeneração:',
+                    `${categoriesDegeneration.map(item => {
+                        const soloValue = Number(JSON.parse(item.categoryDetails).soloValue)
+                        if(item){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${soloValue} = ${Number(item.value) * soloValue} m²`,
+                                ]
+                            )
+                        }
+                        
+                    })}`,
+    
+                    '\n2. Insumos de Regeneração:',
+                    'Solo regenerado: 11.356 m²'
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        marginBottom: 15
+                    },
+                    subheader: {
+                        fontSize: 15,
+                        bold: true,
+                        marginTop: 10
+                    },
+                    quote: {
+                        italics: true
+                    },
+                    small: {
+                        fontSize: 8
+                    },
+                    resultIndice:{
+                        marginBottom: 15
+                    },
+                    descriptionInfo:{
+                        bold: true,
+                        color: '#0a4303',
+                        marginBottom: 5
+                    }
+                }
+                
+            }
+        }
+
+        if(indiceReport === 'agua'){
+            return {
+                content: [
+                    {
+                        text: `Inspeção #${inspection.inspectionId}`,
+                        style: 'header'
+                    },
+                    {
+                        text: `Water Report`,
+                        style: 'subheader'
+                    },
+                    'Producer Wallet:',
+                    {
+                        text: `${inspection.createdBy}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    'Activist Wallet:',
+                    {
+                        text: `${inspection.userWallet}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    {
+                        text: `1. Qual o saldo de água do produtor? Justifique sua resposta`,
+                        style: 'subheader'
+                    },
+                    {
+                        text: `${resultIndices?.agua} m³ / era`,
+                        style: 'resultIndice'
+                    },
+                    '1. Insumos de Degeneração:',
+                    `${categoriesDegeneration.map(item => {
+                        const aguaValue = Number(JSON.parse(item.categoryDetails).aguaValue)
+                        if(item){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${aguaValue} = ${Number(item.value) * aguaValue} m³`,
+                                ]
+                            )
+                        }
+                        
+                    })}`,
+    
+                    '\n2. Insumos de Regeneração:',
+                    `${categoriesRegeneration.map(item => {
+                        const aguaValue = Number(JSON.parse(item.categoryDetails).aguaValue)
+                        if(item.value !== '0'){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${aguaValue} = ${Number(item.value) * aguaValue} m³`,
+                                ]
+                            )
+                        }
+                        
+                    })}`
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        marginBottom: 15
+                    },
+                    subheader: {
+                        fontSize: 15,
+                        bold: true,
+                        marginTop: 10
+                    },
+                    quote: {
+                        italics: true
+                    },
+                    small: {
+                        fontSize: 8
+                    },
+                    resultIndice:{
+                        marginBottom: 15
+                    },
+                    descriptionInfo:{
+                        bold: true,
+                        color: '#0a4303',
+                        marginBottom: 5
+                    }
+                }
+                
+            }
+        }
+
+        if(indiceReport === 'bio'){
+            return {
+                content: [
+                    {
+                        text: `Inspeção #${inspection.inspectionId}`,
+                        style: 'header'
+                    },
+                    {
+                        text: `Biodiversity Report`,
+                        style: 'subheader'
+                    },
+                    'Producer Wallet:',
+                    {
+                        text: `${inspection.createdBy}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    'Activist Wallet:',
+                    {
+                        text: `${inspection.userWallet}`,
+                        style: 'descriptionInfo'
+                    },
+    
+                    {
+                        text: `1. Qual o saldo de biodiversidade do produtor? Justifique sua resposta`,
+                        style: 'subheader'
+                    },
+                    {
+                        text: `${resultIndices?.bio} unidades de vida / era`,
+                        style: 'resultIndice'
+                    },
+                    '1. Insumos de Degeneração:',
+                    `${categoriesDegeneration.map(item => {
+                        const bioValue = Number(JSON.parse(item.categoryDetails).bioValue)
+                        if(item){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${bioValue} = ${Number(item.value) * bioValue} uni`,
+                                ]
+                            )
+                        }
+                        
+                    })}`,
+    
+                    '\n2. Insumos de Regeneração:',
+                    `${categoriesRegeneration.map(item => {
+                        const bioValue = Number(JSON.parse(item.categoryDetails).bioValue)
+                        if(item.value !== '0'){
+                            return(
+                                [
+                                    `\n${item.title}: ${item.value} x ${bioValue} = ${Number(item.value) * bioValue} uni`,
+                                ]
+                            )
+                        }
+                        
+                    })}`
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        marginBottom: 15
+                    },
+                    subheader: {
+                        fontSize: 15,
+                        bold: true,
+                        marginTop: 10
+                    },
+                    quote: {
+                        italics: true
+                    },
+                    small: {
+                        fontSize: 8
+                    },
+                    resultIndice:{
+                        marginBottom: 15
+                    },
+                    descriptionInfo:{
+                        bold: true,
+                        color: '#0a4303',
+                        marginBottom: 5
+                    }
+                }
+                
+            }
+        }
+    }
 
     async function getProducer() {
         setLoading(true);
         const response = await GetProducer(data?.createdBy)
         setProducerData(response);
+        setLoading(false);
     }
 
     async function getProducerDataApi(){
@@ -188,28 +541,77 @@ export function InspectionItem({data, type}){
     }
 
     async function finishInspection(){
-        let isas = [];
+        setLoading(true);
+        let pdfCarbonHash = '';
+        let pdfSoloHash = '';
+        let pdfAguaHash = '';
+        let pdfBioHash = '';
+
         const response = await api.get(`/inspection/${data.id}`)
         if(response.data.inspection.status === 1){
             alert('Realize a inspeção no app do ativista para smartphone!')
+            setLoading(false);
             return;
         }
-        const resultIndices = JSON.parse(response.data.inspection.resultIdices);
+        const resultIndices = JSON.parse(response?.data?.inspection?.resultIdices);
+        const resultCategories = JSON.parse(response?.data?.inspection?.resultCategories);
+        const inspection = response?.data?.inspection
+
+        const pdfCarbon = await pdfMake.createPdf(generatePdf(inspection, 'carbon', resultCategories, resultIndices));
+        const pdfSolo = await pdfMake.createPdf(generatePdf(inspection, 'solo', resultCategories, resultIndices));
+        const pdfAgua = await pdfMake.createPdf(generatePdf(inspection, 'agua', resultCategories, resultIndices));
+        const pdfBio = await pdfMake.createPdf(generatePdf(inspection, 'bio', resultCategories, resultIndices));
+        
+        pdfCarbon.getBuffer(async (res) => {
+            const hash = await save(res);
+            pdfCarbonHash = hash;
+
+            pdfSolo.getBuffer(async (res) => {
+                const hash = await save(res);
+                pdfSoloHash = hash;
+
+                pdfAgua.getBuffer(async (res) => {
+                    const hash = await save(res);
+                    pdfAguaHash = hash;
+
+                    pdfBio.getBuffer(async (res) => {
+                        const hash = await save(res);
+                        pdfBioHash = hash;
+
+                        const data = {
+                            resultIndices,
+                            pdfBioHash,
+                            pdfAguaHash,
+                            pdfCarbonHash,
+                            pdfSoloHash
+                        }
+                        createIsas(data)
+                    })
+                })
+            });
+        });
+
+
+
+    }
     
-        const carbonResult = calculateCarboon(resultIndices);
-        const waterResult = calculateWater(resultIndices);
-        const bioResult = calculateBio(resultIndices);
-        const soloResult = calculateSolo(resultIndices);
-
-        const carbonIndicator = Number(resultIndices?.carbon).toFixed(0)
-        const bioIndicator = Number(resultIndices?.bio).toFixed(0)
-        const aguaIndicator = Number(resultIndices?.agua).toFixed(0)
-        const soloIndicator = Number(resultIndices?.solo).toFixed(0)
-
+    async function createIsas(data){
+        let isas = [];
+        
+        const carbonResult = calculateCarboon(data?.resultIndices);
+        const waterResult = calculateWater(data?.resultIndices);
+        const bioResult = calculateBio(data?.resultIndices);
+        const soloResult = calculateSolo(data?.resultIndices);
+    
+        const carbonIndicator = Number(data?.resultIndices?.carbon).toFixed(0)
+        const bioIndicator = Number(data?.resultIndices?.bio).toFixed(0)
+        const aguaIndicator = Number(data?.resultIndices?.agua).toFixed(0)
+        const soloIndicator = Number(data?.resultIndices?.solo).toFixed(0)
+        
         const carbon = {
             categoryId: 1,
             isaIndex: carbonResult,
-            report: 'hash_pdffcdzfcdsacascascxczcx4324324234',
+            report: data?.pdfCarbonHash,
             indicator: carbonIndicator
         }
         isas.push(carbon);
@@ -217,7 +619,7 @@ export function InspectionItem({data, type}){
         const bio = {
             categoryId: 2,
             isaIndex: bioResult,
-            report: 'hash_pdfdfasd32423423drea vdsadasdeqw4e3',
+            report: data?.pdfBioHash,
             indicator: bioIndicator
         }
         isas.push(bio);
@@ -225,7 +627,7 @@ export function InspectionItem({data, type}){
         const water = {
             categoryId: 3,
             isaIndex: waterResult,
-            report: 'hash_pdfewqeqwdqw4e234235ewrfewf2354234234234',
+            report: data?.pdfAguaHash,
             indicator: aguaIndicator
         }
         isas.push(water);
@@ -233,11 +635,11 @@ export function InspectionItem({data, type}){
         const solo = {
             categoryId: 4,
             isaIndex: soloResult,
-            report: 'hash_pdfewqer32resarfwer23432423423',
+            report: data?.pdfSoloHash,
             indicator: soloIndicator
         }
         isas.push(solo);
-
+        setLoading(false);
         finishInspectionBlockchain(isas)
     }
 
@@ -490,9 +892,7 @@ export function InspectionItem({data, type}){
                         <>
                         <button
                             onClick={() => {
-                                if(data.status === '0'){
-                                    handleAccept()
-                                }
+                                setModalViewResult(true)
                             }}
                             className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
                         >
@@ -583,7 +983,7 @@ export function InspectionItem({data, type}){
                         onOpenChange={(open) => {
                             if(!loadingTransaction){
                                 setModalTransaction(open);
-                                //reloadInspection();
+                                reload();
                                 //close();
                             }
                         }}
@@ -602,6 +1002,19 @@ export function InspectionItem({data, type}){
                         finishInspection={finishInspection}
                     />
                 </Dialog.Root>
+
+                <Dialog.Root
+                    open={modalViewResult}
+                    onOpenChange={(open) => setModalViewResult(open)}
+                >
+                    <ViewResultInspection
+                        data={data}
+                    />
+                </Dialog.Root>
+
+                {loading && (
+                    <Loading/>
+                )}
 
             <ToastContainer/>
         </div>

@@ -5,8 +5,10 @@ import {format} from 'date-fns';
 import { api } from '../../services/api';
 import { IndiceValueItem } from '../../components/IndiceValueItem';
 import { IndiceCalculoItem } from '../../components/IndiceCalculoItem';
+import {GetIsa} from '../../services/manageInspectionsService';
+import { saveAs } from 'file-saver';
 
-export function InspectionItemResult({data}){
+export function InspectionItemResult({data, initialVisible}){
     const {t} = useTranslation();
     const [open, setOpen] = useState(false);
     const [carbonOpen, setCarbonOpen] = useState(false);
@@ -18,10 +20,20 @@ export function InspectionItemResult({data}){
     const [resultCategories, setResultCategories] = useState([]);
     const [resultBiodiversity, setResultBiodiversity] = useState([]);
     const [resultBiomassa, setResultBiomassa] = useState(0);
+    const [isas, setIsas] = useState([]);
 
     useEffect(() => {
         getResultIndices();
-    },[])
+        getIsaData();
+        if(initialVisible){
+            setOpen(true)
+        }
+    },[]);
+
+    async function getIsaData(){
+        const response = await GetIsa(data.id);
+        setIsas(response)
+    }
 
     async function getResultIndices() {
         const response = await api.get(`/inspection/${data.id}`)
@@ -29,10 +41,8 @@ export function InspectionItemResult({data}){
         setResultCategories(JSON.parse(response.data?.inspection?.resultCategories))
 
         const resCategories = JSON.parse(response.data?.inspection?.resultCategories);
-        if(response.data?.inspection?.biodiversityIndice){
-            const resBiodiversity = JSON.parse(response.data?.inspection?.biodiversityIndice);
-            setResultBiodiversity(resBiodiversity);
-        }
+        const resBiodiversity = JSON.parse(response.data?.inspection?.biodversityIndice);
+        setResultBiodiversity(resBiodiversity);
 
         const categoryCoberturaSolo = resCategories.filter(item => item.categoryId === '13')
         const soloRegenerado = Number(categoryCoberturaSolo[0]?.value)
@@ -42,6 +52,10 @@ export function InspectionItemResult({data}){
         const resultIndiceBiomassa = calculoBiomassa * JSON.parse(biomassa1[0].categoryDetails).carbonValue;
         setResultBiomassa(resultIndiceBiomassa);
         setInspectionDataApi(response.data?.inspection);
+    }
+
+    function handleDownloadPDF(hash, filename){
+        saveAs(`https://ipfs.io/ipfs/${hash}`, `${filename}`)
     }
 
     return(
@@ -274,12 +288,15 @@ export function InspectionItemResult({data}){
                                 </div>
 
                                 <div className='flex items-center mt-5 gap-2'>
-                                    <button
+                                    <a  
+                                        target='_blank'
+                                        href={`https://ipfs.io/ipfs/${isas[0]?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
-                                    >View PDF</button>
+                                    >View PDF</a>
 
                                     <button
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        onClick={() => handleDownloadPDF(isas[0]?.report, `Carbon Report - Inspection ${data.id}`)}
                                     >Download PDF</button>
                                 </div>
                             </div>
@@ -320,21 +337,6 @@ export function InspectionItemResult({data}){
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
-                                        <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                            <div className="flex items-center w-full bg-[#A75722]">
-                                                <div className="w-[40%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Insumos</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Impacto</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Valor</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Resultado</p>
-                                                </div>
-                                            </div>
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -348,26 +350,11 @@ export function InspectionItemResult({data}){
                                                     
                                                 </div>
                                             )}
-                                        </div>
                                     </div>
 
                                     <div>
                                         <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                            <div className="flex items-center w-full bg-green-950">
-                                                <div className="w-[40%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Insumos</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Impacto</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Valor</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Resultado</p>
-                                                </div>
-                                            </div>
+                                        <div className="flex flex-col lg:w-[450px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -385,12 +372,39 @@ export function InspectionItemResult({data}){
                                     </div>
                                 </div>
 
+                                <div className='flex flex-col gap-1'>
+                                    <p className='text-white'>Legenda</p>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-red-500'/>
+                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-blue-500'/>
+                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-green-400'/>
+                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900]'>¹</p>
+                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                    </div>
+                                </div>
+
                                 <div className='flex items-center mt-5 gap-2'>
-                                    <button
+                                    <a  
+                                        target='_blank'
+                                        href={`https://ipfs.io/ipfs/${isas[2]?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
-                                    >View PDF</button>
+                                    >View PDF</a>
 
                                     <button
+                                        onClick={() => handleDownloadPDF(isas[2]?.report, `Water Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
@@ -432,21 +446,6 @@ export function InspectionItemResult({data}){
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
-                                        <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                            <div className="flex items-center w-full bg-[#A75722]">
-                                                <div className="w-[40%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Insumos</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Impacto</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Valor</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Resultado</p>
-                                                </div>
-                                            </div>
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -460,26 +459,11 @@ export function InspectionItemResult({data}){
                                                     
                                                 </div>
                                             )}
-                                        </div>
                                     </div>
 
                                     <div>
                                         <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                            <div className="flex items-center w-full bg-green-950">
-                                                <div className="w-[40%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Insumos</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Impacto</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Valor</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Resultado</p>
-                                                </div>
-                                            </div>
+                                        <div className="flex flex-col lg:w-[450px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -497,12 +481,39 @@ export function InspectionItemResult({data}){
                                     </div>
                                 </div>
 
+                                <div className='flex flex-col gap-1'>
+                                    <p className='text-white'>Legenda</p>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-red-500'/>
+                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-blue-500'/>
+                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-green-400'/>
+                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900]'>¹</p>
+                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                    </div>
+                                </div>
+
                                 <div className='flex items-center mt-5 gap-2'>
-                                    <button
+                                    <a  
+                                        target='_blank'
+                                        href={`https://ipfs.io/ipfs/${isas[3]?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
-                                    >View PDF</button>
+                                    >View PDF</a>
 
                                     <button
+                                        onClick={() => handleDownloadPDF(isas[3]?.report, `Solo Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
@@ -544,21 +555,7 @@ export function InspectionItemResult({data}){
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
-                                        <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                            <div className="flex items-center w-full bg-[#A75722]">
-                                                <div className="w-[40%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Insumos</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Impacto</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Valor</p>
-                                                </div>
-                                                <div className="w-[20%] px-3 py-2">
-                                                    <p className='font-bold text-white'>Resultado</p>
-                                                </div>
-                                            </div>
+                                        <div className="flex flex-col lg:w-[450px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -578,21 +575,7 @@ export function InspectionItemResult({data}){
                                     <div className="flex flex-col">
                                         <div>
                                             <p className='font-bold text-white'>Regeneração</p>
-                                            <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                                <div className="flex items-center w-full bg-green-950">
-                                                    <div className="w-[40%] px-3 py-2">
-                                                        <p className='font-bold text-white'>Insumos</p>
-                                                    </div>
-                                                    <div className="w-[20%] px-3 py-2">
-                                                        <p className='font-bold text-white'>Impacto</p>
-                                                    </div>
-                                                    <div className="w-[20%] px-3 py-2">
-                                                        <p className='font-bold text-white'>Valor</p>
-                                                    </div>
-                                                    <div className="w-[20%] px-3 py-2">
-                                                        <p className='font-bold text-white'>Resultado</p>
-                                                    </div>
-                                                </div>
+                                            <div className="flex flex-col lg:w-[450px]">
                                                 {resultCategories.length > 0 && (
                                                     <div className="flex flex-col w-full">
                                                         {resultCategories.map(item => (
@@ -608,18 +591,54 @@ export function InspectionItemResult({data}){
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="flex border-2 rounded-sm border-[#3e9ef5] bg-[#0a4303] p-3 mt-3">
-                                            <p className="font-bold text-white">Registro de Biodiversidade: {resultBiodiversity.length} uni</p>
+                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                            <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Registro de biodiversidade: </p>
+                                            <div className="flex items-center">
+                                                <p className="font-bold mx-2 text-red-500"> {resultBiodiversity.length}</p>
+                                                <p className="font-bold text-white mx-1">x</p>
+                                                <p className="font-bold mx-2 text-blue-500">1</p>
+                                            </div>
+                                            <div className="flex items-center">
+                                            <p className="font-bold text-white mx-1">=</p>
+                                            <p className="font-bold  mx-2 text-green-400">{Number(Number(resultBiodiversity.length) * 1).toFixed(2)}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
+                                <div className='flex flex-col gap-1'>
+                                    <p className='text-white'>Legenda</p>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-red-500'/>
+                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-blue-500'/>
+                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <div className='border-2 w-7 border-green-400'/>
+                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <p className='font-bold text-[#ff9900]'>¹</p>
+                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                    </div>
+                                </div>
+
                                 <div className='flex items-center mt-5 gap-2'>
-                                    <button
+                                    <a  
+                                        target='_blank'
+                                        href={`https://ipfs.io/ipfs/${isas[1]?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
-                                    >View PDF</button>
+                                    >View PDF</a>
 
                                     <button
+                                        onClick={() => handleDownloadPDF(isas[1]?.report, `Biodiversity Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
