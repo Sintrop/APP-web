@@ -18,15 +18,15 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
         if(categoryDetails.category === '2' && indice === 'carbon' && categoryDetails?.carbonValue !== '0' && data?.value !== '0'){
             return(
                 <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                    <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
+                    <p className="font-bold text-[#ff9900] text-center text-sm lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
-                        <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
-                        <p className="font-bold text-white mx-1">x</p>
-                        <p className="font-bold mx-2 text-blue-500">{categoryDetails?.carbonValue}</p>
+                        <p className="font-bold mx-2 text-red-500 text-sm"> {data?.value}</p>
+                        <p className="font-bold text-white text-sm mx-1">x</p>
+                        <p className="font-bold text-sm mx-2 text-blue-500">{categoryDetails?.carbonValue}</p>
                     </div>
                     <div className="flex items-center">
-                    <p className="font-bold text-white mx-1">=</p>
-                    <p className="font-bold  mx-2 text-green-400">{Number(categoryDetails?.carbonValue) * Number(data?.value)}</p>
+                    <p className="font-bold text-sm text-white mx-1">=</p>
+                    <p className="flex item-center font-bold text-sm mx-2 text-green-400">{Number(categoryDetails?.carbonValue) * Number(data?.value)} <p className="text-xs">Kg/Co²</p></p>
                     </div>
                 </div>
             )

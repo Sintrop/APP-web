@@ -253,10 +253,10 @@ export function InspectionItemResult({data, initialVisible}){
                                             
                                         </div>
                                         <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900]">¹Registro de Biomassa:</p>
+                                            <p className="font-bold text-[#ff9900]">¹Cobertura de solo:</p>
                                             <div className="flex items-center">
                                                 <p className="font-bold text-white mx-1">=</p>
-                                                <p className="font-bold text-white mx-2 border-b-4 border-green-400">{resultBiomassa}</p>
+                                                <p className="font-bold mx-2 text-green-400">{resultBiomassa} Kg Co²</p>
                                             </div>
                                         </div>
                                     </div>
