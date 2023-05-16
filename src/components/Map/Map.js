@@ -36,21 +36,23 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                                 setCenter(center)
                             }}
                             onPolylineComplete={(e) => {
+                                console.log(e)
                                 setPolyline(e.latLngs.h[0].h)
                             }}
                         />
                     )}
+                
+                    {!editable && (
+                        <Marker position={center}/>
+                    )}
+
+                    {!editable && (
+                        <Polyline
+                            path={pathPolyline}
+                        />
+                    )}
                 </>
                 }
-                {!editable && (
-                    <Marker position={center}/>
-                )}
-
-                {/* {!editable && (
-                    <Polyline
-                        path={pathPolyline}
-                    />
-                )} */}
             </GoogleMap>
         </LoadScript>
     )

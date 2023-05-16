@@ -241,7 +241,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
                                                         <IndiceCalculoItem
-                                                                key={item.id}
+                                                            key={item.id}
                                                             data={item}
                                                             type='regeneration'
                                                             indice='carbon'

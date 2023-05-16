@@ -123,7 +123,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
                                     <div className="flex w-full mt-7">
                                         <div className="flex flex-col lg:w-[50%]">
-                                            <p className="text-green-800 font-bold text-xl">{tokensBurned} SAC Tokens</p>
+                                            <p className="text-green-800 font-bold text-xl">{tokensBurned} Créditos de Regeneração</p>
                                         </div>
 
                                         <div className="flex flex-col lg:w-[50%]">
@@ -162,7 +162,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                             <Dialog.Trigger
                                 className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
                             >
-                                {t('Contribute More')}
+                                {t('Contribute')}
                             </Dialog.Trigger>
                         </Dialog.Root>
                         <button

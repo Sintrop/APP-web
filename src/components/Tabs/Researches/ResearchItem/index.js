@@ -52,7 +52,7 @@ export function ResearchItem({data, myAccount}){
                                 setWalletSelected(data.createdBy)
                                 navigate(`/dashboard/${walletAddress}/user-details/3`)
                             }}
-                            style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}  
+                            className='border-b-2 border-blue-400 text-blue-400' 
                         >
                             {data.createdBy}
                         </a>

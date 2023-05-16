@@ -36,6 +36,7 @@ export default function Menu({ changeTab }) {
         ],
         },
         { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
+        { id: "network-impact", title: "Network Impact", icon: IconPesquisas, action: "" },
         {
         id: "inspection-history",
         title: "Inspections History",

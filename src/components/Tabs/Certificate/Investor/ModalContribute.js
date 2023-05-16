@@ -79,25 +79,26 @@ export function ModalContribute({wallet, onFinished}){
     }
 
     return(
-        <Dialog.Portal className='modal-contribute__portal'>
-            <Dialog.Overlay className='modal-contribute__overlay'/>
-            <Dialog.Content className='modal-contribute__content'>
-                <Dialog.Title className='modal-contribute__title'>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[400px] h-[200px] p-3 bg-white rounded-md m-2 lg:m-auto inset-0'>
+                <Dialog.Title className='font-bold text-center'>
                     Contribute
                 </Dialog.Title>
                 <p>Your balance: {balanceTokens} SAC Tokens</p>
 
                 <div className='modal-contribute__container-input'>
-                    <p className='modal-contribute__label'>Number of tokens to donate</p>
+                    <p className='modal-contribute__label'>Number of tokens for donation</p>
                     <input
-                        className='modal-contribute__input'
+                        className='w-full rounded-md h-10 border-2 border-[#ff9900] px-3'
                         type='number'
                         value={inputTokens}
                         onChange={(e) => setInputTokens(e.target.value)}
+                        placeholder='Number of tokens'
                     />
                 </div>
 
-                <div className='modal-contribute__area-btn'>
+                <div className='flex items-center w-full justify-end gap-3'>
                     <Dialog.Close className='modal-contribute__btn-close'>Cancel</Dialog.Close>
                     <button 
                         className='modal-contribute__btn-contribute'

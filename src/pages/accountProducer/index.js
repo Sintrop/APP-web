@@ -67,6 +67,7 @@ export default function AccountProducer(){
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
             const address = JSON.parse(response.data.user?.address)
             setProducerAddress(address);
+            console.log(response.data.user)
         }catch(err){
             console.log(err)
         }

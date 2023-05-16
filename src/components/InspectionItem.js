@@ -12,6 +12,7 @@ import { AcceptInspection, RealizeInspection } from '../services/manageInspectio
 import {GetProducer} from '../services/producerService';
 import { ModalChooseMethod } from './ModalChooseMethod';
 import {ViewResultInspection} from './ViewResultInspection';
+import { useNavigate } from 'react-router';
 import Loading from '../components/Loading';
 import {save} from '../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
@@ -19,8 +20,9 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export function InspectionItem({data, type, reload}){
+    const navigate = useNavigate();
     const {walletAddress} = useParams();
-    const {user, blockNumber} = useMainContext();
+    const {user, blockNumber, setWalletSelected} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [moreInfo, setMoreInfo] = useState(false);
@@ -519,7 +521,6 @@ export function InspectionItem({data, type, reload}){
                 message: res.message,
                 hash: res.hashTransaction
             })
-            setLoadingTransaction(false);
             registerInspectionAPI();
         })
         .catch(err => {
@@ -599,7 +600,7 @@ export function InspectionItem({data, type, reload}){
         }catch(err){
             console.log(err);
         }finally{
-
+            setLoadingTransaction(false);
         }
     }
 
@@ -689,6 +690,13 @@ export function InspectionItem({data, type, reload}){
         const bioIndicator = Number(data?.resultIndices?.bio).toFixed(0)
         const aguaIndicator = Number(data?.resultIndices?.agua).toFixed(0)
         const soloIndicator = Number(data?.resultIndices?.solo).toFixed(0)
+
+        const resultIndices = {
+            carbonIndicator,
+            bioIndicator,
+            aguaIndicator,
+            soloIndicator
+        }
         
         const carbon = {
             categoryId: 1,
@@ -722,10 +730,11 @@ export function InspectionItem({data, type, reload}){
         }
         isas.push(solo);
         setLoading(false);
-        finishInspectionBlockchain(isas)
+
+        finishInspectionBlockchain(isas, resultIndices)
     }
 
-    async function finishInspectionBlockchain(isas){
+    async function finishInspectionBlockchain(isas, resultIndices){
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(data.id, isas, walletAddress)
@@ -735,7 +744,7 @@ export function InspectionItem({data, type, reload}){
                 message: res.message,
                 hash: res.hashTransaction
             })
-            setLoadingTransaction(false);
+            attNetworkImpact(resultIndices);
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -897,11 +906,58 @@ export function InspectionItem({data, type, reload}){
         return result;
     }
 
+    function handleClickUser(userType, wallet){
+        setWalletSelected(wallet)
+        navigate(`/dashboard/${walletAddress}/user-details/${userType}`)
+    }
+
+    async function attNetworkImpact(resultIndices){
+        let carbon = 0;
+        let agua = 0;
+        let bio = 0;
+        let solo = 0;
+
+        const responseImpact = await api.get('network-impact')
+        carbon = Number(responseImpact.data.impact[0]?.carbon);
+        agua = Number(responseImpact.data.impact[0]?.agua);
+        bio = Number(responseImpact.data.impact[0]?.bio);
+        solo = Number(responseImpact.data.impact[0]?.solo);
+
+        if(Number(resultIndices.carbonIndicator) < 0){
+            carbon += Number(resultIndices.carbonIndicator);
+        }
+
+        if(Number(resultIndices.bioIndicator) > 0){
+            bio += Number(resultIndices.bioIndicator);
+        }
+
+        if(Number(resultIndices.aguaIndicator) > 0){
+            agua += Number(resultIndices.aguaIndicator)
+        }
+
+        if(Number(resultIndices.soloIndicator) > 0){
+            solo += Number(resultIndices.soloIndicator)
+        }
+
+        await api.put('network-impact',{
+            carbon,
+            agua,
+            bio,
+            solo
+        });
+        setLoadingTransaction(false);
+    }
+
     return(
         <div className='flex flex-col'>
             <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
                 <div className='flex items-center lg:w-[300px] bg-[#0A4303] px-2'>
-                    <p className='text-white max-w-[10ch] text-ellipsis overflow-hidden'>{data.createdBy}</p>
+                    <p 
+                        className='max-w-[13ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
+                        onClick={() => handleClickUser('1', data.createdBy)}
+                    >
+                        {data.createdBy}
+                    </p>
                 </div>
 
                 {type === 'manage' && (
@@ -911,7 +967,12 @@ export function InspectionItem({data, type, reload}){
                 )}
 
                 <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303]'>
-                    <p className='text-white max-w-[10ch] text-ellipsis overflow-hidden'>{data.acceptedBy}</p>
+                    <p 
+                        className='max-w-[13ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
+                        onClick={() => handleClickUser('2', data.acceptedBy)}
+                    >
+                        {data.acceptedBy}
+                    </p>
                 </div>
 
                 <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303]'>

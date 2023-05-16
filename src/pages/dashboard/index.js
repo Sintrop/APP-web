@@ -33,6 +33,7 @@ import ReportsPage from '../../components/Tabs/Reports';
 import ProducersPool from '../../components/Tabs/Pools/Producers';
 import ResearchesPage from '../../components/Tabs/Researches';
 import { UserDetails } from '../../components/Tabs/UserDetails';
+import { NetworkImpact } from '../../components/Tabs/NetworkImpact';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -144,6 +145,17 @@ export default function Dashboard(){
 
                 {activeTab === 'isa' && (
                     <ISA 
+                        user={user} 
+                        walletAddress={walletAddress}
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'network-impact' && (
+                    <NetworkImpact 
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {

@@ -895,6 +895,7 @@ export default function ModalRegister(){
                                 setPolyline={(path) => {
                                     setPropertyGeolocation(path)
                                     calculateArea(JSON.parse(path))
+                                    console.log(path)
                                 }}
                             />
                         </div>
