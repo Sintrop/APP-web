@@ -691,16 +691,24 @@ export default function ModalRegister(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[500px] h-[530px] p-3 bg-white rounded-md m-2 lg:m-auto inset-0'>
-                <img
-                    src={require('../../assets/logo-cinza.png')}
-                    className='w-[120px] object-contain'
-                />
+            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] h-[530px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
+                <div className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2 border-[#ff9900]'>
+                    <div className='px-3'/>
+                    <img
+                        src={require('../../assets/logo-branco.png')}
+                        className='w-[120px] object-contain'
+                    />
+                    <Dialog.Close
+                        className='h-10 text-white text-sm lg:text-base px-3'
+                    >
+                        X
+                    </Dialog.Close>
+                </div>
 
                 {step === 1 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='font-bold text-2xl text-[#0A4303]'>{t('Register')}</h1>
-                        <p className='font-bold lg:text-md text-[#0A4303]'>{t('Do you want to register as one')}?</p>
+                        <h1 className='font-bold text-2xl text-white'>{t('Register')}</h1>
+                        <p className='font-bold lg:text-md text-white'>{t('Do you want to register as one')}?</p>
                         
                         <select
                             defaultValue={type}
@@ -721,12 +729,12 @@ export default function ModalRegister(){
 
                 {step === 2 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='lg:text-lg text-center text-[#0A4303] mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                        <h1 className='lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
 
                         {proofPhoto != '' && (
                             <img
                                 src={`data:image/png;base64,${proofPhotoBase64}`}
-                                className="w-[250px] h-[210px] object-cover mb-3"
+                                className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
                             />
                         )}
                         
@@ -748,14 +756,14 @@ export default function ModalRegister(){
 
                 {step === 3 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='text-center lg:text-lg text-md text-[#0A4303]'>
+                        <h1 className='text-center lg:text-lg text-md text-white'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1>
 
                         <div className='lg:w-[450px] mt-3 lg:mt-10'>
                             <div className='flex flex-col'>
-                                <label className='font-bold text-[#0A4303]' >{t('Name')}</label>
+                                <label className='font-bold text-white' >{t('Name')}</label>
                                 <input
                                     placeholder='Type here'
                                     type="text"
@@ -771,7 +779,7 @@ export default function ModalRegister(){
 
                                 <div className='flex gap-3 mt-3'>
                                     <div className='flex flex-col'>
-                                        <label htmlFor="cep" className='font-bold text-[#0A4303]'>{t('ZIP Code')}</label>
+                                        <label htmlFor="cep" className='font-bold text-white'>{t('ZIP Code')}</label>
                                         <InputMask
                                             placeholder='Type here'
                                             type="text"
@@ -785,7 +793,7 @@ export default function ModalRegister(){
                                     </div>
                                 
                                     <div className='flex flex-col justify-center'>
-                                        <p className='text-sm lg:text-base font-bold text-[#0A4303]'>
+                                        <p className='text-sm lg:text-base font-bold text-white'>
                                             {state === '' ? '' : `${city}-${state}, ${country}.`}
                                         </p>
                                     </div>
@@ -794,7 +802,7 @@ export default function ModalRegister(){
                                 
                                 <div className='flex items-center gap-5 mt-3'>
                                     <div className='flex flex-col'>
-                                        <label htmlFor="street" className='font-bold text-[#0A4303]'>{t('Street')}</label>
+                                        <label htmlFor="street" className='font-bold text-white'>{t('Street')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="street"
@@ -806,7 +814,7 @@ export default function ModalRegister(){
                                     </div>
 
                                     <div className='flex flex-col'>
-                                        <label htmlFor="complement" className='font-bold text-[#0A4303]'>{t('Complement')}</label>
+                                        <label htmlFor="complement" className='font-bold text-white'>{t('Complement')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="complement"
@@ -852,26 +860,26 @@ export default function ModalRegister(){
                             <>
                                 <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="password" style={{fontWeight: 'bold', color: 'green'}}>{t('Password')}</label>
+                                        <label htmlFor="password" style={{fontWeight: 'bold', color: 'white'}}>{t('Password')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            style={{width: '180px', height: 22}}
+                                            className='w-[180px] h-9 rounded-sm border-2 border-[#A75722] px-1'
                                             required
                                             type='password'
                                         />
                                     </div>
 
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                                        <label htmlFor="confirmPassword" style={{fontWeight: 'bold', color: 'green'}}>{t('Confirm Password')}</label>
+                                        <label htmlFor="confirmPassword" style={{fontWeight: 'bold', color: 'white'}}>{t('Confirm Password')}</label>
                                         <input
                                             placeholder='Type here'
                                             name="confirmPassword"
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            style={{width: '180px', height: 22}}
+                                            className='w-[180px] h-9 rounded-sm border-2 border-[#A75722] px-1'
                                             required
                                             type='password'
                                         />
@@ -886,7 +894,7 @@ export default function ModalRegister(){
 
                 {step === 4 && (
                     <div className='modal-register__container-content mb-1'>
-                        <h1 className='font-bold lg:text-lg text-center'>{t('Mark the center of your property, then circle the entire area')}.</h1>
+                        <h1 className='font-bold lg:text-lg text-center text-white'>{t('Mark the center of your property, then circle the entire area')}.</h1>
                         
                         <div className='flex w-full'>
                             <Map
@@ -902,12 +910,8 @@ export default function ModalRegister(){
                     </div>
                 )}
 
-                <div className='flex w-full justify-center gap-2'>
-                    <Dialog.Close
-                        className='lg:w-[200px] h-10 border-[#C66828] border-2 rounded-md text-[#C66828] text-sm lg:text-base px-1'
-                    >
-                        {t('Continue Without Register')}
-                    </Dialog.Close>
+                <div className='flex w-full justify-between items-center gap-2 border-t-2 border-[#ff9900] px-3 pt-3'>
+                    <div>
                     {step > 1 && (
                         <button 
                             className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
@@ -916,6 +920,7 @@ export default function ModalRegister(){
                             {t('Previous')}
                         </button>
                     )}
+                    </div>
                     <button 
                         className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                         onClick={() => {

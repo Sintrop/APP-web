@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-
 
 const containerStyle = {
   width: '100%',
-  height: '367px'
+  height: '320px'
 };
 
 // const center = {
@@ -36,8 +36,8 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                                 setCenter(center)
                             }}
                             onPolylineComplete={(e) => {
-                                console.log(e)
-                                setPolyline(e.latLngs.h[0].h)
+                                setPolyline(e.latLngs.g[0].g)
+                                //setPolyline(e.latLngs.h[0].h) 
                             }}
                         />
                     )}

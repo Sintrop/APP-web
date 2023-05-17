@@ -949,7 +949,7 @@ export function InspectionItem({data, type, reload}){
     }
 
     return(
-        <div className='flex flex-col'>
+        <div className='flex flex-col border-b-2'>
             <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
                 <div className='flex items-center lg:w-[300px] bg-[#0A4303] px-2'>
                     <p 

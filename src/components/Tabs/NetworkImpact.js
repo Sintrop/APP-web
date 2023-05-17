@@ -1,11 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
+import { useParams } from 'react-router';
 
-export function NetworkImpact(){
+export function NetworkImpact({setTab}){
     const [impact, setImpact] = useState({});
     const [usersCount, setUsersCount] = useState({});
     const {t} = useTranslation();
+    const {tabActive} = useParams();
+    
+    useEffect(() => {
+        setTab(tabActive, '')
+    }, [tabActive])
 
     useEffect(() => {
         getImpact();
@@ -55,60 +61,56 @@ export function NetworkImpact(){
                             </div>
                         </div>
 
-                        <div className="flex flex-col w-[90%] lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2">
-                            <div className="flex lg:items-center lg:justify-between gap-2 py-5">
-                                <div className="flex items-center gap-2 w-[50%]">
+                        <div className="flex flex-col w-[90%] lg:w-[300px] lg:h-[250px] lg:p-2 lg:border-r-2 gap-2">
+                            
+                                <div className="flex items-center gap-2">
                                     <div className='flex flex-col font-bold'>
-                                        <p className='text-white'>CO²</p>
+                                        <p className='text-[#ff9900]'>CO²</p>
                                         <img
                                             src={require('../../assets/co2.png')}
                                             alt='Token da sintrop'
-                                            className='w-[40px] h-[40px] object-contain'
+                                            className='w-[40px] h-[40px] object-contain mt-[-8px]'
                                         />
                                     </div>
                                     <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{impact?.carbon} <span className='font-bold text-sm'>Kg</span></p>
                                 </div>
 
-                                <div className="flex items-center justify-end gap-2 w-[50%]">
+                                <div className="flex items-center gap-2 mt-[-8px]">
                                     <div className='flex flex-col'>
-                                        <p className='text-white font-bold'>{t("Solo")}</p>
+                                        <p className='text-[#ff9900] font-bold'>{t("Solo")}</p>
                                         <img
                                             src={require('../../assets/solo.png')}
                                             alt='Token da sintrop'
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{impact?.solo} <span className='font-bold text-sm'>m²</span></p>
+                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impact?.solo} <span className='font-bold text-sm'>m²</span></p>
                                 </div>
-                            </div>
-
-                            <div className='lg:border-2'/>
-
-                            <div className="flex items-center justify-between gap-2 py-5 border-b-2 lg:border-0">
-                                <div className="flex items-center gap-2 w-[50%]">
+                            
+                                <div className="flex items-center gap-2">
                                     <div className='flex flex-col'>
-                                        <p className='text-white font-bold'>{t("Biodiversidade")}</p>
+                                        <p className='text-[#ff9900] font-bold'>{t("Biodiversidade")}</p>
                                         <img
                                             src={require('../../assets/bio.png')}
                                             alt='Token da sintrop'
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 ml-[-70px] mt-5'>{impact?.bio} <span className='font-bold text-sm'>uni</span></p>
+                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impact?.bio} <span className='font-bold text-sm'>uni</span></p>
                                 </div>
 
-                                <div className="flex items-center justify-end gap-2 w-[50%]">
+                                <div className="flex items-center gap-2 ">
                                     <div className='flex flex-col'>
-                                        <p className='text-white font-bold'>{t("Água")}</p>
+                                        <p className='text-[#ff9900] font-bold'>{t("Água")}</p>
                                         <img
                                             src={require('../../assets/agua.png')}
                                             alt='Token da sintrop'
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{impact?.agua} <span className='font-bold text-sm'>m³</span></p>
+                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impact?.agua} <span className='font-bold text-sm'>m³</span></p>
                                 </div>
-                            </div>
+                            
                         </div>
 
                         <div className="flex flex-col w-[300px] h-[250px] justify-between lg:p-2 px-5">

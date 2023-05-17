@@ -5,30 +5,29 @@ import { useTranslation } from 'react-i18next';
 import {FaCheck, FaLock} from 'react-icons/fa';
 
 import {GetProducer} from '../../../services/producerService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import {GetInspections, RequestInspection} from '../../../services/manageInspectionsService';
 import {GetActivist} from '../../../services/activistService';
 import { GetResearcher, GetResearches } from '../../../services/researchersService';
 import {GetDeveloper} from '../../../services/developersService';
 import { GetAdvisor } from '../../../services/advisorsService';
 import {GetContributor} from '../../../services/contributorService';
 import { GetInvestor } from '../../../services/investorService';
-import { RequestInspection } from '../../../services/manageInspectionsService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 import { IndiceValueItem } from '../../IndiceValueItem';
 import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import Map from '../../Map';
+import * as Dialog from '@radix-ui/react-dialog';
 
+import { LoadingTransaction } from '../../LoadingTransaction';  
 import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from '../Researches/ResearchItem';
 
 const containerStyle = {
     width: '100%',
     height: '400px',
-    borderWidth: 4,
     borderRadius: 8,
-    borderColor: '#3E9EF5'
 };
 
 export default function MyAccount({wallet, userType, setTab}){
@@ -45,6 +44,11 @@ export default function MyAccount({wallet, userType, setTab}){
     const [position, setPosition] = useState({});
     const [inspections, setInspections] = useState([]);
     const [researches, setResearches] = useState([]);
+    const [lastResquested, setLastRequested] = useState('');
+    const [btnRequestHover, setBtnRequestHover] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
 
     useEffect(() => {
         setTab(tabActive, '');
@@ -64,12 +68,23 @@ export default function MyAccount({wallet, userType, setTab}){
         getUserData();
     },[]);
 
+    useEffect(() => {
+        if(user === '1'){
+            isProducer()
+        }
+    }, []);
+
+    async function isProducer() {
+        const producer = await GetProducer(walletAddress);
+        setLastRequested(producer.lastRequestAt);
+    }
+
     async function getApiProducer(){
         try{
             setLoadingApi(true);
             const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
             setProducerDataApi(response.data.user)
-            //setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
+            setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
             console.log(address);
@@ -131,6 +146,48 @@ export default function MyAccount({wallet, userType, setTab}){
         setLoading(false)
     }
 
+    async function requestInspection(){
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        RequestInspection(walletAddress)
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            })
+            setLoadingTransaction(false);
+            getInspections();
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Request OPEN or ACCEPTED")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Request OPEN or ACCEPTED',
+                    hash: ''
+                })
+                return;
+            }
+            if(message.includes("Recent inspection")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Recent inspection!',
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
+        
+    }
+
     if(user === '0'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
@@ -142,6 +199,59 @@ export default function MyAccount({wallet, userType, setTab}){
     if(user === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+                <div className='flex justify-center items-center gap-5'>
+                    {user == 1 && (
+                        <button
+                            
+                            className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
+                            onClick={() => {
+                                if(Number(lastResquested) === 0){
+                                    requestInspection()
+                                }
+                                if(Number(lastResquested) !== 0){
+                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
+                                        requestInspection()
+                                    }
+                                }
+                            }}
+                            onMouseEnter={() => setBtnRequestHover(true)}
+                            onMouseOut={() => setBtnRequestHover(false)}
+                        >
+                            {Number(lastResquested) === 0 ? (
+                                `${t('Request New Inspection')}`
+                            ) : (
+                                <>
+                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                    `${t('Request New Inspection')}`
+                                ) : (
+                                    <>
+                                    {btnRequestHover ? (
+                                        <>
+                                            <FaLock 
+                                                size={25}
+                                                onMouseEnter={() => setBtnRequestHover(true)}
+                                                onMouseOut={() => setBtnRequestHover(false)}
+                                            />
+                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
+                                        </>
+                                    ) : `${t('Request New Inspection')}`}
+                                    </>
+                                )}
+                                </>
+                            )}
+                        </button>
+                    )}
+                    <a  
+                        target='_blank'
+                        href={`${window.location.host}/account-producer/${walletAddress}`}
+                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                    >
+                        Página do Produtor
+                    </a>
+                </div>
+                </div>
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
@@ -199,20 +309,6 @@ export default function MyAccount({wallet, userType, setTab}){
                             
                         </div>
                         </div>
-
-                        {/* <button
-                            className='w-52 h-10 rounded-md bg-[#ff9900] font-bold '
-                        >
-                            {t('Request New Inspection')}
-                        </button>
-    
-                        <a  
-                            target='_blank'
-                            href={`${window.location.host}/account-producer/${walletAddress}`}
-                            className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
-                        >
-                            Página do Produtor
-                        </a> */}
                     </div>
                 </div>
     
@@ -231,16 +327,10 @@ export default function MyAccount({wallet, userType, setTab}){
                                     zoom={18}
                                     mapTypeId='satellite'
                                 >
-                                    { 
-                                        <Marker position={position}/>
-                                    }
-                    
-
-                                
-                                        {/* <Polyline
-                                            path={pathPolyline}
-                                        /> */}
-                                    
+                                    <Marker position={position}/>
+                                    <Polyline
+                                        path={propertyPath}
+                                    />  
                                 </GoogleMap>
                             </LoadScript>
                             </div>
@@ -261,6 +351,20 @@ export default function MyAccount({wallet, userType, setTab}){
                 {loading && (
                     <Loading/>
                 )}
+
+                <Dialog.Root 
+                    open={modalTransaction} 
+                    onOpenChange={(open) => {
+                        if(!loadingTransaction){
+                            setModalTransaction(open);
+                        }
+                    }}
+                >
+                    <LoadingTransaction
+                        loading={loadingTransaction}
+                        logTransaction={logTransaction}
+                    />
+                </Dialog.Root>
             </div>
         )
     }
@@ -268,10 +372,13 @@ export default function MyAccount({wallet, userType, setTab}){
     if(user === '2'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <div className='flex flex-col items-center gap-5 lg:flex-row'>
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                    <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+                </div>
+                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                        className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
+                        className="w-[250px] h-[250px] object-cover"
                     />
     
                     <div className="flex flex-col items-center lg:items-start">
@@ -338,10 +445,13 @@ export default function MyAccount({wallet, userType, setTab}){
 
     return(
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
-            <div className='flex flex-col items-center gap-5 lg:flex-row mb-5 lg:mb-10'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+            </div>
+            <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                 <img
                     src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                    className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
+                    className="w-[250px] h-[250px] object-cover"
                 />
 
                 <div className="flex flex-col items-center lg:items-start">

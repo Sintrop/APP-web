@@ -12,12 +12,19 @@ import {GetDeveloper} from '../../services/developersService';
 import { GetAdvisor } from '../../services/advisorsService';
 import {GetContributor} from '../../services/contributorService';
 import { GetInvestor } from '../../services/investorService';
+import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 import Map from '../Map';
 import Loading from '../Loading';
 import { IndiceValueItem } from '../IndiceValueItem';
 import { InspectionItemResult } from '../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from './Researches/ResearchItem';
+
+const containerStyle = {
+    width: '100%',
+    height: '400px',
+    borderRadius: 8,
+};
 
 export function UserDetails({setTab}){
     const {t} = useTranslation();
@@ -87,7 +94,6 @@ export function UserDetails({setTab}){
             console.log(response.data.user);
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
-            return;
             setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
         }catch(err){
             console.log(err);
@@ -98,7 +104,8 @@ export function UserDetails({setTab}){
 
     async function getInspections(){
         const response = await GetInspections();
-        setInspections(response);
+        const inspectionsFiltered = response.filter(item => item.createdBy === walletSelected)
+        setInspections(inspectionsFiltered);
     }
 
     async function getResearches(){
@@ -110,64 +117,55 @@ export function UserDetails({setTab}){
     if(typeUser === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <div className='flex flex-col items-center gap-5 lg:flex-row'>
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                    <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+                </div>
+                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                        className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
+                        className="w-[250px] h-[250px] object-cover"
                     />
     
-                    <div className="flex flex-col gap-3">
-                        <a  
-                            target='_blank'
-                            href={`https://www.sintropapp.com.br/account-producer/${walletSelected}`}
-                            className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
-                        >
-                            Página do Produtor
-                        </a>
+                    <div className="flex flex-col py-2">
+                        <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
+                        <p className="font-bold text-white mt-2">{t('Wallet')}: <span className="text-white font-normal lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.producerWallet}</span></p>
+                        
+                        <p className="font-bold text-white mt-1">{t('Address')}: <span className="text-white font-normal lg:text-lg">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</span></p>
+                        <p className="font-bold text-white mt-1">{t('Certified Area')}: <span className="text-white font-normal">{userData?.certifiedArea}m²</span></p>
+                        <p className="font-bold text-white mt-1">{t('Inspections Reiceved')}: <span className="text-white font-normal">{userData?.totalInspections}</span></p>
+                        <p className="font-bold text-white mt-1">ISA {t('Score')}: <span className="text-white font-normal">{userData?.isa?.isaScore}</span></p>
+                        
                     </div>
                 </div>
     
-                <div className="flex flex-col lg:items-center lg:flex-wrap gap-5 mt-5 lg:mt-16 lg:flex-row">
-                    <div className="flex w-full flex-col lg:w-[450px]">
-                        <div className="flex flex-col w-full h-[330px] lg:h-[370px] bg-[#0A4303] p-2 border-2 border-[#3E9EF5] rounded-sm">
-                            <h2 className="font-bold text-center text-[#A75722] text-2xl">{userData?.name}</h2>
-                            <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                            <p className="text-white lg:text-lg max-w-full overflow-hidden text-ellipsis">{userData?.producerWallet}</p>
-    
-                            <p className="font-bold text-white text-lg mt-2">{t('Address')}:</p>
-                            <p className="text-white lg:text-lg">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-    
-                            <p className="font-bold text-[#ff9900] lg:text-lg mt-5">{t('Inspections Reiceved')}: <span className="text-white">{userData?.totalInspections}</span></p>
-                            <p className="font-bold text-[#ff9900] lg:text-lg mt-1">ISA {t('Score')}: <span className="text-white">{userData?.isa?.isaScore}</span></p>
+                
+                <div className="flex flex-col items-center lg:w-[1000px]">
+                    {userData && (
+                        <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
+                            <div className='flex w-full justify-center'>
+                            <LoadScript
+                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                libraries={['drawing']}
+                            >
+                                <GoogleMap
+                                    mapContainerStyle={containerStyle}
+                                    center={position}
+                                    zoom={18}
+                                    mapTypeId='satellite'
+                                >
+                                    <Marker position={position}/>
+                                    <Polyline
+                                        path={propertyPath}
+                                    />
+                                </GoogleMap>
+                            </LoadScript>
+                            </div>
                         </div>
-    
-                        <div className="flex flex-col w-full lg:w-[70%] bg-green-950 p-2 border-2 border-[#3E9EF5] rounded-sm mt-[-65px] lg:mt-[-75px]">
-                            <p className="font-bold text-[#ff9900] lg:text-lg">Prox. Request:</p>
-                            <p className="text-white lg:text-lg">{t('Your May Request Inspections')}</p>
-                        </div>
-                    </div>
-    
-                    <div className="flex flex-col items-center">
-                        {position && (
-                            <>
-                                {!loadingApi && (
-                                    <div className='flex flex-col'>
-                                        <div className='flex border-2 border-[#3e9ef5]'>
-                                            <Map
-                                                editable={false}
-                                                //position={userData?.propertyAddress?.complement}
-                                                position={position}
-                                                pathPolyline={propertyPath}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
+                    )}
                 </div>
-                                    
-                <div className="flex flex-col lg:mt-10 mt-5">
+                
+    
+                <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
                     {inspections.map(item => (
                         <InspectionItemResult
                             key={item.id}
@@ -186,10 +184,13 @@ export function UserDetails({setTab}){
     if(typeUser === '2'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <div className='flex flex-col items-center gap-5 lg:flex-row'>
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                    <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+                </div>
+                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                        className="w-[200px] h-[200px] rounded-full object-cover border-4 border-[#3e9ef5]"
+                        className="w-[250px] h-[250px] object-cover"
                     />
     
                     <div className="flex flex-col items-center lg:items-start">
@@ -218,10 +219,13 @@ export function UserDetails({setTab}){
 
     return(
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
-            <div className='flex flex-col items-center gap-5 lg:flex-row mb-5 lg:mb-10'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+            </div>
+            <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                 <img
                     src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                    className="w-[200px] h-[200px] rounded-[100%] object-cover border-4 border-[#3e9ef5]"
+                    className="w-[250px] h-[250px] object-cover"
                 />
 
                 <div className="flex flex-col items-center lg:items-start">

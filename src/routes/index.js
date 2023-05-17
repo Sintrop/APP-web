@@ -8,6 +8,7 @@ import ActivistRanking from "../components/Tabs/Ranking/Activist";
 import AccountProducer from "../pages/accountProducer";
 import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
+import IndicesControl from "../pages/indicesControl";
 
 export default function Router(){
     return(
@@ -18,6 +19,7 @@ export default function Router(){
                 
                 <Route exact path="/register" element={<Register/>}/>
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
+                <Route exact path="/indices-control" element={<IndicesControl/>}/>
                 <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
                 

@@ -39,7 +39,7 @@ export default function ResearchesPage({wallet, setTab}){
                     <div className='flex justify-center items-center gap-5'>
                         {user === '3' && (
                             <button
-                                className='flex py-2 px-5 bg-[#3E9EF5] font-bold duration-200 rounded-lg lg:mt-0 lg:px-10'
+                                className='flex py-2 px-5 bg-[#ff9900] font-bold duration-200 rounded-lg lg:mt-0 lg:px-10'
                                 onClick={() => setModalPublish(true)}
                             >
                                 {t('Publish research')}

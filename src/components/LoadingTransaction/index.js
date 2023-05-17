@@ -9,14 +9,14 @@ export function LoadingTransaction({loading, logTransaction}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-center rounded-md m-auto inset-0'>
-                
-                <img
-                    src={require('../../assets/bg-papiro.png')}
-                    className='md:w-[450px] md:h-[550px] object-contain'
-                />
+            <Dialog.Content className='absolute flex flex-col items-center justify-center rounded-md m-auto inset-0 bg-folha-papiro bg-no-repeat bg-center bg-contain md:w-[450px] px-5'>
 
-                <div className='flex flex-col absolute md:w-[380px] items-center'>
+                <div className='flex flex-col absolute items-center h-[300px]'>
+                    <img
+                        src={require('../../assets/logo-cinza.png')}
+                        className='w-[200px] object-contain'
+                    />
+
                     <Dialog.Title className='font-bold text-black text-center px-5'>
                         {loading && `${t('Your transaction is being processed... Be patient, this transaction can take a few minutes')}`}
                         {!loading && logTransaction.type === 'error' && `${t('Transaction error')}`}
@@ -33,7 +33,7 @@ export function LoadingTransaction({loading, logTransaction}){
                             <a 
                                 target='_blank' 
                                 href={`https://goerli.etherscan.io/tx/${logTransaction.hash}`}
-                                className='max-w-[40ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
+                                className='max-w-[35ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
                             >
                                 {logTransaction.hash}
                             </a>

@@ -41,7 +41,7 @@ function Map({setCenter, editable, position, setPolyline, pathPolyline}) {
 
             array.push(data);
         }
-
+        console.log(array)
         setPolyline(JSON.stringify(array));
     }
 

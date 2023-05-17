@@ -21,7 +21,7 @@ export function TopBarStatus({}){
     async function handleSync(){
         const response = await Sync();
         if(response.status === 'connected'){
-            navigate(`/dashboard/${response.wallet}/isa/main`)
+            navigate(`/dashboard/${response.wallet}/network-impact/main`)
         }
     }
 

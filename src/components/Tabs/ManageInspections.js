@@ -22,8 +22,8 @@ export default function ManageInpections({walletAddress, setTab}){
     const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const {tabActive} = useParams();
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [lastResquested, setLastRequested] = useState('');
@@ -99,7 +99,7 @@ export default function ManageInpections({walletAddress, setTab}){
     return(
         <div className='flex flex-col bg-green-950 h-[95vh] px-2 lg:px-10 pt-3 lg:pt-10 overflow-auto'>
             <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
-                <h1 className='font-bold text-2xl text-white'>{t('Manage Inspections')}</h1>
+                <h1 className='font-bold text-2xl text-white'>{t('Manage Inspection')}</h1>
                 <div className='flex justify-center items-center gap-5'>
                     {user == 1 && (
                         <button
@@ -176,8 +176,8 @@ export default function ManageInpections({walletAddress, setTab}){
                     <h3 className='font-bold text-white'>{t('There are no open inspections')}</h3>
                 ) : (
                     <div className='flex flex-col pb-24'>
-                    <div className="flex flex-col border-4 border-[#3E9EF5] rounded-sm">
-                        <div className="flex items-center gap-3 py-1 w-full bg-[#0a4303] border-b-2 border-[#3E9EF5]">
+                    <div className="flex flex-col rounded-sm">
+                        <div className="flex items-center gap-3 py-1 w-full bg-[#0a4303] border-2">
                             <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
                                 <p className='text-white'>{t('Requested By')}</p>
                             </div>

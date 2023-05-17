@@ -67,8 +67,8 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                     {inspections.length === 0 ? (
                         <h3 className='font-bold text-white'>{t('There are no open inspections')}</h3>
                     ) : (
-                        <div className="flex flex-col border-4 border-[#3E9EF5]">
-                            <div className="flex items-center gap-3 py-1 w-full bg-green-950 border-b-2 border-[#3E9EF5]">
+                        <div className="flex flex-col">
+                            <div className="flex items-center gap-3 py-1 w-full bg-green-950 border-2">
                                 <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
                                     <p className='text-white'>{t('Requested By')}</p>
                                 </div>
