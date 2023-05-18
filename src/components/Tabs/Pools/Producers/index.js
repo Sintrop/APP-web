@@ -67,11 +67,12 @@ export default function ProducersPool({wallet, setTab}){
         setCurrentEra(eraContract);
         const balanceContract = await GetBalanceContract();
         setBalanceContract(balanceContract);
-        const scoreProducers = await GetTotalScoreProducers();
-        setScoreProducers(scoreProducers);
+        // const scoreProducers = await GetTotalScoreProducers();
+        // setScoreProducers(scoreProducers);
         if(user === '1'){
             const producer = await GetProducer(wallet);
             setProducerInfo(producer);
+            console.log(producer)
             const balanceProducer = await GetBalanceProducer(wallet);
             setBalanceProducer(balanceProducer);
             const nextAprove = await CheckNextAprove(producerInfo.pool.currentEra);
@@ -212,7 +213,7 @@ export default function ProducersPool({wallet, setTab}){
                         {user === '1' && (
                             <button
                                 className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
-                                onClick={() => {}}
+                                onClick={withdraw}
                             >
                                 {t('Withdraw')} Tokens
                             </button>

@@ -207,7 +207,7 @@ export default function DevelopersPool({wallet, setTab}){
                         {user === '4' && (
                             <button
                                 className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
-                                onClick={() => {}}
+                                onClick={withdraw}
                             >
                                 {t('Withdraw')} Tokens
                             </button>

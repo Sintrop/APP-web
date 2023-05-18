@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './loadingTransaction.css';
 import { useTranslation } from 'react-i18next';
 
 export function LoadingTransaction({loading, logTransaction}){
     const {t} = useTranslation();
+    const [count, setCount] = useState(1);
+
+    useEffect(() => {
+        if(count === 5){
+            setTimeout(() => setCount(1), 1000)
+            return;
+        }
+        setTimeout(() => setCount(count + 1), 1000)
+    },[count]);
     
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
@@ -17,18 +26,28 @@ export function LoadingTransaction({loading, logTransaction}){
                         className='w-[200px] object-contain'
                     />
 
-                    <Dialog.Title className='font-bold text-black text-center px-5'>
+                    <Dialog.Title className='font-bold text-black text-center px-5 mt-5'>
                         {loading && `${t('Your transaction is being processed... Be patient, this transaction can take a few minutes')}`}
                         {!loading && logTransaction.type === 'error' && `${t('Transaction error')}`}
                         {!loading && logTransaction.type === 'success' && `${t('Successful transaction')}`}
                     </Dialog.Title>
+
+                    {loading && (
+                        <p className="font-bold text-3xl w-20">
+                            {count === 1 && '.'}
+                            {count === 2 && '. .'}
+                            {count === 3 && '. . .'}
+                            {count === 4 && '. . . .'}
+                            {count === 5 && '. . . . .'}
+                        </p>
+                    )}
 
                     {!loading && logTransaction.type === 'error' && (
                         <p className="font-bold text-red-500 text-center px-5">{t(`${logTransaction.message}`)}</p>
                     )}
 
                     {!loading && logTransaction.type === 'success' && (
-                        <div className="loading-transaction__area-success">
+                        <div className="flex flex-col mt-5">
                             <p>{t('Click to view transaction details')}</p>
                             <a 
                                 target='_blank' 
@@ -41,7 +60,7 @@ export function LoadingTransaction({loading, logTransaction}){
                     )}
 
                     {!loading && (
-                        <Dialog.Close className='px-10 py-3 bg-[#ff9900] rounded-md font-bold text-white mt-5'>
+                        <Dialog.Close className='px-5 py-2 bg-[#ff9900] rounded-md font-bold text-white mt-5'>
                             {t('Close')}
                         </Dialog.Close>
                     )}

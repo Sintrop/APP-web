@@ -207,6 +207,9 @@ export default function MyAccount({wallet, userType, setTab}){
                             
                             className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
                             onClick={() => {
+                                if(Number(userData?.totalInspections) < 3){
+                                    requestInspection();
+                                }
                                 if(Number(lastResquested) === 0){
                                     requestInspection()
                                 }

@@ -11,6 +11,11 @@ import { saveAs } from 'file-saver';
 export function InspectionItemResult({data, initialVisible}){
     const {t} = useTranslation();
     const [open, setOpen] = useState(false);
+    const [openArvores, setOpenArvores] = useState(false);
+    const [openBiomassa, setOpenBiomassa] = useState(false);
+    const [openInsumosQuimicos, setOpenInsumosQuimicos] = useState(false);
+    const [openInsumosBiologicos, setOpenInsumosBiologicos] = useState(false);
+    const [openRecursosExternos, setOpenRecursosExternos] = useState(false);
     const [carbonOpen, setCarbonOpen] = useState(false);
     const [aguaOpen, setAguaOpen] = useState(false);
     const [soloOpen, setSoloOpen] = useState(false);
@@ -59,9 +64,9 @@ export function InspectionItemResult({data, initialVisible}){
     }
 
     return(
-        <div className='flex flex-col w-full mb-5'>
+        <div className='flex flex-col w-full mb-5 border-2 border-[#ff9900] rounded-md'>
             <div 
-                className='flex items-center justify-between w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] p-3 rounded-t-md cursor-pointer'
+                className='flex items-center justify-between w-full h-20 bg-[#80421A] p-3 rounded-t-md cursor-pointer'
                 onClick={() => setOpen(!open)}
             >
                 <div className='flex items-center gap-5'>
@@ -83,8 +88,9 @@ export function InspectionItemResult({data, initialVisible}){
 
             {open && (
                 <div className='p-2 bg-[#0a4303] w-full flex flex-col'>
-                    <div className='flex items-center gap-10'>
+                    <div className='flex w-full justify-center items-center gap-16'>
                         <div className='flex flex-col items-center'>
+                            <p className='font-bold text-[#ff9900]'>Carbono</p>
                             <img
                                 src={require('../../assets/co2.png')}
                                 className='w-[55px] h-[40px] object-contain'
@@ -95,6 +101,7 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
 
                         <div className='flex flex-col items-center'>
+                            <p className='font-bold text-[#ff9900]'>Solo</p>
                             <img
                                 src={require('../../assets/solo.png')}
                                 className='w-[40px] h-[40px] object-contain'
@@ -105,6 +112,7 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
 
                         <div className='flex flex-col items-center'>
+                            <p className='font-bold text-[#ff9900]'>Água</p>
                             <img
                                 src={require('../../assets/agua.png')}
                                 className='w-[40px] h-[40px] object-contain'
@@ -115,6 +123,7 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
 
                         <div className='flex flex-col items-center'>
+                            <p className='font-bold text-[#ff9900]'>Biodiversidade</p>
                             <img
                                 src={require('../../assets/bio.png')}
                                 className='w-[40px] h-[40px] object-contain'
@@ -125,60 +134,355 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
                     </div>
                     
-                    <p className='font-bold text-black'>{t('Activist')} {t('Wallet')}:</p>
-                    <p className=' text-black'>{data.acceptedBy}</p>
-                    <p className='font-bold text-black mt-2'>{t('Created At')}: <span className='font-normal'>{data.createdAtTimestamp}</span></p>
-                    <p className='font-bold text-black'>{t('Accepted At')}: <span className='font-normal'>{data.acceptedAtTimestamp}</span></p>
-                    <p className='font-bold text-black'>{t('Inspected At')}: <span className='font-normal'>{data.inspectedAtTimestamp}</span></p>
+                    <p className='font-bold text-[#ff9900] mt-5'>{t('Activist')} {t('Wallet')}: <span className='text-white'>{data.acceptedBy}</span></p>
+                    <p className='font-bold text-[#ff9900]'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-[#ff9900]'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-[#ff9900]'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
 
-                    <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                        <div>
-                            <p className='font-bold text-white'>Degeneração</p>
-                            <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                <div className="flex items-center w-full bg-[#A75722]">
-                                    <div className="w-[60%] px-3 py-2">
-                                        <p className='font-bold text-white'>Insumos</p>
+                    <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
+                        {/* REGENERAÇÃO */}
+                        <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
+                            <h3 className='font-bold text-white text-3xl'>Regeneração</h3>
+                        </div>
+                        <div className='flex flex-wrap mt-5 gap-4'>
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Quant. de Árvores</h4>
+                                        <p className='font-bold text-white text-2xl'>300</p>
                                     </div>
-                                    <div className="w-[40%] px-3 py-2">
-                                        <p className='font-bold text-white'>Valor</p>
-                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/arvore-branca.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
                                 </div>
-                                {resultCategories.length > 0 && (
-                                    <div className="flex flex-col w-full">
-                                        {resultCategories.map(item => (
-                                            <IndiceValueItem
-                                                key={item.id}
-                                                data={item}
-                                                type='degeneration'
-                                            />
-                                        ))}
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenArvores(!openArvores)}
+                                >
+                                    {openArvores ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openArvores ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openArvores && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            const categoryDetails = JSON.parse(item.categoryDetails)
+                                            if(categoryDetails.category === '2'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
                                         
                                     </div>
                                 )}
                             </div>
-                        </div>
 
-                        <div>
-                            <p className='font-bold text-white'>Regeneração</p>
-                            <div className="flex flex-col border-2 border-[#3e9ef5] lg:w-[450px]">
-                                <div className="flex items-center w-full bg-green-950">
-                                    <div className="w-[60%] px-3 py-2">
-                                        <p className='font-bold text-white'>Insumos</p>
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
+                                        <p className='font-bold text-white text-2xl'>{resultBiomassa}</p>
                                     </div>
-                                    <div className="w-[40%] px-3 py-2">
-                                        <p className='font-bold text-white'>Valor</p>
-                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/fertilizante-orgânico.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
                                 </div>
-                                {resultCategories.length > 0 && (
-                                    <div className="flex flex-col w-full">
-                                        {resultCategories.map(item => (
-                                            <IndiceValueItem
-                                                key={item.id}
-                                                data={item}
-                                                type='regeneration'
-                                            />
-                                        ))}
-                                        
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenBiomassa(!openBiomassa)}
+                                >
+                                    {openBiomassa ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openBiomassa ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openBiomassa && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '14'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '15'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        <div className='flex w-full items-center justify-between'>
+                                            <p className='font-bold text-white w-[200px]'>Resultado</p>
+
+                                            <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                <p className='font-bold text-blue-400 text-center'>{resultBiomassa}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        {/* REGENERAÇÃO */}
+
+                        {/* DEGENERAÇÃO */}
+                        <div className='flex items-center justify-center h-20 w-full bg-[#783E19] mt-10'>
+                            <h3 className='font-bold text-white text-3xl'>Degeneração</h3>
+                        </div>
+                        <div className='flex flex-wrap mt-5 gap-4'>
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Químicos</h4>
+                                        <p className='font-bold text-white text-2xl'>---</p>
+                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/caveira.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
+                                </div>
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenInsumosQuimicos(!openInsumosQuimicos)}
+                                >
+                                    {openInsumosQuimicos ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openInsumosQuimicos ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openInsumosQuimicos && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '1'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '3'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '5'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Biológicos</h4>
+                                        <p className='font-bold text-white text-2xl'>---</p>
+                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/vaso.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
+                                </div>
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenInsumosBiologicos(!openInsumosBiologicos)}
+                                >
+                                    {openInsumosBiologicos ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openInsumosBiologicos ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openInsumosBiologicos && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '2'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '4'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '6'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Recursos Externos</h4>
+                                        <p className='font-bold text-white text-2xl'>---</p>
+                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/torre.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
+                                </div>
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenRecursosExternos(!openRecursosExternos)}
+                                >
+                                    {openRecursosExternos ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openRecursosExternos ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openRecursosExternos && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '7'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+
+                                        {resultCategories.map(item => {
+                                            if(item.categoryId === '8'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
                                     </div>
                                 )}
                             </div>
