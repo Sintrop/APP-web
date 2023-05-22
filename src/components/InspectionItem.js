@@ -949,11 +949,11 @@ export function InspectionItem({data, type, reload}){
     }
 
     return(
-        <div className='flex flex-col border-b-2'>
+        <div className='flex flex-col border-b-2 border-green-950'>
             <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
-                <div className='flex items-center lg:w-[300px] bg-[#0A4303] px-2'>
+                <div className='flex items-center lg:w-[350px] bg-[#0A4303] px-2'>
                     <p 
-                        className='max-w-[13ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
+                        className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
                         onClick={() => handleClickUser('1', data.createdBy)}
                     >
                         {data.createdBy}
@@ -966,21 +966,21 @@ export function InspectionItem({data, type, reload}){
                     </div>
                 )}
 
-                <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303]'>
+                <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
                     <p 
-                        className='max-w-[13ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
+                        className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
                         onClick={() => handleClickUser('2', data.acceptedBy)}
                     >
                         {data.acceptedBy}
                     </p>
                 </div>
 
-                <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303]'>
+                <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
                     <p className='text-white '>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
                 </div>
 
                 {type === 'manage' && (
-                    <div className='hidden lg:flex items-center h-full w-[300px] bg-[#0A4303] text-white'>
+                    <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303] text-white'>
                         {status === '0' && (
                             <p>{t('Not accepted')}</p>
                         )}
@@ -997,7 +997,7 @@ export function InspectionItem({data, type, reload}){
                 )}
 
                 {type === 'manage' && (
-                    <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
+                    <div className='flex items-center h-full w-[350px] bg-[#0A4303]'>
                         {status === '0' && (
                             <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#F4A022]'>
                                 <p className='text-xs text-white font-bold'>{t('OPEN')}</p>
@@ -1025,12 +1025,12 @@ export function InspectionItem({data, type, reload}){
                 )}
 
                 {type === 'history' && (
-                    <div className='flex items-center h-full w-[300px] bg-[#0A4303]'>
+                    <div className='flex items-center h-full w-[350px] bg-[#0A4303]'>
                         <p className='text-white'>{data.isaScore}</p>
                     </div>
                 )}
 
-                <div className='flex justify-end pr-2 items-center h-full w-[300px] bg-[#0A4303]'>
+                <div className='flex justify-end pr-2 items-center h-full w-[350px] bg-[#0A4303]'>
                     {type === 'history' && (
                         <>
                         <button

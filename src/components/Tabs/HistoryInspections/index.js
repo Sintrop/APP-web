@@ -68,20 +68,20 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         <h3 className='font-bold text-white'>{t('There are no finished inspections')}</h3>
                     ) : (
                         <div className="flex flex-col">
-                            <div className="flex items-center gap-3 py-1 w-full bg-green-950 border-2">
-                                <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
+                            <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                                <div className='flex items-center h-full lg:w-[350px] px-2 font-bold'>
                                     <p className='text-white'>{t('Requested By')}</p>
                                 </div>
-                                <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                                <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>{t('Inspected By')}</p>
                                 </div>
-                                <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
+                                <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>{t('Created At')}</p>
                                 </div>
-                                <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                                <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>Isa {t('Score')}</p>
                                 </div>
-                                <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                                <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>{t('Actions')}</p>
                                 </div>
                             </div>

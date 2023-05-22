@@ -25,6 +25,10 @@ export function InspectionItemResult({data, initialVisible}){
     const [resultCategories, setResultCategories] = useState([]);
     const [resultBiodiversity, setResultBiodiversity] = useState([]);
     const [resultBiomassa, setResultBiomassa] = useState(0);
+    const [quantArvores, setQuantArvores] = useState(0);
+    const [quantInsumosQuimicos, setQuantInsumosQuimicos] = useState(0);
+    const [quantInsumosBiologicos, setQuantInsumosBiologicos] = useState(0);
+    const [quantRecursosExternos, setQuantRecursosExternos] = useState(0);
     const [isas, setIsas] = useState([]);
 
     useEffect(() => {
@@ -53,18 +57,55 @@ export function InspectionItemResult({data, initialVisible}){
         const soloRegenerado = Number(categoryCoberturaSolo[0]?.value)
         const biomassa1 = resCategories.filter(item => item.categoryId === '14')
         const biomassa2 = resCategories.filter(item => item.categoryId === '15')
-        const calculoBiomassa = ((Number(biomassa1[0]?.value) + Number(biomassa2[0]?.value)) / 2) * soloRegenerado
+        const biomassa3 = resCategories.filter(item => item.categoryId === '16')
+        const biomassa4 = resCategories.filter(item => item.categoryId === '17')
+        const biomassa5 = resCategories.filter(item => item.categoryId === '18')
+        const calculoBiomassa = ((Number(biomassa1[0]?.value) + Number(biomassa2[0]?.value) + Number(biomassa3[0]?.value) + Number(biomassa4[0]?.value) + Number(biomassa5[0]?.value)) / 5) * soloRegenerado
         const resultIndiceBiomassa = calculoBiomassa * JSON.parse(biomassa1[0].categoryDetails).carbonValue;
         setResultBiomassa(resultIndiceBiomassa);
         setInspectionDataApi(response.data?.inspection);
+
+        const arvoresMudas = resCategories.filter(item => item.categoryId === '9');
+        const arvoresJovens = resCategories.filter(item => item.categoryId === '10');
+        const arvoresAdultas = resCategories.filter(item => item.categoryId === '11');
+        const arvoresAncias = resCategories.filter(item => item.categoryId === '12');
+        setQuantArvores(Number(arvoresMudas[0].value) + Number(arvoresJovens[0].value) + Number(arvoresAdultas[0].value) + Number(arvoresAncias[0].value))
+    
+        //separa os insumos quimicos e faz a contagem do total utilizado
+        const arrayInsumosQuimicos = resCategories.filter(item => JSON.parse(item.categoryDetails).insumoCategory === 'insumo-quimico');
+        let totalInsumosQuimicos = 0;
+        for(var i = 0; i < arrayInsumosQuimicos.length; i++){
+            const value = Number(arrayInsumosQuimicos[i].value);
+            totalInsumosQuimicos += value
+        }
+        setQuantInsumosQuimicos(totalInsumosQuimicos);
+
+        //separa os insumos biologicos e faz a contagem do total utilizado
+        const arrayInsumosBiologicos = resCategories.filter(item => JSON.parse(item.categoryDetails).insumoCategory === 'insumo-biologico');
+        let totalInsumosBiologicos = 0;
+        for(var i = 0; i < arrayInsumosBiologicos.length; i++){
+            const value = Number(arrayInsumosBiologicos[i].value);
+            totalInsumosBiologicos += value
+        }
+        setQuantInsumosBiologicos(totalInsumosBiologicos);
+
+        //separa os recursos externos e faz a contagem do total utilizado
+        const arrayRecursosExternos = resCategories.filter(item => JSON.parse(item.categoryDetails).insumoCategory === 'recurso-externo');
+        let totalRecursosExternos = 0;
+        for(var i = 0; i < arrayRecursosExternos.length; i++){
+            const value = Number(arrayRecursosExternos[i].value);
+            totalRecursosExternos += value
+        }
+        setQuantRecursosExternos(totalRecursosExternos);
     }
 
     function handleDownloadPDF(hash, filename){
         saveAs(`https://ipfs.io/ipfs/${hash}`, `${filename}`)
     }
 
+    if(data.status === '2'){
     return(
-        <div className='flex flex-col w-full mb-5 border-2 border-[#ff9900] rounded-md'>
+        <div className='flex flex-col w-full mb-5 rounded-md'>
             <div 
                 className='flex items-center justify-between w-full h-20 bg-[#80421A] p-3 rounded-t-md cursor-pointer'
                 onClick={() => setOpen(!open)}
@@ -149,7 +190,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
                                         <h4 className='font-bold text-[#ff9900] text-2xl'>Quant. de Árvores</h4>
-                                        <p className='font-bold text-white text-2xl'>300</p>
+                                        <p className='font-bold text-white text-2xl'>{quantArvores}</p>
                                     </div>
 
                                     <img 
@@ -277,7 +318,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
                                         <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Químicos</h4>
-                                        <p className='font-bold text-white text-2xl'>---</p>
+                                        <p className='font-bold text-white text-2xl'>{quantInsumosQuimicos}</p>
                                     </div>
 
                                     <img 
@@ -353,7 +394,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
                                         <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Biológicos</h4>
-                                        <p className='font-bold text-white text-2xl'>---</p>
+                                        <p className='font-bold text-white text-2xl'>{quantInsumosBiologicos}</p>
                                     </div>
 
                                     <img 
@@ -429,7 +470,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
                                         <h4 className='font-bold text-[#ff9900] text-2xl'>Recursos Externos</h4>
-                                        <p className='font-bold text-white text-2xl'>---</p>
+                                        <p className='font-bold text-white text-2xl'>{quantRecursosExternos}</p>
                                     </div>
 
                                     <img 
@@ -487,8 +528,6 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
                         </div>
-                    </div>
-
                     {/* Carbono ------------------------------------------------------ */}
                     <div className='flex flex-col w-full mt-10'>
                         <div 
@@ -951,8 +990,10 @@ export function InspectionItemResult({data, initialVisible}){
 
                     </div>
                     {/* Bio ------------------------------------------------------ */}
+                    </div>
+
                 </div>
             )}
         </div>
-    )
+    )}
 }

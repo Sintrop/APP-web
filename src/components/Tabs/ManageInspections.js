@@ -177,26 +177,26 @@ export default function ManageInpections({walletAddress, setTab}){
                 ) : (
                     <div className='flex flex-col pb-24'>
                     <div className="flex flex-col rounded-sm">
-                        <div className="flex items-center gap-3 py-1 w-full bg-[#0a4303] border-2">
-                            <div className='flex items-center h-full lg:w-[300px] px-2 font-bold'>
+                        <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                            <div className='flex items-center h-full lg:w-[350px] px-2 font-bold'>
                                 <p className='text-white'>{t('Requested By')}</p>
                             </div>
                             <div className='hidden lg:flex items-center h-full w-full px-1 font-bold'>
                                 <p className='text-white'>{t('Producer Address')}</p>
                             </div>
-                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>{t('Inspected By')}</p>
                             </div>
-                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>{t('Created At')}</p>
                             </div>
-                            <div className='hidden lg:flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>{t('Expires In')}</p>
                             </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>Status</p>
                             </div>
-                            <div className='flex items-center h-full w-[300px] px-1 font-bold'>
+                            <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>{t('Actions')}</p>
                             </div>
                         </div>

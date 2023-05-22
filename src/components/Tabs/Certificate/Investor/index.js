@@ -91,9 +91,9 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="flex flex-col h-[90vh] items-center overflow-auto pb-40">
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
 
-            <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
+                <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
                     <div className="hidden lg:flex flex-col lg:flex-row lg:w-[700px] h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
 
                     </div>
@@ -147,10 +147,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                     
                 </div>
 
-                <div className="flex flex-col items-center w-full mt-5">
+                <div className="flex flex-col mt-5">
                     <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
 
-                    <div className="mt-5 flex items-center gap-2 lg:w-[750px]">
+                    <div className="mt-5 flex items-center gap-2 lg:w-[710px]">
                         <Dialog.Root
                             open={modalContribute}
                             onOpenChange={(open) => setModalContribute(open)}

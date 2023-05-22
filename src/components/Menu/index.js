@@ -11,6 +11,7 @@ import IconCertificate from '../../assets/icon-certificate.png';
 import IconSac from '../../assets/token.png';
 import IconPesquisas from '../../assets/icon-pesquisas.png';
 import IconAccount from '../../assets/icon-account.png';
+import IconNetwork from '../../assets/network.png';
 
 import ItemsList from "./itemsList";
 
@@ -36,7 +37,7 @@ export default function Menu({ changeTab }) {
         ],
         },
         { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
-        { id: "network-impact", title: "Network Impact", icon: IconPesquisas, action: "" },
+        { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
         id: "inspection-history",
         title: "Inspections History",

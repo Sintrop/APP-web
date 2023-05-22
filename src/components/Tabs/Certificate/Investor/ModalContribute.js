@@ -81,14 +81,20 @@ export function ModalContribute({wallet, onFinished}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[400px] h-[200px] p-3 bg-white rounded-md m-2 lg:m-auto inset-0'>
-                <Dialog.Title className='font-bold text-center'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[400px] h-[300px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
+                <div className='flex items-center justify-center py-4 w-full bg-[#0a4303] rounded-t-md border-b-2 border-[#ff9900]'>
+                    <img
+                        src={require('../../../../assets/logo-branco.png')}
+                        className='w-[150px] object-contain'
+                    />
+                </div>
+                <Dialog.Title className='font-bold text-center text-white'>
                     Contribute
                 </Dialog.Title>
-                <p>Your balance: {balanceTokens} SAC Tokens</p>
+                <p className='text-white'>Your balance: {balanceTokens} SAC Tokens</p>
 
                 <div className='modal-contribute__container-input'>
-                    <p className='modal-contribute__label'>Number of tokens for donation</p>
+                    <p className='font-bold text-[#ff9900]'>Number of tokens for donation</p>
                     <input
                         className='w-full rounded-md h-10 border-2 border-[#ff9900] px-3'
                         type='number'
@@ -98,7 +104,7 @@ export function ModalContribute({wallet, onFinished}){
                     />
                 </div>
 
-                <div className='flex items-center w-full justify-end gap-3'>
+                <div className='flex items-center w-full justify-end gap-3 px-3 pb-2'>
                     <Dialog.Close className='modal-contribute__btn-close'>Cancel</Dialog.Close>
                     <button 
                         className='modal-contribute__btn-contribute'

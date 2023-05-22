@@ -38,7 +38,7 @@ export function RankingItem({data, position}){
     return(
         
             <div 
-                className="flex flex-col w-[220px] h-[280px] bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md cursor-pointer"
+                className="flex flex-col w-[220px] h-[280px] bg-[#0A4303] rounded-md cursor-pointer"
                 onClick={handleClickUser}
             >
                 <img

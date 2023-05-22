@@ -28,12 +28,12 @@ export function NetworkImpact({setTab}){
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto h-screen'>
             <h1 className='font-bold text-2xl text-white'>{t('Network Impact')}</h1>
 
-            <section className="flex flex-col items-center py-5 rounded-lg border-2 bg-[#0A4303] lg:w-[1000px] mt-10 px-2 mx-2 lg:mx-0">
+            <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[1000px] mt-10 px-2 mx-2 lg:mx-0">
                     <p className="text-white mb-5 font-bold">{t('IMPACTO DA NOSSA REDE')}</p>
 
                     <div className="flex items-center gap-2 flex-wrap justify-center">
 
-                        <div className="flex flex-col lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2">
+                        <div className="flex flex-col lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2 border-green-950">
                             <div className="flex items-center gap-2 py-5">
                                 <img
                                     src={require('../../assets/token.png')}
@@ -45,8 +45,6 @@ export function NetworkImpact({setTab}){
                                     <p className='text-white'>R$ 0,025</p>
                                 </div>
                             </div>
-
-                            <div className='lg:border-2'/>
 
                             <div className="flex items-center gap-2 py-5 border-b-2 lg:border-0">
                                 <img
@@ -61,7 +59,7 @@ export function NetworkImpact({setTab}){
                             </div>
                         </div>
 
-                        <div className="flex flex-col w-[90%] lg:w-[300px] lg:h-[250px] lg:p-2 lg:border-r-2 gap-2">
+                        <div className="flex flex-col w-[90%] lg:w-[300px] lg:h-[250px] lg:p-2 lg:border-r-2 gap-2 border-green-950">
                             
                                 <div className="flex items-center gap-2">
                                     <div className='flex flex-col font-bold'>
@@ -171,9 +169,9 @@ export function NetworkImpact({setTab}){
                     </div>
 
                     <div className='flex flex-col lg:flex-row items-center w-full justify-between lg:px-20 mt-5'>
-                        <p className='text-[#ABE056] font-bold'>{t("PRODUTORES")}: {usersCount?.producersCount}</p>
-                        <p className='text-[#ABE056] font-bold'>{t("ATIVISTAS")}: {usersCount?.activistsCount}</p>
-                        <p className='text-[#ABE056] font-bold'>{t("PESQUISADORES")}: {usersCount?.researchersCount}</p>
+                        <p className='text-white font-bold'>{t("PRODUTORES")}: <span className='text-blue-500'>{usersCount?.producersCount}</span></p>
+                        <p className='text-white font-bold'>{t("ATIVISTAS")}: <span className='text-blue-500'>{usersCount?.activistsCount}</span></p>
+                        <p className='text-white font-bold'>{t("PESQUISADORES")}: <span className='text-blue-500'>{usersCount?.researchersCount}</span></p>
                     </div>
                 </section>
         </div>

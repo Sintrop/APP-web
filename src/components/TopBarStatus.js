@@ -26,10 +26,11 @@ export function TopBarStatus({}){
     }
 
     return(
-        <div className='flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center justify-between px-2 lg:px-5 bottom-0 lg:top-0'>
+        <div className={`flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center ${walletConnected === '' ? 'justify-center' : 'justify-between'} px-2 lg:px-5 bottom-0 lg:top-0`}>
             {isSupported ? (
                 <>
                 {walletConnected === '' ? (
+                    <>
                     <div className='flex w-full items-center gap-2 justify-center'>
                         <p className='font-bold text-white'>You are good to conect!</p>
                         
@@ -40,6 +41,7 @@ export function TopBarStatus({}){
                             SINCRONIZAR
                         </button>
                     </div>
+                    </>
                 ) : (
                     <>
                     {pathname === '/' ? (

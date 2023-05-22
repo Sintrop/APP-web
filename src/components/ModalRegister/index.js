@@ -645,6 +645,7 @@ export default function ModalRegister(){
     }
 
     async function calculateArea(coords){
+        console.log(coords);
         let coordsUTM = [];
         for(var i = 0; i < coords.length; i++){
             let object = {}
