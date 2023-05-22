@@ -630,6 +630,7 @@ export function InspectionItem({data, type, reload}){
         let pdfBioHash = '';
 
         const response = await api.get(`/inspection/${data.id}`)
+        console.log(response.data)
         if(response.data.inspection.status === 1){
             setLoading(false);
             alert('Realize a inspeção no app do ativista para smartphone!')

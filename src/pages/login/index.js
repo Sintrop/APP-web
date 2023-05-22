@@ -25,7 +25,7 @@ function Login(){
     return(
         <div className="flex flex-col h-[100vh]">
             <TopBarStatus/>
-            <div className="flex flex-col lg:flex-row w-full h-full items-center justify-center bg-[#0A4303] overflow-auto pb-16 pt-[400px] px-2 lg:px-0 lg:pt-0 lg:mt-10 lg:pb-0">
+            <div className="flex flex-col lg:flex-row w-full h-full items-center justify-center bg-[#0A4303] overflow-auto pb-16 pt-[300px] px-2 lg:px-0 lg:pt-0 lg:mt-10 lg:pb-0">
                 <div className="w-full lg:w-[1000px] lg:h-[600px] flex flex-col lg:flex-row">
                     <div className='flex flex-col justify-between w-full lg:w-[500px]'>
                         <div className='flex flex-col w-full lg:w-[300px]'>

@@ -10,7 +10,7 @@ import {
     GetCurrentContractEra, 
     GetBalanceContract, 
     GetBalanceProducer, 
-    CheckNextAprove
+    CheckNextAprove,
 } from '../../../../services/producerPoolService';
 import ProducerService, {GetProducer, WithdrawTokens, GetTotalScoreProducers} from '../../../../services/producerService';
 import ProducerItem from './ProducerItem';
