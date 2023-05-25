@@ -35,5 +35,5 @@ export const get = async (path) => {
         return toString(buf, 'base64')
     } catch (error) {
         console.log(error)
-}
+}  
 };

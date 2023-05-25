@@ -57,6 +57,7 @@ export default function MyAccount({wallet, userType, setTab}){
     useEffect(() => {
         async function check() {
             const response = await checkUser(walletAddress);
+            getUserData(response);
             setTimeout(() => {
                 if(response === '0'){
                     chooseModalRegister()
@@ -65,7 +66,6 @@ export default function MyAccount({wallet, userType, setTab}){
         }
         check();
 
-        getUserData();
     },[]);
 
     useEffect(() => {
@@ -98,7 +98,8 @@ export default function MyAccount({wallet, userType, setTab}){
     async function getInspections(){
         const response = await GetInspections();
         const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
-        setInspections(filterInspections);
+        const filterStatus = filterInspections.filter(item => item.status === '2');
+        setInspections(filterStatus);
     }
 
     async function getResearches(){
@@ -107,9 +108,9 @@ export default function MyAccount({wallet, userType, setTab}){
         setResearches(filterResearches);
     }
 
-    async function getUserData(){
+    async function getUserData(typeUser){
         setLoading(true);
-        if(user === '1'){
+        if(typeUser === '1'){
             getApiProducer();
             const response = await GetProducer(walletAddress);
             //getBase64(response)
@@ -118,28 +119,28 @@ export default function MyAccount({wallet, userType, setTab}){
             console.log(response)
             getInspections();
         }
-        if(user === '2'){
+        if(typeUser === '2'){
             const response = await GetActivist(walletAddress);
             setUserData(response)
         }
-        if(user === '3'){
+        if(typeUser === '3'){
             getResearches();
             const response = await GetResearcher(walletAddress);
             setUserData(response)
         }
-        if(user === '4'){
+        if(typeUser === '4'){
             const response = await GetDeveloper(walletAddress);
             setUserData(response)
         }
-        if(user === '5'){
+        if(typeUser === '5'){
             const response = await GetAdvisor(walletAddress);
             setUserData(response)
         }
-        if(user === '6'){
+        if(typeUser === '6'){
             const response = await GetContributor(walletAddress);
             setUserData(response)
         }
-        if(user === '7'){
+        if(typeUser === '7'){
             const response = await GetInvestor(walletAddress);
             setUserData(response)
         }
@@ -226,20 +227,26 @@ export default function MyAccount({wallet, userType, setTab}){
                                 `${t('Request New Inspection')}`
                             ) : (
                                 <>
-                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                {Number(userData?.totalInspections) < 3 ? (
                                     `${t('Request New Inspection')}`
                                 ) : (
                                     <>
-                                    {btnRequestHover ? (
-                                        <>
-                                            <FaLock 
-                                                size={25}
-                                                onMouseEnter={() => setBtnRequestHover(true)}
-                                                onMouseOut={() => setBtnRequestHover(false)}
-                                            />
-                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
-                                        </>
-                                    ) : `${t('Request New Inspection')}`}
+                                        {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                            `${t('Request New Inspection')}`
+                                        ) : (
+                                            <>
+                                            {btnRequestHover ? (
+                                                <>
+                                                    <FaLock 
+                                                        size={25}
+                                                        onMouseEnter={() => setBtnRequestHover(true)}
+                                                        onMouseOut={() => setBtnRequestHover(false)}
+                                                    />
+                                                    {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
+                                                </>
+                                            ) : `${t('Request New Inspection')}`}
+                                            </>
+                                        )}
                                     </>
                                 )}
                                 </>
@@ -282,30 +289,40 @@ export default function MyAccount({wallet, userType, setTab}){
                                 
                             ) : (
                                 <>
-                                {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
-                                    <div style={{
-                                            display: 'flex', 
-                                            flexDirection: 'row', 
-                                            marginLeft: 5, 
-                                            color: 'green', 
-                                            alignItems: 'center'
-                                        }}
+                                {Number(userData?.totalInspections) < 3 ? (
+                                    <div className='flex items-center text-green-500'
                                     >
                                         <FaCheck size={15} style={{marginRight: 5}}/>
                                         {t('You Can Request Inspections')}
                                     </div>
                                 ) : (
-                                    <div style={{
-                                            display: 'flex', 
-                                            flexDirection: 'row', 
-                                            marginLeft: 5, 
-                                            color: 'red', 
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        <FaLock size={15} style={{marginRight: 5}}/>
-                                        {t('Wait')} {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t("blocks to request")}
-                                    </div>
+                                    <>
+                                        {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                            <div style={{
+                                                    display: 'flex', 
+                                                    flexDirection: 'row', 
+                                                    marginLeft: 5, 
+                                                    color: 'green', 
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <FaCheck size={15} style={{marginRight: 5}}/>
+                                                {t('You Can Request Inspections')}
+                                            </div>
+                                        ) : (
+                                            <div style={{
+                                                    display: 'flex', 
+                                                    flexDirection: 'row', 
+                                                    marginLeft: 5, 
+                                                    color: 'red', 
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <FaLock size={15} style={{marginRight: 5}}/>
+                                                {t('Wait')} {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t("blocks to request")}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                                 </>
                             )}
@@ -343,12 +360,20 @@ export default function MyAccount({wallet, userType, setTab}){
                 
     
                 <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
-                    {inspections.map(item => (
-                        <InspectionItemResult
-                            key={item.id}
-                            data={item}
-                        />
-                    ))}
+                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeções recebidas</p>
+
+                    {inspections.length === 0 ? (
+                        <p className="text-white font-bold text-lg">Nenhuma inspeção finalizada</p>
+                    ) : (
+                        <>
+                            {inspections.map(item => (
+                                <InspectionItemResult
+                                    key={item.id}
+                                    data={item}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
     
                 {loading && (

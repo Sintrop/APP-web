@@ -5,7 +5,7 @@ import {format} from 'date-fns';
 import { api } from '../../services/api';
 import { IndiceValueItem } from '../../components/IndiceValueItem';
 import { IndiceCalculoItem } from '../../components/IndiceCalculoItem';
-import {GetIsa} from '../../services/manageInspectionsService';
+import {GetIsa, GetInspection} from '../../services/manageInspectionsService';
 import { saveAs } from 'file-saver';
 
 export function InspectionItemResult({data, initialVisible}){
@@ -37,11 +37,13 @@ export function InspectionItemResult({data, initialVisible}){
         if(initialVisible){
             setOpen(true)
         }
+        
     },[]);
 
     async function getIsaData(){
         const response = await GetIsa(data.id);
         setIsas(response)
+        console.log(response)
     }
 
     async function getResultIndices() {
@@ -241,7 +243,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
                                         <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
-                                        <p className='font-bold text-white text-2xl'>{resultBiomassa}</p>
+                                        <p className='font-bold text-white text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
                                     </div>
 
                                     <img 
@@ -269,27 +271,14 @@ export function InspectionItemResult({data, initialVisible}){
                                 {openBiomassa && (
                                     <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
                                         {resultCategories.map(item => {
-                                            if(item.categoryId === '14'){
+                                            const categoryDetails = JSON.parse(item.categoryDetails);
+                                            if(categoryDetails.insumoCategory === 'biomassa'){
                                                 return(
                                                     <div className='flex w-full items-center justify-between' key={item.categoryId}>
                                                         <p className='font-bold text-white w-[200px]'>{item.title}</p>
 
                                                         <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '15'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
                                                         </div>
                                                     </div>
                                                 )
@@ -300,7 +289,7 @@ export function InspectionItemResult({data, initialVisible}){
                                             <p className='font-bold text-white w-[200px]'>Resultado</p>
 
                                             <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                <p className='font-bold text-blue-400 text-center'>{resultBiomassa}</p>
+                                                <p className='font-bold text-blue-400 text-center'>{resultBiomassa.toFixed(0)} Kg</p>
                                             </div>
                                         </div>
                                     </div>
@@ -346,41 +335,14 @@ export function InspectionItemResult({data, initialVisible}){
                                 {openInsumosQuimicos && (
                                     <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
                                         {resultCategories.map(item => {
-                                            if(item.categoryId === '1'){
+                                            const categoryDetails = JSON.parse(item.categoryDetails);
+                                            if(categoryDetails.insumoCategory === 'insumo-quimico'){
                                                 return(
                                                     <div className='flex w-full items-center justify-between' key={item.categoryId}>
                                                         <p className='font-bold text-white w-[200px]'>{item.title}</p>
 
                                                         <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '3'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '5'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
                                                         </div>
                                                     </div>
                                                 )
@@ -422,41 +384,14 @@ export function InspectionItemResult({data, initialVisible}){
                                 {openInsumosBiologicos && (
                                     <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
                                         {resultCategories.map(item => {
-                                            if(item.categoryId === '2'){
+                                            const categoryDetails = JSON.parse(item.categoryDetails);
+                                            if(categoryDetails.insumoCategory === 'insumo-biologico'){
                                                 return(
                                                     <div className='flex w-full items-center justify-between' key={item.categoryId}>
                                                         <p className='font-bold text-white w-[200px]'>{item.title}</p>
 
                                                         <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '4'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '6'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
                                                         </div>
                                                     </div>
                                                 )
@@ -498,36 +433,24 @@ export function InspectionItemResult({data, initialVisible}){
                                 {openRecursosExternos && (
                                     <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
                                         {resultCategories.map(item => {
-                                            if(item.categoryId === '7'){
+                                            const categoryDetails = JSON.parse(item.categoryDetails);
+                                            if(categoryDetails.insumoCategory === 'recurso-externo'){
                                                 return(
                                                     <div className='flex w-full items-center justify-between' key={item.categoryId}>
                                                         <p className='font-bold text-white w-[200px]'>{item.title}</p>
 
                                                         <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
                                                         </div>
                                                     </div>
                                                 )
                                             }
-                                        })}
-
-                                        {resultCategories.map(item => {
-                                            if(item.categoryId === '8'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
+                                        })} 
                                     </div>
                                 )}
                             </div>
                         </div>
+
                     {/* Carbono ------------------------------------------------------ */}
                     <div className='flex flex-col w-full mt-10'>
                         <div 
@@ -557,6 +480,16 @@ export function InspectionItemResult({data, initialVisible}){
                         
                         {carbonOpen && (
                             <div className='p-2 w-full flex flex-col'>
+                                <p className='text-white text-center'>
+                                    Classificação na categoria:
+                                    <span className='font-bold text-[#ff9900]'>
+                                        {isas[0].isaIndex === '0' && ' Totalmente sustentável'}
+                                        {isas[0].isaIndex === '1' && ' Parcialmente sustentável'}
+                                        {isas[0].isaIndex === '2' && ' Neutro'}
+                                        {isas[0].isaIndex === '3' && ' Parcialmente não sustentável'}
+                                        {isas[0].isaIndex === '4' && ' Totalmente não sustentável'}
+                                    </span> 
+                                </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div className='lg:w-[400px]'>
                                         <p className='font-bold text-white'>Degeneração</p>
@@ -599,7 +532,7 @@ export function InspectionItemResult({data, initialVisible}){
                                             <p className="font-bold text-[#ff9900]">¹Cobertura de solo:</p>
                                             <div className="flex items-center">
                                                 <p className="font-bold text-white mx-1">=</p>
-                                                <p className="font-bold mx-2 text-green-400">{resultBiomassa} Kg Co²</p>
+                                                <p className="font-bold mx-2 text-green-400">{resultBiomassa.toFixed(0)} Kg Co²</p>
                                             </div>
                                         </div>
                                     </div>
@@ -677,6 +610,16 @@ export function InspectionItemResult({data, initialVisible}){
                         
                         {aguaOpen && (
                             <div className='p-2 w-full flex flex-col'>
+                                <p className='text-white text-center'>
+                                    Classificação na categoria:
+                                    <span className='font-bold text-[#ff9900]'>
+                                        {isas[2].isaIndex === '0' && ' Totalmente sustentável'}
+                                        {isas[2].isaIndex === '1' && ' Parcialmente sustentável'}
+                                        {isas[2].isaIndex === '2' && ' Neutro'}
+                                        {isas[2].isaIndex === '3' && ' Parcialmente não sustentável'}
+                                        {isas[2].isaIndex === '4' && ' Totalmente não sustentável'}
+                                    </span> 
+                                </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
@@ -786,6 +729,16 @@ export function InspectionItemResult({data, initialVisible}){
                         
                         {soloOpen && (
                             <div className='p-2 w-full flex flex-col'>
+                                <p className='text-white text-center'>
+                                    Classificação na categoria:
+                                    <span className='font-bold text-[#ff9900]'>
+                                        {isas[3].isaIndex === '0' && ' Totalmente sustentável'}
+                                        {isas[3].isaIndex === '1' && ' Parcialmente sustentável'}
+                                        {isas[3].isaIndex === '2' && ' Neutro'}
+                                        {isas[3].isaIndex === '3' && ' Parcialmente não sustentável'}
+                                        {isas[3].isaIndex === '4' && ' Totalmente não sustentável'}
+                                    </span> 
+                                </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
@@ -895,6 +848,16 @@ export function InspectionItemResult({data, initialVisible}){
                         
                         {bioOpen && (
                             <div className='p-2 w-full flex flex-col'>
+                                <p className='text-white text-center'>
+                                    Classificação na categoria:
+                                    <span className='font-bold text-[#ff9900]'>
+                                        {isas[1].isaIndex === '0' && ' Totalmente sustentável'}
+                                        {isas[1].isaIndex === '1' && ' Parcialmente sustentável'}
+                                        {isas[1].isaIndex === '2' && ' Neutro'}
+                                        {isas[1].isaIndex === '3' && ' Parcialmente não sustentável'}
+                                        {isas[1].isaIndex === '4' && ' Totalmente não sustentável'}
+                                    </span> 
+                                </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>

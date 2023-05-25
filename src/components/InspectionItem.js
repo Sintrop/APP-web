@@ -46,11 +46,14 @@ export function InspectionItem({data, type, reload}){
     
     function generatePdf(inspection, indiceReport, resultCategories, resultIndices, resultBiodiversity){
         console.log(resultCategories);
-        const categoriesDegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '1')
-        const categoriesRegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '2')
-        const soloRegenerado = resultCategories.filter(item => item.categoryId === '13')
-        const melhorCobertura = resultCategories.filter(item => item.categoryId === '14')
-        const piorCobertura = resultCategories.filter(item => item.categoryId === '15')
+        const categoriesDegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '1');
+        const categoriesRegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '2');
+        const soloRegenerado = resultCategories.filter(item => item.categoryId === '13');
+        const area1 = resultCategories.filter(item => item.categoryId === '14');
+        const area2 = resultCategories.filter(item => item.categoryId === '15');
+        const area3 = resultCategories.filter(item => item.categoryId === '16');
+        const area4 = resultCategories.filter(item => item.categoryId === '17');
+        const area5 = resultCategories.filter(item => item.categoryId === '18');
         
         if(indiceReport === 'carbon'){
             return {
@@ -112,14 +115,14 @@ export function InspectionItem({data, type, reload}){
                         }
                         
                     })}`,
-                    `¹Cobertura de solo: ${(((Number(melhorCobertura[0].value) + Number(piorCobertura[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(melhorCobertura[0].categoryDetails).carbonValue} kg Co²`,
+                    `¹Cobertura de solo: ${(((Number(area1[0].value) + Number(area2[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue} kg Co²`,
                     
                     {
                         text: 'Fórmulas do cálculo:',
                         style: 'titleFormulas'
                     },
-                    `¹ - (((Melhor cobertura de solo + Pior cobertura de solo) / 2) x Solo regenerado) x Impacto de carbono`,
-                    `(${melhorCobertura[0].value} + ${piorCobertura[0].value} / 2) x ${soloRegenerado[0].value} x ${JSON.parse(melhorCobertura[0].categoryDetails).carbonValue} = ${(((Number(melhorCobertura[0].value) + Number(piorCobertura[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(melhorCobertura[0].categoryDetails).carbonValue}`
+                    `¹ - (((Análise de solo(Área 1) + Análise de solo(Área 2) + Análise de solo(Área 3) + Análise de solo(Área 4) + Análise de solo(Área 5)) / 5) x Solo regenerado) x Impacto de carbono`,
+                    `(${area1[0].value} + ${area2[0].value} + ${area3[0].value} + ${area4[0].value} + ${area5[0].value} / 5) x ${soloRegenerado[0].value} x ${JSON.parse(area1[0].categoryDetails).carbonValue} = ${(((Number(area1[0].value) + Number(area2[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue}`
 
                 ],
                 styles: {
@@ -826,19 +829,19 @@ export function InspectionItem({data, type, reload}){
 
     function calculateCarboon(data){
         let result = 0;
-        if(data.carbon >= 1){
+        if(data.carbon >= 10000){
             result = 4  
         }
-        if(data.carbon < 1 && data.carbon > 0){
+        if(data.carbon < 10000 && data.carbon > 0){
             result = 3
         }
         if(data.carbon === 0){
             result = 2  
         }
-        if(data.carbon < 0 && data.carbon > -1){
+        if(data.carbon < 0 && data.carbon > -10000){
             result = 1
         }
-        if(data.carbon <= -1 ){
+        if(data.carbon <= -10000 ){
             result = 0
         }
 
@@ -968,12 +971,16 @@ export function InspectionItem({data, type, reload}){
                 )}
 
                 <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
-                    <p 
-                        className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
-                        onClick={() => handleClickUser('2', data.acceptedBy)}
-                    >
-                        {data.acceptedBy}
-                    </p>
+                    {status === '0' ? (
+                        <p className='text-white'>Não aceita</p>
+                    ) : (
+                        <p 
+                            className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                            onClick={() => handleClickUser('2', data.acceptedBy)}
+                        >
+                            {data.acceptedBy}
+                        </p>
+                    )}
                 </div>
 
                 <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>

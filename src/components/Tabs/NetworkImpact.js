@@ -129,7 +129,7 @@ export function NetworkImpact({setTab}){
                                         className='w-[25px] h-[25px] object-contain'
                                     />
                                 </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>0 <span className='font-bold text-base'>ton</span></p>
+                                <p className='text-white font-bold text-2xl flex items-end gap-2'>0 <span className='font-bold text-base'>kg</span></p>
                             </div>
 
                             <div className="flex items-center gap-2">

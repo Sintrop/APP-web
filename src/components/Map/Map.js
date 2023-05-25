@@ -38,6 +38,7 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                             onPolylineComplete={(e) => {
                                 setPolyline(e.latLngs.g[0].g)
                                 //setPolyline(e.latLngs.h[0].h) 
+                                console.log(e.latLngs.g[0].g)
                             }}
                         />
                     )}

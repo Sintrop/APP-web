@@ -127,10 +127,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                         </div>
 
                                         <div className="flex flex-col lg:w-[50%]">
-                                            <p className="text-black text-sm">Saldo de Carbono: 10 Co²</p>
-                                            <p className="text-black text-sm">Saldo de Água: 25 m³</p>
-                                            <p className="text-black text-sm">Saldo de Biodiversidade: 25</p>
-                                            <p className="text-black text-sm">Saldo de Solo: 50 m²</p>
+                                            <p className="text-black text-sm">Saldo de Carbono: 0 Co²</p>
+                                            <p className="text-black text-sm">Saldo de Água: 0 m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: 0</p>
+                                            <p className="text-black text-sm">Saldo de Solo: 0 m²</p>
                                         </div>
                                     </div>
                                 </div>

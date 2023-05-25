@@ -34,8 +34,7 @@ function Login(){
                                 className="w-[200px] h-[80px] object-contain"
                             />
                             <h1 className="text-[#BBFFB2] font-bold text-2xl">
-                                Sistema descentralizado de certificação de 
-                                <span className="text-white"> Agricultura Regenerativa</span>
+                                Sistema descentralizado de certificação de Agricultura Regenerativa
                             </h1>
                         </div>
 

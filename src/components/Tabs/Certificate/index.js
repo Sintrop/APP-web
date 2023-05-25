@@ -12,17 +12,22 @@ import { useTranslation } from "react-i18next";
 //services
 import {GetProducer} from '../../../services/producerService';
 import {GetDelation} from '../../../services/userService';
+import {GetInspections} from '../../../services/manageInspectionsService';
 
 //components
 import Loading from '../../Loading';
 
 export default function ProducerCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [delationsReceived, setDelationsReceived] = useState('0');
     const [producerAddress, setProducerAddress] = useState({});
+    const [soilTotal, setSoilTotal] = useState(0);
+    const [carbonTotal, setCarbonTotal] = useState(0);
+    const [bioTotal, setBioTotal] = useState(0);
+    const [waterTotal, setWaterTotal] = useState(0);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -31,17 +36,45 @@ export default function ProducerCertificate({userType, wallet, setTab}){
     useEffect(() => {
         if(userType == 1){
             getProducer();
+            getInspections(walletAddress);
         }
     }, []);
 
     async function getProducer(){
         setLoading(true);
-        const response = await GetProducer(wallet);
+        const response = await GetProducer(walletAddress);
         setProducerData(response);
         getProducerDataApi(response.producerWallet);
         const delations = await GetDelation(response.producerWallet);
         setDelationsReceived(delations.length);
         setLoading(false);
+    }
+
+    async function getInspections(producerWallet){
+        let totalCarbon = 0;
+        let totalWater = 0;
+        let totalBio = 0;
+        let totalSoil = 0;
+
+        const response = await GetInspections();
+        const filterInspectionProducer = response.filter(item => String(item.createdBy).toUpperCase() === String(producerWallet).toUpperCase())
+        const filterInspected = filterInspectionProducer.filter(item => item.status === '2');
+        
+        for(var i = 0; i < filterInspected.length; i++){
+            const inspectionId = filterInspected[i].id;
+            const inspectionDataApi = await api.get(`/inspection/${inspectionId}`)
+            const resultIndices = JSON.parse(inspectionDataApi.data.inspection?.resultIdices);
+
+            totalCarbon += resultIndices?.carbon;
+            totalWater += resultIndices?.agua;
+            totalBio += resultIndices?.bio;
+            totalSoil += resultIndices?.solo;
+        }
+
+        setWaterTotal(totalWater);
+        setCarbonTotal(totalCarbon);
+        setBioTotal(totalBio);
+        setSoilTotal(totalSoil);
     }
 
     function downloadCertificate(){
@@ -123,14 +156,14 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                                         <div className="flex flex-col w-[50%]">
                                             <p className="text-black text-sm">{t('Inspections Reiceved')}: {producerData?.totalInspections}</p>
                                             <p className="text-black text-sm">ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
-                                            <p className="text-black text-sm">ISA {t('Average')}: {producerData?.isa?.isaAverage}</p>
+                                            <p className="text-black text-sm">ISA {t('Average')}: {Number(producerData?.isa?.isaScore)/Number(producerData?.totalInspections)}</p>
                                         </div>
 
                                         <div className="flex flex-col w-[50%]">
-                                            <p className="text-black text-sm">Saldo de Carbono: 10 Co²</p>
-                                            <p className="text-black text-sm">Saldo de Água: 25 m³</p>
-                                            <p className="text-black text-sm">Saldo de Biodiversidade: 25</p>
-                                            <p className="text-black text-sm">Saldo de Solo: 50 m²</p>
+                                            <p className="text-black text-sm">Saldo de Carbono: {carbonTotal.toFixed(0)} Kg</p>
+                                            <p className="text-black text-sm">Saldo de Água: {waterTotal.toFixed(0)} m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: {bioTotal.toFixed(0)} uni</p>
+                                            <p className="text-black text-sm">Saldo de Solo: {soilTotal.toFixed(0)} m²</p>
                                         </div>
                                     </div>
                                 </div>
