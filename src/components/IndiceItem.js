@@ -33,7 +33,7 @@ export function IndiceItem({data}){
                 </div>
             </div>
 
-            <div className={`${open ? 'flex' : 'hidden'} flex-col lg:flex-row items-center gap-1 lg:h-[195px] mb-10`}>
+            <div className={`${open ? 'flex' : 'hidden'} flex-col lg:flex-row items-center gap-1 lg:h-[275px] mb-10`}>
                 <div className="flex items-center lg:p-5 w-full lg:w-[180px] h-full bg-[#0A4303] border-2">
                     <p className="text-white text-center">{data.description}</p>
                 </div>
@@ -41,38 +41,75 @@ export function IndiceItem({data}){
                 <div className="flex gap-2">
                     <div className="flex flex-col w-full lg:w-[250px] h-full gap-1">
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#783E19] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{t('Totally Sustainable')}</p>
+                            <p className="text-white text-center text-sm">{t('Regenerative 3')}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#A75722] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{t('Partially Sustainable')}</p>
+                            <p className="text-white text-center text-sm">{t('Regenerative 2')}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#C66828] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">Neutro</p>
+                            <p className="text-white text-center text-sm">{t('Regenerative 1')}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#E79F34] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{t('Partially Not Sustainable')}</p>
+                            <p className="text-white text-center text-sm">Neutro</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#E3BB4E] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{t('Totally Not Sustainable')}</p>
+                            <p className="text-white text-center text-sm">{t('Not Regenerative 1')}</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#c0ac74] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">{t('Not Regenerative 2')}</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#cbc2a9] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">{t('Not Regenerative 3')}</p>
                         </div>
 
                     </div>
 
-                    <div className="flex flex-col w-full lg:w-[250px] h-full gap-1">
+                    <div className="flex flex-col w-full lg:w-[200px] h-full gap-1">
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{data.totallySustainable}</p>
+                            <p className="text-white text-center text-sm">{data.regenerative3}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{data.partiallySustainable}</p>
+                            <p className="text-white text-center text-sm">{data.regenerative2}</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">{data.regenerative1}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
                             <p className="text-white text-center text-sm">{data.neutro}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{data.partiallyNotSustainable}</p>
+                            <p className="text-white text-center text-sm">{data.notRegenerative1}</p>
                         </div>
                         <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
-                            <p className="text-white text-center text-sm">{data.totallyNotSustainable}</p>
+                            <p className="text-white text-center text-sm">{data.notRegenerative2}</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#0A4303] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">{data.notRegenerative3}</p>
+                        </div>
+
+                    </div>
+
+                    <div className="flex flex-col w-full lg:w-[50px] h-full gap-1">
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#783E19] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">+20</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#A75722] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">+10</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#C66828] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">+5</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#E79F34] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">0</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#E3BB4E] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">-5</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#c0ac74] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">-10</p>
+                        </div>
+                        <div className="flex w-full h-12 lg:h-9 items-center justify-center bg-[#cbc2a9] rounded-sm border-2">
+                            <p className="text-white text-center text-sm">-20</p>
                         </div>
 
                     </div>

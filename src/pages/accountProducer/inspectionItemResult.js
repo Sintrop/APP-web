@@ -483,11 +483,13 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[0].isaIndex === '0' && ' Totalmente sustentável'}
-                                        {isas[0].isaIndex === '1' && ' Parcialmente sustentável'}
-                                        {isas[0].isaIndex === '2' && ' Neutro'}
-                                        {isas[0].isaIndex === '3' && ' Parcialmente não sustentável'}
-                                        {isas[0].isaIndex === '4' && ' Totalmente não sustentável'}
+                                        {isas[0].isaIndex === '0' && ' Regenerative 3'}
+                                        {isas[0].isaIndex === '1' && ' Regenerative 2'}
+                                        {isas[0].isaIndex === '2' && ' Regenerative 1'}
+                                        {isas[0].isaIndex === '3' && ' Neutro'}
+                                        {isas[0].isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isas[0].isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isas[0].isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
@@ -613,11 +615,13 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[2].isaIndex === '0' && ' Totalmente sustentável'}
-                                        {isas[2].isaIndex === '1' && ' Parcialmente sustentável'}
-                                        {isas[2].isaIndex === '2' && ' Neutro'}
-                                        {isas[2].isaIndex === '3' && ' Parcialmente não sustentável'}
-                                        {isas[2].isaIndex === '4' && ' Totalmente não sustentável'}
+                                        {isas[2].isaIndex === '0' && ' Regenerative 3'}
+                                        {isas[2].isaIndex === '1' && ' Regenerative 2'}
+                                        {isas[2].isaIndex === '2' && ' Regenerative 1'}
+                                        {isas[2].isaIndex === '3' && ' Neutro'}
+                                        {isas[2].isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isas[2].isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isas[2].isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
@@ -732,11 +736,13 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[3].isaIndex === '0' && ' Totalmente sustentável'}
-                                        {isas[3].isaIndex === '1' && ' Parcialmente sustentável'}
-                                        {isas[3].isaIndex === '2' && ' Neutro'}
-                                        {isas[3].isaIndex === '3' && ' Parcialmente não sustentável'}
-                                        {isas[3].isaIndex === '4' && ' Totalmente não sustentável'}
+                                        {isas[3].isaIndex === '0' && ' Regenerative 3'}
+                                        {isas[3].isaIndex === '1' && ' Regenerative 2'}
+                                        {isas[3].isaIndex === '2' && ' Regenerative 1'}
+                                        {isas[3].isaIndex === '3' && ' Neutro'}
+                                        {isas[3].isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isas[3].isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isas[3].isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
@@ -851,11 +857,13 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[1].isaIndex === '0' && ' Totalmente sustentável'}
-                                        {isas[1].isaIndex === '1' && ' Parcialmente sustentável'}
-                                        {isas[1].isaIndex === '2' && ' Neutro'}
-                                        {isas[1].isaIndex === '3' && ' Parcialmente não sustentável'}
-                                        {isas[1].isaIndex === '4' && ' Totalmente não sustentável'}
+                                        {isas[1].isaIndex === '0' && ' Regenerative 3'}
+                                        {isas[1].isaIndex === '1' && ' Regenerative 2'}
+                                        {isas[1].isaIndex === '2' && ' Regenerative 1'}
+                                        {isas[1].isaIndex === '3' && ' Neutro'}
+                                        {isas[1].isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isas[1].isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isas[1].isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>

@@ -828,42 +828,62 @@ export function InspectionItem({data, type, reload}){
     }
 
     function calculateCarboon(data){
-        let result = 0;
-        if(data.carbon >= 10000){
+        let result = 3;
+        const carbon = data.carbon;
+
+        if(carbon < 0){
+            if(Math.abs(carbon) > 0 && Math.abs(carbon) < 1000){
+                result = 2  
+            }
+            if(Math.abs(carbon) >= 1000 && Math.abs(carbon) < 100000){
+                result = 1
+            }
+            if(Math.abs(carbon) >= 100000 ){
+                result = 0
+            }
+        }
+        if(carbon >= 100000){
+            result = 6
+        }
+        if(carbon >= 1000 && carbon < 100000){
+            result = 5  
+        }
+        if(carbon > 0 && carbon < 1000){
             result = 4  
         }
-        if(data.carbon < 10000 && data.carbon > 0){
+        if(carbon === 0){
             result = 3
         }
-        if(data.carbon === 0){
-            result = 2  
-        }
-        if(data.carbon < 0 && data.carbon > -10000){
-            result = 1
-        }
-        if(data.carbon <= -10000 ){
-            result = 0
-        }
-
+        
         return result;
     }
 
     function calculateWater(data){
         let result = 0;
-        if(data.agua >= 10){
+        const water = data.agua;
+
+        if(water < 0){
+            if(Math.abs(water) > 0 && Math.abs(water) < 10){
+                result = 4
+            }
+            if(Math.abs(water) < 100 && Math.abs(water) >= 10){
+                result = 5
+            }
+            if(Math.abs(water) > 100 ){
+                result = 6
+            }
+        }
+        if(water >= 100){
             result = 0 
         }
-        if(data.agua < 10 && data.agua > 0){
+        if(water >= 10 && water < 100){
             result = 1
         }
-        if(data.agua === 0){
+        if(water > 0 && water < 10){
             result = 2  
         }
-        if(data.agua < 0 && data.agua > -10){
+        if(water === 0){
             result = 3
-        }
-        if(data.agua <= -10 ){
-            result = 4
         }
 
         return result;
@@ -871,41 +891,63 @@ export function InspectionItem({data, type, reload}){
 
     function calculateBio(data){
         let result = 0;
-        if(data.bio >= 100){
-            result = 0 
-        }
-        if(data.bio < 100 && data.bio > 0){
-            result = 1
-        }
-        if(data.bio === 0){
-            result = 2  
-        }
-        if(data.bio < 0 && data.bio > -100){
-            result = 3
-        }
-        if(data.bio <= -100 ){
-            result = 4
-        }
+        const bio = data.bio;
 
-        return result;
+        if(bio < 0){
+            if(Math.abs(bio) > 0 && Math.abs(bio) < 100){
+                result = 4
+                return result;
+            }
+            if(Math.abs(bio) >= 100 && Math.abs(bio) < 1000){
+                result = 5
+                return result;
+            }
+            if(Math.abs(bio) >= 1000){
+                result = 6
+                return result;
+            }
+        }
+        if(bio >= 1000){
+            result = 0 
+            return result;
+        }
+        if(bio < 1000 && bio >= 100){
+            result = 1
+            return result;
+        }
+        if(bio < 100 && bio > 0){
+            result = 2  
+            return result;
+        }
+        if(bio === 0){
+            result = 3
+            return result;
+        }
     }
 
     function calculateSolo(data){
-        let result = 0;
-        if(data.solo >= 100){
+        const percentSoil = (Number(data.solo) / producerData?.certifiedArea) * 100;
+        let result = 3;
+        if(percentSoil >= 70){
             result = 0 
         }
-        if(data.solo < 100 && data.solo > 0){
+        if(percentSoil >= 50 && percentSoil < 70){
             result = 1
         }
-        if(data.solo === 0){
+        if(percentSoil > 30 && percentSoil < 50){
             result = 2  
         }
-        if(data.solo < 0 && data.solo > -100){
+        if(percentSoil === 30){
             result = 3
         }
-        if(data.solo <= -100 ){
+        if(percentSoil < 30 && percentSoil >= 20 ){
             result = 4
+        }
+        if(percentSoil < 20 && percentSoil >= 10 ){
+            result = 5
+        }
+        if(percentSoil < 10 ){
+            result = 6
         }
         return result;
     }

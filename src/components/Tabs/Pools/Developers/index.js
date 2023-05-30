@@ -149,7 +149,7 @@ export default function DevelopersPool({wallet, setTab}){
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
                 {user === '4' && (
                     <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
-                        <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                        <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">
                             <p className="font-bold text-white">Seu Status</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">ERA Atual:</p>
@@ -161,7 +161,7 @@ export default function DevelopersPool({wallet, setTab}){
                             </div>
                         </div>
 
-                        <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md">
+                        <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] rounded-md">
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
@@ -171,7 +171,7 @@ export default function DevelopersPool({wallet, setTab}){
                     </div>
                 )}
 
-                <div className="lg:w-[700px] bg-[#0A4303] flex flex-col border-2 border-[#3E9EF5] rounded-md">
+                <div className="lg:w-[700px] bg-[#0A4303] flex flex-col rounded-md">
                     <div className="flex w-full">
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
@@ -198,7 +198,7 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
                     </div>
 
-                    <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3 border-2 border-[#3E9EF5]'>
+                    <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3'>
                         <div className='flex flex-col'>
                             <p className="font-bold text-white">Soma total dos níveis dos desenvolvedores</p>
                             <p className="font-bold text-[#ff9900]">{eraInfo?.levels}</p>
@@ -215,7 +215,7 @@ export default function DevelopersPool({wallet, setTab}){
                     </div>
 
                 </div>
-                    <div className='flex flex-col lg:w-[700px] bg-[#0a4303] border-2 border-[#3E9EF5] rounded-sm pl-2 pt-2 mt-10'>
+                    <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
                             <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de desenvolvedores</p>
                         </div>

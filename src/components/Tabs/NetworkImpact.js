@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { useParams } from 'react-router';
+import {get} from '../../config/infura';
 
 export function NetworkImpact({setTab}){
     const [impact, setImpact] = useState({});
@@ -15,6 +16,7 @@ export function NetworkImpact({setTab}){
 
     useEffect(() => {
         getImpact();
+        
     }, []);
 
     async function getImpact(){
@@ -22,6 +24,8 @@ export function NetworkImpact({setTab}){
         setImpact(response.data?.impact[0]);
         const users = await api.get('users_count')
         setUsersCount(users.data)
+        const res = await get('QmYo8zPzDPwo513QrBC563CpURki3WGLpFjvkmZ9W8dnCw');
+        console.log(res);
     }
 
     return(
