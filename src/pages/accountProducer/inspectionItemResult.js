@@ -15,6 +15,7 @@ export function InspectionItemResult({data, initialVisible}){
     const [openBiomassa, setOpenBiomassa] = useState(false);
     const [openInsumosQuimicos, setOpenInsumosQuimicos] = useState(false);
     const [openInsumosBiologicos, setOpenInsumosBiologicos] = useState(false);
+    const [openInsumosMinerais, setOpenInsumosMinerais] = useState(false);
     const [openRecursosExternos, setOpenRecursosExternos] = useState(false);
     const [carbonOpen, setCarbonOpen] = useState(false);
     const [aguaOpen, setAguaOpen] = useState(false);
@@ -25,11 +26,18 @@ export function InspectionItemResult({data, initialVisible}){
     const [resultCategories, setResultCategories] = useState([]);
     const [resultBiodiversity, setResultBiodiversity] = useState([]);
     const [resultBiomassa, setResultBiomassa] = useState(0);
+    const [resultBioInsetos, setResultBioInsetos] = useState(0);
     const [quantArvores, setQuantArvores] = useState(0);
+    const [bioArvores, setBioArvores] = useState({});
     const [quantInsumosQuimicos, setQuantInsumosQuimicos] = useState(0);
     const [quantInsumosBiologicos, setQuantInsumosBiologicos] = useState(0);
+    const [quantInsumosMinerais, setQuantInsumosMinerais] = useState(0);
     const [quantRecursosExternos, setQuantRecursosExternos] = useState(0);
     const [isas, setIsas] = useState([]);
+    const [isaCarbon, setIsaCarbon] = useState({});
+    const [isaBio, setIsaBio] = useState({});
+    const [isaWater, setIsaWater] = useState({});
+    const [isaSoil, setIsaSoil] = useState({});
 
     useEffect(() => {
         getResultIndices();
@@ -43,7 +51,20 @@ export function InspectionItemResult({data, initialVisible}){
     async function getIsaData(){
         const response = await GetIsa(data.id);
         setIsas(response)
-        console.log(response)
+        for(var i = 0; i < response.length; i++){
+            if(response[i].categoryId === '1'){
+                setIsaCarbon(response[i])
+            }
+            if(response[i].categoryId === '2'){
+                setIsaBio(response[i])
+            }
+            if(response[i].categoryId === '3'){
+                setIsaWater(response[i])
+            }
+            if(response[i].categoryId === '4'){
+                setIsaSoil(response[i])
+            }
+        }
     }
 
     async function getResultIndices() {
@@ -55,15 +76,19 @@ export function InspectionItemResult({data, initialVisible}){
         const resBiodiversity = JSON.parse(response.data?.inspection?.biodversityIndice);
         setResultBiodiversity(resBiodiversity);
 
-        const categoryCoberturaSolo = resCategories.filter(item => item.categoryId === '13')
-        const soloRegenerado = Number(categoryCoberturaSolo[0]?.value)
-        const biomassa1 = resCategories.filter(item => item.categoryId === '14')
-        const biomassa2 = resCategories.filter(item => item.categoryId === '15')
-        const biomassa3 = resCategories.filter(item => item.categoryId === '16')
-        const biomassa4 = resCategories.filter(item => item.categoryId === '17')
-        const biomassa5 = resCategories.filter(item => item.categoryId === '18')
-        const calculoBiomassa = ((Number(biomassa1[0]?.value) + Number(biomassa2[0]?.value) + Number(biomassa3[0]?.value) + Number(biomassa4[0]?.value) + Number(biomassa5[0]?.value)) / 5) * soloRegenerado
-        const resultIndiceBiomassa = calculoBiomassa * JSON.parse(biomassa1[0].categoryDetails).carbonValue;
+        const categoryCoberturaSolo = resCategories.filter(item => item.categoryId === '13');
+        const soloRegenerado = Number(categoryCoberturaSolo[0]?.value);
+        const analiseSolo1 = resCategories.filter(item => item.categoryId === '14');
+        const analiseSolo2 = resCategories.filter(item => item.categoryId === '15');
+        const analiseSolo3 = resCategories.filter(item => item.categoryId === '16');
+        const analiseSolo4 = resCategories.filter(item => item.categoryId === '17');
+        const analiseSolo5 = resCategories.filter(item => item.categoryId === '18');
+        const calculoBiomassa = ((Number(analiseSolo1[0]?.value) + Number(analiseSolo2[0]?.value) + Number(analiseSolo3[0]?.value) + Number(analiseSolo4[0]?.value) + Number(analiseSolo5[0]?.value)) / 5) * soloRegenerado
+        const resultIndiceBiomassa = calculoBiomassa * JSON.parse(analiseSolo1[0].categoryDetails).carbonValue;
+
+        const calculoBioInsetos = ((Number(analiseSolo1[0]?.value2) + Number(analiseSolo2[0]?.value2) + Number(analiseSolo3[0]?.value2) + Number(analiseSolo4[0]?.value2) + Number(analiseSolo5[0]?.value2)) / 5) * soloRegenerado   
+        
+        setResultBioInsetos(calculoBioInsetos);
         setResultBiomassa(resultIndiceBiomassa);
         setInspectionDataApi(response.data?.inspection);
 
@@ -71,6 +96,9 @@ export function InspectionItemResult({data, initialVisible}){
         const arvoresJovens = resCategories.filter(item => item.categoryId === '10');
         const arvoresAdultas = resCategories.filter(item => item.categoryId === '11');
         const arvoresAncias = resCategories.filter(item => item.categoryId === '12');
+        const bioArvores = resCategories.filter(item => item.categoryId === '23');
+        setBioArvores(bioArvores[0])
+        
         setQuantArvores(Number(arvoresMudas[0].value) + Number(arvoresJovens[0].value) + Number(arvoresAdultas[0].value) + Number(arvoresAncias[0].value))
     
         //separa os insumos quimicos e faz a contagem do total utilizado
@@ -99,6 +127,15 @@ export function InspectionItemResult({data, initialVisible}){
             totalRecursosExternos += value
         }
         setQuantRecursosExternos(totalRecursosExternos);
+        
+        //separa os insumos minerais e faz a contagem do total utilizado
+        const arrayInsumosMinerais = resCategories.filter(item => JSON.parse(item.categoryDetails).insumoCategory === 'insumo-mineral');
+        let totalInsumosMinerais = 0;
+        for(var i = 0; i < arrayInsumosMinerais.length; i++){
+            const value = Number(arrayInsumosMinerais[i].value);
+            totalInsumosMinerais += value
+        }
+        setQuantInsumosMinerais(totalInsumosMinerais);
     }
 
     function handleDownloadPDF(hash, filename){
@@ -139,7 +176,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 className='w-[55px] h-[40px] object-contain'
                             />
                             <p className='font-bold text-white text-lg flex items-end'>
-                                {resultIndices?.carbon} kg
+                                {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
                             </p>
                         </div>
 
@@ -150,7 +187,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 className='w-[40px] h-[40px] object-contain'
                             />
                             <p className='font-bold text-white text-lg flex items-end'>
-                                {resultIndices?.solo} m²
+                                {Number(isaSoil?.indicator).toFixed(0)} m²/era
                             </p>
                         </div>
 
@@ -161,7 +198,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 className='w-[40px] h-[40px] object-contain'
                             />
                             <p className='font-bold text-white text-lg flex items-end'>
-                                {resultIndices?.agua} m³
+                                {Number(isaWater?.indicator).toFixed()} m³/era
                             </p>
                         </div>
 
@@ -172,7 +209,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 className='w-[40px] h-[40px] object-contain'
                             />
                             <p className='font-bold text-white text-lg flex items-end'>
-                                {resultIndices?.bio} uni
+                                {Number(isaBio?.indicator).toFixed(0)} uni/era
                             </p>
                         </div>
                     </div>
@@ -302,6 +339,7 @@ export function InspectionItemResult({data, initialVisible}){
                         <div className='flex items-center justify-center h-20 w-full bg-[#783E19] mt-10'>
                             <h3 className='font-bold text-white text-3xl'>Degeneração</h3>
                         </div>
+
                         <div className='flex flex-wrap mt-5 gap-4'>
                             <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
                                 <div className='flex items-center justify-between w-full p-3'>
@@ -401,6 +439,55 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
+                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
+                                <div className='flex items-center justify-between w-full p-3'>
+                                    <div className='flex flex-col gap-2'>
+                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Minerais</h4>
+                                        <p className='font-bold text-white text-2xl'>{quantInsumosMinerais} kg</p>
+                                    </div>
+
+                                    <img 
+                                        src={require('../../assets/vaso.png')}
+                                        className='w-24 h-28 object-contain'
+                                    />
+                                </div>
+                                <div 
+                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                    onClick={() => setOpenInsumosMinerais(!openInsumosMinerais)}
+                                >
+                                    {openInsumosMinerais ? (
+                                        <AiFillCaretUp size={20} color='white'/>
+                                    ) : (
+                                        <AiFillCaretDown size={20} color='white'/>
+                                    )}
+
+                                    {openInsumosMinerais ? (
+                                        <p className='font-bold text-white'>Mostrar Menos</p>
+                                    ) : (
+                                        <p className='font-bold text-white'>Mostrar Mais</p>
+                                    )}
+                                </div>
+
+                                {openInsumosMinerais && (
+                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                        {resultCategories.map(item => {
+                                            const categoryDetails = JSON.parse(item.categoryDetails);
+                                            if(categoryDetails.insumoCategory === 'insumo-mineral'){
+                                                return(
+                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+
                             <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
                                 <div className='flex items-center justify-between w-full p-3'>
                                     <div className='flex flex-col gap-2'>
@@ -473,7 +560,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[55px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-base flex items-end'>
-                                    {resultIndices?.carbon} kg
+                                    {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
                                 </p>
                             </div>
                         </div>
@@ -483,21 +570,21 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[0].isaIndex === '0' && ' Regenerative 3'}
-                                        {isas[0].isaIndex === '1' && ' Regenerative 2'}
-                                        {isas[0].isaIndex === '2' && ' Regenerative 1'}
-                                        {isas[0].isaIndex === '3' && ' Neutro'}
-                                        {isas[0].isaIndex === '4' && ' Not Regenerative 1'}
-                                        {isas[0].isaIndex === '5' && ' Not Regenerative 2'}
-                                        {isas[0].isaIndex === '6' && ' Not Regenerative 3'}
+                                        {isaCarbon.isaIndex === '0' && ' Regenerative 3'}
+                                        {isaCarbon.isaIndex === '1' && ' Regenerative 2'}
+                                        {isaCarbon.isaIndex === '2' && ' Regenerative 1'}
+                                        {isaCarbon.isaIndex === '3' && ' Neutro'}
+                                        {isaCarbon.isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isaCarbon.isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isaCarbon.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                                    <div className='lg:w-[400px]'>
+                                    <div className='lg:w-[440px]'>
                                         <p className='font-bold text-white'>Degeneração</p>
                                         
                                             {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
+                                                <div className="flex flex-col w-full lg:w-[440px]">
                                                     {resultCategories.map(item => (
                                                         <IndiceCalculoItem
                                                             key={item.id}
@@ -512,11 +599,11 @@ export function InspectionItemResult({data, initialVisible}){
                                     </div>
                                     
                                     <div className="flex flex-col">
-                                        <div className='lg:w-[400px]'>
+                                        <div className='lg:w-[440px]'>
                                             <p className='font-bold text-white'>Regeneração</p>
                                             
                                             {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
+                                                <div className="flex flex-col w-full lg:w-[440px]">
                                                     {resultCategories.map(item => (
                                                         <IndiceCalculoItem
                                                             key={item.id}
@@ -531,7 +618,7 @@ export function InspectionItemResult({data, initialVisible}){
                                             
                                         </div>
                                         <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900]">¹Cobertura de solo:</p>
+                                            <p className="font-bold text-[#ff9900]">¹Biomassa de solo:</p>
                                             <div className="flex items-center">
                                                 <p className="font-bold text-white mx-1">=</p>
                                                 <p className="font-bold mx-2 text-green-400">{resultBiomassa.toFixed(0)} Kg Co²</p>
@@ -568,13 +655,13 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
                                         target='_blank'
-                                        href={`https://ipfs.io/ipfs/${isas[0]?.report}`}
+                                        href={`https://ipfs.io/ipfs/${isaCarbon?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
-                                        onClick={() => handleDownloadPDF(isas[0]?.report, `Carbon Report - Inspection ${data.id}`)}
+                                        onClick={() => handleDownloadPDF(isaCarbon?.report, `Carbon Report - Inspection ${data.id}`)}
                                     >Download PDF</button>
                                 </div>
                             </div>
@@ -605,7 +692,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[40px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-lg flex items-end'>
-                                    {resultIndices?.agua} m³
+                                    {Number(isaWater?.indicator).toFixed(0)} m³
                                 </p>
                             </div>
                         </div>
@@ -615,20 +702,20 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[2].isaIndex === '0' && ' Regenerative 3'}
-                                        {isas[2].isaIndex === '1' && ' Regenerative 2'}
-                                        {isas[2].isaIndex === '2' && ' Regenerative 1'}
-                                        {isas[2].isaIndex === '3' && ' Neutro'}
-                                        {isas[2].isaIndex === '4' && ' Not Regenerative 1'}
-                                        {isas[2].isaIndex === '5' && ' Not Regenerative 2'}
-                                        {isas[2].isaIndex === '6' && ' Not Regenerative 3'}
+                                        {isaWater.isaIndex === '0' && ' Regenerative 3'}
+                                        {isaWater.isaIndex === '1' && ' Regenerative 2'}
+                                        {isaWater.isaIndex === '2' && ' Regenerative 1'}
+                                        {isaWater.isaIndex === '3' && ' Neutro'}
+                                        {isaWater.isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isaWater.isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isaWater.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
                                             {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
+                                                <div className="flex flex-col w-full lg:w-[440px]">
                                                     {resultCategories.map(item => (
                                                         <IndiceCalculoItem
                                                             key={item.id}
@@ -644,7 +731,7 @@ export function InspectionItemResult({data, initialVisible}){
 
                                     <div>
                                         <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col lg:w-[450px]">
+                                        <div className="flex flex-col lg:w-[440px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -689,12 +776,12 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
                                         target='_blank'
-                                        href={`https://ipfs.io/ipfs/${isas[2]?.report}`}
+                                        href={`https://ipfs.io/ipfs/${isaWater?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
-                                        onClick={() => handleDownloadPDF(isas[2]?.report, `Water Report - Inspection ${data.id}`)}
+                                        onClick={() => handleDownloadPDF(isaWater?.report, `Water Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
@@ -726,7 +813,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[40px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-lg flex items-end'>
-                                    {resultIndices?.solo} m²
+                                    {Number(resultIndices?.solo).toFixed(0)} m²
                                 </p>
                             </div>
                         </div>
@@ -736,20 +823,20 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[3].isaIndex === '0' && ' Regenerative 3'}
-                                        {isas[3].isaIndex === '1' && ' Regenerative 2'}
-                                        {isas[3].isaIndex === '2' && ' Regenerative 1'}
-                                        {isas[3].isaIndex === '3' && ' Neutro'}
-                                        {isas[3].isaIndex === '4' && ' Not Regenerative 1'}
-                                        {isas[3].isaIndex === '5' && ' Not Regenerative 2'}
-                                        {isas[3].isaIndex === '6' && ' Not Regenerative 3'}
+                                        {isaSoil.isaIndex === '0' && ' Regenerative 3'}
+                                        {isaSoil.isaIndex === '1' && ' Regenerative 2'}
+                                        {isaSoil.isaIndex === '2' && ' Regenerative 1'}
+                                        {isaSoil.isaIndex === '3' && ' Neutro'}
+                                        {isaSoil.isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isaSoil.isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isaSoil.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
                                             {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
+                                                <div className="flex flex-col w-full lg:w-[440px]">
                                                     {resultCategories.map(item => (
                                                         <IndiceCalculoItem
                                                             key={item.id}
@@ -765,7 +852,7 @@ export function InspectionItemResult({data, initialVisible}){
 
                                     <div>
                                         <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col lg:w-[450px]">
+                                        <div className="flex flex-col lg:w-[440px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -810,12 +897,12 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
                                         target='_blank'
-                                        href={`https://ipfs.io/ipfs/${isas[3]?.report}`}
+                                        href={`https://ipfs.io/ipfs/${isaSoil?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
-                                        onClick={() => handleDownloadPDF(isas[3]?.report, `Solo Report - Inspection ${data.id}`)}
+                                        onClick={() => handleDownloadPDF(isaSoil?.report, `Solo Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
@@ -847,7 +934,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[40px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-lg flex items-end'>
-                                    {resultIndices?.bio} uni
+                                    {Number(resultIndices?.bio).toFixed(0)} uni
                                 </p>
                             </div>
                         </div>
@@ -857,19 +944,19 @@ export function InspectionItemResult({data, initialVisible}){
                                 <p className='text-white text-center'>
                                     Classificação na categoria:
                                     <span className='font-bold text-[#ff9900]'>
-                                        {isas[1].isaIndex === '0' && ' Regenerative 3'}
-                                        {isas[1].isaIndex === '1' && ' Regenerative 2'}
-                                        {isas[1].isaIndex === '2' && ' Regenerative 1'}
-                                        {isas[1].isaIndex === '3' && ' Neutro'}
-                                        {isas[1].isaIndex === '4' && ' Not Regenerative 1'}
-                                        {isas[1].isaIndex === '5' && ' Not Regenerative 2'}
-                                        {isas[1].isaIndex === '6' && ' Not Regenerative 3'}
+                                        {isaBio.isaIndex === '0' && ' Regenerative 3'}
+                                        {isaBio.isaIndex === '1' && ' Regenerative 2'}
+                                        {isaBio.isaIndex === '2' && ' Regenerative 1'}
+                                        {isaBio.isaIndex === '3' && ' Neutro'}
+                                        {isaBio.isaIndex === '4' && ' Not Regenerative 1'}
+                                        {isaBio.isaIndex === '5' && ' Not Regenerative 2'}
+                                        {isaBio.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
                                 <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                     <div>
                                         <p className='font-bold text-white'>Degeneração</p>
-                                        <div className="flex flex-col lg:w-[450px]">
+                                        <div className="flex flex-col lg:w-[440px]">
                                             {resultCategories.length > 0 && (
                                                 <div className="flex flex-col w-full">
                                                     {resultCategories.map(item => (
@@ -886,25 +973,8 @@ export function InspectionItemResult({data, initialVisible}){
                                         </div>
                                     </div>
                                     
-                                    <div className="flex flex-col">
-                                        <div>
-                                            <p className='font-bold text-white'>Regeneração</p>
-                                            <div className="flex flex-col lg:w-[450px]">
-                                                {resultCategories.length > 0 && (
-                                                    <div className="flex flex-col w-full">
-                                                        {resultCategories.map(item => (
-                                                            <IndiceCalculoItem
-                                                                key={item.id}
-                                                                data={item}
-                                                                type='regeneration'
-                                                                indice='bio'
-                                                            />
-                                                        ))}
-                                                        
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
+                                    <div className="flex flex-col lg:w-[440px]">
+                                        <p className='font-bold text-white'>Regeneração</p>
                                         <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                                             <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Registro de biodiversidade: </p>
                                             <div className="flex items-center">
@@ -915,6 +985,25 @@ export function InspectionItemResult({data, initialVisible}){
                                             <div className="flex items-center">
                                             <p className="font-bold text-white mx-1">=</p>
                                             <p className="font-bold  mx-2 text-green-400">{Number(Number(resultBiodiversity.length) * 1).toFixed(2)}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                            <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Biodiversidade de árvores: </p>
+                                            <div className="flex items-center">
+                                                <p className="font-bold mx-2 text-red-500"> {bioArvores?.value}</p>
+                                                <p className="font-bold text-white mx-1">x</p>
+                                                <p className="font-bold mx-2 text-blue-500">1</p>
+                                            </div>
+                                            <div className="flex items-center">
+                                            <p className="font-bold text-white mx-1">=</p>
+                                            <p className="font-bold  mx-2 text-green-400">{bioArvores.value}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                            <p className="font-bold text-[#ff9900]">¹Biodiversidade de insetos:</p>
+                                            <div className="flex items-center">
+                                                <p className="font-bold text-white mx-1">=</p>
+                                                <p className="font-bold mx-2 text-green-400">{resultBioInsetos.toFixed(0)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -947,12 +1036,12 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
                                         target='_blank'
-                                        href={`https://ipfs.io/ipfs/${isas[1]?.report}`}
+                                        href={`https://ipfs.io/ipfs/${isaBio?.report}`}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
-                                        onClick={() => handleDownloadPDF(isas[1]?.report, `Biodiversity Report - Inspection ${data.id}`)}
+                                        onClick={() => handleDownloadPDF(isaBio?.report, `Biodiversity Report - Inspection ${data.id}`)}
                                         className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>

@@ -10,13 +10,12 @@ import {
     GetEraContract, 
     GetEra, 
     CheckNextAprove, 
-    CheckAllowanceTokens,
     GetBalanceDeveloper,
     WithdrawTokens,
     GetDevelopers,
     TokensPerEra
 } from '../../../../services/developersPoolService';
-import DevelopersService from '../../../../services/developersService';
+import {GetDeveloper} from '../../../../services/developersService';
 
 import DeveloperItem from './DeveloperItem';
 import Loading from '../../../Loading';
@@ -26,7 +25,6 @@ import { UserPoolItem } from '../../../UserPoolItem';
 export default function DevelopersPool({wallet, setTab}){
     const {user} = useMainContext();
     const {t} = useTranslation();
-    const developerService = new DevelopersService(wallet);
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
     const [tokensPerEra, setTokensPerEra] = useState('0');
@@ -64,12 +62,11 @@ export default function DevelopersPool({wallet, setTab}){
         const eraInfo = await GetEra(parseFloat(currentEra));
         setEraInfo(eraInfo);
         if(user === '4'){
-            const developerInfo = await developerService.getDeveloper(wallet);
+            const developerInfo = await GetDeveloper(wallet);
             setDeveloperInfo(developerInfo);
-            const nextAprove = await CheckNextAprove(developerInfo.level.currentEra);
+            console.log(developerInfo)
+            const nextAprove = await CheckNextAprove(developerInfo.pool.currentEra);
             setNextAprove(nextAprove);
-            const tokensAllowed = await CheckAllowanceTokens(wallet);
-            setTokensAllowed(tokensAllowed);
             const balanceDeveloper = await GetBalanceDeveloper(wallet);
             setBalanceDeveloper(balanceDeveloper);
             setLoading(false);
@@ -153,11 +150,15 @@ export default function DevelopersPool({wallet, setTab}){
                             <p className="font-bold text-white">Seu Status</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">ERA Atual:</p>
-                                <p className="font-bold text-[#ff9900]">{developerInfo?.level?.currentEra}</p>
+                                <p className="font-bold text-[#ff9900]">{developerInfo?.pool?.currentEra}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white ">Próxima aprovação em:</p>
                                 <p className="font-bold text-[#ff9900]">{nextAprove}</p>
+                            </div>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white ">{t('Level')}:</p>
+                                <p className="font-bold text-[#ff9900]">{developerInfo?.pool?.level}</p>
                             </div>
                         </div>
 
@@ -230,15 +231,16 @@ export default function DevelopersPool({wallet, setTab}){
                                 <p className='font-bold text-white'>{t('Name')}</p>
                             </div>
                             <div className='flex justify-center w-[25%] px-1 py-3'>
-                                <p className='font-bold text-white'>{t('Balance')}</p>
+                                <p className='font-bold text-white'>{t('Level')}</p>
                             </div>
                             <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-t-2 border-l-2 border-[#3E9EF5]'>
-                                <p className='font-bold text-white'>{t('Score')}</p>
+                                <p className='font-bold text-white'>{t('Balance')}</p>
                             </div>
                         </div>
                         <div className='flex flex-col'>
                             {developersList.map((item, index) => (
                                 <UserPoolItem
+                                    key={item.id}
                                     data={item}
                                     position={index + 1}
                                 />
@@ -246,6 +248,10 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
                     </div>
             </div>
+
+            {loading && (
+                <Loading/>
+            )}
         </div>
     )
 }

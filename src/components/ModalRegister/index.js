@@ -24,6 +24,7 @@ export default function ModalRegister(){
     const {walletConnected, chooseModalRegister} = useContext(MainContext);
     const {walletAddress, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
+    const [loadingCalculateArea, setLoadingCalculateArea] = useState(false);
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
@@ -151,6 +152,9 @@ export default function ModalRegister(){
     } 
 
     function validateData(){
+        if(loading){
+            return;
+        }
         if(!name.trim()) {
             toast.error(`${t('Fill in the name field')}!`);
             return;
@@ -174,6 +178,18 @@ export default function ModalRegister(){
 
             if(!street.trim()){
                 toast.error(`${t('Fill in the street field')}!`);
+                return;
+            }
+            if(geoLocation === ''){
+                toast.error(`${t('Authorize location access permission')}!`);
+                return;
+            }
+            if(propertyGeolocation === ''){
+                toast.error(`${t('It is necessary to demarcate the area of ​​​​your property')}!`);
+                return;
+            }
+            if(areaProperty === 0){
+                toast.error(`${t('Invalid Area! Refresh page.')}!`);
                 return;
             }
 
@@ -232,7 +248,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -248,6 +263,7 @@ export default function ModalRegister(){
                     console.log(err);
                 }finally{
                     setLoading(false)
+                    setLoadingTransaction(false);
                 }
             })
             .catch(err => {
@@ -295,7 +311,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -310,6 +325,7 @@ export default function ModalRegister(){
                     console.log(err);
                 }finally{
                     setLoading(false)
+                    setLoadingTransaction(false);
                 }
             })
             .catch(err => {
@@ -358,7 +374,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -369,6 +384,7 @@ export default function ModalRegister(){
                 }catch(err){
                     console.log(err);
                 }finally{
+                    setLoadingTransaction(false);
                     setLoading(false)
                 }
             })
@@ -417,7 +433,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -428,6 +443,7 @@ export default function ModalRegister(){
                 }catch(err){
                     console.log(err);
                 }finally{
+                    setLoadingTransaction(false);
                     setLoading(false)
                 }
             })
@@ -476,7 +492,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -488,6 +503,7 @@ export default function ModalRegister(){
                     console.log(err);
                 }finally{
                     setLoading(false)
+                    setLoadingTransaction(false);
                 }
             })
             .catch(err => {
@@ -535,7 +551,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -547,6 +562,7 @@ export default function ModalRegister(){
                     console.log(err);
                 }finally{
                     setLoading(false)
+                    setLoadingTransaction(false);
                 }
             })
             .catch(err => {
@@ -594,7 +610,6 @@ export default function ModalRegister(){
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                setLoadingTransaction(false);
                 try{
                     setLoading(true);
                     api.post('/users', {
@@ -605,6 +620,7 @@ export default function ModalRegister(){
                 }catch(err){
                     console.log(err);
                 }finally{
+                    setLoadingTransaction(false);
                     setLoading(false)
                 }
             })
@@ -646,6 +662,7 @@ export default function ModalRegister(){
 
     async function calculateArea(coords){
         console.log(coords);
+        setLoading(true);
         let coordsUTM = [];
         for(var i = 0; i < coords.length; i++){
             let object = {}
@@ -674,6 +691,8 @@ export default function ModalRegister(){
         let D = areaX - areaY;
         let areaM2 = 0.5 * D;
         setAreaProperty(Math.abs(areaM2));
+        setLoading(false);
+        console.log(Math.abs(areaM2))
         if(Math.abs(areaM2) < 5000){
             toast.error(t('Your property must be at least 5,000m²'))
         }
@@ -719,11 +738,10 @@ export default function ModalRegister(){
                             <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
                             <option value="activist">{t('Activist')}</option>
-                            <option value="contributor">{t('Contributor')}</option>
+                            <option value="contributor">{t('Validator')}</option>
                             <option value="investor">{t('Investor')}</option>
                             <option value="developer">{t('Developer')}</option>
                             <option value="researcher">{t('Researcher')}</option>
-                            <option value="advisor">{t('Advisor')}</option>
                         </select>
                     </div>
                 )}
@@ -756,13 +774,13 @@ export default function ModalRegister(){
                 )}
 
                 {step === 3 && (
-                    <div className='w-full flex flex-col items-center'>
+                    <div className='w-full flex flex-col items-center p-2'>
                         <h1 className='text-center lg:text-lg text-md text-white'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1>
 
-                        <div className='lg:w-[450px] mt-3 lg:mt-10'>
+                        <div className='lg:w-[450px] w-full mt-3 lg:mt-10'>
                             <div className='flex flex-col'>
                                 <label className='font-bold text-white' >{t('Name')}</label>
                                 <input
@@ -859,7 +877,7 @@ export default function ModalRegister(){
 
                         {type === 'activist' && (
                             <>
-                                <div style={{display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15}}>
+                                <div className='flex flex-col lg:flex-row gap-3 mt-5'>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
                                         <label htmlFor="password" style={{fontWeight: 'bold', color: 'white'}}>{t('Password')}</label>
                                         <input
@@ -895,7 +913,7 @@ export default function ModalRegister(){
 
                 {step === 4 && (
                     <div className='modal-register__container-content mb-1'>
-                        <h1 className='font-bold lg:text-lg text-center text-white'>{t('Mark the center of your property, then circle the entire area')}.</h1>
+                        <h1 className='font-bold lg:text-lg text-center text-white'>{t('Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle')}.</h1>
                         
                         <div className='flex w-full'>
                             <Map

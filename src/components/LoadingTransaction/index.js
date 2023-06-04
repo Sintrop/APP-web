@@ -51,7 +51,7 @@ export function LoadingTransaction({loading, logTransaction}){
                             <p>{t('Click to view transaction details')}</p>
                             <a 
                                 target='_blank' 
-                                href={`https://goerli.etherscan.io/tx/${logTransaction.hash}`}
+                                href={`https://sepolia.etherscan.io/tx/${logTransaction.hash}`}
                                 className='max-w-[35ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
                             >
                                 {logTransaction.hash}

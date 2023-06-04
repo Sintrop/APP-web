@@ -24,10 +24,10 @@ export function ModalChooseTypeDelation(){
     }
 
     return(
-        <Dialog.Portal className='modal-choose-type-delation__portal'>
-            <Dialog.Overlay className='modal-choose-type-delation__overlay'/>
-            <Dialog.Content className='modal-choose-type-delation__content'>
-                <Dialog.Title className='modal-choose-type-delation__title'>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] h-[530px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
+                <Dialog.Title className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2 border-[#ff9900]'>
                     {t('Choose the type of denunciation')}
                 </Dialog.Title>
 

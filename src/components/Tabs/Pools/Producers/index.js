@@ -61,6 +61,7 @@ export default function ProducersPool({wallet, setTab}){
 
 
     async function getInfosPool(){
+        setLoading(true);
         const tokensEra = await GetTokensPerEra();
         setTokensPerEra(tokensEra);
         const eraContract = await GetCurrentContractEra();
@@ -78,7 +79,7 @@ export default function ProducersPool({wallet, setTab}){
             const nextAprove = await CheckNextAprove(producerInfo.pool.currentEra);
             setNextAprove(nextAprove);
         }
-        
+        setLoading(false)
     }
 
 
@@ -246,6 +247,7 @@ export default function ProducersPool({wallet, setTab}){
                         <div className='flex flex-col'>
                             {producersList.map((item, index) => (
                                 <UserPoolItem
+                                    key={item.id}
                                     data={item}
                                     position={index + 1}
                                 />

@@ -32,13 +32,13 @@ export function TopBarStatus({}){
                 {walletConnected === '' ? (
                     <>
                     <div className='flex w-full items-center gap-2 justify-center'>
-                        <p className='font-bold text-white'>You are good to conect!</p>
+                        <p className='font-bold text-white'>{t('You are good to conect')}!</p>
                         
                         <button
                             className='px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
                             onClick={() => handleSync()}
                         >
-                            SINCRONIZAR
+                            {t('SYNCHRONIZE')}
                         </button>
                     </div>
                     </>
@@ -46,13 +46,13 @@ export function TopBarStatus({}){
                     <>
                     {pathname === '/' ? (
                         <div className='flex w-full lg:w-[350px] items-center gap-2 justify-center'>
-                            <p className='font-bold text-white'>You are good to conect!</p>
+                            <p className='font-bold text-white'>{t('You are good to conect')}!</p>
                             
                             <button
                                 className='px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
                                 onClick={() => handleSync()}
                             >
-                                SINCRONIZAR
+                                {t('SYNCHRONIZE')}
                             </button>
                         </div>
                     ) : (
@@ -60,20 +60,20 @@ export function TopBarStatus({}){
                         
                         {user === '0' && (
                             <div className='flex w-full items-center gap-2 justify-center'>
-                                <p className='font-bold text-xs lg:text-lg text-white'>Your connected but not registered!</p>
+                                <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected but not registered')}!</p>
                             
                                 <button
                                     className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#0A4303]'
                                     onClick={chooseModalRegister}
                                 >
-                                    Click Here To Register
+                                    {t('Click Here To Register')}
                                 </button>
 
                                 <button
                                     className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#FF9900]'
                                     onClick={() => navigate('/')}
                                 >
-                                    Start Mission 1
+                                    {t('START MISSION 1')}
                                 </button>
                             </div>
                         )}
@@ -117,7 +117,7 @@ export function TopBarStatus({}){
                 </>
             ) : (
                 <div className='flex w-full items-center gap-2 justify-center'>
-                    <p className='font-bold text-xs lg:text-lg text-white'>Your connected network is unsupported. Please connect to Goerli Testnet!</p>
+                    <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected network is unsupported. Please connect to Sepolia Testnet')}!</p>
                     <a
                         href='https://github.com/Sintrop/SMR/wiki/Como-acessar-a-v3-do-Sistema'
                         target='_blank'

@@ -34,26 +34,35 @@ function Login(){
                                 className="w-[200px] h-[80px] object-contain"
                             />
                             <h1 className="text-[#BBFFB2] font-bold text-2xl">
-                                Sistema descentralizado de certificação de Agricultura Regenerativa
+                                {t('Decentralized Regenerative Agriculture certification system')}
                             </h1>
                         </div>
 
                         <div className="flex items-center gap-2 my-5 lg:my-0">
-                            <a>
+                            <a
+                                href="https://www.linkedin.com/company/sintrop-sustainability/"
+                                target="_blank"
+                            >
                                 <img
                                     src={require('../../assets/icon-linkedin.png')}
                                     className="w-[40px] h-[40px] object-contain"
                                 />
                             </a>
 
-                            <a>
+                            <a
+                                href="https://api.whatsapp.com/send/?phone=%2B5548988133635&text&type=phone_number&app_absent=0"
+                                target="_blank"
+                            >
                                 <img
                                     src={require('../../assets/icon-whats.png')}
                                     className="w-[40px] h-[40px] object-contain"
                                 />
                             </a>
 
-                            <a>
+                            <a
+                                href="https://www.instagram.com/sintrop.sustentabilidade/"
+                                target="_blank"
+                            >
                                 <img
                                     src={require('../../assets/icon-insta.png')}
                                     className="w-[40px] h-[40px] object-contain"
@@ -62,9 +71,9 @@ function Login(){
                         </div>
                     </div>
                     <div className='flex flex-col justify-center'>
-                        <h1 className='font-bold text-white text-3xl mb-3'>Bem vindo</h1>
-                        <p className="font-bold text-[#F4A022] text-xl">Nossa missão é regenerar o planeta!</p>
-                        <p className="text-white lg:w-[500px]">Ela não será nada fácil, porém é extremamente importante pois o futuro da humanidade depende de nós.</p>
+                        <h1 className='font-bold text-white text-3xl mb-3'>{t('Welcome')}</h1>
+                        <p className="font-bold text-[#F4A022] text-xl">{t('Our mission is to regenerate the planet')}!</p>
+                        <p className="text-white lg:w-[500px]">{t('It will not be easy at all, but it is extremely important because the future of humanity depends on us')}.</p>
 
                         <div className="lg:w-[500px] flex justify-center items-center">
                             <img
@@ -73,14 +82,14 @@ function Login(){
                             />
                         </div>
 
-                        <p className="text-white lg:w-[500px]">Será preciso de muita, mas muita gente nessa luta. Por isso estamos buscando pessoas do bem para fazerem parte do Exército da Regeneração. Para se juntar nessa luta, basta concluir a missão 1</p>
+                        <p className="text-white lg:w-[500px]">{t('Será preciso de muita, mas muita gente nessa luta. Por isso estamos buscando pessoas do bem para fazerem parte do Exército da Regeneração. Para se juntar nessa luta, basta concluir a missão 1')}</p>
 
                         <div className="lg:w-[500px] flex flex-col lg:flex-row justify-center">
                             <button
                                 className="lg:w-[300px] h-10 bg-[#A75722] rounded-xl font-bold text-white mt-6"
                                 onClick={chooseModalTutorial}
                             >
-                                COMEÇAR MISSÃO 1
+                                {t('START MISSION 1')}
                             </button>
                         </div>
                     </div>

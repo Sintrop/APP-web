@@ -3,10 +3,10 @@ import ActivistContractJson from  '../data/contracts/abis/ActivistContract.json'
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const ActivistContractAddress = ActivistContractJson.networks[5777].address;
+const ActivistContractAddress = '0xa289fabc5764f91ac56575f7f048038faa3d059d';
 
 //Initializing contract
-const ActivistContract = new web3.eth.Contract(ActivistContractJson.abi, ActivistContractAddress);
+const ActivistContract = new web3.eth.Contract(ActivistContractJson, ActivistContractAddress);
 
 class ActivistService {
     constructor(wallet) {
@@ -29,6 +29,11 @@ class ActivistService {
 export const GetActivist = async (wallet) => {
     const activist = await ActivistContract.methods.getActivist(wallet).call();
     return activist
+}
+
+export const GetActivists = async () => {
+    const activists = await ActivistContract.methods.getActivists().call()
+    return activists;
 }
 
 export default ActivistService; 

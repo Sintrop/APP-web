@@ -79,8 +79,8 @@ export function RankingItem({data, position}){
                     {data?.userType === '4' && (
                         <>
                             <p className='text-xs text-center text-white max-w-[30ch] overflow-hidden text-ellipsis'>{data?.developerWallet}</p> 
-                            <p className='font-bold text-center text-sm text-white mt-3'>{t('Level')}: {data?.level?.level}</p>
-                            <p className='font-bold text-center text-sm text-white'>{t('Current')} Era: {data?.level?.currentEra}</p>
+                            <p className='font-bold text-center text-sm text-white mt-3'>{t('Level')}: {data?.pool?.level}</p>
+                            <p className='font-bold text-center text-sm text-white'>{t('Current')} Era: {data?.pool?.currentEra}</p>
                             <p className='font-bold text-center text-sm text-white'>.</p> 
                         </>
                     )}

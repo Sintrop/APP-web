@@ -45,7 +45,6 @@ export function InspectionItem({data, type, reload}){
     }, [data]);
     
     function generatePdf(inspection, indiceReport, resultCategories, resultIndices, resultBiodiversity){
-        console.log(resultCategories);
         const categoriesDegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '1');
         const categoriesRegeneration = resultCategories.filter(item => JSON.parse(item.categoryDetails).category === '2');
         const soloRegenerado = resultCategories.filter(item => item.categoryId === '13');
@@ -54,6 +53,7 @@ export function InspectionItem({data, type, reload}){
         const area3 = resultCategories.filter(item => item.categoryId === '16');
         const area4 = resultCategories.filter(item => item.categoryId === '17');
         const area5 = resultCategories.filter(item => item.categoryId === '18');
+        const bioArvores = resultCategories.filter(item => item.categoryId === '23');
         
         if(indiceReport === 'carbon'){
             return {
@@ -115,14 +115,14 @@ export function InspectionItem({data, type, reload}){
                         }
                         
                     })}`,
-                    `¹Cobertura de solo: ${(((Number(area1[0].value) + Number(area2[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue} kg Co²`,
+                    `¹Biomassa de solo: ${(((Number(area1[0].value) + Number(area2[0].value) + Number(area3[0].value) + Number(area4[0].value) + Number(area5[0].value)) / 5) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue} kg Co²`,
                     
                     {
                         text: 'Fórmulas do cálculo:',
                         style: 'titleFormulas'
                     },
                     `¹ - (((Análise de solo(Área 1) + Análise de solo(Área 2) + Análise de solo(Área 3) + Análise de solo(Área 4) + Análise de solo(Área 5)) / 5) x Solo regenerado) x Impacto de carbono`,
-                    `(${area1[0].value} + ${area2[0].value} + ${area3[0].value} + ${area4[0].value} + ${area5[0].value} / 5) x ${soloRegenerado[0].value} x ${JSON.parse(area1[0].categoryDetails).carbonValue} = ${(((Number(area1[0].value) + Number(area2[0].value)) / 2) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue}`
+                    `(${area1[0].value} + ${area2[0].value} + ${area3[0].value} + ${area4[0].value} + ${area5[0].value} / 5) x ${soloRegenerado[0].value} x ${JSON.parse(area1[0].categoryDetails).carbonValue} = ${(((Number(area1[0].value) + Number(area2[0].value) + Number(area3[0].value) + Number(area4[0].value) + Number(area5[0].value)) / 5) * Number(soloRegenerado[0].value)) * JSON.parse(area1[0].categoryDetails).carbonValue}`
 
                 ],
                 styles: {
@@ -424,7 +424,16 @@ export function InspectionItem({data, type, reload}){
                     })}`,
     
                     '\n2. Insumos de Regeneração:',
-                    `\nUnidades de vida encontradas na propriedade: ${resultBiodiversity.length} uni/vida`
+                    `\nUnidades de vida encontradas na propriedade: ${resultBiodiversity.length} uni/vida`,
+                    `\nBiodiversidade de árvores: ${bioArvores[0].value} uni/vida`,
+                    `¹Biodiversidade de insetos: ${(((Number(area1[0].value2) + Number(area2[0].value2) + Number(area3[0].value2) + Number(area4[0].value2) + Number(area5[0].value2)) / 5) * Number(soloRegenerado[0].value))}`,
+                    
+                    {
+                        text: 'Fórmulas do cálculo:',
+                        style: 'titleFormulas'
+                    },
+                    `¹ - (((Insetos vistos a olho nu(Área 1) + Insetos vistos a olho nu(Área 2) + Insetos vistos a olho nu(Área 3) + Insetos vistos a olho nu(Área 4) + Insetos vistos a olho nu(Área 5)) / 5) x Solo regenerado)`,
+                    `(${area1[0].value2} + ${area2[0].value2} + ${area3[0].value2} + ${area4[0].value2} + ${area5[0].value2} / 5) x ${soloRegenerado[0].value} = ${(((Number(area1[0].value2) + Number(area2[0].value2) + Number(area3[0].value2) + Number(area4[0].value2) + Number(area5[0].value2)) / 5) * Number(soloRegenerado[0].value))}`
                 ],
                 styles: {
                     header: {
@@ -617,7 +626,7 @@ export function InspectionItem({data, type, reload}){
             setStatus(status)
         }
         if(status === '1'){
-            if(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) < Number(blockNumber)){
+            if(Number(data.acceptedAt) + Number(6650) < Number(blockNumber)){
                 setStatus('3')
             }else{
                 setStatus('1')
@@ -632,17 +641,88 @@ export function InspectionItem({data, type, reload}){
         let pdfAguaHash = '';
         let pdfBioHash = '';
 
+        let totalCarbon = 0;
+        let totalWater = 0;
+        let totalBio = 0;
+        let totalSoil = 0;
+
+        let degenerationCarbon = 0;
+        let regenerationCarbon = 0;
+        let degenerationWater = 0;
+        let regenerationWater = 0;
+        let degenerationBio = 0;
+        let regenerationBio = 0;
+        let degenerationSoil = 0;
+        let regenerationSoil = 0;
+
         const response = await api.get(`/inspection/${data.id}`)
         console.log(response.data)
         if(response.data.inspection.status === 1){
             setLoading(false);
-            alert('Realize a inspeção no app do ativista para smartphone!')
+            toast.error('Realize a inspeção no app do ativista para smartphone!')
             return;
         }
-        const resultIndices = JSON.parse(response?.data?.inspection?.resultIdices);
+
         const resultCategories = JSON.parse(response?.data?.inspection?.resultCategories);
         const inspection = response?.data?.inspection
         const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
+
+        const soloRegenerado = resultCategories.filter(item => item.categoryId === '13');
+        const analiseSolo1 = resultCategories.filter(item => item.categoryId === '14');
+        const analiseSolo2 = resultCategories.filter(item => item.categoryId === '15');
+        const analiseSolo3 = resultCategories.filter(item => item.categoryId === '16');
+        const analiseSolo4 = resultCategories.filter(item => item.categoryId === '17');
+        const analiseSolo5 = resultCategories.filter(item => item.categoryId === '18');
+        const bioArvores = resultCategories.filter(item => item.categoryId === '23');
+
+        const calculoBiomassaSolo = ((Number(analiseSolo1[0]?.value) + Number(analiseSolo2[0]?.value) + Number(analiseSolo3[0]?.value) + Number(analiseSolo4[0]?.value) + Number(analiseSolo5[0]?.value)) / 5) * Number(soloRegenerado[0].value);
+        const resultIndiceBiomassaSolo = calculoBiomassaSolo * JSON.parse(analiseSolo1[0].categoryDetails).carbonValue;
+        regenerationCarbon += resultIndiceBiomassaSolo;
+
+        const calculoBiodiversidadeInsetos = ((Number(analiseSolo1[0]?.value2) + Number(analiseSolo2[0]?.value2) + Number(analiseSolo3[0]?.value2) + Number(analiseSolo4[0]?.value2) + Number(analiseSolo5[0]?.value2)) / 5) * Number(soloRegenerado[0].value);
+        regenerationBio += calculoBiodiversidadeInsetos;
+        regenerationBio += Number(resultBiodiversity.length);
+        regenerationBio += Number(bioArvores[0].value);
+
+        regenerationSoil += Number(soloRegenerado[0].value);
+
+        for(var i = 0; i < resultCategories.length; i++) {
+            const categoryDetails = JSON.parse(resultCategories[i].categoryDetails);
+            if(categoryDetails.category === '1'){
+                degenerationCarbon += Number(resultCategories[i].value) * Number(categoryDetails.carbonValue)
+                degenerationWater += Number(resultCategories[i].value) * Number(categoryDetails.aguaValue)
+                degenerationBio += Number(resultCategories[i].value) * Number(categoryDetails.bioValue)
+                degenerationSoil += Number(resultCategories[i].value) * Number(categoryDetails.soloValue)
+            }
+
+            if(categoryDetails.category === '2' && resultCategories[i].categoryId !== '23'){
+                regenerationCarbon += Number(resultCategories[i].value) * Number(categoryDetails.carbonValue)
+                regenerationWater += Number(resultCategories[i].value) * Number(categoryDetails.aguaValue)
+            }
+        }
+
+        totalCarbon = degenerationCarbon + regenerationCarbon;
+        totalWater = degenerationWater + regenerationWater;
+        totalBio = degenerationBio + regenerationBio;
+        totalSoil = degenerationSoil + regenerationSoil;
+
+        const resultIndices = {
+            carbon: totalCarbon,
+            agua: totalWater,
+            solo: totalSoil,
+            bio: totalBio
+        }
+        console.log(resultIndices)
+
+        try{
+            await api.put(`/inspections/${data.id}/update-result-indices`, {
+                resultIndices: JSON.stringify(resultIndices)
+            })
+            console.log('ok')
+        }catch(err){
+            console.log(err)
+            return;
+        }
 
         const pdfCarbon = await pdfMake.createPdf(generatePdf(inspection, 'carbon', resultCategories, resultIndices, resultBiodiversity));
         const pdfSolo = await pdfMake.createPdf(generatePdf(inspection, 'solo', resultCategories, resultIndices, resultBiodiversity));
@@ -708,7 +788,6 @@ export function InspectionItem({data, type, reload}){
             report: data?.pdfCarbonHash,
             indicator: carbonIndicator
         }
-        isas.push(carbon);
 
         const bio = {
             categoryId: 2,
@@ -716,7 +795,6 @@ export function InspectionItem({data, type, reload}){
             report: data?.pdfBioHash,
             indicator: bioIndicator
         }
-        isas.push(bio);
 
         const water = {
             categoryId: 3,
@@ -724,7 +802,6 @@ export function InspectionItem({data, type, reload}){
             report: data?.pdfAguaHash,
             indicator: aguaIndicator
         }
-        isas.push(water);
 
         const solo = {
             categoryId: 4,
@@ -732,16 +809,26 @@ export function InspectionItem({data, type, reload}){
             report: data?.pdfSoloHash,
             indicator: soloIndicator
         }
-        isas.push(solo);
+        
         setLoading(false);
+        const arrayIsas = [
+            {categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, report: carbon.report, indicator: carbon.indicator},
+            {categoryId: bio.categoryId, isaIndex: bio.isaIndex, report: bio.report, indicator: bio.indicator},
+            {categoryId: solo.categoryId, isaIndex: solo.isaIndex, report: solo.report, indicator: solo.indicator},
+            {categoryId: water.categoryId, isaIndex: water.isaIndex, report: water.report, indicator: water.indicator}
+        ];
 
-        finishInspectionBlockchain(isas, resultIndices)
+        finishInspectionBlockchain(arrayIsas, resultIndices, carbon, bio, solo, water)
     }
-
-    async function finishInspectionBlockchain(isas, resultIndices){
+    
+    async function finishInspectionBlockchain(isas, resultIndices, carbon, bio, solo, water){
         setModalTransaction(true);
         setLoadingTransaction(true);
-        RealizeInspection(data.id, isas, walletAddress)
+        RealizeInspection(
+            data.id, 
+            isas, 
+            walletAddress
+        )
         .then(res => {
             setLogTransaction({
                 type: res.type,
@@ -869,7 +956,7 @@ export function InspectionItem({data, type, reload}){
             if(Math.abs(water) < 100 && Math.abs(water) >= 10){
                 result = 5
             }
-            if(Math.abs(water) > 100 ){
+            if(Math.abs(water) > 100){
                 result = 6
             }
         }
@@ -1035,13 +1122,13 @@ export function InspectionItem({data, type, reload}){
                             <p>{t('Not accepted')}</p>
                         )}
                         {status === '1' && (
-                            <p>{t('Expires in')} {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
+                            <p>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
                         )}
                         {status === '2' && (
                             <p>{t('Inspected')}</p>
                         )}
                         {status === '3' && (
-                            <p>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                            <p>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
                         )}
                     </div>
                 )}
@@ -1049,26 +1136,26 @@ export function InspectionItem({data, type, reload}){
                 {type === 'manage' && (
                     <div className='flex items-center h-full w-[350px] bg-[#0A4303]'>
                         {status === '0' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#F4A022]'>
-                                <p className='text-xs text-white font-bold'>{t('OPEN')}</p>
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
+                                <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
                             </div>
                         )}
 
                         {status === '1' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#3E9EF5]'>
-                                <p className='text-xs text-white font-bold'>{t('ACCEPTED')}</p>
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
+                                <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
                             </div>
                         )}
 
                         {status === '2' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#2AC230]'>
-                                <p className='text-xs text-white font-bold'>{t('INSPECTED')}</p>
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
+                                <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
                             </div>
                         )}
 
                         {status === '3' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg bg-[#C52A15]'>
-                                <p className='text-xs text-white font-bold'>{t('EXPIRED')}</p>
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#C52A15]'>
+                                <p className='text-xs text-[#C52A15] font-bold'>{t('EXPIRED')}</p>
                             </div>
                         )}
                     </div>
@@ -1140,10 +1227,19 @@ export function InspectionItem({data, type, reload}){
             {moreInfo && (
                 <div className='w-full bg-[#0a4303] flex flex-col p-2 border-b-2 border-green-950'>
                     <p className='font-bold text-white'>{t('Address')}:</p>
-                    <p className='text-white'>Cidade/Estado, complemento</p>
+                    <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
 
                     <p className='font-bold text-white mt-3'>{t('Accepted By')}:</p>
-                    <p className='text-white'>{data.acceptedBy}</p>
+                    {status === '0' ? (
+                        <p className='text-white'>Não aceita</p>
+                    ) : (
+                        <p 
+                            className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                            onClick={() => handleClickUser('2', data.acceptedBy)}
+                        >
+                            {data.acceptedBy}
+                        </p>
+                    )}
 
                     <p className='font-bold text-white mt-3'>{t('Created At')}:</p>
                     <p className='text-white'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
@@ -1151,13 +1247,27 @@ export function InspectionItem({data, type, reload}){
                     {type === 'manage' && (
                         <>
                         <p className='font-bold text-white mt-3'>{t('Expires In')}:</p>
-                        <p className='text-white'>0 Blocks to expire</p>
+                        {status === '0' && (
+                            <p className='text-white'>{t('Not accepted')}</p>
+                        )}
+                        {status === '1' && (
+                            <p className='text-white'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
+                        )}
+                        {status === '2' && (
+                            <p className='text-white'>{t('Inspected')}</p>
+                        )}
+                        {status === '3' && (
+                            <p className='text-white'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
+                        )}
 
                         <div className='w-full mt-3'>
                             <button
                                 onClick={() => {
                                     if(data.status === '0'){
                                         handleAccept()
+                                    }
+                                    if(data.status === '1'){
+                                        handleRealize()
                                     }
                                 }}
                                 className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
@@ -1209,7 +1319,9 @@ export function InspectionItem({data, type, reload}){
                     <Loading/>
                 )}
 
-            <ToastContainer/>
+                <ToastContainer
+                    position='top-center'
+                />
         </div>
     )
 }

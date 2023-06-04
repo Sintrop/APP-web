@@ -3,10 +3,10 @@ import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const producerContractAddress = ProducerContractJson.networks[5777].address;
+const producerContractAddress = '0x693161f1e90270ba156179128f49c285c89447e7';
 
 //initializing contract
-const ProducerContract = new web3.eth.Contract(ProducerContractJson.abi, producerContractAddress);
+const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
 
 export const GetProducer = async (wallet) => {
     let dataProducer = []
@@ -47,6 +47,11 @@ export const GetTotalScoreProducers = async () => {
         score = res;
     })
     return score;
+}
+
+export const GetProducers = async () => {
+    const producers = await ProducerContract.methods.getProducers().call()
+    return producers;
 }
 
 class ProducerService {

@@ -38,7 +38,7 @@ export default function AccountInvestor(){
     async function getReceipts(){
         //add try catch in future
         let receiptsArray = [];
-        const receipts = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&contractaddress=0x3b25db3d9853ef80f60079ab38e5739cd1543b34&address=0x49b85e2d9f48252bf32ba35221b361da77aac683&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
+        const receipts = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=tokentx&contractaddress=0xf8033bbfe9c645f52d170ddd733274371e75369f&address=${walletSelected}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=ACCKTAAXZP7GYX6993CMR7BHQYKI7TJA8Q`);
         if(receipts.data.status === '1'){
             receiptsArray = receipts.data.result;
         }
@@ -88,8 +88,8 @@ export default function AccountInvestor(){
                                     />
                                 </div>
                                 <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">25</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">ton</p>
+                                    <p className="font-bold text-[#0a4303] text-[50px]">0</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">kg</p>
                                 </div>
                             </div>
 
@@ -102,7 +102,7 @@ export default function AccountInvestor(){
                                     />
                                 </div>
                                 <div className="flex lg:w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">50</p>
+                                    <p className="font-bold text-[#0a4303] text-[50px]">0</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">m²</p>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@ export default function AccountInvestor(){
                                     />
                                 </div>
                                 <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">35</p>
+                                    <p className="font-bold text-[#0a4303] text-[50px]">0</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">uni</p>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ export default function AccountInvestor(){
                                     />
                                 </div>
                                 <div className="flex w-[70%] h-full items-center justify-center">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">62</p>
+                                    <p className="font-bold text-[#0a4303] text-[50px]">0</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">m³</p>
                                 </div>
                             </div>

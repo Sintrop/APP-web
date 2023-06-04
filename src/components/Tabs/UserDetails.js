@@ -60,7 +60,8 @@ export function UserDetails({setTab}){
         }
         if(typeUser === '2'){
             const response = await GetActivist(walletSelected);
-            setUserData(response)
+            setUserData(response);
+            getInspections();
         }
         if(typeUser === '3'){
             getResearches();
@@ -104,8 +105,16 @@ export function UserDetails({setTab}){
 
     async function getInspections(){
         const response = await GetInspections();
-        const inspectionsFiltered = response.filter(item => item.createdBy === walletSelected)
-        setInspections(inspectionsFiltered);
+
+        if(typeUser === '1'){
+            const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
+            const filterStatus = filterInspections.filter(item => item.status === '2');
+            setInspections(filterStatus);
+        }else{
+            const filterInspections = response.filter(item => String(item.acceptedBy).toUpperCase() === walletSelected.toUpperCase())
+            const filterStatus = filterInspections.filter(item => item.status === '2');
+            setInspections(filterStatus);
+        }
     }
 
     async function getResearches(){
@@ -144,7 +153,7 @@ export function UserDetails({setTab}){
                         <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
                             <div className='flex w-full justify-center'>
                             <LoadScript
-                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
                                 libraries={['drawing']}
                             >
                                 <GoogleMap
@@ -166,12 +175,20 @@ export function UserDetails({setTab}){
                 
     
                 <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
-                    {inspections.map(item => (
-                        <InspectionItemResult
-                            key={item.id}
-                            data={item}
-                        />
-                    ))}
+                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeções recebidas</p>
+
+                    {inspections.length === 0 ? (
+                        <p className="text-white font-bold text-lg">Nenhuma inspeção recebida</p>
+                    ) : (
+                        <>
+                            {inspections.map(item => (
+                                <InspectionItemResult
+                                    key={item.id}
+                                    data={item}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
     
                 {loading && (
@@ -201,13 +218,21 @@ export function UserDetails({setTab}){
                     </div>
                 </div>
     
-                <div className="flex flex-col lg:mt-10 mt-5">
-                    {inspections.map(item => (
-                        <InspectionItemResult
-                            key={item.id}
-                            data={item}
-                        />
-                    ))}
+                <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
+                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeções realizadas</p>
+
+                    {inspections.length === 0 ? (
+                        <p className="text-white font-bold text-lg">Nenhuma inspeção realizada</p>
+                    ) : (
+                        <>
+                            {inspections.map(item => (
+                                <InspectionItemResult
+                                    key={item.id}
+                                    data={item}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
     
                 {loading && (
@@ -243,7 +268,7 @@ export function UserDetails({setTab}){
                         {typeUser === '4' && t('Developer Level')}
                         : <span className="text-white">
                             {typeUser === '3' && userData?.publishedWorks}
-                            {typeUser === '4' && userData?.level?.level}
+                            {typeUser === '4' && userData?.pool?.level}
                         </span>
                     </p>
                 </div>

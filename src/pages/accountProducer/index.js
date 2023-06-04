@@ -116,7 +116,7 @@ export default function AccountProducer(){
                 <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
                     <div className='flex w-full justify-center'>
                     <LoadScript
-                        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                        googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
                         libraries={['drawing']}
                     >
                         <GoogleMap

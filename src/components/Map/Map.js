@@ -14,7 +14,7 @@ const containerStyle = {
 function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
     return(
         <LoadScript
-            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+            googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
             libraries={['drawing']}
         >
             <GoogleMap
@@ -38,7 +38,7 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                             onPolylineComplete={(e) => {
                                 setPolyline(e.latLngs.g[0].g)
                                 //setPolyline(e.latLngs.h[0].h) 
-                                console.log(e.latLngs.g[0].g)
+                                //console.log(e.latLngs.g[0].g)
                             }}
                         />
                     )}

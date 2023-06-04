@@ -35,13 +35,13 @@ export function ResearchItem({data, myAccount}){
     }
 
     return(
-        <div className="flex flex-col gap-3 bg-[#0A4303] border-2 border-[#3E9EF5] rounded-md p-3 mb-5 lg:w-[1000px]">
+        <div className="flex flex-col gap-3 bg-[#0A4303] rounded-md p-3 mb-5 lg:w-[1000px]">
             {!myAccount && (
                 <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start">
                     <div>
                         <img 
                             src={`https://ipfs.io/ipfs/${researcherData?.proofPhoto}`}
-                            className='w-[150px] h-[150px] rounded-full border-4 border-[#3e9ef5]'
+                            className='w-[150px] h-[150px] rounded-full border-4 object-cover'
                         />
                     </div>
 

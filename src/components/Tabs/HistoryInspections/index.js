@@ -86,7 +86,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col h-[65vh] overflow-auto'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}

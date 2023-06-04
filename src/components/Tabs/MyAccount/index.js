@@ -95,11 +95,18 @@ export default function MyAccount({wallet, userType, setTab}){
         }
     }
 
-    async function getInspections(){
+    async function getInspections(typeUser){
         const response = await GetInspections();
-        const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
-        const filterStatus = filterInspections.filter(item => item.status === '2');
-        setInspections(filterStatus);
+
+        if(typeUser === '1'){
+            const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
+            const filterStatus = filterInspections.filter(item => item.status === '2');
+            setInspections(filterStatus);
+        }else{
+            const filterInspections = response.filter(item => String(item.acceptedBy).toUpperCase() === walletAddress.toUpperCase())
+            const filterStatus = filterInspections.filter(item => item.status === '2');
+            setInspections(filterStatus);
+        }
     }
 
     async function getResearches(){
@@ -116,12 +123,12 @@ export default function MyAccount({wallet, userType, setTab}){
             //getBase64(response)
             setPosition(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
-            console.log(response)
-            getInspections();
+            getInspections(typeUser);
         }
         if(typeUser === '2'){
             const response = await GetActivist(walletAddress);
             setUserData(response)
+            getInspections(typeUser);
         }
         if(typeUser === '3'){
             getResearches();
@@ -215,7 +222,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                     requestInspection()
                                 }
                                 if(Number(lastResquested) !== 0){
-                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
+                                    if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
                                         requestInspection()
                                     }
                                 }
@@ -231,7 +238,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                     `${t('Request New Inspection')}`
                                 ) : (
                                     <>
-                                        {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                        {(Number(lastResquested) + 33230) - Number(blockNumber) < 0 ? (
                                             `${t('Request New Inspection')}`
                                         ) : (
                                             <>
@@ -242,7 +249,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                                         onMouseEnter={() => setBtnRequestHover(true)}
                                                         onMouseOut={() => setBtnRequestHover(false)}
                                                     />
-                                                    {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
+                                                    {t('Wait')} {(Number(lastResquested) + 33230) - Number(blockNumber)} {t('blocks to request')}
                                                 </>
                                             ) : `${t('Request New Inspection')}`}
                                             </>
@@ -297,7 +304,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                     </div>
                                 ) : (
                                     <>
-                                        {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                        {(Number(userData?.lastRequestAt) + 33230) - Number(blockNumber) < 0 ? (
                                             <div style={{
                                                     display: 'flex', 
                                                     flexDirection: 'row', 
@@ -319,7 +326,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                                 }}
                                             >
                                                 <FaLock size={15} style={{marginRight: 5}}/>
-                                                {t('Wait')} {(Number(userData?.lastRequestAt) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t("blocks to request")}
+                                                {t('Wait')} {(Number(userData?.lastRequestAt) + 33230) - Number(blockNumber)} {t("blocks to request")}
                                             </div>
                                         )}
                                     </>
@@ -338,7 +345,7 @@ export default function MyAccount({wallet, userType, setTab}){
                         <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
                             <div className='flex w-full justify-center'>
                             <LoadScript
-                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
                                 libraries={['drawing']}
                             >
                                 <GoogleMap
@@ -423,7 +430,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                 </div>
                             ) : (
                                 <>
-                                {(Number(userData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber) < 0 ? (
+                                {(Number(userData?.lastAcceptedAt) + 6650) - Number(blockNumber) < 0 ? (
                                     <div style={{
                                             display: 'flex', 
                                             flexDirection: 'row', 
@@ -445,7 +452,7 @@ export default function MyAccount({wallet, userType, setTab}){
                                         }}
                                     >
                                         <FaLock size={15} style={{marginRight: 5}}/>
-                                        {t('Wait')} {(Number(userData?.lastAcceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} {t('blocks to accept')}.
+                                        {t('Wait')} {(Number(userData?.lastAcceptedAt) + 6650) - Number(blockNumber)} {t('blocks to accept')}.
                                     </div>
                                 )}
                                 </>
@@ -455,13 +462,21 @@ export default function MyAccount({wallet, userType, setTab}){
                     </div>
                 </div>
     
-                <div className="flex flex-col lg:mt-10 mt-5">
-                    {inspections.map(item => (
-                        <InspectionItemResult
-                            key={item.id}
-                            data={item}
-                        />
-                    ))}
+                <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
+                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeções realizadas</p>
+
+                    {inspections.length === 0 ? (
+                        <p className="text-white font-bold text-lg">Nenhuma inspeção realizada</p>
+                    ) : (
+                        <>
+                            {inspections.map(item => (
+                                <InspectionItemResult
+                                    key={item.id}
+                                    data={item}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
     
                 {loading && (
@@ -497,7 +512,7 @@ export default function MyAccount({wallet, userType, setTab}){
                         {user === '4' && t('Developer Level')}
                         : <span className="text-white">
                             {user === '3' && userData?.publishedWorks}
-                            {user === '4' && userData?.level?.level}
+                            {user === '4' && userData?.pool?.level}
                         </span>
                     </p>
                 </div>

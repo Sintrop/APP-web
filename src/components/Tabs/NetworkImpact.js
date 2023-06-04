@@ -2,13 +2,19 @@ import React, {useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { useParams } from 'react-router';
-import {get} from '../../config/infura';
+import {GetProducers} from '../../services/producerService';
+import {GetActivists} from '../../services/activistService';
+import {GetResearchers} from '../../services/researchersService';
+import Loading from '../Loading';
 
 export function NetworkImpact({setTab}){
     const [impact, setImpact] = useState({});
-    const [usersCount, setUsersCount] = useState({});
     const {t} = useTranslation();
     const {tabActive} = useParams();
+    const [producersCount, setProducersCount] = useState(0);
+    const [activistsCount, setActivistsCount] = useState(0);
+    const [researchersCount, setResearchersCount] = useState(0);
+    const [loading, setLoading] = useState(false);
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -16,16 +22,22 @@ export function NetworkImpact({setTab}){
 
     useEffect(() => {
         getImpact();
-        
     }, []);
 
     async function getImpact(){
+        setLoading(true);
         const response = await api.get('network-impact')
         setImpact(response.data?.impact[0]);
-        const users = await api.get('users_count')
-        setUsersCount(users.data)
-        const res = await get('QmYo8zPzDPwo513QrBC563CpURki3WGLpFjvkmZ9W8dnCw');
-        console.log(res);
+        
+        const producers = await GetProducers();
+        setProducersCount(producers.length);
+
+        const activists = await GetActivists();
+        setActivistsCount(activists.length);
+
+        const researchers = await GetResearchers();
+        setResearchersCount(researchers.length);
+        setLoading(false);
     }
 
     return(
@@ -74,7 +86,7 @@ export function NetworkImpact({setTab}){
                                             className='w-[40px] h-[40px] object-contain mt-[-8px]'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{impact?.carbon} <span className='font-bold text-sm'>Kg</span></p>
+                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{(Number(impact?.carbon) / 1000).toFixed(0)} <span className='font-bold text-sm'>t/era</span></p>
                                 </div>
 
                                 <div className="flex items-center gap-2 mt-[-8px]">
@@ -86,7 +98,7 @@ export function NetworkImpact({setTab}){
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impact?.solo} <span className='font-bold text-sm'>m²</span></p>
+                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impact?.solo} <span className='font-bold text-sm'>m²/era</span></p>
                                 </div>
                             
                                 <div className="flex items-center gap-2">
@@ -98,7 +110,7 @@ export function NetworkImpact({setTab}){
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impact?.bio} <span className='font-bold text-sm'>uni</span></p>
+                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impact?.bio} <span className='font-bold text-sm'>uni/era</span></p>
                                 </div>
 
                                 <div className="flex items-center gap-2 ">
@@ -110,7 +122,7 @@ export function NetworkImpact({setTab}){
                                             className='w-[30px] h-[30px] object-contain'
                                         />
                                     </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impact?.agua} <span className='font-bold text-sm'>m³</span></p>
+                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impact?.agua} <span className='font-bold text-sm'>m³/era</span></p>
                                 </div>
                             
                         </div>
@@ -173,11 +185,15 @@ export function NetworkImpact({setTab}){
                     </div>
 
                     <div className='flex flex-col lg:flex-row items-center w-full justify-between lg:px-20 mt-5'>
-                        <p className='text-white font-bold'>{t("PRODUTORES")}: <span className='text-blue-500'>{usersCount?.producersCount}</span></p>
-                        <p className='text-white font-bold'>{t("ATIVISTAS")}: <span className='text-blue-500'>{usersCount?.activistsCount}</span></p>
-                        <p className='text-white font-bold'>{t("PESQUISADORES")}: <span className='text-blue-500'>{usersCount?.researchersCount}</span></p>
+                        <p className='text-white font-bold'>{t("PRODUTORES")}: <span className='text-blue-500'>{producersCount}</span></p>
+                        <p className='text-white font-bold'>{t("ATIVISTAS")}: <span className='text-blue-500'>{activistsCount}</span></p>
+                        <p className='text-white font-bold'>{t("PESQUISADORES")}: <span className='text-blue-500'>{researchersCount}</span></p>
                     </div>
                 </section>
+
+                {loading && (
+                    <Loading/>
+                )}
         </div>
     )
 }

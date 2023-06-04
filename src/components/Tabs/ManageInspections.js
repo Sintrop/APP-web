@@ -28,6 +28,7 @@ export default function ManageInpections({walletAddress, setTab}){
     const [logTransaction, setLogTransaction] = useState({});
     const [lastResquested, setLastRequested] = useState('');
     const [btnRequestHover, setBtnRequestHover] = useState(false);
+    const [userData, setUserData] = useState({});
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -42,6 +43,7 @@ export default function ManageInpections({walletAddress, setTab}){
 
     async function isProducer() {
         const producer = await GetProducer(walletConnected);
+        setUserData(producer);
         setLastRequested(producer.lastRequestAt);
     }
 
@@ -51,7 +53,6 @@ export default function ManageInpections({walletAddress, setTab}){
         const inspections = res.filter(item => item.status !== '2')
         setInpections(inspections);
         setLoading(false);
-        console.log(res);
     }
 
     async function requestInspection(){
@@ -106,11 +107,11 @@ export default function ManageInpections({walletAddress, setTab}){
                             
                             className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
                             onClick={() => {
-                                if(Number(lastResquested) === 0){
-                                    requestInspection()
+                                if(Number(userData?.totalInspections) < 3){
+                                    requestInspection();
                                 }
                                 if(Number(lastResquested) !== 0){
-                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
+                                    if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
                                         requestInspection()
                                     }
                                 }
@@ -122,20 +123,26 @@ export default function ManageInpections({walletAddress, setTab}){
                                 `${t('Request New Inspection')}`
                             ) : (
                                 <>
-                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                {Number(userData?.totalInspections) < 3 ? (
                                     `${t('Request New Inspection')}`
                                 ) : (
                                     <>
-                                    {btnRequestHover ? (
+                                    {(Number(lastResquested) + 33230) - Number(blockNumber) < 0 ? (
+                                        `${t('Request New Inspection')}`
+                                    ) : (
                                         <>
-                                            <FaLock 
-                                                size={25}
-                                                onMouseEnter={() => setBtnRequestHover(true)}
-                                                onMouseOut={() => setBtnRequestHover(false)}
-                                            />
-                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
+                                        {btnRequestHover ? (
+                                            <>
+                                                <FaLock 
+                                                    size={25}
+                                                    onMouseEnter={() => setBtnRequestHover(true)}
+                                                    onMouseOut={() => setBtnRequestHover(false)}
+                                                />
+                                                {t('Wait')} {(Number(lastResquested) + 33230) - Number(blockNumber)} {t('blocks to request')}
+                                            </>
+                                        ) : `${t('Request New Inspection')}`}
                                         </>
-                                    ) : `${t('Request New Inspection')}`}
+                                    )}
                                     </>
                                 )}
                                 </>

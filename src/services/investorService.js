@@ -3,10 +3,10 @@ import InvestorContractJson from  '../data/contracts/abis/InvestorContract.json'
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const investorContractAddress = InvestorContractJson.networks[5777].address;
+const investorContractAddress = '0x8014eef23614d357010685787690d3e7c2cfcc30';
 
 //initializing contract
-const InvestorContract = new web3.eth.Contract(InvestorContractJson.abi, investorContractAddress);
+const InvestorContract = new web3.eth.Contract(InvestorContractJson, investorContractAddress);
 
 class InvestorService {
     constructor(wallet) {

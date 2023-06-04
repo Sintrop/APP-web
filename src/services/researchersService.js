@@ -3,10 +3,10 @@ import ResearcherContractJson from  '../data/contracts/abis/ResearcherContract.j
 const web3 = new Web3(window.ethereum);
 
 //contract addres
-const researcherContractAddress = ResearcherContractJson.networks[5777].address;
+const researcherContractAddress = '0x5c5553b494cc350f1a31e1f91832a3ed19df1627';
 
 //initializing contract
-const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
 
 class ResearchersService {
     constructor(wallet) {
@@ -27,6 +27,11 @@ export default ResearchersService;
 export const GetResearcher = async (walletAdd) => {
     const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()
     return researchers;
+}
+
+export const GetResearchers = async () => {
+    const researchers = await ResearcherContract.methods.getResearchers().call()
+    return researchers; 
 }
 
 export const PublishResearch = async (walletAddress, title, thesis, filePath) => {

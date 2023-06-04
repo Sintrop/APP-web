@@ -4,12 +4,12 @@ import IsaPoolContractJson from '../data/contracts/abis/IsaPool.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const categoryContractAddress = CategoryContractJson.networks[5777].address;
-const isaPoolContractAddress = IsaPoolContractJson.networks[5777].address;
+const categoryContractAddress = '0x788a57aa634e5e559a655033b780d192385617fb';
+const isaPoolContractAddress = '0x4431005e52fe8dc82ab8c9e5d3288384ef1ea999';
 
 //initializing contract
-const CategoryContract = new web3.eth.Contract(CategoryContractJson.abi, categoryContractAddress);
-const IsaPoolContract = new web3.eth.Contract(IsaPoolContractJson.abi, isaPoolContractAddress);
+const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
+const IsaPoolContract = new web3.eth.Contract(IsaPoolContractJson, isaPoolContractAddress);
 
 export const Vote = async (id, tokens, walletAddress) => {
     await CategoryContract.methods.vote(parseInt(id), parseInt(tokens)).send({from: walletAddress})

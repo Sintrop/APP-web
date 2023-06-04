@@ -3,10 +3,10 @@ import ContributorContractJson from  '../data/contracts/abis/ContributorContract
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const contributorContractAddress = ContributorContractJson.networks[5777].address;
+const contributorContractAddress = '0xf1790104904127901ea3dda4b95deb215764023f';
 
 //initializing contract
-const ContributorContract = new web3.eth.Contract(ContributorContractJson.abi, contributorContractAddress);
+const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
 
 class ContributorsService {
     constructor(wallet) {

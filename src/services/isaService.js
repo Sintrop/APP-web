@@ -3,10 +3,10 @@ import CategoryContractJson from '../data/contracts/abis/CategoryContract.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const categoryContractAddress = CategoryContractJson.networks[5777].address;
+const categoryContractAddress = '0x788a57aa634e5e559a655033b780d192385617fb';
 
 //initializing contract
-const CategoryContract = new web3.eth.Contract(CategoryContractJson.abi, categoryContractAddress);
+const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
 
 export const GetCategories = async () => {
     let categories = [];

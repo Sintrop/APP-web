@@ -7,7 +7,7 @@ export function ModalChooseMethod({finishInspection}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 w-[500px] h-[500px] bg-white rounded-md m-auto inset-0'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[500px] bg-white rounded-md m-auto inset-0'>
                 <Dialog.Title>Método de inspeção</Dialog.Title>
 
                 {step === 1 && (
@@ -39,7 +39,7 @@ export function ModalChooseMethod({finishInspection}){
                     <div className="flex flex-col items-center">
                         <h1 className="font-bold text-black text-2xl text-center">Instruções</h1>
 
-                        <div className="flex flex-col w-[320px] gap-2 mt-5">
+                        <div className="flex flex-col lg:w-[320px] gap-2 mt-5">
                             <p>1º | Baixe nosso app no seu celular;</p>
                             <p>2º | Faça login com sua carteira e senha;</p>
                             <p>3º | Localize a inspeção e salve em seu dispositivo;</p>
@@ -54,14 +54,14 @@ export function ModalChooseMethod({finishInspection}){
                     {step !== 1 && (
                         <Dialog.Close 
                             onClick={() => setStep(1)}
-                            className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"
+                            className="px-4 py-2 font-bold text-white rounded-md bg-[#ff9900]"
                         >
                             Entendi
                         </Dialog.Close>
                     )}
                     {step === 2 && (
                         <button 
-                            className="px-5 py-2 font-bold text-white rounded-md bg-[#ff9900]"
+                            className="px-4 py-2 font-bold text-white rounded-md bg-[#ff9900]"
                             onClick={finishInspection}
                         >
                             Finalizar Inspeção

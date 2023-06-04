@@ -19,10 +19,9 @@ export default function DevelopersRanking({ wallet, setTab }) {
         developerService
         .getDeveloperRanking()
         .then((res) => {
-            if(res.length > 0){
-            let developersSort = res.map(item => item ).sort((a, b) => parseInt(b.level[0]) - parseInt(a.level[0]))
+            console.log(res)
+            let developersSort = res.map(item => item ).sort((a, b) => parseInt(b.pool.level) - parseInt(a.pool.level))
             setDevelopers(developersSort);
-            }
         })
         .catch((err) => console.log(err));
     }, []);
