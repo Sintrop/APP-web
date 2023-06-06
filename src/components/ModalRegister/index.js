@@ -17,6 +17,8 @@ import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
 import {api} from '../../services/api';
 import {FiCamera} from 'react-icons/fi';
+import {FaBook} from 'react-icons/fa';
+import { Help } from '../help';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -155,10 +157,19 @@ export default function ModalRegister(){
         if(loading){
             return;
         }
+
         if(!name.trim()) {
             toast.error(`${t('Fill in the name field')}!`);
             return;
         }
+
+        if(step === 2){
+            if(!proofPhoto.trim() && type !== 'investor'){
+                toast.error(`${t('Take proof photo')}!`);
+                return;
+            }
+        }
+
 
         if(type === 'producer'){
             if(documetType === ''){
@@ -193,10 +204,10 @@ export default function ModalRegister(){
                 return;
             }
 
-            // if(!complement.trim()){
-            //     toast.error(`${t('Fill in the complement field')}!`);
-            //     return;
-            // }
+            if(!complement.trim()){
+                toast.error(`${t('Fill in the complement field')}!`);
+                return;
+            }
 
             // if(areaProperty < 5000){
             //     toast.error(t('Your property must be at least 5,000m²'))
@@ -708,10 +719,26 @@ export default function ModalRegister(){
         })
     }
 
+    function resetData(){
+        // setName('');
+        // setDocumentType('');
+        // setDocumentNumber('');
+        // setCep('');
+        // setState('');
+        // setCity('');
+        // setStreet('');
+        // setProofPhoto('');
+        // setComplement('');
+        // setGeolocation('');
+        // setPropertyGeolocation('');
+        // setPassword('');
+        // setConfirmPassword('');
+    }
+
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] h-[530px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] h-[580px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
                 <div className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2 border-[#ff9900]'>
                     <div className='px-3'/>
                     <img
@@ -732,7 +759,10 @@ export default function ModalRegister(){
                         
                         <select
                             defaultValue={type}
-                            onChange={(e) => setType(e.target.value)}
+                            onChange={(e) => {
+                                setType(e.target.value)
+                                resetData();
+                            }}
                             className='mt-10 lg:w-[50%] h-10 bg-[#C66828] text-white font-bold'
                         >
                             <option selected value="">{t('Select user')}</option>
@@ -743,12 +773,18 @@ export default function ModalRegister(){
                             <option value="developer">{t('Developer')}</option>
                             <option value="researcher">{t('Researcher')}</option>
                         </select>
+
+                        <Help
+                            description='Choose above the type of user you want to register'
+                        />
                     </div>
                 )}
 
                 {step === 2 && (
                     <div className='w-full flex flex-col items-center'>
-                        <h1 className='lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                        {proofPhoto === '' && (
+                            <h1 className='lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                        )}
 
                         {proofPhoto != '' && (
                             <img
@@ -770,17 +806,21 @@ export default function ModalRegister(){
                             <FiCamera size={25} color='white'/>
                             {t('Take Photo')}
                         </button>
+
+                        <Help
+                            description='Click the button above and then click allow on the permission popup that will open in your browser'
+                        />
                     </div>
                 )}
 
                 {step === 3 && (
                     <div className='w-full flex flex-col items-center p-2'>
-                        <h1 className='text-center lg:text-lg text-md text-white'>
+                        {/* <h1 className='text-center lg:text-lg text-md text-white'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
-                        </h1>
+                        </h1> */}
 
-                        <div className='lg:w-[450px] w-full mt-3 lg:mt-10'>
+                        <div className='lg:w-[450px] w-full mt-3 lg:mt-5'>
                             <div className='flex flex-col'>
                                 <label className='font-bold text-white' >{t('Name')}</label>
                                 <input
@@ -796,7 +836,7 @@ export default function ModalRegister(){
                         {type === 'producer'&& (
                             <>
 
-                                <div className='flex gap-3 mt-3'>
+                                <div className='flex gap-3 mt-3 items-center'>
                                     <div className='flex flex-col'>
                                         <label htmlFor="cep" className='font-bold text-white'>{t('ZIP Code')}</label>
                                         <InputMask
@@ -811,11 +851,11 @@ export default function ModalRegister(){
                                         />
                                     </div>
                                 
-                                    <div className='flex flex-col justify-center'>
-                                        <p className='text-sm lg:text-base font-bold text-white'>
-                                            {state === '' ? '' : `${city}-${state}, ${country}.`}
-                                        </p>
-                                    </div>
+                                    
+                                    <p className='text-sm lg:text-base font-bold text-white'>
+                                        {state === '' ? '' : `${city}-${state}, ${country}.`}
+                                    </p>
+                                    
                                 </div>
 
                                 
@@ -872,6 +912,10 @@ export default function ModalRegister(){
                                         />
                                     </div>
                                 </div>
+
+                                <Help
+                                    description='Give location permission in the popup that opened in your browser. Then fill in all the data correctly, as it is not possible to change it in the future'
+                                />
                             </>
                         )}
 
@@ -904,6 +948,10 @@ export default function ModalRegister(){
                                         />
                                     </div>
                                 </div>
+
+                                <Help
+                                    description="Fill in your name. This password will be used to enter the activist's Mobile App"
+                                />
                             </>
                         )}
                         </div>
@@ -913,7 +961,7 @@ export default function ModalRegister(){
 
                 {step === 4 && (
                     <div className='modal-register__container-content mb-1'>
-                        <h1 className='font-bold lg:text-lg text-center text-white'>{t('Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle')}.</h1>
+                        {/* <h1 className='font-bold lg:text-lg text-center text-white'>{t('Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle')}.</h1> */}
                         
                         <div className='flex w-full'>
                             <Map
@@ -926,6 +974,10 @@ export default function ModalRegister(){
                                 }}
                             />
                         </div>
+
+                        <Help
+                            description="Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle"
+                        />
                     </div>
                 )}
 
@@ -987,7 +1039,24 @@ export default function ModalRegister(){
                     setModalTransaction(open)
                     if(logTransaction.type === 'success'){
                         chooseModalRegister();
-                        navigate(0)
+                        if(type === 'producer'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/1`)
+                        }
+                        if(type === 'activist'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/2`)
+                        }
+                        if(type === 'contributor'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/6`)
+                        }
+                        if(type === 'investor'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/7`)
+                        }
+                        if(type === 'developer'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/4`)
+                        }
+                        if(type === 'researcher'){
+                            navigate(`/dashboard/${walletAddress}/network-impact/3`)
+                        }
                     }
                 }
             }}>

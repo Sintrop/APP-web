@@ -49,10 +49,9 @@ export function ResearchItem({data, myAccount}){
                         <p className='font-bold text-[#ff9900] text-center text-xl'>{researcherData?.name}</p>
                         <a
                             onClick={() => {
-                                setWalletSelected(data.createdBy)
-                                navigate(`/dashboard/${walletAddress}/user-details/3`)
+                                navigate(`/dashboard/${walletAddress}/user-details/3/${data.createdBy}`)
                             }}
-                            className='border-b-2 border-blue-400 text-blue-400' 
+                            className='border-b-2 border-blue-400 text-blue-400 cursor-pointer' 
                         >
                             {data.createdBy}
                         </a>

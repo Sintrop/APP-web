@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useMainContext } from '../hooks/useMainContext';
 import {useNetwork} from '../hooks/useNetwork';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {VscAccount} from 'react-icons/vsc';
 import {MdVisibility, MdVisibilityOff} from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
@@ -9,19 +9,24 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './HeaderAccount/ModalAccountOptions';
 
 export function TopBarStatus({}){
+    const {walletAddress} = useParams();
     const {pathname} = useLocation();
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, Sync, chooseModalRegister} = useMainContext();
+    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser} = useMainContext();
     const {isSupported} = useNetwork();
     const [visibilityBalance, setVisibilityBalance] = useState(false);
-    const [balanceUser, setBalanceUser] = useState(0);
     const [modalOptions, setModalOptions] = useState(false);
+
+    useEffect(() => {
+        
+    },[]);
 
     async function handleSync(){
         const response = await Sync();
         if(response.status === 'connected'){
-            navigate(`/dashboard/${response.wallet}/network-impact/main`)
+            const typeUser = await checkUser(response.wallet);
+            navigate(`/dashboard/${response.wallet}/network-impact/${typeUser}/n`)
         }
     }
 
@@ -63,32 +68,32 @@ export function TopBarStatus({}){
                                 <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected but not registered')}!</p>
                             
                                 <button
-                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#0A4303]'
+                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#ff9900]'
                                     onClick={chooseModalRegister}
                                 >
                                     {t('Click Here To Register')}
                                 </button>
 
                                 <button
-                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#FF9900]'
+                                    className='px-1 lg:px-10 py-1 rounded-md font-bold text-xs lg:text-base text-white bg-[#0a4303]'
                                     onClick={() => navigate('/')}
                                 >
-                                    {t('START MISSION 1')}
+                                    {t('Voltar para login')}
                                 </button>
                             </div>
                         )}
 
                         {user !== '0' && (
                             <>
-                                <p className='hidden lg:flex font-bold text-[#80421A] text-xl'>Era 1</p>
+                                <p className='hidden lg:flex font-bold text-[#80421A] text-xl'>Era 2</p>
                                 <p className='hidden lg:flex text-xs lg:text-lg font-bold text-white'>Conta: {walletConnected}</p> 
                                 
                                 <div className='flex w-full justify-between lg:w-[300px] lg:justify-normal items-center lg:gap-2'>
                 
-                                    <div className='flex items-center justify-end gap-2 lg:w-[300px]'>
+                                    <div className='flex items-center justify-end gap-2 lg:w-[400px]'>
                                         
                                         <h1 className='font-bold text-white'>{t('Balance')}: </h1>
-                                        <p className='font-bold text-white'>{visibilityBalance ? balanceUser : '******'} SAC Tokens</p>
+                                        <p className='font-bold text-white'>{visibilityBalance ? (balanceUser / 10 ** 18).toFixed(2)  : '******'} Tokens</p>
                                         <button 
                                             className='w-[30px] h-[30px]'
                                             onClick={() => setVisibilityBalance(!visibilityBalance)}

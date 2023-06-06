@@ -11,28 +11,26 @@ export function RankingItem({data, position}){
     
     function handleClickUser(){
         if(data?.userType === '1'){
-            setWalletSelected(data?.producerWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.producerWallet}`)
         }
         if(data?.userType === '2'){
-            setWalletSelected(data?.activistWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.activistWallet}`)
         }
         if(data?.userType === '3'){
-            setWalletSelected(data?.researcherWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.researcherWallet}`)
         }
         if(data?.userType === '4'){
-            setWalletSelected(data?.developerWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.developerWallet}`)
         }
         if(data?.userType === '5'){
-            setWalletSelected(data?.advisorWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.advisorWallet}`)
         }
         if(data?.userType === '6'){
-            setWalletSelected(data?.contributorWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.contributorWallet}`)
         }
         if(data?.userType === '7'){
-            setWalletSelected(data?.investorWallet)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.investorWallet}`)
         }
-
-        navigate(`/dashboard/${walletAddress}/user-details/${data.userType}`)
     }
 
     return(

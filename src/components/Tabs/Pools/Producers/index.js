@@ -32,7 +32,7 @@ export default function ProducersPool({wallet, setTab}){
     const [scoresProducers, setScoreProducers] = useState('0');
     const [nextAprove, setNextAprove] = useState('0');
     const [producersList, setProducersList] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
@@ -71,12 +71,11 @@ export default function ProducersPool({wallet, setTab}){
         // const scoreProducers = await GetTotalScoreProducers();
         // setScoreProducers(scoreProducers);
         if(user === '1'){
-            const producer = await GetProducer(wallet);
+            const producer = await GetProducer(walletAddress);
             setProducerInfo(producer);
-            console.log(producer)
-            const balanceProducer = await GetBalanceProducer(wallet);
+            const balanceProducer = await GetBalanceProducer(walletAddress);
             setBalanceProducer(balanceProducer);
-            const nextAprove = await CheckNextAprove(producerInfo.pool.currentEra);
+            const nextAprove = await CheckNextAprove(producer.pool?.currentEra);
             setNextAprove(nextAprove);
         }
         setLoading(false)
@@ -171,7 +170,7 @@ export default function ProducersPool({wallet, setTab}){
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
-                                <p className="font-bold text-[#ff9900]">{balanceProducer / 10 ** 18}</p>
+                                <p className="font-bold text-[#ff9900]">{(balanceProducer / 10 ** 18).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
@@ -182,7 +181,7 @@ export default function ProducersPool({wallet, setTab}){
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
                                 <p className="font-bold text-[#ff9900]">Saldo do contrato</p>
-                                <p className="font-bold text-white">{balanceContract / 10 ** 18}</p>
+                                <p className="font-bold text-white">{(balanceContract / 10 ** 18).toFixed(2)}</p>
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">

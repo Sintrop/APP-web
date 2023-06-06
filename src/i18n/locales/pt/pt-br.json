@@ -234,7 +234,12 @@
         "Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle": "Circule toda a área da sua propriedade, clicando nas extremidades até completar o círculo inteiro",
         "Validator": "Validador",
         "Validators": "Validadores",
-        "": "",
-        "": ""
+        "Choose above the type of user you want to register": "Escolha acima o tipo de usuário que deseja cadastrar",
+        "Help": "Ajuda",
+        "Click the button above and then click allow on the permission popup that will open in your browser": "Clique no botão acima e depois clique em permitir no popup de permissão que abrirá no navegador",
+        "Give location permission in the popup that opened in your browser. Then fill in all the data correctly, as it is not possible to change it in the future": "Dê a permissão de localização no popup que abriu em seu navegador. Depois preencha todos os dados corretamente, pois não é possível alterar futuramente",
+        "Fill in your name. This password will be used to enter the activist's Mobile App": "Preencha seu nome. Essa senha será utilizada para entrar no App Mobile do ativista",
+        "Data from our test network": "Dados da nossa rede de teste",
+        "Attention": "Atenção"
     }
 }

@@ -9,6 +9,90 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { TopBarStatus } from "../../components/TopBarStatus";
 import {ModalTutorial} from '../../components/Tutorial/ModalTutorial';
 
+const tutorial1 = [
+    {
+        id: 1, 
+        title: 'Missão 1: Entrar na plataforma', 
+        description: 'A primeira missão é a conclusão do cadastro. Essa missão é bem difícil, envolve o uso de algumas tecnologias que talvez sejam novas para você. Mas não se assuste, basta seguir os passos aqui certinho que você vai conseguir!',
+        description2: 'Ao concluir você se tornará um SOLDADO SEMENTE',
+        img: 'formiga-semente-1',
+        imgLong: ''
+    },
+    {
+        id: 2, 
+        title: 'Missão 1: Entrar na plataforma', 
+        description: 'Essa missão possui 5 etapas:',
+        description2: '1) Criar uma carteira no MetaMask; 2) Configurações do MetaMask; 3) Entrar na plataforma; 4) Conseguir goerliETH; 5) Registrar usuário',
+        img: 'formiga-semente-1',
+        imgLong: ''
+    },
+    {
+        id: 3, 
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Nosso sistema utiliza a tecnologia da blockchain. E para interagir com ele, é necessário possuir uma carteira na rede Ethereum e o provedor mais popular é o MetaMask.',
+        description2: 'É por ela que será feita a distribuição dos tokens como pagamento aos serviços ambientais ecossistêmicos prestados para a sociedade. Pense que essa etapa seria o equivalente a abertura de uma conta no banco. Porém no universo descentralizado.',
+        img: '',
+        imgLong: ''
+    },
+    {
+        id: 4, 
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Vá até a loja de extensões do seu navegador e faça a instalação do MetaMask. Fique atento para apenas instalar a extensão com o nome correto, com o selo azul de verificação e do site metamask.io',
+        description2: 'É por ela que será feito. Nunca baixe nenhuma extensão sem ser da fonte original confiável.',
+        img: '',
+        imgLong: 'tutorial-metamask-1'
+    },
+    {
+        id: 5, 
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Após a instalação, o MetaMask irá perguntar se você deseja importar uma conta ou criar uma do zero. Caso já tenha uma, poderá importá-la nessa parte. Caso contrário, clique em criar uma carteira.',
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-metamask-2'
+    },
+    {
+        id: 6, 
+        title: 'Etapa 2: Configurações do MetaMask', 
+        description: 'Parabéns, você está indo muito bem até aqui. Agora vamos para as configurações do MetaMask. Sua tela inicial deverá ser algo semelhante a essa:',
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-metamask-3'
+    },
+    {
+        id: 7, 
+        title: 'Etapa 2: Configurações do MetaMask', 
+        description: 'O primeiro passo será selecionar a rede de testes Sepolia.',
+        description2:'No menu superior, clique onde a seta está indicando',
+        img: '',
+        imgLong: 'tutorial-metamask-4'
+    },
+    {
+        id: 8, 
+        title: 'Etapa 2: Configurações do MetaMask', 
+        description: 'Agora selecione a "Sepolia Test Network". E pronto, você já estará conectado devidamente. Caso ela não apareça, vá até configurações -> avançado e habilite a opção.',
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-metamask-5'
+    },
+    {
+        id: 9, 
+        title: 'Etapa 3: Conseguir SepoliaETH faucet', 
+        description: "A SEPOLIA FAUCET é uma rede de testes que simula a rede principal do Ethereum. Para realizar alguma ação no Sistema é preciso ter SEPOLIA, o que seria equivalente a ter Ether se fosse na rede principal. Portanto todos valores e dados nela são 'faucets' de apenas exemplo e não possuem valor real.",
+        description2:'Não é necessário pagar nada para rodar o sistema na SEPOLIA. Para conseguir os faucets é muito fácil, basta criar uma conta na Alchemy e solicitar os tokens.',
+        img: '',
+        imgLong: '',
+        link: 'https://sepoliafaucet.com/'
+    },
+    {
+        id: 10, 
+        title: 'Parabéns!!!', 
+        description: "Você está indo muito bem, parabéns pelo progresso!",
+        description2:'Já estamos prontos para sincronizar na plataforma. Se a barra superior indicar que a conexão está disponível, pode clicar no botão sincronizar.',
+        img: '',
+        imgLong: 'tutorial-metamask-6',
+    },
+];
+
 function Login(){
     const {t} = useTranslation();
     const {isSupported} = useNetwork();
@@ -106,7 +190,9 @@ function Login(){
                     open={modalTutorial}
                     onOpenChange={chooseModalTutorial}
                 >
-                    <ModalTutorial/>
+                    <ModalTutorial
+                        tutorial={tutorial1}
+                    />
                 </Dialog.Root>
             </div>
         </div>

@@ -3,7 +3,7 @@ import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
 
 export function UserPoolItem({data, position}){
-    const [balance, setBalance] = useState('')
+    const [balance, setBalance] = useState(0)
     useEffect(() => {
         getBalance();
     },[]);
@@ -18,7 +18,7 @@ export function UserPoolItem({data, position}){
             const balance = await GetBalanceProducer(data.producerWallet);
             balanceTokens = balance
         }
-        setBalance(balanceTokens);
+        setBalance(Number(balanceTokens));
     }
 
     return(
@@ -42,7 +42,7 @@ export function UserPoolItem({data, position}){
                 </p>
             </div>
             <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-l-2 border-[#3E9EF5]'>
-                <p className='font-bold text-white'>{parseFloat(balance) / 10**18}</p>
+                <p className='font-bold text-white'>{(balance / 10**18).toFixed(2)}</p>
             </div>
         </div>
     )

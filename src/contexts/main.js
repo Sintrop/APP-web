@@ -3,6 +3,8 @@ import Web3 from 'web3';
 import {CheckUser} from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
+import {GetBalanceDeveloper} from '../services/developersPoolService';
+import {GetBalanceProducer} from '../services/producerPoolService';
 
 export const MainContext = createContext({})
 
@@ -18,6 +20,7 @@ export default function MainProvider({children}){
     const [language, setLanguage] = useState('en-us');
     const [modalChooseLang, setModalChooseLang] = useState(false);
     const [modalTutorial, setModalTutorial] = useState(false);
+    const [balanceUser, setBalanceUser] = useState(0);
 
     useEffect(() => {
         getAtualBlockNumber();
@@ -40,6 +43,20 @@ export default function MainProvider({children}){
         }
     }
 
+    async function getBalanceUser(typeUser, wallet){
+        if(typeUser === '1'){
+            const balanceUser = await GetBalanceProducer(wallet)
+            console.log(balanceUser)
+            setBalanceUser(Number(balanceUser))
+        }
+
+        if(typeUser === '4'){
+            const balanceUser = await GetBalanceDeveloper(wallet)
+            setBalanceUser(Number(balanceUser))
+        }
+    }
+
+
     function chooseModalRegister(){
         setModalRegister(!modalRegister);
     }
@@ -52,6 +69,7 @@ export default function MainProvider({children}){
         const response = await CheckUser(String(wallet));
         setUser(response);
         setWalletConnected(wallet);
+        getBalanceUser(response, wallet);
         return response;
     }
 
@@ -112,7 +130,8 @@ export default function MainProvider({children}){
                 walletSelected,
                 setWalletSelected,
                 modalTutorial,
-                chooseModalTutorial
+                chooseModalTutorial,
+                balanceUser
             }}
         >
             {children}

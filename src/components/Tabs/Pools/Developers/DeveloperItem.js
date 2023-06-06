@@ -30,8 +30,8 @@ export default function DeveloperItem({data, setTab}){
                 </a>
             </td>
             <td>{data.name}</td>
-            <td>{parseFloat(balanceDeveloper) / 10**18}</td>
             <td>{data.pool.level}</td>
+            <td>{(Number(balanceDeveloper) / 10**18).toFixed(2)}</td>
         </tr>
     )
 }

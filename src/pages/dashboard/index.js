@@ -7,24 +7,15 @@ import { useNetwork } from '../../hooks/useNetwork';
 
 //Components
 import Menu from '../../components/Menu';
-import HeaderAccount from '../../components/HeaderAccount';
-import TabIndicator from '../../components/TabIndicator';
 import ManageInspections from '../../components/Tabs/ManageInspections';
-import { UnsupportedNetwork } from '../../components/UnsupportedNetwork';
 import { TopBarStatus } from '../../components/TopBarStatus';
 import { TopBarMobile } from '../../components/TopBarMobile';
+import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
 import ProducerRanking from '../../components/Tabs/Ranking/Producer';
-import ProducerPage from '../../components/Tabs/MyAccount/ProducerPage';
-import ActivistPage from '../../components/Tabs/MyAccount/ActivistPage';
-import DeveloperPage from '../../components/Tabs/MyAccount/DeveloperPage';
-import ResearcherPage from '../../components/Tabs/MyAccount/ResearcherPage';
-import InvestorPage from '../../components/Tabs/MyAccount/InvestorPage';
-import ContributorPage from '../../components/Tabs/MyAccount/ContributorPage';
-import AdvisorPage from '../../components/Tabs/MyAccount/AdvisorPage';
 import MyAccount from '../../components/Tabs/MyAccount';
 import ProducerCertificate from '../../components/Tabs/Certificate';
 import InvestorCertificate from '../../components/Tabs/Certificate/Investor';
@@ -46,11 +37,87 @@ import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 import ModalRegister from '../../components/ModalRegister';
 
+const tutorialRegistro = [
+    {
+        id: 11, 
+        title: 'Etapa 5: Registro no sistema', 
+        description: "Agora chegou a hora de realizar a sua primeira transação no Sistema e realizar o cadastro. Qual usuário você vai ser?",
+        description2:'Neste momento vamos registrar como PRODUTOR',
+        img: '',
+        imgLong: 'tutorial-registro-1',
+    },
+    {
+        id: 12, 
+        title: 'Etapa 5: Tire uma foto', 
+        description: "Esta foto será usada para comprovar sua identidade.",
+        description2:'É necessário dá permissão para acessar a câmera!',
+        img: '',
+        imgLong: 'tutorial-registro-2',
+    },
+    {
+        id: 13, 
+        title: 'Etapa 5: Tire uma foto', 
+        description: "Esta foto será usada para comprovar sua identidade.",
+        description2:'É necessário dá permissão para acessar a câmera!',
+        img: '',
+        imgLong: 'tutorial-registro-2',
+    },
+    {
+        id: 14, 
+        title: 'Etapa 5: Forneça seus dados', 
+        description: "Nessa etapa os dados variam para cada tipo de usuário.",
+        description2:'Cadastre seus dados e certifique-se de que estão corretos, pois não poderá ser alterado no futuro.',
+        img: '',
+        imgLong: 'tutorial-registro-3',
+    },
+    {
+        id: 15, 
+        title: 'Etapa 5: Área da propriedade (APENAS PARA PRODUTORES)', 
+        description: "Autorize a sua localização atual para visualização do mapa.",
+        description2:'A localização é essencial, e não podemos prosseguir sem ela!',
+        img: '',
+        imgLong: 'tutorial-registro-4',
+    },
+    {
+        id: 16, 
+        title: 'Etapa 5: Área da propriedade (APENAS PARA PRODUTORES)', 
+        description: "Circule toda a área da sua propriedade.",
+        description2:'Clique numa das extremidades da propriedade, e vá clicando nos limites da propriedade, até fechar o círculo da sua área. Sem isso não podemos prosseguir! Ao final do processo, clique em registrar',
+        img: '',
+        imgLong: 'tutorial-registro-5',
+    },
+    {
+        id: 17, 
+        title: 'Etapa 5: Finalizar transação', 
+        description: "Finalize a transação, clicando no botão “CONFIRMAR” no Metamask. Lembrando que é necessário ter sepolia o suficiente para realizar a transação.",
+        description2:'Lembre-se, que toda transação feita na Blockchain, demora alguns segundos e até mesmo minutos, mas o importante é não fechar a aba do navegador.',
+        img: '',
+        imgLong: 'tutorial-registro-6',
+    },
+    {
+        id: 18, 
+        title: 'Etapa 5: Transação bem-sucedida', 
+        description: "Sua transação foi bem sucedida, você pode clicar no link para visualizar mais detalhes.",
+        description2:'Com isso, significa que você concluiu seu cadastro!',
+        img: '',
+        imgLong: 'tutorial-registro-7',
+    },
+    {
+        id: 19, 
+        title: '', 
+        description: "",
+        description2:'',
+        img: '',
+        imgLong: '',
+        banner: 'tutorial-registro-8'
+    },
+];
+
 export default function Dashboard(){
     const {isSupported} = useNetwork();
-    const {checkUser, walletConnected, modalRegister, chooseModalRegister, menuOpen} = useContext(MainContext);
+    const {checkUser, walletConnected, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial} = useContext(MainContext);
     const navigate = useNavigate();
-    const {walletAddress, tabActive} = useParams();
+    const {walletAddress, tabActive, typeUser} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
     const {user} = CheckUserRegister({walletAddress: walletAddress});
     const [walletSelect, setWalletSelect] = useState('');
@@ -100,9 +167,9 @@ export default function Dashboard(){
                     changeTab={(tab) => {
                         setActiveTab(tab)
                         if(tab === 'my-account'){
-                            navigate(`/dashboard/${walletAddress}/${tab}/${walletAddress}`)
+                            navigate(`/dashboard/${walletAddress}/${tab}/${typeUser}/${walletAddress}`)
                         }else{
-                            navigate(`/dashboard/${walletAddress}/${tab}/main`)
+                            navigate(`/dashboard/${walletAddress}/${tab}/${typeUser}/n`)
                         }
                     }}
                 />
@@ -115,9 +182,9 @@ export default function Dashboard(){
                         setMenuMobile(false)
                         setActiveTab(tab)
                         if(tab === 'my-account'){
-                            navigate(`/dashboard/${walletAddress}/${tab}/${walletAddress}`)
+                            navigate(`/dashboard/${walletAddress}/${tab}/${typeUser}/${walletAddress}`)
                         }else{
-                            navigate(`/dashboard/${walletAddress}/${tab}/main`)
+                            navigate(`/dashboard/${walletAddress}/${tab}/${typeUser}/n`)
                         }
                     }}
                 />
@@ -255,69 +322,6 @@ export default function Dashboard(){
                         }}
                     />
                 )}
-                {activeTab ===  'producer-page' && (
-                    <ProducerPage 
-                        wallet={walletAddress}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'activist-page' && (
-                    <ActivistPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'developer-page' && (
-                    <DeveloperPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'researcher-page' && (
-                    <ResearcherPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'advisor-page' && (
-                    <AdvisorPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'contributor-page' && (
-                    <ContributorPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-                {activeTab === 'investor-page' && (
-                    <InvestorPage 
-                        wallet={walletSelect}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
                 {activeTab === 'my-account' && (
                     <MyAccount 
                         wallet={walletAddress} 
@@ -411,7 +415,26 @@ export default function Dashboard(){
             >
                 <ModalRegister/>
             </Dialog.Root>
+
+            <Dialog.Root
+                open={modalTutorial}
+                onOpenChange={(open) => {
+                    chooseModalTutorial()
+                }}  
+            >
+                <ModalTutorial
+                    tutorial={tutorialRegistro}
+                    typeUser={typeUser}
+                />
+            </Dialog.Root>
+
         </div>
+            <div 
+                className="absolute w-32 h-10 flex items-center justify-center bg-red-500 z-90 bottom-5 right-10 rounded-md cursor-pointer"
+                onClick={() => chooseModalTutorial()}
+            >
+                <p className="font-bold text-white">Tutorial</p>
+            </div>
         </div>
     )
 }

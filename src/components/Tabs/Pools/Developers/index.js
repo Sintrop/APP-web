@@ -166,7 +166,7 @@ export default function DevelopersPool({wallet, setTab}){
                             <p className="font-bold text-white">Saldo</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
-                                <p className="font-bold text-[#ff9900]">{balanceDeveloper}</p>
+                                <p className="font-bold text-[#ff9900]">{(Number(balanceDeveloper) / 10 ** 18).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
@@ -248,6 +248,21 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
                     </div>
             </div>
+
+            <Dialog.Root 
+                open={modalTransaction} 
+                onOpenChange={(open) => {
+                    if(!loadingTransaction){
+                        setModalTransaction(open);
+                        getInfosPool();
+                    }
+                }}
+            >
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
 
             {loading && (
                 <Loading/>

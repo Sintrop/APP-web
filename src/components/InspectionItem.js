@@ -718,10 +718,8 @@ export function InspectionItem({data, type, reload}){
             await api.put(`/inspections/${data.id}/update-result-indices`, {
                 resultIndices: JSON.stringify(resultIndices)
             })
-            console.log('ok')
         }catch(err){
             console.log(err)
-            return;
         }
 
         const pdfCarbon = await pdfMake.createPdf(generatePdf(inspection, 'carbon', resultCategories, resultIndices, resultBiodiversity));
@@ -1041,7 +1039,7 @@ export function InspectionItem({data, type, reload}){
 
     function handleClickUser(userType, wallet){
         setWalletSelected(wallet)
-        navigate(`/dashboard/${walletAddress}/user-details/${userType}`)
+        navigate(`/dashboard/${walletAddress}/user-details/${userType}/${wallet}`)
     }
 
     async function attNetworkImpact(resultIndices){
@@ -1201,21 +1199,25 @@ export function InspectionItem({data, type, reload}){
                                 </button>
                             </div>
                             <div className='hidden lg:flex w-full h-full'>
-                                {user === '2' && (
-                                    <button
-                                        onClick={() => {
-                                            if(data.status === '0'){
-                                                handleAccept()
-                                            }
-                                            if(data.status === '1'){
-                                                handleRealize()
-                                            }
-                                        }}
-                                        className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
-                                    >
-                                        {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                        {data.status === '1' && t('Realize Inspection')}
-                                    </button>
+                                {status !== '3' && (
+                                    <>
+                                        {user === '2' && (
+                                            <button
+                                                onClick={() => {
+                                                    if(data.status === '0'){
+                                                        handleAccept()
+                                                    }
+                                                    if(data.status === '1'){
+                                                        handleRealize()
+                                                    }
+                                                }}
+                                                className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
+                                            >
+                                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
+                                                {data.status === '1' && t('Realize Inspection')}
+                                            </button>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </>

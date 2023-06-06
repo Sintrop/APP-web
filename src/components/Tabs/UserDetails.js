@@ -28,8 +28,7 @@ const containerStyle = {
 
 export function UserDetails({setTab}){
     const {t} = useTranslation();
-    const {walletSelected} = useMainContext();
-    const {typeUser, tabActive} = useParams();
+    const {typeUser, tabActive, walletSelected} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
     const [userData, setUserData] = useState([]);
@@ -276,6 +275,7 @@ export function UserDetails({setTab}){
 
             {typeUser === '3' && (
                 <>
+                    <p className='font-bold text-center text-[#ff9900] mt-5 mb-2 text-lg lg:w-[1000px]'>Pesquisas publicadas</p>
                     {researches.length === 0 ? (
                         <p className='font-bold text-white'>Nenhuma pesquisa publicada</p>
                     ) : (
