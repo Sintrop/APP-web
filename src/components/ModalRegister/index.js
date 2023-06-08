@@ -23,7 +23,7 @@ import { Help } from '../help';
 export default function ModalRegister(){
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {walletConnected, chooseModalRegister} = useContext(MainContext);
+    const {walletConnected, chooseModalRegister, getUserDataApi} = useContext(MainContext);
     const {walletAddress, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
     const [loadingCalculateArea, setLoadingCalculateArea] = useState(false);
@@ -268,7 +268,8 @@ export default function ModalRegister(){
                         geoLocation,
                         propertyGeolocation,
                         imgProfileUrl: proofPhoto,
-                        address: JSON.stringify(address)
+                        address: JSON.stringify(address),
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -330,7 +331,8 @@ export default function ModalRegister(){
                         userType: 2,
                         password,
                         geoLocation: geoLocation,
-                        imgProfileUrl: proofPhoto
+                        imgProfileUrl: proofPhoto,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -390,7 +392,8 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 6
+                        userType: 6,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -449,7 +452,8 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 7
+                        userType: 7,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -508,7 +512,8 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 4
+                        userType: 4,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -567,7 +572,8 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 3
+                        userType: 3,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -626,7 +632,8 @@ export default function ModalRegister(){
                     api.post('/users', {
                         name,
                         wallet: String(walletConnected).toUpperCase(),
-                        userType: 5
+                        userType: 5,
+                        level: 1
                     })
                 }catch(err){
                     console.log(err);
@@ -1038,31 +1045,33 @@ export default function ModalRegister(){
                 if(!loadingTransaction){
                     setModalTransaction(open)
                     if(logTransaction.type === 'success'){
-                        chooseModalRegister();
+                        getUserDataApi();
                         if(type === 'producer'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/1`)
+                            navigate(`/dashboard/${walletAddress}/my-account/1/${walletAddress}`)
                         }
                         if(type === 'activist'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/2`)
+                            navigate(`/dashboard/${walletAddress}/my-account/2/${walletAddress}`)
                         }
                         if(type === 'contributor'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/6`)
+                            navigate(`/dashboard/${walletAddress}/my-account/6/${walletAddress}`)
                         }
                         if(type === 'investor'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/7`)
+                            navigate(`/dashboard/${walletAddress}/my-account/7/${walletAddress}`)
                         }
                         if(type === 'developer'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/4`)
+                            navigate(`/dashboard/${walletAddress}/my-account/4/${walletAddress}`)
                         }
                         if(type === 'researcher'){
-                            navigate(`/dashboard/${walletAddress}/network-impact/3`)
+                            navigate(`/dashboard/${walletAddress}/my-account/3/${walletAddress}`)
                         }
+                        chooseModalRegister();
                     }
                 }
             }}>
                 <LoadingTransaction
                     loading={loadingTransaction}
                     logTransaction={logTransaction}
+                    action='register'
                 />
             </Dialog.Root>
             {loading && <Loading/>}

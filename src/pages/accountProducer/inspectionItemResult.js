@@ -69,6 +69,10 @@ export function InspectionItemResult({data, initialVisible}){
 
     async function getResultIndices() {
         const response = await api.get(`/inspection/${data.id}`)
+        setInspectionDataApi(response.data.inspection)
+        if(!response.data.inspection.resultCategories){
+            return;
+        }
         setResultIndices(JSON.parse(response.data?.inspection?.resultIdices))
         setResultCategories(JSON.parse(response.data?.inspection?.resultCategories))
 
@@ -168,6 +172,15 @@ export function InspectionItemResult({data, initialVisible}){
 
             {open && (
                 <div className='p-2 bg-[#0a4303] w-full flex flex-col'>
+                    <div className='w-full items-center justify-center'>
+                        <div className='flex justify-center'>
+                            {resultCategories ? (
+                                <p>Método Phoenix</p>
+                            ) : (
+                                <p>Método Manual</p>
+                            )}
+                        </div>
+                    </div>
                     <div className='flex w-full justify-center items-center gap-16'>
                         <div className='flex flex-col items-center'>
                             <p className='font-bold text-[#ff9900]'>Carbono</p>
@@ -220,323 +233,328 @@ export function InspectionItemResult({data, initialVisible}){
                     <p className='font-bold text-[#ff9900]'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
 
                     <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
-                        {/* REGENERAÇÃO */}
-                        <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
-                            <h3 className='font-bold text-white text-3xl'>Regeneração</h3>
-                        </div>
-                        <div className='flex flex-wrap mt-5 gap-4'>
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Quant. de Árvores</h4>
-                                        <p className='font-bold text-white text-2xl'>{quantArvores}</p>
-                                    </div>
-
-                                    <img 
-                                        src={require('../../assets/arvore-branca.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
+                        {resultCategories && (
+                            <>
+                                {/* REGENERAÇÃO */}
+                                <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
+                                    <h3 className='font-bold text-white text-3xl'>Regeneração</h3>
                                 </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenArvores(!openArvores)}
-                                >
-                                    {openArvores ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
-
-                                    {openArvores ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
-                                </div>
-
-                                {openArvores && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails)
-                                            if(categoryDetails.category === '2'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
-                                        <p className='font-bold text-white text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
-                                    </div>
-
-                                    <img 
-                                        src={require('../../assets/fertilizante-orgânico.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
-                                </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenBiomassa(!openBiomassa)}
-                                >
-                                    {openBiomassa ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
-
-                                    {openBiomassa ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
-                                </div>
-
-                                {openBiomassa && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails);
-                                            if(categoryDetails.insumoCategory === 'biomassa'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-
-                                        <div className='flex w-full items-center justify-between'>
-                                            <p className='font-bold text-white w-[200px]'>Resultado</p>
-
-                                            <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                <p className='font-bold text-blue-400 text-center'>{resultBiomassa.toFixed(0)} Kg</p>
+                                <div className='flex flex-wrap mt-5 gap-4'>
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Quant. de Árvores</h4>
+                                                <p className='font-bold text-white text-2xl'>{quantArvores}</p>
                                             </div>
+
+                                            <img 
+                                                src={require('../../assets/arvore-branca.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
                                         </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenArvores(!openArvores)}
+                                        >
+                                            {openArvores ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
+
+                                            {openArvores ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
+
+                                        {openArvores && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails)
+                                                    if(categoryDetails.category === '2'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
+
+                                                
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                        {/* REGENERAÇÃO */}
 
-                        {/* DEGENERAÇÃO */}
-                        <div className='flex items-center justify-center h-20 w-full bg-[#783E19] mt-10'>
-                            <h3 className='font-bold text-white text-3xl'>Degeneração</h3>
-                        </div>
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
+                                                <p className='font-bold text-white text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
+                                            </div>
 
-                        <div className='flex flex-wrap mt-5 gap-4'>
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Químicos</h4>
-                                        <p className='font-bold text-white text-2xl'>{quantInsumosQuimicos}</p>
-                                    </div>
+                                            <img 
+                                                src={require('../../assets/fertilizante-orgânico.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
+                                        </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenBiomassa(!openBiomassa)}
+                                        >
+                                            {openBiomassa ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
 
-                                    <img 
-                                        src={require('../../assets/caveira.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
-                                </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenInsumosQuimicos(!openInsumosQuimicos)}
-                                >
-                                    {openInsumosQuimicos ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
+                                            {openBiomassa ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
 
-                                    {openInsumosQuimicos ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
-                                </div>
+                                        {openBiomassa && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails);
+                                                    if(categoryDetails.insumoCategory === 'biomassa'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
 
-                                {openInsumosQuimicos && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails);
-                                            if(categoryDetails.insumoCategory === 'insumo-quimico'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
 
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                        </div>
+                                                <div className='flex w-full items-center justify-between'>
+                                                    <p className='font-bold text-white w-[200px]'>Resultado</p>
+
+                                                    <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                        <p className='font-bold text-blue-400 text-center'>{resultBiomassa.toFixed(0)} Kg</p>
                                                     </div>
-                                                )
-                                            }
-                                        })}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Biológicos</h4>
-                                        <p className='font-bold text-white text-2xl'>{quantInsumosBiologicos}</p>
-                                    </div>
-
-                                    <img 
-                                        src={require('../../assets/vaso.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
                                 </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenInsumosBiologicos(!openInsumosBiologicos)}
-                                >
-                                    {openInsumosBiologicos ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
+                                {/* REGENERAÇÃO */}
 
-                                    {openInsumosBiologicos ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
+                                {/* DEGENERAÇÃO */}
+                                <div className='flex items-center justify-center h-20 w-full bg-[#783E19] mt-10'>
+                                    <h3 className='font-bold text-white text-3xl'>Degeneração</h3>
                                 </div>
 
-                                {openInsumosBiologicos && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails);
-                                            if(categoryDetails.insumoCategory === 'insumo-biologico'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                <div className='flex flex-wrap mt-5 gap-4'>
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Químicos</h4>
+                                                <p className='font-bold text-white text-2xl'>{quantInsumosQuimicos}</p>
+                                            </div>
 
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
+                                            <img 
+                                                src={require('../../assets/caveira.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
+                                        </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenInsumosQuimicos(!openInsumosQuimicos)}
+                                        >
+                                            {openInsumosQuimicos ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
+
+                                            {openInsumosQuimicos ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
+
+                                        {openInsumosQuimicos && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails);
+                                                    if(categoryDetails.insumoCategory === 'insumo-quimico'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
 
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Minerais</h4>
-                                        <p className='font-bold text-white text-2xl'>{quantInsumosMinerais} kg</p>
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Biológicos</h4>
+                                                <p className='font-bold text-white text-2xl'>{quantInsumosBiologicos}</p>
+                                            </div>
+
+                                            <img 
+                                                src={require('../../assets/vaso.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
+                                        </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenInsumosBiologicos(!openInsumosBiologicos)}
+                                        >
+                                            {openInsumosBiologicos ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
+
+                                            {openInsumosBiologicos ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
+
+                                        {openInsumosBiologicos && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails);
+                                                    if(categoryDetails.insumoCategory === 'insumo-biologico'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <img 
-                                        src={require('../../assets/vaso.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Minerais</h4>
+                                                <p className='font-bold text-white text-2xl'>{quantInsumosMinerais} kg</p>
+                                            </div>
+
+                                            <img 
+                                                src={require('../../assets/vaso.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
+                                        </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenInsumosMinerais(!openInsumosMinerais)}
+                                        >
+                                            {openInsumosMinerais ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
+
+                                            {openInsumosMinerais ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
+
+                                        {openInsumosMinerais && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails);
+                                                    if(categoryDetails.insumoCategory === 'insumo-mineral'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
+                                        <div className='flex items-center justify-between w-full p-3'>
+                                            <div className='flex flex-col gap-2'>
+                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Recursos Externos</h4>
+                                                <p className='font-bold text-white text-2xl'>{quantRecursosExternos}</p>
+                                            </div>
+
+                                            <img 
+                                                src={require('../../assets/torre.png')}
+                                                className='w-24 h-28 object-contain'
+                                            />
+                                        </div>
+                                        <div 
+                                            className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                            onClick={() => setOpenRecursosExternos(!openRecursosExternos)}
+                                        >
+                                            {openRecursosExternos ? (
+                                                <AiFillCaretUp size={20} color='white'/>
+                                            ) : (
+                                                <AiFillCaretDown size={20} color='white'/>
+                                            )}
+
+                                            {openRecursosExternos ? (
+                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                            ) : (
+                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                            )}
+                                        </div>
+
+                                        {openRecursosExternos && (
+                                            <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                {resultCategories.map(item => {
+                                                    const categoryDetails = JSON.parse(item.categoryDetails);
+                                                    if(categoryDetails.insumoCategory === 'recurso-externo'){
+                                                        return(
+                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
+                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+
+                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })} 
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenInsumosMinerais(!openInsumosMinerais)}
-                                >
-                                    {openInsumosMinerais ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
-
-                                    {openInsumosMinerais ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
-                                </div>
-
-                                {openInsumosMinerais && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails);
-                                            if(categoryDetails.insumoCategory === 'insumo-mineral'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
-                                <div className='flex items-center justify-between w-full p-3'>
-                                    <div className='flex flex-col gap-2'>
-                                        <h4 className='font-bold text-[#ff9900] text-2xl'>Recursos Externos</h4>
-                                        <p className='font-bold text-white text-2xl'>{quantRecursosExternos}</p>
-                                    </div>
-
-                                    <img 
-                                        src={require('../../assets/torre.png')}
-                                        className='w-24 h-28 object-contain'
-                                    />
-                                </div>
-                                <div 
-                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
-                                    onClick={() => setOpenRecursosExternos(!openRecursosExternos)}
-                                >
-                                    {openRecursosExternos ? (
-                                        <AiFillCaretUp size={20} color='white'/>
-                                    ) : (
-                                        <AiFillCaretDown size={20} color='white'/>
-                                    )}
-
-                                    {openRecursosExternos ? (
-                                        <p className='font-bold text-white'>Mostrar Menos</p>
-                                    ) : (
-                                        <p className='font-bold text-white'>Mostrar Mais</p>
-                                    )}
-                                </div>
-
-                                {openRecursosExternos && (
-                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                        {resultCategories.map(item => {
-                                            const categoryDetails = JSON.parse(item.categoryDetails);
-                                            if(categoryDetails.insumoCategory === 'recurso-externo'){
-                                                return(
-                                                    <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                        <p className='font-bold text-white w-[200px]'>{item.title}</p>
-
-                                                        <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                            <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })} 
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                                {/* DEGENERAÇÃO */}
+                            </>
+                        )}
 
                     {/* Carbono ------------------------------------------------------ */}
                     <div className='flex flex-col w-full mt-10'>
@@ -579,78 +597,82 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaCarbon.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                                    <div className='lg:w-[440px]'>
-                                        <p className='font-bold text-white'>Degeneração</p>
-                                        
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full lg:w-[440px]">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='degeneration'
-                                                            indice='carbon'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
-                                    </div>
-                                    
-                                    <div className="flex flex-col">
+                                {resultCategories && (
+                                    <>
+                                    <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div className='lg:w-[440px]'>
-                                            <p className='font-bold text-white'>Regeneração</p>
+                                            <p className='font-bold text-white'>Degeneração</p>
                                             
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full lg:w-[440px]">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='regeneration'
-                                                            indice='carbon'
-                                                        />
-                                                    ))}
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full lg:w-[440px]">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='degeneration'
+                                                                indice='carbon'
+                                                            />
+                                                        ))}
                                                         
-                                                </div>
-                                            )}
-                                            
+                                                    </div>
+                                                )}
                                         </div>
-                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900]">¹Biomassa de solo:</p>
-                                            <div className="flex items-center">
-                                                <p className="font-bold text-white mx-1">=</p>
-                                                <p className="font-bold mx-2 text-green-400">{resultBiomassa.toFixed(0)} Kg Co²</p>
+                                        
+                                        <div className="flex flex-col">
+                                            <div className='lg:w-[440px]'>
+                                                <p className='font-bold text-white'>Regeneração</p>
+                                                
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full lg:w-[440px]">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='regeneration'
+                                                                indice='carbon'
+                                                            />
+                                                        ))}
+                                                            
+                                                    </div>
+                                                )}
+                                                
+                                            </div>
+                                            <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                                <p className="font-bold text-[#ff9900]">¹Biomassa de solo:</p>
+                                                <div className="flex items-center">
+                                                    <p className="font-bold text-white mx-1">=</p>
+                                                    <p className="font-bold mx-2 text-green-400">{resultBiomassa.toFixed(0)} Kg Co²</p>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
 
-                                </div>
-
-                                <div className='flex flex-col gap-1'>
-                                    <p className='text-white'>Legenda</p>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
-                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    <div className='flex flex-col gap-1'>
+                                        <p className='text-white'>Legenda</p>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                            <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-red-500'/>
+                                            <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-blue-500'/>
+                                            <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-green-400'/>
+                                            <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900]'>¹</p>
+                                            <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-red-500'/>
-                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-blue-500'/>
-                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-green-400'/>
-                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900]'>¹</p>
-                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
-                                    </div>
-                                </div>
+                                    </>
+                                )}
 
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
@@ -711,67 +733,72 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaWater.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                                    <div>
-                                        <p className='font-bold text-white'>Degeneração</p>
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full lg:w-[440px]">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='degeneration'
-                                                            indice='agua'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
-                                    </div>
 
-                                    <div>
-                                        <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col lg:w-[440px]">
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='regeneration'
-                                                            indice='agua'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
+                                {resultCategories && (
+                                    <>
+                                    <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
+                                        <div>
+                                            <p className='font-bold text-white'>Degeneração</p>
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full lg:w-[440px]">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='degeneration'
+                                                                indice='agua'
+                                                            />
+                                                        ))}
+                                                        
+                                                    </div>
+                                                )}
+                                        </div>
+
+                                        <div>
+                                            <p className='font-bold text-white'>Regeneração</p>
+                                            <div className="flex flex-col lg:w-[440px]">
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='regeneration'
+                                                                indice='agua'
+                                                            />
+                                                        ))}
+                                                        
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className='flex flex-col gap-1'>
-                                    <p className='text-white'>Legenda</p>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
-                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    <div className='flex flex-col gap-1'>
+                                        <p className='text-white'>Legenda</p>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                            <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-red-500'/>
+                                            <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-blue-500'/>
+                                            <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-green-400'/>
+                                            <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900]'>¹</p>
+                                            <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-red-500'/>
-                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-blue-500'/>
-                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-green-400'/>
-                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900]'>¹</p>
-                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
-                                    </div>
-                                </div>
+                                    </>
+                                )}
 
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
@@ -813,7 +840,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[40px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-lg flex items-end'>
-                                    {Number(resultIndices?.solo).toFixed(0)} m²
+                                    {Number(isaSoil?.indicator).toFixed(0)} m²
                                 </p>
                             </div>
                         </div>
@@ -832,67 +859,72 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaSoil.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                                    <div>
-                                        <p className='font-bold text-white'>Degeneração</p>
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full lg:w-[440px]">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='degeneration'
-                                                            indice='solo'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
-                                    </div>
 
-                                    <div>
-                                        <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex flex-col lg:w-[440px]">
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='regeneration'
-                                                            indice='solo'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
+                                {resultCategories && (
+                                    <>
+                                    <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
+                                        <div>
+                                            <p className='font-bold text-white'>Degeneração</p>
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full lg:w-[440px]">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='degeneration'
+                                                                indice='solo'
+                                                            />
+                                                        ))}
+                                                        
+                                                    </div>
+                                                )}
+                                        </div>
+
+                                        <div>
+                                            <p className='font-bold text-white'>Regeneração</p>
+                                            <div className="flex flex-col lg:w-[440px]">
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='regeneration'
+                                                                indice='solo'
+                                                            />
+                                                        ))}
+                                                        
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className='flex flex-col gap-1'>
-                                    <p className='text-white'>Legenda</p>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
-                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                    <div className='flex flex-col gap-1'>
+                                        <p className='text-white'>Legenda</p>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                            <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-red-500'/>
+                                            <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-blue-500'/>
+                                            <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-green-400'/>
+                                            <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900]'>¹</p>
+                                            <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-red-500'/>
-                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-blue-500'/>
-                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-green-400'/>
-                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900]'>¹</p>
-                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
-                                    </div>
-                                </div>
+                                    </>
+                                )}
 
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  
@@ -934,7 +966,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     className='w-[40px] h-[40px] object-contain'
                                 />
                                 <p className='font-bold text-white text-lg flex items-end'>
-                                    {Number(resultIndices?.bio).toFixed(0)} uni
+                                    {Number(isaBio?.indicator).toFixed(0)} uni
                                 </p>
                             </div>
                         </div>
@@ -953,85 +985,90 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaBio.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
-                                    <div>
-                                        <p className='font-bold text-white'>Degeneração</p>
-                                        <div className="flex flex-col lg:w-[440px]">
-                                            {resultCategories.length > 0 && (
-                                                <div className="flex flex-col w-full">
-                                                    {resultCategories.map(item => (
-                                                        <IndiceCalculoItem
-                                                            key={item.id}
-                                                            data={item}
-                                                            type='degeneration'
-                                                            indice='bio'
-                                                        />
-                                                    ))}
-                                                    
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="flex flex-col lg:w-[440px]">
-                                        <p className='font-bold text-white'>Regeneração</p>
-                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Registro de biodiversidade: </p>
-                                            <div className="flex items-center">
-                                                <p className="font-bold mx-2 text-red-500"> {resultBiodiversity.length}</p>
-                                                <p className="font-bold text-white mx-1">x</p>
-                                                <p className="font-bold mx-2 text-blue-500">1</p>
-                                            </div>
-                                            <div className="flex items-center">
-                                            <p className="font-bold text-white mx-1">=</p>
-                                            <p className="font-bold  mx-2 text-green-400">{Number(Number(resultBiodiversity.length) * 1).toFixed(2)}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Biodiversidade de árvores: </p>
-                                            <div className="flex items-center">
-                                                <p className="font-bold mx-2 text-red-500"> {bioArvores?.value}</p>
-                                                <p className="font-bold text-white mx-1">x</p>
-                                                <p className="font-bold mx-2 text-blue-500">1</p>
-                                            </div>
-                                            <div className="flex items-center">
-                                            <p className="font-bold text-white mx-1">=</p>
-                                            <p className="font-bold  mx-2 text-green-400">{bioArvores.value}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
-                                            <p className="font-bold text-[#ff9900]">¹Biodiversidade de insetos:</p>
-                                            <div className="flex items-center">
-                                                <p className="font-bold text-white mx-1">=</p>
-                                                <p className="font-bold mx-2 text-green-400">{resultBioInsetos.toFixed(0)}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div className='flex flex-col gap-1'>
-                                    <p className='text-white'>Legenda</p>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
-                                        <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                {resultCategories && (
+                                    <>
+                                    <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
+                                        <div>
+                                            <p className='font-bold text-white'>Degeneração</p>
+                                            <div className="flex flex-col lg:w-[440px]">
+                                                {resultCategories.length > 0 && (
+                                                    <div className="flex flex-col w-full">
+                                                        {resultCategories.map(item => (
+                                                            <IndiceCalculoItem
+                                                                key={item.id}
+                                                                data={item}
+                                                                type='degeneration'
+                                                                indice='bio'
+                                                            />
+                                                        ))}
+                                                        
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col lg:w-[440px]">
+                                            <p className='font-bold text-white'>Regeneração</p>
+                                            <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                                <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Registro de biodiversidade: </p>
+                                                <div className="flex items-center">
+                                                    <p className="font-bold mx-2 text-red-500"> {resultBiodiversity.length}</p>
+                                                    <p className="font-bold text-white mx-1">x</p>
+                                                    <p className="font-bold mx-2 text-blue-500">1</p>
+                                                </div>
+                                                <div className="flex items-center">
+                                                <p className="font-bold text-white mx-1">=</p>
+                                                <p className="font-bold  mx-2 text-green-400">{Number(Number(resultBiodiversity.length) * 1).toFixed(2)}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                                <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Biodiversidade de árvores: </p>
+                                                <div className="flex items-center">
+                                                    <p className="font-bold mx-2 text-red-500"> {bioArvores?.value}</p>
+                                                    <p className="font-bold text-white mx-1">x</p>
+                                                    <p className="font-bold mx-2 text-blue-500">1</p>
+                                                </div>
+                                                <div className="flex items-center">
+                                                <p className="font-bold text-white mx-1">=</p>
+                                                <p className="font-bold  mx-2 text-green-400">{bioArvores.value}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                                                <p className="font-bold text-[#ff9900]">¹Biodiversidade de insetos:</p>
+                                                <div className="flex items-center">
+                                                    <p className="font-bold text-white mx-1">=</p>
+                                                    <p className="font-bold mx-2 text-green-400">{resultBioInsetos.toFixed(0)}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-red-500'/>
-                                        <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+
+                                    <div className='flex flex-col gap-1'>
+                                        <p className='text-white'>Legenda</p>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900] text-sm'>ABC</p>
+                                            <p className=' text-white text-sm'> - Insumo inspecionado na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-red-500'/>
+                                            <p className=' text-white text-sm'> - Quantidade encontrada na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-blue-500'/>
+                                            <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='border-2 w-7 border-green-400'/>
+                                            <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <p className='font-bold text-[#ff9900]'>¹</p>
+                                            <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-blue-500'/>
-                                        <p className=' text-white text-sm'> - Valor do impacto no meio ambiente</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='border-2 w-7 border-green-400'/>
-                                        <p className=' text-white text-sm'> - Valor total do impacto na propriedade</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <p className='font-bold text-[#ff9900]'>¹</p>
-                                        <p className=' text-white text-sm'> - Para ver o cálculo detalhado acesse o PDF</p>
-                                    </div>
-                                </div>
+                                    </>
+                                )}
 
                                 <div className='flex items-center mt-5 gap-2'>
                                     <a  

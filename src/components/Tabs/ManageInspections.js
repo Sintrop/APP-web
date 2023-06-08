@@ -234,6 +234,7 @@ export default function ManageInpections({walletAddress, setTab}){
                 <LoadingTransaction
                     loading={loadingTransaction}
                     logTransaction={logTransaction}
+                    action='request-inspection'
                 />
             </Dialog.Root>
             {loading && (

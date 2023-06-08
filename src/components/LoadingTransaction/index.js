@@ -2,10 +2,14 @@ import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './loadingTransaction.css';
 import { useTranslation } from 'react-i18next';
+import { MissaoCheck } from '../MissaoCheck';
+import { useMainContext } from '../../hooks/useMainContext';
 
-export function LoadingTransaction({loading, logTransaction}){
+export function LoadingTransaction({loading, logTransaction, action}){
+    const {userData} = useMainContext();
     const {t} = useTranslation();
     const [count, setCount] = useState(1);
+    const [missaoCheck, setMissaoCheck] = useState(false);
 
     useEffect(() => {
         if(count === 5){
@@ -14,6 +18,20 @@ export function LoadingTransaction({loading, logTransaction}){
         }
         setTimeout(() => setCount(count + 1), 1000)
     },[count]);
+
+    useEffect(() => {
+        if(!loading && logTransaction.type === 'success'){
+            if(action === 'register'){
+                setMissaoCheck(true)
+            }
+
+            if(action === 'request-inspection'){
+                if(userData?.level === 1){
+                    setMissaoCheck(true);
+                }
+            }
+        }
+    }, [logTransaction])
     
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
@@ -88,6 +106,15 @@ export function LoadingTransaction({loading, logTransaction}){
                     <Dialog.Close>{t('Close')}</Dialog.Close>
                 )} */}
             </Dialog.Content>
+
+            <Dialog.Root
+                open={missaoCheck}
+                onOpenChange={(open) => setMissaoCheck(open)}
+            >
+                <MissaoCheck
+                    action={action}
+                />
+            </Dialog.Root>
         </Dialog.Portal>
     )
 }

@@ -5,6 +5,7 @@ import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
 import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
+import {api} from '../services/api';
 
 export const MainContext = createContext({})
 
@@ -21,6 +22,7 @@ export default function MainProvider({children}){
     const [modalChooseLang, setModalChooseLang] = useState(false);
     const [modalTutorial, setModalTutorial] = useState(false);
     const [balanceUser, setBalanceUser] = useState(0);
+    const [userData, setUserData] = useState(0);
 
     useEffect(() => {
         getAtualBlockNumber();
@@ -70,7 +72,15 @@ export default function MainProvider({children}){
         setUser(response);
         setWalletConnected(wallet);
         getBalanceUser(response, wallet);
+        if(response !== '0'){
+            getUserDataApi(wallet)
+        }
         return response;
+    }
+
+    async function getUserDataApi(wallet){
+        const resUser = await api.get(`/user/${wallet}`)
+        setUserData(resUser.data.user)
     }
 
     async function getAtualBlockNumber(){
@@ -131,7 +141,9 @@ export default function MainProvider({children}){
                 setWalletSelected,
                 modalTutorial,
                 chooseModalTutorial,
-                balanceUser
+                balanceUser,
+                userData,
+                getUserDataApi
             }}
         >
             {children}

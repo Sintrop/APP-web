@@ -44,7 +44,20 @@ export function WebcamComponent({onTake, check}){
                         {loading ? (
                             <h1>{t('Loading camera')}</h1>
                         ) : (
-                            <h1>{t('Your device does not have a camera, or has been denied permission to access it')}</h1>
+                            <div>
+                                <h1>{t('Your device does not have a camera, or has been denied permission to access it')}</h1>
+                                <button
+                                    className="mt-3 px-5 py-2 rounded-md text-white font-bold bg-[#ff9900]"
+                                    onClick={() => {
+                                        navigator.mediaDevices.getUserMedia({video: true})
+                                        .then(() => {
+                                            setHaveWebcam(true)
+                                        })
+                                    }}
+                                >
+                                    Requisitar Permissão Novamente
+                                </button>
+                            </div>
                         )}
                     </div>
                 ) : (

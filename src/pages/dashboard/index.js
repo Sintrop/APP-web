@@ -11,6 +11,7 @@ import ManageInspections from '../../components/Tabs/ManageInspections';
 import { TopBarStatus } from '../../components/TopBarStatus';
 import { TopBarMobile } from '../../components/TopBarMobile';
 import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
+import { Assistent } from '../../components/Assistent';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -121,7 +122,8 @@ export default function Dashboard(){
     const [activeTab, setActiveTab] = useState('isa');
     const {user} = CheckUserRegister({walletAddress: walletAddress});
     const [walletSelect, setWalletSelect] = useState('');
-    const [menuMobile, setMenuMobile] = useState(false)
+    const [menuMobile, setMenuMobile] = useState(false);
+    const [assistentOpen, setAssistentOpen] = useState(true);
 
     useEffect(() => {
         async function checkConnection(){
@@ -428,13 +430,20 @@ export default function Dashboard(){
                 />
             </Dialog.Root>
 
+
         </div>
-            <div 
-                className="absolute w-32 h-10 flex items-center justify-center bg-red-500 z-90 bottom-5 right-10 rounded-md cursor-pointer"
-                onClick={() => chooseModalTutorial()}
-            >
-                <p className="font-bold text-white">Tutorial</p>
-            </div>
+            {assistentOpen ? (
+                <Assistent
+                    close={() => setAssistentOpen(false)}
+                />
+            ) : (
+                <button 
+                    className="absolute w-32 h-10 flex items-center justify-center bg-red-500 z-90 bottom-5 right-10 rounded-md text-white font-bold"
+                    onClick={() => setAssistentOpen(true)}
+                >
+                    Assistente
+                </button>
+            )}
         </div>
     )
 }
