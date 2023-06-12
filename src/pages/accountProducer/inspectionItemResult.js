@@ -7,8 +7,11 @@ import { IndiceValueItem } from '../../components/IndiceValueItem';
 import { IndiceCalculoItem } from '../../components/IndiceCalculoItem';
 import {GetIsa, GetInspection} from '../../services/manageInspectionsService';
 import { saveAs } from 'file-saver';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function InspectionItemResult({data, initialVisible}){
+    const navigate = useNavigate();
+    const {walletAddress} = useParams();
     const {t} = useTranslation();
     const [open, setOpen] = useState(false);
     const [openArvores, setOpenArvores] = useState(false);
@@ -70,7 +73,8 @@ export function InspectionItemResult({data, initialVisible}){
     async function getResultIndices() {
         const response = await api.get(`/inspection/${data.id}`)
         setInspectionDataApi(response.data.inspection)
-        if(!response.data.inspection.resultCategories){
+        
+        if(response.data.inspection.resultCategories === null){
             return;
         }
         setResultIndices(JSON.parse(response.data?.inspection?.resultIdices))
@@ -174,10 +178,10 @@ export function InspectionItemResult({data, initialVisible}){
                 <div className='p-2 bg-[#0a4303] w-full flex flex-col'>
                     <div className='w-full items-center justify-center'>
                         <div className='flex justify-center'>
-                            {resultCategories ? (
-                                <p>Método Phoenix</p>
-                            ) : (
+                            {resultCategories.length === 0 ? (
                                 <p>Método Manual</p>
+                                ) : (
+                                <p>Método Phoenix</p>
                             )}
                         </div>
                     </div>
@@ -227,13 +231,32 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
                     </div>
                     
-                    <p className='font-bold text-[#ff9900] mt-5'>{t('Activist')} {t('Wallet')}: <span className='text-white'>{data.acceptedBy}</span></p>
-                    <p className='font-bold text-[#ff9900]'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
-                    <p className='font-bold text-[#ff9900]'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
-                    <p className='font-bold text-[#ff9900]'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-[#ff9900] mt-5'>{t('Activist')} {t('Wallet')}: 
+                        <span          
+                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer'
+                            onClick={() => {
+                                navigate(`/dashboard/${walletAddress}/user-details/2/${data.acceptedBy}`)
+                            }}
+                        >
+                            {data.acceptedBy}
+                        </span>
+                    </p>
+                    <p className='font-bold text-[#ff9900] mt-1'>{t('Producer')} {t('Wallet')}: 
+                        <span          
+                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer'
+                            onClick={() => {
+                                navigate(`/dashboard/${walletAddress}/user-details/1/${data.createdBy}`)
+                            }}
+                        >
+                            {data.createdBy}
+                        </span>
+                    </p>
+                    <p className='font-bold text-[#ff9900] mt-1'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-[#ff9900] mt-1'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-[#ff9900] mt-1'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
 
                     <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
-                        {resultCategories && (
+                        {resultCategories.length > 0 && (
                             <>
                                 {/* REGENERAÇÃO */}
                                 <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
@@ -597,7 +620,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaCarbon.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                {resultCategories && (
+                                {resultCategories.length > 0 && (
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div className='lg:w-[440px]'>
@@ -734,7 +757,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     </span> 
                                 </p>
 
-                                {resultCategories && (
+                                {resultCategories.length > 0 && (
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div>
@@ -860,7 +883,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     </span> 
                                 </p>
 
-                                {resultCategories && (
+                                {resultCategories.length > 0 && (
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div>
@@ -986,7 +1009,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     </span> 
                                 </p>
 
-                                {resultCategories && (
+                                {resultCategories.length > 0 && (
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div>

@@ -102,8 +102,8 @@ export default function AccountProducer(){
 
                 <div className='flex flex-col'>
                     <p className='text-lg text-center lg:text-left text-white mt-2'>ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>ISA {t('Average')}: {producerData?.isa?.isaAverage}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>{t('Delations Received')}: {producerData?.isa?.isaAverage}</p>
+                    <p className='text-lg text-center lg:text-left text-white'>ISA {t('Average')}: {(Number(producerData?.isa?.isaScore) / Number(producerData?.totalInspections)).toFixed(1).replace('.',',')}</p>
+                    <p className='text-lg text-center lg:text-left text-white'>{t('Delations Received')}: 0</p>
                 </div>
 
                 <div className='flex flex-col'>

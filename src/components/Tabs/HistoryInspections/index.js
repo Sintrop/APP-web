@@ -25,7 +25,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     const loadInspections = () => {
         inspection.getAllInspections().then( res => {
             const inspections = res.filter(item => item.status === '2')
-            setInspections(inspections);
+            setInspections(inspections.reverse());
         });
     }
 
@@ -69,6 +69,9 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                     ) : (
                         <div className="flex flex-col">
                             <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                                <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
+                                    <p className='text-white'>ID</p>
+                                </div>
                                 <div className='flex items-center h-full lg:w-[350px] px-2 font-bold'>
                                     <p className='text-white'>{t('Requested By')}</p>
                                 </div>
@@ -76,7 +79,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                     <p className='text-white'>{t('Inspected By')}</p>
                                 </div>
                                 <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
-                                    <p className='text-white'>{t('Created At')}</p>
+                                    <p className='text-white'>{t('Inspected At')}</p>
                                 </div>
                                 <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>Isa {t('Score')}</p>
@@ -86,7 +89,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col h-[65vh] overflow-auto'>
+                            <div className='flex flex-col h-[66vh] overflow-auto'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}

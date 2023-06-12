@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import QRCode from "react-qr-code";
+import {QRCode} from "react-qrcode-logo";
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
-import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import { api } from "../../../../services/api";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +25,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     const [loading, setLoading] = useState(false);
     const [modalContribute, setModalContribute] = useState(false);
     const [receipts, setReceipts] = useState([]);
+    const [impactInvestor, setImpactInvestor] = useState({});
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -32,24 +33,34 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
     useEffect(() => {
         getInvestor();
-        getReceipts();
+        getImpact()
     }, []);
 
-    async function getReceipts(){
-        //add try catch in future
-        const receipts = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&contractaddress=0x3b25db3d9853ef80f60079ab38e5739cd1543b34&address=0x49b85e2d9f48252bf32ba35221b361da77aac683&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
-        if(receipts.data.status === '1'){
-            setReceipts(receipts.data.result);
+    async function getImpact(){
+        let carbon = 0;
+        let water = 0;
+        let bio = 0;
+        let soil = 0;
+
+        const response = await api.get(`/tokens-burned/by-wallet/${walletAddress}`);
+        const arrayTokens = response.data.tokensBurned;
+        for(var i = 0; i < arrayTokens.length; i++){
+            const tokens = arrayTokens[i].tokens;
+            carbon += tokens * arrayTokens[i].carbon;
+            water += tokens * arrayTokens[i].water;
+            bio += tokens * arrayTokens[i].bio;
+            soil += tokens * arrayTokens[i].soil;
         }
+
+        setImpactInvestor({carbon, water, bio, soil})
     }
 
     async function getInvestor(){
         setLoading(true);
         const response = await GetInvestor(walletAddress);
         setInvestorData(response);
-        console.log(response)
         const tokens = await GetCertificateTokens(walletAddress);
-        setTokensBurned(Number(tokens) / 10**18);
+        setTokensBurned((Number(tokens) / 10**18));
         setLoading(false);
     }
 
@@ -122,22 +133,32 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
 
                                     <div className="flex w-full mt-7">
-                                        <div className="flex flex-col lg:w-[50%]">
-                                            <p className="text-green-800 font-bold text-xl">{tokensBurned} Créditos de Regeneração</p>
+                                        <div className="flex flex-col items-center lg:w-[40%]">
+                                            <p className="text-green-800 font-bold text-3xl">{Number(tokensBurned).toFixed(2).replace('.',',')}</p>
+                                            <p className="text-green-800 font-bold text-sm">Créditos de Regeneração</p>
                                         </div>
 
-                                        <div className="flex flex-col lg:w-[50%]">
-                                            <p className="text-black text-sm">Saldo de Carbono: 0 Co²</p>
-                                            <p className="text-black text-sm">Saldo de Água: 0 m³</p>
-                                            <p className="text-black text-sm">Saldo de Biodiversidade: 0</p>
-                                            <p className="text-black text-sm">Saldo de Solo: 0 m²</p>
+                                        <div className="flex flex-col lg:w-[60%] lg:ml-3">
+                                            <p className="text-black text-sm">Saldo de Carbono: {Number(impactInvestor?.carbon).toFixed(2)} kg</p>
+                                            <p className="text-black text-sm">Saldo de Água: {Number(impactInvestor?.water).toFixed(2)} m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: {Number(impactInvestor?.bio).toFixed(2)} uni</p>
+                                            <p className="text-black text-sm">Saldo de Solo: {Number(impactInvestor?.soil).toFixed(2)} m²</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col items-center justify-center lg:w-[30%]">
                                     <p className="text-black font-bold text-center mb-5">{t('Investor')}</p>
-                                    <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={180}/>
+                                    <QRCode 
+                                        value={`${window.location.host}/account-investor/${wallet}`} 
+                                        size={180}
+                                        logoImage={require('../../../../assets/icone.png')}
+                                        qrStyle="dots"
+                                        logoPadding={2}
+                                        logoWidth={50}
+                                        removeQrCodeBehindLogo
+                                        eyeColor='#0a4303'
+                                    />
                                 </div>
                             </div>
 
@@ -157,7 +178,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                         >
                             <ModalContribute 
                                 wallet={walletAddress}
-                                onFinished={() => getInvestor()}
+                                onFinished={() => {
+                                    getInvestor()
+                                    getImpact()
+                                }}
                             />
                             <Dialog.Trigger
                                 className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'

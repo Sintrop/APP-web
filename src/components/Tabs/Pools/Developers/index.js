@@ -32,10 +32,9 @@ export default function DevelopersPool({wallet, setTab}){
     const [eraInfo, setEraInfo] = useState([]);
     const [developerInfo, setDeveloperInfo] = useState([]);
     const [nextAprove, setNextAprove] = useState('0');
-    const [tokensAllowed, setTokensAllowed] = useState('0');
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const [developersList, setDevelopersList] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress, typeUser} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(true);
@@ -52,7 +51,7 @@ export default function DevelopersPool({wallet, setTab}){
     async function getInfosPool(){
         setLoading(true);
         const developers = await GetDevelopers();
-        setDevelopersList(developers);
+        filterUsersPool(developers);
         const totalTokens = await GetBalancePool();
         setTotalSACTokens(totalTokens);
         const tokensPerEra = await TokensPerEra();
@@ -61,13 +60,13 @@ export default function DevelopersPool({wallet, setTab}){
         setCurrentEra(currentEra);
         const eraInfo = await GetEra(parseFloat(currentEra));
         setEraInfo(eraInfo);
-        if(user === '4'){
-            const developerInfo = await GetDeveloper(wallet);
+        if(typeUser === '4'){
+            const developerInfo = await GetDeveloper(walletAddress);
             setDeveloperInfo(developerInfo);
             console.log(developerInfo)
             const nextAprove = await CheckNextAprove(developerInfo.pool.currentEra);
             setNextAprove(nextAprove);
-            const balanceDeveloper = await GetBalanceDeveloper(wallet);
+            const balanceDeveloper = await GetBalanceDeveloper(walletAddress);
             setBalanceDeveloper(balanceDeveloper);
             setLoading(false);
         }
@@ -135,6 +134,30 @@ export default function DevelopersPool({wallet, setTab}){
                 hash: ''
             })
         })
+    }
+
+    async function filterUsersPool(array){
+        let newArray = [];
+        for(var i = 0; i < array.length; i++){
+            if(Number(array[i].pool?.level) > 0){
+                const balance = await GetBalanceDeveloper(array[i].developerWallet)
+                if(Number(balance) > 0){
+                    let data = {
+                        developerWallet: array[i].developerWallet,
+                        name: array[i].name,
+                        balance: Number(balance),
+                        userType: '4',
+                        level: array[i].pool?.level
+                    }
+    
+                    newArray.push(data);
+                }
+
+            }
+        }
+
+        let developerSort = newArray.map((item) => item ).sort( (a,b) => parseInt(b.balance) + parseInt(a.balance))
+        setDevelopersList(developerSort)
     }
 
     return(
@@ -218,7 +241,7 @@ export default function DevelopersPool({wallet, setTab}){
                 </div>
                     <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
-                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de desenvolvedores</p>
+                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de Desenvolvedores Aprovados</p>
                         </div>
                         <div className='flex w-full items-center'>
                             <div className='flex w-[5%] px-1 py-3'>

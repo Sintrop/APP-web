@@ -3,7 +3,7 @@ import './certificate.css';
 import '../isa.css';
 import {useParams} from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import QRCode from "react-qr-code";
+import {QRCode} from "react-qrcode-logo";
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
 import { api } from "../../../services/api";
@@ -16,6 +16,7 @@ import {GetInspections} from '../../../services/manageInspectionsService';
 
 //components
 import Loading from '../../Loading';
+import {IsProducerSyntropic} from '../../IsProducerSyntropic';
 
 export default function ProducerCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
@@ -143,23 +144,26 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
                             <div className="flex flex-col lg:flex-row w-full h-full">
                                 <div className="flex flex-col lg:w-[70%]">
-                                    <img
-                                        src={require('../../../assets/logo-cinza.png')}
-                                        className="w-[150px] h-[80px] object-contain"
-                                    />
+                                    <div className="flex items-center gap-5">
+                                        <img
+                                            src={require('../../../assets/logo-cinza.png')}
+                                            className="w-[150px] h-[80px] object-contain"
+                                        />
+                                        <IsProducerSyntropic data={producerData}/>
+                                    </div>
 
                                     <p className="font-bold text-black">{producerData?.name}</p>
                                     <p className="font-bold text-black">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                                     <p className="font-bold text-black">{producerAddress?.complement}</p>
 
                                     <div className="flex w-full mt-7">
-                                        <div className="flex flex-col w-[50%]">
+                                        <div className="flex flex-col w-[40%]">
                                             <p className="text-black text-sm">{t('Inspections Reiceved')}: {producerData?.totalInspections}</p>
                                             <p className="text-black text-sm">ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
                                             <p className="text-black text-sm">ISA {t('Average')}: {Number(producerData?.isa?.isaScore)/Number(producerData?.totalInspections)}</p>
                                         </div>
 
-                                        <div className="flex flex-col w-[50%]">
+                                        <div className="flex flex-col w-[60%]">
                                             <p className="text-black text-sm">Saldo de Carbono: {carbonTotal.toFixed(0)} Kg</p>
                                             <p className="text-black text-sm">Saldo de Água: {waterTotal.toFixed(0)} m³</p>
                                             <p className="text-black text-sm">Saldo de Biodiversidade: {bioTotal.toFixed(0)} uni</p>
@@ -170,7 +174,17 @@ export default function ProducerCertificate({userType, wallet, setTab}){
 
                                 <div className="flex flex-col items-center justify-center lg:w-[30%]">
                                     <p className="text-black font-bold text-center mb-5">Produtor Regenerativo</p>
-                                    <QRCode value={`${window.location.host}/account-producer/${wallet}`} size={180}/>
+                                    <QRCode 
+                                        value={`${window.location.host}/account-producer/${wallet}`} 
+                                        size={180}
+                                        logoImage={require('../../../assets/icone.png')}
+                                        qrStyle="dots"
+                                        logoPadding={2}
+                                        logoPaddingStyle="square"
+                                        logoWidth={50}
+                                        removeQrCodeBehindLogo
+                                        eyeColor='#0a4303'
+                                    />
                                 </div>
                             </div>
 

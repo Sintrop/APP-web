@@ -5,8 +5,13 @@ import {GetTokensBalance} from '../../../../services/voteService';
 import {BurnTokens} from '../../../../services/sacTokenService';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
+import { api } from '../../../../services/api';
+import { useParams } from 'react-router';
+import { useMainContext } from '../../../../hooks/useMainContext';
 
 export function ModalContribute({wallet, onFinished}){
+    const {impactPerToken} = useMainContext();
+    const {walletAddress} = useParams();
     const [balanceTokens, setBalanceTokens] = useState(0);
     const [inputTokens, setInputTokens] = useState('');
     const [loading, setLoading] = useState(false);
@@ -22,6 +27,24 @@ export function ModalContribute({wallet, onFinished}){
         const response = await GetTokensBalance(wallet);
         setBalanceTokens(Number(response) / 10**18);
         console.log(response);
+    }
+
+    async function registerTokensApi(tokens, hash){
+        try{
+            await api.post('/tokens-burned', {
+                wallet: walletAddress.toUpperCase(),
+                tokens: Number(tokens),
+                transactionHash: hash,
+                carbon: Number(impactPerToken?.carbon),
+                water: Number(impactPerToken?.water),
+                bio: Number(impactPerToken?.bio),
+                soil: Number(impactPerToken?.soil)
+            })
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingTransaction(false);
+        }
     }
 
     async function burnTokens(){
@@ -40,7 +63,9 @@ export function ModalContribute({wallet, onFinished}){
                 message: res.message,
                 hash: res.hashTransaction
             })
-            setLoadingTransaction(false);
+            if(res.type === 'success'){
+                registerTokensApi(inputTokens, res.hashTransaction)
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -91,7 +116,7 @@ export function ModalContribute({wallet, onFinished}){
                 <Dialog.Title className='font-bold text-center text-white'>
                     Contribute
                 </Dialog.Title>
-                <p className='text-white'>Your balance: {balanceTokens} SAC Tokens</p>
+                <p className='text-white'>Your balance: {balanceTokens.toFixed(2).replace('.',',')} Créditos de Regeneração</p>
 
                 <div className='modal-contribute__container-input'>
                     <p className='font-bold text-[#ff9900]'>Number of tokens for donation</p>

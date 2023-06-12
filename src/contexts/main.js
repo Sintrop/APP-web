@@ -5,6 +5,8 @@ import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
 import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
+import {GetBalanceContract} from '../services/producerPoolService';
+import {GetBalancePool} from '../services/developersPoolService';
 import {api} from '../services/api';
 
 export const MainContext = createContext({})
@@ -23,10 +25,12 @@ export default function MainProvider({children}){
     const [modalTutorial, setModalTutorial] = useState(false);
     const [balanceUser, setBalanceUser] = useState(0);
     const [userData, setUserData] = useState(0);
+    const [impactPerToken, setImpactPerToken] = useState({});
 
     useEffect(() => {
         getAtualBlockNumber();
         getStorageLanguage();
+        getImpact();
     }, []);
 
     useEffect(() => {
@@ -57,7 +61,6 @@ export default function MainProvider({children}){
             setBalanceUser(Number(balanceUser))
         }
     }
-
 
     function chooseModalRegister(){
         setModalRegister(!modalRegister);
@@ -118,6 +121,44 @@ export default function MainProvider({children}){
             setModalChooseLang(true)
         }
     }
+
+    async function getImpact(){
+        const response = await api.get('network-impact')
+        const impacts = response.data?.impact;
+        
+        const balanceProducers = await GetBalanceContract();
+        const balanceDevelopers = await GetBalancePool();
+
+        for(var i = 0; i < impacts.length; i++){
+            if(impacts[i].id === '1'){
+                calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
+            }
+        }
+    }
+    
+    async function calculateImpactPerToken(balanceProducers, balanceDevelopers, impact){
+        const totalBalanceProducers = 750000000000000000000000000;
+        const totalBalanceDevelopers = 15000000000000000000000000;
+
+        const sacProducers = totalBalanceProducers - balanceProducers;
+        const sacDevelopers = totalBalanceDevelopers - balanceDevelopers;
+
+        const totalSac = sacProducers + sacDevelopers;
+
+        const carbon = Number(impact.carbon) / (totalSac / 10 ** 18);
+        const bio = Number(impact.bio) / (totalSac / 10 ** 18);
+        const water = Number(impact.agua) / (totalSac / 10 ** 18);
+        const soil = Number(impact.solo) / (totalSac / 10 ** 18);
+
+        let impactToken = {
+            carbon,
+            bio,
+            water,
+            soil
+        }
+        setImpactPerToken(impactToken);
+    }
+
     
     return(
         <MainContext.Provider
@@ -143,7 +184,8 @@ export default function MainProvider({children}){
                 chooseModalTutorial,
                 balanceUser,
                 userData,
-                getUserDataApi
+                getUserDataApi,
+                impactPerToken
             }}
         >
             {children}

@@ -6,17 +6,16 @@ import {GetProducers} from '../../services/producerService';
 import {GetActivists} from '../../services/activistService';
 import {GetResearchers} from '../../services/researchersService';
 import Loading from '../Loading';
-import {GetBalanceContract} from '../../services/producerPoolService';
-import {GetBalancePool} from '../../services/developersPoolService';
 import { Warning } from '../Warning';
 import { useNavigate } from 'react-router';
+import { useMainContext } from '../../hooks/useMainContext';
 
 export function NetworkImpact({setTab}){
+    const {impactPerToken} = useMainContext();
     const navigate = useNavigate();
     const [impact, setImpact] = useState({});
     const [impactPhoenix, setImpactPhoenix] = useState({});
     const [impactManual, setImpactManual] = useState({});
-    const [impactPerToken, setImpactPerToken] = useState({});
     const {t} = useTranslation();
     const {tabActive} = useParams();
     const [producersCount, setProducersCount] = useState(0);
@@ -45,14 +44,10 @@ export function NetworkImpact({setTab}){
 
         const researchers = await GetResearchers();
         setResearchersCount(researchers.length);
-        
-        const balanceProducers = await GetBalanceContract();
-        const balanceDevelopers = await GetBalancePool();
 
         for(var i = 0; i < impacts.length; i++){
             if(impacts[i].id === '1'){
                 setImpact(impacts[i]);
-                calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
             }
             if(impacts[i].id === '2'){
                 setImpactPhoenix(impacts[i]);
@@ -62,29 +57,6 @@ export function NetworkImpact({setTab}){
             }
         }
         setLoading(false);
-    }
-    
-    async function calculateImpactPerToken(balanceProducers, balanceDevelopers, impact){
-        const totalBalanceProducers = 750000000000000000000000000;
-        const totalBalanceDevelopers = 15000000000000000000000000;
-
-        const sacProducers = totalBalanceProducers - balanceProducers;
-        const sacDevelopers = totalBalanceDevelopers - balanceDevelopers;
-
-        const totalSac = sacProducers + sacDevelopers;
-
-        const carbon = Number(impact.carbon) / (totalSac / 10 ** 18);
-        const bio = Number(impact.bio) / (totalSac / 10 ** 18);
-        const water = Number(impact.agua) / (totalSac / 10 ** 18);
-        const soil = Number(impact.solo) / (totalSac / 10 ** 18);
-
-        let impactToken = {
-            carbon,
-            bio,
-            water,
-            soil
-        }
-        setImpactPerToken(impactToken);
     }
 
     return(
@@ -99,7 +71,7 @@ export function NetworkImpact({setTab}){
                 width={250}
             />
 
-            <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[1000px] mt-5 px-2 mx-2 lg:mx-0">
+            <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[950px] mt-5 px-2 mx-2 lg:mx-0">
                     <p className="text-white mb-5 font-bold">{t('IMPACTO DA NOSSA REDE')}</p>
 
                     <div className="flex items-center gap-2 flex-wrap justify-center">
@@ -200,7 +172,7 @@ export function NetworkImpact({setTab}){
                                         className='w-[25px] h-[25px] object-contain'
                                     />
                                 </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.carbon).toFixed(2)} <span className='font-bold text-base'>kg</span></p>
+                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.carbon) * 1000).toFixed(2).replace('.',',')} <span className='font-bold text-base'>g</span></p>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -211,7 +183,7 @@ export function NetworkImpact({setTab}){
                                         className='w-[25px] h-[25px] object-contain'
                                     />
                                 </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.soil).toFixed(2)} <span className='font-bold text-base'>m²</span></p>
+                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.soil) * 10000).toFixed(2).replace('.', ',')} <span className='font-bold text-base'>cm²</span></p>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -222,7 +194,7 @@ export function NetworkImpact({setTab}){
                                         className='w-[25px] h-[25px] object-contain'
                                     />
                                 </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.water).toFixed(2)} <span className='font-bold text-base'>m³</span></p>
+                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.water) * 1000).toFixed(2).replace('.',',')} <span className='font-bold text-base'>L</span></p>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -233,7 +205,7 @@ export function NetworkImpact({setTab}){
                                         className='w-[25px] h-[25px] object-contain'
                                     />
                                 </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.bio).toFixed(2)} <span className='font-bold text-base'>uni</span></p>
+                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.bio).toFixed(3)} <span className='font-bold text-base'>uni</span></p>
                             </div>
                         </div>
 
@@ -246,7 +218,7 @@ export function NetworkImpact({setTab}){
                     </div>
             </section>
 
-                <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[1000px] mt-5 px-2 mx-2 lg:mx-0">
+                <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[950px] mt-5 px-2 mx-2 lg:mx-0">
                     <p className="text-white mb-5 font-bold">{t('IMPACTO POR MÉTODO')}</p>
 
                     <div className="flex items-center gap-2 flex-wrap justify-center">

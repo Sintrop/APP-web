@@ -32,7 +32,7 @@ export default function ProducersPool({wallet, setTab}){
     const [scoresProducers, setScoreProducers] = useState('0');
     const [nextAprove, setNextAprove] = useState('0');
     const [producersList, setProducersList] = useState([]);
-    const {tabActive, walletAddress} = useParams();
+    const {tabActive, walletAddress, typeUser} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
@@ -49,12 +49,7 @@ export default function ProducersPool({wallet, setTab}){
         producerService
         .getProducerRanking()
         .then((res) =>{
-            if(res.length > 0){
-
-            let producerSort = res.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
-            
-            setProducersList(producerSort)
-            } 
+            filterUsersPool(res);
         })
         .catch((err) => console.log(err));
     },[])
@@ -70,7 +65,7 @@ export default function ProducersPool({wallet, setTab}){
         setBalanceContract(balanceContract);
         // const scoreProducers = await GetTotalScoreProducers();
         // setScoreProducers(scoreProducers);
-        if(user === '1'){
+        if(typeUser === '1'){
             const producer = await GetProducer(walletAddress);
             setProducerInfo(producer);
             const balanceProducer = await GetBalanceProducer(walletAddress);
@@ -143,6 +138,31 @@ export default function ProducersPool({wallet, setTab}){
                 hash: ''
             })
         })
+    }
+
+    async function filterUsersPool(array){
+        let newArray = [];
+
+        for(var i = 0; i < array.length; i++){
+            if(Number(array[i].isa.isaScore) > 0){
+                const balance = await GetBalanceProducer(array[i].producerWallet)
+                if(Number(balance) > 0){
+                    let data = {
+                        producerWallet: array[i].producerWallet,
+                        name: array[i].name,
+                        isaScore: array[i].isa.isaScore,
+                        balance: Number(balance),
+                        userType: '1'
+                    }
+    
+                    newArray.push(data);
+                }
+
+            }
+        }
+
+        let producerSort = newArray.map((item) => item ).sort( (a,b) => parseInt(b.balance) + parseInt(a.balance))
+        setProducersList(producerSort)
     }
 
     return(
@@ -224,7 +244,7 @@ export default function ProducersPool({wallet, setTab}){
 
                 <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
-                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de produtores</p>
+                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de Produtores Aprovados</p>
                         </div>
                         <div className='flex w-full items-center'>
                             <div className='flex w-[5%] px-1 py-3'>

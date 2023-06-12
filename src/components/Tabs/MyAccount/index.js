@@ -23,6 +23,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from '../../LoadingTransaction';  
 import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from '../Researches/ResearchItem';
+import { IsProducerSyntropic } from '../../IsProducerSyntropic';
 
 const containerStyle = {
     width: '100%',
@@ -262,14 +263,19 @@ export default function MyAccount({wallet, userType, setTab}){
                     )}
                     <a  
                         target='_blank'
-                        href={`${window.location.host}/account-producer/${walletAddress}`}
+                        href={`https://v4-sintrop.netlify.app/account-producer/${walletAddress}`}
                         className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
                     >
                         Página do Produtor
                     </a>
                 </div>
                 </div>
-                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
+
+                <IsProducerSyntropic
+                    data={userData}
+                />
+
+                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303] mt-5'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
                         className="w-[250px] h-[250px] object-cover"

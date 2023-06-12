@@ -1153,6 +1153,10 @@ export function InspectionItem({data, type, reload}){
     return(
         <div className='flex flex-col border-b-2 border-green-950'>
             <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
+                <div className='hidden lg:flex items-center h-full w-[70px] px-2'>
+                    <p className='text-white'>{data.id}</p>
+                </div>
+                
                 <div className='flex items-center lg:w-[350px] bg-[#0A4303] px-2'>
                     <p 
                         className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
@@ -1182,7 +1186,11 @@ export function InspectionItem({data, type, reload}){
                 </div>
 
                 <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
-                    <p className='text-white '>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
+                    {type === 'manage' ? (
+                        <p className='text-white text-center'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
+                    ) : (
+                        <p className='text-white text-center'>{format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
+                    )}
                 </div>
 
                 {type === 'manage' && (

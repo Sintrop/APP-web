@@ -51,7 +51,7 @@ export default function ManageInpections({walletAddress, setTab}){
         setLoading(true);
         const res = await GetInspections();
         const inspections = res.filter(item => item.status !== '2')
-        setInpections(inspections);
+        setInpections(inspections.reverse());
         setLoading(false);
     }
 
@@ -185,6 +185,9 @@ export default function ManageInpections({walletAddress, setTab}){
                     <div className='flex flex-col pb-24'>
                     <div className="flex flex-col rounded-sm">
                         <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                            <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
+                                <p className='text-white'>ID</p>
+                            </div>
                             <div className='flex items-center h-full lg:w-[350px] px-2 font-bold'>
                                 <p className='text-white'>{t('Requested By')}</p>
                             </div>
