@@ -9,7 +9,15 @@ import {GetBalanceContract} from '../services/producerPoolService';
 import {GetBalancePool} from '../services/developersPoolService';
 import {api} from '../services/api';
 
-export const MainContext = createContext({})
+export const MainContext = createContext({});
+
+const blockDeployContract = 3590930;
+const startEra2 = 3624160;
+const startEra3 = 3657390;
+const startEra4 = 3690620;
+const startEra5 = 3723850;
+const startEra6 = 3757080;
+const startEra7 = 3790310;
 
 export default function MainProvider({children}){
     const {i18n} = useTranslation();
@@ -23,12 +31,15 @@ export default function MainProvider({children}){
     const [language, setLanguage] = useState('en-us');
     const [modalChooseLang, setModalChooseLang] = useState(false);
     const [modalTutorial, setModalTutorial] = useState(false);
+    const [modalFeedback, setModalFeedback] = useState(false);
     const [balanceUser, setBalanceUser] = useState(0);
     const [userData, setUserData] = useState(0);
+    const [era, setEra] = useState(1);
+    const [nextEraIn, setNextEraIn] = useState(0);
     const [impactPerToken, setImpactPerToken] = useState({});
+    const [getAtualBlock, setGetAtualBlock] = useState(false);
 
     useEffect(() => {
-        getAtualBlockNumber();
         getStorageLanguage();
         getImpact();
     }, []);
@@ -37,6 +48,13 @@ export default function MainProvider({children}){
         if(user === '2'){
         }
     },[user]);
+
+    useEffect(() => {
+        getAtualBlockNumber();
+        setTimeout(() => {
+            setGetAtualBlock(!getAtualBlock)
+        }, 10000)
+    }, [getAtualBlock])
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -70,6 +88,10 @@ export default function MainProvider({children}){
         setModalTutorial(!modalTutorial);
     }
 
+    function chooseModalFeedBack(){
+        setModalFeedback(!modalFeedback);
+    }
+
     async function checkUser(wallet){
         const response = await CheckUser(String(wallet));
         setUser(response);
@@ -91,7 +113,34 @@ export default function MainProvider({children}){
         await web3js.eth.getBlockNumber()
         .then(res => {
             setBlockNumber(res)
+            checkAtualEra(res);
         })
+    }
+
+    async function checkAtualEra(blockNumber){
+        if(Number(blockNumber) >= startEra2 && Number(blockNumber) < startEra3){
+            setEra(2);
+            setNextEraIn(startEra3 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra3 && Number(blockNumber) < startEra4){
+            setEra(3);
+            setNextEraIn(startEra4 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra4 && Number(blockNumber) < startEra5){
+            setEra(4);
+            setNextEraIn(startEra5 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra5 && Number(blockNumber) < startEra6){
+            setEra(5);
+            setNextEraIn(startEra6 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra6 && Number(blockNumber) < startEra7){
+            setEra(6);
+            setNextEraIn(startEra7 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra7){
+            setEra(7);
+        }
     }
 
     function toggleMenu(){
@@ -185,7 +234,11 @@ export default function MainProvider({children}){
                 balanceUser,
                 userData,
                 getUserDataApi,
-                impactPerToken
+                impactPerToken,
+                modalFeedback,
+                chooseModalFeedBack,
+                era,
+                nextEraIn
             }}
         >
             {children}

@@ -182,9 +182,9 @@ export default function ManageInpections({walletAddress, setTab}){
                 {inspections.length === 0 ? (
                     <h3 className='font-bold text-white'>{t('There are no open inspections')}</h3>
                 ) : (
-                    <div className='flex flex-col pb-24'>
+                    <div className='flex flex-col'>
                     <div className="flex flex-col rounded-sm">
-                        <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                        {/* <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
                             <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
                                 <p className='text-white'>ID</p>
                             </div>
@@ -209,15 +209,16 @@ export default function ManageInpections({walletAddress, setTab}){
                             <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                 <p className='text-white'>{t('Actions')}</p>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col h-[71vh] overflow-auto'>
                             {inspections.map(item => (
                                 <InspectionItem
                                     key={item.id}
                                     data={item}
                                     type='manage'
                                     reload={getInspections}
+                                    statusExpired={(id) => {}}
                                 />
                             ))}
                         </div>

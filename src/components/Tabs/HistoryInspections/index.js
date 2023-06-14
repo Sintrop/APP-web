@@ -68,7 +68,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         <h3 className='font-bold text-white'>{t('There are no finished inspections')}</h3>
                     ) : (
                         <div className="flex flex-col">
-                            <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                            {/* <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
                                 <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
                                     <p className='text-white'>ID</p>
                                 </div>
@@ -87,48 +87,19 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 <div className='flex items-center h-full w-[350px] px-1 font-bold'>
                                     <p className='text-white'>{t('Actions')}</p>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className='flex flex-col h-[66vh] overflow-auto'>
+                            <div className='flex flex-col h-[72vh] overflow-auto'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}
                                         data={item}
                                         type='history'
+                                        statusExpired={(id) => {}}
                                     />
                                 ))}
                             </div>
                         </div>
-
-                        // <table>
-                        //     <thead>
-                        //         <th className='th-wallet'>{t('Requested By')}</th>
-                        //         <th>{t('Producer Address')}</th>
-                        //         <th className='th-wallet'>{t('Inspected By')}</th>
-                        //         <th>{t('Created At')}</th>
-                        //         <th>{t('Expires In')}</th>
-                        //         <th className='th-wallet'>Status</th>
-                        //         <th className='th-wallet'>Isa {t('Score')}</th>
-                        //         <th className='th-wallet'>{t('Actions')}</th>
-                        //     </thead>
-                        //     <tbody>
-                        //         {inspections.map(item => {
-                        //             if(item.status != '2'){
-                        //                 return(
-                        //                     <ItemListInspections
-                        //                         data={item}
-                        //                         user={user}
-                        //                         walletAddress={walletAddress}
-                        //                         key={item.id}
-                        //                         reloadInspections={() => getInspections()}
-                        //                         setTab={(tab, wallet) => setTab(tab, wallet)}
-                        //                     />
-                        //                 )
-                        //             }
-                        //         })}
-                        //     </tbody>
-                        // </table>
-                    
                     )}
             </div>
     )

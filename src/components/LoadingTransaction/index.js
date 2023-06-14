@@ -30,6 +30,12 @@ export function LoadingTransaction({loading, logTransaction, action}){
                     setMissaoCheck(true);
                 }
             }
+
+            if(action === 'accept-inspection'){
+                if(userData?.level === 1){
+                    setMissaoCheck(true);
+                }
+            }
         }
     }, [logTransaction])
     

@@ -20,7 +20,7 @@ import { UserPoolItem } from '../../../UserPoolItem';
 import { api } from '../../../../services/api';
 
 export default function ProducersPool({wallet, setTab}){
-    const {user} = useMainContext();
+    const {user, nextEraIn} = useMainContext();
     const {t} = useTranslation();
     const producerService = new ProducerService(wallet);
     const [loading, setLoading] = useState(false);
@@ -172,6 +172,9 @@ export default function ProducersPool({wallet, setTab}){
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+                <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[250px] mb-5">
+                    <p className="font-bold text-white">Próxima ERA em {nextEraIn} blocos</p>
+                </div>
                 {user === '1' && (
                     <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
                         <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">

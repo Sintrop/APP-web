@@ -17,13 +17,12 @@ import {
 } from '../../../../services/developersPoolService';
 import {GetDeveloper} from '../../../../services/developersService';
 
-import DeveloperItem from './DeveloperItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { UserPoolItem } from '../../../UserPoolItem';
 
 export default function DevelopersPool({wallet, setTab}){
-    const {user} = useMainContext();
+    const {user, nextEraIn} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
@@ -46,8 +45,7 @@ export default function DevelopersPool({wallet, setTab}){
     useEffect(() => {
         getInfosPool();
     },[]);
-
-
+    
     async function getInfosPool(){
         setLoading(true);
         const developers = await GetDevelopers();
@@ -167,6 +165,9 @@ export default function DevelopersPool({wallet, setTab}){
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+                <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[250px] mb-5">
+                    <p className="font-bold text-white">Próxima ERA em {nextEraIn} blocos</p>
+                </div>
                 {user === '4' && (
                     <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
                         <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">

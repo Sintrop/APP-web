@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import './accountProducer.css';
 import {get} from '../../config/infura';
 import * as Dialog from '@radix-ui/react-dialog';
-import Logo from '../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import { IsProducerSyntropic } from '../../components/IsProducerSyntropic';
 import { useTranslation } from 'react-i18next';
 import { ModalChooseTypeDelation } from '../../components/ModalChooseTypeDelation';
 import { api } from '../../services/api';
@@ -98,6 +98,7 @@ export default function AccountProducer(){
                     <h1 className='font-bold text-center lg:text-left text-2xl text-white'>{producerData?.name}</h1>
                     <p className='text-lg text-center lg:text-left text-white mt-2'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                     <p className='text-lg text-center lg:text-left text-white'>{t('Inspections Received')}: {inspections?.length}</p>
+                    <IsProducerSyntropic data={producerData}/>
                 </div>
 
                 <div className='flex flex-col'>

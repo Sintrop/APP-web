@@ -14,7 +14,7 @@ import {GetContributor} from '../../../services/contributorService';
 import { GetInvestor } from '../../../services/investorService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
-import { IndiceValueItem } from '../../IndiceValueItem';
+import {InspectionItem} from '../../InspectionItem';
 import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import Map from '../../Map';
@@ -44,6 +44,7 @@ export default function MyAccount({wallet, userType, setTab}){
     const [propertyPath, setPropertyPath] = useState([]);
     const [position, setPosition] = useState({});
     const [inspections, setInspections] = useState([]);
+    const [currentInspection, setCurrentInspection] = useState([]);
     const [researches, setResearches] = useState([]);
     const [lastResquested, setLastRequested] = useState('');
     const [btnRequestHover, setBtnRequestHover] = useState(false);
@@ -102,11 +103,15 @@ export default function MyAccount({wallet, userType, setTab}){
         if(typeUser === '1'){
             const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletAddress.toUpperCase())
             const filterStatus = filterInspections.filter(item => item.status === '2');
+            const filterCurrent = filterInspections.filter(item => item.status === '1' || item.status === '0');
             setInspections(filterStatus);
+            setCurrentInspection(filterCurrent);
         }else{
             const filterInspections = response.filter(item => String(item.acceptedBy).toUpperCase() === walletAddress.toUpperCase())
             const filterStatus = filterInspections.filter(item => item.status === '2');
+            const filterCurrent = filterInspections.filter(item => item.status === '1');
             setInspections(filterStatus);
+            setCurrentInspection(filterCurrent);
         }
     }
 
@@ -345,7 +350,28 @@ export default function MyAccount({wallet, userType, setTab}){
                     </div>
                 </div>
     
-                
+                <div className='flex flex-col items-center lg:w-[1000px] mt-5'>
+                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeção em andamento</p>
+
+                    {currentInspection.length === 0 ? (
+                        <p className="text-white font-bold text-lg">Nenhuma inspeção em andamento no momento</p>
+                    ) : (
+                        <>
+                            {currentInspection.map(item => (
+                                <InspectionItem
+                                    key={item.id}
+                                    data={item}
+                                    type='manage'
+                                    statusExpired={(id) => {
+                                        const newArray = currentInspection.filter(item => item.id !== id)
+                                        setCurrentInspection(newArray);
+                                    }}
+                                />
+                            ))}
+                        </>
+                    )}
+                </div>
+
                 <div className="flex flex-col items-center lg:w-[1000px]">
                     {userData && (
                         <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
@@ -467,6 +493,8 @@ export default function MyAccount({wallet, userType, setTab}){
                         </div>                    
                     </div>
                 </div>
+
+                
     
                 <div className="flex flex-col lg:mt-10 mt-5 lg:w-[1000px]">
                     <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeções realizadas</p>

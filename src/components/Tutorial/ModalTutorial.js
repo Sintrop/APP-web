@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useMainContext } from '../../hooks/useMainContext';
+import {TbArrowsDiagonalMinimize2} from 'react-icons/tb';
 
 const tutorial1 = [
     {
@@ -143,6 +144,40 @@ const tutorialRequestInspection = [
     //     imgLong: 'tutorial-req-inspection-5',
     // }
 ];
+const tutorialAcceptInspection = [
+    {
+        id: 1, 
+        title: 'Missão 2: Aceitar uma inspeção', 
+        description: "A segunda missão é aceitar uma inspeção de um produtor, que você consiga ir até a propriedade dele.",
+        description2:'Ao concluir você será promovido a SARGENTO MUDA.',
+        img: 'formiga-muda',
+        imgLong: '',
+    },
+    {
+        id: 12, 
+        title: 'Missão 2: Aceitar uma inspeção', 
+        description: "Primeiro clique no menu lateral na opção 'Gerenciar Inspeções'",
+        description2:'Nessa página você terá acesso a todas as inpeções NÃO concluidas do sistema',
+        img: '',
+        imgLong: 'tutorial-accept-inspection-1',
+    },
+    {
+        id: 13, 
+        title: 'Missão 2: Aceitar uma inspeção', 
+        description: "Você só pode aceitar inspeções que esteja com o status 'ABERTA' e que seja de seu alcance se deslocar até a propriedade!",
+        description2:"Depois clique no botão 'Aceitar Inspeção', no canto direito da inspeção desejada",
+        img: '',
+        imgLong: 'tutorial-accept-inspection-2',
+    },
+    {
+        id: 14, 
+        title: 'Missão 2: Aceitar uma inspeção', 
+        description: "Finalize a transação, clicando no botão “CONFIRMAR” no METAMASK",
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-accept-inspection-3',
+    }
+];
 
 export function ModalTutorial(){
     const {chooseModalTutorial, user, userData} = useMainContext();
@@ -156,6 +191,9 @@ export function ModalTutorial(){
         if(user === '1' && userData?.level === 1){
             setTutorial(tutorialRequestInspection);
         }
+        if(user === '2' && userData?.level === 1){
+            setTutorial(tutorialAcceptInspection);
+        }
     },[user, userData])
 
     if(tutorial.length === 0){
@@ -166,10 +204,16 @@ export function ModalTutorial(){
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 w-[450px] h-[600px] bg-green-800 rounded-md m-auto inset-0 border-8 border-[#783E19]'>
-                <img
-                    src={require('../../assets/logo-branco.png')}
-                    className='w-[120px] object-contain'
-                />
+                <div className='flex items-center justify-between w-full'>
+                    <div className='w-[25px]'/>
+                    <img
+                        src={require('../../assets/logo-branco.png')}
+                        className='w-[120px] object-contain'
+                    />
+                    <Dialog.Trigger>
+                        <TbArrowsDiagonalMinimize2 size={25} color='white'/>
+                    </Dialog.Trigger>
+                </div>
 
                 <div className='flex flex-col items-center'>
                     <div className='flex flex-col items-center w-full h-full' key={tutorial[step - 1]?.id}>

@@ -137,10 +137,6 @@ export default function ListItemHistory({data, user, walletAddress, reloadInspec
                     inspectionData={data}
                 />
             </Dialog.Root>
-
-            {loading && (
-                <Loading/>
-            )}
         </tr>
     )
 }

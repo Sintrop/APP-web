@@ -20,6 +20,15 @@ export function MissaoCheck({action}){
                 getUserDataApi();
             }
         }
+        if(user === '2'){
+            if(userData?.level === 1){
+                await api.put('/user/level',{
+                    id: userData?.id,
+                    level: 2
+                })
+                getUserDataApi();
+            }
+        }
     }
 
     return(
@@ -43,6 +52,17 @@ export function MissaoCheck({action}){
                         {userData?.level === 1 && (
                             <img
                                 src={require('../assets/tutorial-req-inspection-6.png')}
+                                className='w-full h-[450px] object-contain'
+                            />
+                        )}
+                    </>
+                )}
+
+                {user === '2' && (
+                    <>
+                        {userData?.level === 1 && (
+                            <img
+                                src={require('../assets/tutorial-accept-inspection-4.png')}
                                 className='w-full h-[450px] object-contain'
                             />
                         )}

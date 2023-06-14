@@ -9,6 +9,7 @@ import AccountProducer from "../pages/accountProducer";
 import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
 import IndicesControl from "../pages/indicesControl";
+import { Feedbacks } from "../pages/feedbacks";
 
 export default function Router(){
     return(
@@ -22,6 +23,7 @@ export default function Router(){
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
                 <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
+                <Route exact path="/feedbacks" element={<Feedbacks/>}/>
                 
             </Routes>
         </BrowserRouter>

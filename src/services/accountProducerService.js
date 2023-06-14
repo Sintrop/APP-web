@@ -65,3 +65,12 @@ export const GetCertificateTokens = async (wallet) => {
     })
     return tokens
 }
+
+export const GetIsa = async (inspectionId) => {
+    let isas = []
+    await SintropContract.methods.getIsa(inspectionId).call({from: sintropContractAddress})
+    .then((res) => {
+        isas = res;
+    })
+    return isas;
+}

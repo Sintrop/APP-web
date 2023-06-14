@@ -16,7 +16,7 @@ import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-
 
 import Map from '../Map';
 import Loading from '../Loading';
-import { IndiceValueItem } from '../IndiceValueItem';
+import { IsProducerSyntropic } from '../IsProducerSyntropic';
 import { InspectionItemResult } from '../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from './Researches/ResearchItem';
 
@@ -125,10 +125,11 @@ export function UserDetails({setTab}){
     if(typeUser === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-5'> 
                     <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
                 </div>
-                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
+                <IsProducerSyntropic data={userData}/>
+                <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303] mt-5'>
                     <img
                         src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
                         className="w-[250px] h-[250px] object-cover"

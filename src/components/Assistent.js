@@ -94,7 +94,7 @@ export function Assistent({close}){
             )}
 
             <div className="flex items-center  gap-4">
-                {user === '1' && (
+                {user === '1' || user === '2' && (
                     <button 
                         className="w-28 h-10 flex items-center justify-center bg-red-500 rounded-md text-white font-bold"
                         onClick={chooseModalTutorial}

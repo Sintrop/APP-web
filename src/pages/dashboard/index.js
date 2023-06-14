@@ -12,6 +12,7 @@ import { TopBarStatus } from '../../components/TopBarStatus';
 import { TopBarMobile } from '../../components/TopBarMobile';
 import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 import { Assistent } from '../../components/Assistent';
+import { ModalFeedback } from '../../components/ModalFeedback';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -116,7 +117,7 @@ const tutorialRegistro = [
 
 export default function Dashboard(){
     const {isSupported} = useNetwork();
-    const {checkUser, walletConnected, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial} = useContext(MainContext);
+    const {checkUser, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial, modalFeedback, chooseModalFeedBack} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive, typeUser} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -146,6 +147,7 @@ export default function Dashboard(){
             }
         }
         checkConnection();
+        getStorageAssistant();
     },[]);
 
     useEffect(() => {
@@ -159,6 +161,19 @@ export default function Dashboard(){
         }
         check();
     }, []);
+
+    async function getStorageAssistant(){
+        const res = await localStorage.getItem('assistantOpen')
+        if(res === null){
+            setAssistentOpen(true);
+        }else{
+            if(res === '1'){
+                setAssistentOpen(true);
+            }else{
+                setAssistentOpen(false);
+            }
+        }
+    }
 
     return(
         <div className='flex flex-col lg:flex-row w-[100vw] h-[100vh]'>
@@ -419,6 +434,15 @@ export default function Dashboard(){
             </Dialog.Root>
 
             <Dialog.Root
+                open={modalFeedback}
+                onOpenChange={(open) => {
+                    chooseModalFeedBack()
+                }}  
+            >
+                <ModalFeedback/>
+            </Dialog.Root>
+
+            <Dialog.Root
                 open={modalTutorial}
                 onOpenChange={(open) => {
                     chooseModalTutorial()
@@ -432,17 +456,37 @@ export default function Dashboard(){
 
 
         </div>
+            <div
+                className="absolute flex items-center bottom-36 right-10 cursor-pointer w-32 bg-[#ff9900] rounded-md p-2 border-2"
+                onClick={() => {
+                    chooseModalFeedBack()
+                }}
+            >
+                <p className="text-center text-white">Clique aqui para sugerir uma melhoria</p>
+            </div>
             {assistentOpen ? (
                 <Assistent
-                    close={() => setAssistentOpen(false)}
+                    close={() => {
+                        setAssistentOpen(false)
+                        localStorage.setItem('assistantOpen', '0')
+                    }}
                 />
             ) : (
-                <button 
-                    className="absolute w-32 h-10 flex items-center justify-center bg-red-500 z-90 bottom-5 right-10 rounded-md text-white font-bold"
-                    onClick={() => setAssistentOpen(true)}
+                <div 
+                    className="absolute flex items-center z-90 bottom-5 right-10 cursor-pointer"
+                    onClick={() => {
+                        setAssistentOpen(true)
+                        localStorage.setItem('assistantOpen', '1')
+                    }}
                 >
-                    Assistente
-                </button>
+                    <div className='p-3 bg-green-800 rounded-l-lg border-2 border-r-0 z-10 mr-[-25px] mt-8 pr-8'>
+                        <p className='font-bold text-white'>Posso te ajudar?</p>
+                    </div>
+                    <img
+                        src={require('../../assets/assistente.png')}
+                        className='w-24 object-contain z-20'
+                    />
+                </div>
             )}
         </div>
     )

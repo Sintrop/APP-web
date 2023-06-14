@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import {AiFillCaretDown, AiFillCaretUp} from 'react-icons/ai';
 import {format} from 'date-fns';
 import { api } from '../../services/api';
-import { IndiceValueItem } from '../../components/IndiceValueItem';
 import { IndiceCalculoItem } from '../../components/IndiceCalculoItem';
-import {GetIsa, GetInspection} from '../../services/manageInspectionsService';
+import {GetIsa} from '../../services/accountProducerService';
 import { saveAs } from 'file-saver';
 import { useNavigate, useParams } from 'react-router-dom';
 
