@@ -2,88 +2,132 @@ import React, {useState, useEffect} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useMainContext } from '../../hooks/useMainContext';
 import {TbArrowsDiagonalMinimize2} from 'react-icons/tb';
+import { ModalRequestSepolia } from '../ModalRequestSepolia';
+import { ToastContainer, toast} from 'react-toastify';
 
 const tutorial1 = [
     {
         id: 1, 
         title: 'Missão 1: Entrar na plataforma', 
-        description: 'A primeira missão é a conclusão do cadastro. Essa missão é bem difícil, envolve o uso de algumas tecnologias que talvez sejam novas para você. Mas não se assuste, basta seguir os passos aqui certinho que você vai conseguir!',
-        description2: 'Ao concluir você se tornará um SOLDADO SEMENTE',
+        description: 'Nosso sistema utiliza a tecnologia da blockchain. E para interagir com ele, é necessário possuir uma carteira na rede Ethereum e o provedor mais popular é o MetaMask. É por ela que será feita a distribuição dos tokens como pagamento aos serviços ambientais ecossistêmicos prestados para a sociedade.',
+        description2: 'Pense que essa etapa seria o equivalente a abertura de uma conta no banco. Porém no universo descentralizado.',
         img: 'formiga-semente-1',
         imgLong: ''
     },
     {
         id: 2, 
-        title: 'Missão 1: Entrar na plataforma', 
-        description: 'Essa missão possui 5 etapas:',
-        description2: '1) Criar uma carteira no MetaMask; 2) Configurações do MetaMask; 3) Entrar na plataforma; 4) Conseguir goerliETH; 5) Registrar usuário',
-        img: 'formiga-semente-1',
-        imgLong: ''
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Vá até a loja de extensões do seu navegador e faça a instalação do MetaMask. Fique atento para apenas instalar a extensão com o nome correto, com o selo azul de verificação e do site metamask.io',
+        description2: 'Nunca baixe nenhuma extensão sem ser da fonte original confiável',
+        img: '',
+        imgLong: 'tutorial-metamask-11'
     },
     {
         id: 3, 
         title: 'Etapa 1: Criar carteira no MetaMask', 
-        description: 'Nosso sistema utiliza a tecnologia da blockchain. E para interagir com ele, é necessário possuir uma carteira na rede Ethereum e o provedor mais popular é o MetaMask.',
-        description2: 'É por ela que será feita a distribuição dos tokens como pagamento aos serviços ambientais ecossistêmicos prestados para a sociedade. Pense que essa etapa seria o equivalente a abertura de uma conta no banco. Porém no universo descentralizado.',
+        description: '4º Passo: Digite Metamask no campo de pesquisa',
+        description2: '',
         img: '',
-        imgLong: ''
+        imgLong: 'tutorial-metamask-12'
     },
     {
         id: 4, 
         title: 'Etapa 1: Criar carteira no MetaMask', 
-        description: 'Vá até a loja de extensões do seu navegador e faça a instalação do MetaMask. Fique atento para apenas instalar a extensão com o nome correto, com o selo azul de verificação e do site metamask.io',
-        description2: 'É por ela que será feito. Nunca baixe nenhuma extensão sem ser da fonte original confiável.',
+        description: 'Irá acontecer o download da extensão, agora é só instalar e configurar.',
+        description2: 'Selecione o campo para aceitar os termos do MetaMask e clique no botão “CRIAR UMA NOVA CARTEIRA” conforme mostra a primeira imagem abaixo, logo em seguida clique no botão “I AGREE”, conforme mostra a segunda imagem abaixo.',
         img: '',
-        imgLong: 'tutorial-metamask-1'
+        imgLong: 'tutorial-metamask-13'
     },
     {
         id: 5, 
         title: 'Etapa 1: Criar carteira no MetaMask', 
-        description: 'Após a instalação, o MetaMask irá perguntar se você deseja importar uma conta ou criar uma do zero. Caso já tenha uma, poderá importá-la nessa parte. Caso contrário, clique em criar uma carteira.',
+        description: 'Crie uma senha anote e guarde em segurança, para não perder, logo após criar a senha, selecione as regras abaixo e clique no botão “CRIAR UMA NOVA CARTEIRA”.',
         description2:'',
         img: '',
-        imgLong: 'tutorial-metamask-2'
+        imgLong: 'tutorial-metamask-14'
     },
     {
         id: 6, 
-        title: 'Etapa 2: Configurações do MetaMask', 
-        description: 'Parabéns, você está indo muito bem até aqui. Agora vamos para as configurações do MetaMask. Sua tela inicial deverá ser algo semelhante a essa:',
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: '',
         description2:'',
         img: '',
-        imgLong: 'tutorial-metamask-3'
+        imgLong: 'tutorial-metamask-15'
     },
     {
         id: 7, 
-        title: 'Etapa 2: Configurações do MetaMask', 
-        description: 'O primeiro passo será selecionar a rede de testes Sepolia.',
-        description2:'No menu superior, clique onde a seta está indicando',
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Anote suas frases que apareceram nos campos do 1 ao 12, e guarde em segurança!',
+        description2:'',
         img: '',
-        imgLong: 'tutorial-metamask-4'
+        imgLong: 'tutorial-metamask-16'
     },
     {
         id: 8, 
-        title: 'Etapa 2: Configurações do MetaMask', 
-        description: 'Agora selecione a "Sepolia Test Network". E pronto, você já estará conectado devidamente. Caso ela não apareça, vá até configurações -> avançado e habilite a opção.',
+        title: 'Etapa 1: Criar carteira no MetaMask', 
+        description: 'Sua carteira foi criada com sucesso!',
         description2:'',
         img: '',
-        imgLong: 'tutorial-metamask-5'
+        imgLong: 'tutorial-metamask-17'
     },
     {
         id: 9, 
-        title: 'Etapa 3: Conseguir SepoliaETH faucet', 
-        description: "A SEPOLIA FAUCET é uma rede de testes que simula a rede principal do Ethereum. Para realizar alguma ação no Sistema é preciso ter SEPOLIA, o que seria equivalente a ter Ether se fosse na rede principal. Portanto todos valores e dados nela são 'faucets' de apenas exemplo e não possuem valor real.",
-        description2:'Não é necessário pagar nada para rodar o sistema na SEPOLIA. Para conseguir os faucets é muito fácil, basta criar uma conta na Alchemy e solicitar os tokens.',
+        title: 'Etapa 2: Configurar Metamask', 
+        description: "Agora que sua carteira foi criada, é hora de configurar...",
+        description2:'',
         img: '',
-        imgLong: '',
-        link: 'https://sepoliafaucet.com/'
+        imgLong: 'tutorial-metamask-18',
     },
     {
         id: 10, 
-        title: 'Parabéns!!!', 
-        description: "Você está indo muito bem, parabéns pelo progresso!",
-        description2:'Já estamos prontos para sincronizar na plataforma. Se a barra superior indicar que a conexão está disponível, pode clicar no botão sincronizar.',
+        title: 'Etapa 2: Configurar Metamask', 
+        description: "Procure pela opção “Mostrar redes de teste” e ative a visualização das redes de teste.",
+        description2:'',
         img: '',
-        imgLong: 'tutorial-metamask-6',
+        imgLong: 'tutorial-metamask-19',
+    },
+    {
+        id: 11, 
+        title: 'Etapa 2: Configurar Metamask', 
+        description: "",
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-metamask-20',
+    },
+    {
+        id: 12, 
+        title: 'Etapa 3: Editar nome da conta', 
+        description: "",
+        description2:'',
+        img: '',
+        imgLong: 'tutorial-metamask-21',
+    },
+    {
+        id: 13, 
+        title: 'Etapa 4: Conseguir Sepólia', 
+        description: "Sepolia é a moeda virtual necessária para realizarmos as transações no sistema. Você tem 2 maneiras de conseguir Sepolia para testes.",
+        description2:'Pelo site que vai estar abaixo das imagens (Imediato), ou então solicitando para nossa equipe (Pode ser que demore algumas horas para que nossa equipe envie sepolia para você)',
+        img: '',
+        imgLong: 'tutorial-metamask-22',
+        link: 'https://sepoliafaucet.com/'
+    },
+    {
+        id: 14, 
+        title: 'Etapa 5: Sincronizar conta', 
+        description: "Pronto agora é só sincronizar a conta do MetaMask com o sistema e concluir o cadastro do seu usuário",
+        description2:'Com a página do sistema aberta, abra o MetaMask para conectar sua conta com a V4 do sistema. *link do sistema abaixo:',
+        img: '',
+        imgLong: 'tutorial-metamask-23',
+        link: 'https://v4-sintrop.netlify.app'
+    },
+    {
+        id: 15, 
+        title: 'Etapa 5: Sincronizar conta', 
+        description: "Pronto agora é só sincronizar a conta criada com o sistema e concluir o cadastro do seu usuário",
+        description2:'Com a página do sistema aberto, abra o metaMask para sincronizar. *link do sistema abaixo:',
+        img: '',
+        imgLong: 'tutorial-metamask-24',
+        link: 'https://v4-sintrop.netlify.app'
     },
 ];
 const tutorialRequestInspection = [
@@ -183,6 +227,7 @@ export function ModalTutorial(){
     const {chooseModalTutorial, user, userData} = useMainContext();
     const [step, setStep] = useState(1);
     const [tutorial, setTutorial] = useState([]);
+    const [modalRequestSepolia, setModalRequestSepolia] = useState(false);
 
     useEffect(() => {
         if(user === '0'){
@@ -203,7 +248,7 @@ export function ModalTutorial(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 w-[450px] h-[600px] bg-green-800 rounded-md m-auto inset-0 border-8 border-[#783E19]'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-1 lg:p-3 lg:w-[1000px] lg:h-[600px] bg-green-800 rounded-md m-auto inset-0 border-8 border-[#783E19]'>
                 <div className='flex items-center justify-between w-full'>
                     <div className='w-[25px]'/>
                     <img
@@ -215,9 +260,9 @@ export function ModalTutorial(){
                     </Dialog.Trigger>
                 </div>
 
-                <div className='flex flex-col items-center'>
-                    <div className='flex flex-col items-center w-full h-full' key={tutorial[step - 1]?.id}>
-                        <div className='flex flex-col w-full h-full items-center justify-between px-6'>
+                <div className='flex flex-col items-center overflow-auto pb-10'>
+                    <div className='flex flex-col items-center w-full' key={tutorial[step - 1]?.id}>
+                        <div className='flex flex-col w-full h-full items-center justify-between px-1 lg:px-6'>
                             <div>
                                 <h1 className='font-bold text-center text-[#ff9900] text-lg'>{tutorial[step - 1]?.title}</h1>
                                 <h2 className='text-center mt-3 text-white'>{tutorial[step - 1]?.description}</h2>
@@ -232,7 +277,7 @@ export function ModalTutorial(){
                             {tutorial[step - 1]?.imgLong !== '' && (
                                 <img
                                     src={require(`../../assets/${tutorial[step - 1]?.imgLong}.png`)}
-                                    className='w-full max-h-[250px] object-contain'
+                                    className='w-full object-contain'
                                 />
                             )}
                             {tutorial[step - 1]?.link && (
@@ -274,8 +319,35 @@ export function ModalTutorial(){
                     >
                         {step === tutorial.length ? 'Concluir' : 'Prosseguir'}
                     </button>
+
+                    {tutorial[step - 1]?.title === 'Etapa 4: Conseguir Sepólia' && (
+                        <button 
+                            className='px-3 py-2 bg-blue-500 text-white font-bold rounded-md mt-[-20px]'
+                            onClick={() => {
+                                setModalRequestSepolia(true);
+                            }}
+                        >
+                            Solicitar Sepolia
+                        </button>
+                    )}
                 </div>
             </Dialog.Content>
+
+            <ToastContainer
+                position='top-center'
+            />
+
+            <Dialog.Root
+                open={modalRequestSepolia}
+                onOpenChange={(open) => setModalRequestSepolia(open)}
+            >
+                <ModalRequestSepolia
+                    close={() => {
+                        setModalRequestSepolia(false);
+                        toast.success('SepoliaETH requisitado com sucesso! O quanto antes a nossa equipe enviará seus SepoliaETH.')
+                    }}
+                />
+            </Dialog.Root>
         </Dialog.Portal>
     )
 }

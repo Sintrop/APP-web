@@ -19,7 +19,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function InspectionItem({data, type, reload, statusExpired}){
+export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     const navigate = useNavigate();
     const {walletAddress} = useParams();
     const {user, blockNumber, setWalletSelected} = useMainContext();
@@ -35,7 +35,7 @@ export function InspectionItem({data, type, reload, statusExpired}){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [openModalChooseMethod, setOpenModalChooseMethod] = useState(false);
     const [modalViewResult, setModalViewResult] = useState(false);
-    const [method, setMethod] = useState('phoenix');
+    const [method, setMethod] = useState('sintrop');
 
     
     useEffect(() => {
@@ -44,13 +44,16 @@ export function InspectionItem({data, type, reload, statusExpired}){
         getProducer();
         validateStatus(data.status);
         getInspectionApi();
+        if(startOpen){
+            setMoreInfo(true)
+        }
     }, [data]);
 
     async function getInspectionApi(){
         try{
             const response = await api.get(`/inspection/${data.id}`);
             if(response.data.inspection?.resultCategories){
-                setMethod('phoenix')
+                setMethod('sintrop')
             }else{
                 setMethod('manual')
             }
@@ -1168,14 +1171,281 @@ export function InspectionItem({data, type, reload, statusExpired}){
 
     return(
         <div className='flex flex-col border-b-2 bg-[#0a4303] mb-3'>
-            <div className="flex items-center justify-between w-full py-2 gap-3">
+            <div 
+                className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3 cursor-pointer"
+                onClick={() => setMoreInfo(!moreInfo)}
+            >
+                <p className='text-white font-bold w-36 hidden lg:flex'>Inspection #{data.id}</p>
+
+                <div className='flex items-center justify-between lg:gap-10'>
+                    <p className='text-white font-bold w-36 lg:hidden flex'>Inspection #{data.id}</p>
+                    {type === 'history' && (
+                        <div className='flex gap-2 items-center justify-center'>
+                            {method === 'sintrop' ? (
+                                <img
+                                    src={require('../assets/metodo-sintrop.png')}
+                                    className='w-[30px] object-contain'
+                                />
+                            ) : (
+                                <img
+                                    src={require('../assets/metodo-manual.png')}
+                                    className='w-[30px] object-contain'
+                                />
+                            )}
+                            <p className='text-white font-bold'>
+                                Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
+                            </p>
+                        </div>
+                    )}
+
+                    {type === 'history' ? (
+                        <div className='flex items-center justify-center border-2 rounded-md w-32 py-1 bg-green-950'>
+                            <p className='text-white font-bold'>ISA {data.isaScore} pts</p>
+                        </div>
+                    ) : (
+                        <div className='flex items-center w-32'>
+                            {status === '0' && (
+                                <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
+                                    <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
+                                </div>
+                            )}
+
+                            {status === '1' && (
+                                <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
+                                    <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
+                                </div>
+                            )}
+
+                            {status === '2' && (
+                                <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
+                                    <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
+                                </div>
+                            )}
+
+                            {status === '3' && (
+                                <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
+                                    <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {type === 'manage' && (
+                        <div className='hidden lg:flex'>
+                            {status !== '3' ? (
+                                <>
+                                    {user === '2' ? (
+                                        <button
+                                            onClick={() => {
+                                                if(data.status === '0'){
+                                                    handleAccept();
+                                                }
+                                                if(data.status === '1'){
+                                                    handleRealize();
+                                                }
+                                            }}
+                                            className='font-bold w-36 h-8 text-[#062C01] text-sm bg-[#ff9900] rounded-md'
+                                        >
+                                            {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
+                                            {data.status === '1' && t('Realize Inspection')}
+                                        </button>
+                                    ) : (
+                                        <div className='w-36'/>
+                                    )}
+                                </>
+                            ) : (
+                                <div className='w-36'/>
+                            )}
+                        </div>
+                    )}
+                    {moreInfo ? (
+                        <AiFillCaretUp
+                            size={30}
+                            color='white'
+                        />    
+                    ) : (
+                        <AiFillCaretDown
+                            size={30}
+                            color='white'
+                        />
+                    )}
+                </div>
+            </div>
+
+            {moreInfo && (
+                <div className='flex flex-col lg:flex-row items-center justify-between w-full mt-2 px-2 pb-3'>
+                    <div className='flex flex-col gap-1'>
+                        <div className='flex flex-col lg:flex-row items-center lg:gap-2'>
+                            <p className='font-bold text-white'>Wallet {t('Producer')}:</p>
+                            <p 
+                                className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                onClick={() => handleClickUser('1', data.createdBy)}
+                            >
+                                {data.createdBy}
+                            </p>
+                        </div>
+                        {type === 'manage' ? (
+                            <p className='text-white w-full'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                        ) : (
+                            <div className='flex items-center lg:gap-2 flex-col lg:flex-row mt-2 lg:mt-0'>
+                                <p className='font-bold text-white'>Wallet {t('Activist')}:</p>
+                                <p 
+                                    className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                    onClick={() => handleClickUser('2', data.acceptedBy)}
+                                >
+                                    {data.acceptedBy}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                        <p className='font-bold text-white'>
+                            {type === 'manage' ? (
+                                `${t('Created At')}`
+                            ) : (
+                                `${t('Inspected At')}`
+                            )}
+                        </p>
+                        <p className="text-white">
+                            {type === 'manage' ? (
+                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            ) : (
+                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            )}
+                        </p>
+                        <div className='flex items-center font-bold'>
+                            {status === '1' && (
+                                <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
+                            )}
+                        
+                            {status === '3' && (
+                                <p className='text-red-500'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center lg:justify-end w-40 h-10">
+                        {type === 'history' && (
+                            <>
+                            <button
+                                onClick={() => {
+                                    setModalViewResult(true)
+                                }}
+                                className='font-bold w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
+                            >
+                                {t('See Result')}
+                            </button>
+                            </>
+                        )}
+
+                        {type === 'manage' && (
+                            <>
+                                {/* <div className='flex lg:hidden'>
+                                    <button
+                                        onClick={() => setMoreInfo(!moreInfo)}
+                                    >
+                                        {moreInfo ? (
+                                            <AiFillCaretUp
+                                                size={30}
+                                                color='white'
+                                            />    
+                                        ) : (
+                                            <AiFillCaretDown
+                                                size={30}
+                                                color='white'
+                                            />
+                                        )}
+                                    </button>
+                                </div> */}
+                                <div className='lg:hidden flex'>
+                                    {status !== '3' ? (
+                                        <>
+                                            {user === '2' ? (
+                                                <button
+                                                    onClick={() => {
+                                                        if(data.status === '0'){
+                                                            handleAccept()
+                                                        }
+                                                        if(data.status === '1'){
+                                                            handleRealize()
+                                                        }
+                                                    }}
+                                                    className='font-bold w-36 h-10 text-[#062C01] text-sm bg-[#ff9900] rounded-md'
+                                                >
+                                                    {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
+                                                    {data.status === '1' && t('Realize Inspection')}
+                                                </button>
+                                            ) : (
+                                                <div className='w-36'/>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <div className='w-36'/>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+
+                <Dialog.Root
+                        open={modalTransaction}
+                        onOpenChange={(open) => {
+                            if(!loadingTransaction){
+                                setModalTransaction(open);
+                                reload();
+                                //close();
+                            }
+                        }}
+                >
+                        <LoadingTransaction
+                            loading={loadingTransaction}
+                            logTransaction={logTransaction}
+                            action='accept-inspection'
+                        />
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={openModalChooseMethod}
+                    onOpenChange={(open) => setOpenModalChooseMethod(open)}
+                >
+                    <ModalChooseMethod
+                        finishInspection={finishInspection}
+                        finishManual={(data, methodType) => createIsas(data, methodType)}
+                    />
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={modalViewResult}
+                    onOpenChange={(open) => setModalViewResult(open)}
+                >
+                    <ViewResultInspection
+                        data={data}
+                    />
+                </Dialog.Root>
+
+                {loading && (
+                    <Loading/>
+                )}
+
+                <ToastContainer
+                    position='top-center'
+                />
+        </div>
+    )
+
+    return(
+        <div className='flex flex-col border-b-2 bg-[#0a4303] mb-3'>
+            <div className="hidden lg:flex flex-col lg:flex-row items-center justify-between w-full py-2 gap-3">
                 <div className='flex flex-col'>
-                    <div className='flex items-center px-2 gap-5'>
+                    <div className='flex items-center px-2 gap-5 w-full'>
                         <p className='text-white font-bold'>Inspeção #{data.id}</p>
                         
                     </div>
                     
-                    <div className='flex items-center px-2 mt-3'>
+                    <div className='flex flex-col lg:flex-row items-center px-2 mt-3'>
                         <p className='font-bold text-white mr-1'>Produtor Carteira:</p>
                         <p 
                             className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
@@ -1185,7 +1455,7 @@ export function InspectionItem({data, type, reload, statusExpired}){
                         </p>
                     </div>
 
-                    <div className='hidden lg:flex items-center h-full bg-[#0A4303] px-2'>
+                    <div className='flex flex-col lg:flex-row items-center h-full bg-[#0A4303] px-2'>
                         {status === '0' ? (
                             <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                         ) : (
@@ -1349,28 +1619,100 @@ export function InspectionItem({data, type, reload, statusExpired}){
                 </div>
             </div>
 
+            <div 
+                className='lg:hidden w-full flex items-center justify-between h-10 px-2 cursor-pointer'
+                onClick={() => setMoreInfo(!moreInfo)}
+            >
+                <p className='font-bols text-white'>{t('Inspection')} #{data.id}</p>
+
+                {type === 'manage' && (
+                    <div className='flex items-center w-32'>
+                        {status === '0' && (
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
+                                <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
+                            </div>
+                        )}
+
+                        {status === '1' && (
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
+                                <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
+                            </div>
+                        )}
+
+                        {status === '2' && (
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
+                                <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
+                            </div>
+                        )}
+
+                        {status === '3' && (
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
+                                <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {moreInfo ? (
+                    <AiFillCaretUp
+                        size={30}
+                        color='white'
+                    />    
+                ) : (
+                    <AiFillCaretDown
+                        size={30}
+                        color='white'
+                    />
+                )}
+            </div>
+
             {moreInfo && (
                 <div className='w-full bg-[#0a4303] flex flex-col p-2 border-b-2 border-green-950'>
-                    <p className='font-bold text-white'>{t('Address')}:</p>
+                    <p className='font-bold text-white mt-3'>ISA {t('Score')}: {data.isaScore}</p>
+
+                    <p className='font-bold text-white mt-3'>{t('Producer')} {t('Wallet')}:</p>
+                    <p 
+                        className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                        onClick={() => handleClickUser('1', data.createdBy)}
+                    >
+                        {data.createdBy}
+                    </p>
+                    <p className='font-bold text-white mt-3'>{t('Address')}:</p>
                     <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
 
-                    <p className='font-bold text-white mt-3'>{t('Accepted By')}:</p>
-                    {status === '0' ? (
-                        <p className='text-white'>Não aceita</p>
+                    {type === 'manage' ? (
+                        <>
+                        {status === '1' && (
+                            <>
+                            <p className='font-bold text-white mt-3'>{t('Accepted By')}:</p>
+                            
+                            <p 
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                onClick={() => handleClickUser('2', data.acceptedBy)}
+                            >
+                                {data.acceptedBy}
+                            </p>
+                            </>
+                        )}
+                        </>
                     ) : (
-                        <p 
-                            className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                            onClick={() => handleClickUser('2', data.acceptedBy)}
-                        >
-                            {data.acceptedBy}
-                        </p>
+                        <>
+                            <p className='font-bold text-white mt-3'>{t('Inspected By')}:</p>
+                            
+                            <p 
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                onClick={() => handleClickUser('2', data.acceptedBy)}
+                            >
+                                {data.acceptedBy}
+                            </p>
+                        </>
                     )}
 
-                    <p className='font-bold text-white mt-3'>{t('Created At')}:</p>
-                    <p className='text-white'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
 
-                    {type === 'manage' && (
+                    {type === 'manage' ? (
                         <>
+                        <p className='font-bold text-white mt-3'>{t('Created At')}:</p>
+                        <p className='text-white'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
                         <p className='font-bold text-white mt-3'>{t('Expires In')}:</p>
                         {status === '0' && (
                             <p className='text-white'>{t('Not accepted')}</p>
@@ -1385,6 +1727,13 @@ export function InspectionItem({data, type, reload, statusExpired}){
                             <p className='text-white'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
                         )}
 
+                        </>
+                    ) : (
+                        <>
+                            <p className='font-bold text-white mt-3'>{t('Inspected At')}:</p>
+                            <p className='text-white'>{format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
+                        </>
+                    )}
                         <div className='w-full mt-3'>
                             <button
                                 onClick={() => {
@@ -1394,15 +1743,17 @@ export function InspectionItem({data, type, reload, statusExpired}){
                                     if(data.status === '1'){
                                         handleRealize()
                                     }
+                                    if(data.status === '2'){
+                                        setModalViewResult(true)
+                                    }
                                 }}
                                 className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
                             >
                                 {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
                                 {data.status === '1' && t('Realize Inspection')}
+                                {data.status === '2' && t('See Result')}
                             </button>
                         </div>
-                        </>
-                    )}
                 </div>
             )}
 

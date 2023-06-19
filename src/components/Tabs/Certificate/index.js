@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 //services
 import {GetProducer} from '../../../services/producerService';
 import {GetDelation} from '../../../services/userService';
-import {GetInspections} from '../../../services/manageInspectionsService';
+import {GetInspections, GetIsa} from '../../../services/manageInspectionsService';
 
 //components
 import Loading from '../../Loading';
@@ -20,7 +20,7 @@ import {IsProducerSyntropic} from '../../IsProducerSyntropic';
 
 export default function ProducerCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
-    const {tabActive, walletAddress} = useParams();
+    const {tabActive, walletAddress, typeUser} = useParams();
     const [producerData, setProducerData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [delationsReceived, setDelationsReceived] = useState('0');
@@ -35,7 +35,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
     }, [tabActive])
 
     useEffect(() => {
-        if(userType == 1){
+        if(typeUser == 1){
             getProducer();
             getInspections(walletAddress);
         }
@@ -62,14 +62,32 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         const filterInspected = filterInspectionProducer.filter(item => item.status === '2');
         
         for(var i = 0; i < filterInspected.length; i++){
-            const inspectionId = filterInspected[i].id;
-            const inspectionDataApi = await api.get(`/inspection/${inspectionId}`)
-            const resultIndices = JSON.parse(inspectionDataApi.data.inspection?.resultIdices);
+            let isaCarbon = {};
+            let isaBio = {};
+            let isaSoil = {};
+            let isaWater = {};
 
-            totalCarbon += resultIndices?.carbon;
-            totalWater += resultIndices?.agua;
-            totalBio += resultIndices?.bio;
-            totalSoil += resultIndices?.solo;
+            const inspectionId = filterInspected[i].id;
+            const response = await GetIsa(inspectionId);
+            for(var i = 0; i < response.length; i++){
+                if(response[i].categoryId === '1'){
+                    isaCarbon = response[i]
+                }
+                if(response[i].categoryId === '2'){
+                    isaBio = response[i]
+                }
+                if(response[i].categoryId === '3'){
+                    isaWater = response[i]
+                }
+                if(response[i].categoryId === '4'){
+                    isaSoil = response[i]
+                }
+            }
+
+            totalCarbon += Number(isaCarbon?.indicator);
+            totalWater += Number(isaWater?.indicator);
+            totalBio += Number(isaBio?.indicator);
+            totalSoil += Number(isaSoil?.indicator);
         }
 
         setWaterTotal(totalWater);
@@ -144,7 +162,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                         <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
                             <div className="flex flex-col lg:flex-row w-full h-full">
                                 <div className="flex flex-col lg:w-[70%]">
-                                    <div className="flex items-center gap-5">
+                                    <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <img
                                             src={require('../../../assets/logo-cinza.png')}
                                             className="w-[150px] h-[80px] object-contain"

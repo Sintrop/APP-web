@@ -8,6 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 
 import { TopBarStatus } from "../../components/TopBarStatus";
 import {ModalTutorial} from '../../components/Tutorial/ModalTutorial';
+import {Assistent} from '../../components/Assistent';
 
 
 
@@ -16,6 +17,7 @@ function Login(){
     const {isSupported} = useNetwork();
     const {Sync, modalChooseLang, toggleModalChooseLang, modalTutorial, chooseModalTutorial} = useContext(MainContext);
     const navigate = useNavigate();
+    const [assistentOpen, setAssistentOpen] = useState(false);
 
     useEffect(() => {
 
@@ -38,7 +40,7 @@ function Login(){
                         <div className='flex flex-col w-full lg:w-[300px]'>
                             <img
                                 src={require('../../assets/logo-branco.png')}
-                                className="w-[200px] h-[80px] object-contain"
+                                className="w-[200px] h-[80px] object-contain mt-24 lg:mt-0"
                             />
                             <h1 className="text-[#BBFFB2] font-bold text-2xl">
                                 {t('Decentralized Regenerative Agriculture certification system')}
@@ -115,6 +117,32 @@ function Login(){
                 >
                     <ModalTutorial/>
                 </Dialog.Root>
+
+                {assistentOpen ? (
+                    <Assistent
+                        close={() => {
+                            setAssistentOpen(false)
+                            localStorage.setItem('assistantOpen', '0')
+                        }}
+                        loginPage
+                    />
+                ) : (
+                    <div 
+                        className="hidden absolute lg:flex items-center z-50 bottom-14 right-1 lg:bottom-3 lg:right-5 cursor-pointer"
+                        onClick={() => {
+                            setAssistentOpen(true)
+                            localStorage.setItem('assistantOpen', '1')
+                        }}
+                    >
+                        <div className='p-3 bg-blue-400 rounded-l-lg border-2 border-r-0 z-10 mr-[-25px] mt-8 pr-8'>
+                            <p className='font-bold text-white'>Dificuldades no primeiro acesso?</p>
+                        </div>
+                        <img
+                            src={require('../../assets/assistente.png')}
+                            className='w-24 object-contain z-20'
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )

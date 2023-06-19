@@ -184,8 +184,8 @@ export default function ProducersPool({wallet, setTab}){
                                 <p className="font-bold text-[#ff9900]">{producerInfo?.pool?.currentEra}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
-                                <p className="text-white ">Próxima aprovação em:</p>
-                                <p className="font-bold text-[#ff9900]">{nextAprove}</p>
+                                <p className="text-white ">Próximo saque em:</p>
+                                <p className="font-bold text-[#ff9900]">{nextAprove} blocos</p>
                             </div>
                         </div>
 

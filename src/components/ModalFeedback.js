@@ -7,7 +7,7 @@ import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { api } from '../services/api';
 
-export function ModalFeedback({}){
+export function ModalFeedback({close}){
     const {walletAddress} = useParams();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
@@ -43,11 +43,11 @@ export function ModalFeedback({}){
                 description: description,
                 photoHash: photoHash
             })
-            toast.success('Feedback enviado com sucesso! Agradecemos a sua colaboração.')
             setTitle('');
             setDescription('');
             setPhotoHash('');
             setBase64('');
+            close()
         }catch(err){
             console.log(err)
         }finally{

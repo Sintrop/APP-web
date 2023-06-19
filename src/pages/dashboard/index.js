@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import './dashboard.css';
+import { ToastContainer, toast } from 'react-toastify';
 import { MainContext } from '../../contexts/main';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNetwork } from '../../hooks/useNetwork';
@@ -13,6 +14,7 @@ import { TopBarMobile } from '../../components/TopBarMobile';
 import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 import { Assistent } from '../../components/Assistent';
 import { ModalFeedback } from '../../components/ModalFeedback';
+import { ModalChooseLang } from '../../components/ModalChooseLang';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -117,7 +119,7 @@ const tutorialRegistro = [
 
 export default function Dashboard(){
     const {isSupported} = useNetwork();
-    const {checkUser, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial, modalFeedback, chooseModalFeedBack} = useContext(MainContext);
+    const {checkUser, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial, modalFeedback, chooseModalFeedBack, modalChooseLang, toggleModalChooseLang} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive, typeUser} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -193,7 +195,7 @@ export default function Dashboard(){
             </div>
 
             {menuMobile && (
-                <div className='flex lg:hidden'>
+                <div className='flex lg:hidden z-70'>
                 <Menu 
                     changeTab={(tab) => {
                         setMenuMobile(false)
@@ -439,7 +441,21 @@ export default function Dashboard(){
                     chooseModalFeedBack()
                 }}  
             >
-                <ModalFeedback/>
+                <ModalFeedback
+                    close={() => {
+                        toast.success('Feedback enviado com sucesso! Agradecemos a sua colaboração.')
+                        chooseModalFeedBack();
+                    }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalChooseLang}
+                onOpenChange={(open) => {
+                    toggleModalChooseLang()
+                }}  
+            >
+                <ModalChooseLang/>
             </Dialog.Root>
 
             <Dialog.Root
@@ -454,10 +470,12 @@ export default function Dashboard(){
                 />
             </Dialog.Root>
 
-
+            <ToastContainer
+                position='top-center'
+            />
         </div>
             <div
-                className="absolute flex items-center bottom-36 right-10 cursor-pointer w-32 bg-[#ff9900] rounded-md p-2 border-2"
+                className="hidden lg:flex absolute items-center bottom-36 right-10 cursor-pointer w-32 bg-[#ff9900] rounded-md p-2 border-2"
                 onClick={() => {
                     chooseModalFeedBack()
                 }}
@@ -473,13 +491,13 @@ export default function Dashboard(){
                 />
             ) : (
                 <div 
-                    className="absolute flex items-center z-90 bottom-5 right-10 cursor-pointer"
+                    className="hidden absolute lg:flex items-center z-50 bottom-14 right-1 lg:bottom-5 lg:right-10 cursor-pointer"
                     onClick={() => {
                         setAssistentOpen(true)
                         localStorage.setItem('assistantOpen', '1')
                     }}
                 >
-                    <div className='p-3 bg-green-800 rounded-l-lg border-2 border-r-0 z-10 mr-[-25px] mt-8 pr-8'>
+                    <div className='p-3 bg-blue-500 rounded-l-lg border-2 border-r-0 z-10 mr-[-25px] mt-8 pr-8'>
                         <p className='font-bold text-white'>Posso te ajudar?</p>
                     </div>
                     <img

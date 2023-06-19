@@ -760,7 +760,7 @@ export default function ModalRegister(){
                 </div>
 
                 {step === 1 && (
-                    <div className='w-full flex flex-col items-center'>
+                    <div className='w-full flex flex-col items-center overflow-auto'>
                         <h1 className='font-bold text-2xl text-white'>{t('Register')}</h1>
                         <p className='font-bold lg:text-md text-white'>{t('Do you want to register as one')}?</p>
                         
@@ -788,7 +788,7 @@ export default function ModalRegister(){
                 )}
 
                 {step === 2 && (
-                    <div className='w-full flex flex-col items-center'>
+                    <div className='w-full flex flex-col items-center overflow-auto'>
                         {proofPhoto === '' && (
                             <h1 className='lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
                         )}
@@ -821,7 +821,7 @@ export default function ModalRegister(){
                 )}
 
                 {step === 3 && (
-                    <div className='w-full flex flex-col items-center p-2'>
+                    <div className='w-full flex flex-col items-center p-2 overflow-auto'>
                         {/* <h1 className='text-center lg:text-lg text-md text-white'>
                             {t('Now provide your details')}.
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
@@ -928,7 +928,7 @@ export default function ModalRegister(){
 
                         {type === 'activist' && (
                             <>
-                                <div className='flex flex-col lg:flex-row gap-3 mt-5'>
+                                <div className='flex flex-col lg:flex-row gap-3 mt-5 '>
                                     <div style={{display: 'flex', flexDirection: 'column'}}>
                                         <label htmlFor="password" style={{fontWeight: 'bold', color: 'white'}}>{t('Password')}</label>
                                         <input
@@ -967,7 +967,7 @@ export default function ModalRegister(){
                 )}
 
                 {step === 4 && (
-                    <div className='modal-register__container-content mb-1'>
+                    <div className='modal-register__container-content mb-1 overflow-auto'>
                         {/* <h1 className='font-bold lg:text-lg text-center text-white'>{t('Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle')}.</h1> */}
                         
                         <div className='flex w-full'>

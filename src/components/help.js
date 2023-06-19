@@ -6,7 +6,7 @@ export function Help({description}){
     const {t} = useTranslation();
 
     return(
-        <div className="rounded-md p-2 w-[95%] lg:mt-5 bg-[#0a4303]">
+        <div className="rounded-md p-2 w-[95%] mt-3 lg:mt-5 bg-[#0a4303]">
             <div className="flex items-center gap-2">
                 <FaBook size={18} color='#ff9900'/>
                 <p className='font-bold text-[#ff9900]'>{t('Help')}</p>

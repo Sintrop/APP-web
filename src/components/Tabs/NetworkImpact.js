@@ -60,7 +60,7 @@ export function NetworkImpact({setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto h-screen'>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto h-screen pb-32 lg:pb-0'>
             <h1 
                 className='font-bold text-2xl text-white'
             >{t('Network Impact')}</h1>
@@ -76,16 +76,16 @@ export function NetworkImpact({setTab}){
 
                     <div className="flex items-center gap-2 flex-wrap justify-center">
 
-                        <div className="flex flex-col lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2 border-green-950">
-                            <div className="flex items-center gap-2 py-5">
+                        <div className="flex flex-col w-full lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2 border-green-950">
+                            <div className="flex items-center gap-2 py-5 w-full">
                                 <img
                                     src={require('../../assets/token.png')}
                                     alt='Token da sintrop'
                                     className='w-[50px] h-[50px] object-contain'
                                 />
-                                <div className='flex flex-col'>
-                                    <p className='text-white'>{t("VALOR DO CRÉDITO DE REGENERAÇÃO")}</p>
-                                    <p className='text-white'>R$ 0,025</p>
+                                <div className='flex flex-col w-full'>
+                                    <p className='text-white w-full'>{t("VALOR DO CRÉDITO DE REGENERAÇÃO")}</p>
+                                    <p className='text-white w-full'>R$ 0,025</p>
                                 </div>
                             </div>
 

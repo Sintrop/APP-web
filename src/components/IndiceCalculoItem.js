@@ -17,7 +17,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
     if(type === 'regeneration'){
         if(categoryDetails.category === '2' && indice === 'carbon' && categoryDetails?.carbonValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center text-sm lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500 text-sm"> {data?.value}</p>
@@ -34,7 +34,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '2' && indice === 'agua' && categoryDetails?.aguaValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -51,7 +51,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '2' && indice === 'solo' && categoryDetails?.soloValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -68,7 +68,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '3' && indice === 'solo' && categoryDetails?.id === '13' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500">{data?.value}</p>
@@ -85,7 +85,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '3' && indice === 'bio' && categoryDetails?.id !== '13' && data?.value2 !== '0' && categoryDetails?.insumoCategory === 'biomassa'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">Insetos na {data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500">{data?.value2}</p>
@@ -102,7 +102,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '2' && indice === 'bio' && categoryDetails?.bioValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -121,7 +121,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
     if(type === 'degeneration'){
         if(categoryDetails.category === '1' && indice === 'carbon' && categoryDetails?.carbonValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -138,7 +138,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '1' && indice === 'agua' && categoryDetails?.aguaValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -155,7 +155,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '1' && indice === 'solo' && categoryDetails?.soloValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>
@@ -172,7 +172,7 @@ export function IndiceCalculoItem({data, type, indice, biomassaValue}){
 
         if(categoryDetails.category === '1' && indice === 'bio' && categoryDetails?.bioValue !== '0' && data?.value !== '0'){
             return(
-                <div className="flex items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
+                <div className="flex flex-col lg:flex-row items-center justify-between border-2 px-2 py-1 mb-3 rounded-md bg-[#0a4303]">
                     <p className="font-bold text-[#ff9900] text-center lg:w-[150px]">{data?.title}: </p>
                     <div className="flex items-center">
                         <p className="font-bold mx-2 text-red-500"> {data?.value}</p>

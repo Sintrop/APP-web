@@ -3,13 +3,12 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from "../pages/login";
 import Dashboard from '../pages/dashboard';
 import Register from "../components/Tabs/Register";
-import ProducerRanking from "../components/Tabs/Ranking/Producer";
-import ActivistRanking from "../components/Tabs/Ranking/Activist";
 import AccountProducer from "../pages/accountProducer";
 import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
 import IndicesControl from "../pages/indicesControl";
 import { Feedbacks } from "../pages/feedbacks";
+import { RequestSepolia } from "../pages/RequestSepolia";
 
 export default function Router(){
     return(
@@ -24,6 +23,7 @@ export default function Router(){
                 <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
                 <Route exact path="/feedbacks" element={<Feedbacks/>}/>
+                <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 
             </Routes>
         </BrowserRouter>

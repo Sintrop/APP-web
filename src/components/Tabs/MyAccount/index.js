@@ -24,6 +24,8 @@ import { LoadingTransaction } from '../../LoadingTransaction';
 import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from '../Researches/ResearchItem';
 import { IsProducerSyntropic } from '../../IsProducerSyntropic';
+import { ModalChangePassword } from '../../ModalChangePassword';
+import { ToastContainer, toast} from 'react-toastify';
 
 const containerStyle = {
     width: '100%',
@@ -51,6 +53,7 @@ export default function MyAccount({wallet, userType, setTab}){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [modalChangePassword, setModalChangePassword] = useState(false);
 
     useEffect(() => {
         setTab(tabActive, '');
@@ -215,7 +218,7 @@ export default function MyAccount({wallet, userType, setTab}){
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
                 <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
-                <div className='flex justify-center items-center gap-5'>
+                <div className='flex flex-col lg:flex-row justify-center items-center gap-5'>
                     {user == 1 && (
                         <button
                             
@@ -279,6 +282,26 @@ export default function MyAccount({wallet, userType, setTab}){
                 <IsProducerSyntropic
                     data={userData}
                 />
+
+                <div className='flex flex-col items-center lg:w-[1000px] mt-5'>
+                    {currentInspection.length > 0 && (
+                        <div className='w-full'>
+                            <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeção em andamento</p>
+                            {currentInspection.map(item => (
+                                <InspectionItem
+                                    key={item.id}
+                                    data={item}
+                                    type='manage'
+                                    statusExpired={(id) => {
+                                        const newArray = currentInspection.filter(item => item.id !== id)
+                                        setCurrentInspection(newArray);
+                                    }}
+                                    startOpen
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303] mt-5'>
                     <img
@@ -348,28 +371,6 @@ export default function MyAccount({wallet, userType, setTab}){
                         </div>
                         </div>
                     </div>
-                </div>
-    
-                <div className='flex flex-col items-center lg:w-[1000px] mt-5'>
-                    <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeção em andamento</p>
-
-                    {currentInspection.length === 0 ? (
-                        <p className="text-white font-bold text-lg">Nenhuma inspeção em andamento no momento</p>
-                    ) : (
-                        <>
-                            {currentInspection.map(item => (
-                                <InspectionItem
-                                    key={item.id}
-                                    data={item}
-                                    type='manage'
-                                    statusExpired={(id) => {
-                                        const newArray = currentInspection.filter(item => item.id !== id)
-                                        setCurrentInspection(newArray);
-                                    }}
-                                />
-                            ))}
-                        </>
-                    )}
                 </div>
 
                 <div className="flex flex-col items-center lg:w-[1000px]">
@@ -441,6 +442,13 @@ export default function MyAccount({wallet, userType, setTab}){
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
                     <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+
+                    <button
+                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                        onClick={() => setModalChangePassword(true)}
+                    >
+                        Alterar senha do app
+                    </button>
                 </div>
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
@@ -516,6 +524,24 @@ export default function MyAccount({wallet, userType, setTab}){
                 {loading && (
                     <Loading/>
                 )}
+
+                <ToastContainer
+                    position='top-center'
+                />
+
+                <Dialog.Root 
+                    open={modalChangePassword} 
+                    onOpenChange={(open) => {
+                        setModalChangePassword(open);
+                    }}
+                >
+                    <ModalChangePassword
+                        close={() => {
+                            setModalChangePassword(false)
+                            toast.success('Senha alterada com sucesso!');
+                        }}
+                    />
+                </Dialog.Root>
             </div>
         )
     }

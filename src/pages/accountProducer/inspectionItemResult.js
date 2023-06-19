@@ -153,7 +153,7 @@ export function InspectionItemResult({data, initialVisible}){
     return(
         <div className='flex flex-col w-full mb-5 rounded-md'>
             <div 
-                className='flex items-center justify-between w-full h-20 bg-[#80421A] p-3 rounded-t-md cursor-pointer'
+                className='flex flex-col lg:flex-row items-center justify-between w-full h-22 bg-[#80421A] p-3 rounded-t-md cursor-pointer'
                 onClick={() => setOpen(!open)}
             >
                 <div className='flex items-center gap-5'>
@@ -165,7 +165,7 @@ export function InspectionItemResult({data, initialVisible}){
 
                     <p className='font-bold text-white'>{t('Result')} {t('Inspection')} #{data.id}</p>     
                 </div>
-                <div className='hidden lg:flex items-center gap-7'>
+                <div className='flex items-center gap-7'>
                     <div className='flex items-center justify-center lg:w-52 bg-[#0A4303] p-2 rounded-md'>
                         <p className='font-bold text-white'>ISA {t('Score')}: {data?.isaScore}</p>
                     </div>
@@ -184,7 +184,7 @@ export function InspectionItemResult({data, initialVisible}){
                             )}
                         </div>
                     </div>
-                    <div className='flex w-full justify-center items-center gap-16'>
+                    <div className='flex flex-wrap w-full justify-center items-center gap-16'>
                         <div className='flex flex-col items-center'>
                             <p className='font-bold text-[#ff9900]'>Carbono</p>
                             <img
@@ -195,7 +195,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
                             </p>
                         </div>
-
+ 
                         <div className='flex flex-col items-center'>
                             <p className='font-bold text-[#ff9900]'>Solo</p>
                             <img
@@ -232,7 +232,7 @@ export function InspectionItemResult({data, initialVisible}){
                     
                     <p className='font-bold text-[#ff9900] mt-5'>{t('Activist')} {t('Wallet')}: 
                         <span          
-                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer'
+                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer max-w-[20ch] overflow-hidden'
                             onClick={() => {
                                 navigate(`/dashboard/${walletAddress}/user-details/2/${data.acceptedBy}`)
                             }}
@@ -298,7 +298,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.category === '2'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value}</p>
@@ -313,7 +313,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         )}
                                     </div>
 
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
                                                 <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
@@ -349,7 +349,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.insumoCategory === 'biomassa'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
@@ -360,7 +360,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                 })}
 
                                                 <div className='flex w-full items-center justify-between'>
-                                                    <p className='font-bold text-white w-[200px]'>Resultado</p>
+                                                    <p className='font-bold text-white lg:w-[200px]'>Resultado</p>
 
                                                     <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                         <p className='font-bold text-blue-400 text-center'>{resultBiomassa.toFixed(0)} Kg</p>
@@ -414,7 +414,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.insumoCategory === 'insumo-quimico'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
@@ -463,7 +463,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.insumoCategory === 'insumo-biologico'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
@@ -512,7 +512,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.insumoCategory === 'insumo-mineral'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
@@ -561,7 +561,7 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.insumoCategory === 'recurso-externo'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
                                                                     <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
@@ -592,7 +592,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-4xl'>CARBONO</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>CARBONO</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -700,11 +700,11 @@ export function InspectionItemResult({data, initialVisible}){
                                     <a  
                                         target='_blank'
                                         href={`https://ipfs.io/ipfs/${isaCarbon?.report}`}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                         onClick={() => handleDownloadPDF(isaCarbon?.report, `Carbon Report - Inspection ${data.id}`)}
                                     >Download PDF</button>
                                 </div>
@@ -728,7 +728,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-4xl'>ÁGUA</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>ÁGUA</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -826,12 +826,12 @@ export function InspectionItemResult({data, initialVisible}){
                                     <a  
                                         target='_blank'
                                         href={`https://ipfs.io/ipfs/${isaWater?.report}`}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
                                         onClick={() => handleDownloadPDF(isaWater?.report, `Water Report - Inspection ${data.id}`)}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
                             </div>
@@ -854,7 +854,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-4xl'>SOLO</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>SOLO</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -952,12 +952,12 @@ export function InspectionItemResult({data, initialVisible}){
                                     <a  
                                         target='_blank'
                                         href={`https://ipfs.io/ipfs/${isaSoil?.report}`}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
                                         onClick={() => handleDownloadPDF(isaSoil?.report, `Solo Report - Inspection ${data.id}`)}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
                             </div>
@@ -980,7 +980,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-4xl'>BIODIVERSIDADE</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>BIODIVERSIDADE</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -1096,12 +1096,12 @@ export function InspectionItemResult({data, initialVisible}){
                                     <a  
                                         target='_blank'
                                         href={`https://ipfs.io/ipfs/${isaBio?.report}`}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >View PDF</a>
 
                                     <button
                                         onClick={() => handleDownloadPDF(isaBio?.report, `Biodiversity Report - Inspection ${data.id}`)}
-                                        className='px-5 py-2 font-bold bg-[#ff9900] rounded-md'
+                                        className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
                                     >Download PDF</button>
                                 </div>
                             </div>

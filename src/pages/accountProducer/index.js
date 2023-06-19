@@ -76,7 +76,7 @@ export default function AccountProducer(){
 
     return(
         <div className="w-full flex flex-col items-center bg-green-950">
-            <div className='w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] flex items-center justify-center lg:justify-start lg:px-16'>
+            <div className='w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] flex items-center justify-center lg:justify-start lg:px-16 mb-3'>
                 <img
                     src={require('../../assets/logo-branco.png')}
                     className='w-[170px] object-contain'
@@ -98,7 +98,9 @@ export default function AccountProducer(){
                     <h1 className='font-bold text-center lg:text-left text-2xl text-white'>{producerData?.name}</h1>
                     <p className='text-lg text-center lg:text-left text-white mt-2'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                     <p className='text-lg text-center lg:text-left text-white'>{t('Inspections Received')}: {inspections?.length}</p>
-                    <IsProducerSyntropic data={producerData}/>
+                    <div className='flex w-full justify-center lg:justify-start'>
+                        <IsProducerSyntropic data={producerData}/>
+                    </div>
                 </div>
 
                 <div className='flex flex-col'>

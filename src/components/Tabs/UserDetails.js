@@ -12,6 +12,7 @@ import {GetDeveloper} from '../../services/developersService';
 import { GetAdvisor } from '../../services/advisorsService';
 import {GetContributor} from '../../services/contributorService';
 import { GetInvestor } from '../../services/investorService';
+import { GetDelation } from '../../services/userService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 import Map from '../Map';
@@ -19,6 +20,8 @@ import Loading from '../Loading';
 import { IsProducerSyntropic } from '../IsProducerSyntropic';
 import { InspectionItemResult } from '../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from './Researches/ResearchItem';
+import * as Dialog from '@radix-ui/react-dialog';
+import {ModalChooseTypeDelation} from '../ModalChooseTypeDelation';
 
 const containerStyle = {
     width: '100%',
@@ -38,6 +41,8 @@ export function UserDetails({setTab}){
     const [position, setPosition] = useState({});
     const [inspections, setInspections] = useState([]);
     const [researches, setResearches] = useState([]);
+    const [modalTypeDelation, setModalTypeDelation] = useState(false);
+    const [delations, setDelations] = useState([]);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -83,6 +88,8 @@ export function UserDetails({setTab}){
             const response = await GetInvestor(walletSelected);
             setUserData(response)
         }
+        const resDelations = await GetDelation(walletSelected);
+        setDelations(resDelations);
         setLoading(false)
     }
 
@@ -127,6 +134,13 @@ export function UserDetails({setTab}){
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-5'> 
                     <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+
+                    <button
+                        className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
+                        onClick={() => setModalTypeDelation(true)}
+                    >
+                        {t('Report User')}
+                    </button>
                 </div>
                 <IsProducerSyntropic data={userData}/>
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303] mt-5'>
@@ -143,7 +157,7 @@ export function UserDetails({setTab}){
                         <p className="font-bold text-white mt-1">{t('Certified Area')}: <span className="text-white font-normal">{userData?.certifiedArea}m²</span></p>
                         <p className="font-bold text-white mt-1">{t('Inspections Reiceved')}: <span className="text-white font-normal">{userData?.totalInspections}</span></p>
                         <p className="font-bold text-white mt-1">ISA {t('Score')}: <span className="text-white font-normal">{userData?.isa?.isaScore}</span></p>
-                        
+                        <p className="font-bold text-red-400 mt-1">{t('Complaints Received')}: <span className="text-white font-normal">{delations.length}</span></p>
                     </div>
                 </div>
     
@@ -194,6 +208,15 @@ export function UserDetails({setTab}){
                 {loading && (
                     <Loading/>
                 )}
+
+                <Dialog.Root
+                    open={modalTypeDelation}
+                    onOpenChange={(open) => {
+                        setModalTypeDelation(open)
+                    }}
+                >
+                    <ModalChooseTypeDelation/>
+                </Dialog.Root>
             </div>
         )
     }
@@ -203,6 +226,13 @@ export function UserDetails({setTab}){
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
                     <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+
+                    <button
+                        className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
+                        onClick={() => setModalTypeDelation(true)}
+                    >
+                        {t('Report User')}
+                    </button>
                 </div>
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     <img
@@ -215,6 +245,7 @@ export function UserDetails({setTab}){
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
                         <p className="text-white lg:text-lg max-w-[80%] overflow-clip lg:max-w-full">{userData?.activistWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
+                        <p className="font-bold text-red-400 mt-1">{t('Complaints Received')}: <span className="text-white font-normal">{delations.length}</span></p>
                     </div>
                 </div>
     
@@ -234,6 +265,15 @@ export function UserDetails({setTab}){
                         </>
                     )}
                 </div>
+
+                <Dialog.Root
+                    open={modalTypeDelation}
+                    onOpenChange={(open) => {
+                        setModalTypeDelation(open)
+                    }}
+                >
+                    <ModalChooseTypeDelation/>
+                </Dialog.Root>
     
                 {loading && (
                     <Loading/>
@@ -246,6 +286,13 @@ export function UserDetails({setTab}){
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
             <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
                 <h1 className='font-bold text-2xl text-white'>{t('User Details')}</h1>
+
+                <button
+                    className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
+                    onClick={() => setModalTypeDelation(true)}
+                >
+                    {t('Report User')}
+                </button>
             </div>
             <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                 <img
@@ -271,6 +318,7 @@ export function UserDetails({setTab}){
                             {typeUser === '4' && userData?.pool?.level}
                         </span>
                     </p>
+                    <p className="font-bold text-red-400 mt-1">{t('Complaints Received')}: <span className="text-white font-normal">{delations.length}</span></p>
                 </div>
             </div>
 
@@ -292,6 +340,15 @@ export function UserDetails({setTab}){
                     )}
                 </>
             )}
+
+            <Dialog.Root
+                open={modalTypeDelation}
+                onOpenChange={(open) => {
+                    setModalTypeDelation(open)
+                }}
+            >
+                <ModalChooseTypeDelation/>
+            </Dialog.Root>
 
             {loading && (
                 <Loading/>

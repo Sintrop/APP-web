@@ -21,6 +21,7 @@ export default function Menu({ changeTab }) {
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
     const [itemsMenu, setItemsMenu] = useState([
+        { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
         id: "rankings",
         title: "Community",
@@ -36,7 +37,6 @@ export default function Menu({ changeTab }) {
         ],
         },
         { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
-        { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
         id: "inspection-history",
         title: "Inspections History",
@@ -92,7 +92,7 @@ export default function Menu({ changeTab }) {
         }
     };
     return (
-        <div className="flex flex-col bg-[#0A4303] mt-14 lg:mt-12 fixed duration-200" style={{width: menuOpen ? '320px' : '90px'}}>
+        <div className="flex flex-col bg-[#0A4303] mt-14 lg:mt-12 fixed duration-200 z-70" style={{width: menuOpen ? '320px' : '90px'}}>
             <div className="hidden lg:flex items-center justify-between">
                 {menuOpen ? (
                     <img className="w-[120px] h-[80px] object-contain ml-4" src={require('../../assets/logo-branco.png')} />

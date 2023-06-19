@@ -1,14 +1,23 @@
 import React from 'react';
 import { useMainContext } from '../hooks/useMainContext';
 
-export function Assistent({close}){
+export function Assistent({close, loginPage}){
     const {chooseModalTutorial, user, userData} = useMainContext();
     return(
         <div className="bg-green-950 absolute bottom-3 right-5 w-[300px] h-[400px] flex flex-col p-3 justify-between rounded-md border-2 ">
             {user === '0' ? (
                 <>
-                    <p className="font-bold text-white text-center">Missão 1</p>
-                    <p className="font-bold text-white">Se cadastre na plataforma, clicando no botão na barra de status superior.</p>
+                    {loginPage ? (
+                        <>
+                            <p className="font-bold text-white text-center">Dificuldades?</p>
+                            <p className="font-bold text-white text-center">Se você estiver com dificuldade ou precisar de ajuda da nossa equipe, agende no link abaixo uma reunião online e nós te ajudaremos no processo de cadastro da plataforma.</p>
+                        </>
+                    ) : (
+                        <>
+                            <p className="font-bold text-white text-center">Missão 1</p>
+                            <p className="font-bold text-white">Se cadastre na plataforma, clicando no botão na barra de status superior.</p>
+                        </>
+                    )}
                 </>
             ) : (
                 <>
@@ -94,6 +103,15 @@ export function Assistent({close}){
             )}
 
             <div className="flex items-center  gap-4">
+                {loginPage && (
+                    <a
+                        className="w-28 h-10 flex items-center justify-center bg-red-500 rounded-md text-white font-bold"
+                        target='_blank'
+                        href='https://calendly.com/d/yvf-qv9-sxg/onboarding-na-plataforma'
+                    >
+                        Agendar
+                    </a>
+                )}
                 {user === '1' || user === '2' && (
                     <button 
                         className="w-28 h-10 flex items-center justify-center bg-red-500 rounded-md text-white font-bold"
