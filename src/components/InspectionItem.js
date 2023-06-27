@@ -675,7 +675,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         let regenerationSoil = 0;
 
         const response = await api.get(`/inspection/${data.id}`)
-        console.log(response.data)
         if(response.data.inspection.status === 1){
             setLoading(false);
             toast.error('Realize a inspeção no app do ativista para smartphone!')

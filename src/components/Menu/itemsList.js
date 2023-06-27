@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import {BsChevronDown, BsChevronUp} from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
 
-export default function ItemsList({data, changeTab, toggle,  open, openPools, openCertificates, menuOpen}){
+export default function ItemsList({data, changeTab, toggle,  open, openPools, openCertificates, openInspections, menuOpen}){
     const {t} = useTranslation();
     const {tabActive} = useParams();
     const {id, title, icon, action, subItem} = data;
@@ -116,6 +116,43 @@ export default function ItemsList({data, changeTab, toggle,  open, openPools, op
         </>
         )
     }
+
+    if(subItem && data.id === 'inspections') {
+        return (
+        <>
+            <div className='flex items-center justify-between px-4 h-16 hover:cursor-pointer hover:bg-green-950' onClick={() => toggle(data.id)}>
+                <div className='flex items-center gap-2'>
+                    <img className='w-8 h-8 object-contain' alt={title} title={title} src={icon}/>
+                    {menuOpen && (
+                        <p className='text-white'>{t(title)}</p>
+                    )}
+                </div>
+                {openInspections ? (
+                    <BsChevronUp size={15} color='green'/>
+                ) : (
+                    <BsChevronDown size={15} color='green' style={{marginLeft: 10}}/>
+                )}
+            </div>
+            { subItem && (
+                subItem.map(item => (
+                    <div 
+                        key={item.id} 
+                        className='flex items-center px-14 h-10 hover:bg-green-950 cursor-pointer' 
+                        style={{ 
+                            display: `${openInspections ? '' : 'none'}`, 
+                            backgroundColor: tabActive === item.id && '#783E19'
+                        }}  
+                        onClick={() => changeTab(item.id)} 
+                    > 
+                        <p className='text-white'>{t(item.label)}</p>
+                         
+                    </div>
+                ))
+            )}
+        </>
+        )
+    }
+
     return(
         <div 
             className='flex items-center px-4 h-16 hover:cursor-pointer hover:bg-green-950' 

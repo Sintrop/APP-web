@@ -3,7 +3,8 @@ import { useMainContext } from '../hooks/useMainContext';
 import {useNetwork} from '../hooks/useNetwork';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {VscAccount} from 'react-icons/vsc';
-import {MdVisibility, MdVisibilityOff} from 'react-icons/md';
+import {MdVisibility, MdVisibilityOff, MdKeyboardArrowDown} from 'react-icons/md';
+import {AiFillCaretDown} from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './HeaderAccount/ModalAccountOptions';
@@ -13,7 +14,7 @@ export function TopBarStatus({}){
     const {pathname} = useLocation();
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang} = useMainContext();
+    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang, language} = useMainContext();
     const {isSupported} = useNetwork();
     const [visibilityBalance, setVisibilityBalance] = useState(false);
     const [modalOptions, setModalOptions] = useState(false);
@@ -50,15 +51,21 @@ export function TopBarStatus({}){
                 ) : (
                     <>
                     {pathname === '/' ? (
-                        <div className='flex w-full lg:w-[350px] items-center gap-2 justify-center'>
-                            <p className='font-bold text-white'>{t('You are good to conect')}!</p>
-                            
-                            <button
-                                className='px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
-                                onClick={() => handleSync()}
-                            >
-                                {t('SYNCHRONIZE')}
-                            </button>
+                        <div className='flex w-full items-center gap-2 justify-between'>
+                            <div/>
+
+                            <div className='flex items-center gap-2'>
+                                <p className='font-bold text-white'>{t('You are good to conect')}!</p>
+                                
+                                <button
+                                    className='px-10 py-1 rounded-md font-bold text-white bg-[#0A4303]'
+                                    onClick={() => handleSync()}
+                                >
+                                    {t('SYNCHRONIZE')}
+                                </button>
+                            </div>
+
+                            <div/>
                         </div>
                     ) : (
                         <>
@@ -107,10 +114,27 @@ export function TopBarStatus({}){
                                     </div>
                                     
                                     <button
-                                        className='px-1 py-1 border-2 rounded-md text-white bg-[#ff9900]'
+                                        className='px-2 py-1 text-white flex items-center justify-center'
                                         onClick={() => toggleModalChooseLang()}
                                     >
-                                        Idioma
+                                        {language === 'pt-BR' ? (
+                                            <img
+                                                src={require('../assets/icon-br.png')}
+                                                className='w-[30px] object-contain'
+                                            />
+                                        ) : (
+                                            <img
+                                                src={require('../assets/icon-brit.png')}
+                                                className='w-[30px] object-contain'
+                                            />
+                                        )}
+
+                                        <div>
+                                            <MdKeyboardArrowDown
+                                                size={20}
+                                                color='white'
+                                            />
+                                        </div>
                                     </button>
                             
                                     <button
@@ -128,18 +152,44 @@ export function TopBarStatus({}){
                 )}
                 </>
             ) : (
-                <div className='flex w-full items-center gap-2 justify-center'>
-                    <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected network is unsupported. Please connect to Sepolia Testnet')}!</p>
-                    <a
-                        href='https://github.com/Sintrop/SMR/wiki/Como-acessar-a-v3-do-Sistema'
-                        target='_blank'
-                    >
-                        <button
-                            className='px-5 lg:px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
+                <div className='flex w-full items-center gap-2 justify-between'>
+                    <div className='flex items-center gap-2'>
+                        <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected network is unsupported. Please connect to Sepolia Testnet')}!</p>
+                        <a
+                            href='https://github.com/Sintrop/SMR/wiki/Como-acessar-a-v3-do-Sistema'
+                            target='_blank'
                         >
-                            Tutorial
-                        </button>
-                    </a>
+                            <button
+                                className='px-5 lg:px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
+                            >
+                                Tutorial
+                            </button>
+                        </a>
+                    </div>
+
+                    <button
+                        className='px-2 py-1 text-white flex items-center justify-center'
+                        onClick={() => toggleModalChooseLang()}
+                    >
+                        {language === 'pt-BR' ? (
+                            <img
+                                src={require('../assets/icon-br.png')}
+                                className='w-[30px] object-contain'
+                            />
+                        ) : (
+                            <img
+                                src={require('../assets/icon-brit.png')}
+                                className='w-[30px] object-contain'
+                            />
+                        )}
+
+                        <div>
+                            <MdKeyboardArrowDown
+                                size={20}
+                                color='white'
+                            />
+                        </div>
+                    </button>
                 </div>
             )}
 

@@ -7,6 +7,9 @@ import { IndiceCalculoItem } from '../../components/IndiceCalculoItem';
 import {GetIsa} from '../../services/accountProducerService';
 import { saveAs } from 'file-saver';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ModalViewPhoto } from '../../components/ModalViewPhoto';
 
 export function InspectionItemResult({data, initialVisible}){
     const navigate = useNavigate();
@@ -40,6 +43,9 @@ export function InspectionItemResult({data, initialVisible}){
     const [isaBio, setIsaBio] = useState({});
     const [isaWater, setIsaWater] = useState({});
     const [isaSoil, setIsaSoil] = useState({});
+    const [proofPhotoBase64, setProofPhotoBase64] = useState('');
+    const [modalViewPhoto, setModalViewPhoto] = useState(false);
+    const [hashSelected, setHashSelected] = useState('');
 
     useEffect(() => {
         getResultIndices();
@@ -76,6 +82,10 @@ export function InspectionItemResult({data, initialVisible}){
         if(response.data.inspection.resultCategories === null){
             return;
         }
+        const resProofPhoto = await axios.get(`https://ipfs.io/ipfs/${response.data?.inspection?.proofPhoto}`)
+        setProofPhotoBase64(resProofPhoto.data)
+        
+        //setProofPhotoBase64(proofPhoto)
         setResultIndices(JSON.parse(response.data?.inspection?.resultIdices))
         setResultCategories(JSON.parse(response.data?.inspection?.resultCategories))
 
@@ -177,56 +187,85 @@ export function InspectionItemResult({data, initialVisible}){
                 <div className='p-2 bg-[#0a4303] w-full flex flex-col'>
                     <div className='w-full items-center justify-center'>
                         <div className='flex justify-center'>
-                            {resultCategories.length === 0 ? (
-                                <p>Método Manual</p>
+                            <div className='flex gap-2 items-center justify-center'>
+                                {resultCategories.length > 0 ? (
+                                    <img
+                                        src={require('../../assets/metodo-sintrop.png')}
+                                        className='w-[30px] object-contain'
+                                    />
                                 ) : (
-                                <p>Método Phoenix</p>
-                            )}
+                                    <img
+                                        src={require('../../assets/metodo-manual.png')}
+                                        className='w-[30px] object-contain'
+                                    />
+                                )}
+                                <p className='text-white font-bold'>
+                                    Método {resultCategories.length > 0 ? 'Sintrop' : 'Manual'}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div className='flex flex-wrap w-full justify-center items-center gap-16'>
-                        <div className='flex flex-col items-center'>
-                            <p className='font-bold text-[#ff9900]'>Carbono</p>
-                            <img
-                                src={require('../../assets/co2.png')}
-                                className='w-[55px] h-[40px] object-contain'
-                            />
-                            <p className='font-bold text-white text-lg flex items-end'>
-                                {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
-                            </p>
-                        </div>
- 
-                        <div className='flex flex-col items-center'>
-                            <p className='font-bold text-[#ff9900]'>Solo</p>
-                            <img
-                                src={require('../../assets/solo.png')}
-                                className='w-[40px] h-[40px] object-contain'
-                            />
-                            <p className='font-bold text-white text-lg flex items-end'>
-                                {Number(isaSoil?.indicator).toFixed(0)} m²/era
-                            </p>
-                        </div>
 
-                        <div className='flex flex-col items-center'>
-                            <p className='font-bold text-[#ff9900]'>Água</p>
-                            <img
-                                src={require('../../assets/agua.png')}
-                                className='w-[40px] h-[40px] object-contain'
-                            />
-                            <p className='font-bold text-white text-lg flex items-end'>
-                                {Number(isaWater?.indicator).toFixed()} m³/era
-                            </p>
+                    <div className="flex flex-col lg:flex-row items-center w-full">
+                        <div className="flex flex-col items-center gap-3 w-[50%]">
+                            <p className="font-bold text-white">{t('Proof Photo')}</p>
+                            {proofPhotoBase64 === '' ? (
+                                <div/>
+                            ) : (
+                                <img
+                                    src={proofPhotoBase64}
+                                    className="w-[200px] h-[250px] object-cover rounded-md border-4 border-[#ff9900] cursor-pointer"
+                                    onClick={() => {
+                                        setHashSelected(inspectionDataApi.proofPhoto);
+                                        setModalViewPhoto(true);
+                                    }}
+                                />
+                            )}
                         </div>
+                        <div className='flex flex-wrap w-[50%] justify-center items-center gap-16 lg:px-16'>
+                            <div className='flex flex-col items-center'>
+                                <p className='font-bold text-[#ff9900]'>Carbono</p>
+                                <img
+                                    src={require('../../assets/co2.png')}
+                                    className='w-[55px] h-[40px] object-contain'
+                                />
+                                <p className='font-bold text-white text-lg flex items-end'>
+                                    {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
+                                </p>
+                            </div>
+    
+                            <div className='flex flex-col items-center'>
+                                <p className='font-bold text-[#ff9900]'>Solo</p>
+                                <img
+                                    src={require('../../assets/solo.png')}
+                                    className='w-[40px] h-[40px] object-contain'
+                                />
+                                <p className='font-bold text-white text-lg flex items-end'>
+                                    {Number(isaSoil?.indicator).toFixed(0)} m²/era
+                                </p>
+                            </div>
 
-                        <div className='flex flex-col items-center'>
-                            <p className='font-bold text-[#ff9900]'>Biodiversidade</p>
-                            <img
-                                src={require('../../assets/bio.png')}
-                                className='w-[40px] h-[40px] object-contain'
-                            />
-                            <p className='font-bold text-white text-lg flex items-end'>
-                                {Number(isaBio?.indicator).toFixed(0)} uni/era
-                            </p>
+                            <div className='flex flex-col items-center'>
+                                <p className='font-bold text-[#ff9900]'>Água</p>
+                                <img
+                                    src={require('../../assets/agua.png')}
+                                    className='w-[40px] h-[40px] object-contain'
+                                />
+                                <p className='font-bold text-white text-lg flex items-end'>
+                                    {Number(isaWater?.indicator).toFixed()} m³/era
+                                </p>
+                            </div>
+
+                            <div className='flex flex-col items-center'>
+                                <p className='font-bold text-[#ff9900]'>Biodiversidade</p>
+                                <img
+                                    src={require('../../assets/bio.png')}
+                                    className='w-[40px] h-[40px] object-contain'
+                                />
+                                <p className='font-bold text-white text-lg flex items-end'>
+                                    {Number(isaBio?.indicator).toFixed(0)} uni/era
+                                </p>
+                            </div>
                         </div>
                     </div>
                     
@@ -1113,6 +1152,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                 </div>
             )}
+
+            <Dialog.Root
+                open={modalViewPhoto}
+                onOpenChange={(open) => setModalViewPhoto(open)}
+            >
+                <ModalViewPhoto
+                    close={() => setModalViewPhoto(false)}
+                    hash={hashSelected}
+                />
+            </Dialog.Root>
         </div>
     )}
 }

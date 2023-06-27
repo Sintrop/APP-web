@@ -165,7 +165,7 @@ export default function DevelopersPool({wallet, setTab}){
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
-                <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[250px] mb-5">
+                <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[344px] mb-5">
                     <p className="font-bold text-white">Próxima ERA em {nextEraIn} blocos</p>
                 </div>
                 {user === '4' && (

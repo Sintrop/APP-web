@@ -12,6 +12,7 @@ import IconSac from '../../assets/token.png';
 import IconPesquisas from '../../assets/icon-pesquisas.png';
 import IconAccount from '../../assets/icon-account.png';
 import IconNetwork from '../../assets/network.png';
+import IconMarket from '../../assets/market-icon.png'
 
 import ItemsList from "./itemsList";
 
@@ -20,6 +21,7 @@ export default function Menu({ changeTab }) {
     const [open, setOpen] = useState(false);
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
+    const [openInspections, setOpenInspections] = useState(false);
     const [itemsMenu, setItemsMenu] = useState([
         { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
@@ -38,17 +40,27 @@ export default function Menu({ changeTab }) {
         },
         { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
         {
-        id: "inspection-history",
-        title: "Inspections History",
-        icon: IconHistory,
-        action: "",
+            id: "inspections",
+            title: "Inspections",
+            icon: IconHistory,
+            action: "",
+            subItem: [
+                { id: "inspection-history", label: "Inspections History" },
+                { id: "manage-inspections", label: "Manage Inspections" },
+            ],
         },
-        {
-        id: "manage-inspections",
-        title: "Manage Inspections",
-        icon: IconManage,
-        action: "",
-        },
+        // {
+        // id: "inspection-history",
+        // title: "Inspections History",
+        // icon: IconHistory,
+        // action: "",
+        // },
+        // {
+        // id: "manage-inspections",
+        // title: "Manage Inspections",
+        // icon: IconManage,
+        // action: "",
+        // },
         // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
         // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
         {
@@ -71,6 +83,7 @@ export default function Menu({ changeTab }) {
             {id: 'developers-pool', label: 'Developers'},
         ] 
         },
+        { id: "market", title: "Market", icon: IconMarket, action: "" },
         //{ 
         //  id: "delations", 
         //  title: "Delations", 
@@ -82,13 +95,16 @@ export default function Menu({ changeTab }) {
     ]);
     const toggleSubItem = (id) => {
         if(id === 'rankings'){
-        setOpen((oldValue) => !oldValue);
+            setOpen((oldValue) => !oldValue);
         }
         if(id === 'pools'){
-        setOpenPools((oldValue) => !oldValue);
+            setOpenPools((oldValue) => !oldValue);
         }
         if(id === 'certificates'){
-        setOpenCertificates((oldValue) => !oldValue);
+            setOpenCertificates((oldValue) => !oldValue);
+        }
+        if(id === 'inspections'){
+            setOpenInspections((oldValue) => !oldValue);
         }
     };
     return (
@@ -129,6 +145,7 @@ export default function Menu({ changeTab }) {
                             key={item.id}
                             subItem={item.subItem}
                             openCertificates={openCertificates}
+                            openInspections={openInspections}
                             openPools={openPools}
                             open={open}
                             toggle={(id) => {
@@ -139,14 +156,22 @@ export default function Menu({ changeTab }) {
                                 if(id === 'certificates'){
                                     setOpenPools(false);
                                     setOpen(false);  
+                                    setOpenInspections(false);
                                 }
                                 if(id === 'rankings'){
                                     setOpenPools(false);
                                     setOpenCertificates(false);
+                                    setOpenInspections(false);
                                 }
                                 if(id === 'pools'){
                                     setOpen(false);
                                     setOpenCertificates(false);
+                                    setOpenInspections(false);
+                                }
+                                if(id === 'inspections'){
+                                    setOpen(false);
+                                    setOpenCertificates(false);
+                                    
                                 }
                             }}
                             menuOpen={menuOpen}

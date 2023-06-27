@@ -110,6 +110,20 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         })
     }
 
+    function downloadCertificateShort(){
+        setLoading(true);
+        const fileNameShort = `Certificate_Short${wallet}`;
+        var certificateShort = document.querySelector("#certificate-short");
+        htmlToImage.toJpeg(certificateShort)
+        .then((dataUrl) => {
+            saveAs(dataUrl, fileNameShort)
+            setLoading(false)
+        })
+        .catch((error) => {
+            setLoading(false);
+        })
+    }
+
     if(userType != 1){
         return(
             <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
@@ -139,6 +153,13 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                         onClick={() => downloadCertificate()}
                     >
                         {t('Download')} {t('Certificate')}
+                    </button>
+
+                    <button
+                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                        onClick={() => downloadCertificateShort()}
+                    >
+                        {t('Download Certificate Short')}
                     </button>
 
                     <CopyToClipboard text={`${window.location.host}/account-producer/${wallet}`}>
@@ -207,6 +228,39 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                             </div>
 
                             <p className="text-sm text-center mt-3">Wallet do produtor: {wallet}</p>
+                        </div>
+                    </div> 
+                    
+                </div>
+
+                <div className="my-3"/>
+
+                <div className="flex flex-col lg:w-[370px] mr-2" id='certificate-short'>
+                    <div className="hidden lg:flex flex-col w-full lg:flex-row lg:w-[370px] h-[430px] border-2 bg-[#0A4303] border-white rounded-md mr-2">
+
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row w-full lg:w-[370px] lg:ml-2 lg:mt-[-420px] bg-white lg:relative p-2 rounded-md" >
+                        <div className="flex flex-col w-full h-full items-center border-4 py-5 px-5 border-[#783E19] rounded-md">
+                                <img
+                                    src={require('../../../assets/logo-cinza.png')}
+                                    className="w-[150px] h-[80px] object-contain"
+                                />
+                                <p className="text-black font-bold text-center">Produtor Regenerativo</p>
+                                <QRCode 
+                                    value={`${window.location.host}/account-producer/${wallet}`} 
+                                    size={180}
+                                    logoImage={require('../../../assets/icone.png')}
+                                    qrStyle="dots"
+                                    logoPadding={2}
+                                    logoPaddingStyle="square"
+                                    logoWidth={50}
+                                    removeQrCodeBehindLogo
+                                    eyeColor='#0a4303'
+                                />
+
+                                <p className="text-sm text-center my-3">{wallet}</p>
+                                <IsProducerSyntropic data={producerData}/>
                         </div>
                     </div> 
                     
