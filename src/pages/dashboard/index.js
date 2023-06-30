@@ -30,6 +30,7 @@ import ResearchesPage from '../../components/Tabs/Researches';
 import { UserDetails } from '../../components/Tabs/UserDetails';
 import { NetworkImpact } from '../../components/Tabs/NetworkImpact';
 import { Market } from '../../components/Tabs/Market';
+import { ResultInspection } from '../../components/Tabs/ResultInspection';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -434,6 +435,15 @@ export default function Dashboard(){
                         }}
                     />
                 )}
+
+                {activeTab === 'result-inspection' && (
+                    <ResultInspection 
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
             </div>
 
             <Dialog.Root
@@ -485,7 +495,7 @@ export default function Dashboard(){
             />
         </div>
             <div
-                className="flex absolute items-center right-3 bottom-44 lg:bottom-36 lg:right-10 cursor-pointer w-32 bg-[#ff9900] rounded-md p-2 border-2"
+                className="hidden lg:flex absolute items-center right-3 bottom-44 lg:bottom-36 lg:right-10 cursor-pointer w-32 bg-[#ff9900] rounded-md p-2 border-2"
                 onClick={() => {
                     chooseModalFeedBack()
                 }}
@@ -501,7 +511,7 @@ export default function Dashboard(){
                 />
             ) : (
                 <div 
-                    className="absolute flex items-center z-50 bottom-14 right-1 lg:bottom-5 lg:right-10 cursor-pointer"
+                    className="absolute hidden lg:flex items-center z-50 bottom-14 right-1 lg:bottom-5 lg:right-10 cursor-pointer"
                     onClick={() => {
                         setAssistentOpen(true)
                         localStorage.setItem('assistantOpen', '1')

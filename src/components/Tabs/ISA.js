@@ -7,6 +7,7 @@ import CreateCategory from '../IsaPageComponents/CreateCategory';
 import ItemsListISA from '../IsaPageComponents/ItemsListISA';
 import Loading from '../Loading';
 import {IndiceItem} from '../IndiceItem';
+import { BackButton } from '../BackButton';
 
 //services
 import {GetCategories} from '../../services/isaService';
@@ -35,8 +36,11 @@ export default function ISA({user, walletAddress, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-            <h1 className='font-bold text-2xl text-white'>{t('Sustainable Agriculture Index')}</h1>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex items-center gap-2'>
+                <BackButton/>
+                <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Sustainable Agriculture Index')}</h1>
+            </div>
             
             {categories.length === 0 ? (
                 <h1>{t('No category registered')}</h1>

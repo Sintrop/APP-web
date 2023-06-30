@@ -18,6 +18,11 @@ const startEra4 = 3690620;
 const startEra5 = 3723850;
 const startEra6 = 3757080;
 const startEra7 = 3790310;
+const startEra8 = 3823540;
+const startEra9 = 3856770;
+const startEra10 = 3890000;
+const startEra11 = 3923230;
+const startEra12 = 3956460;
 
 export default function MainProvider({children}){
     const {i18n} = useTranslation();
@@ -138,8 +143,28 @@ export default function MainProvider({children}){
             setEra(6);
             setNextEraIn(startEra7 - Number(blockNumber));
         }
-        if(Number(blockNumber) >= startEra7){
+        if(Number(blockNumber) >= startEra7 && Number(blockNumber) < startEra8){
             setEra(7);
+            setNextEraIn(startEra8 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra8 && Number(blockNumber) < startEra9){
+            setEra(8);
+            setNextEraIn(startEra9 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra9 && Number(blockNumber) < startEra10){
+            setEra(9);
+            setNextEraIn(startEra10 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra10 && Number(blockNumber) < startEra11){
+            setEra(10);
+            setNextEraIn(startEra11 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra11 && Number(blockNumber) < startEra12){
+            setEra(11);
+            setNextEraIn(startEra12 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra12){
+            setEra(12);
         }
     }
 

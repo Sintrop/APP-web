@@ -17,7 +17,7 @@ import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { UserPoolItem } from '../../../UserPoolItem';
-import { api } from '../../../../services/api';
+import { BackButton } from '../../../BackButton';
 
 export default function ProducersPool({wallet, setTab}){
     const {user, nextEraIn} = useMainContext();
@@ -166,9 +166,12 @@ export default function ProducersPool({wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
-                <h1 className="font-bold text-2xl text-white">{t('Producers Pool')}</h1>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-2 lg:mb-10'>
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Producers Pool')}</h1>
+                </div>
             </div>
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
@@ -203,18 +206,18 @@ export default function ProducersPool({wallet, setTab}){
                     <div className="flex w-full">
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900]">Saldo do contrato</p>
-                                <p className="font-bold text-white">{(balanceContract / 10 ** 18).toFixed(2)}</p>
+                                <p className="font-bold text-sm lg:text-normal text-[#ff9900]">Saldo do contrato</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{(balanceContract / 10 ** 18).toFixed(2)}</p>
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900]">Tokens por ERA</p>
-                                <p className="font-bold text-white">{tokensPerEra / 10 ** 18}</p>
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">Tokens por ERA</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{tokensPerEra / 10 ** 18}</p>
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900]">ERA atual</p>
-                                <p className="font-bold text-white">{currentEra}</p>
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">ERA atual</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{currentEra}</p>
                             </div>
                         </div>
 
@@ -228,14 +231,14 @@ export default function ProducersPool({wallet, setTab}){
 
                     <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3'>
                         <div>
-                            <p className="font-bold text-white">Pontuação total dos produtores</p>
-                            <p className="font-bold text-[#ff9900]">{scoresProducers}</p>
+                            <p className="font-bold text-white text-sm lg:text-normal">Pontuação total dos produtores</p>
+                            <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{scoresProducers}</p>
                         </div>
 
                         
                         {user === '1' && (
                             <button
-                                className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                                className='px-4 py-2 bg-[#ff9900] rounded-md font-bold text-sm lg:text-normal'
                                 onClick={withdraw}
                             >
                                 {t('Withdraw')} Tokens
@@ -247,7 +250,7 @@ export default function ProducersPool({wallet, setTab}){
 
                 <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
-                            <p className='font-bold text-white text-2xl border-b-2 pb-1'>Lista de Produtores Aprovados</p>
+                            <p className='font-bold text-white text-lg lg:text-2xl border-b-2 pb-1'>Lista de Produtores Aprovados</p>
                         </div>
                         <div className='flex w-full items-center'>
                             <div className='flex w-[5%] px-1 py-3'>

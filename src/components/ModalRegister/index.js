@@ -19,6 +19,8 @@ import {api} from '../../services/api';
 import {FiCamera} from 'react-icons/fi';
 import {FaBook} from 'react-icons/fa';
 import { Help } from '../help';
+import { ModalRequestSepolia } from '../ModalRequestSepolia';
+import {IoMdCloseCircleOutline} from 'react-icons/io';
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -31,6 +33,8 @@ export default function ModalRegister(){
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [areaProperty, setAreaProperty] = useState(0);
+    const [modalSepolia, setModalSepolia] = useState(false);
+    const [locationManual, setLocationManual] = useState(false);
 
     const [checkWebcam, setCheckWebcam] = useState(false);
     const [step, setStep] = useState(1);
@@ -51,6 +55,8 @@ export default function ModalRegister(){
     const [propertyGeolocation, setPropertyGeolocation] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [lat, setLat] = useState('');
+    const [lng, setLng] = useState('');
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -191,13 +197,31 @@ export default function ModalRegister(){
                 toast.error(`${t('Fill in the street field')}!`);
                 return;
             }
-            if(geoLocation === ''){
-                toast.error(`${t('Authorize location access permission')}!`);
-                return;
+
+            if(locationManual){
+                if(areaProperty === 0){
+                    return;
+                }
+                if(!lat.trim()){
+                    return;
+                }
+                if(!lng.trim()){
+                    return;
+                }
             }
-            if(propertyGeolocation === ''){
-                toast.error(`${t('It is necessary to demarcate the area of ​​​​your property')}!`);
-                return;
+
+            if(!locationManual){
+                if(geoLocation === ''){
+                    toast.error(`${t('Authorize location access permission')}!`);
+                    return;
+                }
+            }
+
+            if(!locationManual){
+                if(propertyGeolocation === ''){
+                    toast.error(`${t('It is necessary to demarcate the area of ​​​​your property')}!`);
+                    return;
+                }
             }
             if(areaProperty === 0){
                 toast.error(`${t('Invalid Area! Refresh page.')}!`);
@@ -249,10 +273,21 @@ export default function ModalRegister(){
             street,
             country
         }
+
+        let local = '';
+        if(locationManual){
+            let data = {
+                lat: Number(lat),
+                lng: Number(lng),
+            }
+            local = JSON.stringify(data);
+        }else{
+            local = geoLocation
+        }
         if(type === 'producer'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addProducer(walletConnected, name, proofPhoto, geoLocation, areaProperty)
+            addProducer(walletConnected, name, proofPhoto, local, areaProperty)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -745,8 +780,8 @@ export default function ModalRegister(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] h-[580px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
-                <div className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2 border-[#ff9900]'>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] lg:h-[550px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2'>
+                <div className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2'>
                     <div className='px-3'/>
                     <img
                         src={require('../../assets/logo-branco.png')}
@@ -755,14 +790,14 @@ export default function ModalRegister(){
                     <Dialog.Close
                         className='h-10 text-white text-sm lg:text-base px-3'
                     >
-                        X
+                        <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Close>
                 </div>
 
                 {step === 1 && (
                     <div className='w-full flex flex-col items-center overflow-auto'>
-                        <h1 className='font-bold text-2xl text-white'>{t('Register')}</h1>
-                        <p className='font-bold lg:text-md text-white'>{t('Do you want to register as one')}?</p>
+                        <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Register')}</h1>
+                        <p className='font-bold text-sm lg:text-md text-white'>{t('Do you want to register as one')}?</p>
                         
                         <select
                             defaultValue={type}
@@ -770,7 +805,7 @@ export default function ModalRegister(){
                                 setType(e.target.value)
                                 resetData();
                             }}
-                            className='mt-10 lg:w-[50%] h-10 bg-[#C66828] text-white font-bold'
+                            className='mt-10 lg:w-[50%] h-8 lg:h-10 bg-[#C66828] text-white font-bold'
                         >
                             <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
@@ -788,9 +823,9 @@ export default function ModalRegister(){
                 )}
 
                 {step === 2 && (
-                    <div className='w-full flex flex-col items-center overflow-auto'>
+                    <div className='w-full flex flex-col items-center overflow-auto py-2'>
                         {proofPhoto === '' && (
-                            <h1 className='lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                            <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
                         )}
 
                         {proofPhoto != '' && (
@@ -808,7 +843,7 @@ export default function ModalRegister(){
                                 }, 1000)
                             }}
 
-                            className='flex items-center justify-center gap-2 px-5 h-10 bg-[#2066CF] font-bold text-white rounded-md'
+                            className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
                         >
                             <FiCamera size={25} color='white'/>
                             {t('Take Photo')}
@@ -827,7 +862,7 @@ export default function ModalRegister(){
                             {type === 'producer' && ` ${t('Make sure that in address is correct, it can not be changed in the future')}.`}
                         </h1> */}
 
-                        <div className='lg:w-[450px] w-full mt-3 lg:mt-5'>
+                        <div className='lg:w-[450px] w-full mt-2 lg:mt-5'>
                             <div className='flex flex-col'>
                                 <label className='font-bold text-white' >{t('Name')}</label>
                                 <input
@@ -837,7 +872,7 @@ export default function ModalRegister(){
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                    className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                 />
                             </div>
                         {type === 'producer'&& (
@@ -854,12 +889,12 @@ export default function ModalRegister(){
                                             onChange={(e) => setCep(e.target.value)}
                                             mask='99999-999'
                                             required
-                                            className='w-32 h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-32 h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
                                 
                                     
-                                    <p className='text-sm lg:text-base font-bold text-white'>
+                                    <p className='text-sm lg:text-base font-bold text-white mt-4 lg:mt-0'>
                                         {state === '' ? '' : `${city}-${state}, ${country}.`}
                                     </p>
                                     
@@ -875,7 +910,7 @@ export default function ModalRegister(){
                                             value={street}
                                             onChange={(e) => setStreet(e.target.value)}
                                             required
-                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
 
@@ -887,7 +922,7 @@ export default function ModalRegister(){
                                             value={complement}
                                             onChange={(e) => setComplement(e.target.value)}
                                             required
-                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
                                 </div>
@@ -897,7 +932,7 @@ export default function ModalRegister(){
                                         <select 
                                             value={documetType}
                                             onChange={(e) => setDocumentType(e.target.value)}
-                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                         >
                                             <option selected value="">Select Document Type</option>
                                             <option value="rg">RG</option>
@@ -915,7 +950,7 @@ export default function ModalRegister(){
                                             name="documetNumber"
                                             onChange={(e) => setDocumentNumber(e.target.value)}
                                             required
-                                            className='w-full h-10 border-2 border-[#A75722] rounded p-1'
+                                            className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
                                         />
                                     </div>
                                 </div>
@@ -970,17 +1005,66 @@ export default function ModalRegister(){
                     <div className='modal-register__container-content mb-1 overflow-auto'>
                         {/* <h1 className='font-bold lg:text-lg text-center text-white'>{t('Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle')}.</h1> */}
                         
-                        <div className='flex w-full'>
-                            <Map
-                                setCenter={(position) => {setGeolocation(JSON.stringify(position))}}
-                                editable={true}
-                                setPolyline={(path) => {
-                                    setPropertyGeolocation(path)
-                                    calculateArea(JSON.parse(path))
-                                    console.log(path)
-                                }}
-                            />
-                        </div>
+                        {locationManual ? (
+                            <>
+                                <div className='flex flex-col'>
+                                    <label  className='font-bold text-[#ff9900]'>{t('Latitude')}</label>
+                                    <input
+                                        placeholder='Latitude'
+                                        
+                                        value={lat}
+                                        onChange={(e) => setLat(e.target.value)}
+                                        required
+                                        className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
+                                    />
+
+                                    <label className='font-bold text-[#ff9900] mt-2'>{t('Longitude')}</label>
+                                    <input
+                                        placeholder='Longitude'
+                                        
+                                        value={lng}
+                                        onChange={(e) => setLng(e.target.value)}
+                                        required
+                                        className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
+                                    
+                                    />
+
+                                    <label htmlFor="street" className='font-bold text-[#ff9900] mt-2'>{t('Área Propriedade (Em m²):')}</label>
+                                    <input
+                                        placeholder='Área em m²'
+                                        name="street"
+                                        value={areaProperty}
+                                        onChange={(e) => setAreaProperty(Number(e.target.value))}
+                                        required
+                                        className='w-full h-8 lg:h-10 border-2 border-[#A75722] rounded p-1'
+                                        type='numeric'
+                                    />
+
+                                    <button 
+                                        onClick={() => setLocationManual(false)} 
+                                        className='px-2 py-1 bg-[#ff9900] text-white font-bold my-2 rounded-md'
+                                    >
+                                        {t('Usar Google Maps')}
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                            <button onClick={() => setLocationManual(true)} className='px-2 py-1 bg-[#ff9900] text-white font-bold my-2 rounded-md'>{t('Inserir localização manualmente')}</button>
+                            <div className='flex w-full'>
+                                <Map
+                                    setCenter={(position) => {setGeolocation(JSON.stringify(position))}}
+                                    editable={true}
+                                    setPolyline={(path) => {
+                                        setPropertyGeolocation(path)
+                                        calculateArea(JSON.parse(path))
+                                        console.log(path)
+                                    }}
+                                />
+                            </div>
+
+                            </>
+                        )}
 
                         <Help
                             description="Circle the entire area of ​​your property, clicking on the edges until you complete the entire circle"
@@ -988,19 +1072,27 @@ export default function ModalRegister(){
                     </div>
                 )}
 
-                <div className='flex w-full justify-between items-center gap-2 border-t-2 border-[#ff9900] px-3 pt-3'>
-                    <div>
+                <div className='flex w-full justify-between items-center gap-2 border-t-2 px-3 pt-3'>
+                    <div className='lg:w-[120px]'>
                     {step > 1 && (
                         <button 
-                            className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
+                            className='lg:w-[120px] h-8 lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                             onClick={handlePreviousStep}
                         >
                             {t('Previous')}
                         </button>
                     )}
                     </div>
+
+                    <button
+                        className='border-2 rounded-md border-[#ff9900] px-2 h-8 lg:h-10 text-bold text-[#ff9900]'
+                        onClick={() => setModalSepolia(true)}
+                    >
+                        Solicitar SepoliaETH
+                    </button>
+
                     <button 
-                        className='lg:w-[120px] h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
+                        className='lg:w-[120px] h-8 lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                         onClick={() => {
                             if(step === 4){
                                 validateData();
@@ -1074,6 +1166,17 @@ export default function ModalRegister(){
                     action='register'
                 />
             </Dialog.Root>
+
+            <Dialog.Root
+                open={modalSepolia}
+                onOpenChange={(open) => setModalSepolia(open)}
+            >
+                <ModalRequestSepolia close={() => {
+                    setModalSepolia(false)
+                    toast.success('SepoliaETH requisitado com sucesso! O quanto antes a nossa equipe enviará seus SepoliaETH.')
+                }}/>
+            </Dialog.Root>
+
             {loading && <Loading/>}
             <ToastContainer
                 position='top-center'

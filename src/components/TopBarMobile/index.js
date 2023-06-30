@@ -12,16 +12,16 @@ export function TopBarMobile({toggleMenu, openMenu}){
             <div className="lg:hidden flex px-2 py-2 bg-[#0A4303] items-center justify-between w-full">
                 <img
                     src={require('../../assets/logo-branco.png')}
-                    className='w-32 object-contain'
+                    className='w-20 object-contain'
                 />
 
                 <button
                     onClick={toggleMenu}
                 >
                     {openMenu ? (
-                        <RiCloseFill size={25} color='white' />
+                        <RiCloseFill size={23} color='white' />
                     ) : (
-                        <GoThreeBars size={25} color='white' />
+                        <GoThreeBars size={23} color='white' />
                     )}
                 </button>
             </div>

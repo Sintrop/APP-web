@@ -8,6 +8,7 @@ import {GetResearches} from '../../../services/researchersService';
 import { ResearchItem } from './ResearchItem';
 import { useTranslation } from 'react-i18next';
 import {useMainContext} from '../../../hooks/useMainContext';
+import { BackButton } from '../../BackButton';
 
 export default function ResearchesPage({wallet, setTab}){
     const {user} = useMainContext();
@@ -33,9 +34,12 @@ export default function ResearchesPage({wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-                <div className='flex items-center justify-between mb-3 lg:mb-10'> 
-                    <h1 className='font-bold text-2xl text-white'>{t('Researches')}</h1>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+                <div className='flex items-center justify-between mb-2 lg:mb-10'> 
+                    <div className='flex items-center gap-2'>
+                        <BackButton/>
+                        <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Researches')}</h1>
+                    </div>
                     <div className='flex justify-center items-center gap-5'>
                         {user === '3' && (
                             <button

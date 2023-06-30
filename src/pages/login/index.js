@@ -91,7 +91,7 @@ function Login(){
                             />
                         </div>
 
-                        <p className="text-white lg:w-[500px]">{t('Será preciso de muita, mas muita gente nessa luta. Por isso estamos buscando pessoas do bem para fazerem parte do Exército da Regeneração. Para se juntar nessa luta, basta concluir a missão 1')}</p>
+                        <p className="text-white lg:w-[500px]">{t("It will take a lot, but a lot of people in this fight. That's why we are looking for good people to be part of the Regeneration Army. To join this fight, just complete mission 1")}</p>
 
                         <div className="lg:w-[500px] flex flex-col lg:flex-row justify-center">
                             <button

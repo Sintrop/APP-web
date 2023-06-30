@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalViewPhoto } from '../../components/ModalViewPhoto';
+import { InsumoItem } from '../../components/InsumoItem';
 
 export function InspectionItemResult({data, initialVisible}){
     const navigate = useNavigate();
@@ -46,12 +47,13 @@ export function InspectionItemResult({data, initialVisible}){
     const [proofPhotoBase64, setProofPhotoBase64] = useState('');
     const [modalViewPhoto, setModalViewPhoto] = useState(false);
     const [hashSelected, setHashSelected] = useState('');
+    const [method, setMethod] = useState('manual');
 
     useEffect(() => {
         getResultIndices();
         getIsaData();
         if(initialVisible){
-            setOpen(true)
+            setOpen(true);
         }
         
     },[]);
@@ -75,19 +77,33 @@ export function InspectionItemResult({data, initialVisible}){
         }
     }
 
+    async function getProofPhoto(hash){
+        try{
+            const resProofPhoto = await axios.get(`https://ipfs.io/ipfs/${hash}`);
+            setProofPhotoBase64(resProofPhoto.data);
+            console.log()
+        }catch(e){
+            console.log('sem foto');
+        }
+    }
+
     async function getResultIndices() {
         const response = await api.get(`/inspection/${data.id}`)
-        setInspectionDataApi(response.data.inspection)
+        setInspectionDataApi(response.data.inspection);
         
         if(response.data.inspection.resultCategories === null){
+            setMethod('manual');
+            if(response.data.inspection.resultCategories === ''){
+                setMethod('manual');
+            }
             return;
+        }else{
+            setMethod('sintrop');
         }
-        const resProofPhoto = await axios.get(`https://ipfs.io/ipfs/${response.data?.inspection?.proofPhoto}`)
-        setProofPhotoBase64(resProofPhoto.data)
         
-        //setProofPhotoBase64(proofPhoto)
-        setResultIndices(JSON.parse(response.data?.inspection?.resultIdices))
-        setResultCategories(JSON.parse(response.data?.inspection?.resultCategories))
+        getProofPhoto(response.data?.inspection?.proofPhoto)
+        setResultIndices(JSON.parse(response.data?.inspection?.resultIdices));
+        setResultCategories(JSON.parse(response.data?.inspection?.resultCategories));
 
         const resCategories = JSON.parse(response.data?.inspection?.resultCategories);
         const resBiodiversity = JSON.parse(response.data?.inspection?.biodversityIndice);
@@ -164,13 +180,21 @@ export function InspectionItemResult({data, initialVisible}){
         <div className='flex flex-col w-full mb-5 rounded-md'>
             <div 
                 className='flex flex-col lg:flex-row items-center justify-between w-full h-22 bg-[#80421A] p-3 rounded-t-md cursor-pointer'
-                onClick={() => setOpen(!open)}
+                onClick={() => {
+                    if(!initialVisible){
+                        setOpen(!open)
+                    }
+                }}
             >
                 <div className='flex items-center gap-5'>
-                    {open ? (
-                        <AiFillCaretUp size={30} color='white'/>
-                    ) : (
-                        <AiFillCaretDown size={30} color='white'/>
+                    {!initialVisible && (
+                        <>
+                        {open ? (
+                            <AiFillCaretUp size={30} color='white'/>
+                        ) : (
+                            <AiFillCaretDown size={30} color='white'/>
+                        )}
+                        </>
                     )}
 
                     <p className='font-bold text-white'>{t('Result')} {t('Inspection')} #{data.id}</p>     
@@ -188,7 +212,7 @@ export function InspectionItemResult({data, initialVisible}){
                     <div className='w-full items-center justify-center'>
                         <div className='flex justify-center'>
                             <div className='flex gap-2 items-center justify-center'>
-                                {resultCategories.length > 0 ? (
+                                {method === 'sintrop' ? (
                                     <img
                                         src={require('../../assets/metodo-sintrop.png')}
                                         className='w-[30px] object-contain'
@@ -200,7 +224,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     />
                                 )}
                                 <p className='text-white font-bold'>
-                                    Método {resultCategories.length > 0 ? 'Sintrop' : 'Manual'}
+                                    Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
                                 </p>
                             </div>
                         </div>
@@ -210,7 +234,9 @@ export function InspectionItemResult({data, initialVisible}){
                         <div className="flex flex-col items-center gap-3 w-[50%]">
                             <p className="font-bold text-white">{t('Proof Photo')}</p>
                             {proofPhotoBase64 === '' ? (
-                                <div/>
+                                <div className="w-[200px] h-[250px] rounded-md border-4 border-[#ff9900] flex items-center justify-center bg-gray-500">
+                                    <p className="font-bold text-white text-center">No photo</p>
+                                </div>
                             ) : (
                                 <img
                                     src={proofPhotoBase64}
@@ -294,7 +320,7 @@ export function InspectionItemResult({data, initialVisible}){
                     <p className='font-bold text-[#ff9900] mt-1'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
 
                     <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
-                        {resultCategories.length > 0 && (
+                        {method === 'sintrop' && (
                             <>
                                 {/* REGENERAÇÃO */}
                                 <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
@@ -383,20 +409,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                                         {openBiomassa && (
                                             <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                                {resultCategories.map(item => {
-                                                    const categoryDetails = JSON.parse(item.categoryDetails);
-                                                    if(categoryDetails.insumoCategory === 'biomassa'){
-                                                        return(
-                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
-
-                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
+                                                {resultCategories.map(item => (
+                                                    <InsumoItem
+                                                        data={item}
+                                                        typeInsumo='biomassa'
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}
 
                                                 <div className='flex w-full items-center justify-between'>
                                                     <p className='font-bold text-white lg:w-[200px]'>Resultado</p>
@@ -448,20 +470,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                                         {openInsumosQuimicos && (
                                             <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                                {resultCategories.map(item => {
-                                                    const categoryDetails = JSON.parse(item.categoryDetails);
-                                                    if(categoryDetails.insumoCategory === 'insumo-quimico'){
-                                                        return(
-                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
-
-                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
+                                                {resultCategories.map(item => (
+                                                    <InsumoItem
+                                                        data={item}
+                                                        typeInsumo='insumo-quimico'
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}
                                             </div>
                                         )}
                                     </div>
@@ -497,20 +515,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                                         {openInsumosBiologicos && (
                                             <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                                {resultCategories.map(item => {
-                                                    const categoryDetails = JSON.parse(item.categoryDetails);
-                                                    if(categoryDetails.insumoCategory === 'insumo-biologico'){
-                                                        return(
-                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
-
-                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
+                                                {resultCategories.map(item => (
+                                                    <InsumoItem
+                                                        data={item}
+                                                        typeInsumo='insumo-biologico'
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}
                                             </div>
                                         )}
                                     </div>
@@ -546,20 +560,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                                         {openInsumosMinerais && (
                                             <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                                {resultCategories.map(item => {
-                                                    const categoryDetails = JSON.parse(item.categoryDetails);
-                                                    if(categoryDetails.insumoCategory === 'insumo-mineral'){
-                                                        return(
-                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
-
-                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
+                                                {resultCategories.map(item => (
+                                                    <InsumoItem
+                                                        data={item}
+                                                        typeInsumo='insumo-mineral'
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}
                                             </div>
                                         )}
                                     </div>
@@ -595,20 +605,16 @@ export function InspectionItemResult({data, initialVisible}){
 
                                         {openRecursosExternos && (
                                             <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
-                                                {resultCategories.map(item => {
-                                                    const categoryDetails = JSON.parse(item.categoryDetails);
-                                                    if(categoryDetails.insumoCategory === 'recurso-externo'){
-                                                        return(
-                                                            <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
-
-                                                                <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value} {categoryDetails.unity}</p>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })} 
+                                                {resultCategories.map(item => (
+                                                    <InsumoItem
+                                                        data={item}
+                                                        typeInsumo='recurso-externo'
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))} 
                                             </div>
                                         )}
                                     </div>
@@ -658,7 +664,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         {isaCarbon.isaIndex === '6' && ' Not Regenerative 3'}
                                     </span> 
                                 </p>
-                                {resultCategories.length > 0 && (
+                                {method === 'sintrop' && (
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div className='lg:w-[440px]'>

@@ -19,6 +19,7 @@ import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import Map from '../../Map';
 import * as Dialog from '@radix-ui/react-dialog';
+import {BackButton} from '../../BackButton';
 
 import { LoadingTransaction } from '../../LoadingTransaction';  
 import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
@@ -215,75 +216,77 @@ export default function MyAccount({wallet, userType, setTab}){
 
     if(user === '1'){
         return(
-            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
+            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto h-[95vh] pb-40'>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
-                <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
-                <div className='flex flex-col lg:flex-row justify-center items-center gap-5'>
-                    {user == 1 && (
-                        <button
-                            
-                            className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
-                            onClick={() => {
-                                if(Number(userData?.totalInspections) < 3){
-                                    requestInspection();
-                                }
-                                if(Number(lastResquested) === 0){
-                                    requestInspection()
-                                }
-                                if(Number(lastResquested) !== 0){
-                                    if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
-                                        requestInspection()
+                    <div className='flex items-center gap-2'>
+                        <BackButton/>
+                        <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('My Account')}</h1>
+                    </div>
+                    <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-5 mt-2'>
+                        {user == 1 && (
+                            <button
+                                className='flex py-1 lg:py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg w-full lg:w-auto lg:mt-0 justify-center'
+                                onClick={() => {
+                                    if(Number(userData?.totalInspections) < 3){
+                                        requestInspection();
                                     }
-                                }
-                            }}
-                            onMouseEnter={() => setBtnRequestHover(true)}
-                            onMouseOut={() => setBtnRequestHover(false)}
-                        >
-                            {Number(lastResquested) === 0 ? (
-                                `${t('Request New Inspection')}`
-                            ) : (
-                                <>
-                                {Number(userData?.totalInspections) < 3 ? (
+                                    if(Number(lastResquested) === 0){
+                                        requestInspection();
+                                    }
+                                    if(Number(lastResquested) !== 0){
+                                        if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
+                                            requestInspection();
+                                        }
+                                    }
+                                }}
+                                onMouseEnter={() => setBtnRequestHover(true)}
+                                onMouseOut={() => setBtnRequestHover(false)}
+                            >
+                                {Number(lastResquested) === 0 ? (
                                     `${t('Request New Inspection')}`
                                 ) : (
                                     <>
-                                        {(Number(lastResquested) + 33230) - Number(blockNumber) < 0 ? (
-                                            `${t('Request New Inspection')}`
-                                        ) : (
-                                            <>
-                                            {btnRequestHover ? (
+                                    {Number(userData?.totalInspections) < 3 ? (
+                                        `${t('Request New Inspection')}`
+                                    ) : (
+                                        <>
+                                            {(Number(lastResquested) + 33230) - Number(blockNumber) < 0 ? (
+                                                `${t('Request New Inspection')}`
+                                            ) : (
                                                 <>
-                                                    <FaLock 
-                                                        size={25}
-                                                        onMouseEnter={() => setBtnRequestHover(true)}
-                                                        onMouseOut={() => setBtnRequestHover(false)}
-                                                    />
-                                                    {t('Wait')} {(Number(lastResquested) + 33230) - Number(blockNumber)} {t('blocks to request')}
+                                                {btnRequestHover ? (
+                                                    <>
+                                                        <FaLock 
+                                                            size={25}
+                                                            onMouseEnter={() => setBtnRequestHover(true)}
+                                                            onMouseOut={() => setBtnRequestHover(false)}
+                                                        />
+                                                        {t('Wait')} {(Number(lastResquested) + 33230) - Number(blockNumber)} {t('blocks to request')}
+                                                    </>
+                                                ) : `${t('Request New Inspection')}`}
                                                 </>
-                                            ) : `${t('Request New Inspection')}`}
-                                            </>
-                                        )}
+                                            )}
+                                        </>
+                                    )}
                                     </>
                                 )}
-                                </>
-                            )}
-                        </button>
-                    )}
-                    <a  
-                        target='_blank'
-                        href={`https://v4-sintrop.netlify.app/account-producer/${walletAddress}`}
-                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
-                    >
-                        Página do Produtor
-                    </a>
-                </div>
+                            </button>
+                        )}
+                        <a  
+                            target='_blank'
+                            href={`https://v4-sintrop.netlify.app/account-producer/${walletAddress}`}
+                            className='lg:w-52 h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center w-full'
+                        >
+                            Página do Produtor
+                        </a>
+                    </div>
                 </div>
 
                 <IsProducerSyntropic
                     data={userData}
                 />
 
-                <div className='flex flex-col items-center lg:w-[1000px] mt-5'>
+                <div className='flex flex-col items-center lg:w-[1000px] lg:mt-5'>
                     {currentInspection.length > 0 && (
                         <div className='w-full'>
                             <p className='text-[#ff9900] text-center text-xl font-bold mb-5'>Inspeção em andamento</p>
@@ -310,7 +313,7 @@ export default function MyAccount({wallet, userType, setTab}){
                     />
     
                     <div className="flex flex-col py-2">
-                        <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
+                        <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
                         <p className="font-bold text-white mt-2">{t('Wallet')}: <span className="text-white font-normal lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.producerWallet}</span></p>
                         
                         <p className="font-bold text-white mt-1">{t('Address')}: <span className="text-white font-normal lg:text-lg">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</span></p>
@@ -439,12 +442,15 @@ export default function MyAccount({wallet, userType, setTab}){
 
     if(user === '2'){
         return(
-            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
-                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
-                    <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto h-[95vh] pb-40'>
+                <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-10'> 
+                    <div className='flex items-center gap-2'>
+                        <BackButton/>
+                        <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('My Account')}</h1>
+                    </div>
 
                     <button
-                        className='w-52 h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                        className='lg:w-52 w-full h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
                         onClick={() => setModalChangePassword(true)}
                     >
                         Alterar senha do app
@@ -457,9 +463,9 @@ export default function MyAccount({wallet, userType, setTab}){
                     />
     
                     <div className="flex flex-col items-center lg:items-start">
-                        <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
+                        <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                        <p className="text-white lg:text-lg max-w-[80%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.activistWallet}</p>
+                        <p className="text-white lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.activistWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
                         <div className='flex items-center'>
                             {Number(userData?.lastAcceptedAt) === 0 ? (
@@ -547,9 +553,12 @@ export default function MyAccount({wallet, userType, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-20'>
-            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
-                <h1 className='font-bold text-2xl text-white'>{t('My Account')}</h1>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto h-[95vh] pb-20'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-10'> 
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('My Account')}</h1>
+                </div>
             </div>
             <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                 <img
@@ -558,7 +567,7 @@ export default function MyAccount({wallet, userType, setTab}){
                 />
 
                 <div className="flex flex-col items-center lg:items-start">
-                    <h2 className="font-bold text-[#ff9900] text-2xl">{userData?.name}</h2>
+                    <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
                     <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
                     <p className="text-white lg:text-lg max-w-[80%] lg:max-w-full overflow-hidden text-ellipsis">
                         {user === '3' && userData?.researcherWallet}

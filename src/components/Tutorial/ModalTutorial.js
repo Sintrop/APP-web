@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useMainContext } from '../../hooks/useMainContext';
-import {TbArrowsDiagonalMinimize2} from 'react-icons/tb';
+import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { ModalRequestSepolia } from '../ModalRequestSepolia';
 import { ToastContainer, toast} from 'react-toastify';
 
@@ -248,7 +248,7 @@ export function ModalTutorial(){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-1 lg:p-3 lg:w-[1000px] lg:h-[600px] bg-green-800 rounded-md m-auto inset-0 border-8 border-[#783E19]'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-1 lg:p-3 lg:w-[1000px] lg:h-[600px] bg-green-800 rounded-md  lg:my-auto lg:mx-auto mx-2 my-2 inset-0 border-8 border-[#783E19]'>
                 <div className='flex items-center justify-between w-full'>
                     <div className='w-[25px]'/>
                     <img
@@ -256,7 +256,7 @@ export function ModalTutorial(){
                         className='w-[120px] object-contain'
                     />
                     <Dialog.Trigger>
-                        <TbArrowsDiagonalMinimize2 size={25} color='white'/>
+                        <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Trigger>
                 </div>
 

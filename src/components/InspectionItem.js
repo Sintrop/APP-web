@@ -21,7 +21,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     const navigate = useNavigate();
-    const {walletAddress} = useParams();
+    const {walletAddress, typeUser} = useParams();
     const {user, blockNumber, setWalletSelected} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
@@ -1171,14 +1171,23 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     return(
         <div className='flex flex-col border-b-2 bg-[#0a4303] mb-3'>
             <div 
-                className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3 cursor-pointer"
-                onClick={() => setMoreInfo(!moreInfo)}
+                className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3"
             >
-                <p className='text-white font-bold w-36 hidden lg:flex'>Inspection #{data.id}</p>
+                <div className='hidden lg:flex items-center gap-8'>
+                    <p className='text-white font-bold'>#{data.id}</p>
+                    <p className="text-white">
+                        {type === 'manage' ? (
+                            `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                        ) : (
+                            `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                        )}
+                    </p>
+                </div>
 
-                <div className='flex items-center justify-between lg:gap-10'>
-                    <p className='text-white font-bold w-36 lg:hidden flex'>Inspection #{data.id}</p>
-                    {type === 'history' && (
+                <div className='flex w-full lg:w-auto items-center justify-between lg:gap-10'>
+                    <p className='text-white font-bold lg:w-36 lg:hidden flex mr-2 lg:mr-0'>#{data.id}</p>
+                    
+                    {type === 'history' ? (
                         <div className='flex gap-2 items-center justify-center'>
                             {method === 'sintrop' ? (
                                 <img
@@ -1195,10 +1204,12 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                                 Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
                             </p>
                         </div>
+                    ) : (
+                        <div/>
                     )}
 
                     {type === 'history' ? (
-                        <div className='flex items-center justify-center border-2 rounded-md w-32 py-1 bg-green-950'>
+                        <div className='flex items-center justify-center border-2 rounded-md w-32 py-1 bg-green-950 mr-2 lg:mr-0'>
                             <p className='text-white font-bold'>ISA {data.isaScore} pts</p>
                         </div>
                     ) : (
@@ -1227,6 +1238,19 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                                 </div>
                             )}
                         </div>
+                    )}
+
+                    {type === 'history' && (
+                        <>
+                            <button
+                                onClick={() => {
+                                    navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
+                                }}
+                                className='font-bold w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2 hidden lg:flex justify-center'
+                            >
+                                {t('See Result')}
+                            </button>
+                        </>
                     )}
 
                     {type === 'manage' && (
@@ -1261,11 +1285,15 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                         <AiFillCaretUp
                             size={30}
                             color='white'
+                            onClick={() => setMoreInfo(!moreInfo)}
+                            className='cursor-pointer'
                         />    
                     ) : (
                         <AiFillCaretDown
                             size={30}
                             color='white'
+                            className='cursor-pointer'
+                            onClick={() => setMoreInfo(!moreInfo)}
                         />
                     )}
                 </div>
@@ -1284,7 +1312,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             </p>
                         </div>
                         {type === 'manage' ? (
-                            <p className='text-white w-full'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                            <p className='text-white w-full text-center lg:text-start'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                         ) : (
                             <div className='flex items-center lg:gap-2 flex-col lg:flex-row mt-2 lg:mt-0'>
                                 <p className='font-bold text-white'>Wallet {t('Activist')}:</p>
@@ -1299,20 +1327,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
-                        <p className='font-bold text-white'>
-                            {type === 'manage' ? (
-                                `${t('Created At')}`
-                            ) : (
-                                `${t('Inspected At')}`
-                            )}
-                        </p>
-                        <p className="text-white">
-                            {type === 'manage' ? (
-                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
-                            ) : (
-                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
-                            )}
-                        </p>
                         <div className='flex items-center font-bold'>
                             {status === '1' && (
                                 <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
@@ -1323,15 +1337,30 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             )}
                         </div>
                     </div>
+                    
+                    {status === '1' || status === '2' && (
+                        <p className="text-white flex lg:hidden mt-2">
+                            {type === 'manage' ? (
+                                `${t('Accepted At: ')}`
+                            ) : (
+                                `${t('Inspected At: ')}`
+                            )}
+                            {type === 'manage' ? (
+                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            ) : (
+                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            )}
+                        </p>
+                    )}
 
-                    <div className="flex justify-center lg:justify-end w-40 h-10">
+                    <div className="flex justify-center lg:justify-end w-40 h-10 mt-3">
                         {type === 'history' && (
                             <>
                             <button
                                 onClick={() => {
-                                    setModalViewResult(true)
+                                    navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
                                 }}
-                                className='font-bold w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
+                                className='font-bold justify-center w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2 flex lg:hidden'
                             >
                                 {t('See Result')}
                             </button>

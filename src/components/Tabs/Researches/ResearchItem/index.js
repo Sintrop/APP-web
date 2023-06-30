@@ -45,8 +45,8 @@ export function ResearchItem({data, myAccount}){
                         />
                     </div>
 
-                    <div className='lg:ml-10 flex flex-col items-center lg:items-start'>
-                        <p className='font-bold text-[#ff9900] text-center text-xl'>{researcherData?.name}</p>
+                    <div className='lg:ml-10 flex flex-col items-center lg:items-start w-full'>
+                        <p className='font-bold text-[#ff9900] text-center lg:text-xl max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden'>{researcherData?.name}</p>
                         <a
                             onClick={() => {
                                 navigate(`/dashboard/${walletAddress}/user-details/3/${data.createdBy}`)
@@ -61,10 +61,10 @@ export function ResearchItem({data, myAccount}){
                 </div>
             )}
 
-            <h1 className='font-bold text-[#ff9900] text-2xl'>#{data.id} - {data.title}</h1>
+            <h1 className='font-bold text-[#ff9900] text-justify text-lg lg:text-2xl'>#{data.id} - {data.title}</h1>
 
             <label className='font-bold text-[#ff9900]'>Thesis</label>
-            <p className='text-white'>{data.thesis}</p>
+            <p className='text-white text-justify'>{data.thesis}</p>
 
             <label className='font-bold text-[#ff9900]'>PDF Report</label>
             <div className='flex items-center gap-5'>

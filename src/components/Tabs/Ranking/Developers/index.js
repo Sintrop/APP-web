@@ -3,6 +3,7 @@ import DeveloperService from "../../../../services/developersService";
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import {RankingItem} from '../../../RankingItem';
+import { BackButton } from "../../../BackButton";
 
 export default function DevelopersRanking({ wallet, setTab }) {
     const {t} = useTranslation();
@@ -26,12 +27,15 @@ export default function DevelopersRanking({ wallet, setTab }) {
         .catch((err) => console.log(err));
     }, []);
     return (
-        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-            <div className='flex items-center justify-between mb-5'>
-                <h1 className="font-bold text-2xl text-white">{t('Developers')}</h1>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex items-center justify-between mb-2'>
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Developers')}</h1>
+                </div>
             </div>
 
-            <div className="flex items-center h-12 lg:w-full">
+            <div className="flex items-center h-10 lg:h-12 lg:w-full">
                 <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
                     <select
                         className="bg-white border-0 h-full w-full cursor-pointer"
@@ -51,7 +55,7 @@ export default function DevelopersRanking({ wallet, setTab }) {
                     >
                         <img
                             src={require('../../../../assets/icon-search.png')}
-                            className="w-[30px] h-[30px] object-contain"
+                            className="w-[20px] lg:w-[30px] object-contain"
                         />
                     </button>
                 </div>

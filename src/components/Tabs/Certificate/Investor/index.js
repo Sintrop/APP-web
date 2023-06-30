@@ -16,6 +16,7 @@ import {BurnTokens, GetCertificateTokens} from '../../../../services/sacTokenSer
 //components
 import Loading from '../../../Loading';
 import { ModalContribute } from "./ModalContribute";
+import { BackButton } from "../../../BackButton";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
@@ -80,12 +81,15 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     }
 
     return(
-        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-5 lg:mb-10'>
-                <h1 className="font-bold text-2xl text-white">{t('Investor Certificate')}</h1>
-                <div className='flex justify-center items-center gap-2 mt-3 lg:mt-0'>
+        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-2 lg:mb-10'>
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Investor Certificate')}</h1>
+                </div>
+                <div className='flex justify-center items-center gap-2 mt-2 lg:mt-0'>
                     <button
-                        className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                        className='px-4 py-1 lg:py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
                     >
                         {t('Download')} {t('Certificate')}
@@ -93,7 +97,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
                     <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
                         <button
-                            className='px-4 py-2 bg-[#ff9900] rounded-md font-bold '
+                            className='px-4 py-1 lg:py-2 bg-[#ff9900] rounded-md font-bold '
                             onClick={() => alert('URL copied to clipboard')}
                         >
                             {t('Copy')} URL
@@ -171,7 +175,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 <div className="flex flex-col mt-5">
                     <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
 
-                    <div className="mt-5 flex items-center gap-2 lg:w-[710px]">
+                    <div className="mt-5 flex flex-col lg:flex-row items-center gap-2 lg:w-[710px]">
                         <Dialog.Root
                             open={modalContribute}
                             onOpenChange={(open) => setModalContribute(open)}
@@ -184,13 +188,13 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                 }}
                             />
                             <Dialog.Trigger
-                                className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
+                                className='py-3 bg-[#ff9900] rounded-md font-bold w-full lg:w-[50%]'
                             >
                                 {t('Contribute')}
                             </Dialog.Trigger>
                         </Dialog.Root>
                         <button
-                            className='px-4 py-3 bg-[#ff9900] rounded-md font-bold w-[50%]'
+                            className='py-3 bg-[#ff9900] rounded-md font-bold w-full lg:w-[50%]'
                             onClick={() => {}}
                         >
                             {t('Calculadora de Pegada Agrícola')}

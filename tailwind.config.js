@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       backgroundImage:{
         'folha-papiro': "url('/src/assets/bg-papiro.png')",
-        'folha-recibo': "url('/src/assets/nota.png')"
+        'folha-recibo': "url('/src/assets/nota.png')",
+        'certificate-instagram': "url('/src/assets/bg-certificate.jpg')"
       }
     },
   },

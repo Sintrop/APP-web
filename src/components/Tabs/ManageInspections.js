@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 //components
 import Loading from '../Loading';
 import ItemListInspections from '../ManageInspectionsComponents/ItemListInspections';
+import { BackButton } from '../BackButton';
 
 //services
 import {GetProducer} from '../../services/producerService';
@@ -98,9 +99,12 @@ export default function ManageInpections({walletAddress, setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 h-[95vh] px-2 lg:px-10 pt-3 lg:pt-10 overflow-auto'>
-            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-3 lg:mb-10'> 
-                <h1 className='font-bold text-2xl text-white'>{t('Manage Inspections')}</h1>
+        <div className='flex flex-col bg-green-950 h-[95vh] px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-10'> 
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Manage Inspections')}</h1>
+                </div>
                 <div className='flex justify-center items-center gap-5'>
                     {user == 1 && (
                         <button
@@ -153,7 +157,7 @@ export default function ManageInpections({walletAddress, setTab}){
                 </div>
             </div>
 
-            <div className="flex items-center h-12 lg:w-full mb-3">
+            <div className="flex items-center h-10 lg:h-12 lg:w-full mb-3">
                 <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
                     <select
                         className="bg-white border-0 h-full w-full cursor-pointer"
@@ -184,34 +188,17 @@ export default function ManageInpections({walletAddress, setTab}){
                 ) : (
                     <div className='flex flex-col'>
                     <div className="flex flex-col rounded-sm">
-                        {/* <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
+                        <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
                             <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
                                 <p className='text-white'>ID</p>
                             </div>
-                            <div className='flex items-center h-full lg:w-[350px] px-2 font-bold'>
-                                <p className='text-white'>{t('Requested By')}</p>
-                            </div>
-                            <div className='hidden lg:flex items-center h-full w-full px-1 font-bold'>
-                                <p className='text-white'>{t('Producer Address')}</p>
-                            </div>
-                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
-                                <p className='text-white'>{t('Inspected By')}</p>
-                            </div>
-                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
+
+                            <div className='hidden lg:flex items-center h-full lg:w-[200px] px-2 font-bold'>
                                 <p className='text-white'>{t('Created At')}</p>
                             </div>
-                            <div className='hidden lg:flex items-center h-full w-[350px] px-1 font-bold'>
-                                <p className='text-white'>{t('Expires In')}</p>
-                            </div>
-                            <div className='flex items-center h-full w-[350px] px-1 font-bold'>
-                                <p className='text-white'>Status</p>
-                            </div>
-                            <div className='flex items-center h-full w-[350px] px-1 font-bold'>
-                                <p className='text-white'>{t('Actions')}</p>
-                            </div>
-                        </div> */}
+                        </div>
 
-                        <div className='flex flex-col h-[71vh] overflow-auto'>
+                        <div className='flex flex-col h-[66vh] overflow-auto pb-12'>
                             {inspections.map(item => (
                                 <InspectionItem
                                     key={item.id}
