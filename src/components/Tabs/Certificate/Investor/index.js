@@ -154,7 +154,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                                 <div className="flex flex-col items-center justify-center lg:w-[30%]">
                                     <p className="text-black font-bold text-center mb-5">{t('Investor')}</p>
                                     <QRCode 
-                                        value={`${window.location.host}/account-investor/${wallet}`} 
+                                        value={`https://${window.location.host}/account-investor/${wallet}`} 
                                         size={180}
                                         logoImage={require('../../../../assets/icone.png')}
                                         qrStyle="dots"

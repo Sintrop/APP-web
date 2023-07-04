@@ -13,7 +13,7 @@ import { GetAdvisor } from '../../../services/advisorsService';
 import {GetContributor} from '../../../services/contributorService';
 import { GetInvestor } from '../../../services/investorService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
-
+import { ToastContainer, toast} from 'react-toastify';
 import {InspectionItem} from '../../InspectionItem';
 import Loading from '../../Loading';
 import { api } from '../../../services/api';
@@ -26,7 +26,7 @@ import {InspectionItemResult} from '../../../pages/accountProducer/inspectionIte
 import { ResearchItem } from '../Researches/ResearchItem';
 import { IsProducerSyntropic } from '../../IsProducerSyntropic';
 import { ModalChangePassword } from '../../ModalChangePassword';
-import { ToastContainer, toast} from 'react-toastify';
+import {ModalChangePhoto} from '../../ModalChangePhoto';
 
 const containerStyle = {
     width: '100%',
@@ -38,11 +38,12 @@ export default function MyAccount({wallet, userType, setTab}){
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {user, walletConnected, blockNumber,chooseModalRegister, checkUser} = useContext(MainContext);
-    const {tabActive, walletAddress} = useParams();
+    const {tabActive, walletAddress, typeUser} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
     const [userData, setUserData] = useState([]);
     const [producerDataApi, setProducerDataApi] = useState({});
+    const [userDataApi, setUserDataApi] = useState({});
     const [producerAddress, setProducerAddress] = useState({});
     const [propertyPath, setPropertyPath] = useState([]);
     const [position, setPosition] = useState({});
@@ -55,6 +56,7 @@ export default function MyAccount({wallet, userType, setTab}){
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [modalChangePassword, setModalChangePassword] = useState(false);
+    const [modalChangePhoto, setModalChangePhoto] = useState(false);
 
     useEffect(() => {
         setTab(tabActive, '');
@@ -74,17 +76,6 @@ export default function MyAccount({wallet, userType, setTab}){
 
     },[]);
 
-    useEffect(() => {
-        if(user === '1'){
-            isProducer()
-        }
-    }, []);
-
-    async function isProducer() {
-        const producer = await GetProducer(walletAddress);
-        setLastRequested(producer.lastRequestAt);
-    }
-
     async function getApiProducer(){
         try{
             setLoadingApi(true);
@@ -94,6 +85,18 @@ export default function MyAccount({wallet, userType, setTab}){
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
             console.log(address);
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingApi(false);
+        }
+    }
+
+    async function getApiInvestor(){
+        try{
+            setLoadingApi(true);
+            const response = await api.get(`/user/${String(walletAddress).toUpperCase()}`);
+            setUserDataApi(response.data.user)
         }catch(err){
             console.log(err);
         }finally{
@@ -131,9 +134,10 @@ export default function MyAccount({wallet, userType, setTab}){
             getApiProducer();
             const response = await GetProducer(walletAddress);
             //getBase64(response)
-            setPosition(JSON.parse(response.propertyAddress?.coordinate))
+            fixCoordinates(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
             getInspections(typeUser);
+            setLastRequested(response.lastRequestAt);
         }
         if(typeUser === '2'){
             const response = await GetActivist(walletAddress);
@@ -160,6 +164,7 @@ export default function MyAccount({wallet, userType, setTab}){
         if(typeUser === '7'){
             const response = await GetInvestor(walletAddress);
             setUserData(response)
+            getApiInvestor()
         }
         setLoading(false)
     }
@@ -204,6 +209,50 @@ export default function MyAccount({wallet, userType, setTab}){
             })
         })
         
+    }
+
+    async function fixCoordinates(coords){
+        const arrayLat = String(coords.lat).split('');
+            const arrayLng = String(coords.lng).split('');
+            let newLat = '';
+            let newLng = '';
+
+            for(var i = 0; i < arrayLat.length; i++){
+                if(i === 3){
+                    if(arrayLat[i] === '.'){
+                        newLat += arrayLat[i]
+                    }else{
+                        if(arrayLat[i] === ','){
+                            newLat += '.'
+                        }else{
+                            newLat += `.${arrayLat[i]}`
+                        }
+                    }
+                }else{
+                    newLat += arrayLat[i]
+                }
+
+            }
+
+            for(var i = 0; i < arrayLng.length; i++){
+                if(i === 3){
+                    if(arrayLng[i] === '.'){
+                        newLng += arrayLng[i]
+                    }else{
+                        if(arrayLng[i] === ','){
+                            newLng += '.'
+                        }else{
+                            newLng += `.${arrayLng[i]}`
+                        }
+                    }
+                }else{
+                    newLng += arrayLng[i]
+                }
+            }
+            setPosition({
+                lat: Number(newLat),
+                lng: Number(newLng)
+            })
     }
 
     if(user === '0'){
@@ -559,12 +608,26 @@ export default function MyAccount({wallet, userType, setTab}){
                     <BackButton/>
                     <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('My Account')}</h1>
                 </div>
+                
+                <button
+                    className='lg:w-52 w-full h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                    onClick={() => setModalChangePhoto(true)}
+                >
+                    {t('Change Profile Picture')}
+                </button>
             </div>
             <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
-                <img
-                    src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                    className="w-[250px] h-[250px] object-cover"
-                />
+                {typeUser === '7' ? (
+                    <img
+                        src={`https://ipfs.io/ipfs/${userDataApi?.imgProfileUrl}`}
+                        className="w-[250px] h-[250px] object-cover"
+                    />
+                ) : (
+                    <img
+                        src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
+                        className="w-[250px] h-[250px] object-cover"
+                    />
+                )}
 
                 <div className="flex flex-col items-center lg:items-start">
                     <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
@@ -608,6 +671,24 @@ export default function MyAccount({wallet, userType, setTab}){
             {loading && (
                 <Loading/>
             )}
+
+            <ToastContainer
+                position='top-center'
+            />
+
+            <Dialog.Root
+                open={modalChangePhoto}
+                onOpenChange={(open) => setModalChangePhoto(open)}
+            >
+                <ModalChangePhoto
+                    userId={userDataApi?.id}
+                    close={() => {
+                        setModalChangePhoto(false)
+                        getApiInvestor()
+                        toast.success(`${t('Profile picture successfully updated')}`)
+                    }}
+                />
+            </Dialog.Root>
         </div>
     )
 }

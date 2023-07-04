@@ -1312,7 +1312,20 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             </p>
                         </div>
                         {type === 'manage' ? (
+                            <>
                             <p className='text-white w-full text-center lg:text-start'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                            {status === '1' && (
+                                <div className="flex items-center gap-1">
+                                    <p className='font-bold text-white'>Wallet {t('Activist')}:</p>
+                                    <p 
+                                        className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                        onClick={() => handleClickUser('2', data.acceptedBy)}
+                                    >
+                                        {data.acceptedBy}
+                                    </p>
+                                </div>
+                            )}
+                            </>
                         ) : (
                             <div className='flex items-center lg:gap-2 flex-col lg:flex-row mt-2 lg:mt-0'>
                                 <p className='font-bold text-white'>Wallet {t('Activist')}:</p>

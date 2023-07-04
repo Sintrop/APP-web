@@ -11,6 +11,7 @@ import axios from 'axios';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalViewPhoto } from '../../components/ModalViewPhoto';
 import { InsumoItem } from '../../components/InsumoItem';
+import { PhotoBiodiversityItem } from '../../components/PhotoBiodiversityItem';
 
 export function InspectionItemResult({data, initialVisible}){
     const navigate = useNavigate();
@@ -235,7 +236,7 @@ export function InspectionItemResult({data, initialVisible}){
                             <p className="font-bold text-white">{t('Proof Photo')}</p>
                             {proofPhotoBase64 === '' ? (
                                 <div className="w-[200px] h-[250px] rounded-md border-4 border-[#ff9900] flex items-center justify-center bg-gray-500">
-                                    <p className="font-bold text-white text-center">No photo</p>
+                                    <p className="font-bold text-white text-center">{t('No Photo')}</p>
                                 </div>
                             ) : (
                                 <img
@@ -243,95 +244,102 @@ export function InspectionItemResult({data, initialVisible}){
                                     className="w-[200px] h-[250px] object-cover rounded-md border-4 border-[#ff9900] cursor-pointer"
                                     onClick={() => {
                                         setHashSelected(inspectionDataApi.proofPhoto);
-                                        setModalViewPhoto(true);
+                                        setModalViewPhoto(true)
                                     }}
                                 />
                             )}
                         </div>
-                        <div className='flex flex-wrap w-[50%] justify-center items-center gap-16 lg:px-16'>
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold text-[#ff9900]'>Carbono</p>
-                                <img
-                                    src={require('../../assets/co2.png')}
-                                    className='w-[55px] h-[40px] object-contain'
-                                />
-                                <p className='font-bold text-white text-lg flex items-end'>
-                                    {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
-                                </p>
+                        <div className='flex flex-wrap w-[50%] justify-center items-center gap-5 mt-5 lg:mt-0 lg:px-16'>
+                            <div className='flex items-center gap-5'>
+                                <div className='flex flex-col items-center bg-green-950 p-3 rounded-md w-36 lg:w-40'>
+                                    <p className='font-bold text-[#ff9900]'>{t('Carbon')}</p>
+                                    <img
+                                        src={require('../../assets/co2.png')}
+                                        className='w-[55px] h-[40px] object-contain'
+                                    />
+                                    <p className='font-bold text-white lg:text-lg flex items-end'>
+                                        {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t/era
+                                    </p>
+                                </div>
+        
+                                <div className='flex flex-col items-center bg-green-950 p-3 rounded-md w-36 lg:w-40'>
+                                    <p className='font-bold text-[#ff9900]'>{t('Soil')}</p>
+                                    <img
+                                        src={require('../../assets/solo.png')}
+                                        className='w-[40px] h-[40px] object-contain'
+                                    />
+                                    <p className='font-bold text-white lg:text-lg flex items-end'>
+                                        {Number(isaSoil?.indicator).toFixed(0)} m²/era
+                                    </p>
+                                </div>
                             </div>
-    
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold text-[#ff9900]'>Solo</p>
-                                <img
-                                    src={require('../../assets/solo.png')}
-                                    className='w-[40px] h-[40px] object-contain'
-                                />
-                                <p className='font-bold text-white text-lg flex items-end'>
-                                    {Number(isaSoil?.indicator).toFixed(0)} m²/era
-                                </p>
-                            </div>
+                                    
+                            <div className='flex items-center gap-5'>
+                                <div className='flex flex-col items-center bg-green-950 p-3 rounded-md w-36 lg:w-40'>
+                                    <p className='font-bold text-[#ff9900]'>{t('Water')}</p>
+                                    <img
+                                        src={require('../../assets/agua.png')}
+                                        className='w-[40px] h-[40px] object-contain'
+                                    />
+                                    <p className='font-bold text-white lg:text-lg flex items-end'>
+                                        {Number(isaWater?.indicator).toFixed()} m³/era
+                                    </p>
+                                </div>
 
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold text-[#ff9900]'>Água</p>
-                                <img
-                                    src={require('../../assets/agua.png')}
-                                    className='w-[40px] h-[40px] object-contain'
-                                />
-                                <p className='font-bold text-white text-lg flex items-end'>
-                                    {Number(isaWater?.indicator).toFixed()} m³/era
-                                </p>
-                            </div>
-
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold text-[#ff9900]'>Biodiversidade</p>
-                                <img
-                                    src={require('../../assets/bio.png')}
-                                    className='w-[40px] h-[40px] object-contain'
-                                />
-                                <p className='font-bold text-white text-lg flex items-end'>
-                                    {Number(isaBio?.indicator).toFixed(0)} uni/era
-                                </p>
+                                <div className='flex flex-col items-center bg-green-950 p-3 rounded-md w-36 lg:w-40'>
+                                    <p className='font-bold text-[#ff9900]'>{t('Biodiversity')}</p>
+                                    <img
+                                        src={require('../../assets/bio.png')}
+                                        className='w-[40px] h-[40px] object-contain'
+                                    />
+                                    <p className='font-bold text-white lg:text-lg flex items-end'>
+                                        {Number(isaBio?.indicator).toFixed(0)} uni/era
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <p className='font-bold text-[#ff9900] mt-5'>{t('Activist')} {t('Wallet')}: 
-                        <span          
-                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer max-w-[20ch] overflow-hidden'
+                    <div className="flex flex-col lg:flex-row mt-2">
+                        <p className='font-bold text-sm lg:text-normal text-[#ff9900]'>{t('Activist')} {t('Wallet')}:</p>
+                        <p          
+                            className='text-blue-500 border-b-2 border-blue-500 lg:ml-1 cursor-pointer max-w-[95%] overflow-hidden text-ellipsis'
                             onClick={() => {
                                 navigate(`/dashboard/${walletAddress}/user-details/2/${data.acceptedBy}`)
                             }}
                         >
                             {data.acceptedBy}
-                        </span>
-                    </p>
-                    <p className='font-bold text-[#ff9900] mt-1'>{t('Producer')} {t('Wallet')}: 
-                        <span          
-                            className='text-blue-500 border-b-2 border-blue-500 ml-1 cursor-pointer'
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row mt-2">
+                        <p className='font-bold text-sm lg:text-normal text-[#ff9900]'>{t('Producer')} {t('Wallet')}:</p>
+                        <p          
+                            className='text-blue-500 border-b-2 border-blue-500 lg:ml-1 cursor-pointer max-w-[95%] overflow-hidden text-ellipsis'
                             onClick={() => {
                                 navigate(`/dashboard/${walletAddress}/user-details/1/${data.createdBy}`)
                             }}
                         >
                             {data.createdBy}
-                        </span>
-                    </p>
-                    <p className='font-bold text-[#ff9900] mt-1'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
-                    <p className='font-bold text-[#ff9900] mt-1'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
-                    <p className='font-bold text-[#ff9900] mt-1'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                        </p>
+                    </div>
+                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-1'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-1'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-1'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
 
                     <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
                         {method === 'sintrop' && (
                             <>
                                 {/* REGENERAÇÃO */}
                                 <div className='flex items-center justify-center h-20 w-full bg-[#783E19]'>
-                                    <h3 className='font-bold text-white text-3xl'>Regeneração</h3>
+                                    <h3 className='font-bold text-white text-lg lg:text-3xl'>{t('Regeneration')}</h3>
                                 </div>
                                 <div className='flex flex-wrap mt-5 gap-4'>
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Quant. de Árvores</h4>
-                                                <p className='font-bold text-white text-2xl'>{quantArvores}</p>
+                                                <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Total Trees')}</h4>
+                                                <p className='font-bold text-white text-lg lg:text-2xl'>{quantArvores}</p>
                                             </div>
 
                                             <img 
@@ -350,9 +358,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openArvores ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-sm lg:text-normal text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-sm lg:text-normal text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -363,10 +371,10 @@ export function InspectionItemResult({data, initialVisible}){
                                                     if(categoryDetails.category === '2'){
                                                         return(
                                                             <div className='flex w-full items-center justify-between' key={item.categoryId}>
-                                                                <p className='font-bold text-white lg:w-[200px]'>{item.title}</p>
+                                                                <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{item.title}</p>
 
                                                                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                                                                    <p className='font-bold text-blue-400 text-center'>{item.value}</p>
+                                                                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{item.value}</p>
                                                                 </div>
                                                             </div>
                                                         )
@@ -381,8 +389,8 @@ export function InspectionItemResult({data, initialVisible}){
                                     <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Biomassa</h4>
-                                                <p className='font-bold text-white text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
+                                                <h4 className='font-bold text-[#ff9900] text-lg lg:text-2xl'>{t('Biomass')}</h4>
+                                                <p className='font-bold text-white text-lg lg:text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
                                             </div>
 
                                             <img 
@@ -401,9 +409,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openBiomassa ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-sm lg:text-normal text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-sm lg:text-normal text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -430,20 +438,39 @@ export function InspectionItemResult({data, initialVisible}){
                                             </div>
                                         )}
                                     </div>
+
+                                    <div className="flex flex-col w-full">
+                                        <p className="font-bold text-white mb-1">{t('Biodiversity Registry')}</p>
+                                        <div className="flex items-center gap-3 overflow-auto">
+                                            {resultBiodiversity.length > 0 && (
+                                                <>
+                                                {resultBiodiversity.map(item => (
+                                                    <PhotoBiodiversityItem
+                                                        data={item}
+                                                        click={(hash) => {
+                                                            setHashSelected(hash);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                                 {/* REGENERAÇÃO */}
 
                                 {/* DEGENERAÇÃO */}
                                 <div className='flex items-center justify-center h-20 w-full bg-[#783E19] mt-10'>
-                                    <h3 className='font-bold text-white text-3xl'>Degeneração</h3>
+                                    <h3 className='font-bold text-white text-lg lg:text-3xl'>{('Degeneration')}</h3>
                                 </div>
 
                                 <div className='flex flex-wrap mt-5 gap-4'>
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Químicos</h4>
-                                                <p className='font-bold text-white text-2xl'>{quantInsumosQuimicos}</p>
+                                                <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Chemical Supplies')}</h4>
+                                                <p className='font-bold text-white lg:text-2xl'>{quantInsumosQuimicos}</p>
                                             </div>
 
                                             <img 
@@ -462,9 +489,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openInsumosQuimicos ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -484,11 +511,11 @@ export function InspectionItemResult({data, initialVisible}){
                                         )}
                                     </div>
 
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Biológicos</h4>
-                                                <p className='font-bold text-white text-2xl'>{quantInsumosBiologicos}</p>
+                                                <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Biological Inputs')}</h4>
+                                                <p className='font-bold text-white lg:text-2xl'>{quantInsumosBiologicos}</p>
                                             </div>
 
                                             <img 
@@ -507,9 +534,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openInsumosBiologicos ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -529,11 +556,11 @@ export function InspectionItemResult({data, initialVisible}){
                                         )}
                                     </div>
 
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Insumos Minerais</h4>
-                                                <p className='font-bold text-white text-2xl'>{quantInsumosMinerais} kg</p>
+                                                <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Mineral Inputs')}</h4>
+                                                <p className='font-bold text-white lg:text-2xl'>{quantInsumosMinerais} kg</p>
                                             </div>
 
                                             <img 
@@ -552,9 +579,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openInsumosMinerais ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -574,11 +601,11 @@ export function InspectionItemResult({data, initialVisible}){
                                         )}
                                     </div>
 
-                                    <div className={`flex flex-col lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
+                                    <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
                                         <div className='flex items-center justify-between w-full p-3'>
                                             <div className='flex flex-col gap-2'>
-                                                <h4 className='font-bold text-[#ff9900] text-2xl'>Recursos Externos</h4>
-                                                <p className='font-bold text-white text-2xl'>{quantRecursosExternos}</p>
+                                                <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('External Resources')}</h4>
+                                                <p className='font-bold text-white lg:text-2xl'>{quantRecursosExternos}</p>
                                             </div>
 
                                             <img 
@@ -597,9 +624,9 @@ export function InspectionItemResult({data, initialVisible}){
                                             )}
 
                                             {openRecursosExternos ? (
-                                                <p className='font-bold text-white'>Mostrar Menos</p>
+                                                <p className='font-bold text-white'>{t('Show Less')}</p>
                                             ) : (
-                                                <p className='font-bold text-white'>Mostrar Mais</p>
+                                                <p className='font-bold text-white'>{t('Show More')}</p>
                                             )}
                                         </div>
 
@@ -637,7 +664,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-xl lg:text-4xl'>CARBONO</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>{t('CARBON')}</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -668,7 +695,7 @@ export function InspectionItemResult({data, initialVisible}){
                                     <>
                                     <div className='flex flex-col lg:flex-row mt-5 flex-wrap gap-5'>
                                         <div className='lg:w-[440px]'>
-                                            <p className='font-bold text-white'>Degeneração</p>
+                                            <p className='font-bold text-white'>t{('Degeneration')}</p>
                                             
                                                 {resultCategories.length > 0 && (
                                                     <div className="flex flex-col w-full lg:w-[440px]">
@@ -687,7 +714,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         
                                         <div className="flex flex-col">
                                             <div className='lg:w-[440px]'>
-                                                <p className='font-bold text-white'>Regeneração</p>
+                                                <p className='font-bold text-white'>t{('Regeneration')}</p>
                                                 
                                                 {resultCategories.length > 0 && (
                                                     <div className="flex flex-col w-full lg:w-[440px]">
@@ -773,7 +800,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-xl lg:text-4xl'>ÁGUA</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>{t('WATER')}</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -899,7 +926,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-xl lg:text-4xl'>SOLO</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>{t('SOIL')}</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -1025,7 +1052,7 @@ export function InspectionItemResult({data, initialVisible}){
                                 )}
                             </div>
 
-                            <p className='font-bold text-white text-xl lg:text-4xl'>BIODIVERSIDADE</p>
+                            <p className='font-bold text-white text-xl lg:text-4xl'>{t('BIODIVERSITY')}</p>
 
                             <div className='flex flex-col items-end lg:w-28'>
                                 <img
@@ -1109,6 +1136,23 @@ export function InspectionItemResult({data, initialVisible}){
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    
+                                    <p className="font-bold text-white mt-5 mb-1">{t('Biodiversity Registry')}</p>
+                                    <div className="flex items-center gap-3 overflow-auto">
+                                        {resultBiodiversity.length > 0 && (
+                                            <>
+                                            {resultBiodiversity.map(item => (
+                                                <PhotoBiodiversityItem
+                                                    data={item}
+                                                    click={(hash) => {
+                                                        setHashSelected(hash);
+                                                        setModalViewPhoto(true);
+                                                    }}
+                                                />
+                                            ))}
+                                            </>
+                                        )}
                                     </div>
 
                                     <div className='flex flex-col gap-1'>

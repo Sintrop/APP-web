@@ -170,18 +170,18 @@ export default function DevelopersPool({wallet, setTab}){
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
                 <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[344px] mb-5">
-                    <p className="font-bold text-white">Próxima ERA em {nextEraIn} blocos</p>
+                    <p className="font-bold text-white">{t('Next ERA in')} {nextEraIn} {t('Blocks')}</p>
                 </div>
                 {user === '4' && (
                     <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
                         <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">
-                            <p className="font-bold text-white">Seu Status</p>
+                            <p className="font-bold text-white">{t('Your Status')}</p>
                             <div className='flex items-center justify-between mt-2'>
-                                <p className="text-white">ERA Atual:</p>
+                                <p className="text-white">{t('Current ERA')}:</p>
                                 <p className="font-bold text-[#ff9900]">{developerInfo?.pool?.currentEra}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
-                                <p className="text-white ">Próxima aprovação em:</p>
+                                <p className="text-white ">{t('Next Withdrawal on')}:</p>
                                 <p className="font-bold text-[#ff9900]">{nextAprove}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
@@ -191,7 +191,7 @@ export default function DevelopersPool({wallet, setTab}){
                         </div>
 
                         <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] rounded-md">
-                            <p className="font-bold text-white">Saldo</p>
+                            <p className="font-bold text-white">t{('Balance')}</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
                                 <p className="font-bold text-[#ff9900]">{(Number(balanceDeveloper) / 10 ** 18).toFixed(2)}</p>
@@ -204,7 +204,7 @@ export default function DevelopersPool({wallet, setTab}){
                     <div className="flex w-full">
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">Saldo do contrato</p>
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{t('Contract Balance')}</p>
                                 <p className="font-bold text-white text-sm lg:text-normal">{totalSACTokens / 10 ** 18}</p>
                             </div>
 
@@ -214,7 +214,7 @@ export default function DevelopersPool({wallet, setTab}){
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">ERA atual</p>
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{t('Current ERA')}</p>
                                 <p className="font-bold text-white text-sm lg:text-normal">{currentEra}</p>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ export default function DevelopersPool({wallet, setTab}){
 
                     <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3'>
                         <div className='flex flex-col'>
-                            <p className="font-bold text-white text-sm lg:text-normal">Soma total dos níveis dos desenvolvedores</p>
+                            <p className="font-bold text-white text-sm lg:text-normal">{t('Total sum of developer levels')}</p>
                             <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{eraInfo?.levels}</p>
                         </div>
 
@@ -246,7 +246,7 @@ export default function DevelopersPool({wallet, setTab}){
                 </div>
                     <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
-                            <p className='font-bold text-center text-white text-lg lg:text-2xl border-b-2 pb-1'>Lista de Desenvolvedores Aprovados</p>
+                            <p className='font-bold text-center text-white text-lg lg:text-2xl border-b-2 pb-1'>{t('List of Approved Developers')}</p>
                         </div>
                         <div className='flex w-full items-center'>
                             <div className='flex w-[5%] px-1 py-3'>

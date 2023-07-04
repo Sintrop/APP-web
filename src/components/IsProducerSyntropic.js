@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {FaClock, FaCheck} from 'react-icons/fa';
-import {RiCloseCircleLine} from 'react-icons/ri'
+import {RiCloseCircleLine} from 'react-icons/ri';
+import { useTranslation } from "react-i18next";
 
 export function IsProducerSyntropic({data}){
+    const {t} = useTranslation();
     const [status, setStatus] = useState('0');
 
     useEffect(() => {
@@ -23,13 +25,13 @@ export function IsProducerSyntropic({data}){
             {status === '1' && (<FaCheck color='white' size={20}/>)}
             {status === '2' && (<RiCloseCircleLine color='white' size={20}/>)}
             <p className="font-bold text-white text-sm">
-                {status === '0' && 'Certificação em andamento'}
+                {status === '0' && `${t('Certification in progress')}`}
             </p>
             <p className="font-bold text-white text-sm">
-                {status === '1' && 'Produtor Certificado'}
+                {status === '1' && `${t('Certified Producer')}`}
             </p>
             <p className="font-bold text-white text-sm">
-                {status === '2' && 'Produtor Reprovado'}
+                {status === '2' && `${t('Failed Producer')}`}
             </p>
         </div>
     )

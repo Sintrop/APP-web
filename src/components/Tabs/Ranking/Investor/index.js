@@ -5,6 +5,7 @@ import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
+import { GetCertificateTokens } from "../../../../services/accountProducerService";
 
 export default function InvestorRanking({ wallet, setTab }) {
     const {t} = useTranslation();
@@ -21,13 +22,25 @@ export default function InvestorRanking({ wallet, setTab }) {
         investorService
         .getInvestorRanking()
         .then((res) => {
-            if(res.length > 0){
-            let investorSort = res.map(item => item ).sort((a, b) => parseInt(b.totalInspections) - parseInt(a.totalInspections))
-            setInvestor(investorSort);
-            }
+            orderRanking(res);
         })
         .catch((err) => console.log(err));
     }, []);
+
+    async function orderRanking(investors){
+        let arrayInvestors = [];
+        for(var i = 0; i < investors.length; i++){
+            const tokens = await GetCertificateTokens(investors[i].investorWallet);
+            let data = {
+                ...investors[i],
+                tokens: Number(tokens) / 10 ** 18
+            }
+            arrayInvestors.push(data);
+        }
+
+        let investorsSort = arrayInvestors.map(item => item ).sort((a, b) => parseInt(b.tokens) - parseInt(a.tokens))
+        setInvestor(investorsSort)
+    }
 
     return (
         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>

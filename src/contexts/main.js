@@ -180,6 +180,7 @@ export default function MainProvider({children}){
         setLanguage(lang);
         setStorageLanguage(lang);
         i18n.changeLanguage(lang);
+        setModalChooseLang(false);
     }
 
     function setStorageLanguage(lang){

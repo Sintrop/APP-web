@@ -1,13 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMainContext } from '../hooks/useMainContext';
+import { api } from '../services/api';
 
 export function RankingItem({data, position}){
     const {setWalletSelected} = useMainContext();
     const {walletAddress} = useParams();
     const navigate = useNavigate();
     const {t} = useTranslation();
+    const [loadingApi, setLoadingApi] = useState(false);
+    const [userDataApi, setUserDataApi] = useState({});
+
+    useEffect(() => {
+        if(data?.userType === '7'){
+            getInvestorApi()
+        }
+    },[]);
+
+    async function getInvestorApi(){
+        try{
+            setLoadingApi(true);
+            const response = await api.get(`/user/${String(data?.investorWallet).toUpperCase()}`);
+            setUserDataApi(response.data.user)
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingApi(false);
+        }
+    }
     
     function handleClickUser(){
         if(data?.userType === '1'){
@@ -38,11 +59,18 @@ export function RankingItem({data, position}){
             <div 
                 className="flex flex-col w-[220px] h-[280px] bg-[#0A4303] rounded-md cursor-pointer"
                 onClick={handleClickUser}
-            >
-                <img
-                    src={`https://ipfs.io/ipfs/${data?.proofPhoto}`}
-                    className='w-full h-[150px] object-cover rounded-t-md'
-                />
+            >   
+                {data?.userType === '7' ? (
+                    <img
+                        src={`https://ipfs.io/ipfs/${userDataApi?.imgProfileUrl}`}
+                        className='w-full h-[150px] object-cover rounded-t-md'
+                    />
+                ) : (
+                    <img
+                        src={`https://ipfs.io/ipfs/${data?.proofPhoto}`}
+                        className='w-full h-[150px] object-cover rounded-t-md'
+                    />
+                )}
 
                 <div className="flex flex-col w-full py-1 items-center">
                     <p className='font-bold text-center text-md text-white'>{data?.name}</p>
@@ -104,8 +132,8 @@ export function RankingItem({data, position}){
                     {data?.userType === '7' && (
                         <>
                             <p className='text-xs text-center text-white max-w-[30ch] overflow-hidden text-ellipsis'>{data?.investorWallet}</p> 
-                            <p className='font-bold text-center text-sm text-white mt-3'>-</p>
-                            <p className='font-bold text-center text-sm text-white'>-</p>
+                            <p className='font-bold text-center text-[#ff9900] mt-3'>{Number(data.tokens).toFixed(0)}</p>
+                            <p className='font-bold text-center text-sm text-white'>{t('Regeneration Credit')}</p>
                             <p className='font-bold text-center text-sm text-white'>-</p> 
                         </>
                     )}

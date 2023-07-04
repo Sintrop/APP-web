@@ -30,11 +30,11 @@ export function InsumoItem({data, viewPhoto, typeInsumo}){
                             <p className='text-center text-xs'>No photo</p>
                         </div>
                     )}
-                    <p className='font-bold text-white lg:w-[200px]'>{data.title}</p>
+                    <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{data.title}</p>
                 </div>
 
                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                    <p className='font-bold text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
+                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
                 </div>
             </div>
         )
@@ -55,11 +55,11 @@ export function InsumoItem({data, viewPhoto, typeInsumo}){
                             <p className='text-center text-xs'>No photo</p>
                         </div>
                     )}
-                    <p className='font-bold text-white lg:w-[200px]'>{data.title}</p>
+                    <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{data.title}</p>
                 </div>
 
                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                    <p className='font-bold text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
+                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
                 </div>
             </div>
         )
@@ -80,11 +80,11 @@ export function InsumoItem({data, viewPhoto, typeInsumo}){
                             <p className='text-center text-xs'>No photo</p>
                         </div>
                     )}
-                    <p className='font-bold text-white lg:w-[200px]'>{data.title}</p>
+                    <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{data.title}</p>
                 </div>
 
                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                    <p className='font-bold text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
+                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
                 </div>
             </div>
         )
@@ -105,11 +105,11 @@ export function InsumoItem({data, viewPhoto, typeInsumo}){
                             <p className='text-center text-xs'>No photo</p>
                         </div>
                     )}
-                    <p className='font-bold text-white lg:w-[200px]'>{data.title}</p>
+                    <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{data.title}</p>
                 </div>
 
                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                    <p className='font-bold text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
+                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
                 </div>
             </div>
         )
@@ -130,11 +130,11 @@ export function InsumoItem({data, viewPhoto, typeInsumo}){
                             <p className='text-center text-xs'>No photo</p>
                         </div>
                     )}
-                    <p className='font-bold text-white lg:w-[200px]'>{data.title}</p>
+                    <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{data.title}</p>
                 </div>
 
                 <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
-                    <p className='font-bold text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
+                    <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{data.value} {categoryDetails.unity}</p>
                 </div>
             </div>
         )

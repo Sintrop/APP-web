@@ -16,6 +16,9 @@ import {GetDelation, GetInspections, GetProducer} from '../../services/accountPr
 import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
 import { InspectionItemResult } from './inspectionItemResult';
 import {Warning} from '../../components/Warning';
+import {ModalChooseLang} from '../../components/ModalChooseLang';
+import { useMainContext } from '../../hooks/useMainContext';
+import { ModalViewPhoto } from '../../components/ModalViewPhoto';
 
 const containerStyle = {
     width: '100%',
@@ -28,6 +31,7 @@ const containerStyle = {
 export default function AccountProducer(){
     const {t} = useTranslation();
     const {walletSelected} = useParams();
+    const {modalChooseLang} = useMainContext();
     const [producerData, setProducerData] = useState([]);
     const [producerAddress, setProducerAddress] = useState([]);
     const [center, setCenter] = useState({})
@@ -35,6 +39,8 @@ export default function AccountProducer(){
     const [delationsReiceved, setDelationsReiceved] = useState('0');
     const [proofPhotoBase64, setProofPhotoBase64] = useState('');
     const [modalChooseTypeDelation, setModalChooseTypeDelation] = useState(false);
+    const [modalViewPhoto, setModalViewPhoto] = useState(false);
+    const [hashSelected, setHashSelected] = useState('');
 
     useEffect(() => {
         getProducer();
@@ -44,12 +50,55 @@ export default function AccountProducer(){
     async function getProducer(){
         const response = await GetProducer(walletSelected);
         setProducerData(response);
-        const centerProperty = JSON.parse(response.propertyAddress.coordinate)
-        setCenter(centerProperty);
+        fixCoordinates(JSON.parse(response.propertyAddress.coordinate));
         getBase64(response.proofPhoto);
         const delations = await GetDelation(response.producerWallet);
         setDelationsReiceved(delations.length);
         getInspections();
+    }
+
+    async function fixCoordinates(coords){
+        const arrayLat = String(coords.lat).split('');
+            const arrayLng = String(coords.lng).split('');
+            let newLat = '';
+            let newLng = '';
+
+            for(var i = 0; i < arrayLat.length; i++){
+                if(i === 3){
+                    if(arrayLat[i] === '.'){
+                        newLat += arrayLat[i]
+                    }else{
+                        if(arrayLat[i] === ','){
+                            newLat += '.'
+                        }else{
+                            newLat += `.${arrayLat[i]}`
+                        }
+                    }
+                }else{
+                    newLat += arrayLat[i]
+                }
+
+            }
+
+            for(var i = 0; i < arrayLng.length; i++){
+                if(i === 3){
+                    if(arrayLng[i] === '.'){
+                        newLng += arrayLng[i]
+                    }else{
+                        if(arrayLng[i] === ','){
+                            newLng += '.'
+                        }else{
+                            newLng += `.${arrayLng[i]}`
+                        }
+                    }
+                }else{
+                    newLng += arrayLng[i]
+                }
+            }
+            setCenter({
+                lat: Number(newLat),
+                lng: Number(newLng)
+            })
     }
 
     async function getInspections(){
@@ -75,7 +124,8 @@ export default function AccountProducer(){
     }
 
     return(
-        <div className="w-full flex flex-col items-center bg-green-950">
+        <div className="w-full flex flex-col items-center bg-green-950 h-[100vh]">
+            
             <div className='w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] flex items-center justify-center lg:justify-start lg:px-16 mb-3'>
                 <img
                     src={require('../../assets/logo-branco.png')}
@@ -83,6 +133,7 @@ export default function AccountProducer(){
                 />
             </div>
 
+            <div className='flex flex-col w-full items-center overflow-auto'>
             <Warning
                 message='Data from our test network'
                 width={250}
@@ -104,8 +155,8 @@ export default function AccountProducer(){
                 </div>
 
                 <div className='flex flex-col'>
-                    <p className='text-lg text-center lg:text-left text-white mt-2'>ISA {t('Score')}: {producerData?.isa?.isaScore}</p>
-                    <p className='text-lg text-center lg:text-left text-white'>ISA {t('Average')}: {(Number(producerData?.isa?.isaScore) / Number(producerData?.totalInspections)).toFixed(1).replace('.',',')}</p>
+                    <p className='text-lg text-center lg:text-left text-white mt-2'>{t('Regeneration Score')}: {producerData?.isa?.isaScore}</p>
+                    <p className='text-lg text-center lg:text-left text-white'>{t('Average Regeneration')}: {(Number(producerData?.isa?.isaScore) / Number(producerData?.totalInspections)).toFixed(1).replace('.',',')}</p>
                     <p className='text-lg text-center lg:text-left text-white'>{t('Delations Received')}: 0</p>
                 </div>
 
@@ -157,6 +208,14 @@ export default function AccountProducer(){
                     data={item}
                 />
             ))}
+            </div>
+
+        
+            <Dialog.Root
+                open={modalChooseLang}
+            >
+                <ModalChooseLang/>
+            </Dialog.Root>
             </div>
         </div>
     )

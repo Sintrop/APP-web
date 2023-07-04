@@ -15,7 +15,7 @@ export default function ResearchesPage({wallet, setTab}){
     const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const {tabActive, walletAddress} = useParams();
-    const [modalPublish, setModalPublish] = useState(false);
+    const [modalPublish, setModalPublish] = useState(true);
     const [researches, setResearches] = useState([]);
 
     useEffect(() => {

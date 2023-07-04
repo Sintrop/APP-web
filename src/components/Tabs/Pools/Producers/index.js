@@ -176,24 +176,24 @@ export default function ProducersPool({wallet, setTab}){
 
             <div className="flex flex-col h-[90vh] overflow-auto pb-40">
                 <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[344px] mb-5">
-                    <p className="font-bold text-white">Próxima ERA em {nextEraIn} blocos</p>
+                    <p className="font-bold text-white">{t('Next ERA in')} {nextEraIn} {t('Blocks')}</p>
                 </div>
                 {user === '1' && (
                     <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
                         <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">
-                            <p className="font-bold text-white">Seu Status</p>
+                            <p className="font-bold text-white">{t('Your Status')}</p>
                             <div className='flex items-center justify-between mt-2'>
-                                <p className="text-white">ERA Atual:</p>
+                                <p className="text-white">{t('Current ERA')}:</p>
                                 <p className="font-bold text-[#ff9900]">{producerInfo?.pool?.currentEra}</p>
                             </div>
                             <div className='flex items-center justify-between mt-2'>
-                                <p className="text-white ">Próximo saque em:</p>
-                                <p className="font-bold text-[#ff9900]">{nextAprove} blocos</p>
+                                <p className="text-white ">{t('Next Withdrawal on')}:</p>
+                                <p className="font-bold text-[#ff9900]">{nextAprove} {t('Blocks')}</p>
                             </div>
                         </div>
 
                         <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] rounded-md">
-                            <p className="font-bold text-white">Saldo</p>
+                            <p className="font-bold text-white">{t('Balance')}</p>
                             <div className='flex items-center justify-between mt-2'>
                                 <p className="text-white">Total:</p>
                                 <p className="font-bold text-[#ff9900]">{(balanceProducer / 10 ** 18).toFixed(2)}</p>
@@ -206,7 +206,7 @@ export default function ProducersPool({wallet, setTab}){
                     <div className="flex w-full">
                         <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-sm lg:text-normal text-[#ff9900]">Saldo do contrato</p>
+                                <p className="font-bold text-sm lg:text-normal text-[#ff9900]">{t('Contract Balance')}</p>
                                 <p className="font-bold text-white text-sm lg:text-normal">{(balanceContract / 10 ** 18).toFixed(2)}</p>
                             </div>
 
@@ -216,7 +216,7 @@ export default function ProducersPool({wallet, setTab}){
                             </div>
 
                             <div className="p-2 border-2 flex flex-col w-full">
-                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">ERA atual</p>
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{t('Current ERA')}</p>
                                 <p className="font-bold text-white text-sm lg:text-normal">{currentEra}</p>
                             </div>
                         </div>
@@ -231,7 +231,7 @@ export default function ProducersPool({wallet, setTab}){
 
                     <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3'>
                         <div>
-                            <p className="font-bold text-white text-sm lg:text-normal">Pontuação total dos produtores</p>
+                            <p className="font-bold text-white text-sm lg:text-normal">{t("Producers' total score")}</p>
                             <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{scoresProducers}</p>
                         </div>
 
@@ -250,7 +250,7 @@ export default function ProducersPool({wallet, setTab}){
 
                 <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
                         <div className='flex items-center justify-center w-full'>
-                            <p className='font-bold text-white text-lg lg:text-2xl border-b-2 pb-1'>Lista de Produtores Aprovados</p>
+                            <p className='font-bold text-white text-lg lg:text-2xl border-b-2 pb-1'>{t('List of Approved Producers')}</p>
                         </div>
                         <div className='flex w-full items-center'>
                             <div className='flex w-[5%] px-1 py-3'>

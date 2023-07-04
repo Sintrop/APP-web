@@ -5,8 +5,10 @@ import Loading from '../../../Loading';
 import {LoadingTransaction} from '../../../LoadingTransaction';
 import {PublishResearch} from '../../../../services/researchersService';
 import {save} from '../../../../config/infura';
+import { useTranslation } from 'react-i18next';
 
 export function ModalPublish({walletAddress, close}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [thesis, setThesis] = useState('');
@@ -59,38 +61,47 @@ export function ModalPublish({walletAddress, close}){
     }
 
     return(
-        <Dialog.Portal className='modal-publish__portal'>
-            <Dialog.Overlay className='modal-publish__overlay'/>
-            <Dialog.Content className='modal-publish__content'>
-                <Dialog.Title className='modal-publish__title'>
-                    Publish research
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[400px] lg:h-[450px] bg-green-950 rounded-md my-auto lg:mx-auto mx-2 inset-0 border-2'>
+                <Dialog.Title className='font-bold text-white'>
+                    {t('Publish Research')}
                 </Dialog.Title>
 
-                <form onSubmit={handlePublish} className='modal-publish__form'>
-                    <label htmlFor='title' className='modal-publish__label'>Title of report:</label>
+                <form onSubmit={handlePublish} className='flex flex-col w-full'>
+                    <label htmlFor='title' className='font-bold text-[#ff9900]'>{t('Title of Research')}:</label>
                     <input
-                        className='modal-publish__input'
+                        className='bg-[#0a4303] p-2 rounded-md text-white'
                         name='title'
                         type='text'
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder='Title of research'
+                        placeholder={t('Title of Research')}
                         required
                     />
 
-                    <label htmlFor='thesis' className='modal-publish__label'>Thesis:</label>
+                    <label htmlFor='thesis' className='font-bold text-[#ff9900]'>{t('Thesis')}:</label>
                     <textarea
                         style={{resize:'none', height: '100px'}}
-                        className='modal-publish__input'
+                        className='bg-[#0a4303] p-2 rounded-md text-white'
                         name='thesis'
                         type='text'
                         value={thesis}
                         onChange={(e) => setThesis(e.target.value)}
-                        placeholder='thesis'
+                        placeholder={t('thesis')}
                         required
                     />
 
-                    <label htmlFor='pdf' className='modal-publish__label'>Upload PDF report:</label>
+                    <a href='https://docs.google.com/document/d/1hcL2WAGjfyXY3seOo5xuydHz5eGz6NSILuhxKn23A_o/edit?pli=1' target='_blank' className='w-full flex justify-center'>
+                        <button
+                            className='px-2 py-2 rounded-md bg-[#ff9900] text-white font-bold my-3'
+                            type='button'
+                        >
+                            {t('Download Survey Template')}
+                        </button>
+                    </a>
+
+                    <label htmlFor='pdf' className='font-bold text-[#ff9900]'>{t('Upload PDF report')}:</label>
                     <input 
                         type='file' 
                         onChange={(e) => {
@@ -106,17 +117,18 @@ export function ModalPublish({walletAddress, close}){
                     />
                 </form>
                 
-                <div className='modal-publish__area-btn'>
+                <div className='flex items-center gap-2 justify-end w-full'>
                     <Dialog.Close
-                        className='modal-publish__btn-cancel'
+                        className='px-2 py-2 bg-gray-200 text-black font-bold rounded-md'
                     >
-                        Cancel
+                        {t('Cancel')}
                     </Dialog.Close>
                     <button
-                        className='modal-publish__btn-report'
+                        className='px-2 py-2 bg-[#ff9900] text-white font-bold rounded-md'
                         onClick={handlePublish}
+                        type='submit'
                     >
-                        Publish
+                        {t('Publish')}
                     </button>
                 </div>
 

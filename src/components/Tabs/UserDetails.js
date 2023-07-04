@@ -52,6 +52,7 @@ export function UserDetails({setTab}){
     const [carbonTotal, setCarbonTotal] = useState(0);
     const [bioTotal, setBioTotal] = useState(0);
     const [waterTotal, setWaterTotal] = useState(0);
+    const [arvoresTotal, setarvoresTotal] = useState(0);
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -71,11 +72,7 @@ export function UserDetails({setTab}){
             setUserData(response);
             getInspections();
 
-            const coordinate = JSON.parse(response.propertyAddress?.coordinate)
-            setPosition({
-                lat: Number(coordinate.lat),
-                lng: Number(coordinate.lng)
-            })
+            fixCoordinates(JSON.parse(response.propertyAddress?.coordinate))
         }
         if(typeUser === '2'){
             const response = await GetActivist(walletSelected);
@@ -124,6 +121,50 @@ export function UserDetails({setTab}){
         }
     }
 
+    async function fixCoordinates(coords){
+        const arrayLat = String(coords.lat).split('');
+            const arrayLng = String(coords.lng).split('');
+            let newLat = '';
+            let newLng = '';
+
+            for(var i = 0; i < arrayLat.length; i++){
+                if(i === 3){
+                    if(arrayLat[i] === '.'){
+                        newLat += arrayLat[i]
+                    }else{
+                        if(arrayLat[i] === ','){
+                            newLat += '.'
+                        }else{
+                            newLat += `.${arrayLat[i]}`
+                        }
+                    }
+                }else{
+                    newLat += arrayLat[i]
+                }
+
+            }
+
+            for(var i = 0; i < arrayLng.length; i++){
+                if(i === 3){
+                    if(arrayLng[i] === '.'){
+                        newLng += arrayLng[i]
+                    }else{
+                        if(arrayLng[i] === ','){
+                            newLng += '.'
+                        }else{
+                            newLng += `.${arrayLng[i]}`
+                        }
+                    }
+                }else{
+                    newLng += arrayLng[i]
+                }
+            }
+            setPosition({
+                lat: Number(newLat),
+                lng: Number(newLng)
+            })
+    }
+
     async function getInspections(){
         const response = await GetInspections();
 
@@ -135,6 +176,7 @@ export function UserDetails({setTab}){
             const filterInspections = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
             const filterStatus = filterInspections.filter(item => item.status === '2');
             setInspections(filterStatus);
+            calculateArvores(filterStatus);
             for(var i = 0; i < filterStatus.length; i++){
                 let isaCarbon = {};
                 let isaBio = {};
@@ -173,6 +215,28 @@ export function UserDetails({setTab}){
             const filterStatus = filterInspections.filter(item => item.status === '2');
             setInspections(filterStatus);
         }
+    }
+
+    async function calculateArvores(inspections){
+        if(inspections.length < 1){
+            return;
+        }
+        let totalArvores = 0;
+        for(var i = 0; i < inspections.length; i++){
+            let arvoresInspections = 0;
+
+            const response = await api.get(`/inspection/${inspections[i].id}`);
+            const resCategories = JSON.parse(response.data?.inspection?.resultCategories);
+            const arvoresMudas = resCategories.filter(item => item.categoryId === '9');
+            const arvoresJovens = resCategories.filter(item => item.categoryId === '10');
+            const arvoresAdultas = resCategories.filter(item => item.categoryId === '11');
+            const arvoresAncias = resCategories.filter(item => item.categoryId === '12');
+
+            arvoresInspections = Number(arvoresMudas[0].value) + Number(arvoresJovens[0].value) + Number(arvoresAdultas[0].value) + Number(arvoresAncias[0].value);
+            totalArvores += arvoresInspections
+        }
+
+        setarvoresTotal(totalArvores / inspections.length)
     }
 
     async function getResearches(){
@@ -270,13 +334,13 @@ export function UserDetails({setTab}){
                 
                 <div className="flex flex-col lg:w-[1000px] items-center mt-8">
                     <p className="font-bold text-white">{t('Certified for social networks')}</p>
-                    <div className="bg-white p-2 rounded-md lg:w-[615px]">
-                    <div className="bg-certificate-instagram lg:w-[600px] flex flex-col rounded-md bg-center" id='certificate-social'>
-                        <div className="flex flex-col w-full h-full bg-[rgba(0,0,0,0.5)] p-3">
-                            <div className="w-full flex flex-col lg:flex-row items-center justify-between">
+                    <div className="">
+                    <div className="bg-certificate-instagram lg:w-[700px] flex flex-col rounded-md bg-center" id='certificate-social'>
+                        <div className="flex flex-col w-full h-full p-5 bg-[rgba(6,32,16,0.5)]">
+                            <div className="w-full flex flex-col lg:flex-row justify-between">
                                 <img
                                     src={require('../../assets/logo-branco.png')}
-                                    className="w-[110px] h-[60px] object-contain"
+                                    className="w-[110px] h-[60px] mt-[-10px] object-contain"
                                 />
 
                                 <div className="flex flex-col gap-2">
@@ -288,58 +352,73 @@ export function UserDetails({setTab}){
                                 </div>
                             </div>
 
-                            <div className="flex flex-col items-center gap-2 mt-10">
-                                <p className="font-bold text-white text-lg">{userData?.name}</p>
-                                <p className="font-bold text-white text-lg">{(userData?.propertyAddress?.coordinate)}</p>
-                            </div>
+                            <div className="flex flex-col items-center border-4 border-white mt-5">
+                                <img
+                                    src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
+                                    className="w-[110px] h-[110px] object-cover rounded-full border-4 border-white mt-[-60px]"
+                                />
+                           
+                                <p className="font-bold text-[#ff9900] text-lg">{userData?.name}</p>
+                                <p className="font-bold text-white text-lg">
+                                    Latitude: {position.lat}, Longitude: {position.lng}
+                                </p>
+                                <p className="font-bold text-white">
+                                    {t('Area')}: <span className="font-bold text-[#ff9900]">{userData?.certifiedArea} m²</span>
+                                </p>
 
-                            <div className="flex items-center justify-center w-full mt-5">
-                                <QRCode 
-                                    value={`${window.location.host}/account-producer/${walletSelected}`} 
-                                    size={180}
-                                    logoImage={require('../../assets/icone.png')}
-                                    qrStyle="dots"
-                                    logoPadding={2}
-                                    logoPaddingStyle="square"
-                                    logoWidth={50}
-                                    removeQrCodeBehindLogo
-                                    eyeColor='#0a4303'
-                                />        
-                            </div>
+                                <div className="flex flex-col items-center justify-center w-full mt-5 gap-5">
+                                    <QRCode 
+                                        value={`https://${window.location.host}/account-producer/${walletSelected}`} 
+                                        size={180}
+                                        logoImage={require('../../assets/icone.png')}
+                                        qrStyle="dots"
+                                        logoPadding={2}
+                                        logoPaddingStyle="square"
+                                        logoWidth={50}
+                                        removeQrCodeBehindLogo
+                                        eyeColor='#0a4303'
+                                    /> 
 
-                            <div className="flex justify-center gap-3 w-full mt-5">
-                                <div className="flex flex-col items-center gap-1 w-[45%]">
-                                    <p className="font-bold text-white">
-                                        {t('Inspections Reiceved')}: <span className="font-bold text-[#ff9900]">{userData?.totalInspections}</span>
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        ISA {t('Score')}: <span className="font-bold text-[#ff9900]">{userData?.isa?.isaScore}</span>
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        ISA {t('Average')}: <span className="font-bold text-[#ff9900]">{Number(userData?.isa?.isaScore)/Number(userData?.totalInspections)}</span>
-                                    </p>
+                                    <div className="flex items-center gap-1">
+                                        <p className="font-bold text-[#ff9900]">Total de Árvores:</p>       
+                                        <p className="font-bold text-white">{arvoresTotal}</p>
+                                    </div>
                                 </div>
 
-                                <div className="flex flex-col gap-1 w-[45%]">
-                                    <p className="font-bold text-white">
-                                        {t('Carbon Balance')}: <span className="font-bold text-[#ff9900]">{carbonTotal.toFixed(0)} Kg</span>
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        {t('Water Balance')}: <span className="font-bold text-[#ff9900]">{waterTotal.toFixed(0)} m³</span>
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        {t('Soil Balance')}: <span className="font-bold text-[#ff9900]">{soilTotal.toFixed(0)} m²</span>
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        {t('Biodiversity Balance')}: <span className="font-bold text-[#ff9900]">{bioTotal.toFixed(0)} uni</span>
-                                    </p>
+                                <div className="flex justify-center gap-3 w-full mt-2">
+                                    <div className="flex flex-col items-center gap-1 w-[45%]">
+                                        <p className="font-bold text-white">
+                                            {t('Inspections Reiceved')}: <span className="font-bold text-[#ff9900]">{userData?.totalInspections}</span>
+                                        </p>
+                                        <p className="font-bold text-white">
+                                            {t('Regeneration Score')}: <span className="font-bold text-[#ff9900]">{userData?.isa?.isaScore}</span>
+                                        </p>
+                                        <p className="font-bold text-white">
+                                            {t('Average')}: <span className="font-bold text-[#ff9900]">{Number(userData?.isa?.isaScore)/Number(userData?.totalInspections)}</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col items-center gap-1 w-[45%]">
+                                        <p className="font-bold text-white">
+                                            {t('Carbon Balance')}: <span className="font-bold text-[#ff9900]">{(carbonTotal / 1000).toFixed(1)} t</span>
+                                        </p>
+                                        <p className="font-bold text-white">
+                                            {t('Water Balance')}: <span className="font-bold text-[#ff9900]">{waterTotal.toFixed(0)} m³</span>
+                                        </p>
+                                        <p className="font-bold text-white">
+                                            {t('Soil Balance')}: <span className="font-bold text-[#ff9900]">{soilTotal.toFixed(0)} m²</span>
+                                        </p>
+                                        <p className="font-bold text-white">
+                                            {t('Biodiversity Balance')}: <span className="font-bold text-[#ff9900]">{bioTotal.toFixed(0)} uni</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col w-full mt-3">
+                                    <p className="text-white text-center">Wallet {t('Producer')}: {userData?.producerWallet}</p>
                                 </div>
                             </div>
-
-                            <div className="flex flex-col w-full mt-3">
-                                <p className="text-white text-center">Wallet {t('Producer')}: {userData?.producerWallet}</p>
-                                <p className="text-white text-right">sintrop.com</p> 
-                            </div>
+                            <p className="text-white text-center mb-[-5px]">sintrop.com</p> 
                         </div>
                     </div>
                     </div>

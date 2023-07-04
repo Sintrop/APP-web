@@ -30,7 +30,7 @@ export function ModalViewPhoto({close, hash}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[600px] bg-green-950 rounded-md m-auto inset-0 border-2'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] lg:h-[600px] bg-green-950 rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]'/>
                     <Dialog.Title className='font-bold text-white'>View Photo</Dialog.Title>
@@ -44,7 +44,7 @@ export function ModalViewPhoto({close, hash}){
                 ) : (
                     <img
                         src={photoBase64}
-                        className='lg:w-[490px] h-[530px] rounded-md object-contain'
+                        className='lg:w-[490px] lg:h-[530px] rounded-md object-contain'
                     />
                 )}
 
