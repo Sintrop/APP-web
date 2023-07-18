@@ -21,8 +21,8 @@ export function ModalChangePhoto({close, userId}){
         if(!hash.trim())return;
         try{
             setLoading(true);
-            await api.put('/user/updatePhoto', {
-                id: String(userId),
+            await api.put('/update-profile-photo', {
+                wallet: String(walletAddress),
                 hashPhoto: String(hash)
             });
             close()

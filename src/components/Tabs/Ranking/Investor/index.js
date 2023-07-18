@@ -6,8 +6,10 @@ import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
 import { GetCertificateTokens } from "../../../../services/accountProducerService";
+import Loading from '../../../Loading';
 
 export default function InvestorRanking({ wallet, setTab }) {
+    const [loading, setLoading] = useState(false);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const investorService = new InvestorService(wallet);
@@ -15,16 +17,21 @@ export default function InvestorRanking({ wallet, setTab }) {
     const {tabActive, walletAddress} = useParams();
         
     useEffect(() => {
-            setTab(tabActive, '')
+        setTab(tabActive, '')
     }, [tabActive])
     
     useEffect(() => {
+        setLoading(true);
         investorService
         .getInvestorRanking()
         .then((res) => {
             orderRanking(res);
+            setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err)
+            setLoading(false)
+        });
     }, []);
 
     async function orderRanking(investors){
@@ -92,6 +99,10 @@ export default function InvestorRanking({ wallet, setTab }) {
                     </>
                 )}
             </div>
+
+            {loading && (
+                <Loading/>
+            )}
         </div>
     );
 }

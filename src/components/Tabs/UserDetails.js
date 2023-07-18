@@ -41,6 +41,7 @@ export function UserDetails({setTab}){
     const [loadingApi, setLoadingApi] = useState(true)
     const [userData, setUserData] = useState([]);
     const [producerDataApi, setProducerDataApi] = useState({});
+    const [userDataApi, setUserDataApi] = useState({});
     const [producerAddress, setProducerAddress] = useState({});
     const [propertyPath, setPropertyPath] = useState([]);
     const [position, setPosition] = useState({});
@@ -99,10 +100,23 @@ export function UserDetails({setTab}){
         if(typeUser === '7'){
             const response = await GetInvestor(walletSelected);
             setUserData(response)
+            getApiInvestor()
         }
         const resDelations = await GetDelation(walletSelected);
         setDelations(resDelations);
         setLoading(false)
+    }
+
+    async function getApiInvestor(){
+        try{
+            setLoadingApi(true);
+            const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
+            setUserDataApi(response.data.user)
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingApi(false);
+        }
     }
 
     async function getApiProducer(){
@@ -543,10 +557,17 @@ export function UserDetails({setTab}){
 
             <div className="flex flex-col overflow-auto h-[95vh] pb-40">
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
-                    <img
-                        src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
-                        className="w-[250px] h-[250px] object-cover"
-                    />
+                    {typeUser === '7' ? (
+                        <img
+                            src={`https://ipfs.io/ipfs/${userDataApi?.imgProfileUrl}`}
+                            className="w-[250px] h-[250px] object-cover"
+                        />
+                    ) : (
+                        <img
+                            src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
+                            className="w-[250px] h-[250px] object-cover"
+                        />
+                    )}
 
                     <div className="flex flex-col items-center lg:items-start">
                         <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>

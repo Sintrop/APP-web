@@ -278,10 +278,9 @@ export default function MyAccount({wallet, userType, setTab}){
                                 onClick={() => {
                                     if(Number(userData?.totalInspections) < 3){
                                         requestInspection();
+                                        return;
                                     }
-                                    if(Number(lastResquested) === 0){
-                                        requestInspection();
-                                    }
+                                    
                                     if(Number(lastResquested) !== 0){
                                         if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
                                             requestInspection();

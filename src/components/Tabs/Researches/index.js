@@ -9,13 +9,15 @@ import { ResearchItem } from './ResearchItem';
 import { useTranslation } from 'react-i18next';
 import {useMainContext} from '../../../hooks/useMainContext';
 import { BackButton } from '../../BackButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResearchesPage({wallet, setTab}){
+    const navigate = useNavigate();
     const {user} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
-    const {tabActive, walletAddress} = useParams();
-    const [modalPublish, setModalPublish] = useState(true);
+    const {tabActive, walletAddress, typeUser} = useParams();
+    const [modalPublish, setModalPublish] = useState(false);
     const [researches, setResearches] = useState([]);
 
     useEffect(() => {
@@ -23,6 +25,7 @@ export default function ResearchesPage({wallet, setTab}){
     }, [tabActive])
 
     useEffect(() => {
+        navigate(`/researchers-center/${walletAddress}/${typeUser}`)
         getResearches();
     },[])
 

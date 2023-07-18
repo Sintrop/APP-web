@@ -63,11 +63,10 @@ export default function MainProvider({children}){
 
     async function Sync(){
         const wallet = await ConnectWallet();
-
         if(wallet.connectedStatus){
             return {
                 status: 'connected',
-                wallet: wallet.address
+                wallet: wallet.address[0]
             }
         }
     }
