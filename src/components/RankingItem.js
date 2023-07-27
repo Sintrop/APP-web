@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useMainContext } from '../hooks/useMainContext';
 import { api } from '../services/api';
 
-export function RankingItem({data, position}){
+export function RankingItem({data, position, researchersCenter}){
     const {setWalletSelected} = useMainContext();
     const {walletAddress} = useParams();
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ export function RankingItem({data, position}){
     return(
         
             <div 
-                className="flex flex-col w-[220px] h-[280px] bg-[#0A4303] rounded-md cursor-pointer"
+                className={`flex flex-col w-[220px] h-[280px] ${researchersCenter ? 'bg-[#1B7A74]' : 'bg-[#0A4303]'} rounded-md cursor-pointer`}
                 onClick={handleClickUser}
             >   
                 {data?.userType === '7' ? (

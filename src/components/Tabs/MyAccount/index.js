@@ -27,6 +27,7 @@ import { ResearchItem } from '../Researches/ResearchItem';
 import { IsProducerSyntropic } from '../../IsProducerSyntropic';
 import { ModalChangePassword } from '../../ModalChangePassword';
 import {ModalChangePhoto} from '../../ModalChangePhoto';
+import Loader from '../../Loader';
 
 const containerStyle = {
     width: '100%',
@@ -255,6 +256,17 @@ export default function MyAccount({wallet, userType, setTab}){
             })
     }
 
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
+
     if(user === '0'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-10 overflow-auto h-[95vh] pb-40'>
@@ -429,7 +441,7 @@ export default function MyAccount({wallet, userType, setTab}){
                         <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
                             <div className='flex w-full justify-center'>
                             <LoadScript
-                                googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
+                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                                 libraries={['drawing']}
                             >
                                 <GoogleMap

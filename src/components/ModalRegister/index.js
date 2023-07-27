@@ -120,10 +120,10 @@ export default function ModalRegister(){
             toast.error('Select a user type!')
             return;
         }
-        // if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
-        //     toast.error('It is necessary to send a photo!')
-        //     return;
-        // }
+        if(step === 2 && type !== 'investor' && proofPhotoBase64 === ''){
+            toast.error('It is necessary to send a photo!')
+            return;
+        }
         if(step === 1 && type === 'investor'){
             setStep(3)
             return;

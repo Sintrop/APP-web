@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Loader from '../Loader';
 
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
@@ -33,6 +34,17 @@ export default function ISA({user, walletAddress, setTab}){
         const response = await GetCategories();
         setCategories(response);
         setLoading(false);
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
     }
 
     return(

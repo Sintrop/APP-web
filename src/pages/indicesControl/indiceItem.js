@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { api } from "../../services/api";
 
-export function IndiceItem({data, attIndices}){
+export function IndiceItem({data, attIndices, researchersCenter}){
     const [loading, setLoading] = useState(false);
     const [edit, setEdit] = useState(false);
     const [carbon, setCarbon] = useState('');
@@ -37,9 +37,12 @@ export function IndiceItem({data, attIndices}){
             setEdit(false);
         }
     }
+    if(data.id === '23'){
+        return <div/>
+    }
     
     return(
-        <div className="flex flex-col border-2 rounded-md">
+        <div className="flex flex-col border-2 rounded-md bg-white">
             <div className="flex h-14">
                 <div className='w-12 border-r-2 h-full flex items-center justify-center'>
                     {data.id}
@@ -99,25 +102,27 @@ export function IndiceItem({data, attIndices}){
                         <p className='font-bold text-green-800'>{data.bioValue}</p>
                     )}
                 </div>
+                
+                {!researchersCenter && (
+                    <div className='w-[80px] border-r-2 h-full flex items-center justify-center'>
+                        {edit ? (
+                            <button
+                                className="px-2 py-1 bg-[#0a4303] rounded-md font-bold text-white"
+                                onClick={handleSave}
+                            >
+                                Save
+                            </button>
+                        ):(
+                            <button
+                                className="px-2 py-1 bg-[#ff9900] rounded-md font-bold text-white"
+                                onClick={() => setEdit(true)}
+                            >
+                                Edit
+                            </button>
 
-                <div className='w-[80px] border-r-2 h-full flex items-center justify-center'>
-                    {edit ? (
-                        <button
-                            className="px-2 py-1 bg-[#0a4303] rounded-md font-bold text-white"
-                            onClick={handleSave}
-                        >
-                            Save
-                        </button>
-                    ):(
-                        <button
-                            className="px-2 py-1 bg-[#ff9900] rounded-md font-bold text-white"
-                            onClick={() => setEdit(true)}
-                        >
-                            Edit
-                        </button>
-
-                    )}
-                </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )

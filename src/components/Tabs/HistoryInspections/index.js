@@ -7,6 +7,7 @@ import ItemListInspections from "../../ManageInspectionsComponents/ItemListInspe
 import { useTranslation } from "react-i18next";
 import {InspectionItem} from '../../InspectionItem';
 import { BackButton } from "../../BackButton";
+import Loader from "../../Loader";
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
     const {t} = useTranslation();
@@ -24,10 +25,23 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     }, [tabActive])
     
     const loadInspections = () => {
+        setLoading(true);
         inspection.getAllInspections().then( res => {
             const inspections = res.filter(item => item.status === '2')
             setInspections(inspections.reverse());
+            setLoading(false)
         });
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
     }
 
     return (

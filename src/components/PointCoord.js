@@ -1,25 +1,37 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Loader from "./Loader";
 
 export function PointCoord({data, zones, analiseSolo}){
     const [image, setImage] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getImage();
     },[])
 
     async function getImage(){
+        setLoading(true);
         const image64 = await axios.get(`https://ipfs.io/ipfs/${data.photo}`)
         setImage(image64.data);
+        setLoading(false);
     }
 
     return(
         <div className="flex items-center gap-2">
-            {image !== '' && (
-                <img
-                    src={image}
-                    className="w-[40px] h-[40px] object-cover border-2 border-[#ff9900] rounded-md"
-                />
+            {loading ? (
+                <div className="w-[40px] h-[40px] border-2 bg-gray-500 border-[#ff9900] rounded-md">
+                    
+                </div>
+            ) : (
+                <>
+                    {image !== '' && (
+                        <img
+                            src={image}
+                            className="w-[40px] h-[40px] object-cover border-2 border-[#ff9900] rounded-md"
+                        />
+                    )}
+                </>
             )}
 
             {zones && (

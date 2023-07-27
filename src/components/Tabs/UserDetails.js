@@ -27,6 +27,7 @@ import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
 import {ImLab} from 'react-icons/im';
 import {QRCode} from "react-qrcode-logo";
+import Loader from '../Loader';
 
 const containerStyle = {
     width: '100%',
@@ -273,6 +274,17 @@ export function UserDetails({setTab}){
         })
     }
 
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
+
     if(typeUser === '1'){
         return(
             <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto pb-40'>
@@ -326,7 +338,7 @@ export function UserDetails({setTab}){
                         <div className='flex w-full lg:w-[1000px] justify-center mt-5 px-2 lg:px-0 lg:mt-10'>
                             <div className='flex w-full justify-center'>
                             <LoadScript
-                                googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
+                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                                 libraries={['drawing']}
                             >
                                 <GoogleMap

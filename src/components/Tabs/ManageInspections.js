@@ -7,6 +7,7 @@ import { LoadingTransaction } from '../LoadingTransaction';
 import { MainContext } from '../../contexts/main';
 import {FaLock} from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import Loader from '../Loader';
 
 //components
 import Loading from '../Loading';
@@ -96,6 +97,17 @@ export default function ManageInpections({walletAddress, setTab}){
             })
         })
         
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
     }
 
     return(
@@ -228,9 +240,7 @@ export default function ManageInpections({walletAddress, setTab}){
                     action='request-inspection'
                 />
             </Dialog.Root>
-            {loading && (
-                <Loading/>
-            )}
+            
         </div>
     )
 }

@@ -134,7 +134,7 @@ export function ModalChooseMethod({finishInspection, finishManual}){
                                         className="border-b-2 border-blue-500 text-blue-500 cursor-pointer text-center"
                                         onClick={() => setMethod('phoenix')}
                                     >
-                                        Clique aqui para selecionar o método Phoenix
+                                        Clique aqui para selecionar o método Sintrop
                                     </p>
                                 </div>
 

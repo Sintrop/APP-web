@@ -5,10 +5,12 @@ import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
+import Loader from "../../../Loader";
 
 export default function ContributorsRanking({ wallet, setTab }) {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 	const contributorsService = new ContributorsService(wallet);
 	const [contributors, setContributors] = useState([]);
 	const {tabActive, walletAddress} = useParams();
@@ -18,6 +20,7 @@ export default function ContributorsRanking({ wallet, setTab }) {
 	}, [tabActive])
 	
 	useEffect(() => {
+        setLoading(true)
 		contributorsService
 		.getContributorsRanking()
 		.then((res) => {
@@ -25,9 +28,21 @@ export default function ContributorsRanking({ wallet, setTab }) {
 			//   let ContributorsSort = res.map(item => item ).sort((a, b) => parseInt(b.level[0]) - parseInt(a.level[0]))
 			setContributors(res);
 			}
+            setLoading(false);
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => setLoading(false));
 	}, []);
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
 
 	return (
 		<div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>

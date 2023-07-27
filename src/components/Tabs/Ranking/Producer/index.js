@@ -5,10 +5,12 @@ import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
+import Loader from "../../../Loader";
 
 export default function ProducerRanking({ wallet, setTab }) {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const producerService = new ProducerService(wallet);
     const [producers, setProducers] = useState([]);
     const {tabActive, walletAddress} = useParams();
@@ -24,12 +26,14 @@ export default function ProducerRanking({ wallet, setTab }) {
     }, []);
     
     function getProducers(){
+        setLoading(true)
         producerService
         .getProducerRanking()
         .then((res) =>{
             orderRanking(res);
+            setLoading(false)
         })
-        .catch((err) => console.log(err));
+        .catch((err) => setLoading(false));
     }
 
     function orderRanking(data){
@@ -49,6 +53,17 @@ export default function ProducerRanking({ wallet, setTab }) {
             const usersFilter = users.filter(item => item.producerWallet === inputFilter);
             setProducers(usersFilter)
         }
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
     }
 
     return (

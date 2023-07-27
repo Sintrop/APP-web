@@ -14,7 +14,7 @@ const containerStyle = {
 function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
     return(
         <LoadScript
-            googleMapsApiKey='AIzaSyD9854_llv58ijiMNKxdLbe6crnQuCpGuo'
+            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
             libraries={['drawing']}
         >
             <GoogleMap

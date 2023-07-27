@@ -21,6 +21,7 @@ import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { UserPoolItem } from '../../../UserPoolItem';
 import { BackButton } from '../../../BackButton';
+import Loader from '../../../Loader';
 
 export default function DevelopersPool({wallet, setTab}){
     const {user, nextEraIn} = useMainContext();
@@ -157,6 +158,17 @@ export default function DevelopersPool({wallet, setTab}){
 
         let developerSort = newArray.map((item) => item ).sort( (a,b) => parseInt(b.balance) + parseInt(a.balance))
         setDevelopersList(developerSort)
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
     }
 
     return(

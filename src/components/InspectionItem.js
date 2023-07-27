@@ -38,7 +38,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     const [openModalChooseMethod, setOpenModalChooseMethod] = useState(false);
     const [modalViewResult, setModalViewResult] = useState(false);
     const [method, setMethod] = useState('sintrop');
-
     
     useEffect(() => {
         //console.log(data);
@@ -105,97 +104,97 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         //Transforma o isaindex em uma string legivel;
         if(isas){
             if(isas.carbon === 0){
-                isaCarbon = 'Regenerativo 3'
+                isaCarbon = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
             if(isas.carbon === 1){
-                isaCarbon = 'Regenerativo 2'
+                isaCarbon = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if(isas.carbon === 2){
-                isaCarbon = 'Regenerativo 1'
+                isaCarbon = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
             if(isas.carbon === 3){
-                isaCarbon = 'Neutro'
+                isaCarbon = 'Neutro = 0 Pontos de Regeneração'
             }
             if(isas.carbon === 4){
-                isaCarbon = 'Não Regenerativo 1'
+                isaCarbon = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
             if(isas.carbon === 5){
-                isaCarbon = 'Não Regenerativo 2'
+                isaCarbon = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if(isas.carbon === 6){
-                isaCarbon = 'Não Regenerativo 3'
+                isaCarbon = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
         if(isas){
             if(isas.water === 0){
-                isaWater = 'Regenerativo 3'
+                isaWater = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
             if(isas.water === 1){
-                isaWater = 'Regenerativo 2'
+                isaWater = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if(isas.water === 2){
-                isaWater = 'Regenerativo 1'
+                isaWater = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
             if(isas.water === 3){
-                isaWater = 'Neutro'
+                isaWater = 'Neutro = 0 Pontos de Regeneração'
             }
             if(isas.water === 4){
-                isaWater = 'Não Regenerativo 1'
+                isaWater = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
             if(isas.water === 5){
-                isaWater = 'Não Regenerativo 2'
+                isaWater = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if(isas.water === 6){
-                isaWater = 'Não Regenerativo 3'
+                isaWater = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
         if(isas){
             if(isas.soil === 0){
-                isaSoil = 'Regenerativo 3'
+                isaSoil = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
             if(isas.soil === 1){
-                isaSoil = 'Regenerativo 2'
+                isaSoil = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if(isas.soil === 2){
-                isaSoil = 'Regenerativo 1'
+                isaSoil = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
             if(isas.soil === 3){
-                isaSoil = 'Neutro'
+                isaSoil = 'Neutro = 0 Pontos de Regeneração'
             }
             if(isas.soil === 4){
-                isaSoil = 'Não Regenerativo 1'
+                isaSoil = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
             if(isas.soil === 5){
-                isaSoil = 'Não Regenerativo 2'
+                isaSoil = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if(isas.soil === 6){
-                isaSoil = 'Não Regenerativo 3'
+                isaSoil = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
         if(isas){
             if(isas.bio === 0){
-                isaBio = 'Regenerativo 3'
+                isaBio = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
             if(isas.bio === 1){
-                isaBio = 'Regenerativo 2'
+                isaBio = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if(isas.bio === 2){
-                isaBio = 'Regenerativo 1'
+                isaBio = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
             if(isas.bio === 3){
-                isaBio = 'Neutro'
+                isaBio = 'Neutro = 0 Pontos de Regeneração'
             }
             if(isas.bio === 4){
-                isaBio = 'Não Regenerativo 1'
+                isaBio = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
             if(isas.bio === 5){
-                isaBio = 'Não Regenerativo 2'
+                isaBio = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if(isas.bio === 6){
-                isaBio = 'Não Regenerativo 3'
+                isaBio = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
         
@@ -353,18 +352,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                         body: [
                             ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Total'],
                             ...bodyInsetosAnaliseSoloZones
-                        ]
-                    }
-                },
-                {
-                    text: `Subzonas das áreas:`,
-                    style: 'label'
-                },
-                {
-                    table:{
-                        body: [
-                            ['Zona Mãe', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Área'],
-                            ...bodyCoordsSubZones
                         ]
                     }
                 },
@@ -865,9 +852,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             const zone = [`${resultZones[i].title}`, `Lat:${resultZones[i].path[0].lat}, Lng:${resultZones[i].path[0].lng}`, `Lat:${resultZones[i].path[1].lat}, Lng:${resultZones[i].path[1].lng}`, `Lat:${resultZones[i].path[2].lat}, Lng:${resultZones[i].path[2].lng}`, `Lat:${resultZones[i].path[3].lat}, Lng:${resultZones[i].path[3].lng}`, `${(resultZones[i].areaZone).toFixed(1)} m²`,]
             bodyCoordsZones.push(zone);
 
-            const subZone = [`${resultZones[i].title}`, `Lat:${resultZones[i].subZone[0].lat}, Lng:${resultZones[i].subZone[0].lng}`, `Lat:${resultZones[i].subZone[1].lat}, Lng:${resultZones[i].subZone[1].lng}`, `Lat:${resultZones[i].subZone[2].lat}, Lng:${resultZones[i].subZone[2].lng}`, `Lat:${resultZones[i].subZone[3].lat}, Lng:${resultZones[i].subZone[3].lng}`, `${(resultZones[i].areaSubZone).toFixed(1)} m²`,]
-            bodyCoordsSubZones.push(subZone);
-
             const analiseSolo = resultZones[i].analiseSolo;
             //Filtra as árvores pelo id
             const mudasValue = resultZones[i].arvores.filter(item => item.id === 1);
@@ -1094,6 +1078,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         }
         
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas));
+        
         pdf.getBuffer(async(res) => {
             const hash = await save(res);
             pdfDevHash = hash;
@@ -1623,7 +1608,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3"
             >
                 <div className='hidden lg:flex items-center gap-8'>
-                    <p className='text-white font-bold' >#{data.id}</p>
+                    <p className='text-white font-bold' onClick={finishNewVersion}>#{data.id}</p>
                     <p className="text-white">
                         {type === 'manage' ? (
                             `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
