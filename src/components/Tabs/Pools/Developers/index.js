@@ -156,7 +156,7 @@ export default function DevelopersPool({wallet, setTab}){
             }
         }
 
-        let developerSort = newArray.map((item) => item ).sort( (a,b) => parseInt(b.balance) + parseInt(a.balance))
+        let developerSort = newArray.map((item) => item ).sort( (a,b) => Number(b.balance) - Number(a.balance))
         setDevelopersList(developerSort)
     }
 
@@ -180,7 +180,7 @@ export default function DevelopersPool({wallet, setTab}){
                 </div>
             </div>
 
-            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[344px] mb-5">
                     <p className="font-bold text-white">{t('Next ERA in')} {nextEraIn} {t('Blocks')}</p>
                 </div>

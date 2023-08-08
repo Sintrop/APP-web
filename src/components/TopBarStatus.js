@@ -3,25 +3,36 @@ import { useMainContext } from '../hooks/useMainContext';
 import {useNetwork} from '../hooks/useNetwork';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {VscAccount} from 'react-icons/vsc';
-import {MdVisibility, MdVisibilityOff, MdKeyboardArrowDown} from 'react-icons/md';
+import {MdVisibility, MdVisibilityOff, MdKeyboardArrowDown, MdOutlineNotificationsActive} from 'react-icons/md';
 import {AiFillCaretDown} from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './HeaderAccount/ModalAccountOptions';
+import { ModalNotifications } from './ModalNotifications';
 
 export function TopBarStatus({}){
     const {walletAddress} = useParams();
     const {pathname} = useLocation();
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang, language} = useMainContext();
+    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang, language, notifications} = useMainContext();
     const {isSupported} = useNetwork();
     const [visibilityBalance, setVisibilityBalance] = useState(false);
     const [modalOptions, setModalOptions] = useState(false);
+    const [modalNotifications, setModalNotifications] = useState(false);
+    const [notificationNotVisualized, setNotificationNotVisualized] = useState(0);
 
     useEffect(() => {
-        
-    },[]);
+        if(notifications.length > 0) {
+            let totalNotVisualized = 0;
+            for(var i = 0; i < notifications.length; i++) {
+                if(!notifications[i].visualized){
+                    totalNotVisualized += 1;
+                }
+            }
+            setNotificationNotVisualized(totalNotVisualized);
+        }
+    },[notifications]);
 
     async function handleSync(){
         const response = await Sync();
@@ -136,6 +147,20 @@ export function TopBarStatus({}){
                                             />
                                         </div>
                                     </button>
+
+                                    <button 
+                                        onClick={() => setModalNotifications(true)}
+                                        className='flex flex-col ml-3 mr-1'
+                                    >
+                                        <MdOutlineNotificationsActive size={25} color='white'/>
+                                        {notificationNotVisualized > 0 && (
+                                            <div className='flex w-5 h-5 rounded-full bg-red-500 items-center justify-center border mt-[-15px] ml-[-10px]'>
+                                                <p className='text-white text-xs'>
+                                                    {notificationNotVisualized < 10 ? notificationNotVisualized : '+9'}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </button>
                             
                                     <button
                                         onClick={() => setModalOptions(true)}
@@ -201,6 +226,15 @@ export function TopBarStatus({}){
                     user={user}
                     walletConnected={walletConnected}
                     close={() => setModalOptions(false)}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalNotifications}
+                onOpenChange={(open) => setModalNotifications(open)}
+            >
+                <ModalNotifications
+                
                 />
             </Dialog.Root>
         </div>

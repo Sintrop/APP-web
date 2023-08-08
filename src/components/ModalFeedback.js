@@ -12,14 +12,14 @@ export function ModalFeedback({close}){
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [photoHash, setPhotoHash] = useState('');
+    const [photoHash, setPhotoHash] = useState([]);
     const [base64, setBase64] = useState('');
 
 
     async function getPath(file){
         setLoading(true);
         const path = await save(file);
-        setPhotoHash(path);
+        photoHash.push(path);
         getBase64(path);
     }
 
@@ -41,11 +41,12 @@ export function ModalFeedback({close}){
                 wallet: String(walletAddress).toUpperCase(),
                 title: title,
                 description: description,
-                photoHash: photoHash
+                photoHash: JSON.stringify(photoHash),
+                type: 'feedback'
             })
             setTitle('');
             setDescription('');
-            setPhotoHash('');
+            setPhotoHash([]);
             setBase64('');
             close()
         }catch(err){
@@ -74,6 +75,7 @@ export function ModalFeedback({close}){
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder='Digite aqui'
                         className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
+                        maxLength={50}
                     />
 
                     <p className="font-bold text-[#ff9900] mt-3">Descrição:</p>

@@ -261,7 +261,7 @@ export default function ProducerCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 <p className="font-bold text-white text-lg">{t('Long Certificate')}</p>
                 <div className="flex flex-col lg:w-[715px] " id='certificate'>
                     <div className="hidden lg:flex flex-col w-full lg:flex-row lg:w-[700px] h-[350px] border-2 bg-[#0A4303] border-white rounded-md mr-2">

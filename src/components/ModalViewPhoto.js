@@ -5,6 +5,7 @@ import Loading from './Loading';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import axios from 'axios';
+import Loader from './Loader';
 
 export function ModalViewPhoto({close, hash}){
     const {walletAddress} = useParams();
@@ -31,29 +32,35 @@ export function ModalViewPhoto({close, hash}){
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] lg:h-[600px] bg-green-950 rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
-                <div className='flex items-center w-full justify-between'>
-                    <div className='w-[25px]'/>
-                    <Dialog.Title className='font-bold text-white'>View Photo</Dialog.Title>
-                    <Dialog.Close>
-                        <IoMdCloseCircleOutline size={25} color='white'/>
-                    </Dialog.Close>
-                </div>
-                
-                {photoBase64 === '' ? (
-                    <p className='font-bold text-white'>Erro ao obter a imagem!</p>
-                ) : (
-                    <img
-                        src={photoBase64}
-                        className='lg:w-[490px] lg:h-[530px] rounded-md object-contain'
-                    />
-                )}
-
-                <div/>
+        
+                    <div className='flex items-center w-full justify-between'>
+                        <div className='w-[25px]'/>
+                        <Dialog.Title className='font-bold text-white'>View Photo</Dialog.Title>
+                        <Dialog.Close>
+                            <IoMdCloseCircleOutline size={25} color='white'/>
+                        </Dialog.Close>
+                    </div>
+                    
+                    {loading ? (
+                        <Loader
+                            type='hash'
+                            color='white'
+                        />
+                    ) : (
+                        <>
+                        {photoBase64 === '' ? (
+                            <p className='font-bold text-white'>Erro ao obter a imagem!</p>
+                        ) : (
+                            <img
+                                src={photoBase64}
+                                className='lg:w-[490px] lg:h-[530px] rounded-md object-contain'
+                            />
+                        )}
+                        </>
+                    )}
+                    <div/>
+                 
             </Dialog.Content>
-
-            {loading && (
-                <Loading/>
-            )}
         </Dialog.Portal>
     )
 }

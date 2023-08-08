@@ -15,7 +15,7 @@ export default function ProducerRanking({ wallet, setTab }) {
     const [producers, setProducers] = useState([]);
     const {tabActive, walletAddress} = useParams();
     const [inputFilter, setInputFilter] = useState('');
-    const [filterSelect, setFilterSelect] = useState('all');
+    const [filterSelect, setFilterSelect] = useState('reais');
         
     useEffect(() => {
         setTab(tabActive, '')
@@ -31,7 +31,7 @@ export default function ProducerRanking({ wallet, setTab }) {
         .getProducerRanking()
         .then((res) =>{
             orderRanking(res);
-            setLoading(false)
+            setLoading(false);
         })
         .catch((err) => setLoading(false));
     }
@@ -43,15 +43,24 @@ export default function ProducerRanking({ wallet, setTab }) {
         }
     }
 
-    function filter(type){
+    function filter(type, producersArray){
         if(type === 'all'){
-            getProducers();
+            getProducers('all');
         }
 
         if(type === 'wallet'){
             let users = producers;
             const usersFilter = users.filter(item => item.producerWallet === inputFilter);
-            setProducers(usersFilter)
+            setProducers(usersFilter);
+        }
+
+        if(type === 'reais'){
+            let users = producersArray;
+            const usersFilter = users.filter(item => item.producerWallet === '0xaC3Dd98E8025BD37Ca653f314B5CBE8492738919' ||
+                item.producerWallet === '0x72482AE19928D654EB6D55f741157AE4701E3abe' ||
+                item.producerWallet === '0x566C073Ec7B0d9e9Dd1CAf58e74CB954d8cB5DEf'
+            );
+            setProducers(usersFilter);
         }
     }
 
@@ -85,9 +94,14 @@ export default function ProducerRanking({ wallet, setTab }) {
                                 setInputFilter('');
                                 filter('all')
                             }
+                            if(e.target.value === 'reais'){
+                                setInputFilter('');
+                                filter('reais', producers)
+                            }
                         }}
                         value={filterSelect}
                     >
+                        <option value="reais">Produtores reais</option>
                         <option value="all">Todos os produtores</option>
                         <option value="wallet">Buscar pela wallet</option>
                     </select>
@@ -111,7 +125,7 @@ export default function ProducerRanking({ wallet, setTab }) {
                 </div>
             </div>
 
-            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-2 lg:mt-14">
+            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-2 lg:mt-14 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 {producers.length === 0 ? (
                     <p className="text-white font-bold text-center mt-10">Nenhum produtor cadastrado no sistema!</p>
                 ) : (
@@ -121,6 +135,7 @@ export default function ProducerRanking({ wallet, setTab }) {
                             key={item.id}
                             data={item}
                             position={index + 1}
+                            filterSelect={filterSelect}
                         />
                     ))}
                     </>

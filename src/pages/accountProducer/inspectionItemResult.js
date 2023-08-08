@@ -13,11 +13,13 @@ import { ModalViewPhoto } from '../../components/ModalViewPhoto';
 import { InsumoItem } from '../../components/InsumoItem';
 import { PhotoCarrouselItem } from '../../components/PhotoCarrouselItem';
 import { ZoneItem } from '../../components/ZoneItem';
+import Loader from '../../components/Loader';
 
 export function InspectionItemResult({data, initialVisible}){
     const navigate = useNavigate();
     const {walletAddress} = useParams();
     const {t} = useTranslation();
+    const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [openArvores, setOpenArvores] = useState(false);
     const [openBiomassa, setOpenBiomassa] = useState(false);
@@ -303,6 +305,7 @@ export function InspectionItemResult({data, initialVisible}){
     }
 
     async function getResultIndices() {
+        setLoading(true);
         const response = await api.get(`/inspection/${data.id}`)
         setInspectionDataApi(response.data.inspection);
         
@@ -422,10 +425,20 @@ export function InspectionItemResult({data, initialVisible}){
             totalInsumosMinerais += value
         }
         setQuantInsumosMinerais(totalInsumosMinerais);
+        setLoading(false);
     }
 
     function handleDownloadPDF(hash, filename){
         saveAs(`https://ipfs.io/ipfs/${hash}`, `${filename}`)
+    }
+
+    if(loading){
+        return(
+            <Loader
+                type='hash'
+                color='white'
+            />
+        )
     }
 
     if(data.status === '2'){

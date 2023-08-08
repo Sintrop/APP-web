@@ -3,6 +3,8 @@ import { PointCoord } from './PointCoord';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import { useTranslation } from 'react-i18next';
 import { PhotoCarrouselItem } from './PhotoCarrouselItem';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ModalViewPhoto } from './ModalViewPhoto';
 
 const containerStyle = {
     width: '100%',
@@ -14,20 +16,20 @@ export function ZoneItem({data}){
     const {t} = useTranslation();
     const [pathZone, setPathZone] = useState([]);
     const [pathSubZone, setPathSubZone] = useState([]);
+    const [modalViewPhoto, setModalViewPhoto] = useState(false);
+    const [hashSelected, setHashSelected] = useState('');
     useEffect(() => {
         fixPathZones();
-        console.log(data.arvores)
     },[]);
 
     function fixPathZones(){
-        const dataZone = [
-            data.path[0],
-            data.path[1],
-            data.path[2],
-            data.path[3],
-            data.path[0],
-        ]
-        setPathZone(dataZone)
+        const coords = data.path;
+        let newArrayCoords = [];
+        for(var i = 0; i < coords.length; i++){
+            newArrayCoords.push(coords[i]);
+        }
+        newArrayCoords.push(data.path[0])
+        setPathZone(newArrayCoords)
     }
     
     return(
@@ -49,7 +51,12 @@ export function ZoneItem({data}){
                                 options={{
                                     strokeColor: 'red'  
                                 }}
-                            />  
+                            />
+                            {pathZone.map(item => (
+                                <Marker
+                                    position={{lat: item.lat, lng: item.lng}}
+                                />
+                            ))}  
                         </GoogleMap>
                     </LoadScript>
             </div>
@@ -78,6 +85,10 @@ export function ZoneItem({data}){
                 {data.path.map((item, index) => (
                     <PhotoCarrouselItem
                         data={item}
+                        click={(hash) => {
+                            setHashSelected(hash, item);
+                            setModalViewPhoto(true)
+                        }}
                     />
                 ))}
             </div>
@@ -131,9 +142,23 @@ export function ZoneItem({data}){
                 {data.analiseSolo.map(item => (
                     <PhotoCarrouselItem
                         data={item}
+                        click={(hash) => {
+                            setHashSelected(hash, item);
+                            setModalViewPhoto(true)
+                        }}
                     />
                 ))}
             </div>
+
+            <Dialog.Root
+                open={modalViewPhoto}
+                onOpenChange={(open) => setModalViewPhoto(open)}
+            >
+                <ModalViewPhoto
+                    close={() => setModalViewPhoto(false)}
+                    hash={hashSelected}
+                />
+            </Dialog.Root>
         </div>
     )
 }

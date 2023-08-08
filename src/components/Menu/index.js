@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import "./menu.css";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from 'react-icons/bs';
 import { MainContext } from "../../contexts/main";
+import { useNavigate, useParams } from "react-router";
 
 import IconCommunity from '../../assets/icon-community.png'
 import IconIndice from '../../assets/icon-indice.png';
@@ -12,57 +13,59 @@ import IconSac from '../../assets/token.png';
 import IconPesquisas from '../../assets/icon-pesquisas.png';
 import IconAccount from '../../assets/icon-account.png';
 import IconNetwork from '../../assets/network.png';
-import IconMarket from '../../assets/market-icon.png'
+import IconMarket from '../../assets/market-icon.png';
+import IconDev from '../../assets/developer-center.png';
 
 import ItemsList from "./itemsList";
 
 export default function Menu({ changeTab }) {
+    const navigate = useNavigate();
+    const {walletAddress, typeUser} = useParams();
     const {menuOpen, toggleMenu} = useContext(MainContext);
     const [open, setOpen] = useState(false);
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
     const [openInspections, setOpenInspections] = useState(false);
+    const [openFinancial, setOpenFinancial] = useState(false);
     const [itemsMenu, setItemsMenu] = useState([
         { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
-        id: "rankings",
-        title: "Community",
-        icon: IconCommunity,
-        action: "",
-        subItem: [
-            { id: "producers", label: "Producers" },
-            { id: "activists", label: "Activists" },
-            { id: "investors", label: "Investors" },
-            { id: "developers", label: "Developers" },
-            { id: "contributors", label: "Validators" },
-            { id: "researchers", label: "Researchers" },
-        ],
+            id: "rankings",
+            title: "Community",
+            icon: IconCommunity,
+            action: "",
+            subItem: [
+                { id: "producers", label: "Producers" },
+                { id: "activists", label: "Activists" },
+                { id: "investors", label: "Investors" },
+                { id: "developers", label: "Developers" },
+                { id: "contributors", label: "Validators" },
+                { id: "researchers", label: "Researchers" },
+            ],
         },
-        { id: "isa", title: "Sustainable Agriculture Index", icon: IconIndice, action: "" },
         {
             id: "inspections",
-            title: "Inspections",
+            title: "Inspections Center",
             icon: IconHistory,
             action: "",
             subItem: [
                 { id: "inspection-history", label: "Inspections History" },
                 { id: "manage-inspections", label: "Manage Inspections" },
+                { id: "isa", label: "Sustainable Agriculture Index"},
             ],
         },
-        // {
-        // id: "inspection-history",
-        // title: "Inspections History",
-        // icon: IconHistory,
-        // action: "",
-        // },
-        // {
-        // id: "manage-inspections",
-        // title: "Manage Inspections",
-        // icon: IconManage,
-        // action: "",
-        // },
-        // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
-        // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
+        {
+            id: "financial-center",
+            title: "Financial Center",
+            icon: IconMarket,
+            action: "",
+            subItem: [
+                { id: "market", label: "Market" },
+                { id: "private-sales", label: "Private Sales 1" },
+                {id: 'producers-pool', label: 'Producers Pool'},
+                {id: 'developers-pool', label: 'Developers Pool'},
+            ],
+        },
         {
         id: "certificates",
         title: "Certificates",
@@ -73,24 +76,8 @@ export default function Menu({ changeTab }) {
             {id: 'investor-certificate', label: 'Investor'},
         ]
         },
-        { 
-        id: "pools", 
-        title: "Regeneration Credit", 
-        icon: IconSac, 
-        action: "",
-        subItem: [
-            {id: 'producers-pool', label: 'Producers'},
-            {id: 'developers-pool', label: 'Developers'},
-        ] 
-        },
-        { id: "market", title: "Market", icon: IconMarket, action: "" },
-        //{ 
-        //  id: "delations", 
-        //  title: "Delations", 
-        //  icon: IconInspections, 
-        //  action: ""
-        //},
         { id: "researches", title: "Research Center", icon: IconPesquisas, action: "" },
+        { id: "developers-center", title: "Developers Center", icon: IconDev, action: "" },
         { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
     ]);
     const toggleSubItem = (id) => {
@@ -105,6 +92,9 @@ export default function Menu({ changeTab }) {
         }
         if(id === 'inspections'){
             setOpenInspections((oldValue) => !oldValue);
+        }
+        if(id === 'financial-center'){
+            setOpenFinancial((oldValue) => !oldValue);
         }
     };
     return (
@@ -135,18 +125,33 @@ export default function Menu({ changeTab }) {
                 </button>
             </div>
 
-            <div className="flex flex-col h-[90vh] pb-20 overflow-auto">
+            <div className="flex flex-col h-[90vh] pb-20 overflow-auto scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
             {itemsMenu.map((item) => {
                 return (
-                    <div className="h-26">
+                    <div className="h-26  ">
                         <ItemsList
                             data={item}
-                            changeTab={(tab) => changeTab(tab)}
+                            changeTab={(tab) => {
+                                if(tab === 'researches'){
+                                    navigate(`/researchers-center/${walletAddress}/${typeUser}`);
+                                    return;
+                                }
+                                if(tab === 'developers-center'){
+                                    navigate(`/developers-center/${walletAddress}/${typeUser}`);
+                                    return;
+                                }
+                                if(tab === 'private-sales'){
+                                    navigate(`/private-sales`);
+                                    return;
+                                }
+                                changeTab(tab)
+                            }}
                             key={item.id}
                             subItem={item.subItem}
                             openCertificates={openCertificates}
                             openInspections={openInspections}
                             openPools={openPools}
+                            openFinancial={openFinancial}
                             open={open}
                             toggle={(id) => {
                                 toggleSubItem(id)
@@ -157,21 +162,30 @@ export default function Menu({ changeTab }) {
                                     setOpenPools(false);
                                     setOpen(false);  
                                     setOpenInspections(false);
+                                    setOpenFinancial(false);
                                 }
                                 if(id === 'rankings'){
                                     setOpenPools(false);
                                     setOpenCertificates(false);
                                     setOpenInspections(false);
+                                    setOpenFinancial(false);
                                 }
                                 if(id === 'pools'){
                                     setOpen(false);
                                     setOpenCertificates(false);
                                     setOpenInspections(false);
+                                    setOpenFinancial(false);
                                 }
                                 if(id === 'inspections'){
                                     setOpen(false);
+                                    setOpenFinancial(false);
                                     setOpenCertificates(false);
                                     
+                                }
+                                if(id === 'financial-center'){
+                                    setOpenPools(false);
+                                    setOpenCertificates(false);
+                                    setOpenInspections(false);
                                 }
                             }}
                             menuOpen={menuOpen}

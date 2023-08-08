@@ -135,7 +135,7 @@ function Login(){
                         }}
                     >
                         <div className='p-3 bg-blue-400 rounded-l-lg border-2 border-r-0 z-10 mr-[-25px] mt-8 pr-8'>
-                            <p className='font-bold text-white'>Dificuldades no primeiro acesso?</p>
+                            <p className='font-bold text-white'>{t('Difficulty on first login')}?</p>
                         </div>
                         <img
                             src={require('../../assets/assistente.png')}

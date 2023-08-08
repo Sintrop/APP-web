@@ -77,7 +77,7 @@ export default function DevelopersRanking({ wallet, setTab }) {
                 </div>
             </div>
 
-            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-5 lg:mt-14">
+            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-5 lg:mt-14 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 {developers.length === 0 ? (
                     <p className="text-white font-bold text-center mt-10">Nenhum desenvolvedor cadastrado no sistema!</p>
                 ) : (

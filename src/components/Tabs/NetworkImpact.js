@@ -81,7 +81,7 @@ export function NetworkImpact({setTab}){
                 >{t('Network Impact')}</h1>
             </div>
 
-            <div className='overflow-auto mt-2 lg:mt-5 pb-20'>
+            <div className='overflow-auto mt-2 lg:mt-5 pb-20 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
             <Warning
                 message='Data from our test network'
                 width={250}

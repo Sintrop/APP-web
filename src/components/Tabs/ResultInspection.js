@@ -42,7 +42,7 @@ export function ResultInspection({setTab}){
                 </div>
             </div>
 
-            <div className='flex flex-col w-full h-[82vh] overflow-auto'>
+            <div className='flex flex-col w-full h-[82vh] overflow-auto scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
                 {inspection.length > 0 && (
                     <>
                     {inspection.map(item => (

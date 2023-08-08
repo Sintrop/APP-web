@@ -94,6 +94,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             bodyAnaliseSoloZones,
             bodyInsetosAnaliseSoloZones,
             bioInsetos,
+            bodyCoordsZonesTeste
         } = pdfData;
 
         let isaCarbon = '';
@@ -314,8 +315,8 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Nome', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Área'],
-                            ...bodyCoordsZones
+                            ['Nome', 'Coordenadas', 'Área'],
+                            ...bodyCoordsZonesTeste
                         ]
                     }
                 },
@@ -326,7 +327,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4'],
+                            ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Ponto 5', 'Ponto 6', 'Ponto 7', 'Ponto 8', 'Ponto 9', 'Ponto 10'],
                             ...bodyPicturesZone
                         ]
                     }
@@ -362,7 +363,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Zona Mãe', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total'],
+                            ['Zona Mãe', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total', 'Área'],
                             ...bodyArvoresSubZone
                         ]
                     }
@@ -834,6 +835,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         let saldoSoilAnaliseSoloZones = 0;
 
         let bodyCoordsZones = [];
+        let bodyCoordsZonesTeste = [];
         let bodyCoordsSubZones = [];
         let bodyPicturesZone = [];
         let bodyPicturesSubZones = [];
@@ -847,10 +849,22 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         //For para calcular os resultados das zonas
         for(var i = 0; i < resultZones.length; i++){
             const titleZone = resultZones[i].title;
+            const pathZone = resultZones[i].path;
 
             //Pega as cordenadas da zona, titulo e area e coloca no array para montar no pdf
-            const zone = [`${resultZones[i].title}`, `Lat:${resultZones[i].path[0].lat}, Lng:${resultZones[i].path[0].lng}`, `Lat:${resultZones[i].path[1].lat}, Lng:${resultZones[i].path[1].lng}`, `Lat:${resultZones[i].path[2].lat}, Lng:${resultZones[i].path[2].lng}`, `Lat:${resultZones[i].path[3].lat}, Lng:${resultZones[i].path[3].lng}`, `${(resultZones[i].areaZone).toFixed(1)} m²`,]
+            const zone = [`${resultZones[i].title}`, `Lat:${resultZones[i].path[0].lat}, Lng:${resultZones[i].path[0].lng}`, `Lat:${resultZones[i].path[1].lat}, Lng:${resultZones[i].path[1].lng}`, `Lat:${resultZones[i].path[2].lat}, Lng:${resultZones[i].path[2].lng}`, `Lat:${resultZones[i].path[3].lat}, Lng:${resultZones[i].path[3].lng}`, `Lat:${resultZones[i].path[4].lat}, Lng:${resultZones[i].path[4].lng}`, `Lat:${resultZones[i].path[5].lat}, Lng:${resultZones[i].path[5].lng}`,`${(resultZones[i].areaZone).toFixed(0)} m²`,]
             bodyCoordsZones.push(zone);
+
+            let bodyTeste = [
+                titleZone,
+            ];
+            let stringCoords = '';
+            for(var c = 0; c < pathZone.length; c++){
+                stringCoords += `| Ponto ${c+1} - Lat: ${pathZone[c].lat}, Lng: ${pathZone[c].lng} `;
+            }
+            bodyTeste.push(stringCoords);
+            bodyTeste.push(`${(resultZones[i].areaZone).toFixed(0)} m²`)
+            bodyCoordsZonesTeste.push(bodyTeste)
 
             const analiseSolo = resultZones[i].analiseSolo;
             //Filtra as árvores pelo id
@@ -873,7 +887,8 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 jovensValue[0].value,
                 adultasValue[0].value,
                 anciasValue[0].value,
-                Number(mudasValue[0].value) + Number(jovensValue[0].value) + Number(adultasValue[0].value) + Number(anciasValue[0].value)
+                Number(mudasValue[0].value) + Number(jovensValue[0].value) + Number(adultasValue[0].value) + Number(anciasValue[0].value),
+                `${resultZones[i].areaSubZone} m²`
             ]
             bodyArvoresSubZone.push(arrayArvoresSubZone);
 
@@ -951,14 +966,17 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             //Pega as fotos registradas de cada zona e monta o array
             const coordsZone = resultZones[i].path
             let arrayPicturesZone = []
-            for(var i = 0; i < coordsZone.length; i++){
-                let dataPhotoZones = {
-                    text: `Foto`,
-                    link: `https://${window.location.host}/view-image/${coordsZone[i].photo}`,
-                    style: 'link'
+            for(var i = 0; i < 10; i++){
+                if(coordsZone[i]?.photo){
+                    let dataPhotoZones = {
+                        text: `Foto`,
+                        link: `https://${window.location.host}/view-image/${coordsZone[i].photo}`,
+                        style: 'link'
+                    }
+                    arrayPicturesZone.push(dataPhotoZones);
+                }else{
+                    arrayPicturesZone.push('-');
                 }
-    
-                arrayPicturesZone.push(dataPhotoZones);
             }
             arrayPicturesZone.unshift(titleZone);
             bodyPicturesZone.push(arrayPicturesZone);
@@ -1020,7 +1038,8 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             bodyImpactWaterArvoresZone,
             bodyAnaliseSoloZones,
             bodyInsetosAnaliseSoloZones,
-            bioInsetos
+            bioInsetos,
+            bodyCoordsZonesTeste
         }
 
         return{
@@ -1608,44 +1627,58 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3"
             >
                 <div className='hidden lg:flex items-center gap-8'>
-                    <p className='text-white font-bold' onClick={finishNewVersion}>#{data.id}</p>
-                    <p className="text-white">
-                        {type === 'manage' ? (
-                            `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
-                        ) : (
-                            `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
-                        )}
-                    </p>
+                    <p className='text-white font-bold'>#{data.id}</p>
+                    {status !== '3' && (
+                        <p className="text-white">
+                            {type === 'manage' ? (
+                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            ) : (
+                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                            )}
+                        </p>
+                    )}
                 </div>
 
                 <div className='flex w-full lg:w-auto items-center justify-between lg:gap-10'>
                     <p className='text-white font-bold lg:w-36 lg:hidden flex mr-2 lg:mr-0'>#{data.id}</p>
                     
                     {type === 'history' ? (
-                        <div className='flex gap-2 items-center justify-center'>
-                            {method === 'sintrop' ? (
-                                <img
-                                    src={require('../assets/metodo-sintrop.png')}
-                                    className='w-[30px] object-contain'
-                                />
-                            ) : (
-                                <img
-                                    src={require('../assets/metodo-manual.png')}
-                                    className='w-[30px] object-contain'
-                                />
-                            )}
-                            <p className='text-white font-bold'>
-                                Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
-                            </p>
-                        </div>
+                        <>
+                        {status === '2' && (
+                            <div className='flex gap-2 items-center justify-center'>
+                                {method === 'sintrop' ? (
+                                    <img
+                                        src={require('../assets/metodo-sintrop.png')}
+                                        className='w-[30px] object-contain'
+                                    />
+                                ) : (
+                                    <img
+                                        src={require('../assets/metodo-manual.png')}
+                                        className='w-[30px] object-contain'
+                                    />
+                                )}
+                                <p className='text-white font-bold'>
+                                    Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
+                                </p>
+                            </div>
+                        )}
+                        </>
                     ) : (
                         <div/>
                     )}
 
                     {type === 'history' ? (
-                        <div className='flex items-center justify-center border-2 rounded-md w-32 py-1 bg-green-950 mr-2 lg:mr-0'>
-                            <p className='text-white font-bold'>ISA {data.isaScore} pts</p>
-                        </div>
+                        <>
+                        {status === '3' ? (
+                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
+                                <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
+                            </div>
+                        ) : (
+                            <div className='flex items-center justify-center border-2 rounded-md w-32 py-1 bg-green-950 mr-2 lg:mr-0'>
+                                <p className='text-white font-bold'>ISA {data.isaScore} pts</p>
+                            </div>
+                        )}
+                        </>
                     ) : (
                         <div className='flex items-center w-32'>
                             {status === '0' && (
@@ -1676,6 +1709,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
                     {type === 'history' && (
                         <>
+                        {status === '2' && (
                             <button
                                 onClick={() => {
                                     navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
@@ -1684,6 +1718,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             >
                                 {t('See Result')}
                             </button>
+                        )}
                         </>
                     )}
 

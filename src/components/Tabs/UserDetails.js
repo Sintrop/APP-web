@@ -287,7 +287,7 @@ export function UserDetails({setTab}){
 
     if(typeUser === '1'){
         return(
-            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto pb-40'>
+            <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto pb-40 '>
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-5'> 
                     <div className='flex items-center gap-2'>
                         <BackButton/>
@@ -311,7 +311,7 @@ export function UserDetails({setTab}){
                     </div>
                 </div>
 
-                <div className='flex flex-col w-full h-[78vh] overflow-auto'>
+                <div className='flex flex-col w-full h-[78vh] overflow-auto scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
                 
                 <IsProducerSyntropic data={userData}/>
                 <div className='flex flex-col gap-2 lg:gap-5 lg:flex-row w-full lg:w-[1000px] bg-[#0a4303] mt-5'>
@@ -501,7 +501,7 @@ export function UserDetails({setTab}){
                     </button>
                 </div>
 
-                <div className="flex flex-col overflow-auto h-[95vh] pb-40">
+                <div className="flex flex-col overflow-auto h-[95vh] pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                     <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                         <img
                             src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
@@ -567,7 +567,7 @@ export function UserDetails({setTab}){
                 </button>
             </div>
 
-            <div className="flex flex-col overflow-auto h-[95vh] pb-40">
+            <div className="flex flex-col overflow-auto h-[95vh] pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                     {typeUser === '7' ? (
                         <img

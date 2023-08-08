@@ -23,6 +23,11 @@ const startEra9 = 3856770;
 const startEra10 = 3890000;
 const startEra11 = 3923230;
 const startEra12 = 3956460;
+const startEra13 = 3989690;
+const startEra14 = 4022920;
+const startEra15 = 4056150;
+const startEra16 = 4089380;
+const startEra17 = 4122610;
 
 export default function MainProvider({children}){
     const {i18n} = useTranslation();
@@ -43,6 +48,8 @@ export default function MainProvider({children}){
     const [nextEraIn, setNextEraIn] = useState(0);
     const [impactPerToken, setImpactPerToken] = useState({});
     const [getAtualBlock, setGetAtualBlock] = useState(false);
+    const [attNotifications, setAttNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         getStorageLanguage();
@@ -60,6 +67,13 @@ export default function MainProvider({children}){
             setGetAtualBlock(!getAtualBlock)
         }, 10000)
     }, [getAtualBlock])
+
+    useEffect(() => {
+        getNotifications();
+        setTimeout(() => {
+            setAttNotifications(!attNotifications);
+        }, 10000)
+    }, [attNotifications]);
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -162,8 +176,24 @@ export default function MainProvider({children}){
             setEra(11);
             setNextEraIn(startEra12 - Number(blockNumber));
         }
-        if(Number(blockNumber) >= startEra12){
+        if(Number(blockNumber) >= startEra12 && Number(blockNumber) < startEra13){
             setEra(12);
+            setNextEraIn(startEra13 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra13 && Number(blockNumber) < startEra14){
+            setEra(13);
+            setNextEraIn(startEra14 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra14 && Number(blockNumber) < startEra15){
+            setEra(14);
+            setNextEraIn(startEra15 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra15 && Number(blockNumber) < startEra16){
+            setEra(15);
+            setNextEraIn(startEra16 - Number(blockNumber));
+        }
+        if(Number(blockNumber) >= startEra17){
+            setEra(17);
         }
     }
 
@@ -233,6 +263,11 @@ export default function MainProvider({children}){
         setImpactPerToken(impactToken);
     }
 
+    async function getNotifications(){
+        //const responseWallet = await Sync();
+        const responseNotifications = await api.get(`/notifications/${walletConnected}`);
+        setNotifications(responseNotifications.data.notifications.Notifications)
+    }
     
     return(
         <MainContext.Provider
@@ -263,7 +298,9 @@ export default function MainProvider({children}){
                 modalFeedback,
                 chooseModalFeedBack,
                 era,
-                nextEraIn
+                nextEraIn,
+                notifications,
+                getNotifications
             }}
         >
             {children}

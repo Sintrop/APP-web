@@ -1,15 +1,15 @@
 import React , { useEffect, useState } from "react";
 import InspectionsService from "../../../services/inspectionsHistoryService";
-import Loading from "../../Loading";
 import '../manageInspections.css'
 import {useParams} from 'react-router-dom';
-import ItemListInspections from "../../ManageInspectionsComponents/ItemListInspections";
 import { useTranslation } from "react-i18next";
 import {InspectionItem} from '../../InspectionItem';
 import { BackButton } from "../../BackButton";
 import Loader from "../../Loader";
+import { useMainContext } from "../../../hooks/useMainContext";
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
+    const {blockNumber} = useMainContext();
     const {t} = useTranslation();
     const {tabActive} = useParams();
     const [inspections, setInspections ] = useState([]);
@@ -27,10 +27,25 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
     const loadInspections = () => {
         setLoading(true);
         inspection.getAllInspections().then( res => {
-            const inspections = res.filter(item => item.status === '2')
-            setInspections(inspections.reverse());
-            setLoading(false)
+            filterInspections(res);
         });
+    }
+
+    function filterInspections(data){
+        let newArrayInspections = [];
+        const inspections = data;
+        for(var i = 0; i < inspections.length; i++){
+            if(inspections[i].status === '1'){
+                if(Number(inspections[i].acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) < Number(blockNumber)){
+                    newArrayInspections.push(inspections[i]);
+                }
+            }
+            if(inspections[i].status === '2'){
+                newArrayInspections.push(inspections[i]);
+            }
+        }
+        setInspections(newArrayInspections.reverse());
+        setLoading(false);
     }
 
     if(loading){
@@ -96,7 +111,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col h-[66vh] overflow-auto pb-12'>
+                            <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}

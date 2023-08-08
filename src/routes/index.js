@@ -7,10 +7,11 @@ import AccountProducer from "../pages/accountProducer";
 import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
 import IndicesControl from "../pages/indicesControl";
-import { Feedbacks } from "../pages/feedbacks";
 import { RequestSepolia } from "../pages/RequestSepolia";
 import { ViewImage } from "../pages/ViewImage";
 import { ResearchersCenter } from "../pages/ResearchersCenter";
+import { DevelopersCenter } from "../pages/DevelopersCenter";
+import { PrivateSales } from "../pages/privateSales";
 
 export default function Router(){
     return(
@@ -24,10 +25,11 @@ export default function Router(){
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
                 <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
-                <Route exact path="/feedbacks" element={<Feedbacks/>}/>
                 <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
                 <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
+                <Route exact path="/developers-center/:walletAddress/:typeUser" element={<DevelopersCenter/>}/>
+                <Route exact path="/private-sales" element={<PrivateSales/>}/>
             </Routes>
         </BrowserRouter>
     );

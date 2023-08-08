@@ -14,13 +14,21 @@ import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import Map from '../Map';
 import * as htmlToImage from 'html-to-image';
-import { saveAs } from 'file-saver';
+import Webcam from "react-webcam";
 import {api} from '../../services/api';
 import {FiCamera} from 'react-icons/fi';
 import {FaBook} from 'react-icons/fa';
 import { Help } from '../help';
 import { ModalRequestSepolia } from '../ModalRequestSepolia';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
+import { ModalLoadingCam } from './ModalLoadingCam';
+
+
+const videoConstraints = {
+    width: 800,
+    height: 600,
+    facingMode: "user"
+};
 
 export default function ModalRegister(){
     const {t} = useTranslation();
@@ -28,6 +36,7 @@ export default function ModalRegister(){
     const {walletConnected, chooseModalRegister, getUserDataApi} = useContext(MainContext);
     const {walletAddress, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
+    const [loadingWebcam, setLoadingWebcam] = useState(true);
     const [loadingCalculateArea, setLoadingCalculateArea] = useState(false);
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
@@ -36,7 +45,6 @@ export default function ModalRegister(){
     const [modalSepolia, setModalSepolia] = useState(false);
     const [locationManual, setLocationManual] = useState(false);
 
-    const [checkWebcam, setCheckWebcam] = useState(false);
     const [step, setStep] = useState(1);
     const [type, setType] = useState("");
     const [modalWebcam, setModalWebcam] = useState(false);
@@ -57,6 +65,9 @@ export default function ModalRegister(){
     const [confirmPassword, setConfirmPassword] = useState('');
     const [lat, setLat] = useState('');
     const [lng, setLng] = useState('');
+    const [imageSrc, setImageSrc] = useState('');
+    const [haveWebcam, setHaveWebcam] = useState(false);
+    const [modalLoadingCam, setModalLoadingCam] = useState(false);
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -89,7 +100,27 @@ export default function ModalRegister(){
         if(step === 3 && type === 'producer'){
             getLocale()
         }
-    },[step])
+    },[step]);
+
+    useEffect(() => {
+        if(step === 2){
+            checkWebcam();
+        }
+    },[step]);
+
+    function checkWebcam(){
+        setModalLoadingCam(true)
+        setLoadingWebcam(true);
+        navigator.mediaDevices.getUserMedia({video: true})
+        .then(() => {
+            setLoadingWebcam(false);
+            setHaveWebcam(true);
+        })
+        .catch(err => {
+            setLoadingWebcam(false);
+            setHaveWebcam(false);
+        })
+    }
 
     async function handleSearchAddress(){
         setLoading(true);
@@ -156,6 +187,7 @@ export default function ModalRegister(){
 
         const base64Hash = await get(hashPhoto);
         setProofPhotoBase64(base64Hash);
+        setImageSrc('');
         setLoading(false);
     } 
 
@@ -824,30 +856,92 @@ export default function ModalRegister(){
 
                 {step === 2 && (
                     <div className='w-full flex flex-col items-center overflow-auto py-2'>
-                        {proofPhoto === '' && (
-                            <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
-                        )}
+                        {modalWebcam ? (
+                            // <input
+                            //     type='file'
+                            //     capture='user'
+                            // />
+                            <Webcam
+                                className="w-full h-[200px] z-50"
+                                audio={false}
+                                screenshotFormat="image/png"
+                                videoConstraints={videoConstraints}
+                            >
+                                {({ getScreenshot }) => (
+                                <>
+                                    {imageSrc === '' && (
+                                        <div className="flex flex-col items-center w-full">
+                                        <button
+                                            style={{marginTop: 15}}
+                                            onClick={() => {
+                                                const data = getScreenshot();
+                                                setImageSrc(data);
+                                                setModalWebcam(false);
+                                            }}
+                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                                        >
+                                            {t('Capture photo')}
+                                        </button>
+                                        </div>
+                                    )}
+                                </>
+                                )}
+                            </Webcam>
+                        ) : (
+                            <>
+                            {imageSrc !== '' ? (
+                                <div className="flex flex-col items-center w-full gap-2">
+                                    <img 
+                                        src={imageSrc} 
+                                        alt="Captured photo"
+                                        className="lg:w-[250px] h-[200px] object-contain lg:object-cover"
+                                    />
+                                    <div className="w-full flex justify-center gap-3">
+                                        <button
+                                            onClick={() => {
+                                                setImageSrc('')
+                                                setModalWebcam(true)
+                                            }}
+                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                                        >{t('Take another')}</button>
+                            
+                                        <button
+                                            onClick={() => {
+                                                handleProofPhoto(imageSrc)
+                                            }}
+                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                                        >{t('Confirm')}</button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {proofPhoto === '' && (
+                                        <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                                    )}
 
-                        {proofPhoto != '' && (
-                            <img
-                                src={`data:image/png;base64,${proofPhotoBase64}`}
-                                className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
-                            />
+                                    {proofPhoto != '' && (
+                                        <img
+                                            src={`data:image/png;base64,${proofPhotoBase64}`}
+                                            className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
+                                        />
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setTimeout(() => {
+                                                setModalWebcam(true);
+                                            }, 1000)
+                                        }}
+
+                                        className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
+                                    >
+                                        <FiCamera size={25} color='white'/>
+                                        {t('Take Photo')}
+                                    </button>
+                                </>
+                            )}
+                            </>
                         )}
                         
-                        <button
-                            onClick={() => {
-                                setCheckWebcam(true);
-                                setTimeout(() => {
-                                    setModalWebcam(true);
-                                }, 1000)
-                            }}
-
-                            className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
-                        >
-                            <FiCamera size={25} color='white'/>
-                            {t('Take Photo')}
-                        </button>
 
                         <Help
                             description='Click the button above and then click allow on the permission popup that will open in your browser'
@@ -1072,11 +1166,11 @@ export default function ModalRegister(){
                     </div>
                 )}
 
-                <div className='flex w-full justify-between items-center gap-2 border-t-2 px-3 pt-3'>
-                    <div className='lg:w-[120px]'>
+                <div className='flex w-full justify-between items-center gap-2 border-t-2 px-3 pt-3 h-20'>
+                    <div className='lg:w-[120px] h-full'>
                     {step > 1 && (
                         <button 
-                            className='lg:w-[120px] h-8 lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
+                            className='lg:w-[120px] h-full lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                             onClick={handlePreviousStep}
                         >
                             {t('Previous')}
@@ -1085,14 +1179,14 @@ export default function ModalRegister(){
                     </div>
 
                     <button
-                        className='border-2 rounded-md border-[#ff9900] px-2 h-8 lg:h-10 text-bold text-[#ff9900]'
+                        className='border-2 rounded-md border-[#ff9900] px-2 h-full lg:h-10 text-bold text-[#ff9900]'
                         onClick={() => setModalSepolia(true)}
                     >
                         Solicitar SepoliaETH
                     </button>
 
                     <button 
-                        className='lg:w-[120px] h-8 lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
+                        className='lg:w-[120px] h-full lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                         onClick={() => {
                             if(step === 4){
                                 validateData();
@@ -1114,23 +1208,6 @@ export default function ModalRegister(){
                         {step === 2 && `${t('Next Step')}`}
                     </button>
                 </div>
-
-                <Dialog.Root
-                    open={modalWebcam}
-                    onOpenChange={(open) => {
-                        setCheckWebcam(false);
-                        setModalWebcam(open)
-                    }}
-                >
-                    <WebcamComponent
-                        check={checkWebcam}
-                        onTake={(data) => {
-                            handleProofPhoto(data);
-                            setModalWebcam(false);
-                            setCheckWebcam(false);
-                        }}  
-                    />
-                </Dialog.Root>
             </Dialog.Content>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
@@ -1175,6 +1252,16 @@ export default function ModalRegister(){
                     setModalSepolia(false)
                     toast.success('SepoliaETH requisitado com sucesso! O quanto antes a nossa equipe enviará seus SepoliaETH.')
                 }}/>
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalLoadingCam}
+            >    
+                <ModalLoadingCam
+                    loadingCam={loadingWebcam}
+                    haveWebcam={haveWebcam}
+                    close={() => setModalLoadingCam(false)}
+                />
             </Dialog.Root>
 
             {loading && <Loading/>}

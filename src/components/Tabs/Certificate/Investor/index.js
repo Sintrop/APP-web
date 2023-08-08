@@ -106,7 +106,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="flex flex-col h-[90vh] overflow-auto pb-40">
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
 
                 <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
                     <div className="hidden lg:flex flex-col lg:flex-row lg:w-[700px] h-[330px] border-2 bg-[#0A4303] border-white rounded-md">

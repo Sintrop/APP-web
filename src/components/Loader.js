@@ -34,9 +34,13 @@ export default function Loader({type, color, size, noText}){
                         color={color}
                         loading={true}
                         cssOverride={override}
-                        size={25}
+                        height={10}
+                        width={2}
+                        radius={1}
+                        margin={1}
                         aria-label="Loading Spinner"
                         data-testid="loader"
+                        
                     />
                 </>
             )}

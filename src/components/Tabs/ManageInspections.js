@@ -52,8 +52,22 @@ export default function ManageInpections({walletAddress, setTab}){
     async function getInspections(){
         setLoading(true);
         const res = await GetInspections();
-        const inspections = res.filter(item => item.status !== '2')
-        setInpections(inspections.reverse());
+        filterInspections(res);
+    }
+
+    function filterInspections(data){
+        let newArrayInspections = [];
+        const inspections = data.filter(item => item.status !== '2')
+        for(var i = 0; i < inspections.length; i++){
+            if(inspections[i].status === '1'){
+                if(Number(inspections[i].acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) > Number(blockNumber)){
+                    newArrayInspections.push(inspections[i]);
+                }
+            }else{
+                newArrayInspections.push(inspections[i]);
+            }
+        }
+        setInpections(newArrayInspections.reverse());
         setLoading(false);
     }
 
@@ -210,7 +224,7 @@ export default function ManageInpections({walletAddress, setTab}){
                             </div>
                         </div>
 
-                        <div className='flex flex-col h-[66vh] overflow-auto pb-12'>
+                        <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
                             {inspections.map(item => (
                                 <InspectionItem
                                     key={item.id}

@@ -9,9 +9,12 @@ module.exports = {
         'certificate-instagram': "url('/src/assets/bg-certificate.jpg')",
         'centro-pesquisa': "url('/src/assets/bg-centro-pesquisa.png')",
         'centro-pesquisa2': "url('/src/assets/bg-centro-pesquisa2.png')",
+        'centro-dev': "url('/src/assets/bg-dev-center.png')",
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')({ nocompatible: true }),
+  ],
 }
 
