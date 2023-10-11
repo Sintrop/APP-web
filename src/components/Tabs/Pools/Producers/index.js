@@ -12,7 +12,14 @@ import {
     GetBalanceProducer, 
     CheckNextAprove,
 } from '../../../../services/producerPoolService';
-import ProducerService, {GetProducer, WithdrawTokens, GetTotalScoreProducers} from '../../../../services/producerService';
+import {
+    GetProducersInfura,
+    GetEraContractProducerPoolInfura,
+    GetTokensPerEraProducerPoolInfura,
+    GetBalancePoolProducersInfura, 
+    GetBalanceProducerInfura
+} from '../../../../services/methodsGetInfuraApi';
+import ProducerService, {GetProducer, WithdrawTokens, GetTotalScoreProducers, GetProducers} from '../../../../services/producerService';
 import ProducerItem from './ProducerItem';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
@@ -21,7 +28,7 @@ import { BackButton } from '../../../BackButton';
 import Loader from '../../../Loader';
 
 export default function ProducersPool({wallet, setTab}){
-    const {user, nextEraIn} = useMainContext();
+    const {user, nextEraIn, viewMode} = useMainContext();
     const {t} = useTranslation();
     const producerService = new ProducerService(wallet);
     const [loading, setLoading] = useState(false);
@@ -46,26 +53,33 @@ export default function ProducersPool({wallet, setTab}){
         getInfosPool();
     },[]);
 
-    useEffect(() => {
-        producerService
-        .getProducerRanking()
-        .then((res) =>{
-            filterUsersPool(res);
-        })
-        .catch((err) => console.log(err));
-    },[])
-
-
     async function getInfosPool(){
         setLoading(true);
-        const tokensEra = await GetTokensPerEra();
-        setTokensPerEra(tokensEra);
-        const eraContract = await GetCurrentContractEra();
-        setCurrentEra(eraContract);
-        const balanceContract = await GetBalanceContract();
-        setBalanceContract(balanceContract);
-        // const scoreProducers = await GetTotalScoreProducers();
-        // setScoreProducers(scoreProducers);
+
+        if(viewMode){
+            const tokensEra = await GetTokensPerEraProducerPoolInfura();
+            setTokensPerEra(tokensEra);
+            const eraContract = await GetEraContractProducerPoolInfura();
+            setCurrentEra(eraContract);
+            const balanceContract = await GetBalancePoolProducersInfura();
+            setBalanceContract(balanceContract);
+            const producers = await GetProducersInfura();
+            filterUsersPool(producers);
+            // const scoreProducers = await GetTotalScoreProducers();
+            // setScoreProducers(scoreProducers);
+        }else{
+            const tokensEra = await GetTokensPerEra();
+            setTokensPerEra(tokensEra);
+            const eraContract = await GetCurrentContractEra();
+            setCurrentEra(eraContract);
+            const balanceContract = await GetBalanceContract();
+            setBalanceContract(balanceContract);
+            const producers = await GetProducers();
+            filterUsersPool(producers);
+            // const scoreProducers = await GetTotalScoreProducers();
+            // setScoreProducers(scoreProducers);
+        }
+
         if(typeUser === '1'){
             const producer = await GetProducer(walletAddress);
             setProducerInfo(producer);
@@ -146,19 +160,33 @@ export default function ProducersPool({wallet, setTab}){
 
         for(var i = 0; i < array.length; i++){
             if(Number(array[i].isa.isaScore) > 0){
-                const balance = await GetBalanceProducer(array[i].producerWallet)
-                if(Number(balance) > 0){
-                    let data = {
-                        producerWallet: array[i].producerWallet,
-                        name: array[i].name,
-                        isaScore: array[i].isa.isaScore,
-                        balance: Number(balance),
-                        userType: '1'
+                if(viewMode){
+                    const balance = await GetBalanceProducerInfura(array[i].producerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            producerWallet: array[i].producerWallet,
+                            name: array[i].name,
+                            isaScore: array[i].isa.isaScore,
+                            balance: Number(balance),
+                            userType: '1'
+                        }
+        
+                        newArray.push(data);
                     }
-    
-                    newArray.push(data);
+                }else{
+                    const balance = await GetBalanceProducer(array[i].producerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            producerWallet: array[i].producerWallet,
+                            name: array[i].name,
+                            isaScore: array[i].isa.isaScore,
+                            balance: Number(balance),
+                            userType: '1'
+                        }
+        
+                        newArray.push(data);
+                    }
                 }
-
             }
         }
 

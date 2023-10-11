@@ -20,8 +20,7 @@ function Login(){
     const [assistentOpen, setAssistentOpen] = useState(false);
 
     useEffect(() => {
-
-        
+        navigate(`/dashboard/0x000/network-impact/0/main`)
     },[])
 
     async function handleSync(){

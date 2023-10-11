@@ -13,8 +13,13 @@ import { api } from '../../services/api';
 import { IndiceItem } from '../indicesControl/indiceItem';
 import Loader from '../../components/Loader';
 import { InspectionItemResult } from '../accountProducer/inspectionItemResult';
+import { useMainContext } from '../../hooks/useMainContext';
+import { ModalWelcome } from './ModalWelcome';
+
+import {GetResearchersInfura, GetResearchesInfura} from '../../services/methodsGetInfuraApi';
 
 export function ResearchersCenter(){
+    const {viewMode} = useMainContext();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const {walletAddress, typeUser} = useParams();
@@ -27,6 +32,7 @@ export function ResearchersCenter(){
     const [arvores, setArvores] = useState([]);
     const [analiseSolo, setAnaliseSolo] = useState([]);
     const [inspections, setInspections] = useState([]);
+    const [modalWelcome, setModalWelcome] = useState(false);
 
     useEffect(() => {
         if(tabSelected === 'pesquisas'){
@@ -39,6 +45,10 @@ export function ResearchersCenter(){
             getInsumos();
         }
     },[tabSelected]);
+
+    useEffect(() => {
+        verifyWelcome();
+    },[]);
 
     async function getInsumos(){
         setLoading(true);
@@ -57,85 +67,122 @@ export function ResearchersCenter(){
     async function getResearches() {
         setLoading(true);
         let array = [];
-        const response = await GetResearches();
-        array = response;
-        setResearches(array);
+        if(viewMode){
+            const response = await GetResearchesInfura();
+            array = response;
+        }else{
+            const response = await GetResearches();
+            array = response;
+        }
+        orderRanking(array);
         setLoading(false);
+    }
+
+    function orderRanking(data){
+        if(data.length > 0){
+            let researchesSort = data.map((item) => item ).sort( (a,b) => parseInt(b.createdAtTimeStamp) - parseInt(a.createdAtTimeStamp))
+            setResearches(researchesSort)
+            //filter(filter, producerSort)
+        }
     }
 
     async function getResearchers(){
         setLoading(true);
-        const response = await GetResearchers();
-        setResearchers(response);
+        if(viewMode){
+            const response = await GetResearchersInfura();
+            setResearchers(response);
+        }else{
+            const response = await GetResearchers();
+            setResearchers(response);
+        }
         setLoading(false);
     }
 
     async function getInspections(){
-        const inspections = await GetInspections();
-        let inspectionMethodSintrop = [];
-        for(var i = 0; i < inspections.length; i++){
-            const response = await api.get(`/inspection/${inspections[i].id}`);
-            const inspection = response.data.inspection;
-            if(inspection){
-                if(inspection.methodType){
-                    if(inspection.methodType === 'sintrop'){
-                        inspectionMethodSintrop.push(inspections[i])
-                    }
-                }
-            }
+        try{
+            setLoading(true);
+            const response = await api.get(`/inspections/method/sintrop`);
+            //setInspections(response.data.inspections);
+        }catch(err){
+
+        }finally{
+            setLoading(false);
         }
-        setInspections(inspectionMethodSintrop);
-        setLoading(false);
+    }
+
+    async function verifyWelcome(){
+        const welcome = await localStorage.getItem('welcome-researcher-center');
+        if(welcome){
+            setModalWelcome(false);
+        }else{
+            setModalWelcome(true);
+            localStorage.setItem('welcome-researcher-center', 'true');
+        }
     }
 
     return(
-        <div className="w-full h-full flex flex-col bg-centro-pesquisa bg-bottom">
+        <div className="w-full h-full flex flex-col bg-[#f2f2f2]">
             <TopBarStatus />
 
-            <div className="flex mt-12">
-                <div className="flex flex-col w-[350px] h-[93vh] bg-centro-pesquisa2 bg-center">
-                    <div className="bg-[#00BFE366] h-full">
-                    <img
-                        src={require('../../assets/logo-cinza.png')}
-                        className='w-[150px] object-contain mt-5 ml-5'
-                    />
+            <div className="flex flex-col lg:flex-row lg:mt-12">
+                <div className="flex flex-col w-full lg:w-[350px] lg:h-[93vh]">
+                    <div className="bg-[#222831] h-full">
+                    
+                    <div className="flex w-full items-center justify-between mt-3 lg:mt-0">
+                        <img
+                            src={require('../../assets/logo-branco.png')}
+                            className='w-[100px] lg:w-[150px] object-contain lg:mt-5 ml-5'
+                        />
+                        <div
+                            className='flex lg:hidden items-center px-5 gap-3'
+                        >
+                            {/* <img
+                                className='w-[40px] h-[40px] object-contain'
+                                src={require('../../assets/icon-pesquisas2.png')}
+                            /> */}
+                            <p className='font-bold text-[#1B7A74]'>Centro de Pesquisas</p>
+                        </div>
+                    </div>
 
                     <button
                         onClick={() => navigate(`/dashboard/${walletAddress}/network-impact/${typeUser}/main`)}
-                        className='flex items-center gap-2 my-3 px-4 text-[#1B7A74] font-bold'
+                        className='items-center gap-2 my-3 px-4 text-white font-bold hidden lg:flex'
                     >
-                        <FaChevronLeft size={25} color='#1B7A74'/>
+                        <FaChevronLeft size={25} color='white'/>
                         Voltar Para Plataforma
                     </button>
 
                     <div
-                        className='flex items-center px-5 gap-3'
+                        className='hidden lg:flex items-center px-5 gap-3'
                     >
                         <img
                             className='w-[50px] h-[50px] object-contain'
                             src={require('../../assets/icon-pesquisas2.png')}
                         />
-                        <p className='font-bold text-[#1B7A74]'>Centro de Pesquisas</p>
+                        <p className='font-bold text-white'>Centro de Pesquisas</p>
                     </div>
 
-                    <button
-                        onClick={() => setTabSelected('pesquisas')}
-                        className={`flex items-center px-5 w-full font-bold text-white h-12 ${tabSelected === 'pesquisas' && 'bg-[#1B7A74]'}`}
-                    >
-                        Pesquisas
-                    </button>
-                    <button
-                        onClick={() => setTabSelected('pesquisadores')}
-                        className={`flex items-center px-5 w-full font-bold text-white h-12 ${tabSelected === 'pesquisadores' && 'bg-[#1B7A74]'}`}
-                    >
-                        Pesquisadores
-                    </button>
-                    <button
-                        onClick={() => setTabSelected('metodos')}
-                        className={`flex items-center px-5 w-full font-bold text-white h-12 ${tabSelected === 'metodos' && 'bg-[#1B7A74]'}`}
-                    >
-                        Métodos
-                    </button>
+                    <div className='flex items-center justify-center lg:flex-col'>
+                        <button
+                            onClick={() => setTabSelected('pesquisas')}
+                            className={`flex items-center px-5 lg:w-full font-bold text-white h-12 ${tabSelected === 'pesquisas' && 'bg-[#1B7A74]'}`}
+                        >
+                            Pesquisas
+                        </button>
+                        <button
+                            onClick={() => setTabSelected('pesquisadores')}
+                            className={`flex items-center px-5 lg:w-full font-bold text-white h-12 ${tabSelected === 'pesquisadores' && 'bg-[#1B7A74]'}`}
+                        >
+                            Pesquisadores
+                        </button>
+                        <button
+                            onClick={() => setTabSelected('metodos')}
+                            className={`flex items-center px-5 lg:w-full font-bold text-white h-12 ${tabSelected === 'metodos' && 'bg-[#1B7A74]'}`}
+                        >
+                            Métodos
+                        </button>
+                    </div>
+
                     </div>
                 </div>  
 
@@ -150,7 +197,7 @@ export function ResearchersCenter(){
                     <div className="w-full flex flex-col">
                         {tabSelected === 'pesquisas' && (
                             <div className="w-full flex flex-col">
-                                <div className="w-full flex items-center justify-between h-16 bg-[#1B7A74] px-5">
+                                <div className="w-full hidden items-center justify-between h-16 bg-[#687372] px-5 lg:flex">
                                     <div className='flex items-center gap-2'>
                                         <img
                                             src={require('../../assets/icon-pesquisas3.png')}
@@ -158,13 +205,16 @@ export function ResearchersCenter(){
                                         />
                                         <h1 className='font-bold text-white text-lg'>Pesquisas</h1>
                                     </div>
-                                    <button
-                                        onClick={() => setModalPublish(true)}
-                                        className='px-3 py-2 text-white font-bold rounded-md bg-[#00BFE3]'
-                                    >Publicar Pesquisa</button>
+
+                                    {typeUser === '3' && (
+                                        <button
+                                            onClick={() => setModalPublish(true)}
+                                            className='px-3 py-2 text-white font-bold rounded-md bg-[#00BFE3]'
+                                        >Publicar Pesquisa</button>
+                                    )}
                                 </div>
 
-                                <div className="w-full flex h-[83vh] flex-col overflow-auto px-5 mt-3">
+                                <div className="w-full flex h-[83vh] flex-col overflow-auto px-2 lg:px-5 mt-3">
                                     {researches.length > 0 && (
                                         <>
                                         {researches.map(item => (
@@ -178,21 +228,14 @@ export function ResearchersCenter(){
 
                         {tabSelected === 'pesquisadores' && (
                             <div className="w-full flex flex-col">
-                                <div className="w-full flex items-center justify-between h-16 bg-[#1B7A74] px-5">
+                                <div className="hidden w-full lg:flex items-center justify-between h-16 bg-[#687372] px-5">
                                     <div className='flex items-center gap-2'>
-                                        <img
-                                            src={require('../../assets/icon-pesquisadores.png')}
-                                            className='w-[50px] h-[50px] object-contain'
-                                        />
+                                        
                                         <h1 className='font-bold text-white text-lg'>Pesquisadores</h1>
                                     </div>
-                                    <button
-                                        onClick={() => setModalPublish(true)}
-                                        className='px-3 py-2 text-white font-bold rounded-md bg-[#00BFE3]'
-                                    >Publicar Pesquisa</button>
                                 </div>
 
-                                <div className="w-full flex h-[80vh] flex-col overflow-auto px-5 mt-3">
+                                <div className="w-full flex h-[80vh] flex-wrap overflow-auto px-5 mt-3 justify-center">
                                     {researchers.length > 0 && (
                                         <>
                                         {researchers.map((item, index) => (
@@ -210,7 +253,7 @@ export function ResearchersCenter(){
 
                         {tabSelected === 'metodos' && (
                             <div className="w-full flex flex-col">
-                                <div className="w-full flex items-center justify-between h-16 bg-[#1B7A74] px-5">
+                                <div className="w-full hidden lg:flex items-center justify-between h-16 bg-[#687372] px-5">
                                     <div className='flex items-center gap-2'>
                                         <img
                                             src={require('../../assets/icon-pesquisadores.png')}
@@ -457,6 +500,12 @@ export function ResearchersCenter(){
                     close={() => setModalPublish(false)}
                 />
             </Dialog.Root>
+
+            {modalWelcome && (
+                <ModalWelcome
+                    close={() => setModalWelcome(false)}
+                />
+            )}
         </div>
     )
 }

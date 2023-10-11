@@ -8,6 +8,7 @@ import { saveAs } from 'file-saver';
 import { api } from "../../../../services/api";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
+import { useMainContext } from "../../../../hooks/useMainContext";
 
 //services
 import { GetInvestor } from "../../../../services/accountProducerService";
@@ -20,6 +21,7 @@ import { BackButton } from "../../../BackButton";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const {tabActive, walletAddress} = useParams();
     const [investorData, setInvestorData] = useState([]);
     const [tokensBurned, setTokensBurned] = useState('');
@@ -33,8 +35,10 @@ export default function InvestorCertificate({userType, wallet, setTab}){
     }, [tabActive])
 
     useEffect(() => {
-        getInvestor();
-        getImpact()
+        if(!viewMode){
+            getInvestor();
+            getImpact()
+        }
     }, []);
 
     async function getImpact(){
@@ -79,6 +83,14 @@ export default function InvestorCertificate({userType, wallet, setTab}){
             setLoading(false)
         })    
     }
+
+    // if(viewMode){
+    //     return(
+    //         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+    //             <h1 className="font-bold text-white">Este é o selo de investidor. Você pode mostrar para o mundo que você investe na regeneração!</h1>
+    //         </div>
+    //     )
+    // }
 
     return(
         <div className='flex flex-col w-full h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>

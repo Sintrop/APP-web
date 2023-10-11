@@ -9,13 +9,14 @@ import { useTranslation } from 'react-i18next';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalAccountOptions } from './HeaderAccount/ModalAccountOptions';
 import { ModalNotifications } from './ModalNotifications';
+import { ModalTutorial } from './Tutorial/ModalTutorial';
 
 export function TopBarStatus({}){
     const {walletAddress} = useParams();
     const {pathname} = useLocation();
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang, language, notifications} = useMainContext();
+    const {user, walletConnected, Sync, chooseModalRegister, balanceUser, checkUser, era, toggleModalChooseLang, language, notifications, viewMode, chooseModalTutorial, modalTutorial} = useMainContext();
     const {isSupported} = useNetwork();
     const [visibilityBalance, setVisibilityBalance] = useState(false);
     const [modalOptions, setModalOptions] = useState(false);
@@ -40,6 +41,55 @@ export function TopBarStatus({}){
             const typeUser = await checkUser(response.wallet);
             navigate(`/dashboard/${response.wallet}/network-impact/${typeUser}/n`)
         }
+    }
+
+    if(viewMode){
+        return(
+            <div className={`flex w-full h-12 bg-[url("./assets/bg-status-bar.png")] fixed items-center justify-between px-2 lg:px-5 bottom-0 lg:top-0`}>
+                <div className='flex items-center gap-2'>
+                    <p className='text-white text-sm lg:text-base'>{t('You are in preview mode')}</p>
+                    <button
+                        onClick={() => chooseModalTutorial()}
+                        className='px-3 h-8 font-bold text-white rounded-md bg-green-600'
+                    >
+                        {t('Register')}
+                    </button>
+                </div>
+
+                <div className='flex items-center gap-2'>
+                    <button
+                        className='px-2 py-1 text-white flex items-center justify-center'
+                        onClick={() => toggleModalChooseLang()}
+                    >
+                        {language === 'pt-BR' ? (
+                            <img
+                                src={require('../assets/icon-br.png')}
+                                className='w-[30px] object-contain'
+                            />
+                        ) : (
+                            <img
+                                src={require('../assets/icon-brit.png')}
+                                className='w-[30px] object-contain'
+                            />
+                        )}
+
+                        <div>
+                            <MdKeyboardArrowDown
+                                size={20}
+                                color='white'
+                            />
+                        </div>
+                    </button>
+                </div>
+
+                <Dialog.Root
+                    open={modalTutorial}
+                    onOpenChange={(open) => chooseModalTutorial()}
+                >
+                    <ModalTutorial/>
+                </Dialog.Root>
+            </div>
+        );
     }
 
     return(
@@ -179,17 +229,14 @@ export function TopBarStatus({}){
             ) : (
                 <div className='flex w-full items-center gap-2 justify-between'>
                     <div className='flex items-center gap-2'>
-                        <p className='font-bold text-xs lg:text-lg text-white'>{t('Your connected network is unsupported. Please connect to Sepolia Testnet')}!</p>
-                        <a
-                            href='https://github.com/Sintrop/SMR/wiki/Como-acessar-a-v3-do-Sistema'
-                            target='_blank'
+                        <p className='text-xs lg:text-lg text-white'>{t('Your connected network is unsupported. Please connect to Sepolia Testnet')}!</p>
+                        
+                        <button
+                            onClick={() => chooseModalTutorial()}
+                            className='px-5 lg:px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
                         >
-                            <button
-                                className='px-5 lg:px-10 h-8 rounded-md font-bold text-white bg-[#FF9900]'
-                            >
-                                Tutorial
-                            </button>
-                        </a>
+                            Tutorial
+                        </button>
                     </div>
 
                     <button

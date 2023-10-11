@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ProducerService from "../../../../services/producerService";
+import {GetProducers} from "../../../../services/producerService";
+import {GetProducersInfura} from "../../../../services/methodsGetInfuraApi";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
 import Loader from "../../../Loader";
+import { useMainContext } from "../../../../hooks/useMainContext";
 
 export default function ProducerRanking({ wallet, setTab }) {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const {viewMode} = useMainContext();
     const [loading, setLoading] = useState(false);
-    const producerService = new ProducerService(wallet);
     const [producers, setProducers] = useState([]);
     const {tabActive, walletAddress} = useParams();
     const [inputFilter, setInputFilter] = useState('');
@@ -25,22 +27,24 @@ export default function ProducerRanking({ wallet, setTab }) {
         getProducers();
     }, []);
     
-    function getProducers(){
-        setLoading(true)
-        producerService
-        .getProducerRanking()
-        .then((res) =>{
-            orderRanking(res);
-            setLoading(false);
-        })
-        .catch((err) => setLoading(false));
+    async function getProducers(){
+        setLoading(true);
+        if(viewMode){
+            const response = await GetProducersInfura();
+            orderRanking(response, filterSelect);
+        }else{
+            const response = await GetProducers();
+            orderRanking(response, filterSelect);
+        }
     }
-
-    function orderRanking(data){
+    
+    function orderRanking(data, filter){
         if(data.length > 0){
             let producerSort = data.map((item) => item ).sort( (a,b) => parseInt(b.isa.isaScore) - parseInt(a.isa.isaScore))
             setProducers(producerSort)
+            //filter(filter, producerSort)
         }
+        setLoading(false);
     }
 
     function filter(type, producersArray){
@@ -58,7 +62,8 @@ export default function ProducerRanking({ wallet, setTab }) {
             let users = producersArray;
             const usersFilter = users.filter(item => item.producerWallet === '0xaC3Dd98E8025BD37Ca653f314B5CBE8492738919' ||
                 item.producerWallet === '0x72482AE19928D654EB6D55f741157AE4701E3abe' ||
-                item.producerWallet === '0x566C073Ec7B0d9e9Dd1CAf58e74CB954d8cB5DEf'
+                item.producerWallet === '0x566C073Ec7B0d9e9Dd1CAf58e74CB954d8cB5DEf' ||
+                item.producerWallet === '0x489885f27B174200413115AB82e50CFCC9897265'
             );
             setProducers(usersFilter);
         }

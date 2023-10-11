@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import { useMainContext } from '../../hooks/useMainContext';
 import { useTranslation } from 'react-i18next';
 import Loading from '../Loading';
-//import { generateRoute } from '../../config/uniswap/alphaRouter';
+import {GetInspectionInfura} from '../../services/methodsGetInfuraApi';
 import {InspectionItemResult} from '../../pages/accountProducer/inspectionItemResult';
 import {GetInspection} from '../../services/manageInspectionsService';
 import { BackButton } from '../BackButton';
@@ -12,6 +12,7 @@ import { BackButton } from '../BackButton';
 
 export function ResultInspection({setTab}){
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const {typeUser, tabActive, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
     const [inspection, setInspection] = useState([]);
@@ -27,8 +28,14 @@ export function ResultInspection({setTab}){
     async function getInspection() {
         let inspections = []
         setLoading(true);
-        const response = await GetInspection(walletSelected);
-        inspections.push(response);
+
+        if(viewMode){
+            const response = await GetInspectionInfura(walletSelected);
+            inspections.push(response);
+        }else{
+            const response = await GetInspection(walletSelected);
+            inspections.push(response);
+        }
         setInspection(inspections);
         setLoading(false);
     }

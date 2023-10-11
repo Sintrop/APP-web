@@ -9,14 +9,17 @@ import { api } from '../../services/api';
 import Loader from '../../components/Loader';
 import { useTranslation } from 'react-i18next';
 import { GetDevelopers } from '../../services/developersPoolService';
+import { GetDevelopersInfura } from '../../services/methodsGetInfuraApi';
 import { FeedbackItem } from './feedbackItem';
 import { ModalCreateTask } from './ModalCreateTask';
 import { ToastContainer, toast } from 'react-toastify';
 import { Marker } from './Marker';
+import { useMainContext } from '../../hooks/useMainContext';
 
 export function DevelopersCenter(){
     const navigate = useNavigate();
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const [loading, setLoading] = useState(true);
     const {walletAddress, typeUser} = useParams();
     const [tabSelected, setTabSelected] = useState('feedbacks');
@@ -44,8 +47,13 @@ export function DevelopersCenter(){
 
     async function getDevelopers(){
         setLoading(true);
-        const response = await GetDevelopers();
-        setDevs(response);
+        if(viewMode){
+            const response = await GetDevelopersInfura();
+            setDevs(response);
+        }else{
+            const response = await GetDevelopers();
+            setDevs(response);
+        }
         setLoading(false);
     }
 
@@ -53,6 +61,7 @@ export function DevelopersCenter(){
         try{
             setLoading(true);
             const response = await api.get('/feedback');
+           
             const responseFeedbacks = response.data.feedbacks;
             const feedbacksNotFinished = responseFeedbacks.filter(item => item.status !== 4);
             const feedbacksFinished = responseFeedbacks.filter(item => item.status === 4);
@@ -147,7 +156,7 @@ export function DevelopersCenter(){
                             className='w-[40px] h-[40px] object-contain'
                             src={require('../../assets/icon-dev-1.png')}
                         />
-                        <p className='font-bold text-[#FFC633]'>{t('Developers Center')}</p>
+                        <p className='font-bold text-[#FFC633]'>{t('Development Center')}</p>
                     </div>
 
                     <button
@@ -219,13 +228,15 @@ export function DevelopersCenter(){
                                         />
                                         <h1 className='font-bold text-white text-lg'>{t('Feedbacks')}</h1>
                                     </div>
-
-                                    <button 
-                                        className='px-3 py-2 rounded-md bg-[#ff9900] text-white font-bold'
-                                        onClick={() => setModalCreateTask(true)}
-                                    >
-                                        Create Task
-                                    </button>
+                                    
+                                    {typeUser === '4' && (
+                                        <button 
+                                            className='px-3 py-2 rounded-md bg-[#ff9900] text-white font-bold'
+                                            onClick={() => setModalCreateTask(true)}
+                                        >
+                                            Create Task
+                                        </button>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-3 px-5 mt-2">
@@ -297,7 +308,7 @@ export function DevelopersCenter(){
                                     </div>
                                 </div>
 
-                                <div className="w-full flex flex-col gap-5 overflow-auto px-5 mt-1 h-[77vh] scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-700">
+                                <div className="w-full flex flex-col gap-5 overflow-auto px-5 mt-1 h-[84vh] scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-700">
                                     {feedbacksFinished.length > 0 && (
                                         <>
                                         {feedbacksFinished.map((item) => (

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ResearchersService from "../../../../services/researchersService";
+import {GetResearchers} from "../../../../services/researchersService";
 import "../../Ranking/ranking.css";
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
 import Loader from "../../../Loader";
+import { useMainContext } from "../../../../hooks/useMainContext";
+import { GetResearchersInfura } from "../../../../services/methodsGetInfuraApi";
 
 export default function ResearchersRanking({ wallet, setTab }) {
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const researchersService = new ResearchersService(wallet);
     const [researchers, setResearchers] = useState([]);
     const {tabActive, walletAddress} = useParams();
         
@@ -20,18 +22,27 @@ export default function ResearchersRanking({ wallet, setTab }) {
     }, [tabActive])
 
     useEffect(() => {
-        setLoading(true);
-        researchersService
-        .getResearcherRanking()
-        .then((res) => {
-            if (res.length > 0) {
-            let researchersSort = res.map(item => item ).sort((a, b) => parseInt(b.publishedWorks) - parseInt(a.publishedWorks))
-            setResearchers(researchersSort);
-            }
-            setLoading(false);
-        })
-        .catch((err) => setLoading(false));
+        getResearchers();
     }, []);
+    
+    async function getResearchers(){
+        setLoading(true);
+        if(viewMode){
+            const response = await GetResearchersInfura();
+            orderRanking(response);
+        }else{
+            const response = await GetResearchers();
+            orderRanking(response);
+        }
+    }
+
+    function orderRanking(data){
+        if(data.length > 0){
+            let researcherSort = data.map((item) => item ).sort( (a,b) => parseInt(b.publishedWorks) - parseInt(a.publishedWorks))
+            setResearchers(researcherSort)
+        }
+        setLoading(false);
+    }
 
     if(loading){
         return(

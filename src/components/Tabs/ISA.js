@@ -2,19 +2,21 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Loader from '../Loader';
+import { useMainContext } from '../../hooks/useMainContext';
 
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
-import ItemsListISA from '../IsaPageComponents/ItemsListISA';
 import Loading from '../Loading';
 import {IndiceItem} from '../IndiceItem';
 import { BackButton } from '../BackButton';
 
 //services
 import {GetCategories} from '../../services/isaService';
+import { GetCategoriesInfura } from '../../services/methodsGetInfuraApi';
 
 export default function ISA({user, walletAddress, setTab}){
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const [categories, setCategories] = useState([]);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -31,8 +33,13 @@ export default function ISA({user, walletAddress, setTab}){
 
     async function getCategories(){
         setLoading(true);
-        const response = await GetCategories();
-        setCategories(response);
+        if(viewMode){
+            const response = await GetCategoriesInfura();
+            setCategories(response);
+        }else{
+            const response = await GetCategories();
+            setCategories(response);
+        }
         setLoading(false);
     }
 

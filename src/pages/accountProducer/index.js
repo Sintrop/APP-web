@@ -206,6 +206,7 @@ export default function AccountProducer(){
                 <InspectionItemResult
                     key={item.id}
                     data={item}
+                    initialVisible
                 />
             ))}
             </div>

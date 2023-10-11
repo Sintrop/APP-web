@@ -15,6 +15,7 @@ import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 import { Assistent } from '../../components/Assistent';
 import { ModalFeedback } from '../../components/ModalFeedback';
 import { ModalChooseLang } from '../../components/ModalChooseLang';
+import ModalRegister from '../../components/ModalRegister';
 
 //Tabs
 import Register from '../../components/Tabs/Register';
@@ -31,6 +32,8 @@ import { UserDetails } from '../../components/Tabs/UserDetails';
 import { NetworkImpact } from '../../components/Tabs/NetworkImpact';
 import { Market } from '../../components/Tabs/Market';
 import { ResultInspection } from '../../components/Tabs/ResultInspection';
+import { PrivateSales } from '../../components/Tabs/PrivateSales';
+import { Missions } from '../../components/Tabs/Missions';
 
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
@@ -41,7 +44,8 @@ import ContributorsRanking from '../../components/Tabs/Ranking/Contributors';
 import InvestorRanking from '../../components/Tabs/Ranking/Investor';
 import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
-import ModalRegister from '../../components/ModalRegister';
+import { ModalWelcomePlatform } from '../../components/ModalWelcomePlatform';
+import { ModalTransactionOpen } from '../../components/ModalTransactionOpen';
 
 const tutorialRegistro = [
     {
@@ -121,7 +125,7 @@ const tutorialRegistro = [
 
 export default function Dashboard(){
     const {isSupported} = useNetwork();
-    const {checkUser, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial, modalFeedback, chooseModalFeedBack, modalChooseLang, toggleModalChooseLang} = useContext(MainContext);
+    const {checkUser, modalRegister, chooseModalRegister, menuOpen, modalTutorial, chooseModalTutorial, modalFeedback, chooseModalFeedBack, modalChooseLang, toggleModalChooseLang, transactionOpen, setTransactionOpen, transactionOpened} = useContext(MainContext);
     const navigate = useNavigate();
     const {walletAddress, tabActive, typeUser} = useParams();
     const [activeTab, setActiveTab] = useState('isa');
@@ -129,6 +133,7 @@ export default function Dashboard(){
     const [walletSelect, setWalletSelect] = useState('');
     const [menuMobile, setMenuMobile] = useState(false);
     const [assistentOpen, setAssistentOpen] = useState(true);
+    const [modalWelcome, setModalWelcome] = useState(false);
 
     useEffect(() => {
         async function checkConnection(){
@@ -138,10 +143,10 @@ export default function Dashboard(){
                 })
                 .then((accounts) => {
                     if(accounts.length == 0){
-                        navigate('/')
+                        //navigate('/')
                     }else{
                         if(accounts[0] != walletAddress){
-                            navigate('/')
+                            //navigate('/')
                         }
                     }
                 })
@@ -152,6 +157,7 @@ export default function Dashboard(){
         }
         checkConnection();
         getStorageAssistant();
+        getStorageWelcome();
     },[]);
 
     useEffect(() => {
@@ -176,6 +182,15 @@ export default function Dashboard(){
             }else{
                 setAssistentOpen(false);
             }
+        }
+    }
+
+    async function getStorageWelcome(){
+        const res = await localStorage.getItem('welcomePlatform')
+        if(res === null){
+            setModalWelcome(true);
+        }else{
+            setModalWelcome(false);
         }
     }
 
@@ -444,16 +459,31 @@ export default function Dashboard(){
                         }}
                     />
                 )}
+
+                {activeTab === 'private-sales' && (
+                    <PrivateSales 
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
+
+                {activeTab === 'missions' && (
+                    <Missions 
+                        setTab={(tab, wallet) => {
+                            setWalletSelect(wallet)
+                            setActiveTab(tab)
+                        }}
+                    />
+                )}
             </div>
 
-            <Dialog.Root
-                open={modalRegister}
-                onOpenChange={(open) => {
-                    chooseModalRegister()
-                }}  
-            >
-                <ModalRegister/>
-            </Dialog.Root>
+            {modalRegister && (
+                <ModalRegister
+                    close={chooseModalRegister}
+                />
+            )}
 
             <Dialog.Root
                 open={modalFeedback}
@@ -525,6 +555,24 @@ export default function Dashboard(){
                         className='w-24 object-contain z-20'
                     />
                 </div>
+            )}
+
+            {modalWelcome && (
+                <ModalWelcomePlatform
+                    close={() => {
+                        setModalWelcome(false);
+                        localStorage.setItem('welcomePlatform', 'view')
+                    }}
+                />
+            )}
+
+            {transactionOpen && (
+                <ModalTransactionOpen
+                    close={() => {
+                        setTransactionOpen(false);
+                    }}
+                    transactions={transactionOpened}
+                />
             )}
         </div>
     )

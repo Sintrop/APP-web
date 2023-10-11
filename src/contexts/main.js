@@ -7,6 +7,7 @@ import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
 import {GetBalanceContract} from '../services/producerPoolService';
 import {GetBalancePool} from '../services/developersPoolService';
+import {GetBalancePoolDevelopersInfura, GetBalancePoolProducersInfura} from '../services/methodsGetInfuraApi';
 import {api} from '../services/api';
 
 export const MainContext = createContext({});
@@ -50,10 +51,14 @@ export default function MainProvider({children}){
     const [getAtualBlock, setGetAtualBlock] = useState(false);
     const [attNotifications, setAttNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [viewMode, setViewMode] = useState(true);
+    const [transactionOpen, setTransactionOpen] = useState(false);
+    const [transactionOpened, setTranscationsOpened] = useState([]);
 
     useEffect(() => {
         getStorageLanguage();
         getImpact();
+        checkMode();
     }, []);
 
     useEffect(() => {
@@ -74,6 +79,43 @@ export default function MainProvider({children}){
             setAttNotifications(!attNotifications);
         }, 10000)
     }, [attNotifications]);
+
+    useEffect(() => {
+        if(walletConnected !== '')checkTransactionQueue();
+    }, [walletConnected]);
+
+    async function checkTransactionQueue(){
+        const response = await api.get(`/transactions-open/${walletConnected}`);
+        const transactions = response.data.transactions;
+        
+        if(transactions.length > 0){
+            setTransactionOpen(true);
+            setTranscationsOpened(transactions);
+        }else{
+            setTransactionOpen(false);
+        }
+    }
+
+    async function checkMode(){
+        if(window.ethereum){
+            setViewMode(false);
+            await window.ethereum.request({
+                method: 'eth_accounts'
+            })
+            .then((accounts) => {
+                if(accounts.length == 0){
+                    
+                }else{
+                    
+                }
+            })
+            .catch(() => {
+                console.log('error')
+            })
+        }else{
+            setViewMode(true)
+        }
+    }
 
     async function Sync(){
         const wallet = await ConnectWallet();
@@ -123,7 +165,8 @@ export default function MainProvider({children}){
 
     async function getUserDataApi(wallet){
         const resUser = await api.get(`/user/${wallet}`)
-        setUserData(resUser.data.user)
+        setUserData(resUser.data.user);
+        
     }
 
     async function getAtualBlockNumber(){
@@ -229,15 +272,27 @@ export default function MainProvider({children}){
     async function getImpact(){
         const response = await api.get('network-impact')
         const impacts = response.data?.impact;
-        
-        const balanceProducers = await GetBalanceContract();
-        const balanceDevelopers = await GetBalancePool();
 
-        for(var i = 0; i < impacts.length; i++){
-            if(impacts[i].id === '1'){
-                calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
+        if(window.ethereum){
+            const balanceProducers = await GetBalanceContract();
+            const balanceDevelopers = await GetBalancePool();
+    
+            for(var i = 0; i < impacts.length; i++){
+                if(impacts[i].id === '1'){
+                    calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
+                }
+            }
+        }else{
+            const balanceProducers = await GetBalancePoolProducersInfura();
+            const balanceDevelopers = await GetBalancePoolDevelopersInfura();
+    
+            for(var i = 0; i < impacts.length; i++){
+                if(impacts[i].id === '1'){
+                    calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
+                }
             }
         }
+        
     }
     
     async function calculateImpactPerToken(balanceProducers, balanceDevelopers, impact){
@@ -254,7 +309,7 @@ export default function MainProvider({children}){
         const water = Number(impact.agua) / (totalSac / 10 ** 18);
         const soil = Number(impact.solo) / (totalSac / 10 ** 18);
 
-        let impactToken = {
+        let impactToken = { 
             carbon,
             bio,
             water,
@@ -275,7 +330,8 @@ export default function MainProvider({children}){
                 user, 
                 Sync, 
                 checkUser, 
-                walletConnected, 
+                walletConnected,
+                setWalletConnected, 
                 chooseModalRegister, 
                 modalRegister, 
                 blockNumber, 
@@ -300,7 +356,12 @@ export default function MainProvider({children}){
                 era,
                 nextEraIn,
                 notifications,
-                getNotifications
+                getNotifications,
+                viewMode,
+                transactionOpen,
+                setTransactionOpen,
+                transactionOpened,
+                userData
             }}
         >
             {children}

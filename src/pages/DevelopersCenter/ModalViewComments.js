@@ -58,7 +58,7 @@ export function ModalViewComments({data, userData}){
                     </Dialog.Close>
                 </div>
                 
-                <div className='flex flex-col w-full h-full gap-5 overflow-auto'>
+                <div className='flex flex-col w-full h-full gap-5 overflow-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-thumb-rounded'>
                     {loading ? (
                         <Loader
                             type='hash'

@@ -5,15 +5,17 @@ import { useParams } from 'react-router';
 import {GetProducers} from '../../services/producerService';
 import {GetActivists} from '../../services/activistService';
 import {GetResearchers} from '../../services/researchersService';
+import {GetActivistsInfura, GetProducersInfura, GetResearchersInfura} from '../../services/methodsGetInfuraApi';
 import Loading from '../Loading';
 import { Warning } from '../Warning';
 import { useNavigate } from 'react-router';
 import { useMainContext } from '../../hooks/useMainContext';
 import { BackButton } from '../BackButton';
 import Loader from '../Loader';
+import { CardImpact } from '../CardImpact';
 
 export function NetworkImpact({setTab}){
-    const {impactPerToken} = useMainContext();
+    const {impactPerToken, viewMode} = useMainContext();
     const navigate = useNavigate();
     const [impact, setImpact] = useState({});
     const [impactPhoenix, setImpactPhoenix] = useState({});
@@ -27,7 +29,7 @@ export function NetworkImpact({setTab}){
     
     useEffect(() => {
         setTab(tabActive, '')
-    }, [tabActive])
+    }, [tabActive]);
 
     useEffect(() => {
         getImpact();
@@ -38,14 +40,25 @@ export function NetworkImpact({setTab}){
         const response = await api.get('network-impact')
         const impacts = response.data?.impact;
         
-        const producers = await GetProducers();
-        setProducersCount(producers.length);
-
-        const activists = await GetActivists();
-        setActivistsCount(activists.length);
-
-        const researchers = await GetResearchers();
-        setResearchersCount(researchers.length);
+        if(viewMode){
+            const producers = await GetProducersInfura();
+            setProducersCount(producers.length);
+    
+            const activists = await GetActivistsInfura();
+            setActivistsCount(activists.length);
+    
+            const researchers = await GetResearchersInfura();
+            setResearchersCount(researchers.length);
+        }else{
+            const producers = await GetProducers();
+            setProducersCount(producers.length);
+    
+            const activists = await GetActivists();
+            setActivistsCount(activists.length);
+    
+            const researchers = await GetResearchers();
+            setResearchersCount(researchers.length);
+        }
 
         for(var i = 0; i < impacts.length; i++){
             if(impacts[i].id === '1'){
@@ -73,7 +86,7 @@ export function NetworkImpact({setTab}){
     }
 
     return(
-        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-1 lg:pt-10 overflow-auto h-screen pb-24 lg:pb-0'>
+        <div className='flex flex-col bg-green-950 px-2 lg:pl-10 pt-1 lg:pt-10 overflow-auto h-screen pb-24 lg:pb-0'>
             <div className='flex items-center gap-2'>
                 <BackButton/>
                 <h1 
@@ -87,275 +100,68 @@ export function NetworkImpact({setTab}){
                 width={250}
             />
 
-            <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[950px] mt-5 px-2 mx-2 lg:mx-0">
-                    <p className="text-white text-sm lg:text-normal mb-5 font-bold">{t('ECOSYSTEM IMPACT OF THE NETWORK')}</p>
+            <section className='flex flex-col px-2 mt-5 lg:w-[1000px] lg:px-0'>
+                <h3 className='font-bold text-center text-white text-2xl lg:text-start'>{t('Token Crédito de Regeneração')}</h3>
+                <div className='flex items-center gap-5 flex-wrap mt-3'>
+                    <div className='flex flex-col justify-center p-3 border-2 border-white rounded-lg w-full lg:w-[300px] h-[320px]'>
+                        <img
+                            src={require('../../assets/token.png')}
+                            alt='Imagem do token de regeneração'
+                            className='w-[80px] object-contain'
+                        />
 
-                    <div className="flex w-full items-center gap-2 flex-wrap justify-center">
+                        <p className='text-white mt-6'>{t('FORNECIMENTO TOTAL MÁXIMO')}</p>
+                        <p className='text-white font-bold'>1,499,437,064 RCT</p>
 
-                        <div className="flex flex-col w-full lg:w-[300px] lg:h-[250px] justify-between lg:p-2 lg:border-r-2 border-green-950">
-                            <div className="flex items-center gap-2 py-5 w-full">
-                                <img
-                                    src={require('../../assets/token.png')}
-                                    alt='Token da sintrop'
-                                    className='w-[50px] h-[50px] object-contain'
-                                />
-                                <div className='flex flex-col w-full'>
-                                    <p className='text-white w-full text-sm lg:text-normal'>{t("AMOUNT OF REGENERATION CREDIT")}</p>
-                                    <p className='text-white w-full text-sm lg:text-normal'>R$ 0,025</p>
-                                </div>
-                            </div>
+                        <p className='text-white mt-6'>{t('TITULARES')}</p>
+                        <p className='text-white font-bold'>18</p>
 
-                            <div className="flex items-center gap-2 py-5 border-b-2 lg:border-0">
-                                <img
-                                    src={require('../../assets/globo-branco.png')}
-                                    alt='Token da sintrop'
-                                    className='w-[50px] h-[50px] object-contain'
-                                />
-                                <div className='flex flex-col'>
-                                    <p className='text-white text-sm lg:text-normal'>{t('CIRCULATING MARKET CAP')}</p>
-                                    <p className='text-white text-sm lg:text-normal'>R$ 0,00</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col w-full lg:w-[300px] lg:h-[250px] border-b-2 border-white lg:border-b-0 p-2 lg:border-r-2 gap-2 lg:border-green-950">
-                            
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col font-bold'>
-                                        <p className='text-[#ff9900]'>CO²</p>
-                                        <img
-                                            src={require('../../assets/co2.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[40px] h-[40px] object-contain mt-[-8px]'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{(Number(impact?.carbon) / 1000).toFixed(0)} <span className='font-bold text-sm'>t</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 mt-[-8px]">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Soil")}</p>
-                                        <img
-                                            src={require('../../assets/solo.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impact?.solo} <span className='font-bold text-sm'>m²</span></p>
-                                </div>
-                            
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Biodiversity")}</p>
-                                        <img
-                                            src={require('../../assets/bio.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impact?.bio} <span className='font-bold text-sm'>uni</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 ">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Water")}</p>
-                                        <img
-                                            src={require('../../assets/agua.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impact?.agua} <span className='font-bold text-sm'>m³</span></p>
-                                </div>
-                            
-                        </div>
-
-                        <div className="flex flex-col w-[300px] h-[250px] justify-between lg:p-2 px-5">
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/token.png')}
-                                    alt='Token da sintrop'
-                                    className='w-[50px] h-[50px] object-contain'
-                                />
-                                <p className='text-white'>{t("ECOSYSTEM IMPACT PER TOKEN")}</p>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <div className='flex flex-col'>
-                                    <img
-                                        src={require('../../assets/co2.png')}
-                                        alt='Token da sintrop'
-                                        className='w-[25px] h-[25px] object-contain'
-                                    />
-                                </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.carbon) * 1000).toFixed(2).replace('.',',')} <span className='font-bold text-base'>g</span></p>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <div className='flex flex-col'>
-                                    <img
-                                        src={require('../../assets/solo.png')}
-                                        alt='Token da sintrop'
-                                        className='w-[25px] h-[25px] object-contain'
-                                    />
-                                </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.soil) * 10000).toFixed(2).replace('.', ',')} <span className='font-bold text-base'>cm²</span></p>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <div className='flex flex-col'>
-                                    <img
-                                        src={require('../../assets/agua.png')}
-                                        alt='Token da sintrop'
-                                        className='w-[25px] h-[25px] object-contain'
-                                    />
-                                </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{(Number(impactPerToken?.water) * 1000).toFixed(2).replace('.',',')} <span className='font-bold text-base'>L</span></p>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <div className='flex flex-col'>
-                                    <img
-                                        src={require('../../assets/bio.png')}
-                                        alt='Token da sintrop'
-                                        className='w-[25px] h-[25px] object-contain'
-                                    />
-                                </div>
-                                <p className='text-white font-bold text-2xl flex items-end gap-2'>{Number(impactPerToken?.bio).toFixed(3)} <span className='font-bold text-base'>uni</span></p>
-                            </div>
-                        </div>
-
+                        <p className='text-white mt-6'>{t('TOTAL DE TRANFERÊNCIAS')}</p>
+                        <p className='text-white font-bold'>56</p>
                     </div>
 
-                    <div className='flex flex-col lg:flex-row items-center w-full justify-between lg:px-20 mt-5'>
-                        <p className='text-white font-bold'>{t("PRODUCERS")}: <span className='text-blue-500'>{producersCount}</span></p>
-                        <p className='text-white font-bold'>{t("ACTIVISTS")}: <span className='text-blue-500'>{activistsCount}</span></p>
-                        <p className='text-white font-bold'>{t("RESEARCHERS")}: <span className='text-blue-500'>{researchersCount}</span></p>
+                    <div className='flex flex-col p-3 justify-center border-2 border-white bg-green-900 rounded-lg w-full lg:w-[300px] h-[320px]'>
+                        <p className='text-white font-bold'>{t('MERCADO')}</p>
+
+                        <p className='text-white mt-6'>{t('VALOR DE MERCADO')}</p>
+                        <p className='text-white font-bold'>R$0,0282</p>
+
+                        <p className='text-white mt-6'>{t('CAPITALIZAÇÃO DE MERCADO DE OFERTA CIRCULANTE')}</p>
+                        <p className='text-white font-bold'>R$0,00</p>
                     </div>
+
+                    <div className='flex flex-col justify-center p-3 border-2 border-white rounded-lg w-full lg:w-[300px] h-[320px]'>
+                        <p className='text-white font-bold'>{t('OUTRAS INFORMAÇÕES')}</p>
+
+                        <p className='text-white mt-6'>{t('TOKEN CONTRACT (WITH 18 DECIMALS)')}</p>
+
+                        <a 
+                            className='text-blue-500 border-b-2 border-blue-500 font-bold mt-6 max-w-[30ch] overflow-hidden text-ellipsis'
+                            href='https://sepolia.etherscan.io/token/0xf8033bbfe9c645f52d170ddd733274371e75369f'
+                            target='_blank'
+                        >0xF8033Bbfe9c645F52d170DDD733274371E75369F</a>
+                    </div>
+                </div>
             </section>
 
-                <section className="flex flex-col items-center py-5 rounded-lg bg-[#0A4303] lg:w-[950px] mt-5 px-2 mx-2 lg:mx-0">
-                    <p className="text-white mb-5 font-bold">{t('IMPACT PER METHOD')}</p>
+            <section className='flex flex-col px-2 mt-5 lg:px-0 lg:flex-row lg:w-[1000px] gap-5'>
+                <CardImpact
+                    title='ECOSYSTEM IMPACT OF THE NETWORK'
+                    impact={impact}
+                />
 
-                    <div className="flex items-center gap-2 flex-wrap justify-center">
+                <CardImpact
+                    title='ECOSYSTEM IMPACT PER TOKEN'
+                    impact={impact}
+                    type='impactToken'
+                />
+            </section>
+   
+        </div>
 
-                        <div className="flex flex-col w-full lg:w-[400px] lg:h-[250px] p-2 lg:border-r-2 gap-2 lg:border-green-950 border-b-2 lg:border-b-0 border-white">
-                            <div className='flex items-center w-full justify-center'>
-                                <p className='text-white font-bold'>{t('Method Sintrop')}</p>
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col font-bold'>
-                                        <p className='text-[#ff9900]'>CO²</p>
-                                        <img
-                                            src={require('../../assets/co2.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[40px] h-[40px] object-contain mt-[-8px]'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{(Number(impactPhoenix?.carbon) / 1000).toFixed(0)} <span className='font-bold text-sm'>t</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 mt-[-8px]">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Soil")}</p>
-                                        <img
-                                            src={require('../../assets/solo.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impactPhoenix?.solo} <span className='font-bold text-sm'>m²</span></p>
-                                </div>
-                            
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Biodiversity")}</p>
-                                        <img
-                                            src={require('../../assets/bio.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impactPhoenix?.bio} <span className='font-bold text-sm'>uni</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 ">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Water")}</p>
-                                        <img
-                                            src={require('../../assets/agua.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impactPhoenix?.agua} <span className='font-bold text-sm'>m³</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col w-full lg:w-[400px] lg:h-[250px] p-2 gap-2">
-                            <div className='flex items-center w-full justify-center'>
-                                <p className='text-white font-bold'>{t('Method Manual')}</p>
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col font-bold'>
-                                        <p className='text-[#ff9900]'>CO²</p>
-                                        <img
-                                            src={require('../../assets/co2.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[40px] h-[40px] object-contain mt-[-8px]'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5'>{(Number(impactManual?.carbon) / 1000).toFixed(0)} <span className='font-bold text-sm'>t</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 mt-[-8px]">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Soil")}</p>
-                                        <img
-                                            src={require('../../assets/solo.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-1'>{impactManual?.solo} <span className='font-bold text-sm'>m²</span></p>
-                                </div>
-                            
-                                <div className="flex items-center gap-2">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Biodiversity")}</p>
-                                        <img
-                                            src={require('../../assets/bio.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg ml-[-75px] flex items-end gap-1 mt-5'>{impactManual?.bio} <span className='font-bold text-sm'>uni</span></p>
-                                </div>
-
-                                <div className="flex items-center gap-2 ">
-                                    <div className='flex flex-col'>
-                                        <p className='text-[#ff9900] font-bold'>{t("Water")}</p>
-                                        <img
-                                            src={require('../../assets/agua.png')}
-                                            alt='Token da sintrop'
-                                            className='w-[30px] h-[30px] object-contain'
-                                        />
-                                    </div>
-                                    <p className='text-white font-bold text-lg flex items-end gap-1 mt-5 ml-[-5px]'>{impactManual?.agua} <span className='font-bold text-sm'>m³</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-            </div>
-
-                {loading && (
-                    <Loading/>
-                )}
+            {loading && (
+                <Loading/>
+            )}
         </div>
     )
 }

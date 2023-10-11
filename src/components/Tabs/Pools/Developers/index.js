@@ -17,6 +17,16 @@ import {
 } from '../../../../services/developersPoolService';
 import {GetDeveloper} from '../../../../services/developersService';
 
+import {
+    GetBalancePoolDevelopersInfura,
+    GetDeveloperInfura,
+    GetDevelopersInfura,
+    TokensPerEraInfura,
+    GetEraInfura,
+    GetEraContractDevPoolInfura,
+    GetBalanceDeveloperInfura,
+} from '../../../../services/methodsGetInfuraApi';
+
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { UserPoolItem } from '../../../UserPoolItem';
@@ -24,7 +34,7 @@ import { BackButton } from '../../../BackButton';
 import Loader from '../../../Loader';
 
 export default function DevelopersPool({wallet, setTab}){
-    const {user, nextEraIn} = useMainContext();
+    const {user, nextEraIn, viewMode} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
@@ -50,25 +60,38 @@ export default function DevelopersPool({wallet, setTab}){
     
     async function getInfosPool(){
         setLoading(true);
-        const developers = await GetDevelopers();
-        filterUsersPool(developers);
-        const totalTokens = await GetBalancePool();
-        setTotalSACTokens(totalTokens);
-        const tokensPerEra = await TokensPerEra();
-        setTokensPerEra(tokensPerEra);
-        const currentEra = await GetEraContract();
-        setCurrentEra(currentEra);
-        const eraInfo = await GetEra(parseFloat(currentEra));
-        setEraInfo(eraInfo);
-        if(typeUser === '4'){
-            const developerInfo = await GetDeveloper(walletAddress);
-            setDeveloperInfo(developerInfo);
-            console.log(developerInfo)
-            const nextAprove = await CheckNextAprove(developerInfo.pool.currentEra);
-            setNextAprove(nextAprove);
-            const balanceDeveloper = await GetBalanceDeveloper(walletAddress);
-            setBalanceDeveloper(balanceDeveloper);
-            setLoading(false);
+
+        if(viewMode){
+            const developers = await GetDevelopersInfura();
+            filterUsersPool(developers);
+            const totalTokens = await GetBalancePoolDevelopersInfura();
+            setTotalSACTokens(totalTokens);
+            const tokensPerEra = await TokensPerEraInfura();
+            setTokensPerEra(tokensPerEra);
+            const currentEra = await GetEraContractDevPoolInfura();
+            setCurrentEra(currentEra);
+            const eraInfo = await GetEraInfura(parseFloat(currentEra));
+            setEraInfo(eraInfo);
+        }else{
+            const developers = await GetDevelopers();
+            filterUsersPool(developers);
+            const totalTokens = await GetBalancePool();
+            setTotalSACTokens(totalTokens);
+            const tokensPerEra = await TokensPerEra();
+            setTokensPerEra(tokensPerEra);
+            const currentEra = await GetEraContract();
+            setCurrentEra(currentEra);
+            const eraInfo = await GetEra(parseFloat(currentEra));
+            setEraInfo(eraInfo);
+            if(typeUser === '4'){
+                const developerInfo = await GetDeveloper(walletAddress);
+                setDeveloperInfo(developerInfo);
+                const nextAprove = await CheckNextAprove(developerInfo.pool.currentEra);
+                setNextAprove(nextAprove);
+                const balanceDeveloper = await GetBalanceDeveloper(walletAddress);
+                setBalanceDeveloper(balanceDeveloper);
+                setLoading(false);
+            }
         }
         setLoading(false);
     }
@@ -140,17 +163,32 @@ export default function DevelopersPool({wallet, setTab}){
         let newArray = [];
         for(var i = 0; i < array.length; i++){
             if(Number(array[i].pool?.level) > 0){
-                const balance = await GetBalanceDeveloper(array[i].developerWallet)
-                if(Number(balance) > 0){
-                    let data = {
-                        developerWallet: array[i].developerWallet,
-                        name: array[i].name,
-                        balance: Number(balance),
-                        userType: '4',
-                        level: array[i].pool?.level
+                if(viewMode){
+                    const balance = await GetBalanceDeveloperInfura(array[i].developerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            developerWallet: array[i].developerWallet,
+                            name: array[i].name,
+                            balance: Number(balance),
+                            userType: '4',
+                            level: array[i].pool?.level
+                        }
+        
+                        newArray.push(data);
                     }
-    
-                    newArray.push(data);
+                }else{
+                    const balance = await GetBalanceDeveloper(array[i].developerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            developerWallet: array[i].developerWallet,
+                            name: array[i].name,
+                            balance: Number(balance),
+                            userType: '4',
+                            level: array[i].pool?.level
+                        }
+        
+                        newArray.push(data);
+                    }
                 }
 
             }

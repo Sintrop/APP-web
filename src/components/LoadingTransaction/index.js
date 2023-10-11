@@ -40,7 +40,7 @@ export function LoadingTransaction({loading, logTransaction, action}){
     }, [logTransaction])
     
     return(
-        <Dialog.Portal className='flex justify-center items-center inset-0'>
+        <Dialog.Portal className='flex justify-center items-center inset-0 z-50'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
             <Dialog.Content className='absolute flex flex-col items-center justify-center rounded-md m-auto inset-0 bg-folha-papiro bg-no-repeat bg-center bg-contain md:w-[450px] px-5'>
 

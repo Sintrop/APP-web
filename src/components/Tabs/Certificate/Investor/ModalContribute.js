@@ -10,7 +10,7 @@ import { useParams } from 'react-router';
 import { useMainContext } from '../../../../hooks/useMainContext';
 
 export function ModalContribute({wallet, onFinished}){
-    const {impactPerToken} = useMainContext();
+    const {impactPerToken, userData} = useMainContext();
     const {walletAddress} = useParams();
     const [balanceTokens, setBalanceTokens] = useState(0);
     const [inputTokens, setInputTokens] = useState('');
@@ -30,6 +30,11 @@ export function ModalContribute({wallet, onFinished}){
     }
 
     async function registerTokensApi(tokens, hash){
+        const additionalData = {
+            userData,
+            tokens: Number(tokens)
+        }
+
         try{
             await api.post('/tokens-burned', {
                 wallet: walletAddress.toUpperCase(),
@@ -39,6 +44,13 @@ export function ModalContribute({wallet, onFinished}){
                 water: Number(impactPerToken?.water),
                 bio: Number(impactPerToken?.bio),
                 soil: Number(impactPerToken?.soil)
+            });
+
+            await api.post('/publication/new', {
+                userId: userData?.id,
+                type: 'contribute-tokens',
+                origin: 'platform',
+                additionalData: JSON.stringify(additionalData),
             })
         }catch(err){
             console.log(err);

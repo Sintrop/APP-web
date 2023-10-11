@@ -21,4 +21,9 @@ class InspectionsHistoryService {
     }
 }
 
+export const GetInspections = async () => {
+    const inspections = await SintropContract.methods.getInspections().call()
+    return inspections;
+}
+
 export default InspectionsHistoryService; 

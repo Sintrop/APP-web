@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import InvestorService from "../../../../services/investorService";
-import '../../Ranking/ranking.css';
+import {GetInvestors} from "../../../../services/investorService";
+import {GetInvestorsInfura, GetCertificateTokensInfura} from '../../../../services/methodsGetInfuraApi';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
-import { GetCertificateTokens } from "../../../../services/accountProducerService";
 import Loading from '../../../Loading';
 import Loader from '../../../Loader';
+import { useMainContext } from "../../../../hooks/useMainContext";
 
 export default function InvestorRanking({ wallet, setTab }) {
     const [loading, setLoading] = useState(false);
+    const {viewMode} = useMainContext();
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const investorService = new InvestorService(wallet);
     const [investor, setInvestor] = useState([]);
     const {tabActive, walletAddress} = useParams();
         
@@ -22,22 +22,24 @@ export default function InvestorRanking({ wallet, setTab }) {
     }, [tabActive])
     
     useEffect(() => {
-        setLoading(true);
-        investorService
-        .getInvestorRanking()
-        .then((res) => {
-            orderRanking(res);
-        })
-        .catch((err) => {
-            console.log(err)
-            setLoading(false)
-        });
+        getInvestors();
     }, []);
+
+    async function getInvestors(){
+        setLoading(true);
+        if(viewMode){
+            const response = await GetInvestorsInfura();
+            orderRanking(response);
+        }else{
+            const response = await GetInvestors();
+            orderRanking(response);
+        }
+    }
 
     async function orderRanking(investors){
         let arrayInvestors = [];
         for(var i = 0; i < investors.length; i++){
-            const tokens = await GetCertificateTokens(investors[i].investorWallet);
+            const tokens = await GetCertificateTokensInfura(investors[i].investorWallet);
             let data = {
                 ...investors[i],
                 tokens: Number(tokens) / 10 ** 18
@@ -97,7 +99,7 @@ export default function InvestorRanking({ wallet, setTab }) {
                 
             </div>
 
-            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-2 lg:mt-14 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
+            <div className="flex h-[95vh] pb-40 overflow-auto justify-center flex-wrap gap-5 mt-2 lg:mt-2 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                 {investor.length === 0 ? (
                     <p className="text-white font-bold text-center mt-10">Nenhum investidor cadastrado no sistema!</p>
                 ) : (

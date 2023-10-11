@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import DeveloperService from "../../../../services/developersService";
+import {GetDevelopers} from "../../../../services/developersService";
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import {RankingItem} from '../../../RankingItem';
 import { BackButton } from "../../../BackButton";
 import Loader from "../../../Loader";
+import { useMainContext } from "../../../../hooks/useMainContext";
+import { GetDevelopersInfura } from "../../../../services/methodsGetInfuraApi";
 
 export default function DevelopersRanking({ wallet, setTab }) {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const {viewMode} = useMainContext();
     const [loading, setLoading] = useState(false);
-    const developerService = new DeveloperService(wallet);
     const [developers, setDevelopers] = useState([]);
     const {tabActive, walletAddress} = useParams();
         
@@ -19,17 +21,28 @@ export default function DevelopersRanking({ wallet, setTab }) {
     }, [tabActive])
 
     useEffect(() => {
-        setLoading(true);
-        developerService
-        .getDeveloperRanking()
-        .then((res) => {
-            console.log(res)
-            let developersSort = res.map(item => item ).sort((a, b) => parseInt(b.pool.level) - parseInt(a.pool.level))
-            setDevelopers(developersSort);
-            setLoading(false);
-        })
-        .catch((err) => setLoading(false));
+        getDevelopers();
     }, []);
+    
+    async function getDevelopers(){
+        setLoading(true);
+        if(viewMode){
+            const response = await GetDevelopersInfura();
+            console.log(response);
+            orderRanking(response);
+        }else{
+            const response = await GetDevelopers();
+            orderRanking(response);
+        }
+    }
+
+    function orderRanking(data){
+        if(data.length > 0){
+            let develoeprSort = data.map((item) => item ).sort( (a,b) => parseInt(b.pool.level) - parseInt(a.pool.level))
+            setDevelopers(develoeprSort)
+        }
+        setLoading(false);
+    }
 
     if(loading){
         return(
@@ -86,6 +99,7 @@ export default function DevelopersRanking({ wallet, setTab }) {
                         <RankingItem
                             data={item}
                             position={index + 1}
+
                         />
                     ))}
                     </>

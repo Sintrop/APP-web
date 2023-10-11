@@ -14,6 +14,8 @@ import { InsumoItem } from '../../components/InsumoItem';
 import { PhotoCarrouselItem } from '../../components/PhotoCarrouselItem';
 import { ZoneItem } from '../../components/ZoneItem';
 import Loader from '../../components/Loader';
+import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
+import { PolylineItem } from '../../components/PolylineItem';
 
 export function InspectionItemResult({data, initialVisible}){
     const navigate = useNavigate();
@@ -55,10 +57,12 @@ export function InspectionItemResult({data, initialVisible}){
 
     //States nova versão do app do ativista com zoneamentos
     const [newVersion, setNewVersion] = useState(false);
+    const [version3, setVersion3] = useState(false);
     const [zones, setZones] = useState([]);
     const [arvores, setArvores] = useState([]);
     const [bioSolo, setBioSolo] = useState(0);
     const [openZones, setOpenZones] = useState(false);
+    const [volumeTrees, setVolumeTrees] = useState(0);
 
     useEffect(() => {
         getResultIndices();
@@ -66,7 +70,6 @@ export function InspectionItemResult({data, initialVisible}){
         if(initialVisible){
             setOpen(true);
         }
-        
     },[]);
 
     async function getIsaData(){
@@ -236,11 +239,11 @@ export function InspectionItemResult({data, initialVisible}){
             const estimatedAncias = Number((Number(anciasValue[0].value) / resultZones[i].areaSubZone) * resultZones[i].areaZone).toFixed(0);
             
             //Calcula quantas árvores existe na zona
-            totalArvoresZones += Number(Number(estimatedMudas) + Number(estimatedJovens) + Number(estimatedAdultas) + Number(estimatedAncias)).toFixed(0);
-            totalMudasZones += Number(Number(estimatedMudas)).toFixed(0);
-            totalJovensZones += Number(Number(estimatedJovens)).toFixed(0);
-            totalAdultasZones += Number(Number(estimatedAdultas)).toFixed(0);
-            totalAnciasZones += Number(Number(estimatedAncias)).toFixed(0);
+            totalArvoresZones = Number(Number(totalArvoresZones) + Number(estimatedMudas) + Number(estimatedJovens) + Number(estimatedAdultas) + Number(estimatedAncias)).toFixed(0);
+            totalMudasZones = Number(Number(totalMudasZones) + Number(estimatedMudas)).toFixed(0);
+            totalJovensZones = Number(Number(totalJovensZones) + Number(estimatedJovens)).toFixed(0);
+            totalAdultasZones = Number(Number(totalAdultasZones) + Number(estimatedAdultas)).toFixed(0);
+            totalAnciasZones = Number(Number(totalAnciasZones) +Number(estimatedAncias)).toFixed(0);
 
             //Calcula o impacto das árvores da zona
             saldoCarbonArvoresZones += (Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).carbonValue)) + (Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).carbonValue)) + (Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).carbonValue)) + (Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).carbonValue));
@@ -304,6 +307,371 @@ export function InspectionItemResult({data, initialVisible}){
         }
     }
 
+    async function calculateIndicesV3(resultCategories, resultBiodiversity, resultZones, indices){
+        const indiceAnaliseSolo = indices.filter(item => item.id === '14');
+        const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
+        const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
+        const indiceCarbonBiomassaSeca = indices.filter(item => item.id === '29');
+
+        let bodyInsumos = [];
+        for (var i = 0; i < indices.length; i++){
+            let row = [];
+            row.push(indices[i].title);
+            row.push(indices[i].carbonValue);
+            row.push(indices[i].aguaValue);
+            row.push(indices[i].soloValue);
+            row.push(indices[i].bioValue);
+            row.push(indices[i].unity)
+
+            bodyInsumos.push(row);
+        }
+
+        //Filtra os indices das árvores
+        // const ArvoreMuda = resultCategories.filter(item => item.categoryId === '9');
+        // const ArvoreJovem = resultCategories.filter(item => item.categoryId === '10');
+        // const ArvoreAdulta = resultCategories.filter(item => item.categoryId === '11');
+        // const ArvoreAncia = resultCategories.filter(item => item.categoryId === '12');
+        
+
+        let bodyResultInsumos = [];
+
+        //Variaveis da degeneração
+        let bodyDegradacao = [];
+        let degenerationCarbon = 0;
+        let degenerationWater = 0;
+        let degenerationSoil = 0;
+        let degenerationBio = 0;
+        
+        //Variaveis das arvores
+        let bodyArvoresAvulsas = [];
+        let totalArvoresAvulsas = 0;
+        let saldoCarbonArvores = 0;
+        let saldoWaterArvores = 0;
+        let saldoBioArvores = 0;
+
+        //Variaveis da biodiversidade
+        let bioPictures = [];
+        let bioInsetos = 0;
+
+        //Cria a lista de link das fotos da biodiversidade
+        for(var i = 0; i < resultBiodiversity.length; i++){
+            let dataBio = {
+                text: `ipfs.io/ipfs/${resultBiodiversity[i].photo}`,
+                link: `https://${window.location.host}/view-image/${resultBiodiversity[i].photo}`,
+                style: 'link'
+            }
+
+            bioPictures.push(dataBio);
+        }
+
+        //For para calcular os resultados dos insumos e árvores avulsas
+        for (var i = 0; i < resultCategories.length; i++){
+            const category = JSON.parse(resultCategories[i].categoryDetails);
+
+            //Lista os insumos registrados na inspeção
+            if(resultCategories[i].value !== '0'){
+                let row = [];
+                row.push(resultCategories[i].title);
+                row.push(resultCategories[i].value);
+                row.push(category.unity);
+                
+                if(category.id === '9' || category.id === '10' || category.id === '11' || category.id === '12' || category.id === '23'){
+                }else{
+                    bodyResultInsumos.push(row);
+                }
+            }
+
+            //Faz a contagem dos insumos de degeneração
+            if(category.category === '1'){
+                if(resultCategories[i].value !== '0'){
+                    let row = [];
+                    row.push(resultCategories[i].title);
+                    row.push(`${resultCategories[i].value} x ${category.carbonValue} = ${(Number(resultCategories[i].value) * Number(category.carbonValue)).toFixed(1)} kg`);
+                    row.push(`${resultCategories[i].value} x ${category.aguaValue} = ${(Number(resultCategories[i].value) * Number(category.aguaValue)).toFixed(1)} m³`);
+                    row.push(`${resultCategories[i].value} x ${category.soloValue} = ${(Number(resultCategories[i].value) * Number(category.soloValue)).toFixed(1)} m²`);
+                    row.push(`${resultCategories[i].value} x ${category.bioValue} = ${(Number(resultCategories[i].value) * Number(category.bioValue)).toFixed(1)} uni`);
+                    
+                    bodyDegradacao.push(row);
+
+                    //Faz a soma da degeneração
+                    degenerationCarbon += Number(resultCategories[i].value) * Number(category.carbonValue);
+                    degenerationWater += Number(resultCategories[i].value) * Number(category.aguaValue);
+                    degenerationSoil += Number(resultCategories[i].value) * Number(category.soloValue);
+                    degenerationBio += Number(resultCategories[i].value) * Number(category.bioValue);
+                }
+            }
+
+            //faz a contagem das arvores avulsas
+            // if(category.id === '9' || category.id === '10' || category.id === '11' || category.id === '12'){
+            //     let row = [];
+            //     row.push(resultCategories[i].title);
+            //     row.push(resultCategories[i].value);
+            //     row.push(`${resultCategories[i].value} x ${category.carbonValue} = ${(Number(resultCategories[i].value) * Number(category.carbonValue)).toFixed(1)} kg`);
+            //     row.push(`${resultCategories[i].value} x ${category.aguaValue} = ${(Number(resultCategories[i].value) * Number(category.aguaValue)).toFixed(1)} m³`);
+                
+            //     bodyArvoresAvulsas.push(row);
+
+            //     //Faz a soma das arvores
+            //     totalArvoresAvulsas += Number(resultCategories[i].value);
+            //     saldoCarbonArvores += Number(resultCategories[i].value) * Number(category.carbonValue);
+            //     saldoWaterArvores += Number(resultCategories[i].value) * Number(category.aguaValue);
+            // }
+
+        }
+
+        //Análise das zonas
+        let saldoCarbonArvoresZones = 0;
+        let saldoWaterArvoresZones = 0;
+        let saldoBioArvoresZones = 0;
+        let saldoCarbonAnaliseSoloZones = 0;
+        let saldoSoilAnaliseSoloZones = 0;
+
+        let bodyCoordsZones = [];
+        let bodyCoordsZonesTeste = [];
+        let bodyCoordsSubZones = [];
+        let bodyPicturesZone = [];
+        let bodyPicturesSubZones = [];
+        let bodyArvoresSubZone = [];
+        let bodyArvoresZone = [];
+        let bodyImpactCarbonArvoresZone = [];
+        let bodyImpactWaterArvoresZone = [];
+        let bodyAnaliseSoloZones = [];
+        let bodyInsetosAnaliseSoloZones = [];
+
+        //novo método
+        let volumeAmostraAereaSampling1 = 0;
+        let volumeAmostraAereaSampling2 = 0;
+        let bodySampling1 = [];
+        
+        let volumeTotalZonas = 0;
+        
+        let totalAguaEstocadaZones = 0;
+        let totalCarbonEstocadoZones = 0;
+
+        let bodyEstocadosArvores = [];
+        let bodyVolumeZones = [];
+        let totalTrees = 0;
+        let biomassaSolo = 0;
+        
+        //For para calcular os resultados das zonas
+        for(var i = 0; i < resultZones.length; i++){
+            let volumeTotalSampling1 = 0;
+            let volumeTotalSampling2 = 0;
+
+            const zone = resultZones[i];
+            const titleZone = resultZones[i].title;
+            const pathZone = resultZones[i].path;
+            const areaZone = Number(zone.areaZone);
+            const areaSampling1 = zone.arvores?.sampling1?.area;
+            const areaSampling2 = zone.arvores?.sampling2?.area;
+            
+            const treesS1 = zone.arvores?.sampling1?.trees;
+            const treesS2 = zone.arvores?.sampling2?.trees;
+
+            //Estima a quantidade de árvores
+            const estimatedTreesS1 = areaZone * (treesS1.length / areaSampling1);
+            totalTrees += estimatedTreesS1;
+            if(zone.arvores?.sampling2){
+                const estimatedTreesS2 = areaZone * (treesS2.length / areaSampling2);
+                totalTrees += estimatedTreesS2;
+            }
+        
+            for(var s1 = 0; s1 < treesS1.length; s1++){
+                const height = Number(treesS1[s1].height);
+                const diameter = Number(treesS1[s1].ray);
+
+                const volumeTree = 3.14159 * ((((Number(diameter) / 100) / 2) ** 2) * Number(height));
+                volumeAmostraAereaSampling1 += Number(volumeTree);
+
+                let row = [];
+                let imgTree = {
+                    text: `Foto`,
+                    link: `https://${window.location.host}/view-image/${treesS1[s1].photo}`,
+                    style: 'link'
+                }
+
+                row.push(titleZone);
+                row.push(`Lat: ${treesS1[s1]?.lat}, Lng: ${treesS1[s1]?.lng}`);
+                row.push(`${treesS1[s1].ray} cm`);
+                row.push(`${treesS1[s1].height} m`);
+                row.push(imgTree);
+                row.push(`${volumeTree.toFixed(4).replace('.',',')} m³`);
+                row.push(`1 - ${zone?.arvores?.sampling1?.area} m²`);
+
+                bodySampling1.push(row);
+            }
+
+            const totalSampling1 = Number(volumeAmostraAereaSampling1) * Number(indiceMultiplicadorRaiz[0].carbonValue);
+            volumeTotalSampling1 = Number(totalSampling1);
+
+            const volumeAmostra = areaZone * (Number(totalSampling1) / Number(zone.arvores?.sampling1?.area));
+            //volumeTotalZonas += Number(volumeAmostra)
+            
+
+            if(zone.arvores?.sampling2){
+                for(var s2 = 0; s2 < treesS2.length; s2++){
+                    const height = Number(treesS2[s2].height);
+                    const diameter = Number(treesS2[s2].ray);
+    
+                    const volumeTree = 3.14159 * ((((Number(diameter) / 100) / 2) ** 2) * Number(height));
+                    volumeAmostraAereaSampling2 += Number(volumeTree)
+                    
+                    let row = [];
+                    let imgTree = {
+                        text: `Foto`,
+                        link: `https://${window.location.host}/view-image/${treesS2[s2].photo}`,
+                        style: 'link'
+                    }
+                    row.push(titleZone);
+                    row.push(`Lat: ${treesS2[s2]?.lat}, Lng: ${treesS2[s2]?.lng}`);
+                    row.push(`${treesS2[s2].ray} cm`);
+                    row.push(`${treesS2[s2].height} m`);
+                    row.push(imgTree);
+                    row.push(`${volumeTree.toFixed(4).replace('.',',')} m³`);
+                    row.push(`2 - ${zone?.arvores?.sampling2?.area} m²`);
+    
+                    bodySampling1.push(row);
+                }
+                const totalSampling2 = Number(volumeAmostraAereaSampling2) * Number(indiceMultiplicadorRaiz[0].carbonValue);
+                volumeTotalZonas += areaZone * (totalSampling2 / Number(zone.arvores?.sampling2?.area));
+                volumeTotalSampling2 += totalSampling2;
+            }
+            let volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area) + (Number(volumeTotalSampling2) / Number(zone.arvores?.sampling2 ? zone.arvores?.sampling2?.area : 0))));
+            
+            if(zone.arvores?.sampling2){
+                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area) + (Number(volumeTotalSampling2) / Number(zone.arvores?.sampling2 ? zone.arvores?.sampling2?.area : 0))));
+            }else{
+                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area)));
+            }
+            
+            volumeTotalZonas += volumeZona;
+
+            let aguaEstocada = volumeZona * Number(indicePercentAguaEstocada[0].aguaValue);
+            totalAguaEstocadaZones += aguaEstocada;
+
+            let biomassaSeca = volumeZona - Number(aguaEstocada);
+            const carbonoEstocado = Number(biomassaSeca) * Number(indiceCarbonBiomassaSeca[0].carbonValue);
+            totalCarbonEstocadoZones += Number(carbonoEstocado);
+
+            bodyVolumeZones.push([titleZone, `${volumeZona.toFixed(2).replace('.', ',')} m³`])
+
+            let bodyEstocados = [
+                titleZone,
+                `${aguaEstocada?.toFixed(2).replace('.', ',')} m³`,
+                `${carbonoEstocado?.toFixed(2).replace('.', ',')} t`
+            ];
+
+            bodyEstocadosArvores.push(bodyEstocados);
+
+            let bodyTeste = [
+                titleZone,
+            ];
+            let stringCoords = '';
+            for(var c = 0; c < pathZone.length; c++){
+                stringCoords += `| Ponto ${c+1} - Lat: ${pathZone[c].lat}, Lng: ${pathZone[c].lng} `;
+            }
+            bodyTeste.push(stringCoords);
+            bodyTeste.push(`${(resultZones[i].areaZone).toFixed(0)} m²`);
+            bodyCoordsZonesTeste.push(bodyTeste);
+
+            const analiseSolo = resultZones[i].analiseSolo;
+
+            //Faz o cálculo da biomassa da zona
+            const calculoBiomassaSolo = Number(((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue);
+            saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
+            saldoSoilAnaliseSoloZones += resultZones[i].areaZone;
+            biomassaSolo += calculoBiomassaSolo;
+
+            //Monta o item da tabela para a análise de solo;
+            const analiseSoloZone = [
+                titleZone,
+                `${analiseSolo[0].value} kg`,
+                `${analiseSolo[1].value} kg`,
+                `${analiseSolo[2].value} kg`,
+                `${analiseSolo[3].value} kg`,
+                `${(calculoBiomassaSolo).toFixed(1)} kg`
+            ]
+            bodyAnaliseSoloZones.push(analiseSoloZone);
+
+            //Pega as fotos registradas de cada zona e monta o array
+            const coordsZone = resultZones[i].path
+            let arrayPicturesZone = []
+            for(var p = 0; p < 10; p++){
+                if(coordsZone[p]?.photo){
+                    let dataPhotoZones = {
+                        text: `Foto`,
+                        link: `https://${window.location.host}/view-image/${coordsZone[p].photo}`,
+                        style: 'link'
+                    }
+                    arrayPicturesZone.push(dataPhotoZones);
+                }else{
+                    arrayPicturesZone.push('-');
+                }
+            }
+            arrayPicturesZone.unshift(titleZone);
+            bodyPicturesZone.push(arrayPicturesZone);
+        }
+
+        let totalCarbon = degenerationCarbon + ((totalCarbonEstocadoZones * -1) * 1000) + saldoCarbonAnaliseSoloZones;
+        let totalWater = degenerationWater + totalAguaEstocadaZones;
+        let totalBio = degenerationBio + resultBiodiversity.length;
+        let totalSoil = degenerationSoil + saldoSoilAnaliseSoloZones;
+        
+        const resultIndices = {
+            carbon: totalCarbon.toFixed(1),
+            water: totalWater.toFixed(1),
+            bio: totalBio.toFixed(1),
+            soil: totalSoil.toFixed(1),
+        }
+
+
+        const data = {
+            bioPictures,
+            bodyArvoresAvulsas,
+            bodyDegradacao,
+            bodyResultInsumos,
+            bodyInsumos,
+            degenerationCarbon,
+            degenerationWater,
+            degenerationSoil,
+            degenerationBio,
+            totalArvoresAvulsas,
+            saldoCarbonArvores,
+            saldoWaterArvores,
+            saldoBioArvores,
+            saldoCarbonArvoresZones,
+            saldoWaterArvoresZones,
+            saldoBioArvoresZones,
+            saldoCarbonAnaliseSoloZones,
+            saldoSoilAnaliseSoloZones,
+            bodyCoordsZones,
+            bodyPicturesZone,
+            bodyCoordsSubZones,
+            bodyPicturesSubZones,
+            bodyArvoresSubZone,
+            bodyArvoresZone,
+            bodyImpactCarbonArvoresZone,
+            bodyImpactWaterArvoresZone,
+            bodyAnaliseSoloZones,
+            bodyInsetosAnaliseSoloZones,
+            bioInsetos,
+            bodyCoordsZonesTeste,
+            bodySampling1,
+            bodyEstocadosArvores,
+            totalAguaEstocadaZones,
+            totalCarbonEstocadoZones,
+            bodyVolumeZones,
+            volumeTotalZonas,
+            totalTrees,
+            biomassaSolo
+        }
+
+        return{
+            resultIndices,
+            data
+        }
+    }
+
     async function getResultIndices() {
         setLoading(true);
         const response = await api.get(`/inspection/${data.id}`)
@@ -325,6 +693,12 @@ export function InspectionItemResult({data, initialVisible}){
             setNewVersion(true);
         }
 
+        if(JSON.parse(response.data.inspection.zones)[0].arvores.sampling1){
+            setVersion3(true);
+        }else{
+            setVersion3(false);
+        }
+
         getProofPhoto(response.data?.inspection?.proofPhoto)
         setResultIndices(JSON.parse(response.data?.inspection?.resultIdices));
         setResultCategories(JSON.parse(response.data?.inspection?.resultCategories));
@@ -337,32 +711,42 @@ export function InspectionItemResult({data, initialVisible}){
         setZones(resZones)
 
         if(response.data.inspection.zones !== null){
-            const responseTableIndices = await api.get('/subCategories');
-            const responseIndices = await calculateIndices(resCategories, resultBiodiversity, resZones, responseTableIndices.data.subCategories);
-            const {
-                totalArvoresAvulsas, 
-                totalArvoresZones, 
-                totalMudasZones, 
-                totalJovensZones,
-                totalAdultasZones,
-                totalAnciasZones,
-                totalMudasAvulsas,
-                totalJovensAvulsas,
-                totalAdultasAvulsas,
-                totalAnciasAvulsas,
-                saldoCarbonAnaliseSoloZones
-            } = responseIndices.data;
-            console.log(responseIndices)
-           
-            setArvores({
-                total: totalArvoresAvulsas + Number(totalArvoresZones),
-                mudas: Number(totalMudasZones) + Number(totalMudasAvulsas),
-                jovens: Number(totalJovensZones) + Number(totalJovensAvulsas),
-                adultas: Number(totalAdultasZones) + Number(totalAdultasAvulsas),
-                ancias: Number(totalAnciasZones) + Number(totalAnciasAvulsas),
-            })
+            if(!JSON.parse(response.data.inspection.zones)[0].arvores.sampling1){
+                const responseTableIndices = await api.get('/subCategories');
+                const responseIndices = await calculateIndices(resCategories, resultBiodiversity, resZones, responseTableIndices.data.subCategories);
+                const {
+                    totalArvoresAvulsas, 
+                    totalArvoresZones, 
+                    totalMudasZones, 
+                    totalJovensZones,
+                    totalAdultasZones,
+                    totalAnciasZones,
+                    totalMudasAvulsas,
+                    totalJovensAvulsas,
+                    totalAdultasAvulsas,
+                    totalAnciasAvulsas,
+                    saldoCarbonAnaliseSoloZones
+                } = responseIndices.data;
+            
+                setArvores({
+                    total: Number(totalArvoresAvulsas) + Number(totalArvoresZones),
+                    mudas: Number(totalMudasZones) + Number(totalMudasAvulsas),
+                    jovens: Number(totalJovensZones) + Number(totalJovensAvulsas),
+                    adultas: Number(totalAdultasZones) + Number(totalAdultasAvulsas),
+                    ancias: Number(totalAnciasZones) + Number(totalAnciasAvulsas),
+                })
 
-            setResultBiomassa(saldoCarbonAnaliseSoloZones)
+                setResultBiomassa(saldoCarbonAnaliseSoloZones);
+            }else{
+                const responseTableIndices = await api.get('/subCategories');
+                const responseIndices = await calculateIndicesV3(resCategories, resultBiodiversity, resZones, responseTableIndices.data.subCategories);
+                const {volumeTotalZonas, totalTrees, biomassaSolo} = responseIndices.data;
+                setArvores({
+                    total: totalTrees,
+                    volume: volumeTotalZonas
+                });
+                setResultBiomassa(biomassaSolo);
+            }
         }else{
             const categoryCoberturaSolo = resCategories.filter(item => item.categoryId === '13');
             const soloRegenerado = Number(categoryCoberturaSolo[0]?.value);
@@ -443,6 +827,601 @@ export function InspectionItemResult({data, initialVisible}){
 
     if(data.status === '2'){
 
+        if(version3){
+            return(
+                <div className='flex flex-col w-full mb-5 rounded-md'>
+                    <div 
+                        className='flex flex-col lg:flex-row items-center justify-between w-full h-22 bg-[#ff9900] p-3 rounded-t-md cursor-pointer gap-2 lg:gap-0'
+                        onClick={() => {
+                            if(!initialVisible){
+                                setOpen(!open)
+                            }
+                        }}
+                    >
+                        <div className='flex items-center gap-5'>
+                            {!initialVisible && (
+                                <>
+                                {open ? (
+                                    <AiFillCaretUp size={30} color='white'/>
+                                ) : (
+                                    <AiFillCaretDown size={30} color='white'/>
+                                )}
+                                </>
+                            )}
+        
+                            <p className='font-bold text-white'>{t('Result')} {t('Inspection')} #{data.id}</p>     
+                        </div>
+                        <div className='flex gap-2 items-center justify-center'>
+                            {method === 'sintrop' ? (
+                                <img
+                                    src={require('../../assets/metodo-sintrop.png')}
+                                    className='w-[30px] object-contain'
+                                />
+                            ) : (
+                                <img
+                                    src={require('../../assets/metodo-manual.png')}
+                                    className='w-[30px] object-contain'
+                                />
+                            )}
+                            <p className='text-white font-bold'>
+                                Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
+                            </p>
+                        </div>
+                        <div className='flex items-center gap-7'>
+                            <div className='flex items-center justify-center lg:w-52 bg-[#0A4303] p-2 rounded-md'>
+                                <p className='font-bold text-white'>{t('Regeneration score')}: {data?.isaScore}</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+        
+                    {open && (
+                        <div className='p-2 bg-[#0a4303] w-full flex flex-col'>
+                            <div className='w-full items-center justify-center'>
+                                <div className='flex justify-center'>
+                                </div>
+                            </div>
+
+                            {/* Informações da inspeção */}
+                            <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-5">
+                                <div className="flex flex-col items-center gap-3">
+                                    <p className="font-bold text-white">{t('Proof Photo')}</p>
+                                    {proofPhotoBase64 === '' ? (
+                                        <div className="w-[250px] h-[300px] rounded-md border-4 border-[#ff9900] flex items-center justify-center bg-gray-500">
+                                            <p className="font-bold text-white text-center">{t('No Photo')}</p>
+                                        </div>
+                                    ) : (
+                                        <img
+                                            src={proofPhotoBase64}
+                                            className="w-[250px] h-[300px] object-cover rounded-md border-4 border-[#ff9900] cursor-pointer"
+                                            onClick={() => {
+                                                setHashSelected(inspectionDataApi.proofPhoto);
+                                                setModalViewPhoto(true)
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                                
+                                <div className='flex flex-col justify-center mt-5 w-full lg:w-auto'>
+                                    <p className='font-bold text-sm lg:text-normal text-[#ff9900]'>{t('Activist')} {t('Wallet')}:</p>
+                                    <p          
+                                        className='text-blue-500 border-b-2 border-blue-500 cursor-pointer max-w-[95%] overflow-hidden text-ellipsis'
+                                        onClick={() => {
+                                            navigate(`/dashboard/${walletAddress}/user-details/2/${data.acceptedBy}`)
+                                        }}
+                                    >
+                                        {data.acceptedBy}
+                                    </p>
+                
+                                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-2 lg:mt-5'>{t('Producer')} {t('Wallet')}:</p>
+                                    <p          
+                                        className='text-blue-500 border-b-2 border-blue-500 cursor-pointer max-w-[95%] overflow-hidden text-ellipsis'
+                                        onClick={() => {
+                                            navigate(`/dashboard/${walletAddress}/user-details/1/${data.createdBy}`)
+                                        }}
+                                    >
+                                        {data.createdBy}
+                                    </p>
+                                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-2 lg:mt-8'>{t('Created At')}: <span className='text-white'>{format(new Date(Number(data.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-1'>{t('Accepted At')}: <span className='text-white'>{format(new Date(Number(data.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                                    <p className='font-bold text-sm lg:text-normal text-[#ff9900] mt-1'>{t('Inspected At')}: <span className='text-white'>{format(new Date(Number(data.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}</span></p>
+                                    
+                                    <div className='flex items-center gap-2 mt-5'>
+                                        <a  
+                                            target='_blank'
+                                            href={`https://ipfs.io/ipfs/${isaCarbon?.report}`}
+                                            className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
+                                        >{t('View Report')}</a>
+                
+                                        <button
+                                            className='w-32 text-center py-2 font-bold bg-[#ff9900] rounded-md'
+                                            onClick={() => handleDownloadPDF(isaCarbon?.report, `Carbon Report - Inspection ${data.id}`)}
+                                        >{t('Download Report')}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Resultado dos indices */}
+                            <h2 className="font-bold text-[#ff9900] text-xl px-3 mt-5">{t('Final Result')}</h2>
+                            <div className='flex flex-wrap w-full justify-center items-center gap-5 mt-1'>
+                                <div className='flex items-center justify-center bg-green-950 py-6 rounded-md w-full lg:w-[48%] gap-5'>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold text-white'>{t('Carbon')}</p>
+                                        <img
+                                            src={require('../../assets/co2.png')}
+                                            className='w-[55px] h-[40px] object-contain'
+                                        />
+                                    </div>
+
+                                    <div className='flex flex-col'>
+                                        <p className='font-bold text-white lg:text-xl flex items-end'>
+                                            {(Number(isaCarbon?.indicator) / 1000).toFixed(1)} t
+                                        </p>
+                                        <span className=' text-[#ff9900]'>
+                                            {isaCarbon.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
+                                            {isaCarbon.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
+                                            {isaCarbon.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
+                                            {isaCarbon.isaIndex === '3' && 'Neutro = 0'}
+                                            {isaCarbon.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
+                                            {isaCarbon.isaIndex === '5' && `${t('Not Regenerative')} 2 = -10`}
+                                            {isaCarbon.isaIndex === '6' && `${t('Not Regenerative')} 3 = -20`}
+                                        </span> 
+                                    </div>
+                                </div>
+                
+                                <div className='flex items-center justify-center bg-green-950 py-6 rounded-md w-full lg:w-[48%] gap-5'>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold text-white'>{t('Soil')}</p>
+                                        <img
+                                            src={require('../../assets/solo.png')}
+                                            className='w-[40px] h-[40px] object-contain'
+                                        />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <p className='font-bold text-white lg:text-xl flex items-end'>
+                                            {Number(isaSoil?.indicator).toFixed(0)} m²
+                                        </p>
+                                        <span className=' text-[#ff9900]'>
+                                            {isaSoil.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
+                                            {isaSoil.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
+                                            {isaSoil.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
+                                            {isaSoil.isaIndex === '3' && 'Neutro = 0'}
+                                            {isaSoil.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
+                                            {isaSoil.isaIndex === '5' && `${t('Not Regenerative')} 2 = -10`}
+                                            {isaSoil.isaIndex === '6' && `${t('Not Regenerative')} 3 = -20`}
+                                        </span> 
+                                    </div>
+                                </div>
+                                   
+                                <div className='flex items-center justify-center bg-green-950 py-6 rounded-md w-full lg:w-[48%] gap-5'>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold text-white'>{t('Water')}</p>
+                                        <img
+                                            src={require('../../assets/agua.png')}
+                                            className='w-[40px] h-[40px] object-contain'
+                                        />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <p className='font-bold text-white lg:text-xl flex items-end'>
+                                            {Number(isaWater?.indicator).toFixed(0)} m³
+                                        </p>
+                                        <span className=' text-[#ff9900]'>
+                                            {isaWater.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
+                                            {isaWater.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
+                                            {isaWater.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
+                                            {isaWater.isaIndex === '3' && 'Neutro = 0'}
+                                            {isaWater.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
+                                            {isaWater.isaIndex === '5' && `${t('Not Regenerative')} 2 = -10`}
+                                            {isaWater.isaIndex === '6' && `${t('Not Regenerative')} 3 = -20`}
+                                        </span> 
+                                    </div>
+                                </div>
+        
+                                <div className='flex items-center justify-center bg-green-950 py-6 rounded-md w-full lg:w-[48%] gap-5'>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold text-white'>{t('Biodiversity')}</p>
+                                        <img
+                                            src={require('../../assets/bio.png')}
+                                            className='w-[40px] h-[40px] object-contain'
+                                        />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <p className='font-bold text-white lg:text-xl flex items-end'>
+                                            {Number(isaBio?.indicator).toFixed(0)} uv
+                                        </p>
+                                        <span className=' text-[#ff9900]'>
+                                            {isaBio.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
+                                            {isaBio.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
+                                            {isaBio.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
+                                            {isaBio.isaIndex === '3' && 'Neutro = 0'}
+                                            {isaBio.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
+                                            {isaBio.isaIndex === '5' && `${t('Not Regenerative')} 2 = -10`}
+                                            {isaBio.isaIndex === '6' && `${t('Not Regenerative')} 3 = -20`}
+                                        </span> 
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                            
+                            
+                            <div className='flex flex-col bg-green-950 p-3 w-full mt-5'>
+                                {method === 'sintrop' && (
+                                    <>
+                                        {/* Carrosel de imagens da biodiversidade */}
+                                        <div className="flex flex-col w-full">
+                                            <h2 className="font-bold text-[#ff9900] text-xl">{t('Biodiversity Registry')}</h2>
+                                            <div className="flex items-center gap-3 overflow-auto">
+                                                {resultBiodiversity.length > 0 && (
+                                                    <>
+                                                        {resultBiodiversity.map(item => (
+                                                            <PhotoCarrouselItem
+                                                                data={item}
+                                                                click={(hash) => {
+                                                                    setHashSelected(hash);
+                                                                    setModalViewPhoto(true);
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </>
+                                                )}
+                                            </div>
+                                            <p className="font-bold text-white mt-2">Total: {resultBiodiversity.length} {t('Records')}</p>
+                                        </div>
+
+                                        {/* Exibe as zonas cadastradas no app mobile */}
+                                        <div className={`flex flex-col w-full lg:w-[100%] pb-2 mt-5`}>
+                                            <h2 className="font-bold text-[#ff9900] text-xl">{t('Regeneration Zones')}</h2>
+                                            <LoadScript
+                                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                            >
+                                                <GoogleMap
+                                                    mapContainerStyle={{width: '100%', height: 300, borderRadius: 8,}}
+                                                    center={{lat: zones[0].path[0].lat, lng: zones[0].path[0].lng}}
+                                                    zoom={18}
+                                                    mapTypeId='satellite' 
+                                                >
+                                                    {zones.map((item, index) => (
+                                                        <>
+                                                            <PolylineItem
+                                                                data={item}
+                                                                index={index}
+                                                            />
+                                                        </>
+                                                    ))}
+                                                </GoogleMap>
+                                            </LoadScript>
+
+                                            <div className='flex flex-col mt-1 gap-5'>
+                                                {zones.map((item, index) => (
+                                                    <ZoneItem
+                                                        data={item}
+                                                        index={index}
+                                                        viewPhoto={(hash) => {
+                                                            setHashSelected(hash, item);
+                                                            setModalViewPhoto(true);
+                                                        }}
+                                                    />
+                                                ))}    
+                                            </div>
+                                        </div>
+                                        
+                                        {/* REGENERAÇÃO */}
+                                        <div className='flex items-center justify-center h-20 w-full bg-[#ff9900] mt-5'>
+                                            <h3 className='font-bold text-white text-lg lg:text-3xl'>{t('Regeneration')}</h3>
+                                        </div>
+                                        <div className='flex flex-wrap mt-5 gap-4'>
+
+                                            {/* Lista as arvores */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openArvores ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Total Trees')}</h4>
+                                                        <p className='font-bold text-white text-lg lg:text-2xl'>{Number(arvores?.total).toFixed(0)}</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/arvore-branca.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenArvores(!openArvores)}
+                                                >
+                                                    {openArvores ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openArvores ? (
+                                                        <p className='font-bold text-sm lg:text-normal text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-sm lg:text-normal text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openArvores && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        
+                                                        <div className='flex w-full items-center justify-between'>
+                                                            <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>Total</p>
+        
+                                                            <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{Number(arvores?.total).toFixed(0)}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className='flex w-full items-center justify-between'>
+                                                            <p className='font-bold text-sm lg:text-normal text-white lg:w-[200px]'>{t('Total volume of wood')}</p>
+        
+                                                            <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                <p className='font-bold text-sm lg:text-normal text-blue-400 text-center'>{Number(arvores?.volume).toFixed(2).replace('.',',')} m³</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            {/* Mostra o resultado da biodiversidade */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openBiomassa ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] text-lg lg:text-2xl'>{t('Biomass')}</h4>
+                                                        <p className='font-bold text-white text-lg lg:text-2xl'>{resultBiomassa.toFixed(0)} Kg</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/fertilizante-orgânico.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenBiomassa(!openBiomassa)}
+                                                >
+                                                    {openBiomassa ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openBiomassa ? (
+                                                        <p className='font-bold text-sm lg:text-normal text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-sm lg:text-normal text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openBiomassa && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        <div className='flex w-full items-center justify-between'>
+                                                            <p className='font-bold text-white lg:w-[200px]'>Resultado</p>
+        
+                                                            <div className='w-24 py-1 border-2 border-[#ff9900] rounded-md'>
+                                                                <p className='font-bold text-blue-400 text-center'>{resultBiomassa.toFixed(0)} Kg</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <p className='text-gray-400'>*{t('Details of the biomass calculation can be seen in the inspection report')}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {/* REGENERAÇÃO */}
+        
+                                        {/* DEGENERAÇÃO */}
+                                        <div className='flex items-center justify-center h-20 w-full bg-[#ff9900] mt-10'>
+                                            <h3 className='font-bold text-white text-lg lg:text-3xl'>{t('Degeneration')}</h3>
+                                        </div>
+        
+                                        <div className='flex flex-wrap mt-5 gap-4'>
+
+                                            {/* Insumos Químicos */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosQuimicos ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Chemical Supplies')}</h4>
+                                                        <p className='font-bold text-white lg:text-2xl'>{quantInsumosQuimicos}</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/caveira.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenInsumosQuimicos(!openInsumosQuimicos)}
+                                                >
+                                                    {openInsumosQuimicos ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openInsumosQuimicos ? (
+                                                        <p className='font-bold text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openInsumosQuimicos && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        {resultCategories.map(item => (
+                                                            <InsumoItem
+                                                                data={item}
+                                                                typeInsumo='insumo-quimico'
+                                                                viewPhoto={(hash) => {
+                                                                    setHashSelected(hash, item);
+                                                                    setModalViewPhoto(true);
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            {/* Insumos biologicos */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosBiologicos ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Biological Inputs')}</h4>
+                                                        <p className='font-bold text-white lg:text-2xl'>{quantInsumosBiologicos}</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/vaso.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenInsumosBiologicos(!openInsumosBiologicos)}
+                                                >
+                                                    {openInsumosBiologicos ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openInsumosBiologicos ? (
+                                                        <p className='font-bold text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openInsumosBiologicos && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        {resultCategories.map(item => (
+                                                            <InsumoItem
+                                                                data={item}
+                                                                typeInsumo='insumo-biologico'
+                                                                viewPhoto={(hash) => {
+                                                                    setHashSelected(hash, item);
+                                                                    setModalViewPhoto(true);
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            {/* Insumos Minerais */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openInsumosMinerais ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('Mineral Inputs')}</h4>
+                                                        <p className='font-bold text-white lg:text-2xl'>{quantInsumosMinerais} kg</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/vaso.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenInsumosMinerais(!openInsumosMinerais)}
+                                                >
+                                                    {openInsumosMinerais ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openInsumosMinerais ? (
+                                                        <p className='font-bold text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openInsumosMinerais && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        {resultCategories.map(item => (
+                                                            <InsumoItem
+                                                                data={item}
+                                                                typeInsumo='insumo-mineral'
+                                                                viewPhoto={(hash) => {
+                                                                    setHashSelected(hash, item);
+                                                                    setModalViewPhoto(true);
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            {/* Lista os recursos externos */}
+                                            <div className={`flex flex-col w-full lg:w-[49%] bg-[#0a4303] pb-2 ${openRecursosExternos ? 'h-auto' : 'h-44'}`}>
+                                                <div className='flex items-center justify-between w-full p-3'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h4 className='font-bold text-[#ff9900] lg:text-2xl'>{t('External Resources')}</h4>
+                                                        <p className='font-bold text-white lg:text-2xl'>{quantRecursosExternos}</p>
+                                                    </div>
+        
+                                                    <img 
+                                                        src={require('../../assets/torre.png')}
+                                                        className='w-24 h-28 object-contain'
+                                                    />
+                                                </div>
+                                                <div 
+                                                    className='bg-[#0D5305] mx-2 h-8 flex items-center gap-3 px-2 cursor-pointer'
+                                                    onClick={() => setOpenRecursosExternos(!openRecursosExternos)}
+                                                >
+                                                    {openRecursosExternos ? (
+                                                        <AiFillCaretUp size={20} color='white'/>
+                                                    ) : (
+                                                        <AiFillCaretDown size={20} color='white'/>
+                                                    )}
+        
+                                                    {openRecursosExternos ? (
+                                                        <p className='font-bold text-white'>{t('Show Less')}</p>
+                                                    ) : (
+                                                        <p className='font-bold text-white'>{t('Show More')}</p>
+                                                    )}
+                                                </div>
+        
+                                                {openRecursosExternos && (
+                                                    <div className='flex flex-col mx-2 mt-1 bg-[#0D5305] p-3 gap-5'>
+                                                        {resultCategories.map(item => (
+                                                            <InsumoItem
+                                                                data={item}
+                                                                typeInsumo='recurso-externo'
+                                                                viewPhoto={(hash) => {
+                                                                    setHashSelected(hash, item);
+                                                                    setModalViewPhoto(true);
+                                                                }}
+                                                            />
+                                                        ))} 
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {/* DEGENERAÇÃO */}
+                                    </>
+                                )}
+                            </div>
+        
+                        </div>
+                    )}
+        
+                    <Dialog.Root
+                        open={modalViewPhoto}
+                        onOpenChange={(open) => setModalViewPhoto(open)}
+                    >
+                        <ModalViewPhoto
+                            close={() => setModalViewPhoto(false)}
+                            hash={hashSelected}
+                        />
+                    </Dialog.Root>
+                </div>
+            )
+        }
+
         if(newVersion){
             return(
                 <div className='flex flex-col w-full mb-5 rounded-md'>
@@ -485,7 +1464,7 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
                         <div className='flex items-center gap-7'>
                             <div className='flex items-center justify-center lg:w-52 bg-[#0A4303] p-2 rounded-md'>
-                                <p className='font-bold text-white'>ISA {t('Score')}: {data?.isaScore}</p>
+                                <p className='font-bold text-white'>{t('Regeneration score')}: {data?.isaScore}</p>
                             </div>
                             
                         </div>
@@ -497,7 +1476,8 @@ export function InspectionItemResult({data, initialVisible}){
                                 <div className='flex justify-center'>
                                 </div>
                             </div>
-        
+
+                            {/* Informações da inspeção */}
                             <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-5">
                                 <div className="flex flex-col items-center gap-3">
                                     <p className="font-bold text-white">{t('Proof Photo')}</p>
@@ -574,7 +1554,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         </p>
                                         <span className=' text-[#ff9900]'>
                                             {isaCarbon.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
-                                            {isaCarbon.isaIndex === '1' && `${t('Regenerative')} 2 = +15`}
+                                            {isaCarbon.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
                                             {isaCarbon.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
                                             {isaCarbon.isaIndex === '3' && 'Neutro = 0'}
                                             {isaCarbon.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
@@ -598,7 +1578,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         </p>
                                         <span className=' text-[#ff9900]'>
                                             {isaSoil.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
-                                            {isaSoil.isaIndex === '1' && `${t('Regenerative')} 2 = +15`}
+                                            {isaSoil.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
                                             {isaSoil.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
                                             {isaSoil.isaIndex === '3' && 'Neutro = 0'}
                                             {isaSoil.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
@@ -622,7 +1602,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         </p>
                                         <span className=' text-[#ff9900]'>
                                             {isaWater.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
-                                            {isaWater.isaIndex === '1' && `${t('Regenerative')} 2 = +15`}
+                                            {isaWater.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
                                             {isaWater.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
                                             {isaWater.isaIndex === '3' && 'Neutro = 0'}
                                             {isaWater.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
@@ -646,7 +1626,7 @@ export function InspectionItemResult({data, initialVisible}){
                                         </p>
                                         <span className=' text-[#ff9900]'>
                                             {isaBio.isaIndex === '0' && `${t('Regenerative')} 3 = +20`}
-                                            {isaBio.isaIndex === '1' && `${t('Regenerative')} 2 = +15`}
+                                            {isaBio.isaIndex === '1' && `${t('Regenerative')} 2 = +10`}
                                             {isaBio.isaIndex === '2' && `${t('Regenerative')} 1 = +5`}
                                             {isaBio.isaIndex === '3' && 'Neutro = 0'}
                                             {isaBio.isaIndex === '4' && `${t('Not Regenerative')} 1 = -5`}
@@ -686,16 +1666,37 @@ export function InspectionItemResult({data, initialVisible}){
                                         {/* Exibe as zonas cadastradas no app mobile */}
                                         <div className={`flex flex-col w-full lg:w-[100%] pb-2 mt-5`}>
                                             <h2 className="font-bold text-[#ff9900] text-xl">{t('Regeneration Zones')}</h2>
+                                            <LoadScript
+                                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                            >
+                                                <GoogleMap
+                                                    mapContainerStyle={{width: '100%', height: 300, borderRadius: 8,}}
+                                                    center={{lat: zones[0].path[0].lat, lng: zones[0].path[0].lng}}
+                                                    zoom={18}
+                                                    mapTypeId='satellite' 
+                                                >
+                                                    {zones.map((item, index) => (
+                                                        <>
+                                                            <PolylineItem
+                                                                data={item}
+                                                                index={index}
+                                                            />
+                                                        </>
+                                                    ))}
+                                                </GoogleMap>
+                                            </LoadScript>
+
                                             <div className='flex flex-col mt-1 gap-5'>
-                                                {zones.map(item => (
+                                                {zones.map((item, index) => (
                                                     <ZoneItem
                                                         data={item}
+                                                        index={index}
                                                         viewPhoto={(hash) => {
                                                             setHashSelected(hash, item);
                                                             setModalViewPhoto(true);
                                                         }}
                                                     />
-                                                ))}   
+                                                ))}    
                                             </div>
                                         </div>
                                         
@@ -1057,7 +2058,7 @@ export function InspectionItemResult({data, initialVisible}){
                         </div>
                         <div className='flex items-center gap-7'>
                             <div className='flex items-center justify-center lg:w-52 bg-[#0A4303] p-2 rounded-md'>
-                                <p className='font-bold text-white'>ISA {t('Score')}: {data?.isaScore}</p>
+                                <p className='font-bold text-white'>{t('Regeneration score')}: {data?.isaScore}</p>
                             </div>
                             
                         </div>

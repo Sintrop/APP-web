@@ -17,7 +17,6 @@ import { ToastContainer, toast} from 'react-toastify';
 import {InspectionItem} from '../../InspectionItem';
 import Loading from '../../Loading';
 import { api } from '../../../services/api';
-import Map from '../../Map';
 import * as Dialog from '@radix-ui/react-dialog';
 import {BackButton} from '../../BackButton';
 
@@ -38,7 +37,7 @@ const containerStyle = {
 export default function MyAccount({wallet, userType, setTab}){
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {user, walletConnected, blockNumber,chooseModalRegister, checkUser} = useContext(MainContext);
+    const {user, walletConnected, blockNumber,chooseModalRegister, checkUser, viewMode} = useContext(MainContext);
     const {tabActive, walletAddress, typeUser} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
@@ -135,6 +134,7 @@ export default function MyAccount({wallet, userType, setTab}){
             getApiProducer();
             const response = await GetProducer(walletAddress);
             //getBase64(response)
+            //console.log(JSON.parse(response.propertyAddress?.coordinate))
             fixCoordinates(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
             getInspections(typeUser);
@@ -182,6 +182,15 @@ export default function MyAccount({wallet, userType, setTab}){
             })
             setLoadingTransaction(false);
             getInspections();
+
+            if(res.type === 'success'){
+                api.post('/publication/new', {
+                    userId: userDataApi?.id,
+                    type: 'request-inspection',
+                    origin: 'platform',
+                    additionalData: JSON.stringify(userDataApi)
+                })
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -256,6 +265,14 @@ export default function MyAccount({wallet, userType, setTab}){
             })
     }
 
+    if(viewMode){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <p className="font-bold text-white">Você deve estar conectado para acessar essa página</p>
+            </div>
+        )
+    }
+
     if(loading){
         return(
             <div className="flex items-center justify-center bg-green-950 w-full h-screen">
@@ -286,7 +303,7 @@ export default function MyAccount({wallet, userType, setTab}){
                     <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-5 mt-2'>
                         {user == 1 && (
                             <button
-                                className='flex py-1 lg:py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg w-full lg:w-auto lg:mt-0 justify-center'
+                                className='flex py-2 lg:py-2 px-10 bg-[#1A61AA] hover:bg-blue-600 font-bold text-white duration-200 rounded-lg w-full lg:w-auto lg:mt-0 justify-center'
                                 onClick={() => {
                                     if(Number(userData?.totalInspections) < 3){
                                         requestInspection();
@@ -335,16 +352,24 @@ export default function MyAccount({wallet, userType, setTab}){
                         <a  
                             target='_blank'
                             href={`https://v4-sintrop.netlify.app/account-producer/${walletAddress}`}
-                            className='lg:w-52 h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center w-full'
+                            className='lg:w-52 p-2 lg:h-10 rounded-md bg-[#229B13] text-white font-bold flex items-center justify-center w-full'
                         >
                             Página do Produtor
                         </a>
                     </div>
+                    <button
+                        className='lg:w-52 w-full h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                        onClick={() => setModalChangePassword(true)}
+                    >
+                        Alterar senha do app
+                    </button>
                 </div>
-
-                <IsProducerSyntropic
-                    data={userData}
-                />
+                
+                <div className="flex w-full justify-center lg:justify-start">
+                    <IsProducerSyntropic
+                        data={userData}
+                    />
+                </div>
 
                 <div className='flex flex-col items-center lg:w-[1000px] lg:mt-5'>
                     {currentInspection.length > 0 && (
@@ -359,7 +384,6 @@ export default function MyAccount({wallet, userType, setTab}){
                                         const newArray = currentInspection.filter(item => item.id !== id)
                                         setCurrentInspection(newArray);
                                     }}
-                                    startOpen
                                 />
                             ))}
                         </div>
@@ -496,6 +520,20 @@ export default function MyAccount({wallet, userType, setTab}){
                         logTransaction={logTransaction}
                     />
                 </Dialog.Root>
+
+                <Dialog.Root 
+                    open={modalChangePassword} 
+                    onOpenChange={(open) => {
+                        setModalChangePassword(open);
+                    }}
+                >
+                    <ModalChangePassword
+                        close={() => {
+                            setModalChangePassword(false)
+                            toast.success('Senha alterada com sucesso!');
+                        }}
+                    />
+                </Dialog.Root>
             </div>
         )
     }
@@ -620,11 +658,20 @@ export default function MyAccount({wallet, userType, setTab}){
                     <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('My Account')}</h1>
                 </div>
                 
+                {typeUser === '7' && (
+                    <button
+                        className='lg:w-52 w-full h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
+                        onClick={() => setModalChangePhoto(true)}
+                    >
+                        {t('Change Profile Picture')}
+                    </button>
+                )}
+
                 <button
                     className='lg:w-52 w-full h-8 lg:h-10 rounded-md bg-[#ff9900] font-bold flex items-center justify-center'
-                    onClick={() => setModalChangePhoto(true)}
+                    onClick={() => setModalChangePassword(true)}
                 >
-                    {t('Change Profile Picture')}
+                    Alterar senha do app
                 </button>
             </div>
             <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
@@ -697,6 +744,20 @@ export default function MyAccount({wallet, userType, setTab}){
                         setModalChangePhoto(false)
                         getApiInvestor()
                         toast.success(`${t('Profile picture successfully updated')}`)
+                    }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root 
+                open={modalChangePassword} 
+                onOpenChange={(open) => {
+                    setModalChangePassword(open);
+                }}
+            >
+                <ModalChangePassword
+                    close={() => {
+                        setModalChangePassword(false)
+                        toast.success('Senha alterada com sucesso!');
                     }}
                 />
             </Dialog.Root>

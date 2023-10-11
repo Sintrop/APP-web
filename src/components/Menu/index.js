@@ -5,7 +5,7 @@ import { MainContext } from "../../contexts/main";
 import { useNavigate, useParams } from "react-router";
 
 import IconCommunity from '../../assets/icon-community.png'
-import IconIndice from '../../assets/icon-indice.png';
+import IconMissions from '../../assets/assistente.png';
 import IconHistory from '../../assets/icon-history.png';
 import IconManage from '../../assets/icon-manage.png';
 import IconCertificate from '../../assets/icon-certificate.png';
@@ -28,6 +28,7 @@ export default function Menu({ changeTab }) {
     const [openInspections, setOpenInspections] = useState(false);
     const [openFinancial, setOpenFinancial] = useState(false);
     const [itemsMenu, setItemsMenu] = useState([
+        { id: "missions", title: "Missions", icon: IconMissions, action: "" },
         { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
             id: "rankings",
@@ -36,7 +37,7 @@ export default function Menu({ changeTab }) {
             action: "",
             subItem: [
                 { id: "producers", label: "Producers" },
-                { id: "activists", label: "Activists" },
+                { id: "activists", label: "Inspectors" },
                 { id: "investors", label: "Investors" },
                 { id: "developers", label: "Developers" },
                 { id: "contributors", label: "Validators" },
@@ -61,7 +62,7 @@ export default function Menu({ changeTab }) {
             action: "",
             subItem: [
                 { id: "market", label: "Market" },
-                { id: "private-sales", label: "Private Sales 1" },
+                { id: "private-sales", label: "Seed Round" },
                 {id: 'producers-pool', label: 'Producers Pool'},
                 {id: 'developers-pool', label: 'Developers Pool'},
             ],
@@ -77,7 +78,7 @@ export default function Menu({ changeTab }) {
         ]
         },
         { id: "researches", title: "Research Center", icon: IconPesquisas, action: "" },
-        { id: "developers-center", title: "Developers Center", icon: IconDev, action: "" },
+        { id: "developers-center", title: "Development Center", icon: IconDev, action: "" },
         { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
     ]);
     const toggleSubItem = (id) => {
@@ -140,10 +141,7 @@ export default function Menu({ changeTab }) {
                                     navigate(`/developers-center/${walletAddress}/${typeUser}`);
                                     return;
                                 }
-                                if(tab === 'private-sales'){
-                                    navigate(`/private-sales`);
-                                    return;
-                                }
+                                
                                 changeTab(tab)
                             }}
                             key={item.id}

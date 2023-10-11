@@ -18,13 +18,20 @@ import {save} from '../config/infura';
 import axios from 'axios';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { GetProducerInfura } from '../services/methodsGetInfuraApi';
+import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+const containerStyle = {
+    width: '100%',
+    height: '200px',
+    borderRadius: 8,
+};
 
 export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     const navigate = useNavigate();
     const {walletAddress, typeUser} = useParams();
-    const {user, blockNumber, setWalletSelected} = useMainContext();
+    const {user, blockNumber, setWalletSelected, viewMode} = useMainContext();
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [moreInfo, setMoreInfo] = useState(false);
@@ -38,9 +45,9 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     const [openModalChooseMethod, setOpenModalChooseMethod] = useState(false);
     const [modalViewResult, setModalViewResult] = useState(false);
     const [method, setMethod] = useState('sintrop');
+    const [position, setPosition] = useState({});
     
     useEffect(() => {
-        //console.log(data);
         getProducerDataApi();
         getProducer();
         validateStatus(data.status);
@@ -48,6 +55,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         if(startOpen){
             setMoreInfo(true)
         }
+        
     }, [data]);
 
     async function getInspectionApi(){
@@ -94,7 +102,19 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             bodyAnaliseSoloZones,
             bodyInsetosAnaliseSoloZones,
             bioInsetos,
-            bodyCoordsZonesTeste
+            bodyCoordsZonesTeste,
+            bodySampling1,
+            bodyAguaEstocada,
+            totalAguaEstocadaZones,
+            totalCarbonEstocadoZones,
+            bodyVolumeZones,
+            bodyResiduos,
+            bodyIndices,
+            bodyBio,
+            bodyCarbonoEstocado,
+            volumeTotalZonas,
+            estimatedTreesTotal,
+            bodyEstimatedTrees
         } = pdfData;
 
         let isaCarbon = '';
@@ -252,17 +272,42 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 },
                 {
                     text: `Relatório da Inspeção #${inspection.inspectionId}`,
-                    style: 'title'
+                    style: 'title',
+                    fillColor: '#c5e0b3'
                 },
                 {
-                    text: `Tabela de indices utilizada`,
+                    text: `Tabela de índices utilizada`,
                     style: 'subTitle'
                 },
                 {
                     table:{
                         body: [
-                            ['Insumo', 'Carbono', 'Água', 'Solo', 'Biodiversidade', 'Unidade'],
+                            [{text: 'Indice', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyIndices
+                        ]
+                    }
+                },
+                {
+                    text: `Tabela de insumos utilizada`,
+                    style: 'subTitle'
+                },
+                {
+                    table:{
+                        body: [
+                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyInsumos
+                        ]
+                    }
+                },
+                {
+                    text: `Tabela de resíduos utilizada`,
+                    style: 'subTitle'
+                },
+                {
+                    table:{
+                        body: [
+                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyResiduos
                         ]
                     }
                 },
@@ -273,39 +318,26 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Insumo', 'Resultado', 'Unidade'],
+                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyResultInsumos
                         ]
                     }
                 },
                 {
-                    text: `2) Cálculo da degradação por uso de insumos externos:`,
+                    text: `2) Cálculo da degradação por uso de insumos e resíduos:`,
                     style: 'subTitle'
                 },
                 {
                     table:{
                         body: [
-                            ['Insumo', 'Carbono', 'Água', 'Solo', 'Biodiversidade'],
+                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyDegradacao,
-                            ['Total', `${degenerationCarbon.toFixed(1)} kg`, `${degenerationWater.toFixed(1)} m³`, `${degenerationSoil.toFixed(1)} m²`, `${degenerationBio.toFixed(1)} uv`,]
+                            [{text: 'Total', style: 'tableHeader'}, {text: `${degenerationCarbon.toFixed(1).replace('.',',')} kg`, style: 'tableHeader'}, {text: `${degenerationWater.toFixed(1).replace('.',',')} m³`, style: 'tableHeader'}, {text: `${degenerationSoil.toFixed(1).replace('.',',')} m²`, style: 'tableHeader'}, {text: `${degenerationBio.toFixed(1).replace('.',',')} uv`, style: 'tableHeader'}],
                         ]
                     }
                 },
                 {
-                    text: `3) Contagem de árvores avulsas:`,
-                    style: 'subTitle'
-                },
-                {
-                    table:{
-                        body: [
-                            ['Tipo', 'Contagem', 'Saldo de Co²', 'Saldo de Água'],
-                            ...bodyArvoresAvulsas,
-                            ['Total', `${totalArvoresAvulsas}`, `${saldoCarbonArvores.toFixed(1)} kg`, `${saldoWaterArvores.toFixed(1)} m³`]
-                        ]
-                    }
-                },
-                {
-                    text: `4) Zonas de Regeneração: Em Desenvolvimento`,
+                    text: `3) Zonas de Regeneração:`,
                     style: 'subTitle'
                 },
                 {
@@ -315,10 +347,11 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Nome', 'Coordenadas', 'Área'],
+                            [{text: 'Nome', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Coordenadas', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyCoordsZonesTeste
                         ]
-                    }
+                    },
+                    style: 'table'
                 },
                 {
                     text: `Foto das coordenadas das zonas:`,
@@ -327,85 +360,150 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 {
                     table:{
                         body: [
-                            ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Ponto 5', 'Ponto 6', 'Ponto 7', 'Ponto 8', 'Ponto 9', 'Ponto 10'],
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 1', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 2', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 3', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 4', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 5', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 6', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 7', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 8', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 9', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 10', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyPicturesZone
                         ]
-                    }
+                    },
+                    style: 'table'
                 },
                 {
-                    text: `Análise de solo das zonas`,
+                    text: `Estimativa de biomassa no solo`,
                     style: 'label'
                 },
                 {
                     table:{
                         body: [
-                            ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Total'],
-                            ...bodyAnaliseSoloZones
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 1 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 2 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 3 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 4 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biomassa úmida?', style: 'tableHeader', fillColor: '#C5E0B3'} ,{text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyAnaliseSoloZones,
+                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],
                         ]
                     }
                 },
                 {
-                    text: `Insetos encontrados nas análises de solo`,
+                    text: `-Cálculo da biomassa no solo:`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Total = ((Média dos pontos x Área da zona) / Área da amostra) x Indice da análise de solo`,
+                    italics: true,
+                    color: '#0a4303'
+                },
+                {
+                    text: `Caso seja assinalado o solo úmido, o resultado da fórmula acima, é multiplicado pelo indice do fator de umidade`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `Plantas registradas nas zonas`,
                     style: 'label'
                 },
                 {
                     table:{
                         body: [
-                            ['Zona', 'Ponto 1', 'Ponto 2', 'Ponto 3', 'Ponto 4', 'Total'],
-                            ...bodyInsetosAnaliseSoloZones
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Coordenada', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Diâmetro [cm]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Altura [m]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Amostragem', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodySampling1
                         ]
                     }
                 },
                 {
-                    text: `Contagem de árvores nas subzonas:`,
+                    text: `-Cálculo do volume de biomassa das árvores:`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Volume = (π x r² x altura) x Índice multiplicador da raiz`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `Quantidade total de plantas`,
+                    style: 'label'
+                },
+                {
+                    table:{
+                        headerRows: 1,
+                        body: [
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Plantas registradas', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área total das amostragens [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total estimado', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyEstimatedTrees,
+                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${estimatedTreesTotal}`, style: 'tableHeader'}],
+                        ]
+                    }
+                },
+                {
+                    text: `-Cálculo da estimativa de plantas:`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Total = Área da zona x (Total de plantas registrados / Área total das amostragens da zona)`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `Volume estimado de biomassa das zonas`,
+                    style: 'label'
+                },
+                {
+                    table:{
+                        headerRows: 1,
+                        body: [
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume total da amostra [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área total da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyVolumeZones,
+                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${volumeTotalZonas.toFixed(4).replace('.',',')}`, style: 'tableHeader'}],
+                        ]
+                    }
+                },
+                {
+                    text: `-Fórmula da extrapolação do volume de biomassa da amostra para a zona`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Volume da zona = Área da zona x (Volume total da amostra / Área total da amostra)`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `Água estocada nas zonas`,
                     style: 'label'
                 },
                 {
                     table:{
                         body: [
-                            ['Zona Mãe', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total', 'Área'],
-                            ...bodyArvoresSubZone
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyAguaEstocada,
+                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${totalAguaEstocadaZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],   
                         ]
-                    }
+                    },
                 },
                 {
-                    text: `Extrapolação de árvores para as zonas:`,
+                    text: `-Cálculo da água estocada:`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Água estocada = Volume da zona x Índice da porcentagem de água na biomassa`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `Carbono estocado nas zonas`,
                     style: 'label'
                 },
                 {
                     table:{
                         body: [
-                            ['Zona', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total'],
-                            ...bodyArvoresZone
+                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água estocada [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biomassa seca', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [t]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyCarbonoEstocado,
+                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${totalCarbonEstocadoZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],
                         ]
                     }
                 },
                 {
-                    text: `Impacto de carbono das ávores das zonas:`,
-                    style: 'label'
+                    text: `-Cálculo do carbono estocado:`,
+                    style: 'titleExplic'
                 },
                 {
-                    table:{
-                        body: [
-                            ['Zona', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total'],
-                            ...bodyImpactCarbonArvoresZone
-                        ]
-                    }
+                    text: `Carbono estocado = *Biomassa seca x Índice da porcentagem de carbono na biomassa seca`,
+                    style: 'explicacaoCalc'
                 },
                 {
-                    text: `Impacto de água das ávores das zonas:`,
-                    style: 'label'
+                    text: `*Biomassa Seca = Volume da zona - Água estocada`,
+                    style: 'explicacaoCalc'
                 },
                 {
-                    table:{
-                        body: [
-                            ['Zona', 'Mudas', 'Jovens', 'Adultas', 'Anciâs', 'Total'],
-                            ...bodyImpactWaterArvoresZone
-                        ]
-                    }
-                },
-                {
-                    text: `5) Registro de Biodiversidade:`,
+                    text: `4) Registro de Biodiversidade:`,
                     style: 'subTitle'
                 },
                 {
@@ -416,37 +514,43 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     ul: bioPictures
                 },
                 {
-                    text:[
-                        {
-                            text: 'Biodiversidade registrada: ',
-                            style: 'label'
-                        },
-                        `${bioPictures.length} uni`
-                    ]
+                    table:{
+                        body: [
+                            [{text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ...bodyBio
+                        ]
+                    }
                 },
                 {
-                    text: `6) Resultado Final:`,
+                    text: `-Cálculo da biodiversidade:`,
+                    style: 'titleExplic'
+                },
+                {
+                    text: `Biodiversidade total = Biodiversidade registrada ^ 2`,
+                    style: 'explicacaoCalc'
+                },
+                {
+                    text: `5) Resultado Final:`,
                     style: 'subTitle'
                 },
                 {
                     table:{
                         body: [
-                            ['', 'Carbono', 'Água', 'Solo', 'Biodiversidade'],
-                            ['Insumos', `${degenerationCarbon.toFixed(1)} kg`, `${degenerationWater.toFixed(1)} m³`, `${degenerationSoil.toFixed(1)} m²`, `${degenerationBio.toFixed(0)} uv`],
-                            ['Árvores Avulsas', `${saldoCarbonArvores.toFixed(1)} kg`, `${saldoWaterArvores.toFixed(1)} m³`, `0 m²`, `0 uv`],
-                            ['Árvores das Zonas', `${saldoCarbonArvoresZones.toFixed(1)} kg`, `${saldoWaterArvoresZones.toFixed(1)} m³`, `0 m²`, `0 uv`],
-                            ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(1)} kg`, `0 m³`, `${saldoSoilAnaliseSoloZones.toFixed(1)} m²`, `${bioInsetos.toFixed(0)} uv`],
-                            ['Registro de Biodiversidade', '0 kg', '0 m³', '0 m²', `${bioPictures.length} uni`],
+                            [{text: '', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade [uv]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            ['Insumos', `${degenerationCarbon.toFixed(2).replace('.',',')}`, `${degenerationWater.toFixed(2).replace('.',',')}`, `${degenerationSoil.toFixed(2).replace('.',',')}`, `${degenerationBio.toFixed(0)}`],
+                            ['Árvores', `${((totalCarbonEstocadoZones * -1) * 1000).toFixed(2).replace('.', ',')}`, `${totalAguaEstocadaZones.toFixed(2).replace('.', ',')}`, `0`, `0`],
+                            ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.',',')}`, `0`, `${saldoSoilAnaliseSoloZones.toFixed(2).replace('.',',')}`, `0`],
+                            ['Biodiversidade', '0', '0', '0', `${(Number(bioPictures.length) ** 2).toFixed(0)}`],
                             [
-                                'Total', 
-                                `${(degenerationCarbon + saldoCarbonArvores + saldoCarbonArvoresZones + saldoCarbonAnaliseSoloZones).toFixed(1)} kg`, 
-                                `${(degenerationWater + saldoWaterArvores + saldoWaterArvoresZones).toFixed(1)} m³`, 
-                                `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(1)} m²`, 
-                                `${(degenerationBio + Number(bioPictures.length) + bioInsetos).toFixed(0)} uni`, 
-                                
+                                {text: 'Total', style: 'tableHeader'}, 
+                                {text: `${(degenerationCarbon + saldoCarbonAnaliseSoloZones + ((totalCarbonEstocadoZones * -1) * 1000)).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
+                                {text: `${(degenerationWater + totalAguaEstocadaZones).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
+                                {text: `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
+                                {text: `${(degenerationBio + (Number(bioPictures.length) ** 2)).toFixed(0)}`, style: 'tableHeader'},
                             ]
                         ]
-                    }
+                    },
+                    style: 'table'
                 },
                 {
                     text: `Resultado Registrado na Blockchain:`,
@@ -458,7 +562,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             text: 'Carbono: ',
                             style: 'label'
                         },
-                        `${resultIndices?.carbon} kg = ${isaCarbon}`
+                        `${Number(resultIndices?.carbon).toFixed(2).replace('.',',')} kg = ${isaCarbon}`
                     ]
                 },
                 {
@@ -467,7 +571,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             text: 'Água: ',
                             style: 'label'
                         },
-                        `${resultIndices?.water} m³ = ${isaWater}`
+                        `${Number(resultIndices?.water).toFixed(2).replace('.',',')} m³ = ${isaWater}`
                     ]
                 },
                 {
@@ -476,7 +580,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             text: 'Solo: ',
                             style: 'label'
                         },
-                        `${resultIndices?.soil} m² = ${isaSoil}`
+                        `${Number(resultIndices?.soil).toFixed(2).replace('.',',')} m² = ${isaSoil}`
                     ]
                 },
                 {
@@ -505,14 +609,16 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     textAlign: 'center',
                     bold: true,
                     fontSize: 22,
-                    marginTop: 15
+                    marginTop: 15,
+                    backgroundColor: 'green'
                 },
                 subTitle: {
                     color: '#0a4303',
                     textAlign: 'center',
                     bold: true,
                     fontSize: 14,
-                    marginTop: 15
+                    marginTop: 15,
+                    marginBottom: 5
                 },
                 blackBold: {
                     bold: true,
@@ -521,11 +627,27 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 label:{
                     bold: true,
                     color: '#0a4303',
-                    marginTop: 5
+                    marginTop: 5,
+                    marginBottom: 5
                 },
                 link:{
                     color: 'blue',
                     marginBottom:5
+                },
+                explicacaoCalc:{
+                    marginBottom: 10,
+                    italics: true,
+                    color: '#0a4303'
+                },
+                titleExplic:{
+                    color: '#0a4303',
+                    italics: true
+                },
+                tableHeader:{
+                    bold: true
+                },
+                table:{
+                    marginBottom: 10
                 }
             }   
         }
@@ -533,8 +655,17 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
     async function getProducer() {
         setLoading(true);
-        const response = await GetProducer(data?.createdBy)
-        setProducerData(response);
+
+        if(viewMode){
+            const response = await GetProducerInfura(data?.createdBy)
+            setProducerData(response);
+            setPosition(JSON.parse(response.propertyAddress?.coordinate));
+        }else{
+            const response = await GetProducer(data?.createdBy)
+            setProducerData(response);
+            setPosition(JSON.parse(response.propertyAddress?.coordinate));
+            
+        }
         setLoading(false);
     }
 
@@ -542,7 +673,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         try{
             const response = await api.get(`/user/${String(data?.createdBy).toUpperCase()}`);
             setProducerDataApi(response.data.user);
-            const address = JSON.parse(response.data.user.address);
+            const address = JSON.parse(response.data?.user?.address);
             setProducerAddress(address);
         }catch(err){
             console.log(err);
@@ -567,10 +698,9 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             return;
         }
 
-        if(!producerData || !producerDataApi){
+        if(!producerData){
             return;
         }
-        
         acceptInspection();
     }
 
@@ -585,6 +715,20 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 hash: res.hashTransaction
             })
             registerInspectionAPI();
+
+            const dataNotification = {
+                text1: 'Accept your inspection', 
+                text2: 'Wait for the inspector at your property'
+            }
+
+            if(res.type === 'success'){
+                api.post('/notifications/send', {
+                    from: walletAddress,
+                    type: 'accept-inspection', 
+                    data: JSON.stringify(dataNotification),
+                    for: producerData?.producerWallet
+                })
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -720,25 +864,61 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
     async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity){
         const indiceAnaliseSolo = indices.filter(item => item.id === '14');
+        const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
+        const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
+        const indiceCarbonBiomassaSeca = indices.filter(item => item.id === '29');
+        const indiceFatorUmidade = indices.filter(item => item.id === '30');
 
         let bodyInsumos = [];
         for (var i = 0; i < indices.length; i++){
             let row = [];
             row.push(indices[i].title);
+            row.push(indices[i].unity);
             row.push(indices[i].carbonValue);
             row.push(indices[i].aguaValue);
             row.push(indices[i].soloValue);
             row.push(indices[i].bioValue);
-            row.push(indices[i].unity)
 
-            bodyInsumos.push(row);
+            if(indices[i].insumoCategory === 'insumo-quimico' || indices[i].insumoCategory === 'insumo-biologico' || indices[i].insumoCategory === 'insumo-mineral' || indices[i].insumoCategory === 'recurso-externo'){
+                bodyInsumos.push(row);
+            }
+        }
+
+        let bodyResiduos = [];
+        for (var i = 0; i < indices.length; i++){
+            let row = [];
+            row.push(indices[i].title);
+            row.push(indices[i].unity);
+            row.push(indices[i].carbonValue);
+            row.push(indices[i].aguaValue);
+            row.push(indices[i].soloValue);
+            row.push(indices[i].bioValue);
+
+            if(indices[i].insumoCategory === 'embalagens'){
+                bodyResiduos.push(row);
+            }
+        }
+
+        let bodyIndices = [];
+        for (var i = 0; i < indices.length; i++){
+            let row = [];
+            row.push(indices[i].title);
+            row.push(indices[i].unity);
+            row.push(indices[i].carbonValue);
+            row.push(indices[i].aguaValue);
+            row.push(indices[i].soloValue);
+            row.push(indices[i].bioValue);
+
+            if(indices[i].insumoCategory === 'arvores' || indices[i].insumoCategory === 'biomassa'){
+                bodyIndices.push(row);
+            }
         }
 
         //Filtra os indices das árvores
-        const ArvoreMuda = resultCategories.filter(item => item.categoryId === '9');
-        const ArvoreJovem = resultCategories.filter(item => item.categoryId === '10');
-        const ArvoreAdulta = resultCategories.filter(item => item.categoryId === '11');
-        const ArvoreAncia = resultCategories.filter(item => item.categoryId === '12');
+        // const ArvoreMuda = resultCategories.filter(item => item.categoryId === '9');
+        // const ArvoreJovem = resultCategories.filter(item => item.categoryId === '10');
+        // const ArvoreAdulta = resultCategories.filter(item => item.categoryId === '11');
+        // const ArvoreAncia = resultCategories.filter(item => item.categoryId === '12');
         
 
         let bodyResultInsumos = [];
@@ -760,6 +940,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         //Variaveis da biodiversidade
         let bioPictures = [];
         let bioInsetos = 0;
+        let bodyBio = [];
 
         //Cria a lista de link das fotos da biodiversidade
         for(var i = 0; i < resultBiodiversity.length; i++){
@@ -771,6 +952,14 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
             bioPictures.push(dataBio);
         }
+
+        let rowBio = [
+            `${resultBiodiversity.length}`,
+            `${resultBiodiversity.length} ^ 2`,
+            `${(Number(resultBiodiversity.length) ** 2).toFixed(0)}`
+        ];
+        bodyBio.push(rowBio);
+
 
         //For para calcular os resultados dos insumos e árvores avulsas
         for (var i = 0; i < resultCategories.length; i++){
@@ -808,23 +997,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     degenerationBio += Number(resultCategories[i].value) * Number(category.bioValue);
                 }
             }
-
-            //faz a contagem das arvores avulsas
-            if(category.id === '9' || category.id === '10' || category.id === '11' || category.id === '12'){
-                let row = [];
-                row.push(resultCategories[i].title);
-                row.push(resultCategories[i].value);
-                row.push(`${resultCategories[i].value} x ${category.carbonValue} = ${(Number(resultCategories[i].value) * Number(category.carbonValue)).toFixed(1)} kg`);
-                row.push(`${resultCategories[i].value} x ${category.aguaValue} = ${(Number(resultCategories[i].value) * Number(category.aguaValue)).toFixed(1)} m³`);
-                
-                bodyArvoresAvulsas.push(row);
-
-                //Faz a soma das arvores
-                totalArvoresAvulsas += Number(resultCategories[i].value);
-                saldoCarbonArvores += Number(resultCategories[i].value) * Number(category.carbonValue);
-                saldoWaterArvores += Number(resultCategories[i].value) * Number(category.aguaValue);
-            }
-
         }
 
         //Análise das zonas
@@ -846,15 +1018,186 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         let bodyAnaliseSoloZones = [];
         let bodyInsetosAnaliseSoloZones = [];
 
+        //novo método
+        
+        let bodySampling1 = [];
+        
+        let volumeTotalZonas = 0;
+        
+        let totalAguaEstocadaZones = 0;
+        let totalCarbonEstocadoZones = 0;
+
+        let bodyAguaEstocada = [];
+        let bodyCarbonoEstocado = [];
+        let bodyVolumeZones = [];
+        let estimatedTreesTotal = 0;
+        let bodyEstimatedTrees = [];
+        
         //For para calcular os resultados das zonas
         for(var i = 0; i < resultZones.length; i++){
+            let volumeTotalSampling1 = 0;
+            let volumeTotalSampling2 = 0;
+            let volumeAmostraAereaSampling1 = 0;
+            let volumeAmostraAereaSampling2 = 0;
+
+            const zone = resultZones[i];
             const titleZone = resultZones[i].title;
             const pathZone = resultZones[i].path;
+            const areaZone = Number(zone.areaZone);
+            
+            const treesS1 = zone.arvores?.sampling1?.trees;
+            const treesS2 = zone.arvores?.sampling2?.trees;
 
-            //Pega as cordenadas da zona, titulo e area e coloca no array para montar no pdf
-            const zone = [`${resultZones[i].title}`, `Lat:${resultZones[i].path[0].lat}, Lng:${resultZones[i].path[0].lng}`, `Lat:${resultZones[i].path[1].lat}, Lng:${resultZones[i].path[1].lng}`, `Lat:${resultZones[i].path[2].lat}, Lng:${resultZones[i].path[2].lng}`, `Lat:${resultZones[i].path[3].lat}, Lng:${resultZones[i].path[3].lng}`, `Lat:${resultZones[i].path[4].lat}, Lng:${resultZones[i].path[4].lng}`, `Lat:${resultZones[i].path[5].lat}, Lng:${resultZones[i].path[5].lng}`,`${(resultZones[i].areaZone).toFixed(0)} m²`,]
-            bodyCoordsZones.push(zone);
+            //Faz a estimativa de árvores da zona e monta o array da tabela do pdf
+            let estimatedTreeZone = 0;
+            let rowTreesZone = [];
 
+            if(zone.arvores?.sampling2){
+                const estimatedTree = (areaZone * ((treesS1.length + treesS2.length) / (Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area))));
+                estimatedTreeZone += Number(estimatedTree).toFixed(0);
+                
+                const rowTree = [
+                    titleZone,
+                    `${areaZone.toFixed(2).replace('.',',')}`,
+                    `${treesS1.length + treesS2.length}`,
+                    `${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)}`,
+                    `${areaZone.toFixed(2).replace('.',',')} x (${treesS1.length + treesS2.length} / ${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)})`,
+                    `${estimatedTree.toFixed(0)}`
+                ];
+                rowTreesZone = rowTree;
+            }else{
+                const estimatedTree = (areaZone * (treesS1.length / Number(zone.arvores?.sampling1.area)));
+                estimatedTreeZone += Number(estimatedTree).toFixed(0);
+
+                const rowTree = [
+                    titleZone,
+                    `${areaZone.toFixed(2).replace('.',',')}`,
+                    `${treesS1.length}`,
+                    `${Number(zone.arvores?.sampling1.area)}`,
+                    `${areaZone.toFixed(2).replace('.',',')} x (${treesS1.length} / ${Number(zone.arvores?.sampling1.area)})`,
+                    `${estimatedTree.toFixed(0)}`
+                ];
+                rowTreesZone = rowTree;
+            }
+            
+            bodyEstimatedTrees.push(rowTreesZone);
+            estimatedTreesTotal += Number(estimatedTreeZone);
+        
+            //For para listar e calcular cada árvore registrada
+            for(var s1 = 0; s1 < treesS1.length; s1++){
+                const height = Number(treesS1[s1].height);
+                const diameter = Number(treesS1[s1].ray);
+                const ray = (diameter / 2) / 100;
+
+                const volumeTree = 3.14159 * (Number(ray ** 2) * Number(height));
+                volumeAmostraAereaSampling1 += Number(volumeTree);
+
+                let row = [];
+                let imgTree = {
+                    text: `Foto`,
+                    link: `https://${window.location.host}/view-image/${treesS1[s1].photo}`,
+                    style: 'link'
+                }
+
+                row.push(titleZone);
+                row.push(`Lat: ${treesS1[s1]?.lat}, Lng: ${treesS1[s1]?.lng}`);
+                row.push(`${treesS1[s1].ray}`);
+                row.push(`${treesS1[s1].height}`);
+                row.push(imgTree);
+                row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.',',')}`);
+                row.push(`1 - ${zone?.arvores?.sampling1?.area} m²`);
+
+                bodySampling1.push(row);
+            }
+
+            const totalSampling1 = Number(volumeAmostraAereaSampling1) * Number(indiceMultiplicadorRaiz[0].carbonValue);
+            volumeTotalSampling1 = Number(totalSampling1);
+
+            if(zone.arvores?.sampling2){
+                for(var s2 = 0; s2 < treesS2.length; s2++){
+                    const height = Number((treesS2[s2].height).replace(',','.'));
+                    const diameter = Number((treesS2[s2].ray).replace(',','.'));
+                    const ray = (diameter / 2) / 100;
+    
+                    const volumeTree = 3.14159 * ((Number(ray) ** 2) * Number(height));
+                    volumeAmostraAereaSampling2 += Number(volumeTree)
+                    
+                    let row = [];
+                    let imgTree = {
+                        text: `Foto`,
+                        link: `https://${window.location.host}/view-image/${treesS2[s2].photo}`,
+                        style: 'link'
+                    }
+                    row.push(titleZone);
+                    row.push(`Lat: ${treesS2[s2]?.lat}, Lng: ${treesS2[s2]?.lng}`);
+                    row.push(`${treesS2[s2].ray}`);
+                    row.push(`${treesS2[s2].height}`);
+                    row.push(imgTree);
+                    row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.',',')}`);
+                    row.push(`2 - ${zone?.arvores?.sampling2?.area}`);
+    
+                    bodySampling1.push(row);
+                }
+                const totalSampling2 = Number(volumeAmostraAereaSampling2) * Number(indiceMultiplicadorRaiz[0].carbonValue);
+                volumeTotalZonas += areaZone * (totalSampling2 / Number(zone.arvores?.sampling2?.area));
+                volumeTotalSampling2 += totalSampling2;
+            }
+
+            let volumeZona = 0;
+            let volumeTotalAmostragem = 0
+            let areaTotalAmostragem = 0;
+
+            if(zone.arvores?.sampling2){
+                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area) + (Number(volumeTotalSampling2) / Number(zone.arvores?.sampling2 ? zone.arvores?.sampling2?.area : 0))));
+                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area) + Number(zone.arvores?.sampling2?.area) ;
+                volumeTotalAmostragem += Number(volumeTotalSampling1) + Number(volumeTotalSampling2);
+            }else{
+                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area)));
+                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area);
+                volumeTotalAmostragem += Number(volumeTotalSampling1);
+            }
+            
+            volumeTotalZonas += volumeZona;
+
+            let aguaEstocada = volumeZona * Number(indicePercentAguaEstocada[0].aguaValue);
+            totalAguaEstocadaZones += aguaEstocada;
+
+            let biomassaSeca = volumeZona - Number(aguaEstocada);
+            const carbonoEstocado = Number(biomassaSeca) * Number(indiceCarbonBiomassaSeca[0].carbonValue);
+            totalCarbonEstocadoZones += Number(carbonoEstocado);
+
+            bodyVolumeZones.push([
+                titleZone, 
+                `${areaZone.toFixed(2).replace('.',',')}`,
+                `${volumeTotalAmostragem.toFixed(4).replace('.',',')}`,
+                `${areaTotalAmostragem.toFixed(2).replace('.',',')}`,
+                `${areaZone.toFixed(2).replace('.', ',')} m² x (${volumeTotalAmostragem.toFixed(4).replace('.', ',')} m³ / ${areaTotalAmostragem.toFixed(2).replace('.',',')} m²)`,
+                `${volumeZona.toFixed(4).replace('.', ',')}`, 
+            ]);
+
+            //Monta a tabela da água estocada
+            let bodyAgua = [
+                titleZone,
+                `${Number(volumeZona).toFixed(4).replace('.',',')}`,
+                `${Number(volumeZona).toFixed(4).replace('.',',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
+                `${aguaEstocada?.toFixed(2).replace('.', ',')}`,
+            ];
+
+            bodyAguaEstocada.push(bodyAgua);
+
+            //Monta a tabela do carbono estocad0
+            let bodyCarbono = [
+                titleZone,
+                `${Number(volumeZona).toFixed(4).replace('.',',')}`,
+                `${aguaEstocada?.toFixed(2).replace('.', ',')}`,
+                `${Number(volumeZona).toFixed(4).replace('.',',')} - ${aguaEstocada?.toFixed(4).replace('.', ',')} = ${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.',',')}`,
+                `${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.',',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
+                `${carbonoEstocado?.toFixed(2).replace('.', ',')}`,
+            ];
+
+            bodyCarbonoEstocado.push(bodyCarbono);
+
+            //Monta a tabela com coordenadas e área de cada zona
             let bodyTeste = [
                 titleZone,
             ];
@@ -863,114 +1206,48 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 stringCoords += `| Ponto ${c+1} - Lat: ${pathZone[c].lat}, Lng: ${pathZone[c].lng} `;
             }
             bodyTeste.push(stringCoords);
-            bodyTeste.push(`${(resultZones[i].areaZone).toFixed(0)} m²`)
-            bodyCoordsZonesTeste.push(bodyTeste)
+            bodyTeste.push(`${(resultZones[i].areaZone).toFixed(0)} m²`);
+            bodyCoordsZonesTeste.push(bodyTeste);
 
             const analiseSolo = resultZones[i].analiseSolo;
-            //Filtra as árvores pelo id
-            const mudasValue = resultZones[i].arvores.filter(item => item.id === 1);
-            const jovensValue = resultZones[i].arvores.filter(item => item.id === 2);
-            const adultasValue = resultZones[i].arvores.filter(item => item.id === 3);
-            const anciasValue = resultZones[i].arvores.filter(item => item.id === 4);
-            const bioValue = resultZones[i].arvores.filter(item => item.id === 5);
-
-            //Faz a estimativa de arvores da zona calculando pela subzona
-            const estimatedMudas = Number((Number(mudasValue[0].value) / resultZones[i].areaSubZone) * resultZones[i].areaZone).toFixed(0);
-            const estimatedJovens = Number((Number(jovensValue[0].value) / resultZones[i].areaSubZone) * resultZones[i].areaZone).toFixed(0);
-            const estimatedAdultas = Number((Number(adultasValue[0].value) / resultZones[i].areaSubZone) * resultZones[i].areaZone).toFixed(0);
-            const estimatedAncias = Number((Number(anciasValue[0].value) / resultZones[i].areaSubZone) * resultZones[i].areaZone).toFixed(0);
-
-            //Monta a tabela de quantas árvores por zona e mostra a estrapolação;
-            const arrayArvoresSubZone = [
-                titleZone,
-                mudasValue[0].value,
-                jovensValue[0].value,
-                adultasValue[0].value,
-                anciasValue[0].value,
-                Number(mudasValue[0].value) + Number(jovensValue[0].value) + Number(adultasValue[0].value) + Number(anciasValue[0].value),
-                `${resultZones[i].areaSubZone} m²`
-            ]
-            bodyArvoresSubZone.push(arrayArvoresSubZone);
-
-            //Monta o array da extrapolação de árvores para a zona
-            const arrayArvoresZone = [
-                titleZone,
-                estimatedMudas,
-                estimatedJovens,
-                estimatedAdultas,
-                estimatedAncias,
-                Number(estimatedMudas) + Number(estimatedJovens) + Number(estimatedAncias) + Number(estimatedAdultas)
-            ]
-            bodyArvoresZone.push(arrayArvoresZone);
-            
-            //Calcula o impacto das árvores da zona
-            saldoCarbonArvoresZones += (Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).carbonValue)) + (Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).carbonValue)) + (Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).carbonValue)) + (Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).carbonValue));
-            saldoWaterArvoresZones += (Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).aguaValue)) + (Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).aguaValue)) + (Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).aguaValue)) + (Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).aguaValue))
-            
-            
-            //Monta a tabela do impacto de carbono das árvores da zona
-            const impactCarbonArvoresSubZone = [
-                titleZone,
-                `${estimatedMudas} x ${Number(JSON.parse(ArvoreMuda[0].categoryDetails).carbonValue)} = ${(Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).carbonValue)).toFixed(1)} kg`,
-                `${estimatedJovens} x ${Number(JSON.parse(ArvoreJovem[0].categoryDetails).carbonValue)} = ${(Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).carbonValue)).toFixed(1)} kg`,
-                `${estimatedAdultas} x ${Number(JSON.parse(ArvoreAdulta[0].categoryDetails).carbonValue)} = ${(Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).carbonValue)).toFixed(1)} kg`,
-                `${estimatedAncias} x ${Number(JSON.parse(ArvoreAncia[0].categoryDetails).carbonValue)} = ${(Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).carbonValue)).toFixed(1)} kg`,
-                `${((Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).carbonValue)) + (Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).carbonValue)) + (Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).carbonValue)) + (Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).carbonValue))).toFixed(1)} kg`
-            ]
-            bodyImpactCarbonArvoresZone.push(impactCarbonArvoresSubZone);
-
-            //Monta a tabela do impacto dde agua das árvores da zona
-            const impactWaterArvoresSubZone = [
-                titleZone,
-                `${estimatedMudas} x ${Number(JSON.parse(ArvoreMuda[0].categoryDetails).aguaValue)} = ${(Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).aguaValue)).toFixed(1)} m³`,
-                `${estimatedJovens} x ${Number(JSON.parse(ArvoreJovem[0].categoryDetails).aguaValue)} = ${(Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).aguaValue)).toFixed(1)} m³`,
-                `${estimatedAdultas} x ${Number(JSON.parse(ArvoreAdulta[0].categoryDetails).aguaValue)} = ${(Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).aguaValue)).toFixed(1)} m³`,
-                `${estimatedAncias} x ${Number(JSON.parse(ArvoreAncia[0].categoryDetails).aguaValue)} = ${(Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).aguaValue)).toFixed(1)} m³`,
-                `${((Number(estimatedMudas) * Number(JSON.parse(ArvoreMuda[0].categoryDetails).aguaValue)) + (Number(estimatedJovens) * Number(JSON.parse(ArvoreJovem[0].categoryDetails).aguaValue)) + (Number(estimatedAdultas) * Number(JSON.parse(ArvoreAdulta[0].categoryDetails).aguaValue)) + (Number(estimatedAncias) * Number(JSON.parse(ArvoreAncia[0].categoryDetails).aguaValue))).toFixed(1)} m³`
-            ]
-            bodyImpactWaterArvoresZone.push(impactWaterArvoresSubZone);
-            //Seta a biodiversidade de arvores da zona
-            saldoBioArvoresZones += Number(bioValue[0].value);
 
             //Faz o cálculo da biomassa da zona
-            const calculoBiomassaSolo = Number(((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue);
-            saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
+            let biomassaSolo = 0;
             saldoSoilAnaliseSoloZones += resultZones[i].areaZone;
-
-            //Faz o calculo da biodiversidade dos insetos vistos nas analises de solo
-            const calculoBioInsetos = Number(((Number(analiseSolo[0].insetos) + Number(analiseSolo[1].insetos) + Number(analiseSolo[2].insetos) + Number(analiseSolo[3].insetos)) / 4) * resultZones[i].areaZone);
-            bioInsetos += Number(calculoBioInsetos);
+            
+            if(resultZones[i]?.soilUmid){
+                const calculoBiomassaSolo = (Number((((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) / 0.5) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue)) * Number(indiceFatorUmidade[0].carbonValue);
+                saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
+                biomassaSolo += calculoBiomassaSolo;
+            }else{
+                const calculoBiomassaSolo = Number((((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) / 0.5) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue);
+                saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
+                biomassaSolo += calculoBiomassaSolo;
+            }
 
             //Monta o item da tabela para a análise de solo;
             const analiseSoloZone = [
                 titleZone,
-                `${analiseSolo[0].value} kg`,
-                `${analiseSolo[1].value} kg`,
-                `${analiseSolo[2].value} kg`,
-                `${analiseSolo[3].value} kg`,
-                `${(calculoBiomassaSolo).toFixed(1)} kg`
+                `${areaZone.toFixed(2).replace('.',',')}`,
+                `${analiseSolo[0].value}`,
+                `${analiseSolo[1].value}`,
+                `${analiseSolo[2].value}`,
+                `${analiseSolo[3].value}`,
+                '0,5',
+                `${resultZones[i]?.soilUmid ? 'Sim' : 'Não'}`,
+                `(((${analiseSolo[0].value} + ${analiseSolo[1].value} + ${analiseSolo[2].value} + ${analiseSolo[3].value} / 4) / 0,5) x ${areaZone.toFixed(2).replace('.',',')}) x ${indiceAnaliseSolo[0].carbonValue}`,
+                `${(biomassaSolo).toFixed(2).replace('.',',')} kg`
             ]
             bodyAnaliseSoloZones.push(analiseSoloZone);
-
-            //Monta a tabela dos insetos de cada zona
-            const insetosAnaliseSoloZone = [
-                titleZone,
-                `${analiseSolo[0].insetos}`,
-                `${analiseSolo[1].insetos}`,
-                `${analiseSolo[2].insetos}`,
-                `${analiseSolo[3].insetos}`,
-                `${(calculoBioInsetos).toFixed(0)} uv`
-            ]
-            bodyInsetosAnaliseSoloZones.push(insetosAnaliseSoloZone);
 
             //Pega as fotos registradas de cada zona e monta o array
             const coordsZone = resultZones[i].path
             let arrayPicturesZone = []
-            for(var i = 0; i < 10; i++){
-                if(coordsZone[i]?.photo){
+            for(var p = 0; p < 10; p++){
+                if(coordsZone[p]?.photo){
                     let dataPhotoZones = {
                         text: `Foto`,
-                        link: `https://${window.location.host}/view-image/${coordsZone[i].photo}`,
+                        link: `https://${window.location.host}/view-image/${coordsZone[p].photo}`,
                         style: 'link'
                     }
                     arrayPicturesZone.push(dataPhotoZones);
@@ -980,33 +1257,18 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             }
             arrayPicturesZone.unshift(titleZone);
             bodyPicturesZone.push(arrayPicturesZone);
-
-            // //Pega as fotos registradas de cada subzona e monta o array
-            // const coordsSubZone = resultZones[i].subZone
-            // let arrayPicturesSubZone = []
-            // for(var i = 0; i < coordsSubZone.length; i++){
-            //     let dataPhotoSubZone = {
-            //         text: `Photo`,
-            //         link: `https://ipfs.io/ipfs/${coordsSubZone[i].photo}`,
-            //         style: 'link'
-            //     }
-    
-            //     arrayPicturesSubZone.push(dataPhotoSubZone);
-            // }
-            // arrayPicturesSubZone.unshift(titleZone);
-            // bodyPicturesSubZones.push(arrayPicturesSubZone);
         }
 
-        let totalCarbon = degenerationCarbon + saldoCarbonArvores + saldoCarbonArvoresZones + saldoCarbonAnaliseSoloZones;
-        let totalWater = degenerationWater + saldoWaterArvores + saldoWaterArvoresZones;
-        let totalBio = degenerationBio + resultBiodiversity.length + bioInsetos;
+        let totalCarbon = degenerationCarbon + ((totalCarbonEstocadoZones * -1) * 1000) + saldoCarbonAnaliseSoloZones;
+        let totalWater = degenerationWater + totalAguaEstocadaZones;
+        let totalBio = degenerationBio + (Number(resultBiodiversity.length) * Number(resultBiodiversity.length));
         let totalSoil = degenerationSoil + saldoSoilAnaliseSoloZones;
         
         const resultIndices = {
-            carbon: totalCarbon.toFixed(1),
-            water: totalWater.toFixed(1),
-            bio: totalBio.toFixed(1),
-            soil: totalSoil.toFixed(1),
+            carbon: totalCarbon.toFixed(2),
+            water: totalWater.toFixed(2),
+            bio: totalBio.toFixed(2),
+            soil: totalSoil.toFixed(2),
         }
 
         const pdfData = {
@@ -1039,7 +1301,19 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
             bodyAnaliseSoloZones,
             bodyInsetosAnaliseSoloZones,
             bioInsetos,
-            bodyCoordsZonesTeste
+            bodyCoordsZonesTeste,
+            bodySampling1,
+            bodyAguaEstocada,
+            bodyCarbonoEstocado,
+            totalAguaEstocadaZones,
+            totalCarbonEstocadoZones,
+            bodyVolumeZones,
+            bodyResiduos,
+            bodyIndices,
+            bodyBio,
+            volumeTotalZonas,
+            estimatedTreesTotal,
+            bodyEstimatedTrees
         }
 
         return{
@@ -1071,7 +1345,11 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         
         //Função que calcula os indices e retorna os dados para o pdf
         const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity)
-        
+        await api.put('/update-result',{
+            id: data?.id,
+            result: JSON.stringify(responseCalculo)
+        })
+
         const data1 = {
             resultIndices: responseCalculo.resultIndices,
             pdfBioHash: pdfDevHash,
@@ -1104,131 +1382,6 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
             createIsas(data1, 'phoenix', hash);
         })
-    }
-
-    async function finishInspection(){
-        setLoading(true);
-        let pdfCarbonHash = '';
-        let pdfSoloHash = '';
-        let pdfAguaHash = '';
-        let pdfBioHash = '';
-
-        let totalCarbon = 0;
-        let totalWater = 0;
-        let totalBio = 0;
-        let totalSoil = 0;
-
-        let degenerationCarbon = 0;
-        let regenerationCarbon = 0;
-        let degenerationWater = 0;
-        let regenerationWater = 0;
-        let degenerationBio = 0;
-        let regenerationBio = 0;
-        let degenerationSoil = 0;
-        let regenerationSoil = 0;
-
-        const response = await api.get(`/inspection/${data.id}`)
-        if(response.data.inspection.status === 1){
-            setLoading(false);
-            toast.error('Realize a inspeção no app do ativista para smartphone!')
-            return;
-        }
-
-        const resultCategories = JSON.parse(response?.data?.inspection?.resultCategories);
-        const inspection = response?.data?.inspection
-        const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
-
-        const soloRegenerado = resultCategories.filter(item => item.categoryId === '13');
-        const analiseSolo1 = resultCategories.filter(item => item.categoryId === '14');
-        const analiseSolo2 = resultCategories.filter(item => item.categoryId === '15');
-        const analiseSolo3 = resultCategories.filter(item => item.categoryId === '16');
-        const analiseSolo4 = resultCategories.filter(item => item.categoryId === '17');
-        const analiseSolo5 = resultCategories.filter(item => item.categoryId === '18');
-        const bioArvores = resultCategories.filter(item => item.categoryId === '23');
-
-        const calculoBiomassaSolo = ((Number(analiseSolo1[0]?.value) + Number(analiseSolo2[0]?.value) + Number(analiseSolo3[0]?.value) + Number(analiseSolo4[0]?.value) + Number(analiseSolo5[0]?.value)) / 5) * Number(soloRegenerado[0].value);
-        const resultIndiceBiomassaSolo = calculoBiomassaSolo * JSON.parse(analiseSolo1[0].categoryDetails).carbonValue;
-        regenerationCarbon += resultIndiceBiomassaSolo;
-
-        const calculoBiodiversidadeInsetos = ((Number(analiseSolo1[0]?.value2) + Number(analiseSolo2[0]?.value2) + Number(analiseSolo3[0]?.value2) + Number(analiseSolo4[0]?.value2) + Number(analiseSolo5[0]?.value2)) / 5) * Number(soloRegenerado[0].value);
-        regenerationBio += calculoBiodiversidadeInsetos;
-        regenerationBio += Number(resultBiodiversity.length);
-        regenerationBio += Number(bioArvores[0].value);
-
-        regenerationSoil += Number(soloRegenerado[0].value);
-
-        for(var i = 0; i < resultCategories.length; i++) {
-            const categoryDetails = JSON.parse(resultCategories[i].categoryDetails);
-            if(categoryDetails.category === '1'){
-                degenerationCarbon += Number(resultCategories[i].value) * Number(categoryDetails.carbonValue)
-                degenerationWater += Number(resultCategories[i].value) * Number(categoryDetails.aguaValue)
-                degenerationBio += Number(resultCategories[i].value) * Number(categoryDetails.bioValue)
-                degenerationSoil += Number(resultCategories[i].value) * Number(categoryDetails.soloValue)
-            }
-
-            if(categoryDetails.category === '2' && resultCategories[i].categoryId !== '23'){
-                regenerationCarbon += Number(resultCategories[i].value) * Number(categoryDetails.carbonValue)
-                regenerationWater += Number(resultCategories[i].value) * Number(categoryDetails.aguaValue)
-            }
-        }
-
-        totalCarbon = degenerationCarbon + regenerationCarbon;
-        totalWater = degenerationWater + regenerationWater;
-        totalBio = degenerationBio + regenerationBio;
-        totalSoil = degenerationSoil + regenerationSoil;
-
-        const resultIndices = {
-            carbon: totalCarbon,
-            agua: totalWater,
-            solo: totalSoil,
-            bio: totalBio
-        }
-        console.log(resultIndices)
-
-        try{
-            await api.put(`/inspections/${data.id}/update-result-indices`, {
-                resultIndices: JSON.stringify(resultIndices)
-            })
-        }catch(err){
-            console.log(err)
-        }
-
-        const pdfCarbon = await pdfMake.createPdf(generatePdf(inspection, 'carbon', resultCategories, resultIndices, resultBiodiversity));
-        const pdfSolo = await pdfMake.createPdf(generatePdf(inspection, 'solo', resultCategories, resultIndices, resultBiodiversity));
-        const pdfAgua = await pdfMake.createPdf(generatePdf(inspection, 'agua', resultCategories, resultIndices, resultBiodiversity));
-        const pdfBio = await pdfMake.createPdf(generatePdf(inspection, 'bio', resultCategories, resultIndices, resultBiodiversity));
-        
-        pdfCarbon.getBuffer(async (res) => {
-            const hash = await save(res);
-            pdfCarbonHash = hash;
-
-            pdfSolo.getBuffer(async (res) => {
-                const hash = await save(res);
-                pdfSoloHash = hash;
-
-                pdfAgua.getBuffer(async (res) => {
-                    const hash = await save(res);
-                    pdfAguaHash = hash;
-
-                    pdfBio.getBuffer(async (res) => {
-                        const hash = await save(res);
-                        pdfBioHash = hash;
-
-                        const data = {
-                            resultIndices,
-                            pdfBioHash,
-                            pdfAguaHash,
-                            pdfCarbonHash,
-                            pdfSoloHash
-                        }
-                        createIsas(data, 'phoenix')
-                    })
-                })
-            });
-        });
-
-
-
     }
     
     async function createIsas(data, methodType, hashPdf){
@@ -1307,6 +1460,21 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 hash: res.hashTransaction
             })
             attNetworkImpact(resultIndices, methodType);
+
+            const dataNotification = {
+                text1: 'Completed your inspection', 
+                text2: 'Check the results of your inspection',
+                inspectionId: data.id
+            }
+
+            if(res.type === 'success'){
+                api.post('/notifications/send', {
+                    from: walletAddress,
+                    type: 'finalize-inspection', 
+                    data: JSON.stringify(dataNotification),
+                    for: producerData?.producerWallet
+                })
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -1449,7 +1617,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
 
     function calculateBio(data){
         let result = 0;
-        const bio = data.bio;
+        const bio = Number(data.bio);
 
         if(bio < 0){
             if(Math.abs(bio) > 0 && Math.abs(bio) < 100){
@@ -1484,29 +1652,33 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     }
 
     function calculateSolo(data){
-        const percentSoil = (Number(data.soil) / producerData?.certifiedArea) * 100;
-        let result = 3;
-        if(percentSoil >= 70){
+        const soil = Number(data.soil) / 10000;
+
+        let result = 0;
+        if(soil < 0){
+            if(Math.abs(soil) > 0 && Math.abs(soil) < 1){
+                result = 4
+            }
+            if(Math.abs(soil) < 2 && Math.abs(soil) >= 1){
+                result = 5
+            }
+            if(Math.abs(soil) >= 2){
+                result = 6
+            }
+        }
+        if(soil >= 100){
             result = 0 
         }
-        if(percentSoil >= 50 && percentSoil < 70){
+        if(soil >= 5 && soil < 100){
             result = 1
         }
-        if(percentSoil > 30 && percentSoil < 50){
+        if(soil > 0 && soil < 5){
             result = 2  
         }
-        if(percentSoil === 30){
+        if(soil === 0){
             result = 3
         }
-        if(percentSoil < 30 && percentSoil >= 20 ){
-            result = 4
-        }
-        if(percentSoil < 20 && percentSoil >= 10 ){
-            result = 5
-        }
-        if(percentSoil < 10 ){
-            result = 6
-        }
+        
         return result;
     }
 
@@ -1620,6 +1792,276 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         }
         setLoadingTransaction(false);
     }
+    
+
+    if(type === 'history'){
+        return(
+            <div className="flex flex-col w-full rounded-lg bg-[rgb(10,67,3)] lg:flex-row">
+                <div className="flex flex-col p-3 w-full">
+                    <div className="flex gap-3 border-b-2 border-green-950">
+                        <div className="flex flex-col">
+                            <h5 className="font-bold text-white">ID</h5>
+                            <p className="text-[#ff9900]" onClick={finishNewVersion}>#{data.id}</p>
+                        </div>
+
+                        <div className="flex flex-col w-40 ml-2">
+                            <h5 className="font-bold text-white">{t('Producer')}</h5>
+                            <p className="text-[#ff9900]">{producerData?.name}</p>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <h5 className="font-bold text-white">{t('Address')}</h5>
+                            <p className="text-[#ff9900]">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col justify-between mt-2 lg:flex-row'>
+                        <div className='flex flex-col gap-2'>
+                            <p 
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
+                                onClick={() => handleClickUser('1', data.createdBy)}
+                            >
+                                Wallet {t('Producer')}: {data.createdBy}
+                            </p>
+                            
+                            <p 
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
+                                onClick={() => handleClickUser('2', data.acceptedBy)}
+                            >
+                                Wallet {t('Inspector')}: {data.acceptedBy}
+                            </p>
+                        </div>
+
+                        <div className='flex flex-col items-center'>
+                            {status === '2' && (
+                                <>
+                                <p className='font-bold text-white'>{t('Inspected At')}</p>
+                                <p className="text-white">
+                                    {format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}
+                                </p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center gap-3  border-l border-green-950 py-2 lg:w-52 lg:flex-col">
+                    {status === '2' && (
+                        <>
+                        <div className='h-10 w-20 border-2 border-[#ff9900] rounded-full flex items-center justify-center'>
+                            <p className='font-bold text-[#ff9900]'>{data.isaScore} pts</p>
+                        </div>
+                        <div className='flex gap-2 items-center justify-center'>
+                                {method === 'sintrop' ? (
+                                    <img
+                                        src={require('../assets/metodo-sintrop.png')}
+                                        className='w-[30px] object-contain'
+                                    />
+                                ) : (
+                                    <img
+                                        src={require('../assets/metodo-manual.png')}
+                                        className='w-[30px] object-contain'
+                                    />
+                                )}
+                                <p className='text-white font-bold'>
+                                    Método {method === 'sintrop' ? 'Sintrop' : 'Manual'}
+                                </p>
+                        </div>
+
+                        <button
+                            className='bg-[#229B13] text-white h-10 w-28 rounded-lg'
+                            onClick={() => {
+                                navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
+                            }}
+                        >
+                            {t('See Result')}
+                        </button>
+                        </>
+                    )} 
+
+                    {status === '3' && (
+                        <>
+                        <p className="font-bold text-[#ff9900] text-center mx-2">{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                        <div className='h-10 w-28 border-2 border-[#ff9900] rounded-lg flex items-center justify-center'>
+                            <p className='font-bold text-[#ff9900]'>{t('EXPIRED')}</p>
+                        </div>
+                        </>
+                    )}           
+                </div>
+            </div>
+        )
+    }
+
+    if(type === 'manage'){
+        return(
+            <div className="flex flex-col w-full rounded-lg bg-[rgb(10,67,3)] py-2">
+                <div className="flex flex-col lg:flex-row">
+                <div className="flex flex-col p-3 w-full">
+                    <div className="flex gap-3 border-b-2 border-green-950">
+                        <div className="flex flex-col">
+                            <h5 className="font-bold text-white">ID</h5>
+                            <p className="text-[#ff9900]" onClick={finishNewVersion}>#{data.id}</p>
+                        </div>
+
+                        <div className="flex flex-col w-40 ml-2">
+                            <h5 className="font-bold text-white">{t('Producer')}</h5>
+                            <p className="text-[#ff9900]">{producerData?.name}</p>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <h5 className="font-bold text-white">{t('Address')}</h5>
+                            <p className="text-[#ff9900]">{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col justify-between mt-2 lg:flex-row'>
+                        <div className='flex flex-col gap-2'>
+                            <p 
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
+                                onClick={() => handleClickUser('1', data.createdBy)}
+                            >
+                                Wallet {t('Producer')}: {data.createdBy}
+                            </p>
+                            
+                            {status === '1' && (
+                                <p 
+                                    className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
+                                    onClick={() => handleClickUser('2', data.acceptedBy)}
+                                >
+                                    Wallet {t('Inspector')}: {data.acceptedBy}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className='flex flex-col items-center'>
+                            <p className='font-bold text-white'>{t('Created At')}</p>
+                            <p className="text-white">
+                                {format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center gap-3  border-l border-green-950 py-2 lg:w-52 lg:flex-col">
+                    {status === '0' && (
+                        <>
+                        <div className='h-10 w-28 border-2 border-[#229b13] rounded-lg flex items-center justify-center'>
+                            <p className='font-bold text-[#229B13]'>{t('OPEN')}</p>
+                        </div>
+                        <button
+                            className='bg-[#229B13] text-white h-10 w-28 rounded-lg'
+                            onClick={() => {
+                                handleAccept();
+                            }}
+                        >
+                            {t('Accept')}
+                        </button>
+                        </>
+                    )} 
+
+                    {status === '1' && (
+                        <>
+                        <div className='h-10 w-28 border-2 border-[#229b13] rounded-lg flex items-center justify-center'>
+                            <p className='font-bold text-[#229B13]'>{t('ACCEPTED')}</p>
+                        </div>
+            
+                        <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
+                        
+                        <button
+                            className='bg-[#229B13] text-white h-10 w-36 rounded-lg'
+                            onClick={() => {
+                                setOpenModalChooseMethod(true);
+                            }}
+                        >
+                            {t('Realize Inspection')}
+                        </button>
+                        </>
+                    )} 
+
+                    {status === '3' && (
+                        <>
+                        <p className="font-bold text-[#ff9900] text-center mx-2">{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION))} blocks</p>
+                        <div className='h-10 w-28 border-2 border-[#ff9900] rounded-lg flex items-center justify-center'>
+                            <p className='font-bold text-[#ff9900]'>{t('EXPIRED')}</p>
+                        </div>
+                        </>
+                    )}           
+                </div>
+                </div>
+                <p
+                    onClick={() => setMoreInfo(!moreInfo)}
+                    className='text-start cursor-pointer ml-3 text-gray-400 border-b border-gray-400 w-[70px]'
+                >
+                    {t('See More')}
+                </p>
+                {moreInfo && (
+                    <>
+                    <LoadScript
+                        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                        libraries={['drawing']}
+                    >
+                        <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={position}
+                            zoom={18}
+                            mapTypeId='satellite'
+                        >
+                            <Marker position={position}/>
+                            {/* 
+                            <Polyline
+                                path={propertyPath}
+                            />   */}
+                        </GoogleMap>
+                    </LoadScript>
+                    </>
+                )}
+
+                <Dialog.Root
+                        open={modalTransaction}
+                        onOpenChange={(open) => {
+                            if(!loadingTransaction){
+                                setModalTransaction(open);
+                                reload();
+                                //close();
+                            }
+                        }}
+                >
+                        <LoadingTransaction
+                            loading={loadingTransaction}
+                            logTransaction={logTransaction}
+                            action='accept-inspection'
+                        />
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={openModalChooseMethod}
+                    onOpenChange={(open) => setOpenModalChooseMethod(open)}
+                >
+                    <ModalChooseMethod
+                        finishInspection={finishNewVersion}
+                        finishManual={(data, methodType) => createIsas(data, methodType)}
+                    />
+                </Dialog.Root>
+
+                <Dialog.Root
+                    open={modalViewResult}
+                    onOpenChange={(open) => setModalViewResult(open)}
+                >
+                    <ViewResultInspection
+                        data={data}
+                    />
+                </Dialog.Root>
+
+                {loading && (
+                    <Loading/>
+                )}
+
+                <ToastContainer
+                    position='top-center'
+                />
+            </div>
+        )
+    }
 
     return(
         <div className='flex flex-col border-b-2 bg-[#0a4303] mb-3'>
@@ -1627,13 +2069,13 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 className="flex flex-col lg:flex-row items-center justify-between w-full p-2 gap-3"
             >
                 <div className='hidden lg:flex items-center gap-8'>
-                    <p className='text-white font-bold'>#{data.id}</p>
+                    <p className='text-white font-bold' onClick={finishNewVersion}>#{data.id}</p>
                     {status !== '3' && (
                         <p className="text-white">
                             {type === 'manage' ? (
-                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                                `${format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}  |   ${producerDataApi?.name}`
                             ) : (
-                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}`
+                                `${format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')} |   ${producerDataApi?.name}`
                             )}
                         </p>
                     )}
@@ -1670,7 +2112,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     {type === 'history' ? (
                         <>
                         {status === '3' ? (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
+                            <div className='flex items-center justify-center w-32 h-8 rounded-lg border-2 border-red-500'>
                                 <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
                             </div>
                         ) : (
@@ -1774,7 +2216,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                         <div className='flex flex-col lg:flex-row items-center lg:gap-2'>
                             <p className='font-bold text-white'>Wallet {t('Producer')}:</p>
                             <p 
-                                className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
                                 onClick={() => handleClickUser('1', data.createdBy)}
                             >
                                 {data.createdBy}
@@ -1784,10 +2226,10 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             <>
                             <p className='text-white w-full text-center lg:text-start'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
                             {status === '1' && (
-                                <div className="flex items-center gap-1">
+                                <div className="flex flex-col lg:flex-row lg:gap-1 items-center mt-2">
                                     <p className='font-bold text-white'>Wallet {t('Activist')}:</p>
                                     <p 
-                                        className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                        className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer lg:max-w-none'
                                         onClick={() => handleClickUser('2', data.acceptedBy)}
                                     >
                                         {data.acceptedBy}
@@ -1799,7 +2241,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             <div className='flex items-center lg:gap-2 flex-col lg:flex-row mt-2 lg:mt-0'>
                                 <p className='font-bold text-white'>Wallet {t('Activist')}:</p>
                                 <p 
-                                    className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
+                                    className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer lg:max-w-none'
                                     onClick={() => handleClickUser('2', data.acceptedBy)}
                                 >
                                     {data.acceptedBy}
@@ -1838,14 +2280,16 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     <div className="flex justify-center lg:justify-end w-40 h-10 mt-3">
                         {type === 'history' && (
                             <>
-                            <button
-                                onClick={() => {
-                                    navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
-                                }}
-                                className='font-bold justify-center w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2 flex lg:hidden'
-                            >
-                                {t('See Result')}
-                            </button>
+                            {status === '2' && (
+                                <button
+                                    onClick={() => {
+                                        navigate(`/dashboard/${walletAddress}/result-inspection/${typeUser}/${data.id}`)
+                                    }}
+                                    className='font-bold justify-center w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2 flex lg:hidden'
+                                >
+                                    {t('See Result')}
+                                </button>
+                            )}
                             </>
                         )}
 
@@ -1944,630 +2388,5 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     position='top-center'
                 />
         </div>
-    )
-
-    return(
-        <div className='flex flex-col border-b-2 bg-[#0a4303] mb-3'>
-            <div className="hidden lg:flex flex-col lg:flex-row items-center justify-between w-full py-2 gap-3">
-                <div className='flex flex-col'>
-                    <div className='flex items-center px-2 gap-5 w-full'>
-                        <p className='text-white font-bold'>Inspeção #{data.id}</p>
-                        
-                    </div>
-                    
-                    <div className='flex flex-col lg:flex-row items-center px-2 mt-3'>
-                        <p className='font-bold text-white mr-1'>Produtor Carteira:</p>
-                        <p 
-                            className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
-                            onClick={() => handleClickUser('1', data.createdBy)}
-                        >
-                            {data.createdBy}
-                        </p>
-                    </div>
-
-                    <div className='flex flex-col lg:flex-row items-center h-full bg-[#0A4303] px-2'>
-                        {status === '0' ? (
-                            <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-                        ) : (
-                            <>
-                            <p className='font-bold text-white mr-1'>Ativista Carteira:</p>
-                            <p 
-                                className='max-w-[40ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                                onClick={() => handleClickUser('2', data.acceptedBy)}
-                            >
-                                {data.acceptedBy}
-                            </p>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                
-
-                <div className='flex flex-col items-center w-[250px]'>
-                    {type === 'manage' && (
-                            <div className='flex items-center w-32'>
-                                {status === '0' && (
-                                    <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
-                                        <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
-                                    </div>
-                                )}
-
-                                {status === '1' && (
-                                    <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
-                                        <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
-                                    </div>
-                                )}
-
-                                {status === '2' && (
-                                    <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
-                                        <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
-                                    </div>
-                                )}
-
-                                {status === '3' && (
-                                    <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
-                                        <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    {type === 'manage' ? (
-                        <>
-                        <p className='text-white font-bold'>{t('Created At')}:</p>
-                        <p className='text-white text-center'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-                        </>
-                    ) : (
-                        <>
-                        <p className='text-white font-bold'>{t('Inspected At')}:</p>
-                        <p className='text-white text-center'>{format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-
-                        {method === 'phoenix' ? (
-                            <div className='flex items-center gap-1 border-2 rounded-md px-2 mt-2'>
-                                <img
-                                    src={require('../assets/token.png')}
-                                    className='w-[30px] h-[30px] object-contain'
-                                />
-                                <p className='font-bold text-white text-sm'>Método Phoenix</p>
-                            </div>
-                        ) : (
-                            <div className='flex items-center gap-1 border-2 rounded-md px-2 mt-2'>
-                                <div
-                                    className='w-[25px] h-[25px] my-1 rounded-full bg-gray-500'
-                                />
-                                <p className='font-bold text-white text-sm'>Método Manual</p>
-                            </div>
-                        )}
-                        </>
-                    )}
-
-                    {type === 'manage' && (
-                        <div className='flex items-center font-bold'>
-                            {status === '1' && (
-                                <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
-                            )}
-                        
-                            {status === '3' && (
-                                <p className='text-red-500'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
-                            )}
-                        </div>
-                    )}
-                </div>
-
-
-                
-
-                {type === 'history' && (
-                    <div className='flex flex-col items-center bg-green-950 p-2 rounded-md border-2'>
-                        <p className='text-white'>ISA {t('Score')}</p>
-                        <p className='text-white font-bold text-lg'>{data.isaScore} pts</p>
-                    </div>
-                )}
-
-                <div className='flex justify-end pr-2 items-center bg-[#0A4303]'>
-                    {type === 'history' && (
-                        <>
-                        <button
-                            onClick={() => {
-                                setModalViewResult(true)
-                            }}
-                            className='font-bold w-32 text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
-                        >
-                            {t('See Result')}
-                        </button>
-                        </>
-                    )}
-
-                    {type === 'manage' && (
-                        <>
-                            <div className='flex lg:hidden'>
-                                <button
-                                    onClick={() => setMoreInfo(!moreInfo)}
-                                >
-                                    {moreInfo ? (
-                                        <AiFillCaretUp
-                                            size={30}
-                                            color='white'
-                                        />    
-                                    ) : (
-                                        <AiFillCaretDown
-                                            size={30}
-                                            color='white'
-                                        />
-                                    )}
-                                </button>
-                            </div>
-                            <div className='hidden lg:flex w-full h-full'>
-                                {status !== '3' ? (
-                                    <>
-                                        {user === '2' ? (
-                                            <button
-                                                onClick={() => {
-                                                    if(data.status === '0'){
-                                                        handleAccept()
-                                                    }
-                                                    if(data.status === '1'){
-                                                        handleRealize()
-                                                    }
-                                                }}
-                                                className='font-bold w-36 h-10 text-[#062C01] text-sm bg-[#ff9900] rounded-md'
-                                            >
-                                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                                {data.status === '1' && t('Realize Inspection')}
-                                            </button>
-                                        ) : (
-                                            <div className='w-36'/>
-                                        )}
-                                    </>
-                                ) : (
-                                    <div className='w-36'/>
-                                )}
-                            </div>
-                        </>
-                    )}
-
-                </div>
-            </div>
-
-            <div 
-                className='lg:hidden w-full flex items-center justify-between h-10 px-2 cursor-pointer'
-                onClick={() => setMoreInfo(!moreInfo)}
-            >
-                <p className='font-bols text-white'>{t('Inspection')} #{data.id}</p>
-
-                {type === 'manage' && (
-                    <div className='flex items-center w-32'>
-                        {status === '0' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
-                                <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
-                            </div>
-                        )}
-
-                        {status === '1' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
-                                <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
-                            </div>
-                        )}
-
-                        {status === '2' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
-                                <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
-                            </div>
-                        )}
-
-                        {status === '3' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-red-500'>
-                                <p className='text-xs text-red-500 font-bold'>{t('EXPIRED')}</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {moreInfo ? (
-                    <AiFillCaretUp
-                        size={30}
-                        color='white'
-                    />    
-                ) : (
-                    <AiFillCaretDown
-                        size={30}
-                        color='white'
-                    />
-                )}
-            </div>
-
-            {moreInfo && (
-                <div className='w-full bg-[#0a4303] flex flex-col p-2 border-b-2 border-green-950'>
-                    <p className='font-bold text-white mt-3'>ISA {t('Score')}: {data.isaScore}</p>
-
-                    <p className='font-bold text-white mt-3'>{t('Producer')} {t('Wallet')}:</p>
-                    <p 
-                        className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                        onClick={() => handleClickUser('1', data.createdBy)}
-                    >
-                        {data.createdBy}
-                    </p>
-                    <p className='font-bold text-white mt-3'>{t('Address')}:</p>
-                    <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-
-                    {type === 'manage' ? (
-                        <>
-                        {status === '1' && (
-                            <>
-                            <p className='font-bold text-white mt-3'>{t('Accepted By')}:</p>
-                            
-                            <p 
-                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                                onClick={() => handleClickUser('2', data.acceptedBy)}
-                            >
-                                {data.acceptedBy}
-                            </p>
-                            </>
-                        )}
-                        </>
-                    ) : (
-                        <>
-                            <p className='font-bold text-white mt-3'>{t('Inspected By')}:</p>
-                            
-                            <p 
-                                className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                                onClick={() => handleClickUser('2', data.acceptedBy)}
-                            >
-                                {data.acceptedBy}
-                            </p>
-                        </>
-                    )}
-
-
-                    {type === 'manage' ? (
-                        <>
-                        <p className='font-bold text-white mt-3'>{t('Created At')}:</p>
-                        <p className='text-white'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-                        <p className='font-bold text-white mt-3'>{t('Expires In')}:</p>
-                        {status === '0' && (
-                            <p className='text-white'>{t('Not accepted')}</p>
-                        )}
-                        {status === '1' && (
-                            <p className='text-white'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
-                        )}
-                        {status === '2' && (
-                            <p className='text-white'>{t('Inspected')}</p>
-                        )}
-                        {status === '3' && (
-                            <p className='text-white'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
-                        )}
-
-                        </>
-                    ) : (
-                        <>
-                            <p className='font-bold text-white mt-3'>{t('Inspected At')}:</p>
-                            <p className='text-white'>{format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-                        </>
-                    )}
-                        <div className='w-full mt-3'>
-                            <button
-                                onClick={() => {
-                                    if(data.status === '0'){
-                                        handleAccept()
-                                    }
-                                    if(data.status === '1'){
-                                        handleRealize()
-                                    }
-                                    if(data.status === '2'){
-                                        setModalViewResult(true)
-                                    }
-                                }}
-                                className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
-                            >
-                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                {data.status === '1' && t('Realize Inspection')}
-                                {data.status === '2' && t('See Result')}
-                            </button>
-                        </div>
-                </div>
-            )}
-
-                <Dialog.Root
-                        open={modalTransaction}
-                        onOpenChange={(open) => {
-                            if(!loadingTransaction){
-                                setModalTransaction(open);
-                                reload();
-                                //close();
-                            }
-                        }}
-                >
-                        <LoadingTransaction
-                            loading={loadingTransaction}
-                            logTransaction={logTransaction}
-                            action='accept-inspection'
-                        />
-                </Dialog.Root>
-
-                <Dialog.Root
-                    open={openModalChooseMethod}
-                    onOpenChange={(open) => setOpenModalChooseMethod(open)}
-                >
-                    <ModalChooseMethod
-                        finishInspection={finishInspection}
-                        finishManual={(data, methodType) => createIsas(data, methodType)}
-                    />
-                </Dialog.Root>
-
-                <Dialog.Root
-                    open={modalViewResult}
-                    onOpenChange={(open) => setModalViewResult(open)}
-                >
-                    <ViewResultInspection
-                        data={data}
-                    />
-                </Dialog.Root>
-
-                {loading && (
-                    <Loading/>
-                )}
-
-                <ToastContainer
-                    position='top-center'
-                />
-        </div>
-    )
-
-    return(
-        <div className='flex flex-col border-b-2 border-green-950'>
-            <div className="flex items-center w-full py-2 gap-3 bg-[#0a4303]">
-                <div className='hidden lg:flex items-center h-full w-[70px] px-2'>
-                    <p className='text-white'>{data.id}</p>
-                </div>
-                
-                <div className='flex items-center lg:w-[350px] bg-[#0A4303] px-2'>
-                    <p 
-                        className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400 cursor-pointer'
-                        onClick={() => handleClickUser('1', data.createdBy)}
-                    >
-                        {data.createdBy}
-                    </p>
-                </div>
-
-                {type === 'manage' && (
-                    <div className='hidden lg:flex items-center h-full w-full bg-[#0A4303]'>
-                        <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-                    </div>
-                )}
-
-                <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
-                    {status === '0' ? (
-                        <p className='text-white'>Não aceita</p>
-                    ) : (
-                        <p 
-                            className='max-w-[11ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                            onClick={() => handleClickUser('2', data.acceptedBy)}
-                        >
-                            {data.acceptedBy}
-                        </p>
-                    )}
-                </div>
-
-                <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303]'>
-                    {type === 'manage' ? (
-                        <p className='text-white text-center'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-                    ) : (
-                        <p className='text-white text-center'>{format(new Date(Number(data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-                    )}
-                </div>
-
-                {type === 'manage' && (
-                    <div className='hidden lg:flex items-center h-full w-[350px] bg-[#0A4303] text-white'>
-                        {status === '0' && (
-                            <p>{t('Not accepted')}</p>
-                        )}
-                        {status === '1' && (
-                            <p>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
-                        )}
-                        {status === '2' && (
-                            <p>{t('Inspected')}</p>
-                        )}
-                        {status === '3' && (
-                            <p>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
-                        )}
-                    </div>
-                )}
-
-                {type === 'manage' && (
-                    <div className='flex items-center h-full w-[350px] bg-[#0A4303]'>
-                        {status === '0' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#F4A022]'>
-                                <p className='text-xs text-[#F4A022] font-bold'>{t('OPEN')}</p>
-                            </div>
-                        )}
-
-                        {status === '1' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#3E9EF5]'>
-                                <p className='text-xs text-[#3E9EF5] font-bold'>{t('ACCEPTED')}</p>
-                            </div>
-                        )}
-
-                        {status === '2' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#2AC230]'>
-                                <p className='text-xs text-[#2AC230] font-bold'>{t('INSPECTED')}</p>
-                            </div>
-                        )}
-
-                        {status === '3' && (
-                            <div className='flex items-center justify-center w-full h-8 rounded-lg border-2 border-[#C52A15]'>
-                                <p className='text-xs text-[#C52A15] font-bold'>{t('EXPIRED')}</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {type === 'history' && (
-                    <div className='flex items-center h-full w-[350px] bg-[#0A4303]'>
-                        <p className='text-white'>{data.isaScore}</p>
-                    </div>
-                )}
-
-                <div className='flex justify-end pr-2 items-center h-full w-[350px] bg-[#0A4303]'>
-                    {type === 'history' && (
-                        <>
-                        <button
-                            onClick={() => {
-                                setModalViewResult(true)
-                            }}
-                            className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
-                        >
-                            {t('See Result')}
-                        </button>
-                        </>
-                    )}
-
-                    {type === 'manage' && (
-                        <>
-                            <div className='flex lg:hidden'>
-                                <button
-                                    onClick={() => setMoreInfo(!moreInfo)}
-                                >
-                                    {moreInfo ? (
-                                        <AiFillCaretUp
-                                            size={30}
-                                            color='white'
-                                        />    
-                                    ) : (
-                                        <AiFillCaretDown
-                                            size={30}
-                                            color='white'
-                                        />
-                                    )}
-                                </button>
-                            </div>
-                            <div className='hidden lg:flex w-full h-full'>
-                                {status !== '3' && (
-                                    <>
-                                        {user === '2' && (
-                                            <button
-                                                onClick={() => {
-                                                    if(data.status === '0'){
-                                                        handleAccept()
-                                                    }
-                                                    if(data.status === '1'){
-                                                        handleRealize()
-                                                    }
-                                                }}
-                                                className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md'
-                                            >
-                                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                                {data.status === '1' && t('Realize Inspection')}
-                                            </button>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                        </>
-                    )}
-
-                </div>
-            </div>
-
-            {moreInfo && (
-                <div className='w-full bg-[#0a4303] flex flex-col p-2 border-b-2 border-green-950'>
-                    <p className='font-bold text-white'>{t('Address')}:</p>
-                    <p className='text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
-
-                    <p className='font-bold text-white mt-3'>{t('Accepted By')}:</p>
-                    {status === '0' ? (
-                        <p className='text-white'>Não aceita</p>
-                    ) : (
-                        <p 
-                            className='max-w-[30ch] text-ellipsis overflow-hidden border-b-2 border-blue-400 text-blue-400  cursor-pointer'
-                            onClick={() => handleClickUser('2', data.acceptedBy)}
-                        >
-                            {data.acceptedBy}
-                        </p>
-                    )}
-
-                    <p className='font-bold text-white mt-3'>{t('Created At')}:</p>
-                    <p className='text-white'>{format(new Date(Number(data?.createdAtTimestamp) * 1000), 'dd/MM/yyyy kk:mm')}</p>
-
-                    {type === 'manage' && (
-                        <>
-                        <p className='font-bold text-white mt-3'>{t('Expires In')}:</p>
-                        {status === '0' && (
-                            <p className='text-white'>{t('Not accepted')}</p>
-                        )}
-                        {status === '1' && (
-                            <p className='text-white'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
-                        )}
-                        {status === '2' && (
-                            <p className='text-white'>{t('Inspected')}</p>
-                        )}
-                        {status === '3' && (
-                            <p className='text-white'>{t('Expired ago')} {Number(blockNumber) - (Number(data.acceptedAt) + Number(6650))} blocks</p>
-                        )}
-
-                        <div className='w-full mt-3'>
-                            <button
-                                onClick={() => {
-                                    if(data.status === '0'){
-                                        handleAccept()
-                                    }
-                                    if(data.status === '1'){
-                                        handleRealize()
-                                    }
-                                }}
-                                className='font-bold w-full text-[#062C01] text-sm bg-[#ff9900] rounded-md py-2'
-                            >
-                                {data.status === '0' && `${t('Accept')} ${t('Inspection')}`}
-                                {data.status === '1' && t('Realize Inspection')}
-                            </button>
-                        </div>
-                        </>
-                    )}
-                </div>
-            )}
-
-                <Dialog.Root
-                        open={modalTransaction}
-                        onOpenChange={(open) => {
-                            if(!loadingTransaction){
-                                setModalTransaction(open);
-                                reload();
-                                //close();
-                            }
-                        }}
-                >
-                        <LoadingTransaction
-                            loading={loadingTransaction}
-                            logTransaction={logTransaction}
-                            action='accept-inspection'
-                        />
-                </Dialog.Root>
-
-                <Dialog.Root
-                    open={openModalChooseMethod}
-                    onOpenChange={(open) => setOpenModalChooseMethod(open)}
-                >
-                    <ModalChooseMethod
-                        finishInspection={finishInspection}
-                        finishManual={(data, methodType) => createIsas(data, methodType)}
-                    />
-                </Dialog.Root>
-
-                <Dialog.Root
-                    open={modalViewResult}
-                    onOpenChange={(open) => setModalViewResult(open)}
-                >
-                    <ViewResultInspection
-                        data={data}
-                    />
-                </Dialog.Root>
-
-                {loading && (
-                    <Loading/>
-                )}
-
-                <ToastContainer
-                    position='top-center'
-                />
-        </div>
-    )
+    );
 }

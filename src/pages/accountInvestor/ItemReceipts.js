@@ -73,7 +73,7 @@ export function ItemReceipt({data, index}){
                 <div className="flex flex-col lg:p-3">
                     <p className="font-bold text-black text-sm lg:text-base">{t('Carbono')} = {Number(impactReceipt?.carbon).toFixed(2)} kg</p>
                     <p className="font-bold text-black text-sm lg:text-base">Solo = {Number(impactReceipt?.soil).toFixed(2)} m²</p>
-                    <p className="font-bold text-black text-sm lg:text-base">{t('Biodiversidade')} = {Number(impactReceipt?.bio).toFixed(2)} uni</p>
+                    <p className="font-bold text-black text-sm lg:text-base">{t('Biodiversidade')} = {Number(impactReceipt?.bio).toFixed(2)} uv</p>
                     <p className="font-bold text-black text-sm lg:text-base">{t('Água')} = {Number(impactReceipt?.water).toFixed(2)} m³</p>
                 </div>
                 <p className="max-w-[100%] overflow-clip">**********************************************************************************</p>

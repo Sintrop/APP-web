@@ -10,7 +10,7 @@ import { ModalChooseLang } from '../../ModalChooseLang';
 
 export function ModalAccountOptions({user, walletConnected, close}){
     const {t} = useTranslation();
-    const {chooseModalRegister, toggleModalChooseLang, modalChooseLang} = useContext(MainContext)
+    const {chooseModalRegister, toggleModalChooseLang, modalChooseLang, setWalletConnected} = useContext(MainContext)
     const navigate = useNavigate();
 
     return(
@@ -40,8 +40,8 @@ export function ModalAccountOptions({user, walletConnected, close}){
 
                 <button
                     onClick={() => {
+                        setWalletConnected('');
                         close();
-                        navigate('/');
                     }}
                     className='modal-account-options__option-container'
                 >

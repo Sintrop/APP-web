@@ -36,6 +36,24 @@ export function PhotoCarrouselItem({data, click}){
         )
     }
 
+    if(data.ray){
+        return(
+            <div className="w-[250px] h-[300px] rounded-md bg-gray-500 flex flex-col items-center justify-center">
+                <img
+                    src={image64}
+                    className='w-[250px] h-[300px] object-cover rounded-md cursor-pointer'
+                    onClick={() => click(data.photo)}
+                />
+
+                <div className='flex flex-col w-full h-32 bg-black/80 mt-[-70px] items-center justify-center rounded-t-lg'>
+                    <p className='text-white text-center text-sm'>Lat: {data.lat}, Lng: {data.lng}</p>
+                    <p className='text-white text-center text-sm'>{t('Diameter')}: {data.ray} cm, {t('Height')}: {String(data.height).replace('.',',')} m</p>
+                    <p className='text-white text-center text-sm'>Volume: {(3.1459 * (((Number(data.ray) / 100) / 2 *( Number(data.ray) / 100) / 2)) * Number(data.height)).toFixed(4)} m³</p>
+                </div>
+            </div>
+        )
+    }
+
     if(data.coord){
         return(
             <div className="w-[250px] h-[300px] rounded-md bg-gray-500 flex flex-col items-center justify-center">

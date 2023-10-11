@@ -32,7 +32,7 @@ export function FeedbackItem({data, userData}){
         setStatus(Number(data.status));
         setComments(data.CommentsFeedback);
         if(data.responsible){
-            setResponsible(JSON.parse(data.responsible)[0]);
+            if(data.responsible !== '[NULL]')setResponsible(JSON.parse(data.responsible)[0]);
         }
     },[]);
 
@@ -216,7 +216,7 @@ export function FeedbackItem({data, userData}){
                                                 </div>
 
                                                 <div className='flex items-center gap-2'>
-                                                {String(userData.wallet).toUpperCase() === responsible && (
+                                                {String(userData?.wallet).toUpperCase() === responsible && (
                                                     <>
                                                     {editStatus ? (
                                                         <select

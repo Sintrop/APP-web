@@ -83,7 +83,7 @@ export default function AccountInvestor(){
             <div className='flex flex-col lg:w-[1000px] lg:flex-row w-full gap-5 lg:gap-10 items-center justify-center lg:px-30 lg:mt-10'>
                 <img 
                     src={`data:image/png;base64,${proofPhotoBase64}`} 
-                    className='h-[200px] w-[200px] object-cover border-4 border-[#3E9EF5] rounded-full mt-5 lg:mt-0'
+                    className='h-[200px] w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
                 />
 
                 <div className='flex flex-col items-center lg:items-start'>
@@ -99,28 +99,27 @@ export default function AccountInvestor(){
             <div className="flex flex-col items-center w-full mt-5 lg:mt-10 px-2 lg:px-0">
                     <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
                 
-                    <div className="flex flex-col lg:w-[800px] mt-10 bg-[#0A4303] rounded-md border-2 border-[#3E9EF5] px-2 py-4">
+                    <div className="flex flex-col w-full lg:w-[800px] mt-10 bg-[#0A4303] rounded-md border-2  px-2 py-4">
                         <div className="flex w-full py-1 items-center justify-center bg-[#783E19] rounded-md">
                             <p className="font-bold text-white text-xl">Meu impacto</p>
-
                         </div>
                         <div className="flex flex-col lg:flex-row w-full justify-center flex-wrap gap-2 mt-5">
-                            <div className="flex lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
+                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col lg:w-[30%] items-center">
                                     <p className="font-bold text-[#0A4303] text-2xl">Carbono</p>
                                     <img
                                         src={require('../../assets/icon-co2.png')}
                                         className="w-[70px] h-[60px] object-cover"
                                     />
                                 </div>
-                                <div className="flex w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">{Number(impactInvestor?.carbon).toFixed(2)}</p>
+                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
+                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.carbon).toFixed(2)}</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">kg</p>
                                 </div>
                             </div>
 
-                            <div className="flex lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
+                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col items-center lg:w-[30%]">
                                     <p className="font-bold text-[#0A4303] text-2xl">Solo</p>
                                     <img
                                         src={require('../../assets/icon-solo.png')}
@@ -128,35 +127,35 @@ export default function AccountInvestor(){
                                     />
                                 </div>
                                 <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">{Number(impactInvestor?.soil).toFixed(2)}</p>
+                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.soil).toFixed(2)}</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">m²</p>
                                 </div>
                             </div>
 
-                            <div className="flex lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
+                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col items-center lg:w-[30%]">
                                     <p className="font-bold text-[#0A4303] text-2xl">Biodiversidade</p>
                                     <img
                                         src={require('../../assets/icon-bio.png')}
                                         className="w-[50px] h-[50px] object-contain"
                                     />
                                 </div>
-                                <div className="flex w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">{Number(impactInvestor?.bio).toFixed(2)}</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">uni</p>
+                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
+                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.bio).toFixed(2)}</p>
+                                    <p className="font-bold text-[#0a4303] text-3xl">uv</p>
                                 </div>
                             </div>
 
-                            <div className="flex lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col w-[30%]">
+                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
+                                <div className="flex flex-col items-center lg:w-[30%]">
                                     <p className="font-bold text-[#0A4303] text-2xl">Água</p>
                                     <img
                                         src={require('../../assets/icon-agua.png')}
                                         className="w-[50px] h-[50px] object-contain"
                                     />
                                 </div>
-                                <div className="flex w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-[50px]">{Number(impactInvestor?.water).toFixed(2)}</p>
+                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
+                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.water).toFixed(2)}</p>
                                     <p className="font-bold text-[#0a4303] text-3xl">m³</p>
                                 </div>
                             </div>

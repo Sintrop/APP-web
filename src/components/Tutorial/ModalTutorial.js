@@ -260,7 +260,7 @@ export function ModalTutorial(){
                     </Dialog.Trigger>
                 </div>
 
-                <div className='flex flex-col items-center overflow-auto pb-10'>
+                <div className='flex flex-col items-center overflow-auto pb-10 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
                     <div className='flex flex-col items-center w-full' key={tutorial[step - 1]?.id}>
                         <div className='flex flex-col w-full h-full items-center justify-between px-1 lg:px-6'>
                             <div>

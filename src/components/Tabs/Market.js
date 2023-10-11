@@ -2,31 +2,54 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { useMainContext } from '../../hooks/useMainContext';
 import { useTranslation } from 'react-i18next';
+
+import { providers, ethers } from 'ethers'; 
+import detectEthereumProvider from '@metamask/detect-provider'; 
+import { SwapWidget } from '@uniswap/widgets';
+
 import Loading from '../Loading';
-//import { generateRoute } from '../../config/uniswap/alphaRouter';
-import { createTrade } from '../../config/uniswap/trade1';
 import {FaAngleDown} from 'react-icons/fa';
 import {BiTransferAlt} from 'react-icons/bi';
 import {Warning} from '../Warning';
 import { BackButton } from '../BackButton';
 
+const jsonRpcEndpoint = `https://sepolia.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`;
+const jsonRpcProvider = new providers.JsonRpcProvider(jsonRpcEndpoint);  
+const provider = new ethers.providers.Web3Provider(jsonRpcProvider);
 
 export function Market({setTab}){
     const {t} = useTranslation();
     const {typeUser, tabActive, walletSelected} = useParams();
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        setTab(tabActive, '')
-    }, [tabActive])
+    const [account, setAccount] = useState({  
+        address: '',  
+        provider: provider,  
+    })
 
-    async function teste() {
-        //clsgenerateRoute('0xE8282Fc7340E6767F4f5d8039dB963D86D79ca6C', 100)
-        createTrade()
-    }
+    useEffect(() => {
+        setTab(tabActive, '');
+    }, [tabActive]);
+
+    useEffect(() => {
+
+    },[])
+
+    async function connectWallet() {  
+        const ethereumProvider = await detectEthereumProvider();  if (ethereumProvider) {   
+            const accounts = await window.ethereum.request({  
+                method: 'eth_requestAccounts',  
+            })     
+            const address = accounts[0];     
+            setAccount({  
+                address: address,  
+                provider: ethereumProvider  
+            })  
+        }  
+    }  
 
     return(
         <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto h-[95vh] pb-20'>
-            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-10'> 
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2'> 
                 <div className='flex items-center gap-2'>
                     <BackButton/>
                     <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Market')}</h1>
@@ -38,7 +61,15 @@ export function Market({setTab}){
                 width={200}
             />
 
-            <div className='flex flex-col lg:w-[500px] rounded-lg bg-[#0a4303] p-3 mt-5'>
+            <div className='my-5'>
+                <SwapWidget  
+                    provider={account.provider}  
+                    JsonRpcEndpoint={jsonRpcEndpoint} 
+                    
+                />  
+            </div>
+
+            {/* <div className='flex flex-col lg:w-[500px] rounded-lg bg-[#0a4303] p-3 mt-5'>
                 <div className='flex items-center justify-between'>
                     <p className='font-bold text-white'>Swap</p>
                 </div>
@@ -91,20 +122,20 @@ export function Market({setTab}){
 
                 <button
                     className='font-bold text-white text-xl bg-[#ff9900] hover:bg-[#cc851a] w-full py-3 rounded-lg duration-200 mt-5'
-                    onClick={teste}
+                    onClick={() => {}}
                 >
                     Swap
                 </button>
-            </div>
+            </div> */}
 
-            <a className='flex items-center justify-center px-3 py-1 rounded-md bg-white w-60 mt-3' href='https://uniswap.org/' target='_blank'>
+            {/* <a className='flex items-center justify-center px-3 py-1 rounded-md bg-white w-60 mt-3' href='https://uniswap.org/' target='_blank'>
                 <p className='font-bold text-black'>powered by</p>
                 <img
                     src={require('../../assets/logo-uniswap.png')}
                     className='w-10 object-contain'
                 />
                 <p className='font-bold text-pink-600'>UNISWAP</p>
-            </a>
+            </a> */}
             
             {loading && (
                 <Loading/>

@@ -14,6 +14,17 @@ import {GetContributor} from '../../services/contributorService';
 import { GetInvestor } from '../../services/investorService';
 import { GetDelation } from '../../services/userService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
+import {
+    GetResearchesInfura, 
+    GetInspectionsInfura, 
+    GetProducerInfura, 
+    GetInspectorInfura,
+    GetDelationInfura,
+    GetDeveloperInfura,
+    GetResearcherInfura,
+    GetInvestorInfura,
+    GetContributorInfura
+} from '../../services/methodsGetInfuraApi';
 
 import Map from '../Map';
 import Loading from '../Loading';
@@ -37,6 +48,7 @@ const containerStyle = {
 
 export function UserDetails({setTab}){
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const {typeUser, tabActive, walletSelected} = useParams();
     const [loading, setLoading] = useState(true);
     const [loadingApi, setLoadingApi] = useState(true)
@@ -68,43 +80,82 @@ export function UserDetails({setTab}){
         setLoading(true);
         if(typeUser === '1'){
             getApiProducer();
-            const response = await GetProducer(walletSelected);
-            //getBase64(response)
+            let response = {};
+
+            if(viewMode){
+                const responseProducer = await GetProducerInfura(walletSelected);
+                response = responseProducer
+            }else{
+                const responseProducer = await GetProducer(walletSelected);
+                response = responseProducer
+            }
+
             setPosition(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
             getInspections();
-
             fixCoordinates(JSON.parse(response.propertyAddress?.coordinate))
         }
         if(typeUser === '2'){
-            const response = await GetActivist(walletSelected);
-            setUserData(response);
+            if(viewMode){
+                const response = await GetInspectorInfura(walletSelected);
+                setUserData(response);
+                console.log(response)
+            }else{
+                const response = await GetActivist(walletSelected);
+                setUserData(response);
+            }
             getInspections();
         }
         if(typeUser === '3'){
+            if(viewMode){
+                const response = await GetResearcherInfura(walletSelected);
+                setUserData(response);
+            }else{
+                const response = await GetResearcher(walletSelected);
+                setUserData(response);
+            }
             getResearches();
-            const response = await GetResearcher(walletSelected);
-            setUserData(response)
         }
         if(typeUser === '4'){
-            const response = await GetDeveloper(walletSelected);
-            setUserData(response)
+            if(viewMode){
+                const response = await GetDeveloperInfura(walletSelected);
+                setUserData(response);
+            }else{
+                const response = await GetDeveloper(walletSelected);
+                setUserData(response)
+            }
         }
         if(typeUser === '5'){
             const response = await GetAdvisor(walletSelected);
             setUserData(response)
         }
         if(typeUser === '6'){
-            const response = await GetContributor(walletSelected);
-            setUserData(response)
+            if(viewMode){
+                const response = await GetContributorInfura(walletSelected);
+                setUserData(response);
+            }else{
+                const response = await GetContributor(walletSelected);
+                setUserData(response);
+            }
         }
         if(typeUser === '7'){
-            const response = await GetInvestor(walletSelected);
-            setUserData(response)
+            if(viewMode){
+                const response = await GetInvestorInfura(walletSelected);
+                setUserData(response);
+            }else{
+                const response = await GetInvestor(walletSelected);
+                setUserData(response);
+            }
             getApiInvestor()
         }
-        const resDelations = await GetDelation(walletSelected);
-        setDelations(resDelations);
+
+        if(viewMode){
+            const resDelations = await GetDelationInfura(walletSelected);
+            setDelations(resDelations);
+        }else{
+            const resDelations = await GetDelation(walletSelected);
+            setDelations(resDelations);
+        }
         setLoading(false)
     }
 
@@ -125,7 +176,6 @@ export function UserDetails({setTab}){
             setLoadingApi(true);
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
             setProducerDataApi(response.data.user); 
-            console.log(response.data.user);
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
             setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
@@ -181,7 +231,15 @@ export function UserDetails({setTab}){
     }
 
     async function getInspections(){
-        const response = await GetInspections();
+        let response = [];
+
+        if(viewMode){
+            const responseInspections = await GetInspectionsInfura();
+            response = responseInspections;
+        }else{
+            const responseInspections = await GetInspections();
+            response = responseInspections;
+        }
 
         if(typeUser === '1'){
             let totalCarbon = 0;
@@ -230,6 +288,7 @@ export function UserDetails({setTab}){
             const filterStatus = filterInspections.filter(item => item.status === '2');
             setInspections(filterStatus);
         }
+
     }
 
     async function calculateArvores(inspections){
@@ -255,16 +314,22 @@ export function UserDetails({setTab}){
     }
 
     async function getResearches(){
-        const response = await GetResearches();
-        const filterResearches = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
-        setResearches(filterResearches);
+        if(viewMode){
+            const response = await GetResearchesInfura();
+            const filterResearches = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
+            setResearches(filterResearches);
+        }else{
+            const response = await GetResearches();
+            const filterResearches = response.filter(item => String(item.createdBy).toUpperCase() === walletSelected.toUpperCase())
+            setResearches(filterResearches);
+        }
     }
 
     function downloadCertificateSocial(){
         setLoading(true);
         const fileNameSocial = `Certificate_Social${walletSelected}`;
         var certificateSocial = document.querySelector("#certificate-social");
-        htmlToImage.toJpeg(certificateSocial)
+        htmlToImage.toPng(certificateSocial)
         .then((dataUrl) => {
             saveAs(dataUrl, fileNameSocial)
             setLoading(false)

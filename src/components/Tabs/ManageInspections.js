@@ -18,10 +18,13 @@ import { BackButton } from '../BackButton';
 import {GetProducer} from '../../services/producerService';
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
 import { InspectionItem } from '../InspectionItem';
+import { GetInspectionsInfura } from '../../services/methodsGetInfuraApi';
+import { api } from '../../services/api';
 
-export default function ManageInpections({walletAddress, setTab}){
+export default function ManageInpections({setTab}){
     const {t} = useTranslation();
-    const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
+    const {walletAddress} = useParams();
+    const {user, blockNumber, walletConnected, getAtualBlockNumber, viewMode, userData: userDataApi} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
     const {tabActive} = useParams();
@@ -51,8 +54,13 @@ export default function ManageInpections({walletAddress, setTab}){
 
     async function getInspections(){
         setLoading(true);
-        const res = await GetInspections();
-        filterInspections(res);
+        if(viewMode){
+            const response = await GetInspectionsInfura();
+            filterInspections(response);
+        }else{
+            const response = await GetInspections();
+            filterInspections(response);
+        }
     }
 
     function filterInspections(data){
@@ -80,9 +88,33 @@ export default function ManageInpections({walletAddress, setTab}){
                 type: res.type,
                 message: res.message,
                 hash: res.hashTransaction
-            })
+            });
             setLoadingTransaction(false);
             getInspections();
+
+            const dataNotification = {
+                text1: 'Request new inspection', 
+                text2: ''
+            }
+
+            if(res.type === 'success'){
+                api.post('/notifications/send', {
+                    from: walletAddress,
+                    group: 'inspectors',
+                    type: 'request-inspection', 
+                    data: JSON.stringify(dataNotification),
+                    for: 'inspectors'
+                })
+            }
+
+            if(res.type === 'success'){
+                api.post('/publication/new', {
+                    userId: userDataApi?.id,
+                    type: 'request-inspection',
+                    origin: 'platform',
+                    additionalData: JSON.stringify(userDataApi)
+                })
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -214,17 +246,7 @@ export default function ManageInpections({walletAddress, setTab}){
                 ) : (
                     <div className='flex flex-col'>
                     <div className="flex flex-col rounded-sm">
-                        <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
-                            <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
-                                <p className='text-white'>ID</p>
-                            </div>
-
-                            <div className='hidden lg:flex items-center h-full lg:w-[200px] px-2 font-bold'>
-                                <p className='text-white'>{t('Created At')}</p>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
+                        <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md gap-2'>
                             {inspections.map(item => (
                                 <InspectionItem
                                     key={item.id}

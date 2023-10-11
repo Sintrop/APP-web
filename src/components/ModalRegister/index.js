@@ -21,7 +21,7 @@ import {FaBook} from 'react-icons/fa';
 import { Help } from '../help';
 import { ModalRequestSepolia } from '../ModalRequestSepolia';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { ModalLoadingCam } from './ModalLoadingCam';
+import { ModalConfirmMobile } from './ModalConfirmMobile';
 
 
 const videoConstraints = {
@@ -30,7 +30,7 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-export default function ModalRegister(){
+export default function ModalRegister({close}){
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {walletConnected, chooseModalRegister, getUserDataApi} = useContext(MainContext);
@@ -68,6 +68,7 @@ export default function ModalRegister(){
     const [imageSrc, setImageSrc] = useState('');
     const [haveWebcam, setHaveWebcam] = useState(false);
     const [modalLoadingCam, setModalLoadingCam] = useState(false);
+    const [confirmMobile, setConfirmMobile] = useState(false);
     let formatDocument = useRef('')
 
     useEffect(() => {
@@ -100,31 +101,18 @@ export default function ModalRegister(){
         if(step === 3 && type === 'producer'){
             getLocale()
         }
-    },[step]);
-
-    useEffect(() => {
-        if(step === 2){
-            checkWebcam();
+        if(type === 'producer' && step === 2){
+            setConfirmMobile(true);
         }
     },[step]);
 
-    function checkWebcam(){
-        setModalLoadingCam(true)
-        setLoadingWebcam(true);
-        navigator.mediaDevices.getUserMedia({video: true})
-        .then(() => {
-            setLoadingWebcam(false);
-            setHaveWebcam(true);
-        })
-        .catch(err => {
-            setLoadingWebcam(false);
-            setHaveWebcam(false);
-        })
-    }
+    useEffect(() => {
+       
+    },[]);
 
     async function handleSearchAddress(){
-        setLoading(true);
         try{
+            setLoading(true);
             const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
             if(response.data.erro === true){
                 toast.error(`${t('No address found with that zip code')}!`);
@@ -178,6 +166,7 @@ export default function ModalRegister(){
     }
 
     async function handleProofPhoto(data){
+        setModalWebcam(false);
         setLoading(true);
         let res = await fetch(data);
         let myBlob = await res.blob();
@@ -187,7 +176,6 @@ export default function ModalRegister(){
 
         const base64Hash = await get(hashPhoto);
         setProofPhotoBase64(base64Hash);
-        setImageSrc('');
         setLoading(false);
     } 
 
@@ -303,7 +291,8 @@ export default function ModalRegister(){
             city,
             complement,
             street,
-            country
+            country,
+            areaProperty
         }
 
         let local = '';
@@ -380,7 +369,7 @@ export default function ModalRegister(){
             });
         }
 
-        if(type === 'activist'){
+        if(type === 'inspector'){
             setModalTransaction(true);
             setLoadingTransaction(true);
             addActivist(walletConnected, name, proofPhoto, geoLocation)
@@ -810,24 +799,26 @@ export default function ModalRegister(){
     }
 
     return(
-        <Dialog.Portal className='flex justify-center items-center inset-0'>
-            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='fixed flex flex-col items-center justify-between pb-3 lg:w-[500px] lg:h-[550px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2'>
+        <div 
+            className="flex fixed top-0 left-0 w-screen h-screen items-center justify-center bg-black/90 m-auto px-2 lg:px-0"
+        >
+            <div className="flex flex-col items-center justify-between w-full lg:w-[500px] h-[500px] bg-green-950 rounded-lg">
                 <div className='w-full h-16 flex justify-between items-center rounded-t-md bg-[#0a4303] border-b-2'>
                     <div className='px-3'/>
                     <img
                         src={require('../../assets/logo-branco.png')}
                         className='w-[120px] object-contain'
                     />
-                    <Dialog.Close
+                    <button
+                        onClick={close}
                         className='h-10 text-white text-sm lg:text-base px-3'
                     >
                         <IoMdCloseCircleOutline size={25} color='white'/>
-                    </Dialog.Close>
+                    </button>
                 </div>
 
                 {step === 1 && (
-                    <div className='w-full flex flex-col items-center overflow-auto'>
+                    <div className='w-full flex flex-col items-center overflow-auto px-2'>
                         <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Register')}</h1>
                         <p className='font-bold text-sm lg:text-md text-white'>{t('Do you want to register as one')}?</p>
                         
@@ -841,7 +832,7 @@ export default function ModalRegister(){
                         >
                             <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
-                            <option value="activist">{t('Activist')}</option>
+                            <option value="inspector">{t('Inspector')}</option>
                             <option value="contributor">{t('Validator')}</option>
                             <option value="investor">{t('Investor')}</option>
                             <option value="developer">{t('Developer')}</option>
@@ -855,97 +846,118 @@ export default function ModalRegister(){
                 )}
 
                 {step === 2 && (
-                    <div className='w-full flex flex-col items-center overflow-auto py-2'>
-                        {modalWebcam ? (
-                            // <input
-                            //     type='file'
-                            //     capture='user'
-                            // />
-                            <Webcam
-                                className="w-full h-[200px] z-50"
-                                audio={false}
-                                screenshotFormat="image/png"
-                                videoConstraints={videoConstraints}
-                            >
-                                {({ getScreenshot }) => (
-                                <>
-                                    {imageSrc === '' && (
-                                        <div className="flex flex-col items-center w-full">
-                                        <button
-                                            style={{marginTop: 15}}
-                                            onClick={() => {
-                                                const data = getScreenshot();
-                                                setImageSrc(data);
-                                                setModalWebcam(false);
-                                            }}
-                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                                        >
-                                            {t('Capture photo')}
-                                        </button>
-                                        </div>
-                                    )}
-                                </>
-                                )}
-                            </Webcam>
-                        ) : (
-                            <>
-                            {imageSrc !== '' ? (
-                                <div className="flex flex-col items-center w-full gap-2">
-                                    <img 
-                                        src={imageSrc} 
-                                        alt="Captured photo"
-                                        className="lg:w-[250px] h-[200px] object-contain lg:object-cover"
-                                    />
-                                    <div className="w-full flex justify-center gap-3">
-                                        <button
-                                            onClick={() => {
-                                                setImageSrc('')
-                                                setModalWebcam(true)
-                                            }}
-                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                                        >{t('Take another')}</button>
+                    // <div className='w-full flex flex-col items-center overflow-auto py-2'>
+                    //     {modalWebcam ? (
+                    //         // <input
+                    //         //     type='file'
+                    //         //     capture='user'
+                    //         // />
+                    //         <Webcam
+                    //             className="w-full h-[200px] z-50"
+                    //             audio={false}
+                    //             screenshotFormat="image/png"
+                    //             videoConstraints={videoConstraints}
+                    //         >
+                    //             {({ getScreenshot }) => (
+                    //             <>
+                    //                 {imageSrc === '' && (
+                    //                     <div className="flex flex-col items-center w-full">
+                    //                     <button
+                    //                         style={{marginTop: 15}}
+                    //                         onClick={() => {
+                    //                             const data = getScreenshot();
+                    //                             setImageSrc(data);
+                    //                             setModalWebcam(false);
+                    //                         }}
+                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                    //                     >
+                    //                         {t('Capture photo')}
+                    //                     </button>
+                    //                     </div>
+                    //                 )}
+                    //             </>
+                    //             )}
+                    //         </Webcam>
+                    //     ) : (
+                    //         <>
+                    //         {imageSrc !== '' ? (
+                    //             <div className="flex flex-col items-center w-full gap-2">
+                    //                 <img 
+                    //                     src={imageSrc} 
+                    //                     alt="Captured photo"
+                    //                     className="lg:w-[250px] h-[200px] object-contain lg:object-cover"
+                    //                 />
+                    //                 <div className="w-full flex justify-center gap-3">
+                    //                     <button
+                    //                         onClick={() => {
+                    //                             setImageSrc('')
+                    //                             setModalWebcam(true)
+                    //                         }}
+                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                    //                     >{t('Take another')}</button>
                             
-                                        <button
-                                            onClick={() => {
-                                                handleProofPhoto(imageSrc)
-                                            }}
-                                            className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                                        >{t('Confirm')}</button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    {proofPhoto === '' && (
-                                        <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
-                                    )}
+                    //                     <button
+                    //                         onClick={() => {
+                    //                             handleProofPhoto(imageSrc)
+                    //                         }}
+                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
+                    //                     >{t('Confirm')}</button>
+                    //                 </div>
+                    //             </div>
+                    //         ) : (
+                    //             <>
+                    //                 {proofPhoto === '' && (
+                    //                     <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
+                    //                 )}
 
-                                    {proofPhoto != '' && (
-                                        <img
-                                            src={`data:image/png;base64,${proofPhotoBase64}`}
-                                            className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
-                                        />
-                                    )}
-                                    <button
-                                        onClick={() => {
-                                            setTimeout(() => {
-                                                setModalWebcam(true);
-                                            }, 1000)
-                                        }}
+                    //                 {proofPhoto != '' && (
+                    //                     <img
+                    //                         src={`data:image/png;base64,${proofPhotoBase64}`}
+                    //                         className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
+                    //                     />
+                    //                 )}
+                    //                 <button
+                    //                     onClick={() => {
+                    //                         setTimeout(() => {
+                    //                             setModalWebcam(true);
+                    //                         }, 1000)
+                    //                     }}
 
-                                        className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
-                                    >
-                                        <FiCamera size={25} color='white'/>
-                                        {t('Take Photo')}
-                                    </button>
-                                </>
-                            )}
-                            </>
-                        )}
+                    //                     className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
+                    //                 >
+                    //                     <FiCamera size={25} color='white'/>
+                    //                     {t('Take Photo')}
+                    //                 </button>
+                    //             </>
+                    //         )}
+                    //         </>
+                    //     )}
                         
 
-                        <Help
-                            description='Click the button above and then click allow on the permission popup that will open in your browser'
-                        />
+                    //     <Help
+                    //         description='Click the button above and then click allow on the permission popup that will open in your browser'
+                    //     />
+                    // </div>
+                    <div className="flex flex-col mt-5 w-[90%] overflow-auto">
+                            {imageSrc === '' ? (
+                                <>
+                                <p className='text-white text-justify'>{t('Precisamos de uma foto de prova sua para continuarmos o cadastro. (Qualquer usuário sem foto de prova sera bloqueado no sistema)')}</p>
+                                </>
+                            ) : (
+                                <div className="flex flex-col w-full items-center">
+                                    <img
+                                        src={imageSrc}
+                                        className="w-[300px] object-contain"
+                                    />
+                                </div>
+                            )}
+
+                            <button 
+                                onClick={() => setModalWebcam(true)}
+                                className='px-3 py-2 bg-[#FF9900] rounded-md font-bold text-white mt-3'
+                            >
+                                {t('Take Photo')}
+                            </button>
                     </div>
                 )}
 
@@ -1208,7 +1220,7 @@ export default function ModalRegister(){
                         {step === 2 && `${t('Next Step')}`}
                     </button>
                 </div>
-            </Dialog.Content>
+            </div>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
                 if(!loadingTransaction){
@@ -1254,20 +1266,27 @@ export default function ModalRegister(){
                 }}/>
             </Dialog.Root>
 
-            <Dialog.Root
-                open={modalLoadingCam}
-            >    
-                <ModalLoadingCam
-                    loadingCam={loadingWebcam}
-                    haveWebcam={haveWebcam}
-                    close={() => setModalLoadingCam(false)}
+            {modalWebcam && (
+                <WebcamComponent
+                    close={() => setModalWebcam(false)}
+                    onTake={(uri) => {
+                        handleProofPhoto(uri);
+                        setImageSrc(uri);
+                    }}
                 />
-            </Dialog.Root>
+            )}
+
+            {confirmMobile && (
+                <ModalConfirmMobile
+                    close={() => setConfirmMobile(false)}
+                />
+            )}
 
             {loading && <Loading/>}
+
             <ToastContainer
                 position='top-center'
             />
-        </Dialog.Portal>
+        </div>
     )
 }

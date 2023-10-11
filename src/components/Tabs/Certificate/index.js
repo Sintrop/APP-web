@@ -227,13 +227,17 @@ export default function ProducerCertificate({userType, wallet, setTab}){
         }
     }
 
-    if(userType != 1){
-        return(
-            <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
-                <h1 className="font-bold text-white">This account is not a producer.</h1>
-            </div>
-        )
-    }
+    // if(userType != 1){
+    //     return(
+    //         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+    //             <h1 className="font-bold text-white">{t('Example certificate producer')}</h1>
+    //             <img
+    //                 src={require('../../../assets/certificate-example.png')}
+    //                 className="lg:w-[50%] object-contain"
+    //             />
+    //         </div>
+    //     )
+    // }
 
     return(
         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>

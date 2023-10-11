@@ -1,5 +1,5 @@
 import React , { useEffect, useState } from "react";
-import InspectionsService from "../../../services/inspectionsHistoryService";
+import {GetInspections} from "../../../services/inspectionsHistoryService";
 import '../manageInspections.css'
 import {useParams} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
@@ -7,14 +7,14 @@ import {InspectionItem} from '../../InspectionItem';
 import { BackButton } from "../../BackButton";
 import Loader from "../../Loader";
 import { useMainContext } from "../../../hooks/useMainContext";
+import { GetInspectionsInfura } from "../../../services/methodsGetInfuraApi";
 
 function HistoryInspections({ walletAddress, user, setTab } ) {
-    const {blockNumber} = useMainContext();
+    const {blockNumber, viewMode} = useMainContext();
     const {t} = useTranslation();
     const {tabActive} = useParams();
     const [inspections, setInspections ] = useState([]);
     const [loading, setLoading] = useState(false);
-    const inspection = new InspectionsService(walletAddress);
 
     useEffect(() => {
         loadInspections()
@@ -24,17 +24,21 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
         setTab(tabActive, '')
     }, [tabActive])
     
-    const loadInspections = () => {
+    async function loadInspections(){
         setLoading(true);
-        inspection.getAllInspections().then( res => {
-            filterInspections(res);
-        });
+        if(viewMode){
+            const response = await GetInspectionsInfura();
+            filterInspections(response);
+        }else{
+            const response = await GetInspections();
+            filterInspections(response);
+        }
     }
 
     function filterInspections(data){
         let newArrayInspections = [];
         const inspections = data;
-        for(var i = 0; i < inspections.length; i++){
+        for(var i = 0; i < inspections.length; i++){ 
             if(inspections[i].status === '1'){
                 if(Number(inspections[i].acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) < Number(blockNumber)){
                     newArrayInspections.push(inspections[i]);
@@ -44,7 +48,12 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                 newArrayInspections.push(inspections[i]);
             }
         }
-        setInspections(newArrayInspections.reverse());
+
+        if(newArrayInspections.length > 0){
+            let inspectionsSort = newArrayInspections.map((item) => item).sort( (a,b) => parseInt(b.inspectedAtTimestamp) - parseInt(a.inspectedAtTimestamp))
+            setInspections(inspectionsSort);
+        }
+        
         setLoading(false);
     }
 
@@ -101,17 +110,7 @@ function HistoryInspections({ walletAddress, user, setTab } ) {
                         <h3 className='font-bold text-white'>{t('There are no finished inspections')}</h3>
                     ) : (
                         <div className="flex flex-col">
-                            <div className="flex items-center gap-3 py-1 w-full bg-[#80421A]">
-                                <div className='flex items-center h-full lg:w-[50px] px-2 font-bold'>
-                                    <p className='text-white'>ID</p>
-                                </div>
-
-                                <div className='hidden lg:flex items-center h-full lg:w-[200px] px-2 font-bold'>
-                                    <p className='text-white'>{t('Inspected At')}</p>
-                                </div>
-                            </div>
-
-                            <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md'>
+                            <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md gap-2'>
                                 {inspections.map(item => (
                                     <InspectionItem
                                         key={item.id}

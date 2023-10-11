@@ -27,3 +27,8 @@ export const GetDeveloper = async (walletAdd) => {
     const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()
     return developers;
 }
+
+export const GetDevelopers = async () => {
+    const developers = await DeveloperContract.methods.getDevelopers().call()
+    return developers;
+}
