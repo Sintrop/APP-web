@@ -9,8 +9,9 @@ const NETWORKS = {
   42: "Kovan Test Network",
   56: "Binance Smart Chain",
   5777: "Ganache",
+  11155111: 'Sepolia Test Network'
 };
-const targetNetwork = NETWORKS["5777"];
+const targetNetwork = NETWORKS["11155111"];
 export const useNetwork = () => {
   const web3 = new Web3(window.ethereum);
   // window.ethereum.on("chainChanged", (_chainId) => {

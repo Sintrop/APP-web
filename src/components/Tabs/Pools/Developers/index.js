@@ -3,27 +3,39 @@ import './developersPool.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useTranslation } from 'react-i18next';
+import { useMainContext } from '../../../../hooks/useMainContext';
 //services
 import {
     GetBalancePool, 
     GetEraContract, 
     GetEra, 
     CheckNextAprove, 
-    CheckAllowanceTokens,
     GetBalanceDeveloper,
     WithdrawTokens,
     GetDevelopers,
     TokensPerEra
 } from '../../../../services/developersPoolService';
-import DevelopersService from '../../../../services/developersService';
+import {GetDeveloper} from '../../../../services/developersService';
 
-import DeveloperItem from './DeveloperItem';
+import {
+    GetBalancePoolDevelopersInfura,
+    GetDeveloperInfura,
+    GetDevelopersInfura,
+    TokensPerEraInfura,
+    GetEraInfura,
+    GetEraContractDevPoolInfura,
+    GetBalanceDeveloperInfura,
+} from '../../../../services/methodsGetInfuraApi';
+
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
+import { UserPoolItem } from '../../../UserPoolItem';
+import { BackButton } from '../../../BackButton';
+import Loader from '../../../Loader';
 
-export default function DevelopersPool({user, wallet, setTab}){
+export default function DevelopersPool({wallet, setTab}){
+    const {user, nextEraIn, viewMode} = useMainContext();
     const {t} = useTranslation();
-    const developerService = new DevelopersService(wallet);
     const [loading, setLoading] = useState(false);
     const [totalSACTokens, setTotalSACTokens] = useState('0');
     const [tokensPerEra, setTokensPerEra] = useState('0');
@@ -31,10 +43,9 @@ export default function DevelopersPool({user, wallet, setTab}){
     const [eraInfo, setEraInfo] = useState([]);
     const [developerInfo, setDeveloperInfo] = useState([]);
     const [nextAprove, setNextAprove] = useState('0');
-    const [tokensAllowed, setTokensAllowed] = useState('0');
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const [developersList, setDevelopersList] = useState([]);
-    const {tabActive} = useParams();
+    const {tabActive, walletAddress, typeUser} = useParams();
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(true);
@@ -46,30 +57,41 @@ export default function DevelopersPool({user, wallet, setTab}){
     useEffect(() => {
         getInfosPool();
     },[]);
-
-
+    
     async function getInfosPool(){
         setLoading(true);
-        const developers = await GetDevelopers();
-        setDevelopersList(developers);
-        const totalTokens = await GetBalancePool();
-        setTotalSACTokens(totalTokens);
-        const tokensPerEra = await TokensPerEra();
-        setTokensPerEra(tokensPerEra);
-        const currentEra = await GetEraContract();
-        setCurrentEra(currentEra);
-        const eraInfo = await GetEra(parseFloat(currentEra));
-        setEraInfo(eraInfo);
-        if(user === '4'){
-            const developerInfo = await developerService.getDeveloper(wallet);
-            setDeveloperInfo(developerInfo);
-            const nextAprove = await CheckNextAprove(developerInfo.level.currentEra);
-            setNextAprove(nextAprove);
-            const tokensAllowed = await CheckAllowanceTokens(wallet);
-            setTokensAllowed(tokensAllowed);
-            const balanceDeveloper = await GetBalanceDeveloper(wallet);
-            setBalanceDeveloper(balanceDeveloper);
-            setLoading(false);
+
+        if(viewMode){
+            const developers = await GetDevelopersInfura();
+            filterUsersPool(developers);
+            const totalTokens = await GetBalancePoolDevelopersInfura();
+            setTotalSACTokens(totalTokens);
+            const tokensPerEra = await TokensPerEraInfura();
+            setTokensPerEra(tokensPerEra);
+            const currentEra = await GetEraContractDevPoolInfura();
+            setCurrentEra(currentEra);
+            const eraInfo = await GetEraInfura(parseFloat(currentEra));
+            setEraInfo(eraInfo);
+        }else{
+            const developers = await GetDevelopers();
+            filterUsersPool(developers);
+            const totalTokens = await GetBalancePool();
+            setTotalSACTokens(totalTokens);
+            const tokensPerEra = await TokensPerEra();
+            setTokensPerEra(tokensPerEra);
+            const currentEra = await GetEraContract();
+            setCurrentEra(currentEra);
+            const eraInfo = await GetEra(parseFloat(currentEra));
+            setEraInfo(eraInfo);
+            if(typeUser === '4'){
+                const developerInfo = await GetDeveloper(walletAddress);
+                setDeveloperInfo(developerInfo);
+                const nextAprove = await CheckNextAprove(developerInfo.pool.currentEra);
+                setNextAprove(nextAprove);
+                const balanceDeveloper = await GetBalanceDeveloper(walletAddress);
+                setBalanceDeveloper(balanceDeveloper);
+                setLoading(false);
+            }
         }
         setLoading(false);
     }
@@ -137,72 +159,174 @@ export default function DevelopersPool({user, wallet, setTab}){
         })
     }
 
+    async function filterUsersPool(array){
+        let newArray = [];
+        for(var i = 0; i < array.length; i++){
+            if(Number(array[i].pool?.level) > 0){
+                if(viewMode){
+                    const balance = await GetBalanceDeveloperInfura(array[i].developerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            developerWallet: array[i].developerWallet,
+                            name: array[i].name,
+                            balance: Number(balance),
+                            userType: '4',
+                            level: array[i].pool?.level
+                        }
+        
+                        newArray.push(data);
+                    }
+                }else{
+                    const balance = await GetBalanceDeveloper(array[i].developerWallet)
+                    if(Number(balance) > 0){
+                        let data = {
+                            developerWallet: array[i].developerWallet,
+                            name: array[i].name,
+                            balance: Number(balance),
+                            userType: '4',
+                            level: array[i].pool?.level
+                        }
+        
+                        newArray.push(data);
+                    }
+                }
+
+            }
+        }
+
+        let developerSort = newArray.map((item) => item ).sort( (a,b) => Number(b.balance) - Number(a.balance))
+        setDevelopersList(developerSort)
+    }
+
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
+
     return(
-        <div className='container-isa-page'>
-            <div className='header-isa'>
-                <h1>{t('Developers Distribution Pool')}</h1>
-                <div className='area-btn-header-isa-page'></div>
+        <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-2 lg:mb-10'>
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Developers Pool')}</h1>
+                </div>
             </div>
-            {user === '4' && (
-                <div className='area-stats-developer'>
-                    <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>{t('Your Status')}</h1>
-                        <p className='p'>
-                            {t('Level')}: {developerInfo.level === undefined ? '0' : developerInfo.level.level}
-                        </p>
-                        <p className='p'>
-                            {t('Current Era')}: {developerInfo.level === undefined ? '0' : developerInfo.level.currentEra}
-                        </p>
-                    </div>
-                    <div className='stats-developer__card card-stats'>
-                        <h1 className='card__title'>{t('Balance')}</h1>
-                        <p className='p'>Total: {parseFloat(tokensAllowed) / 10**18 + parseFloat(balanceDeveloper) / 10**18}</p>
-                    </div>
-                        <button 
-                            className='btn-new-category-isa'
-                            onClick={() => {withdraw()}}
-                        >{t('Withdraw')}</button>
+
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
+                <div className="flex items-center p-3 rounded-md bg-[#0a4303] w-[344px] mb-5">
+                    <p className="font-bold text-white">{t('Next ERA in')} {nextEraIn} {t('Blocks')}</p>
                 </div>
-            )}
-            
-            <div className='area-pool'>
-                <div className='stats-developer__card card-pool'>
-                    <h1 className='card__title'>{t('Developers Pool')}</h1>
-                    <h2 className='card__subtitle'>{t('Contract Balance')}</h2>
-                    <p className='p'>{parseFloat(totalSACTokens) / 10**18}</p>
+                {user === '4' && (
+                    <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-[700px] gap-3 mb-7">
+                        <div className="flex flex-col lg:w-[49%] px-2 py-4 bg-[#0A4303] rounded-md">
+                            <p className="font-bold text-white">{t('Your Status')}</p>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white">{t('Current ERA')}:</p>
+                                <p className="font-bold text-[#ff9900]">{developerInfo?.pool?.currentEra}</p>
+                            </div>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white ">{t('Next Withdrawal on')}:</p>
+                                <p className="font-bold text-[#ff9900]">{nextAprove}</p>
+                            </div>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white ">{t('Level')}:</p>
+                                <p className="font-bold text-[#ff9900]">{developerInfo?.pool?.level}</p>
+                            </div>
+                        </div>
 
-                    <h2 className='card__subtitle'>Tokens {t('Per')} ERA</h2>
-                    <p className='p'>{parseFloat(tokensPerEra) / 10**18}</p>
+                        <div className="flex flex-col lg:w-[49%] h-full px-2 py-4 bg-[#0A4303] rounded-md">
+                            <p className="font-bold text-white">t{('Balance')}</p>
+                            <div className='flex items-center justify-between mt-2'>
+                                <p className="text-white">Total:</p>
+                                <p className="font-bold text-[#ff9900]">{(Number(balanceDeveloper) / 10 ** 18).toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                    <h2 className='card__subtitle'>{t('Current Era')}</h2>
-                    <p className='p'>{currentEra}</p>
+                <div className="lg:w-[700px] bg-[#0A4303] flex flex-col rounded-md">
+                    <div className="flex w-full">
+                        <div className="flex flex-col py-5 px-3 gap-2 w-[50%]">
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{t('Contract Balance')}</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{totalSACTokens / 10 ** 18}</p>
+                            </div>
 
-                    <h2 className='card__subtitle'>{t('Next Aprove In')}</h2>
-                    <p className='p'>{nextAprove}</p>
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">Tokens por ERA</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{(tokensPerEra / 10 ** 18).toFixed(2)}</p>
+                            </div>
 
-                    <h2 className='card__subtitle'>{t('Developers Levels Sum')}</h2>
-                    <p className='p'>{eraInfo.levels}</p>
-                </div>
+                            <div className="p-2 border-2 flex flex-col w-full">
+                                <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{t('Current ERA')}</p>
+                                <p className="font-bold text-white text-sm lg:text-normal">{currentEra}</p>
+                            </div>
+                        </div>
 
-                <div className='stats-developer__card card-developers-list'>
-                    <h1 className='card__title'>{t('Developers List')}</h1>
-                    <table border="1">
-                        <tr>
-                        <th>#</th>
-                        <th>{t('Wallet')}</th>
-                        <th>{t('Name')}</th>
-                        <th>{t('Balance')}</th>
-                        <th>{t('Developer Level')}</th>
-                        </tr>
-                        {developersList.map((item) => (
-                            <DeveloperItem 
-                                data={item}
-                                setTab={(tab, wallet) => setTab(tab, wallet)}
+                        <div className='flex items-center justify-center w-[50%] h-full'>
+                            <img
+                                src={require('../../../../assets/token.png')}
+                                className='w-[250px] h-[250px] object-contain'
                             />
-                        ))}
-                    </table>
+                        </div>
+                    </div>
+
+                    <div className='flex items-center justify-between w-full px-4 py-2 bg-[#783E19] mb-3'>
+                        <div className='flex flex-col'>
+                            <p className="font-bold text-white text-sm lg:text-normal">{t('Total sum of developer levels')}</p>
+                            <p className="font-bold text-[#ff9900] text-sm lg:text-normal">{eraInfo?.levels}</p>
+                        </div>
+
+                        {user === '4' && (
+                            <button
+                                className='px-4 py-2 bg-[#ff9900] rounded-md font-bold text-sm lg:text-normal'
+                                onClick={withdraw}
+                            >
+                                {t('Withdraw')} Tokens
+                            </button>
+                        )}
+                    </div>
+
                 </div>
+                    <div className='flex flex-col lg:w-[700px] bg-[#0a4303] rounded-sm pl-2 pt-2 mt-10'>
+                        <div className='flex items-center justify-center w-full'>
+                            <p className='font-bold text-center text-white text-lg lg:text-2xl border-b-2 pb-1'>{t('List of Approved Developers')}</p>
+                        </div>
+                        <div className='flex w-full items-center'>
+                            <div className='flex w-[5%] px-1 py-3'>
+                                <p className='font-bold text-white'>#</p>
+                            </div>
+                            <div className='flex justify-center w-[20%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Wallet')}</p>
+                            </div>
+                            <div className='flex justify-center w-[30%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Name')}</p>
+                            </div>
+                            <div className='flex justify-center w-[25%] px-1 py-3'>
+                                <p className='font-bold text-white'>{t('Level')}</p>
+                            </div>
+                            <div className='flex justify-center w-[20%] px-1 py-3 bg-[#783E19] border-t-2 border-l-2 border-[#3E9EF5]'>
+                                <p className='font-bold text-white'>{t('Balance')}</p>
+                            </div>
+                        </div>
+                        <div className='flex flex-col'>
+                            {developersList.map((item, index) => (
+                                <UserPoolItem
+                                    key={item.id}
+                                    data={item}
+                                    position={index + 1}
+                                />
+                            ))}
+                        </div>
+                    </div>
             </div>
+
             <Dialog.Root 
                 open={modalTransaction} 
                 onOpenChange={(open) => {
@@ -217,6 +341,7 @@ export default function DevelopersPool({user, wallet, setTab}){
                     logTransaction={logTransaction}
                 />
             </Dialog.Root>
+
             {loading && (
                 <Loading/>
             )}

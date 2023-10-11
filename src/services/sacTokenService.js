@@ -3,10 +3,10 @@ import SacTokenContractJson from '../data/contracts/abis/SacToken.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const SACTokenContractAddress = SacTokenContractJson.networks[5777].address;
+const SACTokenContractAddress = '0xF8033Bbfe9c645F52d170DDD733274371E75369F';
 
 //initializing contract
-const SACTokenContract = new web3.eth.Contract(SacTokenContractJson.abi, SACTokenContractAddress);
+const SACTokenContract = new web3.eth.Contract(SacTokenContractJson, SACTokenContractAddress);
 
 export const GetCertificateTokens = async (wallet) => {
     let tokens = 0

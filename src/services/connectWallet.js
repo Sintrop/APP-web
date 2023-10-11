@@ -19,7 +19,6 @@ async function ConnectWallet(){
             }
         }
     }else{
-        alert('Instale a extensão do Metamask em seu navegador para continuar!')
         return{
             connectedStatus: false,
             status: 'MetaMask não instalado no navegador!',

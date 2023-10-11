@@ -4,12 +4,12 @@ import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const developerContractAddress = DeveloperContractJson.networks[5777].address;
-const developersPoolAddress = DevelopersPoolJson.networks[5777].address;
+const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
+const developersPoolAddress = '0x5703e8a25a6bcd2a989f28a3cfd39cfc9ae06718';
 
 //initializing contract
-const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson.abi, developersPoolAddress);
-const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
+const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson, developersPoolAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
 
 export const GetBalancePool = async () => {
     let tokens = 0;
@@ -46,15 +46,6 @@ export const CheckNextAprove = async (era) => {
         eras = res;
     })
     return eras;
-}
-
-export const CheckAllowanceTokens = async (wallet) => {
-    let tokensAllowed = 0;
-    await DevelopersPoolContract.methods.allowance().call({from: wallet})
-    .then((res) => {
-        tokensAllowed = res;
-    })
-    return tokensAllowed;
 }
 
 export const GetBalanceDeveloper = async (wallet) => {

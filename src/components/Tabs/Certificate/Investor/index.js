@@ -1,65 +1,78 @@
 import React, {useEffect, useState} from "react";
-import '../certificate.css';
-import '../../isa.css';
 import {useParams} from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import QRCode from "react-qr-code";
+import {QRCode} from "react-qrcode-logo";
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
-import Logo from '../../../../assets/img/262543420-sintrop-logo-com-degrade.png';
+import { api } from "../../../../services/api";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
+import { useMainContext } from "../../../../hooks/useMainContext";
 
 //services
-import InvestorService from '../../../../services/investorService';
-import {GetCertificateTokens} from '../../../../services/sacTokenService';
+import { GetInvestor } from "../../../../services/accountProducerService";
+import {BurnTokens, GetCertificateTokens} from '../../../../services/sacTokenService';
 
 //components
 import Loading from '../../../Loading';
 import { ModalContribute } from "./ModalContribute";
-import { ItemReceipt } from "./ItemReceipt";
+import { BackButton } from "../../../BackButton";
 
 export default function InvestorCertificate({userType, wallet, setTab}){
     const {t} = useTranslation();
-    const investorService = new InvestorService(wallet);
+    const {viewMode} = useMainContext();
     const {tabActive, walletAddress} = useParams();
     const [investorData, setInvestorData] = useState([]);
     const [tokensBurned, setTokensBurned] = useState('');
     const [loading, setLoading] = useState(false);
     const [modalContribute, setModalContribute] = useState(false);
     const [receipts, setReceipts] = useState([]);
+    const [impactInvestor, setImpactInvestor] = useState({});
 
     useEffect(() => {
         setTab(tabActive, '')
     }, [tabActive])
 
     useEffect(() => {
-        getInvestor();
-        getReceipts();
+        if(!viewMode){
+            getInvestor();
+            getImpact()
+        }
     }, []);
 
-    async function getReceipts(){
-        //add try catch in future
-        const receipts = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&contractaddress=0x3b25db3d9853ef80f60079ab38e5739cd1543b34&address=0x49b85e2d9f48252bf32ba35221b361da77aac683&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
-        if(receipts.data.status === '1'){
-            setReceipts(receipts.data.result);
+    async function getImpact(){
+        let carbon = 0;
+        let water = 0;
+        let bio = 0;
+        let soil = 0;
+
+        const response = await api.get(`/tokens-burned/by-wallet/${walletAddress}`);
+        const arrayTokens = response.data.tokensBurned;
+        for(var i = 0; i < arrayTokens.length; i++){
+            const tokens = arrayTokens[i].tokens;
+            carbon += tokens * arrayTokens[i].carbon;
+            water += tokens * arrayTokens[i].water;
+            bio += tokens * arrayTokens[i].bio;
+            soil += tokens * arrayTokens[i].soil;
         }
+
+        setImpactInvestor({carbon, water, bio, soil})
     }
 
     async function getInvestor(){
         setLoading(true);
-        const response = await investorService.getInvestor(walletAddress);
+        const response = await GetInvestor(walletAddress);
         setInvestorData(response);
         const tokens = await GetCertificateTokens(walletAddress);
-        setTokensBurned(Number(tokens) / 10**18);
+        setTokensBurned((Number(tokens) / 10**18));
         setLoading(false);
     }
 
     function downloadCertificate(){
         setLoading(true);
-        const fileNameShort = `Certificate_Short_${walletAddress}`;
-        var certificateShort = document.querySelector(".container__certificate-container-short");
+        const fileNameShort = `Certificate_${walletAddress}`;
+        var certificateShort = document.querySelector("#certificate-investor");
         htmlToImage.toJpeg(certificateShort)
         .then((dataUrlShort) => {
             saveAs(dataUrlShort, fileNameShort);
@@ -67,16 +80,28 @@ export default function InvestorCertificate({userType, wallet, setTab}){
         })
         .catch((error) => {
             console.log(error);
+            setLoading(false)
         })    
     }
 
+    // if(viewMode){
+    //     return(
+    //         <div className='flex flex-col h-[100vh] bg-green-950 px-2 lg:px-10 pt-5 lg:pt-10 overflow-auto'>
+    //             <h1 className="font-bold text-white">Este é o selo de investidor. Você pode mostrar para o mundo que você investe na regeneração!</h1>
+    //         </div>
+    //     )
+    // }
+
     return(
-        <div className="container-isa-page">
-            <div className='header-isa'>
-                <h1>{t('Investor Certificate')}</h1>
-                <div className='area-btn-header-isa-page'>
+        <div className='flex flex-col w-full h-[100vh] bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between mb-2 lg:mb-10'>
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Investor Certificate')}</h1>
+                </div>
+                <div className='flex justify-center items-center gap-2 mt-2 lg:mt-0'>
                     <button
-                        className='btn-new-category-isa'
+                        className='px-4 py-1 lg:py-2 bg-[#ff9900] rounded-md font-bold '
                         onClick={() => downloadCertificate()}
                     >
                         {t('Download')} {t('Certificate')}
@@ -84,7 +109,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
                     <CopyToClipboard text={`${window.location.host}/account-investor/${wallet}`}>
                         <button
-                            className='btn-new-category-isa'
+                            className='px-4 py-1 lg:py-2 bg-[#ff9900] rounded-md font-bold '
                             onClick={() => alert('URL copied to clipboard')}
                         >
                             {t('Copy')} URL
@@ -93,69 +118,108 @@ export default function InvestorCertificate({userType, wallet, setTab}){
                 </div>
             </div>
 
-            <div className="area-certificates">
-                <div className="container__certificate-container-short">
-                    <img src={Logo} className='img-logo-certificate'/>
-                    <QRCode value={`${window.location.host}/account-investor/${wallet}`} size={190}/>
-                    <p className="hash-qrcode">{walletAddress}</p>
-                    <p style={{textAlign: 'center'}}>
-                        {userType === '7' ? `${t('The investor')}` : `${t('You')}`}
-                        <span style={{fontWeight: 'bold', color: 'green'}}> {investorData === [] ? '' : investorData.name}</span> {t('contributed to the agroecological transition with a total of')}:
-                    </p>
-                    <div style={{backgroundColor: '#1eb76f', paddingLeft: 10, paddingRight: 10, borderRadius: 8}}>
-                        <p style={{fontWeight: 'bold'}}>{String(tokensBurned).replace('e-12', '').replace('e-9', '')} SAC Tokens</p>
-                    </div>
-                </div>
+            <div className="flex flex-col h-[90vh] overflow-auto pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
 
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 300}}>
-                    {tokensBurned === 0 ? (
-                        <p style={{textAlign: 'center'}}>
-                            {t("You haven't contributed to the agroecological transition yet")}
-                        </p>
-                    ) : (
-                        <p style={{color: 'green', textAlign: 'center'}}>
-                            {t('The earth thanks your contribution. Together we will make agriculture sustainable')}!
-                        </p>
-                    )}
+                <div className="flex flex-col lg:w-[715px]" id='certificate-investor'>
+                    <div className="hidden lg:flex flex-col lg:flex-row lg:w-[700px] h-[330px] border-2 bg-[#0A4303] border-white rounded-md">
 
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <p style={{margin: 0}}>{t('My impact')}:</p>
-                        <ul style={{margin: 0}}>
-                            <li>0 TONS {t('of')} CO2 {t('captured')}</li>
-                            <li>0 TONS {t('of')} CO2 {t('prevented')}</li>
-                            <li>0 {t('increased biodiversity')}</li>
-                        </ul>
                     </div>
 
-                    <Dialog.Root onOpenChange={(open) => setModalContribute(open)} open={modalContribute}>
-                        <Dialog.Trigger
-                            className="investor-certificate__btn-donate"
-                        >{tokensBurned === 0 ? `${t('Contribute')}` : `${t('Contribute More')}`}</Dialog.Trigger>
-                        <ModalContribute 
-                            wallet={wallet} 
-                            onFinished={() => {
-                                getInvestor();
-                                setModalContribute(false)
-                            }}
-                        />
-                    </Dialog.Root>
+                    <div className="flex flex-col lg:flex-row lg:w-[700px] lg:ml-2 lg:mt-[-320px] bg-white lg:relative p-2 rounded-md">
+                        <div className="flex flex-col w-full h-full border-4 py-5 px-5 border-[#783E19] rounded-md">
+                            <div className="flex flex-col lg:flex-row w-full h-full">
+                                <div className="flex flex-col lg:w-[70%]">
+                                    <img
+                                        src={require('../../../../assets/logo-cinza.png')}
+                                        className="w-[150px] h-[80px] object-contain"
+                                    />
 
-                    <button
-                        className="investor-certificate__btn-calculator"
-                    >{t('Agriculture Footprint Calculator')}</button>
 
-                    <p style={{textAlign: 'center'}}>{t('Read our documentation to understand better')}</p>
+                                    {investorData?.userType === '0' ? (
+                                        <>
+                                            <p className="font-bold text-black">Investidor Anônimo</p>
+                                            <p className="font-bold text-black">Você contribuiu com um total de:</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="font-bold text-black">{investorData?.name}</p>
+                                            <p className="font-bold text-black">Contribuiu com um total de:</p>
+                                        </>
+                                    )}
+
+
+                                    <div className="flex w-full mt-7">
+                                        <div className="flex flex-col items-center lg:w-[40%]">
+                                            <p className="text-green-800 font-bold text-3xl">{Number(tokensBurned).toFixed(2).replace('.',',')}</p>
+                                            <p className="text-green-800 font-bold text-sm">Créditos de Regeneração</p>
+                                        </div>
+
+                                        <div className="flex flex-col lg:w-[60%] lg:ml-3">
+                                            <p className="text-black text-sm">Saldo de Carbono: {Number(impactInvestor?.carbon).toFixed(2)} kg</p>
+                                            <p className="text-black text-sm">Saldo de Água: {Number(impactInvestor?.water).toFixed(2)} m³</p>
+                                            <p className="text-black text-sm">Saldo de Biodiversidade: {Number(impactInvestor?.bio).toFixed(2)} uni</p>
+                                            <p className="text-black text-sm">Saldo de Solo: {Number(impactInvestor?.soil).toFixed(2)} m²</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col items-center justify-center lg:w-[30%]">
+                                    <p className="text-black font-bold text-center mb-5">{t('Investor')}</p>
+                                    <QRCode 
+                                        value={`https://${window.location.host}/account-investor/${wallet}`} 
+                                        size={180}
+                                        logoImage={require('../../../../assets/icone.png')}
+                                        qrStyle="dots"
+                                        logoPadding={2}
+                                        logoWidth={50}
+                                        removeQrCodeBehindLogo
+                                        eyeColor='#0a4303'
+                                    />
+                                </div>
+                            </div>
+
+                            <p className="text-sm text-center mt-3">Wallet do investidor: {wallet}</p>
+                        </div>
+                    </div> 
+                    
                 </div>
-            </div>
 
-            <div className="investor-certificate__area-receipts">
-                {receipts.map(receipt => {
-                    if(receipt.to === '0x0000000000000000000000000000000000000000'){
-                        return(
-                            <ItemReceipt key={receipt.hash} data={receipt}/>
-                        )
-                    }
-                })}            
+                <div className="flex flex-col mt-5">
+                    <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
+
+                    <div className="mt-5 flex flex-col lg:flex-row items-center gap-2 lg:w-[710px]">
+                        <Dialog.Root
+                            open={modalContribute}
+                            onOpenChange={(open) => setModalContribute(open)}
+                        >
+                            <ModalContribute 
+                                wallet={walletAddress}
+                                onFinished={() => {
+                                    getInvestor()
+                                    getImpact()
+                                }}
+                            />
+                            <Dialog.Trigger
+                                className='py-3 bg-[#ff9900] rounded-md font-bold w-full lg:w-[50%]'
+                            >
+                                {t('Contribute')}
+                            </Dialog.Trigger>
+                        </Dialog.Root>
+                        <button
+                            className='py-3 bg-[#ff9900] rounded-md font-bold w-full lg:w-[50%]'
+                            onClick={() => {}}
+                        >
+                            {t('Calculadora de Pegada Agrícola')}
+                        </button>
+                    </div>
+
+                    <a
+                        href='#'
+                        className="text-white mt-5 text-xl"
+                    >
+                        Leia nossa documentação para entender mais
+                    </a>
+                </div>
             </div>
 
             {loading && (

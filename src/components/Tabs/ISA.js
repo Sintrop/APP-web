@@ -1,18 +1,22 @@
 import React, {useState, useEffect} from 'react';
-import './isa.css';
 import {useParams} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Loader from '../Loader';
+import { useMainContext } from '../../hooks/useMainContext';
 
 //components
 import CreateCategory from '../IsaPageComponents/CreateCategory';
-import ItemsListISA from '../IsaPageComponents/ItemsListISA';
 import Loading from '../Loading';
+import {IndiceItem} from '../IndiceItem';
+import { BackButton } from '../BackButton';
 
 //services
 import {GetCategories} from '../../services/isaService';
+import { GetCategoriesInfura } from '../../services/methodsGetInfuraApi';
 
 export default function ISA({user, walletAddress, setTab}){
     const {t} = useTranslation();
+    const {viewMode} = useMainContext();
     const [categories, setCategories] = useState([]);
     const [isCreateCategory, setIsCreateCategory] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -29,59 +33,45 @@ export default function ISA({user, walletAddress, setTab}){
 
     async function getCategories(){
         setLoading(true);
-        const response = await GetCategories();
-        setCategories(response);
+        if(viewMode){
+            const response = await GetCategoriesInfura();
+            setCategories(response);
+        }else{
+            const response = await GetCategories();
+            setCategories(response);
+        }
         setLoading(false);
     }
 
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
+
     return(
-        <div className='container-isa-page'>
-            <div className='header-isa'>
-                <h1>{t('Sustainable Agriculture Index')}</h1>
-                <div className='area-btn-header-isa-page'>
-                    {user == 3 && (
-                        <button
-                            className='btn-new-category-isa'
-                            onClick={() => setIsCreateCategory(true)}
-                        >
-                            {t('Create New Category')}
-                        </button>
-                    )}
-                    <button
-                        className='btn-load-categories-isa'
-                        onClick={() => getCategories()}
-                    >
-                        {t('Load Categories')}
-                    </button>
-                </div>
+        <div className='flex flex-col bg-green-950 px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex items-center gap-2'>
+                <BackButton/>
+                <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Sustainable Agriculture Index')}</h1>
             </div>
             
             {categories.length === 0 ? (
                 <h1>{t('No category registered')}</h1>
-            ) : (                
-                <table>
-                    <thead>
-                        <th className='th-info-isa'>{t('Info')}</th>
-                        <th id='createdByIsaTable'>{t('Created By')}</th>
-                        <th id='categories-isa-table'>{t('Name')}</th>
-                        <th className='description-isa-table'>{t('Description')}</th>
-                        <th id='votes-isa-table'>{t('Number Of Votes')}</th>
-                        <th id='config-isa-table'>{t('Actions')}</th>
-                    </thead>
-                    <tbody>
-                        {categories.map(item => {
-                            return(
-                                <ItemsListISA 
-                                    data={item} 
-                                    key={item.id} 
-                                    walletAddress={walletAddress}
-                                    reloadCategories={() => getCategories()}
-                                    setTab={(tab, wallet) => setTab(tab, wallet)}
-                                />
-                            )
-                        })}
-                    </tbody>
-                </table>                
+            ) : (              
+                <div className="mt-5 lg:mt-10 h-[64vh] lg:h-[90vh] lg:overflow-auto pb-20">  
+                    {categories.map(item => (
+                        <IndiceItem
+                            key={item.id}
+                            data={item}   
+                        />
+                    ))}
+                </div>        
             )}
            
             {isCreateCategory && (

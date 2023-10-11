@@ -9,28 +9,28 @@ import InvestorContractJson from "../data/contracts/abis/InvestorContract.json";
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const contributorContractAddress = ContributorContractJson.networks[5777].address;
-const producerContractAddress = ProducerContractJson.networks[5777].address;
-const activistContractAddress = ActivistContractJson.networks[5777].address;
-const researcherContractAddress = ResearcherContractJson.networks[5777].address;
-const developerContractAddress = DeveloperContractJson.networks[5777].address;
-const advisorContractAddress = AdvisorContractJson.networks[5777].address;
-const investorContractAddress = InvestorContractJson.networks[5777].address;
+const contributorContractAddress = '0xf1790104904127901ea3dda4b95deb215764023f';
+const producerContractAddress = '0x693161f1e90270ba156179128f49c285c89447e7';
+const activistContractAddress = '0xa289fabc5764f91ac56575f7f048038faa3d059d';
+const researcherContractAddress = '0x5c5553b494cc350f1a31e1f91832a3ed19df1627';
+const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
+const advisorContractAddress = '0xfba96a8aba5d24109aa0c8038aa90095f81281e2';
+const investorContractAddress = '0x8014eef23614d357010685787690d3e7c2cfcc30';
 
 //initializing contract
-const ProducerContract = new web3.eth.Contract(ProducerContractJson.abi, producerContractAddress);
-const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
-const ContributorContract = new web3.eth.Contract(ContributorContractJson.abi, contributorContractAddress);
-const AdvisorContract = new web3.eth.Contract(AdvisorContractJson.abi, advisorContractAddress);
-const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
-const ActivistContract = new web3.eth.Contract(ActivistContractJson.abi, activistContractAddress);
-const InvestorContract = new web3.eth.Contract(InvestorContractJson.abi, investorContractAddress);
+const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
+const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
+const AdvisorContract = new web3.eth.Contract(AdvisorContractJson, advisorContractAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
+const ActivistContract = new web3.eth.Contract(ActivistContractJson, activistContractAddress);
+const InvestorContract = new web3.eth.Contract(InvestorContractJson, investorContractAddress);
 
-export const addProducer = async (wallet, name, document, documentType, country, state, city, cep, street, complement, proofPhoto) => {
+export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaProperty) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    await ProducerContract.methods.addProducer(name, proofPhoto, document, documentType, country, state, city, street, complement,cep)
+    await ProducerContract.methods.addProducer(Number(areaProperty).toFixed(0), name, proofPhoto, geoLocation)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){
@@ -57,11 +57,11 @@ export const addProducer = async (wallet, name, document, documentType, country,
     }
 }
 
-export const addActivist = async (wallet, name, country, state, city, cep, proofPhoto) => {
+export const addActivist = async (wallet, name, proofPhoto, coordinate) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
-    await ActivistContract.methods.addActivist(name, proofPhoto, country, state, city, cep)
+    await ActivistContract.methods.addActivist(name, proofPhoto, coordinate)
     .send({ from: wallet })
     .on('transactionHash', hash => {
         if(hash){

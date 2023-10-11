@@ -5,8 +5,13 @@ import {GetTokensBalance} from '../../../../services/voteService';
 import {BurnTokens} from '../../../../services/sacTokenService';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
+import { api } from '../../../../services/api';
+import { useParams } from 'react-router';
+import { useMainContext } from '../../../../hooks/useMainContext';
 
 export function ModalContribute({wallet, onFinished}){
+    const {impactPerToken, userData} = useMainContext();
+    const {walletAddress} = useParams();
     const [balanceTokens, setBalanceTokens] = useState(0);
     const [inputTokens, setInputTokens] = useState('');
     const [loading, setLoading] = useState(false);
@@ -22,6 +27,36 @@ export function ModalContribute({wallet, onFinished}){
         const response = await GetTokensBalance(wallet);
         setBalanceTokens(Number(response) / 10**18);
         console.log(response);
+    }
+
+    async function registerTokensApi(tokens, hash){
+        const additionalData = {
+            userData,
+            tokens: Number(tokens)
+        }
+
+        try{
+            await api.post('/tokens-burned', {
+                wallet: walletAddress.toUpperCase(),
+                tokens: Number(tokens),
+                transactionHash: hash,
+                carbon: Number(impactPerToken?.carbon),
+                water: Number(impactPerToken?.water),
+                bio: Number(impactPerToken?.bio),
+                soil: Number(impactPerToken?.soil)
+            });
+
+            await api.post('/publication/new', {
+                userId: userData?.id,
+                type: 'contribute-tokens',
+                origin: 'platform',
+                additionalData: JSON.stringify(additionalData),
+            })
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingTransaction(false);
+        }
     }
 
     async function burnTokens(){
@@ -40,7 +75,9 @@ export function ModalContribute({wallet, onFinished}){
                 message: res.message,
                 hash: res.hashTransaction
             })
-            setLoadingTransaction(false);
+            if(res.type === 'success'){
+                registerTokensApi(inputTokens, res.hashTransaction)
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -79,25 +116,32 @@ export function ModalContribute({wallet, onFinished}){
     }
 
     return(
-        <Dialog.Portal className='modal-contribute__portal'>
-            <Dialog.Overlay className='modal-contribute__overlay'/>
-            <Dialog.Content className='modal-contribute__content'>
-                <Dialog.Title className='modal-contribute__title'>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='fixed flex flex-col items-center justify-between lg:w-[400px] h-[300px] bg-green-950 rounded-md m-2 lg:m-auto inset-0 border-2 border-[#ff9900]'>
+                <div className='flex items-center justify-center py-4 w-full bg-[#0a4303] rounded-t-md border-b-2 border-[#ff9900]'>
+                    <img
+                        src={require('../../../../assets/logo-branco.png')}
+                        className='w-[150px] object-contain'
+                    />
+                </div>
+                <Dialog.Title className='font-bold text-center text-white'>
                     Contribute
                 </Dialog.Title>
-                <p>Your balance: {balanceTokens} SAC Tokens</p>
+                <p className='text-white'>Your balance: {balanceTokens.toFixed(2).replace('.',',')} Créditos de Regeneração</p>
 
                 <div className='modal-contribute__container-input'>
-                    <p className='modal-contribute__label'>Number of tokens to donate</p>
+                    <p className='font-bold text-[#ff9900]'>Number of tokens for donation</p>
                     <input
-                        className='modal-contribute__input'
+                        className='w-full rounded-md h-10 border-2 border-[#ff9900] px-3'
                         type='number'
                         value={inputTokens}
                         onChange={(e) => setInputTokens(e.target.value)}
+                        placeholder='Number of tokens'
                     />
                 </div>
 
-                <div className='modal-contribute__area-btn'>
+                <div className='flex items-center w-full justify-end gap-3 px-3 pb-2'>
                     <Dialog.Close className='modal-contribute__btn-close'>Cancel</Dialog.Close>
                     <button 
                         className='modal-contribute__btn-contribute'

@@ -6,6 +6,7 @@ export default function DeveloperItem({data, setTab}){
     const navigate = useNavigate();
     const [balanceDeveloper, setBalanceDeveloper] = useState('0');
     const {walletAddress} = useParams();
+    console.log(data.developerWallet)
     useEffect(() => {
         getBalance();
     },[]);
@@ -29,8 +30,8 @@ export default function DeveloperItem({data, setTab}){
                 </a>
             </td>
             <td>{data.name}</td>
-            <td>{parseFloat(balanceDeveloper) / 10**18}</td>
-            <td>{data.level[0]}</td>
+            <td>{data.pool.level}</td>
+            <td>{(Number(balanceDeveloper) / 10**18).toFixed(2)}</td>
         </tr>
     )
 }

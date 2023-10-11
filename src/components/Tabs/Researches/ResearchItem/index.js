@@ -3,14 +3,25 @@ import './researchItem.css';
 import {format} from 'date-fns';
 import { saveAs } from 'file-saver';
 import {useParams, useNavigate} from 'react-router-dom';
+import { useMainContext } from '../../../../hooks/useMainContext';
+import { GetResearcher } from '../../../../services/researchersService';
 
-export function ResearchItem({data}){
+export function ResearchItem({data, myAccount}){
+    const {setWalletSelected} = useMainContext();
     const navigate = useNavigate();
     const {walletAddress} = useParams();
     const [date, setDate] = useState('');
+    const [researcherData, setResearcherData] = useState([]);
+
     useEffect(() => {
         formatDate();
+        getResearcher();
     },[]);
+
+    async function getResearcher() {
+        const response = await GetResearcher(data.createdBy);
+        setResearcherData(response);
+    }
 
     async function formatDate(){
         const timestamp = Number(data.createdAtTimeStamp) * 1000;
@@ -24,42 +35,49 @@ export function ResearchItem({data}){
     }
 
     return(
-        <div className="research-item__container">
-            <div className="research-item__header">
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">ID</label>
-                    <p>{data.id}</p>
-                </div>
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">CreatedAt</label>
-                    <p>{date}</p>
-                </div>
-                <div className='research-item__card-header'>
-                    <label className="research-item__label">CreatedBy</label>
-                    <a
-                        onClick={() => navigate(`/dashboard/${walletAddress}/researcher-page/${data.createdBy}`)}
-                        style={{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}} 
-                    >
-                        {data.createdBy}
-                    </a>
-                </div>
-            </div>
+        <div className="flex flex-col gap-3 bg-[#0A4303] rounded-md p-3 mb-5 lg:w-[1000px]">
+            {!myAccount && (
+                <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start">
+                    <div>
+                        <img 
+                            src={`https://ipfs.io/ipfs/${researcherData?.proofPhoto}`}
+                            className='w-[150px] h-[150px] rounded-full border-4 object-cover'
+                        />
+                    </div>
 
-            <h1 className='research-item__title'>{data.title}</h1>
+                    <div className='lg:ml-10 flex flex-col items-center lg:items-start w-full'>
+                        <p className='font-bold text-[#ff9900] text-center lg:text-xl max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden'>{researcherData?.name}</p>
+                        <a
+                            onClick={() => {
+                                navigate(`/dashboard/${walletAddress}/user-details/3/${data.createdBy}`)
+                            }}
+                            className='border-b-2 border-blue-400 text-blue-400 cursor-pointer' 
+                        >
+                            {data.createdBy}
+                        </a>
+                        <p className="text-white">{date}</p>
 
-            <label className='research-item__label'>Thesis</label>
-            <p className='research-item__description'>{data.thesis}</p>
+                    </div>
+                </div>
+            )}
 
-            <label className='research-item__label'>PDF Report</label>
-            <div className='research-item__area-btn-pdf'>
-                <button>
+            <h1 className='font-bold text-[#ff9900] text-justify text-lg lg:text-2xl'>#{data.id} - {data.title}</h1>
+
+            <label className='font-bold text-[#ff9900]'>Thesis</label>
+            <p className='text-white text-justify'>{data.thesis}</p>
+
+            <label className='font-bold text-[#ff9900]'>PDF Report</label>
+            <div className='flex items-center gap-5'>
+                <button
+                    className='px-3 py-2 bg-[#783E19] font-bold rounded-md text-white'
+                >
                     <a
                         href={`https://ipfs.io/ipfs/${data.file}`}
                         target="_blank"
-                        style={{textDecoration: 'none', color: '#000'}}
+                        style={{textDecoration: 'none', color: '#fff'}}
                     >View PDF</a>
                 </button>
-                <button onClick={handleDownloadPDF} style={{cursor: 'pointer'}}>
+                <button onClick={handleDownloadPDF} className='px-3 py-2 bg-[#783E19] font-bold rounded-md text-white'>
                     Download PDF
                 </button>
             </div>

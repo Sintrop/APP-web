@@ -2,55 +2,71 @@ import React, { useState, useContext } from "react";
 import "./menu.css";
 import {BsChevronDoubleLeft, BsChevronDoubleRight} from 'react-icons/bs';
 import { MainContext } from "../../contexts/main";
-import Logo from "../../assets/img/262543420-sintrop-logo-com-degrade.png";
-import LogoSimple from '../../assets/img/logo-simple.png'
-import IconISA from "../../assets/img/263926603-6.png";
-import IconInspections from "../../assets/img/263926582-4.png";
-import IconAcceptedInspection from "../../assets/img/263926589-5.png";
-import IconProducers from "../../assets/img/263926618-8.png";
-import IconActivists from "../../assets/img/263926692-20.png";
-import IconMyAccount from "../../assets/img/263926648-13.png";
-import IconCertificate from "../../assets/img/263926557-1.png";
-import IconPools from "../../assets/img/263926606-7.png";
+import { useNavigate, useParams } from "react-router";
+
+import IconCommunity from '../../assets/icon-community.png'
+import IconMissions from '../../assets/assistente.png';
+import IconHistory from '../../assets/icon-history.png';
+import IconManage from '../../assets/icon-manage.png';
+import IconCertificate from '../../assets/icon-certificate.png';
+import IconSac from '../../assets/token.png';
+import IconPesquisas from '../../assets/icon-pesquisas.png';
+import IconAccount from '../../assets/icon-account.png';
+import IconNetwork from '../../assets/network.png';
+import IconMarket from '../../assets/market-icon.png';
+import IconDev from '../../assets/developer-center.png';
 
 import ItemsList from "./itemsList";
 
 export default function Menu({ changeTab }) {
+    const navigate = useNavigate();
+    const {walletAddress, typeUser} = useParams();
     const {menuOpen, toggleMenu} = useContext(MainContext);
     const [open, setOpen] = useState(false);
     const [openPools, setOpenPools] = useState(false);
     const [openCertificates, setOpenCertificates] = useState(false);
+    const [openInspections, setOpenInspections] = useState(false);
+    const [openFinancial, setOpenFinancial] = useState(false);
     const [itemsMenu, setItemsMenu] = useState([
+        { id: "missions", title: "Missions", icon: IconMissions, action: "" },
+        { id: "network-impact", title: "Network Impact", icon: IconNetwork, action: "" },
         {
-        id: "rankings",
-        title: "Community",
-        icon: IconActivists,
-        action: "",
-        subItem: [
-            { id: "producers", label: "Producers" },
-            { id: "activists", label: "Activists" },
-            { id: "advisors", label: "Advisors" },
-            { id: "investors", label: "Investors" },
-            { id: "developers", label: "Developers" },
-            { id: "contributors", label: "Contributors" },
-            { id: "researchers", label: "Researchers" },
-        ],
-        },
-        { id: "isa", title: "Sustainable Agriculture Index", icon: IconISA, action: "" },
-        {
-        id: "inspection-history",
-        title: "Inspections History",
-        icon: IconInspections,
-        action: "",
+            id: "rankings",
+            title: "Community",
+            icon: IconCommunity,
+            action: "",
+            subItem: [
+                { id: "producers", label: "Producers" },
+                { id: "activists", label: "Inspectors" },
+                { id: "investors", label: "Investors" },
+                { id: "developers", label: "Developers" },
+                { id: "contributors", label: "Validators" },
+                { id: "researchers", label: "Researchers" },
+            ],
         },
         {
-        id: "manage-inspections",
-        title: "Manage Inspections",
-        icon: IconAcceptedInspection,
-        action: "",
+            id: "inspections",
+            title: "Inspections Center",
+            icon: IconHistory,
+            action: "",
+            subItem: [
+                { id: "inspection-history", label: "Inspections History" },
+                { id: "manage-inspections", label: "Manage Inspections" },
+                { id: "isa", label: "Sustainable Agriculture Index"},
+            ],
         },
-        // { id: "producers", title: "Producers", icon: IconProducers, action: "" },
-        // { id: "activists", title: "Activists", icon: IconActivists, action: "" },
+        {
+            id: "financial-center",
+            title: "Financial Center",
+            icon: IconMarket,
+            action: "",
+            subItem: [
+                { id: "market", label: "Market" },
+                { id: "private-sales", label: "Seed Round" },
+                {id: 'producers-pool', label: 'Producers Pool'},
+                {id: 'developers-pool', label: 'Developers Pool'},
+            ],
+        },
         {
         id: "certificates",
         title: "Certificates",
@@ -61,94 +77,121 @@ export default function Menu({ changeTab }) {
             {id: 'investor-certificate', label: 'Investor'},
         ]
         },
-        { 
-        id: "pools", 
-        title: "SAC Token", 
-        icon: IconPools, 
-        action: "",
-        subItem: [
-            {id: 'producers-pool', label: 'Producers'},
-            {id: 'developers-pool', label: 'Developers'},
-        ] 
-        },
-        //{ 
-        //  id: "delations", 
-        //  title: "Delations", 
-        //  icon: IconInspections, 
-        //  action: ""
-        //},
-        { id: "my-account", title: "My Account", icon: IconMyAccount, action: "" },
-        { id: "researches", title: "Research Center", icon: IconISA, action: "" },
+        { id: "researches", title: "Research Center", icon: IconPesquisas, action: "" },
+        { id: "developers-center", title: "Development Center", icon: IconDev, action: "" },
+        { id: "my-account", title: "My Account", icon: IconAccount, action: "" },
     ]);
     const toggleSubItem = (id) => {
         if(id === 'rankings'){
-        setOpen((oldValue) => !oldValue);
+            setOpen((oldValue) => !oldValue);
         }
         if(id === 'pools'){
-        setOpenPools((oldValue) => !oldValue);
+            setOpenPools((oldValue) => !oldValue);
         }
         if(id === 'certificates'){
-        setOpenCertificates((oldValue) => !oldValue);
+            setOpenCertificates((oldValue) => !oldValue);
+        }
+        if(id === 'inspections'){
+            setOpenInspections((oldValue) => !oldValue);
+        }
+        if(id === 'financial-center'){
+            setOpenFinancial((oldValue) => !oldValue);
         }
     };
     return (
-        <div className="container-menu" style={{width: menuOpen ? '300px' : '90px'}}>
-            {menuOpen ? (
-                <img className="img-logo" src={Logo} />
-            ) : (
-                <img className="img-logo-simple" src={LogoSimple} />
-            )}
+        <div className="flex flex-col bg-[#0A4303] mt-12 lg:mt-12 fixed duration-200 z-70" style={{width: menuOpen ? '320px' : '90px'}}>
+            <div className="hidden lg:flex items-center justify-between">
+                {menuOpen ? (
+                    <img className="w-[120px] h-[80px] object-contain ml-4" src={require('../../assets/logo-branco.png')} />
+                ) : (
+                    <img className="w-[40px] h-[40px] object-contain ml-3 mt-4 mb-5" src={require('../../assets/logos-branco.png')} />
+                )}
 
-            {itemsMenu.map((item) => {
-                return (
-                <ItemsList
-                    data={item}
-                    changeTab={(tab) => changeTab(tab)}
-                    key={item.id}
-                    subItem={item.subItem}
-                    openCertificates={openCertificates}
-                    openPools={openPools}
-                    open={open}
-                    toggle={(id) => {
-                        toggleSubItem(id)
-                        if(!menuOpen){
-                            toggleMenu()
-                        }
-                        if(id === 'certificates'){
-                            setOpenPools(false);
-                            setOpen(false);
-                        }
-                        if(id === 'rankings'){
-                            setOpenPools(false);
-                            setOpenCertificates(false);
-                        }
-                        if(id === 'pools'){
+                <button
+                    onClick={() => {
+                        toggleMenu()
+                        if(menuOpen){
                             setOpen(false);
                             setOpenCertificates(false);
+                            setOpenPools(false)
                         }
                     }}
-                    menuOpen={menuOpen}
-                />
+                    className='px-3 py-3 hover:bg-green-950'
+                >
+                    {menuOpen ? (
+                        <BsChevronDoubleLeft color='green' size={20}/>
+                    ) : (
+                        <BsChevronDoubleRight color='green' size={20}/>
+                    )}
+                </button>
+            </div>
+
+            <div className="flex flex-col h-[90vh] pb-20 overflow-auto scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
+            {itemsMenu.map((item) => {
+                return (
+                    <div className="h-26  ">
+                        <ItemsList
+                            data={item}
+                            changeTab={(tab) => {
+                                if(tab === 'researches'){
+                                    navigate(`/researchers-center/${walletAddress}/${typeUser}`);
+                                    return;
+                                }
+                                if(tab === 'developers-center'){
+                                    navigate(`/developers-center/${walletAddress}/${typeUser}`);
+                                    return;
+                                }
+                                
+                                changeTab(tab)
+                            }}
+                            key={item.id}
+                            subItem={item.subItem}
+                            openCertificates={openCertificates}
+                            openInspections={openInspections}
+                            openPools={openPools}
+                            openFinancial={openFinancial}
+                            open={open}
+                            toggle={(id) => {
+                                toggleSubItem(id)
+                                if(!menuOpen){
+                                    toggleMenu()
+                                }
+                                if(id === 'certificates'){
+                                    setOpenPools(false);
+                                    setOpen(false);  
+                                    setOpenInspections(false);
+                                    setOpenFinancial(false);
+                                }
+                                if(id === 'rankings'){
+                                    setOpenPools(false);
+                                    setOpenCertificates(false);
+                                    setOpenInspections(false);
+                                    setOpenFinancial(false);
+                                }
+                                if(id === 'pools'){
+                                    setOpen(false);
+                                    setOpenCertificates(false);
+                                    setOpenInspections(false);
+                                    setOpenFinancial(false);
+                                }
+                                if(id === 'inspections'){
+                                    setOpen(false);
+                                    setOpenFinancial(false);
+                                    setOpenCertificates(false);
+                                    
+                                }
+                                if(id === 'financial-center'){
+                                    setOpenPools(false);
+                                    setOpenCertificates(false);
+                                    setOpenInspections(false);
+                                }
+                            }}
+                            menuOpen={menuOpen}
+                        />
+                    </div>
                 );
             })}
-
-            <button
-                onClick={() => {
-                    toggleMenu()
-                    if(menuOpen){
-                        setOpen(false);
-                        setOpenCertificates(false);
-                        setOpenPools(false)
-                    }
-                }}
-                className='menu__btn-change-open'
-            >
-                {menuOpen ? (
-                    <BsChevronDoubleLeft color='green' size={20}/>
-                ) : (
-                    <BsChevronDoubleRight color='green' size={20}/>
-                )}
-            </button>
+            </div>
         </div>
     );
 }

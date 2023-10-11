@@ -2,14 +2,14 @@ import React from 'react';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 
 const containerStyle = {
-  width: '450px',
-  height: '400px'
+  width: '100%',
+  height: '320px'
 };
 
 // const center = {
-//   lat: -3.745,
-//   lng: -38.523
-// };
+//    lat: -3.745,
+//    lng: -38.523
+//  };
 
 function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
     return(
@@ -29,24 +29,31 @@ function MapView({center, setCenter, editable, setPolyline, pathPolyline}){
                         <DrawingManager
                             drawingMode='polyline'
                             onMarkerComplete={e => {
-                                setCenter(`${e.position.lat()}, ${e.position.lng()}`)
+                                const center = {
+                                    lat: e.position.lat(),
+                                    lng: e.position.lng()
+                                }
+                                setCenter(center)
                             }}
                             onPolylineComplete={(e) => {
-                                setPolyline(e.latLngs.h[0].h)
+                                setPolyline(e.latLngs.g[0].g)
+                                //setPolyline(e.latLngs.h[0].h) 
+                                //console.log(e.latLngs.g[0].g)
                             }}
+                        />
+                    )}
+                
+                    {!editable && (
+                        <Marker position={center}/>
+                    )}
+
+                    {!editable && (
+                        <Polyline
+                            path={pathPolyline}
                         />
                     )}
                 </>
                 }
-                {!editable && (
-                    <Marker position={center}/>
-                )}
-
-                {!editable && (
-                    <Polyline
-                        path={pathPolyline}
-                    />
-                )}
             </GoogleMap>
         </LoadScript>
     )

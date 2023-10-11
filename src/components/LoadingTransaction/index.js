@@ -1,16 +1,96 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './loadingTransaction.css';
 import { useTranslation } from 'react-i18next';
+import { MissaoCheck } from '../MissaoCheck';
+import { useMainContext } from '../../hooks/useMainContext';
 
-export function LoadingTransaction({loading, logTransaction}){
+export function LoadingTransaction({loading, logTransaction, action}){
+    const {userData} = useMainContext();
     const {t} = useTranslation();
+    const [count, setCount] = useState(1);
+    const [missaoCheck, setMissaoCheck] = useState(false);
+
+    useEffect(() => {
+        if(count === 5){
+            setTimeout(() => setCount(1), 1000)
+            return;
+        }
+        setTimeout(() => setCount(count + 1), 1000)
+    },[count]);
+
+    useEffect(() => {
+        if(!loading && logTransaction.type === 'success'){
+            if(action === 'register'){
+                setMissaoCheck(true)
+            }
+
+            if(action === 'request-inspection'){
+                if(userData?.level === 1){
+                    setMissaoCheck(true);
+                }
+            }
+
+            if(action === 'accept-inspection'){
+                if(userData?.level === 1){
+                    setMissaoCheck(true);
+                }
+            }
+        }
+    }, [logTransaction])
     
     return(
-        <Dialog.Portal className='loading-transaction__portal'>
-            <Dialog.Overlay className='loading-transaction__overlay'/>
-            <Dialog.Content className='loading-transaction__content'>
-                <Dialog.Title className='loading-transaction__title'>
+        <Dialog.Portal className='flex justify-center items-center inset-0 z-50'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
+            <Dialog.Content className='absolute flex flex-col items-center justify-center rounded-md m-auto inset-0 bg-folha-papiro bg-no-repeat bg-center bg-contain md:w-[450px] px-5'>
+
+                <div className='flex flex-col absolute items-center h-[300px]'>
+                    <img
+                        src={require('../../assets/logo-cinza.png')}
+                        className='w-[200px] object-contain'
+                    />
+
+                    <Dialog.Title className='font-bold text-black text-center px-5 mt-5'>
+                        {loading && `${t('Your transaction is being processed... Be patient, this transaction can take a few minutes')}`}
+                        {!loading && logTransaction.type === 'error' && `${t('Transaction error')}`}
+                        {!loading && logTransaction.type === 'success' && `${t('Successful transaction')}`}
+                    </Dialog.Title>
+
+                    {loading && (
+                        <p className="font-bold text-3xl w-20">
+                            {count === 1 && '.'}
+                            {count === 2 && '. .'}
+                            {count === 3 && '. . .'}
+                            {count === 4 && '. . . .'}
+                            {count === 5 && '. . . . .'}
+                        </p>
+                    )}
+
+                    {!loading && logTransaction.type === 'error' && (
+                        <p className="font-bold text-red-500 text-center px-5">{t(`${logTransaction.message}`)}</p>
+                    )}
+
+                    {!loading && logTransaction.type === 'success' && (
+                        <div className="flex flex-col mt-5">
+                            <p>{t('Click to view transaction details')}</p>
+                            <a 
+                                target='_blank' 
+                                href={`https://sepolia.etherscan.io/tx/${logTransaction.hash}`}
+                                className='max-w-[35ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
+                            >
+                                {logTransaction.hash}
+                            </a>
+                        </div>
+                    )}
+
+                    {!loading && (
+                        <Dialog.Close className='px-5 py-2 bg-[#ff9900] rounded-md font-bold text-white mt-5'>
+                            {t('Close')}
+                        </Dialog.Close>
+                    )}
+                </div>
+                
+                {/* <Dialog.Title className='loading-transaction__title'>
                     {loading && `${t('Your transaction is being processed... Be patient, this transaction can take a few minutes')}`}
                     {!loading && logTransaction.type === 'error' && `${t('Transaction error')}`}
                     {!loading && logTransaction.type === 'success' && `${t('Successful transaction')}`}
@@ -30,8 +110,17 @@ export function LoadingTransaction({loading, logTransaction}){
 
                 {!loading && (
                     <Dialog.Close>{t('Close')}</Dialog.Close>
-                )}
+                )} */}
             </Dialog.Content>
+
+            <Dialog.Root
+                open={missaoCheck}
+                onOpenChange={(open) => setMissaoCheck(open)}
+            >
+                <MissaoCheck
+                    action={action}
+                />
+            </Dialog.Root>
         </Dialog.Portal>
     )
 }

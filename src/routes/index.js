@@ -2,25 +2,33 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Login from "../pages/login";
 import Dashboard from '../pages/dashboard';
-import Register from "../components/Tabs/Register";
-import ProducerRanking from "../components/Tabs/Ranking/Producer";
-import ActivistRanking from "../components/Tabs/Ranking/Activist";
 import AccountProducer from "../pages/accountProducer";
+import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
+import IndicesControl from "../pages/indicesControl";
+import { RequestSepolia } from "../pages/RequestSepolia";
+import { ViewImage } from "../pages/ViewImage";
+import { ResearchersCenter } from "../pages/ResearchersCenter";
+import { DevelopersCenter } from "../pages/DevelopersCenter";
+import { PrivateSales } from "../pages/privateSales";
+import {Register} from "../pages/register";
 
 export default function Router(){
     return(
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<Login/>}/>
-                <Route path="/dashboard/:walletAddress/:tabActive/:walletSelected" element={<Dashboard/>}/>
+                <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
-                <Route exact path="/register" element={<Register/>}/>
-                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
-
-                <Route exact path="/producers-ranking" element={ <ProducerRanking />}/>
-                <Route exact path="/activists-ranking" element={ <ActivistRanking />}/>
+                <Route exact path="/indices-control" element={<IndicesControl/>}/>
+                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
+                <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
+                <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
+                <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
+                <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
+                <Route exact path="/developers-center/:walletAddress/:typeUser" element={<DevelopersCenter/>}/>
+                <Route exact path="/register/:walletAddress" element={<Register/>}/>
             </Routes>
         </BrowserRouter>
     );

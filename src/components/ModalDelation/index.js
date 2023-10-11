@@ -13,9 +13,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function ModalDelation({close, anonymousReport}){
     const {t} = useTranslation();
-    const {walletConnected} = useMainContext();
     const navigate = useNavigate();
-    const {walletSelected} = useParams();
+    const {walletSelected, walletAddress} = useParams();
     const [title, setTitle] = useState('');
     const [testemony, setTestemony] = useState('');
     const [photo, setPhoto] = useState('');
@@ -69,7 +68,7 @@ export default function ModalDelation({close, anonymousReport}){
         setModalTransaction(true);
         setLoadingTransaction(true);
         AddDelation(
-            walletConnected,
+            walletAddress,
             walletSelected,
             title,
             testemony,

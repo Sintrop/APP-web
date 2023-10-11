@@ -7,26 +7,33 @@ import { LoadingTransaction } from '../LoadingTransaction';
 import { MainContext } from '../../contexts/main';
 import {FaLock} from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import Loader from '../Loader';
 
 //components
 import Loading from '../Loading';
 import ItemListInspections from '../ManageInspectionsComponents/ItemListInspections';
+import { BackButton } from '../BackButton';
 
 //services
 import {GetProducer} from '../../services/producerService';
 import {GetInspections, RequestInspection} from '../../services/manageInspectionsService';
+import { InspectionItem } from '../InspectionItem';
+import { GetInspectionsInfura } from '../../services/methodsGetInfuraApi';
+import { api } from '../../services/api';
 
-export default function ManageInpections({walletAddress, setTab}){
+export default function ManageInpections({setTab}){
     const {t} = useTranslation();
-    const {user, blockNumber, walletConnected, getAtualBlockNumber} = useContext(MainContext);
+    const {walletAddress} = useParams();
+    const {user, blockNumber, walletConnected, getAtualBlockNumber, viewMode, userData: userDataApi} = useContext(MainContext);
     const [inspections, setInpections] = useState([])
     const [loading, setLoading] = useState(false);
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const {tabActive} = useParams();
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [lastResquested, setLastRequested] = useState('');
     const [btnRequestHover, setBtnRequestHover] = useState(false);
+    const [userData, setUserData] = useState({});
     
     useEffect(() => {
         setTab(tabActive, '')
@@ -41,15 +48,35 @@ export default function ManageInpections({walletAddress, setTab}){
 
     async function isProducer() {
         const producer = await GetProducer(walletConnected);
+        setUserData(producer);
         setLastRequested(producer.lastRequestAt);
     }
 
     async function getInspections(){
         setLoading(true);
-        const res = await GetInspections();
-        setInpections(res);
+        if(viewMode){
+            const response = await GetInspectionsInfura();
+            filterInspections(response);
+        }else{
+            const response = await GetInspections();
+            filterInspections(response);
+        }
+    }
+
+    function filterInspections(data){
+        let newArrayInspections = [];
+        const inspections = data.filter(item => item.status !== '2')
+        for(var i = 0; i < inspections.length; i++){
+            if(inspections[i].status === '1'){
+                if(Number(inspections[i].acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION) > Number(blockNumber)){
+                    newArrayInspections.push(inspections[i]);
+                }
+            }else{
+                newArrayInspections.push(inspections[i]);
+            }
+        }
+        setInpections(newArrayInspections.reverse());
         setLoading(false);
-        console.log(res);
     }
 
     async function requestInspection(){
@@ -61,9 +88,33 @@ export default function ManageInpections({walletAddress, setTab}){
                 type: res.type,
                 message: res.message,
                 hash: res.hashTransaction
-            })
+            });
             setLoadingTransaction(false);
             getInspections();
+
+            const dataNotification = {
+                text1: 'Request new inspection', 
+                text2: ''
+            }
+
+            if(res.type === 'success'){
+                api.post('/notifications/send', {
+                    from: walletAddress,
+                    group: 'inspectors',
+                    type: 'request-inspection', 
+                    data: JSON.stringify(dataNotification),
+                    for: 'inspectors'
+                })
+            }
+
+            if(res.type === 'success'){
+                api.post('/publication/new', {
+                    userId: userDataApi?.id,
+                    type: 'request-inspection',
+                    origin: 'platform',
+                    additionalData: JSON.stringify(userDataApi)
+                })
+            }
         })
         .catch(err => {
             setLoadingTransaction(false);
@@ -94,21 +145,35 @@ export default function ManageInpections({walletAddress, setTab}){
         
     }
 
+    if(loading){
+        return(
+            <div className="flex items-center justify-center bg-green-950 w-full h-screen">
+                <Loader
+                    color='white'
+                    type='hash'
+                />
+            </div>
+        )
+    }
+
     return(
-        <div className='container-isa-page'>
-            <div className='header-isa'>
-                <h1>{t('Manage Inspections')}</h1>
-                <div className='area-btn-header-isa-page'>
+        <div className='flex flex-col bg-green-950 h-[95vh] px-2 lg:px-10 pt-2 lg:pt-10 overflow-auto'>
+            <div className='flex flex-col lg:flex-row lg:items-center justify-between mb-2 lg:mb-10'> 
+                <div className='flex items-center gap-2'>
+                    <BackButton/>
+                    <h1 className='font-bold text-lg lg:text-2xl text-white'>{t('Manage Inspections')}</h1>
+                </div>
+                <div className='flex justify-center items-center gap-5'>
                     {user == 1 && (
                         <button
                             
-                            className='btn-new-category-isa'
+                            className='flex mt-5 py-2 px-10 bg-[#FF9900] hover:bg-orange-400 font-bold duration-200 rounded-lg lg:mt-0'
                             onClick={() => {
-                                if(Number(lastResquested) === 0){
-                                    requestInspection()
+                                if(Number(userData?.totalInspections) < 3){
+                                    requestInspection();
                                 }
                                 if(Number(lastResquested) !== 0){
-                                    if((Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0){
+                                    if((Number(lastResquested) + 33230) - Number(blockNumber) < 0){
                                         requestInspection()
                                     }
                                 }
@@ -120,68 +185,80 @@ export default function ManageInpections({walletAddress, setTab}){
                                 `${t('Request New Inspection')}`
                             ) : (
                                 <>
-                                {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber) < 0 ? (
+                                {Number(userData?.totalInspections) < 3 ? (
                                     `${t('Request New Inspection')}`
                                 ) : (
                                     <>
-                                    {btnRequestHover ? (
+                                    {(Number(lastResquested) + 33230) - Number(blockNumber) < 0 ? (
+                                        `${t('Request New Inspection')}`
+                                    ) : (
                                         <>
-                                            <FaLock 
-                                                size={25}
-                                                onMouseEnter={() => setBtnRequestHover(true)}
-                                                onMouseOut={() => setBtnRequestHover(false)}
-                                            />
-                                            {t('Wait')} {(Number(lastResquested) + Number(process.env.REACT_APP_TIME_BETWEEN_INSPECTIONS)) - Number(blockNumber)} {t('blocks to request')}
+                                        {btnRequestHover ? (
+                                            <>
+                                                <FaLock 
+                                                    size={25}
+                                                    onMouseEnter={() => setBtnRequestHover(true)}
+                                                    onMouseOut={() => setBtnRequestHover(false)}
+                                                />
+                                                {t('Wait')} {(Number(lastResquested) + 33230) - Number(blockNumber)} {t('blocks to request')}
+                                            </>
+                                        ) : `${t('Request New Inspection')}`}
                                         </>
-                                    ) : `${t('Request New Inspection')}`}
+                                    )}
                                     </>
                                 )}
                                 </>
                             )}
                         </button>
                     )}
-                    <button
-                        className='btn-load-categories-isa'
-                        onClick={() => getInspections()}
+                    
+                </div>
+            </div>
+
+            <div className="flex items-center h-10 lg:h-12 lg:w-full mb-3">
+                <div className="flex bg-white h-full w-[30%] border-r-2 rounded-l-md px-3">
+                    <select
+                        className="bg-white border-0 h-full w-full cursor-pointer"
                     >
-                        {t('Load Inspections')}
+                        <option value="">Todas as inspeções</option>
+                        <option value="">Buscar pela wallet do ativista</option>
+                        <option value="">Buscar pela wallet do produtor</option>
+                    </select>
+                </div>
+                <div className="flex bg-white h-full w-[70%] px-3 rounded-r-md">
+                    <input
+                        className="bg-white border-0 h-full w-full"
+                        placeholder="Digite aqui"
+                    />
+                    <button
+                        className="font-bold py-2 rounded-md bg-white"
+                    >
+                        <img
+                            src={require('../../assets/icon-search.png')}
+                            className="w-[30px] h-[30px] object-contain"
+                        />
                     </button>
                 </div>
             </div>
             
                 {inspections.length === 0 ? (
-                    <h3>{t('There are no open inspections')}</h3>
+                    <h3 className='font-bold text-white'>{t('There are no open inspections')}</h3>
                 ) : (
-                    
-                        <table>
-                            <thead>
-                                <th className='th-wallet'>{t('Requested By')}</th>
-                                <th>{t('Producer Address')}</th>
-                                <th className='th-wallet'>{t('Inspected By')}</th>
-                                <th>{t('Created At')}</th>
-                                <th>{t('Expires In')}</th>
-                                <th className='th-wallet'>Status</th>
-                                <th className='th-wallet'>Isa {t('Score')}</th>
-                                <th className='th-wallet'>{t('Actions')}</th>
-                            </thead>
-                            <tbody>
-                                {inspections.map(item => {
-                                    if(item.status != '2'){
-                                        return(
-                                            <ItemListInspections
-                                                data={item}
-                                                user={user}
-                                                walletAddress={walletAddress}
-                                                key={item.id}
-                                                reloadInspections={() => getInspections()}
-                                                setTab={(tab, wallet) => setTab(tab, wallet)}
-                                            />
-                                        )
-                                    }
-                                })}
-                            </tbody>
-                        </table>
-                
+                    <div className='flex flex-col'>
+                    <div className="flex flex-col rounded-sm">
+                        <div className='flex flex-col h-[66vh] overflow-auto pb-12 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md gap-2'>
+                            {inspections.map(item => (
+                                <InspectionItem
+                                    key={item.id}
+                                    data={item}
+                                    type='manage'
+                                    reload={getInspections}
+                                    statusExpired={(id) => {}}
+                                />
+                            ))}
+                        </div>
+                    </div> 
+                    </div>
                 )}
             
             <Dialog.Root 
@@ -196,11 +273,10 @@ export default function ManageInpections({walletAddress, setTab}){
                 <LoadingTransaction
                     loading={loadingTransaction}
                     logTransaction={logTransaction}
+                    action='request-inspection'
                 />
             </Dialog.Root>
-            {loading && (
-                <Loading/>
-            )}
+            
         </div>
     )
 }

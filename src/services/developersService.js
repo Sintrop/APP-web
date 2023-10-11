@@ -3,10 +3,10 @@ import DeveloperContractJson from  '../data/contracts/abis/DeveloperContract.jso
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const developerContractAddress = DeveloperContractJson.networks[5777].address;
+const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
 
 //initializing contract
-const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
 
 class DevelopersService {
     constructor(wallet) {
@@ -19,11 +19,16 @@ class DevelopersService {
         const developers = await DeveloperContract.methods.getDevelopers().call()
         return developers;
     }
-
-    async getDeveloper(walletAdd){
-        const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()
-        return developers;
-    }
 }
 
 export default DevelopersService; 
+
+export const GetDeveloper = async (walletAdd) => {
+    const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()
+    return developers;
+}
+
+export const GetDevelopers = async () => {
+    const developers = await DeveloperContract.methods.getDevelopers().call()
+    return developers;
+}

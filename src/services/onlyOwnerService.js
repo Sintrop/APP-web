@@ -8,20 +8,20 @@ import SACTokenContractJson from '../data/contracts/abis/SacToken.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const userContractAddress = UserContractJson.networks[5777].address;
-const researcherContractAddress = ResearcherContractJson.networks[5777].address;
-const contributorContractAddress = ContributorContractJson.networks[5777].address;
-const advisorContractAddress = AdvisorContractJson.networks[5777].address;
-const developerContractAddress = DeveloperContractJson.networks[5777].address;
-const SACTokenContractAddress = SACTokenContractJson.networks[5777].address;
+const userContractAddress = '0x6e84e942d18dc2f68ec9fed5a4fa526b17f04113';
+const researcherContractAddress = '0x5c5553b494cc350f1a31e1f91832a3ed19df1627';
+const contributorContractAddress = '0xf1790104904127901ea3dda4b95deb215764023f';
+const advisorContractAddress = '0xfba96a8aba5d24109aa0c8038aa90095f81281e2';
+const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
+const SACTokenContractAddress = '0xF8033Bbfe9c645F52d170DDD733274371E75369F';
 
 //initializing contract
-const UserContract = new web3.eth.Contract(UserContractJson.abi, userContractAddress);
-const ResearcherContract = new web3.eth.Contract(ResearcherContractJson.abi, researcherContractAddress);
-const ContributorContract = new web3.eth.Contract(ContributorContractJson.abi, contributorContractAddress);
-const AdvisorContract = new web3.eth.Contract(AdvisorContractJson.abi, advisorContractAddress);
-const DeveloperContract = new web3.eth.Contract(DeveloperContractJson.abi, developerContractAddress);
-const SACTokenContract = new web3.eth.Contract(SACTokenContractJson.abi, SACTokenContractAddress);
+const UserContract = new web3.eth.Contract(UserContractJson, userContractAddress);
+const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
+const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
+const AdvisorContract = new web3.eth.Contract(AdvisorContractJson, advisorContractAddress);
+const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
+const SACTokenContract = new web3.eth.Contract(SACTokenContractJson, SACTokenContractAddress);
 
 export const NewAllowedUser = async (walletUser, walletAdm) => {
     await UserContract.methods.newAllowedCaller(walletUser).send({from: walletAdm})
