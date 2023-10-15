@@ -4,8 +4,8 @@ import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
-const developersPoolAddress = '0x5703e8a25a6bcd2a989f28a3cfd39cfc9ae06718';
+const developerContractAddress = process.env.REACT_APP_DEVELOPER_CONTRACT_ADDRESS;
+const developersPoolAddress = process.env.REACT_APP_DEVELOPER_POOL_CONTRACT_ADDRESS;
 
 //initializing contract
 const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson, developersPoolAddress);

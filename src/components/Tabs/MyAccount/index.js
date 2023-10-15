@@ -10,8 +10,8 @@ import {GetActivist} from '../../../services/activistService';
 import { GetResearcher, GetResearches } from '../../../services/researchersService';
 import {GetDeveloper} from '../../../services/developersService';
 import { GetAdvisor } from '../../../services/advisorsService';
-import {GetContributor} from '../../../services/contributorService';
-import { GetInvestor } from '../../../services/investorService';
+import {GetValidator} from '../../../services/contributorService';
+import { GetSupporter } from '../../../services/investorService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import { ToastContainer, toast} from 'react-toastify';
 import {InspectionItem} from '../../InspectionItem';
@@ -152,18 +152,19 @@ export default function MyAccount({wallet, userType, setTab}){
         }
         if(typeUser === '4'){
             const response = await GetDeveloper(walletAddress);
-            setUserData(response)
+            setUserData(response);
+            console.log(response)
         }
         if(typeUser === '5'){
             const response = await GetAdvisor(walletAddress);
             setUserData(response)
         }
         if(typeUser === '6'){
-            const response = await GetContributor(walletAddress);
+            const response = await GetValidator(walletAddress);
             setUserData(response)
         }
         if(typeUser === '7'){
-            const response = await GetInvestor(walletAddress);
+            const response = await GetSupporter(walletAddress);
             setUserData(response)
             getApiInvestor()
         }

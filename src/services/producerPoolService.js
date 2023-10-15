@@ -3,7 +3,7 @@ import ProducerPoolContractJson from '../data/contracts/abis/ProducerPool.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const producerPoolContractAddress = '0x0751c7e08e53a55a1ed24fe1467d9a0ceb8ef95e';
+const producerPoolContractAddress = process.env.REACT_APP_PRODUCER_POOL_CONTRACT_ADDRESS;
 //const poolableContractAddress = PoolableContractJson.networks
 
 //initializing contract

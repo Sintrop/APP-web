@@ -3,7 +3,7 @@ import DeveloperContractJson from  '../data/contracts/abis/DeveloperContract.jso
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
+const developerContractAddress = process.env.REACT_APP_DEVELOPER_CONTRACT_ADDRESS;
 
 //initializing contract
 const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);

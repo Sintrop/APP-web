@@ -3,7 +3,7 @@ import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const producerContractAddress = '0x693161f1e90270ba156179128f49c285c89447e7';
+const producerContractAddress = process.env.REACT_APP_PRODUCER_CONTRACT_ADDRESS;
 
 //initializing contract
 const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);

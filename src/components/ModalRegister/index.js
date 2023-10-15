@@ -8,7 +8,7 @@ import Loading from '../Loading';
 import { WebcamComponent } from '../Webcam';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
-import {addContributor, addActivist, addProducer, addInvestor, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
+import {addValidator, addActivist, addProducer, addSupporter, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
@@ -325,7 +325,8 @@ export default function ModalRegister({close}){
                         propertyGeolocation,
                         imgProfileUrl: proofPhoto,
                         address: JSON.stringify(address),
-                        level: 1
+                        level: 1,
+                        onBlockchain: true
                     })
                 }catch(err){
                     console.log(err);
@@ -388,7 +389,8 @@ export default function ModalRegister({close}){
                         password,
                         geoLocation: geoLocation,
                         imgProfileUrl: proofPhoto,
-                        level: 1
+                        level: 1,
+                        onBlockchain: true
                     })
                 }catch(err){
                     console.log(err);
@@ -436,7 +438,7 @@ export default function ModalRegister({close}){
         if(type === 'contributor'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addContributor(walletConnected, name, proofPhoto)
+            addValidator(walletConnected, name, proofPhoto)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -449,7 +451,9 @@ export default function ModalRegister({close}){
                         name,
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 6,
-                        level: 1
+                        level: 1,
+                        onBlockchain: true,
+                        imgProfileUrl: proofPhoto,
                     })
                 }catch(err){
                     console.log(err);
@@ -493,10 +497,10 @@ export default function ModalRegister({close}){
             })
         }
 
-        if(type === 'investor'){
+        if(type === 'supporter'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInvestor(walletConnected, name)
+            addSupporter(walletConnected, name)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -509,7 +513,8 @@ export default function ModalRegister({close}){
                         name,
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 7,
-                        level: 1
+                        level: 1,
+                        onBlockchain: true
                     })
                 }catch(err){
                     console.log(err);
@@ -569,7 +574,9 @@ export default function ModalRegister({close}){
                         name,
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 4,
-                        level: 1
+                        level: 1,
+                        onBlockchain: true,
+                        imgProfileUrl: proofPhoto,
                     })
                 }catch(err){
                     console.log(err);
@@ -629,7 +636,9 @@ export default function ModalRegister({close}){
                         name,
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 3,
-                        level: 1
+                        level: 1,
+                        imgProfileUrl: proofPhoto,
+                        onBlockchain: true
                     })
                 }catch(err){
                     console.log(err);
@@ -689,7 +698,9 @@ export default function ModalRegister({close}){
                         name,
                         wallet: String(walletConnected).toUpperCase(),
                         userType: 5,
-                        level: 1
+                        level: 1,
+                        imgProfileUrl: proofPhoto,
+                        onBlockchain: true
                     })
                 }catch(err){
                     console.log(err);

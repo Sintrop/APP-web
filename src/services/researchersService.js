@@ -3,7 +3,7 @@ import ResearcherContractJson from  '../data/contracts/abis/ResearcherContract.j
 const web3 = new Web3(window.ethereum);
 
 //contract addres
-const researcherContractAddress = '0x5c5553b494cc350f1a31e1f91832a3ed19df1627';
+const researcherContractAddress = process.env.REACT_APP_RESEARCHER_CONTRACT_ADDRESS;
 
 //initializing contract
 const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);

@@ -30,6 +30,8 @@ const startEra15 = 4056150;
 const startEra16 = 4089380;
 const startEra17 = 4122610;
 
+console.log(process.env.REACT_APP_RCTOKENICO_CONTRACT_ADDRESS)
+
 export default function MainProvider({children}){
     const {i18n} = useTranslation();
     const [user, setUser] = useState('0');

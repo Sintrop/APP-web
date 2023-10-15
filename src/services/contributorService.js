@@ -1,22 +1,22 @@
 import Web3 from "web3";
-import ContributorContractJson from  '../data/contracts/abis/ContributorContract.json';
+import ValidatorContractJson from  '../data/contracts/abis/ValidatorContract.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const contributorContractAddress = '0xf1790104904127901ea3dda4b95deb215764023f';
+const validatorContractAddress = process.env.REACT_APP_VALIDATOR_CONTRACT_ADDRESS;
 
 //initializing contract
-const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
+const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
 
 class ContributorsService {
     constructor(wallet) {
         this.web3 = new Web3(window.ethereum);
         this.wallet = wallet;
-        this.contributorContractAddress = contributorContractAddress;
+        this.contributorContractAddress = validatorContractAddress;
     }
 
     async getContributorsRanking(){
-        const contributors = await ContributorContract.methods.getContributors().call()
+        const contributors = await ValidatorContract.methods.getValidators().call()
         return contributors;
     }
 }
@@ -24,7 +24,7 @@ class ContributorsService {
 
 export default ContributorsService; 
 
-export const GetContributor = async(walletAdd) => {
-    const contributors = await ContributorContract.methods.getContributor(walletAdd).call()
-    return contributors;
+export const GetValidator = async(walletAdd) => {
+    const validator = await ValidatorContract.methods.getValidator(walletAdd).call()
+    return validator;
 }

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useMainContext } from "../../../../hooks/useMainContext";
 
 //services
-import { GetInvestor } from "../../../../services/accountProducerService";
+import { GetSupporter } from "../../../../services/accountProducerService";
 import {BurnTokens, GetCertificateTokens} from '../../../../services/sacTokenService';
 
 //components
@@ -62,7 +62,7 @@ export default function InvestorCertificate({userType, wallet, setTab}){
 
     async function getInvestor(){
         setLoading(true);
-        const response = await GetInvestor(walletAddress);
+        const response = await GetSupporter(walletAddress);
         setInvestorData(response);
         const tokens = await GetCertificateTokens(walletAddress);
         setTokensBurned((Number(tokens) / 10**18));

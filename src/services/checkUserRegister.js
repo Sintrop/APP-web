@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import UserContractJson from '../data/contracts/abis/UserContract.json';
 const web3 = new Web3(window.ethereum);
 
-const userContractAddress = '0x6e84e942d18dc2f68ec9fed5a4fa526b17f04113';
+const userContractAddress = process.env.REACT_APP_USER_CONTRACT_ADDRESS
 const UserContract = new web3.eth.Contract(UserContractJson, userContractAddress)
 
 function CheckUserRegister({walletAddress}) {

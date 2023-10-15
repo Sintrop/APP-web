@@ -37,7 +37,7 @@ export function NetworkImpact({setTab}){
 
     async function getImpact(){
         setLoading(true);
-        const response = await api.get('network-impact')
+        const response = await api.get('/network-impact')
         const impacts = response.data?.impact;
         
         if(viewMode){

@@ -6,7 +6,7 @@ import { ItemReceipt } from './ItemReceipts';
 import { api } from '../../services/api';
 
 //services
-import {GetInvestor, GetCertificateTokens} from '../../services/accountProducerService';
+import {GetSupporter, GetCertificateTokens} from '../../services/accountProducerService';
 
 export default function AccountInvestor(){
     const {t} = useTranslation();
@@ -43,7 +43,7 @@ export default function AccountInvestor(){
     }
 
     async function getInvestor(){
-        const response = await GetInvestor(walletSelected);
+        const response = await GetSupporter(walletSelected);
         if(response.userType === '0'){
             let data = {
                 name: 'Investidor Anônimo'

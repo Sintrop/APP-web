@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {GetInvestors} from "../../../../services/investorService";
-import {GetInvestorsInfura, GetCertificateTokensInfura} from '../../../../services/methodsGetInfuraApi';
+import {GetSupporters} from "../../../../services/investorService";
+import {GetSupportersInfura, GetCertificateTokensInfura} from '../../../../services/methodsGetInfuraApi';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
@@ -28,10 +28,10 @@ export default function InvestorRanking({ wallet, setTab }) {
     async function getInvestors(){
         setLoading(true);
         if(viewMode){
-            const response = await GetInvestorsInfura();
+            const response = await GetSupportersInfura();
             orderRanking(response);
         }else{
-            const response = await GetInvestors();
+            const response = await GetSupporters();
             orderRanking(response);
         }
     }

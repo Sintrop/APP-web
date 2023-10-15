@@ -681,26 +681,26 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
     }
 
     function handleAccept(){
-        if(user !== '2'){
-            toast.error(`${t('This account is not activist')}!`);
-            return;
-        }
-        if(data.status === '2'){
-            toast.error(`${t('This inspection has been inspected')}!`);
-            return;
-        }
-        if(data.status === '3'){
-            toast.error(`${t('This inspection has been expired')}!`);
-            return;
-        }
-        if(data.status === '1'){
-            toast.error(`${t('This inspection has been accepted')}!`);
-            return;
-        }
+        // if(user !== '2'){
+        //     toast.error(`${t('This account is not activist')}!`);
+        //     return;
+        // }
+        // if(data.status === '2'){
+        //     toast.error(`${t('This inspection has been inspected')}!`);
+        //     return;
+        // }
+        // if(data.status === '3'){
+        //     toast.error(`${t('This inspection has been expired')}!`);
+        //     return;
+        // }
+        // if(data.status === '1'){
+        //     toast.error(`${t('This inspection has been accepted')}!`);
+        //     return;
+        // }
 
-        if(!producerData){
-            return;
-        }
+        // if(!producerData){
+        //     return;
+        // }
         acceptInspection();
     }
 
@@ -733,6 +733,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
         .catch(err => {
             setLoadingTransaction(false);
             const message = String(err.message);
+            console.log(err);
             if(message.includes("Can't accept yet")){
                 setLogTransaction({
                     type: 'error',

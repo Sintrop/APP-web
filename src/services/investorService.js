@@ -1,22 +1,22 @@
 import Web3 from "web3";
-import InvestorContractJson from  '../data/contracts/abis/InvestorContract.json';
+import SupporterContractJson from  '../data/contracts/abis/SupporterContract.json';
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const investorContractAddress = '0x8014eef23614d357010685787690d3e7c2cfcc30';
+const supporterContractAddress = process.env.REACT_APP_SUPPORTER_CONTRACT_ADDRESS
 
 //initializing contract
-const InvestorContract = new web3.eth.Contract(InvestorContractJson, investorContractAddress);
+const SupporterContract = new web3.eth.Contract(SupporterContractJson, supporterContractAddress);
 
 class InvestorService {
     constructor(wallet) {
         this.web3 = web3;
         this.wallet = wallet;
-        this.investorContractAddress = investorContractAddress;
+        this.investorContractAddress = supporterContractAddress;
     }
 
     async getInvestorRanking(){
-        const investors = await InvestorContract.methods.getInvestors().call()
+        const investors = await SupporterContract.methods.getSupporters().call()
         return investors;
     }
 }
@@ -24,12 +24,12 @@ class InvestorService {
 
 export default InvestorService; 
 
-export const GetInvestors = async () => {
-    const investors = await InvestorContract.methods.getInvestors().call()
+export const GetSupporters = async () => {
+    const investors = await SupporterContract.methods.getSupporters().call()
     return investors;
 }
 
-export const GetInvestor = async (walletAdd) => {
-    const investor = await InvestorContract.methods.getInvestor(walletAdd).call()
+export const GetSupporter = async (walletAdd) => {
+    const investor = await SupporterContract.methods.getSupporter(walletAdd).call()
     return investor;
 }

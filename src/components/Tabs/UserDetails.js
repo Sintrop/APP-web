@@ -10,8 +10,8 @@ import {GetActivist} from '../../services/activistService';
 import { GetResearcher, GetResearches } from '../../services/researchersService';
 import {GetDeveloper} from '../../services/developersService';
 import { GetAdvisor } from '../../services/advisorsService';
-import {GetContributor} from '../../services/contributorService';
-import { GetInvestor } from '../../services/investorService';
+import {GetValidator} from '../../services/contributorService';
+import { GetSupporter } from '../../services/investorService';
 import { GetDelation } from '../../services/userService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import {
@@ -22,8 +22,8 @@ import {
     GetDelationInfura,
     GetDeveloperInfura,
     GetResearcherInfura,
-    GetInvestorInfura,
-    GetContributorInfura
+    GetSupporterInfura,
+    GetValidatorInfura
 } from '../../services/methodsGetInfuraApi';
 
 import Map from '../Map';
@@ -131,19 +131,19 @@ export function UserDetails({setTab}){
         }
         if(typeUser === '6'){
             if(viewMode){
-                const response = await GetContributorInfura(walletSelected);
+                const response = await GetValidatorInfura(walletSelected);
                 setUserData(response);
             }else{
-                const response = await GetContributor(walletSelected);
+                const response = await GetValidator(walletSelected);
                 setUserData(response);
             }
         }
         if(typeUser === '7'){
             if(viewMode){
-                const response = await GetInvestorInfura(walletSelected);
+                const response = await GetSupporterInfura(walletSelected);
                 setUserData(response);
             }else{
-                const response = await GetInvestor(walletSelected);
+                const response = await GetSupporter(walletSelected);
                 setUserData(response);
             }
             getApiInvestor()

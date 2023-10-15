@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './modalContribute.css';
-import {GetTokensBalance} from '../../../../services/voteService';
 import {BurnTokens} from '../../../../services/sacTokenService';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
@@ -20,14 +19,14 @@ export function ModalContribute({wallet, onFinished}){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
 
     useEffect(() => {
-        getTokensWallet();
+        //getTokensWallet();
     },[]);
 
-    async function getTokensWallet(){
-        const response = await GetTokensBalance(wallet);
-        setBalanceTokens(Number(response) / 10**18);
-        console.log(response);
-    }
+    // async function getTokensWallet(){
+    //     const response = await GetTokensBalance(wallet);
+    //     setBalanceTokens(Number(response) / 10**18);
+    //     console.log(response);
+    // }
 
     async function registerTokensApi(tokens, hash){
         const additionalData = {
@@ -153,7 +152,7 @@ export function ModalContribute({wallet, onFinished}){
                 onOpenChange={(open) => {
                     if(!loadingTransaction){
                         setModalTransaction(open);
-                        getTokensWallet();
+                        //getTokensWallet();
                         setInputTokens('');
                         onFinished();
                     }

@@ -7,7 +7,7 @@ import { useParams } from 'react-router';
 import { LoadingTransaction } from './LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from 'react-router';
-import {addProducer, addActivist} from '../services/registerService';
+import {addProducer, addActivist, addInspector} from '../services/registerService';
 import {AcceptInspection, GetInspection, RealizeInspection, RequestInspection} from '../services/manageInspectionsService';
 import {GetProducer} from '../services/producerService';
 import {format} from 'date-fns';
@@ -118,7 +118,7 @@ export function ModalTransactionOpen({close, transactions}){
         if(userData.userType === 2){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addActivist(walletAddress, userData?.name, userData.imgProfileUrl, userData.geoLocation)
+            addInspector(walletAddress, userData?.name, userData.imgProfileUrl, userData.geoLocation)
             .then(async (res) => {
                 setLogTransaction({
                     type: res.type,

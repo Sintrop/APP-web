@@ -18,7 +18,6 @@ import { ModalChooseLang } from '../../components/ModalChooseLang';
 import ModalRegister from '../../components/ModalRegister';
 
 //Tabs
-import Register from '../../components/Tabs/Register';
 import ISA from '../../components/Tabs/ISA';
 import ProducerRanking from '../../components/Tabs/Ranking/Producer';
 import MyAccount from '../../components/Tabs/MyAccount';
@@ -236,16 +235,6 @@ export default function Dashboard(){
         >
 
             <div className='w-[100%] h-[100%]'>
-                {activeTab === 'register' && (
-                    <Register 
-                        wallet={walletAddress}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
-
                 {activeTab === 'isa' && (
                     <ISA 
                         user={user} 

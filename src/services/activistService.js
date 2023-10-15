@@ -3,7 +3,7 @@ import ActivistContractJson from  '../data/contracts/abis/ActivistContract.json'
 const web3 = new Web3(window.ethereum);
 
 //contract address
-const ActivistContractAddress = '0xa289fabc5764f91ac56575f7f048038faa3d059d';
+const ActivistContractAddress = process.env.REACT_APP_ACTIVIST_CONTRACT_ADDRESS;
 
 //Initializing contract
 const ActivistContract = new web3.eth.Contract(ActivistContractJson, ActivistContractAddress);

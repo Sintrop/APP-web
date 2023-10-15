@@ -1,47 +1,47 @@
 import Web3 from "web3";
 import SintropContractJson from '../data/contracts/abis/Sintrop.json';
 import UserContractJson from '../data/contracts/abis/UserContract.json';
-import SACTokenContractJson from '../data/contracts/abis/SacToken.json';
+import RcTokenContractJson from '../data/contracts/abis/RcToken.json';
 import DevelopersPoolJson from '../data/contracts/abis/DeveloperPool.json';
 import ProducerPoolContractJson from '../data/contracts/abis/ProducerPool.json';
 import CategoryContractJson from '../data/contracts/abis/CategoryContract.json';
 
 import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
 import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
-import InvestorContractJson from '../data/contracts/abis/InvestorContract.json';
+import SupporterContractJson from '../data/contracts/abis/SupporterContract.json';
 import ActivistContractJson from '../data/contracts/abis/ActivistContract.json';
 import ResearcherContractJson from '../data/contracts/abis/ResearcherContract.json';
-import ContributorContractJson from  '../data/contracts/abis/ContributorContract.json';
+import ValidatorContractJson from  '../data/contracts/abis/ValidatorContract.json';
 
 const provider = `https://sepolia.infura.io/v3/e46d8ac23f55416a9c93c0efa005450a`;
 const web3 = new Web3(provider);
 
 //contract address
-const sintropContractAddress = '0x6ff3e655a639e35d9194228aa42879ae7ddf7dd8';
-const userContractAddress = '0x6e84e942d18dc2f68ec9fed5a4fa526b17f04113';
-const sacTokenContractAddress = '0xF8033Bbfe9c645F52d170DDD733274371E75369F';
-const developersPoolAddress = '0x5703e8a25a6bcd2a989f28a3cfd39cfc9ae06718';
-const producerPoolContractAddress = '0x0751c7e08e53a55a1ed24fe1467d9a0ceb8ef95e';
-const categoryContractAddress = '0x788a57aa634e5e559a655033b780d192385617fb';
+const sintropContractAddress = process.env.REACT_APP_SINTROP_CONTRACT_ADDRESS;
+const userContractAddress = process.env.REACT_APP_USER_CONTRACT_ADDRESS;
+const rcTokenContractAddress = process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS;
+const developersPoolAddress = process.env.REACT_APP_DEVELOPER_POOL_CONTRACT_ADDRESS;
+const producerPoolContractAddress = process.env.REACT_APP_PRODUCER_POOL_CONTRACT_ADDRESS;
+const categoryContractAddress = "0xB68D2182D2bc0af29FD6C25185EFd253fb9513e9"
 
-const producerContractAddress = '0x693161f1e90270ba156179128f49c285c89447e7';
-const investorContractAddress = '0x8014eef23614d357010685787690d3e7c2cfcc30';
-const activistContractAddress = '0xa289fabc5764f91ac56575f7f048038faa3d059d';
-const researcherContractAddress = '0x5c5553b494cc350f1a31e1f91832a3ed19df1627';
-const developerContractAddress = '0x0c9aa6894d586fbfd246b7633cde1ced544120f4';
-const contributorContractAddress = '0xf1790104904127901ea3dda4b95deb215764023f';
+const producerContractAddress = process.env.REACT_APP_PRODUCER_CONTRACT_ADDRESS;
+const supporterContractAddress = process.env.REACT_APP_SUPPORTER_CONTRACT_ADDRESS;
+const activistContractAddress = process.env.REACT_APP_ACTIVIST_CONTRACT_ADDRESS;
+const researcherContractAddress = process.env.REACT_APP_RESEARCHER_CONTRACT_ADDRESS
+const developerContractAddress = process.env.REACT_APP_DEVELOPER_CONTRACT_ADDRESS
+const validatorContractAddress = process.env.REACT_APP_VALIDATOR_CONTRACT_ADDRESS;
 
 //initializing contract
 const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
-const InvestorContract = new web3.eth.Contract(InvestorContractJson, investorContractAddress);
+const SupporterContract = new web3.eth.Contract(SupporterContractJson, supporterContractAddress);
 const ActivistContract = new web3.eth.Contract(ActivistContractJson, activistContractAddress);
 const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
 const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
-const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
+const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
 
 const SintropContract = new web3.eth.Contract(SintropContractJson, sintropContractAddress);
 const UserContract = new web3.eth.Contract(UserContractJson, userContractAddress);
-const SACTokenContract = new web3.eth.Contract(SACTokenContractJson, sacTokenContractAddress);
+const RcTokenContract = new web3.eth.Contract(RcTokenContractJson, rcTokenContractAddress);
 const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson, developersPoolAddress);
 const ProducerPoolContract = new web3.eth.Contract(ProducerPoolContractJson, producerPoolContractAddress);
 const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
@@ -108,15 +108,15 @@ export const GetDeveloperInfura = async (walletAdd) => {
 
 //Investidores
 
-export const GetInvestorsInfura = async () => {
-    const investors = await InvestorContract.methods.getInvestors().call()
+export const GetSupportersInfura = async () => {
+    const investors = await SupporterContract.methods.getSupporters().call()
     return investors;
 }
 
 //contribuidores
-export const GetContributorInfura = async(walletAdd) => {
-    const contributors = await ContributorContract.methods.getContributor(walletAdd).call()
-    return contributors;
+export const GetValidatorInfura = async(walletAdd) => {
+    const validator = await ValidatorContract.methods.getValidator(walletAdd).call()
+    return validator;
 }
 
 //Inspeções
@@ -254,14 +254,14 @@ export const GetDelationInfura = async (wallet) => {
     return delations;
 }
 
-export const GetInvestorInfura = async (wallet) => {
-    const investor = await InvestorContract.methods.getInvestor(wallet).call()
-    return investor;
+export const GetSupporterInfura = async (wallet) => {
+    const supporter = await SupporterContract.methods.getSupporter(wallet).call()
+    return supporter;
 }
 
 export const GetCertificateTokensInfura = async (wallet) => {
     let tokens = 0
-    await SACTokenContract.methods.certificate(wallet).call({from: sacTokenContractAddress})
+    await RcTokenContract.methods.certificate(wallet).call({from: rcTokenContractAddress})
     .then((res) => {
         tokens = res
     })
