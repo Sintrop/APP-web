@@ -7,10 +7,11 @@ import {FaCheck, FaLock} from 'react-icons/fa';
 import {GetProducer} from '../../../services/producerService';
 import {GetInspections, RequestInspection} from '../../../services/manageInspectionsService';
 import {GetActivist} from '../../../services/activistService';
+import {GetInspector} from '../../../services/inspectorService';
 import { GetResearcher, GetResearches } from '../../../services/researchersService';
 import {GetDeveloper} from '../../../services/developersService';
 import { GetAdvisor } from '../../../services/advisorsService';
-import {GetValidator} from '../../../services/contributorService';
+import {GetValidator} from '../../../services/validatorService';
 import { GetSupporter } from '../../../services/investorService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import { ToastContainer, toast} from 'react-toastify';
@@ -19,7 +20,7 @@ import Loading from '../../Loading';
 import { api } from '../../../services/api';
 import * as Dialog from '@radix-ui/react-dialog';
 import {BackButton} from '../../BackButton';
-
+import axios from 'axios';
 import { LoadingTransaction } from '../../LoadingTransaction';  
 import {InspectionItemResult} from '../../../pages/accountProducer/inspectionItemResult';
 import { ResearchItem } from '../Researches/ResearchItem';
@@ -57,6 +58,7 @@ export default function MyAccount({wallet, userType, setTab}){
     const [logTransaction, setLogTransaction] = useState({});
     const [modalChangePassword, setModalChangePassword] = useState(false);
     const [modalChangePhoto, setModalChangePhoto] = useState(false);
+    const [imageProfile, setImageProfile] = useState('');
 
     useEffect(() => {
         setTab(tabActive, '');
@@ -76,12 +78,22 @@ export default function MyAccount({wallet, userType, setTab}){
 
     },[]);
 
+    async function getImageProfile(photo){
+        const response = await axios.get(`https://ipfs.io/ipfs/${photo}`);
+        
+        if(response.data.includes('base64')){
+            setImageProfile(response.data);
+        }else{
+            setImageProfile(`https://ipfs.io/ipfs/${photo}`)
+        }
+    }
+
     async function getApiProducer(){
         try{
             setLoadingApi(true);
             const response = await api.get(`/user/${String(wallet).toUpperCase()}`);
             setProducerDataApi(response.data.user)
-            setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
+            fixPathProperty(JSON.parse(response?.data?.user?.propertyGeolocation));
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
             console.log(address);
@@ -96,7 +108,8 @@ export default function MyAccount({wallet, userType, setTab}){
         try{
             setLoadingApi(true);
             const response = await api.get(`/user/${String(walletAddress).toUpperCase()}`);
-            setUserDataApi(response.data.user)
+            setUserDataApi(response.data.user);
+            getImageProfile(response.data.user.imgProfileUrl);
         }catch(err){
             console.log(err);
         }finally{
@@ -133,35 +146,39 @@ export default function MyAccount({wallet, userType, setTab}){
         if(typeUser === '1'){
             getApiProducer();
             const response = await GetProducer(walletAddress);
-            //getBase64(response)
-            //console.log(JSON.parse(response.propertyAddress?.coordinate))
+            
+            getImageProfile(response.proofPhoto);
             fixCoordinates(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
             getInspections(typeUser);
             setLastRequested(response.lastRequestAt);
         }
         if(typeUser === '2'){
-            const response = await GetActivist(walletAddress);
+            const response = await GetInspector(walletAddress);
             setUserData(response)
             getInspections(typeUser);
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '3'){
             getResearches();
             const response = await GetResearcher(walletAddress);
-            setUserData(response)
+            setUserData(response);
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '4'){
             const response = await GetDeveloper(walletAddress);
             setUserData(response);
-            console.log(response)
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '5'){
             const response = await GetAdvisor(walletAddress);
-            setUserData(response)
+            setUserData(response);
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '6'){
             const response = await GetValidator(walletAddress);
-            setUserData(response)
+            setUserData(response);
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '7'){
             const response = await GetSupporter(walletAddress);
@@ -223,47 +240,32 @@ export default function MyAccount({wallet, userType, setTab}){
     }
 
     async function fixCoordinates(coords){
-        const arrayLat = String(coords.lat).split('');
-            const arrayLng = String(coords.lng).split('');
-            let newLat = '';
-            let newLng = '';
-
-            for(var i = 0; i < arrayLat.length; i++){
-                if(i === 3){
-                    if(arrayLat[i] === '.'){
-                        newLat += arrayLat[i]
-                    }else{
-                        if(arrayLat[i] === ','){
-                            newLat += '.'
-                        }else{
-                            newLat += `.${arrayLat[i]}`
-                        }
-                    }
-                }else{
-                    newLat += arrayLat[i]
-                }
-
-            }
-
-            for(var i = 0; i < arrayLng.length; i++){
-                if(i === 3){
-                    if(arrayLng[i] === '.'){
-                        newLng += arrayLng[i]
-                    }else{
-                        if(arrayLng[i] === ','){
-                            newLng += '.'
-                        }else{
-                            newLng += `.${arrayLng[i]}`
-                        }
-                    }
-                }else{
-                    newLng += arrayLng[i]
-                }
-            }
+        if(coords.latitude){
             setPosition({
-                lat: Number(newLat),
-                lng: Number(newLng)
-            })
+                lat: coords.latitude,
+                lng: coords.longitude
+            });
+        }else{
+            setPosition(coords);
+        }
+    }
+
+    async function fixPathProperty(coords){
+        if(coords[0].latitude){
+            let newPath = [];
+            for(var i = 0; i < coords.length; i++){
+                const data = {
+                    lat: coords.latitude,
+                    lng: coords.longitude
+                }
+
+                newPath.push(data);
+            }
+
+            setPropertyPath(newPath);
+        }else{
+            setPropertyPath(coords);
+        }
     }
 
     if(viewMode){
@@ -564,7 +566,7 @@ export default function MyAccount({wallet, userType, setTab}){
                     <div className="flex flex-col items-center lg:items-start">
                         <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
                         <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                        <p className="text-white lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.activistWallet}</p>
+                        <p className="text-white lg:text-lg max-w-[90%] lg:max-w-full text-ellipsis overflow-hidden">{userData?.investorWallet}</p>
                         <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
                         <div className='flex items-center'>
                             {Number(userData?.lastAcceptedAt) === 0 ? (

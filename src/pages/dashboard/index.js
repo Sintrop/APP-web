@@ -37,10 +37,10 @@ import { Missions } from '../../components/Tabs/Missions';
 //Services
 import CheckUserRegister from '../../services/checkUserRegister';
 import HistoryInspections from '../../components/Tabs/HistoryInspections';
-import ActivistRanking from '../../components/Tabs/Ranking/Activist';
+import InspectorsRanking from '../../components/Tabs/Ranking/Inspectors';
 import DevelopersRanking from '../../components/Tabs/Ranking/Developers';
 import ContributorsRanking from '../../components/Tabs/Ranking/Contributors';
-import InvestorRanking from '../../components/Tabs/Ranking/Investor';
+import SupporterRanking from '../../components/Tabs/Ranking/Supporters';
 import ResearchersRanking from '../../components/Tabs/Ranking/Researchers';
 import AdvisorsRanking from '../../components/Tabs/Ranking/Advisors';
 import { ModalWelcomePlatform } from '../../components/ModalWelcomePlatform';
@@ -287,8 +287,8 @@ export default function Dashboard(){
                         }}
                     />
                 )}
-                {activeTab === 'activists' && (
-                    <ActivistRanking 
+                {activeTab === 'inspectors' && (
+                    <InspectorsRanking 
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {
@@ -317,8 +317,8 @@ export default function Dashboard(){
                         }}
                     />
                 )}
-                {activeTab === 'investors' && (
-                    <InvestorRanking 
+                {activeTab === 'supporters' && (
+                    <SupporterRanking 
                         user={user} 
                         walletAddress={walletAddress}
                         setTab={(tab, wallet) => {
@@ -555,14 +555,14 @@ export default function Dashboard(){
                 />
             )}
 
-            {transactionOpen && (
+            {/* {transactionOpen && (
                 <ModalTransactionOpen
                     close={() => {
                         setTransactionOpen(false);
                     }}
                     transactions={transactionOpened}
                 />
-            )}
+            )} */}
         </div>
     )
 }

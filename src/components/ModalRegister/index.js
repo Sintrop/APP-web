@@ -8,7 +8,7 @@ import Loading from '../Loading';
 import { WebcamComponent } from '../Webcam';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
-import {addValidator, addActivist, addProducer, addSupporter, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
+import {addActivist, addProducer, addSupporter, addDeveloper, addAdvisor, addResearcher} from "../../services/registerService";
 import { save, get } from '../../config/infura';
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import { Help } from '../help';
 import { ModalRequestSepolia } from '../ModalRequestSepolia';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { ModalConfirmMobile } from './ModalConfirmMobile';
+import {addValidator} from '../../services/validatorService';
 
 
 const videoConstraints = {
@@ -435,10 +436,10 @@ export default function ModalRegister({close}){
             });
         }
 
-        if(type === 'contributor'){
+        if(type === 'validator'){
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addValidator(walletConnected, name, proofPhoto)
+            addValidator(walletAddress)
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -449,7 +450,7 @@ export default function ModalRegister({close}){
                     setLoading(true);
                     api.post('/users', {
                         name,
-                        wallet: String(walletConnected).toUpperCase(),
+                        wallet: String(walletAddress).toUpperCase(),
                         userType: 6,
                         level: 1,
                         onBlockchain: true,
@@ -844,7 +845,7 @@ export default function ModalRegister({close}){
                             <option selected value="">{t('Select user')}</option>
                             <option value="producer">{t('Producer')}</option>
                             <option value="inspector">{t('Inspector')}</option>
-                            <option value="contributor">{t('Validator')}</option>
+                            <option value="validator">{t('Validator')}</option>
                             <option value="investor">{t('Investor')}</option>
                             <option value="developer">{t('Developer')}</option>
                             <option value="researcher">{t('Researcher')}</option>
@@ -857,98 +858,6 @@ export default function ModalRegister({close}){
                 )}
 
                 {step === 2 && (
-                    // <div className='w-full flex flex-col items-center overflow-auto py-2'>
-                    //     {modalWebcam ? (
-                    //         // <input
-                    //         //     type='file'
-                    //         //     capture='user'
-                    //         // />
-                    //         <Webcam
-                    //             className="w-full h-[200px] z-50"
-                    //             audio={false}
-                    //             screenshotFormat="image/png"
-                    //             videoConstraints={videoConstraints}
-                    //         >
-                    //             {({ getScreenshot }) => (
-                    //             <>
-                    //                 {imageSrc === '' && (
-                    //                     <div className="flex flex-col items-center w-full">
-                    //                     <button
-                    //                         style={{marginTop: 15}}
-                    //                         onClick={() => {
-                    //                             const data = getScreenshot();
-                    //                             setImageSrc(data);
-                    //                             setModalWebcam(false);
-                    //                         }}
-                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                    //                     >
-                    //                         {t('Capture photo')}
-                    //                     </button>
-                    //                     </div>
-                    //                 )}
-                    //             </>
-                    //             )}
-                    //         </Webcam>
-                    //     ) : (
-                    //         <>
-                    //         {imageSrc !== '' ? (
-                    //             <div className="flex flex-col items-center w-full gap-2">
-                    //                 <img 
-                    //                     src={imageSrc} 
-                    //                     alt="Captured photo"
-                    //                     className="lg:w-[250px] h-[200px] object-contain lg:object-cover"
-                    //                 />
-                    //                 <div className="w-full flex justify-center gap-3">
-                    //                     <button
-                    //                         onClick={() => {
-                    //                             setImageSrc('')
-                    //                             setModalWebcam(true)
-                    //                         }}
-                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                    //                     >{t('Take another')}</button>
-                            
-                    //                     <button
-                    //                         onClick={() => {
-                    //                             handleProofPhoto(imageSrc)
-                    //                         }}
-                    //                         className='px-5 h-10 bg-[#C66828] font-bold text-white rounded-md'
-                    //                     >{t('Confirm')}</button>
-                    //                 </div>
-                    //             </div>
-                    //         ) : (
-                    //             <>
-                    //                 {proofPhoto === '' && (
-                    //                     <h1 className='text-sm lg:text-lg text-center text-white mb-10'>{t('Now we need to take a picture. This photo will be used to prove your identity and necessary to the inspection proof photo')}.</h1>
-                    //                 )}
-
-                    //                 {proofPhoto != '' && (
-                    //                     <img
-                    //                         src={`data:image/png;base64,${proofPhotoBase64}`}
-                    //                         className="w-[250px] h-[210px] object-cover mb-3 border-4 border-[#A75722]"
-                    //                     />
-                    //                 )}
-                    //                 <button
-                    //                     onClick={() => {
-                    //                         setTimeout(() => {
-                    //                             setModalWebcam(true);
-                    //                         }, 1000)
-                    //                     }}
-
-                    //                     className='flex items-center justify-center gap-2 px-5 h-8 lg:h-10 bg-[#2066CF] font-bold text-white rounded-md'
-                    //                 >
-                    //                     <FiCamera size={25} color='white'/>
-                    //                     {t('Take Photo')}
-                    //                 </button>
-                    //             </>
-                    //         )}
-                    //         </>
-                    //     )}
-                        
-
-                    //     <Help
-                    //         description='Click the button above and then click allow on the permission popup that will open in your browser'
-                    //     />
-                    // </div>
                     <div className="flex flex-col mt-5 w-[90%] overflow-auto">
                             {imageSrc === '' ? (
                                 <>
@@ -1211,6 +1120,10 @@ export default function ModalRegister({close}){
                     <button 
                         className='lg:w-[120px] h-full lg:h-10 bg-[#C66828] rounded-md text-white text-sm lg:text-base px-1'
                         onClick={() => {
+                            if(type === 'validator'){
+                                register();
+                                return;
+                            }
                             if(step === 4){
                                 validateData();
                             }else if(step === 3 && type !== 'producer'){
@@ -1220,15 +1133,21 @@ export default function ModalRegister({close}){
                             }
                         }}
                     >
-                        {step === 4 && `${t('Register')}`}
-                        {step === 3 && (
+                        {type === 'validator' ? (
+                            'Register'
+                        ) : (
                             <>
-                                {type === 'producer' && `${t('Next Step')}`}
-                                {type !== 'producer' && `${t('Register')}`}
+                            {step === 4 && `${t('Register')}`}
+                            {step === 3 && (
+                                <>
+                                    {type === 'producer' && `${t('Next Step')}`}
+                                    {type !== 'producer' && `${t('Register')}`}
+                                </>
+                            )}
+                            {step === 1 && `${t('Next Step')}`}
+                            {step === 2 && `${t('Next Step')}`}
                             </>
                         )}
-                        {step === 1 && `${t('Next Step')}`}
-                        {step === 2 && `${t('Next Step')}`}
                     </button>
                 </div>
             </div>

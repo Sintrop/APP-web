@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {GetSupporters} from "../../../../services/investorService";
 import {GetSupportersInfura, GetCertificateTokensInfura} from '../../../../services/methodsGetInfuraApi';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
@@ -8,8 +7,9 @@ import { BackButton } from "../../../BackButton";
 import Loading from '../../../Loading';
 import Loader from '../../../Loader';
 import { useMainContext } from "../../../../hooks/useMainContext";
+import {GetSupporters} from '../../../../services/supporterService';
 
-export default function InvestorRanking({ wallet, setTab }) {
+export default function SupporterRanking({ wallet, setTab }) {
     const [loading, setLoading] = useState(false);
     const {viewMode} = useMainContext();
     const {t} = useTranslation();
@@ -22,10 +22,10 @@ export default function InvestorRanking({ wallet, setTab }) {
     }, [tabActive])
     
     useEffect(() => {
-        getInvestors();
+        getSupporters();
     }, []);
 
-    async function getInvestors(){
+    async function getSupporters(){
         setLoading(true);
         if(viewMode){
             const response = await GetSupportersInfura();
@@ -39,7 +39,7 @@ export default function InvestorRanking({ wallet, setTab }) {
     async function orderRanking(investors){
         let arrayInvestors = [];
         for(var i = 0; i < investors.length; i++){
-            const tokens = await GetCertificateTokensInfura(investors[i].investorWallet);
+            const tokens = await GetCertificateTokensInfura(investors[i].supporterWallet);
             let data = {
                 ...investors[i],
                 tokens: Number(tokens) / 10 ** 18
@@ -68,7 +68,7 @@ export default function InvestorRanking({ wallet, setTab }) {
             <div className='flex items-center justify-between mb-2'>
                 <div className='flex items-center gap-2'>
                     <BackButton/>
-                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Investors')}</h1>
+                    <h1 className="font-bold text-lg lg:text-2xl text-white">{t('Supporters')}</h1>
                 </div>
             </div>
 

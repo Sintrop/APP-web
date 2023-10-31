@@ -152,7 +152,7 @@ export function NetworkImpact({setTab}){
 
                 <CardImpact
                     title='ECOSYSTEM IMPACT PER TOKEN'
-                    impact={impact}
+                    impact={impactPerToken}
                     type='impactToken'
                 />
             </section>

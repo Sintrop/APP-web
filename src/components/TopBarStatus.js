@@ -153,7 +153,7 @@ export function TopBarStatus({}){
 
                         {user !== '0' && (
                             <>
-                                <p className='hidden lg:flex font-bold text-[#80421A] text-xl'>Era {era}</p>
+                                <p className='hidden lg:flex font-bold text-[#80421A] text-xl'>Era 1</p>
                                 <p className='hidden lg:flex text-xs lg:text-lg font-bold text-white'>Conta: {walletConnected}</p> 
                                 
                                 <div className='flex w-full justify-between lg:w-[350px] lg:justify-normal items-center lg:gap-2'>

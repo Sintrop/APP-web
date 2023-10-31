@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {GetActivists} from "../../../../services/activistService";
+import {GetInspectors} from "../../../../services/inspectorService";
 import {GetActivistsInfura} from '../../../../services/methodsGetInfuraApi';
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
@@ -9,7 +9,7 @@ import {BackButton} from '../../../BackButton';
 import Loader from '../../../Loader';
 import { useMainContext } from "../../../../hooks/useMainContext";
 
-export default function ActivistRanking({ wallet, setTab }) {
+export default function InspectorRanking({ wallet, setTab }) {
     const {viewMode} = useMainContext();
     const {t} = useTranslation();
     const navigate = useNavigate(); 
@@ -24,16 +24,16 @@ export default function ActivistRanking({ wallet, setTab }) {
     }, [tabActive])
 
     useEffect(() => {    
-        getActivists();
+        getInspectors();
     }, []);
 
-    async function getActivists(){
+    async function getInspectors(){
         setLoading(true);
         if(viewMode){
             const response = await GetActivistsInfura();
             orderRaking(response);
         }else{
-            const response = await GetActivists();
+            const response = await GetInspectors();
             orderRaking(response);
         }
     }
@@ -48,7 +48,7 @@ export default function ActivistRanking({ wallet, setTab }) {
 
     function filter(type, activistArray){
         if(type === 'all'){
-            getActivists('all');
+            getInspectors('all');
         }
 
         if(type === 'wallet'){
@@ -58,13 +58,7 @@ export default function ActivistRanking({ wallet, setTab }) {
         }
 
         if(type === 'reais'){
-            let users = activistArray;
-            const usersFilter = users.filter(item => item.activistWallet === '0x954B8C950A9F9b6fDf6082033aE741a22FC137d2' ||
-                item.activistWallet === '0x55E75F35a5AAd1676749a3a03c85c6ea70A5F72A' ||
-                item.activistWallet === '0x4E5C1Cf06094C64c3396E96d00B787392B2b5cB6' ||
-                item.activistWallet === '0x67879715dFaCBBF3b759558686c94114764a6462'
-            );
-            setActivist(usersFilter);
+            getInspectors('all')
         }
     }
 

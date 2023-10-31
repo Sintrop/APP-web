@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import ContributorsService from "../../../../services/contributorService";
 import '../../Ranking/ranking.css';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { RankingItem } from "../../../RankingItem";
 import { BackButton } from "../../../BackButton";
 import Loader from "../../../Loader";
+import {GetValidators} from '../../../../services/validatorService';
 
 export default function ContributorsRanking({ wallet, setTab }) {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-	const contributorsService = new ContributorsService(wallet);
+	
 	const [contributors, setContributors] = useState([]);
 	const {tabActive, walletAddress} = useParams();
 		
@@ -20,18 +20,15 @@ export default function ContributorsRanking({ wallet, setTab }) {
 	}, [tabActive])
 	
 	useEffect(() => {
-        setLoading(true)
-		contributorsService
-		.getContributorsRanking()
-		.then((res) => {
-			if(res.length > 0){
-			//   let ContributorsSort = res.map(item => item ).sort((a, b) => parseInt(b.level[0]) - parseInt(a.level[0]))
-			setContributors(res);
-			}
-            setLoading(false);
-		})
-		.catch((err) => setLoading(false));
+        getValidators();
 	}, []);
+
+    async function getValidators() {
+        setLoading(true)
+        const response = await GetValidators();
+        setContributors(response);
+		setLoading(false);
+    }
 
     if(loading){
         return(

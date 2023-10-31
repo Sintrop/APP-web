@@ -2,15 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { useMainContext } from '../../hooks/useMainContext';
 import { useTranslation } from 'react-i18next';
-
+import axios from 'axios';
 import { api } from '../../services/api';
 import {GetProducer} from '../../services/producerService';
 import {GetInspections, GetIsa} from '../../services/manageInspectionsService';
 import {GetActivist} from '../../services/activistService';
+import {GetInspector} from '../../services/inspectorService';
 import { GetResearcher, GetResearches } from '../../services/researchersService';
 import {GetDeveloper} from '../../services/developersService';
 import { GetAdvisor } from '../../services/advisorsService';
-import {GetValidator} from '../../services/contributorService';
+import {GetValidator} from '../../services/validatorService';
 import { GetSupporter } from '../../services/investorService';
 import { GetDelation } from '../../services/userService';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
@@ -67,6 +68,7 @@ export function UserDetails({setTab}){
     const [bioTotal, setBioTotal] = useState(0);
     const [waterTotal, setWaterTotal] = useState(0);
     const [arvoresTotal, setarvoresTotal] = useState(0);
+    const [imageProfile, setImageProfile] = useState('');
 
     useEffect(() => {
         setTab(tabActive, '')
@@ -74,7 +76,17 @@ export function UserDetails({setTab}){
 
     useEffect(() => {
         getUserData();
-    },[])
+    },[]);
+
+    async function getImageProfile(photo){
+        const response = await axios.get(`https://ipfs.io/ipfs/${photo}`);
+        
+        if(response.data.includes('base64')){
+            setImageProfile(response.data);
+        }else{
+            setImageProfile(`https://ipfs.io/ipfs/${photo}`)
+        }
+    }
 
     async function getUserData(){
         setLoading(true);
@@ -90,6 +102,7 @@ export function UserDetails({setTab}){
                 response = responseProducer
             }
 
+            getImageProfile(response.proofPhoto);
             setPosition(JSON.parse(response.propertyAddress?.coordinate))
             setUserData(response);
             getInspections();
@@ -99,10 +112,11 @@ export function UserDetails({setTab}){
             if(viewMode){
                 const response = await GetInspectorInfura(walletSelected);
                 setUserData(response);
-                console.log(response)
+                getImageProfile(response.proofPhoto);
             }else{
-                const response = await GetActivist(walletSelected);
+                const response = await GetInspector(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }
             getInspections();
         }
@@ -110,9 +124,11 @@ export function UserDetails({setTab}){
             if(viewMode){
                 const response = await GetResearcherInfura(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }else{
                 const response = await GetResearcher(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }
             getResearches();
         }
@@ -120,22 +136,27 @@ export function UserDetails({setTab}){
             if(viewMode){
                 const response = await GetDeveloperInfura(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }else{
                 const response = await GetDeveloper(walletSelected);
-                setUserData(response)
+                setUserData(response);
+                getImageProfile(response.proofPhoto);
             }
         }
         if(typeUser === '5'){
             const response = await GetAdvisor(walletSelected);
-            setUserData(response)
+            setUserData(response);
+            getImageProfile(response.proofPhoto);
         }
         if(typeUser === '6'){
             if(viewMode){
                 const response = await GetValidatorInfura(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }else{
                 const response = await GetValidator(walletSelected);
                 setUserData(response);
+                getImageProfile(response.proofPhoto);
             }
         }
         if(typeUser === '7'){
@@ -164,6 +185,7 @@ export function UserDetails({setTab}){
             setLoadingApi(true);
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
             setUserDataApi(response.data.user)
+            getImageProfile(response.data.user.imgProfileUrl);
         }catch(err){
             console.log(err);
         }finally{
@@ -178,7 +200,7 @@ export function UserDetails({setTab}){
             setProducerDataApi(response.data.user); 
             const address = JSON.parse(response?.data?.user?.address)
             setProducerAddress(address);
-            setPropertyPath(JSON.parse(response?.data?.user?.propertyGeolocation));
+            fixPathProperty(JSON.parse(response?.data?.user?.propertyGeolocation));
         }catch(err){
             console.log(err);
         }finally{
@@ -187,47 +209,32 @@ export function UserDetails({setTab}){
     }
 
     async function fixCoordinates(coords){
-        const arrayLat = String(coords.lat).split('');
-            const arrayLng = String(coords.lng).split('');
-            let newLat = '';
-            let newLng = '';
-
-            for(var i = 0; i < arrayLat.length; i++){
-                if(i === 3){
-                    if(arrayLat[i] === '.'){
-                        newLat += arrayLat[i]
-                    }else{
-                        if(arrayLat[i] === ','){
-                            newLat += '.'
-                        }else{
-                            newLat += `.${arrayLat[i]}`
-                        }
-                    }
-                }else{
-                    newLat += arrayLat[i]
-                }
-
-            }
-
-            for(var i = 0; i < arrayLng.length; i++){
-                if(i === 3){
-                    if(arrayLng[i] === '.'){
-                        newLng += arrayLng[i]
-                    }else{
-                        if(arrayLng[i] === ','){
-                            newLng += '.'
-                        }else{
-                            newLng += `.${arrayLng[i]}`
-                        }
-                    }
-                }else{
-                    newLng += arrayLng[i]
-                }
-            }
+        if(coords.latitude){
             setPosition({
-                lat: Number(newLat),
-                lng: Number(newLng)
-            })
+                lat: coords.latitude,
+                lng: coords.longitude
+            });
+        }else{
+            setPosition(coords);
+        }
+    }
+
+    async function fixPathProperty(coords){
+        if(coords[0].latitude){
+            let newPath = [];
+            for(var i = 0; i < coords.length; i++){
+                const data = {
+                    lat: coords.latitude,
+                    lng: coords.longitude
+                }
+
+                newPath.push(data);
+            }
+
+            setPropertyPath(newPath);
+        }else{
+            setPropertyPath(coords);
+        }
     }
 
     async function getInspections(){
@@ -381,7 +388,7 @@ export function UserDetails({setTab}){
                 <IsProducerSyntropic data={userData}/>
                 <div className='flex flex-col gap-2 lg:gap-5 lg:flex-row w-full lg:w-[1000px] bg-[#0a4303] mt-5'>
                     <img
-                        src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
+                        src={imageProfile}
                         className="w-[250px] h-[250px] object-cover"
                     />
     
@@ -404,7 +411,6 @@ export function UserDetails({setTab}){
                             <div className='flex w-full justify-center'>
                             <LoadScript
                                 googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                libraries={['drawing']}
                             >
                                 <GoogleMap
                                     mapContainerStyle={containerStyle}
@@ -569,14 +575,14 @@ export function UserDetails({setTab}){
                 <div className="flex flex-col overflow-auto h-[95vh] pb-40 scrollbar-thin scrollbar-thumb-green-900 scrollbar-thumb-rounded-md">
                     <div className='flex flex-col gap-5 lg:flex-row lg:w-[1000px] bg-[#0a4303]'>
                         <img
-                            src={`https://ipfs.io/ipfs/${userData?.proofPhoto}`}
+                            src={imageProfile}
                             className="w-[250px] h-[250px] object-cover"
                         />
         
                         <div className="flex flex-col items-center lg:items-start">
                             <h2 className="font-bold text-[#ff9900] text-lg lg:text-2xl">{userData?.name}</h2>
                             <p className="font-bold text-white lg:text-lg mt-3">{t('Wallet')}:</p>
-                            <p className="text-white lg:text-lg max-w-[90%] overflow-clip lg:max-w-full text-ellipsis">{userData?.activistWallet}</p>
+                            <p className="text-white lg:text-lg max-w-[90%] overflow-clip lg:max-w-full text-ellipsis">{userData?.investorWallet}</p>
                             <p className="font-bold text-[#ff9900] lg:text-lg">{t('Inspections Realized')}: <span className="text-white">{userData?.totalInspections}</span></p>
                             <p className="font-bold text-red-400 mt-1">{t('Complaints Received')}: <span className="text-white font-normal">{delations.length}</span></p>
                         </div>

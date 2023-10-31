@@ -12,6 +12,7 @@ import { ResearchersCenter } from "../pages/ResearchersCenter";
 import { DevelopersCenter } from "../pages/DevelopersCenter";
 import { PrivateSales } from "../pages/privateSales";
 import {Register} from "../pages/register";
+import { Checkout } from "../pages/checkout";
 
 export default function Router(){
     return(
@@ -29,6 +30,7 @@ export default function Router(){
                 <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
                 <Route exact path="/developers-center/:walletAddress/:typeUser" element={<DevelopersCenter/>}/>
                 <Route exact path="/register/:walletAddress" element={<Register/>}/>
+                <Route exact path="/checkout" element={<Checkout/>}/>
             </Routes>
         </BrowserRouter>
     );

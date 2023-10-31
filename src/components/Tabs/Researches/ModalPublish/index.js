@@ -7,9 +7,12 @@ import {PublishResearch} from '../../../../services/researchersService';
 import {save} from '../../../../config/infura';
 import { useTranslation } from 'react-i18next';
 import {MdOutlineFileDownload} from 'react-icons/md';
+import { api } from '../../../../services/api';
+import { useParams } from 'react-router';
 
-export function ModalPublish({walletAddress, close}){
+export function ModalPublish({close}){
     const {t} = useTranslation();
+    const {walletAddress} = useParams();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [thesis, setThesis] = useState('');
@@ -17,6 +20,16 @@ export function ModalPublish({walletAddress, close}){
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        getUserApi();
+    },[]);
+
+    async function getUserApi(){
+        const response = await api.get(`/user/${walletAddress}`);
+        setUserData(response.data.user);
+    }
 
     function handlePublish(e){
         e.preventDefault();
@@ -26,12 +39,26 @@ export function ModalPublish({walletAddress, close}){
         setModalTransaction(true);
         setLoadingTransaction(true);
         PublishResearch(walletAddress, title, thesis, file)
-        .then(res => {
+        .then(async(res) => {
             setLogTransaction({
                 type: res.type,
                 message: res.message,
                 hash: res.hashTransaction
-            })
+            });
+
+            if(res.type === 'success'){
+                api.post('/publication/new', {
+                    userId: userData?.id,
+                    type: 'publish-researche',
+                    origin: 'platform',
+                    additionalData: JSON.stringify({
+                        userData,
+                        title,
+                        thesis, 
+                        file
+                    }),
+                });
+            }
             setLoadingTransaction(false);
         })
         .catch(err => {

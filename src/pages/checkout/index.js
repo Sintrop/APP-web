@@ -1,42 +1,107 @@
-import React, {useState, useEffect} from 'react';
-import { useTranslation } from 'react-i18next';
-import {RiCloseCircleLine} from 'react-icons/ri';
-import { api } from '../services/api';
-import { useMainContext } from '../hooks/useMainContext';
-import { useParams } from 'react-router';
-import { LoadingTransaction } from './LoadingTransaction';
+import React, {useEffect, useState} from 'react';
+import ConnectWallet from '../../services/connectWallet';
+import {api} from '../../services/api';
+import Loading from '../../components/Loading';
+import Web3 from 'web3';
+import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from 'react-router';
-import {addProducer, addActivist, addInspector} from '../services/registerService';
-import {AcceptInspection, GetInspection, RealizeInspection, RequestInspection} from '../services/manageInspectionsService';
-import {addSupporter} from '../services/supporterService';
-import {GetProducer} from '../services/producerService';
+import {addProducer, addActivist, addInspector, addDeveloper} from '../../services/registerService';
+import {AcceptInspection, GetInspection, RealizeInspection, RequestInspection} from '../../services/manageInspectionsService';
+import {GetTokensBalance, BuyRCT, BurnTokens} from '../../services/sacTokenService';
+import {addSupporter} from '../../services/supporterService';
+import {GetProducer} from '../../services/producerService';
 import {format} from 'date-fns';
-import { save } from '../config/infura';
-import Loading from './Loading';
+import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { useMainContext } from '../../hooks/useMainContext';
+import axios from 'axios';
+import emailjs from '@emailjs/browser';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export function ModalTransactionOpen({close, transactions}){
-    const {userData} = useMainContext();
-    const {t} = useTranslation();
-    const navigate = useNavigate();
+const web3js = new Web3(window.ethereum);
+
+export function Checkout(){
+    const {impactPerToken} = useMainContext()
+    const [walletAddress, setWalletAddress] = useState('');
+    const [loadingData, setLoadingData] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {walletAddress} = useParams();
+    const [transactions, setTransactions] = useState([]);
+    const [userData, setUserData] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [userDataApi, setUserDataApi] = useState({});
     const [additionalData, setAdditionalData] = useState({});
-    const [producerData, setProducerData] = useState({});
+    const [imageProfile, setImageProfile] = useState('');
+    const [balanceETH, setBalanceETH] = useState(0);
+    const [balanceRCT, setBalanceRCT] = useState(0);
 
     useEffect(() => {
-        if(transactions[0].additionalData){
-            setAdditionalData(JSON.parse(transactions[0]?.additionalData))
+        if(walletAddress !== ''){
+            getDataWallet();
+            getBalanceAccount();
         }
+    }, [walletAddress]);
+
+    async function connect(){
+        const response = await ConnectWallet();
+        if(response.connectedStatus){
+            setWalletAddress(response.address[0]);
+        }
+    };
+
+    async function getDataWallet(){
+        setLoadingData(true);
+        const responseUser = await api.get(`/user/${walletAddress}`);
+        const responseTransactions = await api.get(`/transactions-open/${walletAddress}`);
+        const user = responseUser.data.user;
+        const transactions = responseTransactions.data.transactions;
         
-    }, []);
+        getImageProfile(user)
+        setUserData(user)
+        if(transactions.length > 0){
+            setTransactions(transactions);
+            if(transactions[0].additionalData){
+                setAdditionalData(JSON.parse(transactions[0].additionalData))
+            }
+        }
+
+        setLoadingData(false);
+    }
+
+    async function getImageProfile(user){
+        if(user?.userType === 7){
+            if(user?.imgProfileUrl){
+                const response = await axios.get(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`);
+            
+                if(response.data.includes('base64')){
+                    setImageProfile(response.data);
+                }else{
+                    setImageProfile(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`)
+                }
+            }else{
+                setImageProfile('');
+            }
+        }else{
+            const response = await axios.get(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`);
+            
+            if(response.data.includes('base64')){
+                setImageProfile(response.data);
+            }else{
+                setImageProfile(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`)
+            }
+        }
+    }
+
+    async function getBalanceAccount(){
+        const response = await web3js.eth.getBalance(walletAddress);
+        setBalanceETH(Number(response / 10**18).toFixed(5));
+
+        const response2 = await GetTokensBalance(walletAddress);
+        setBalanceRCT(Number(response2 / 10**18).toFixed(2).replace('.',','));
+    }
 
     async function executeTransaction(){
         setLoading(true);
@@ -51,6 +116,12 @@ export function ModalTransactionOpen({close, transactions}){
         }
         if(transactions[0].type === 'request-inspection'){
             requestInspection();
+        }
+        if(transactions[0].type === 'buy-tokens'){
+            buyTokens();
+        }
+        if(transactions[0].type === 'burn-tokens'){
+            burnTokens();
         }
     }
 
@@ -175,6 +246,63 @@ export function ModalTransactionOpen({close, transactions}){
             });
         }
 
+        if(userData.userType === 4){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addDeveloper(walletAddress, userData?.name, userData.imgProfileUrl)
+            .then(async(res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                try{
+                    setLoading(true);
+                    await api.put('/user/on-blockchain', {userWallet: walletAddress})
+                    await api.put('/transactions-open/finish', {id: transactions[0].id});
+                    
+                }catch(err){
+                    console.log(err);
+                }finally{
+                    setLoading(false)
+                    setLoadingTransaction(false);
+                }
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if(message.includes("Not allowed user")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Not allowed user',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("This developer already exist")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'This developer already exist',
+                        hash: ''
+                    })
+                    return;
+                }
+                if(message.includes("User already exists")){
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'User already exists',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            });
+        }
+
         if(userData.userType === 7){
             setModalTransaction(true);
             setLoadingTransaction(true);
@@ -237,6 +365,7 @@ export function ModalTransactionOpen({close, transactions}){
     async function acceptInspection(){
         setModalTransaction(true);
         setLoadingTransaction(true);
+        console.log(additionalData.inspectionId)
         AcceptInspection(String(additionalData.inspectionId), walletAddress)
         .then(async(res) => {
             setLogTransaction({
@@ -356,6 +485,8 @@ export function ModalTransactionOpen({close, transactions}){
             setLoadingTransaction(false);
         }
     }
+
+    //----------- FINISH INSPECTION ---------------------
 
     function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas){
         const {
@@ -635,19 +766,6 @@ export function ModalTransactionOpen({close, transactions}){
                         body: [
                             [{text: 'Nome', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Coordenadas', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}],
                             ...bodyCoordsZonesTeste
-                        ]
-                    },
-                    style: 'table'
-                },
-                {
-                    text: `Foto das coordenadas das zonas:`,
-                    style: 'label'
-                },
-                {
-                    table:{
-                        body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 1', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 2', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 3', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 4', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 5', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 6', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 7', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 8', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 9', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 10', style: 'tableHeader', fillColor: '#C5E0B3'}],
-                            ...bodyPicturesZone
                         ]
                     },
                     style: 'table'
@@ -1316,24 +1434,6 @@ export function ModalTransactionOpen({close, transactions}){
                 `${(biomassaSolo).toFixed(2).replace('.',',')} kg`
             ]
             bodyAnaliseSoloZones.push(analiseSoloZone);
-
-            //Pega as fotos registradas de cada zona e monta o array
-            const coordsZone = resultZones[i].path
-            let arrayPicturesZone = []
-            for(var p = 0; p < 10; p++){
-                if(coordsZone[p]?.photo){
-                    let dataPhotoZones = {
-                        text: `Foto`,
-                        link: `https://${window.location.host}/view-image/${coordsZone[p].photo}`,
-                        style: 'link'
-                    }
-                    arrayPicturesZone.push(dataPhotoZones);
-                }else{
-                    arrayPicturesZone.push('-');
-                }
-            }
-            arrayPicturesZone.unshift(titleZone);
-            bodyPicturesZone.push(arrayPicturesZone);
         }
 
         let totalCarbon = degenerationCarbon + ((totalCarbonEstocadoZones * -1) * 1000) + saldoCarbonAnaliseSoloZones;
@@ -1880,6 +1980,8 @@ export function ModalTransactionOpen({close, transactions}){
         setLoadingTransaction(false);
     }
 
+    //----------- FINISH INSPECTION ---------------------^^^^^^^^
+
     async function requestInspection(){
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -1910,10 +2012,13 @@ export function ModalTransactionOpen({close, transactions}){
                     userId: userData?.id,
                     type: 'request-inspection',
                     origin: 'platform',
-                    additionalData: JSON.stringify(userDataApi)
+                    additionalData: JSON.stringify({
+                        userData
+                    })
                 });
 
                 api.put('/transactions-open/finish', {id: transactions[0].id});
+                setTransactions([]);
             }
 
             
@@ -1948,79 +2053,281 @@ export function ModalTransactionOpen({close, transactions}){
         
     }
 
+    async function handleRequestSepolia(){
+        if(loading) return;
+        try{
+            setLoadingData(true);
+            await api.post('/request-faucet', {
+                wallet: walletAddress
+            })
+            alert('Requisição feita com sucesso! Em instantes nossa equipe enviará ETH para você')
+            emailjs.send('service_alygxgf', 'template_elsj08i', {walletAddress}, 'kuy2D_QzG95P7COQI')
+            .then(() => {
+            })
+            .catch(() => {
+
+            })
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingData(false);
+        }
+    }
+
+    async function buyTokens(){
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        BuyRCT(walletAddress, additionalData?.value)
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            });
+            setLoadingTransaction(false);
+
+            if(res.type === 'success'){
+                api.put('/transactions-open/finish', {id: transactions[0].id});
+                getBalanceAccount();
+                setTransactions([]);
+            }
+            
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Request OPEN or ACCEPTED")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Request OPEN or ACCEPTED',
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
+    }
+
+    //------------ BURN TOKENS ---------------
+    async function burnTokens(){
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        BurnTokens(walletAddress, String(additionalData?.value)+'000000000000000000')
+        .then(res => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            });
+
+            if(res.type === 'success'){
+                api.put('/transactions-open/finish', {id: transactions[0].id});
+                registerTokensApi(additionalData?.value, res.hashTransaction)
+                getBalanceAccount();
+                setTransactions([]);
+            }
+            
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Request OPEN or ACCEPTED")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Request OPEN or ACCEPTED',
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
+    }
+
+    async function registerTokensApi(tokens, hash){
+        const additionalData = {
+            userData,
+            tokens: Number(tokens),
+            transactionHash: hash
+        }
+
+        try{
+            await api.post('/tokens-burned', {
+                wallet: walletAddress.toUpperCase(),
+                tokens: Number(tokens),
+                transactionHash: hash,
+                carbon: Number(impactPerToken?.carbon),
+                water: Number(impactPerToken?.water),
+                bio: Number(impactPerToken?.bio),
+                soil: Number(impactPerToken?.soil)
+            });
+
+            await api.post('/publication/new', {
+                userId: userData?.id,
+                type: 'contribute-tokens',
+                origin: 'platform',
+                additionalData: JSON.stringify(additionalData),
+            })
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoadingTransaction(false);
+        }
+    }
+    //------------ BURN TOKENS ---------------
+
     return(
-        <div 
-            className="flex fixed top-0 left-0 w-screen h-screen items-center justify-center bg-black/90 m-auto"
-        >
-            <div className="flex flex-col items-center justify-between w-full p-5 lg:w-[500px] h-[500px] bg-[#222831] rounded-lg">
-                <div className="flex items-center justify-between w-full">
-                    <div/>
-                    <button onClick={close}>
-                        <RiCloseCircleLine color='white' size={30}/>
-                    </button>
-                </div>
+        <div className="flex flex-col items-center w-screen h-screen bg-[#062C01]">
+            {walletAddress === '' ? (
+                <>
+                <div className="flex flex-col h-screen w-screen items-center justify-center">
+                    <div className="max-w-[350px] w-full h-screen bg-checkout bg-contain bg-no-repeat bg-center flex flex-col justify-between px-3">
+                        <div className='mt-10'>
+                            <img
+                                src={require('../../assets/logo-branco.png')}
+                                className='w-[180px] object-contain'
+                            />
+                            <h2 className='font-bold text-xl text-white'>Payment System</h2>
+                        </div>
 
-                <div className="flex flex-col items-center">
-                    <div className="flex flex-col w-full items-center lg:gap-5 justify-center lg:flex-row ">
-                        {/* <img
-                            className='w-[150px] h-[150px] object-contain'
-                            src={require('../assets/platform.png')}
-                        /> */}
-                        <h1 className='font-bold text-white text-lg lg:text-2xl text-center'>{t('You have an open transaction. Do you want to finish')}?</h1>
-                    </div>
-                    <h2 className='text-white text-sm lg:text-base mt-2 lg:mt-5 text-center'>{t("Transaction type")}</h2>
+                        <h3 className='w-40 text-white text-3xl font-bold'>Transações simples e seguras</h3>
 
-                    <div className='flex p-3 border-2 rounded-lg w-40 justify-center'>
-                        <p className='text-[#2c96ff] font-bold'>{transactions[0].type}</p>
+                        <button 
+                            className='px-3 py-2 rounded-lg bg-[#3E9EF5] font-bold text-white mt-2 mb-10'
+                            onClick={connect}
+                        >
+                            Sincronizar wallet
+                        </button>
                     </div>
                 </div>
+                </>
+            ) : (
+                <>
+                <div className="p-3 w-full max-w-[320px] flex flex-col">
+                    <img
+                        src={require('../../assets/logo-branco.png')}
+                        className='w-[100px] object-contain mt-3'
+                    />
 
-                <div className='flex items-center w-full justify-between'>
-                    <button 
-                        className='font-bold text-white'
-                        onClick={async () => {
-                            await api.put('/transactions-open/finish', {id: transactions[0].id});
-                            close();
-                        }}
-                    >
-                        Descartar
-                    </button>
+                    <div className='flex items-center justify-between my-3'>
+                        <div>
+                            <p className='font-bold text-white text-sm'>Olá, {userData?.name}</p>
+                            <p className='text-gray-200 text-xs'>Acompanhe aqui suas transações</p>
+                            <button
+                                className='font-bold text-red-500 text-xs'
+                                onClick={() => setWalletAddress('')}
+                            >
+                                Trocar wallet
+                            </button>
+                        </div>
 
-                    <button 
-                        className='font-bold text-white bg-[#2c96ff] rounded-lg px-3 py-2'
-                        onClick={executeTransaction}
-                    >
-                        {t('Finalize transaction')}
-                    </button>
+                        <img
+                            src={imageProfile}
+                            className='w-[50px] h-[50px] rounded-full object-cover border-2'
+                        />
+                    </div>
+
+                    {balanceETH < 0.01 && (
+                        <button
+                            onClick={handleRequestSepolia}
+                            className='font-bold text-white text-center text-xs border-2 rounded-lg p-2'
+                        >Solicitar ETH</button>
+                    )}
+
+                    <div className="w-full h-[200px] flex flex-col justify-center p-2 bg-card bg-contain bg-center bg-no-repeat">
+                        <div className="flex flex-col">
+                            <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{walletAddress}</p>
+                            <p className="text-sm text-white">wallet</p>
+                        </div>
+
+                        <div className="flex items-center gap-5 mt-2">
+                            <div className="flex flex-col">
+                                <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceETH}</p>
+                                <p className="text-white text-sm">ETH</p>
+                            </div>
+
+                            <div className="flex flex-col">
+                                <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceRCT}</p>
+                                <p className="text-white text-sm">RCT</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p className='text-white'>Transação em fila</p>
+
+                    {transactions.length === 0 ? (
+                        <p className='font-bold text-center text-white'>Essa wallet não possui nenhuma transação em aberto</p>
+                    ) : (
+                        <>
+                        <div className='flex flex-col p-2 rounded-md w-full max-w-[320px] bg-[#0a4303]'>
+                            <p className='font-bold text-sm flex gap-1 text-white'>
+                                Tipo da transação: 
+
+                                <p className='font-normal'>
+                                    {transactions[0].type === 'register' && 'Cadastro'}
+                                    {transactions[0].type === 'request-inspection' && 'Solicitação de inspeção'}
+                                    {transactions[0].type === 'accept-inspection' && 'Aceitar inspeção'}
+                                    {transactions[0].type === 'realize-inspection' && 'Finalizar inspeção'}
+                                    {transactions[0].type === 'buy-tokens' && 'Compra de RCT'}
+                                    {transactions[0].type === 'burn-tokens' && 'Contribuição'}
+                                </p>
+                            </p>
+
+                            <button 
+                                className="w-full rounded-lg py-2 bg-[#3E9EF5] font-bold text-white mt-5"
+                                onClick={executeTransaction}
+                            >
+                                Finalizar transação
+                            </button>
+
+                            <button 
+                                className="w-full rounded-md py-2 font-bold text-gray-500"
+                                onClick={async () => {
+                                    await api.put('/transactions-open/finish', {id: transactions[0].id});
+                                    setTransactions([]);
+                                    getDataWallet();
+                                }}
+                            >
+                                Descartar transação
+                            </button>
+                        </div>
+                        </>
+                    )}
                 </div>
-            </div>
+                </>
+            )}
 
+            {loadingData && (
+                <Loading/>
+            )}
+
+            <div className="absolute z-50">
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
                 if(!loadingTransaction){
                     setModalTransaction(open)
                     setLoading(false);
                     if(logTransaction.type === 'success'){
-                        if(userDataApi?.userType === 1){
-                            navigate(`/dashboard/${walletAddress}/my-account/1/${walletAddress}`)
-                        }
-                        if(userDataApi?.userType === 2){
-                            navigate(`/dashboard/${walletAddress}/my-account/2/${walletAddress}`)
-                        }
-                        close();
-                        
+                        alert('Transação finalizada com sucesso! Retorne ao App');
+                        setTransactions([]);
+                        getDataWallet();
                     }
                 }
             }}>
                 <LoadingTransaction
                     loading={loadingTransaction}
                     logTransaction={logTransaction}
-                    action='register'
                 />
             </Dialog.Root>
-
-            {loading && (
-                <Loading/>
-            )}
+            </div>
         </div>
     )
 }

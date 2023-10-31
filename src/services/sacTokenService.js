@@ -20,6 +20,18 @@ export const GetCertificateTokens = async (wallet) => {
     return tokens
 }
 
+export const GetTokensBalance = async (wallet) => {
+    let tokens = 0
+    await RcTokenContract.methods.balanceOf(wallet).call({from: RcTokenContractAddress})
+    .then((res) => {
+        tokens = res
+    })
+    .catch((err) => {
+        tokens = 0
+    })
+    return tokens
+}
+
 export const BurnTokens = async (wallet, tokens) => {
     let type = '';
     let message = '';
@@ -53,5 +65,35 @@ export const BurnTokens = async (wallet, tokens) => {
         type,
         message,
         hashTransaction,
+    }
+}
+
+export const BuyRCT = async (wallet, value) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = '';
+
+    await web3.eth.sendTransaction({
+        to: process.env.REACT_APP_RCTOKENICO_CONTRACT_ADDRESS,
+        from: wallet,
+        value: Number(value) * 10**18
+    })
+    .then((hash) => {
+        console.log(hash);
+        if(hash){
+            hashTransaction = hash.transactionHash
+            type = 'success'
+            message = "Buy success"
+        }
+
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
+    return {
+        type, 
+        message,
+        hashTransaction
     }
 }

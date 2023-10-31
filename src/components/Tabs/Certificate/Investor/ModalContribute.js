@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './modalContribute.css';
-import {BurnTokens} from '../../../../services/sacTokenService';
+import {BurnTokens, GetTokensBalance} from '../../../../services/sacTokenService';
 import Loading from '../../../Loading';
 import { LoadingTransaction } from '../../../LoadingTransaction';
 import { api } from '../../../../services/api';
@@ -19,19 +19,20 @@ export function ModalContribute({wallet, onFinished}){
     const [loadingTransaction, setLoadingTransaction] = useState(false);
 
     useEffect(() => {
-        //getTokensWallet();
+        getTokensWallet();
     },[]);
 
-    // async function getTokensWallet(){
-    //     const response = await GetTokensBalance(wallet);
-    //     setBalanceTokens(Number(response) / 10**18);
-    //     console.log(response);
-    // }
+    async function getTokensWallet(){
+        const response = await GetTokensBalance(wallet);
+        setBalanceTokens(Number(response) / 10**18);
+        console.log(response);
+    }
 
     async function registerTokensApi(tokens, hash){
         const additionalData = {
             userData,
-            tokens: Number(tokens)
+            tokens: Number(tokens),
+            transactionHash: hash
         }
 
         try{
@@ -127,7 +128,7 @@ export function ModalContribute({wallet, onFinished}){
                 <Dialog.Title className='font-bold text-center text-white'>
                     Contribute
                 </Dialog.Title>
-                <p className='text-white'>Your balance: {balanceTokens.toFixed(2).replace('.',',')} Créditos de Regeneração</p>
+                <p className='text-white'>Your balance: {balanceTokens.toFixed(0).replace('.',',')} Créditos de Regeneração</p>
 
                 <div className='modal-contribute__container-input'>
                     <p className='font-bold text-[#ff9900]'>Number of tokens for donation</p>

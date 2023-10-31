@@ -1966,7 +1966,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                             <p className='font-bold text-[#229B13]'>{t('ACCEPTED')}</p>
                         </div>
             
-                        <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(6650)) - Number(blockNumber)} blocks</p>
+                        <p className='text-[#ff9900]'>{t('Expires in')} {(Number(data.acceptedAt) + Number(process.env.REACT_APP_BLOCKS_TO_EXPIRE_ACCEPTED_INSPECTION)) - Number(blockNumber)} blocks</p>
                         
                         <button
                             className='bg-[#229B13] text-white h-10 w-36 rounded-lg'

@@ -272,52 +272,8 @@ export default function MainProvider({children}){
     }
 
     async function getImpact(){
-        const response = await api.get('network-impact')
-        const impacts = response.data?.impact;
-
-        if(window.ethereum){
-            const balanceProducers = await GetBalanceContract();
-            const balanceDevelopers = await GetBalancePool();
-    
-            for(var i = 0; i < impacts.length; i++){
-                if(impacts[i].id === '1'){
-                    calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
-                }
-            }
-        }else{
-            const balanceProducers = await GetBalancePoolProducersInfura();
-            const balanceDevelopers = await GetBalancePoolDevelopersInfura();
-    
-            for(var i = 0; i < impacts.length; i++){
-                if(impacts[i].id === '1'){
-                    calculateImpactPerToken(balanceProducers, balanceDevelopers, impacts[i]);
-                }
-            }
-        }
-        
-    }
-    
-    async function calculateImpactPerToken(balanceProducers, balanceDevelopers, impact){
-        const totalBalanceProducers = 750000000000000000000000000;
-        const totalBalanceDevelopers = 15000000000000000000000000;
-
-        const sacProducers = totalBalanceProducers - balanceProducers;
-        const sacDevelopers = totalBalanceDevelopers - balanceDevelopers;
-
-        const totalSac = sacProducers + sacDevelopers;
-
-        const carbon = Number(impact.carbon) / (totalSac / 10 ** 18);
-        const bio = Number(impact.bio) / (totalSac / 10 ** 18);
-        const water = Number(impact.agua) / (totalSac / 10 ** 18);
-        const soil = Number(impact.solo) / (totalSac / 10 ** 18);
-
-        let impactToken = { 
-            carbon,
-            bio,
-            water,
-            soil
-        }
-        setImpactPerToken(impactToken);
+        const response = await api.get('/impact-per-token')
+        setImpactPerToken(response.data.impact);
     }
 
     async function getNotifications(){

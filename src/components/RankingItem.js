@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useMainContext } from '../hooks/useMainContext';
 import { api } from '../services/api';
 import { NumericFormat } from 'react-number-format';
+import axios from 'axios';
 
 export function RankingItem({data, position, researchersCenter, developersCenter, filterSelect}){
     const {setWalletSelected} = useMainContext();
@@ -13,19 +14,33 @@ export function RankingItem({data, position, researchersCenter, developersCenter
     const [loadingApi, setLoadingApi] = useState(false);
     const [userDataApi, setUserDataApi] = useState({});
     const [impactInvestor, setImpactInvestor] = useState({});
+    const [imageProfile, setImageProfile] = useState('');
 
     useEffect(() => {
         if(data?.userType === '7'){
             getInvestorApi();
             getImpact();
+        }else{
+            getImageProfile(data.proofPhoto);
         }
     },[]);
+
+    async function getImageProfile(photo){
+        const response = await axios.get(`https://ipfs.io/ipfs/${photo}`);
+        
+        if(response.data.includes('base64')){
+            setImageProfile(response.data);
+        }else{
+            setImageProfile(`https://ipfs.io/ipfs/${photo}`)
+        }
+    }
 
     async function getInvestorApi(){
         try{
             setLoadingApi(true);
             const response = await api.get(`/user/${String(data?.investorWallet).toUpperCase()}`);
-            setUserDataApi(response.data.user)
+            setUserDataApi(response.data.user);
+            getImageProfile(response.data.user.imgProfileUrl);
         }catch(err){
             console.log(err);
         }finally{
@@ -38,7 +53,7 @@ export function RankingItem({data, position, researchersCenter, developersCenter
             navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.producerWallet}`)
         }
         if(data?.userType === '2'){
-            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.activistWallet}`)
+            navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.inspectorWallet}`)
         }
         if(data?.userType === '3'){
             navigate(`/dashboard/${walletAddress}/user-details/${data.userType}/${data?.researcherWallet}`)
@@ -85,7 +100,7 @@ export function RankingItem({data, position, researchersCenter, developersCenter
                 <div className="flex w-full justify-center">
                     {userDataApi?.imgProfileUrl ? (
                         <img
-                            src={`https://ipfs.io/ipfs/${userDataApi?.imgProfileUrl}`}
+                            src={imageProfile}
                             className='w-[150px] h-[150px] object-cover rounded-full'
                         />
                     ) : (
@@ -188,7 +203,7 @@ export function RankingItem({data, position, researchersCenter, developersCenter
             >   
                 
                 <img
-                    src={`https://ipfs.io/ipfs/${data?.proofPhoto}`}
+                    src={imageProfile}
                     className='w-full h-[150px] object-cover rounded-t-md'
                 />
                 
@@ -223,7 +238,6 @@ export function RankingItem({data, position, researchersCenter, developersCenter
             </div>
     )
     }
-
     
     return(
             <div 
@@ -232,12 +246,12 @@ export function RankingItem({data, position, researchersCenter, developersCenter
             >   
                 {data?.userType === '7' ? (
                     <img
-                        src={`https://ipfs.io/ipfs/${userDataApi?.imgProfileUrl}`}
+                        src={imageProfile}
                         className='w-full h-[150px] object-cover rounded-t-md'
                     />
                 ) : (
                     <img
-                        src={`https://ipfs.io/ipfs/${data?.proofPhoto}`}
+                        src={imageProfile}
                         className='w-full h-[150px] object-cover rounded-t-md'
                     />
                 )}
@@ -292,7 +306,7 @@ export function RankingItem({data, position, researchersCenter, developersCenter
 
                     {data?.userType === '6' && (
                         <>
-                            <p className='text-xs text-center text-white max-w-[30ch] overflow-hidden text-ellipsis'>{data?.contributorWallet}</p> 
+                            <p className='text-xs text-center text-white max-w-[30ch] overflow-hidden text-ellipsis'>{data?.validatorWallet}</p> 
                             <p className='font-bold text-center text-sm text-white mt-3'>-</p>
                             <p className='font-bold text-center text-sm text-white'>-</p>
                             <p className='font-bold text-center text-sm text-white'>-</p> 
@@ -328,6 +342,6 @@ export function RankingItem({data, position, researchersCenter, developersCenter
                     />
                 )}
             </div>
-    )
+    );
     
 }

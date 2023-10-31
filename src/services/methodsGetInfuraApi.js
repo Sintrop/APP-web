@@ -22,7 +22,7 @@ const userContractAddress = process.env.REACT_APP_USER_CONTRACT_ADDRESS;
 const rcTokenContractAddress = process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS;
 const developersPoolAddress = process.env.REACT_APP_DEVELOPER_POOL_CONTRACT_ADDRESS;
 const producerPoolContractAddress = process.env.REACT_APP_PRODUCER_POOL_CONTRACT_ADDRESS;
-const categoryContractAddress = "0xB68D2182D2bc0af29FD6C25185EFd253fb9513e9"
+const categoryContractAddress = "0xd2d2f8a49fe9e7d832045516f623b255ab8fa7ee"
 
 const producerContractAddress = process.env.REACT_APP_PRODUCER_CONTRACT_ADDRESS;
 const supporterContractAddress = process.env.REACT_APP_SUPPORTER_CONTRACT_ADDRESS;
