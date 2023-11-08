@@ -451,7 +451,7 @@ export default function ModalRegister({close}){
                     api.post('/users', {
                         name,
                         wallet: String(walletAddress).toUpperCase(),
-                        userType: 6,
+                        userType: 8,
                         level: 1,
                         onBlockchain: true,
                         imgProfileUrl: proofPhoto,

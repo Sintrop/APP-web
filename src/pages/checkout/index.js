@@ -11,6 +11,7 @@ import {AcceptInspection, GetInspection, RealizeInspection, RequestInspection} f
 import {GetTokensBalance, BuyRCT, BurnTokens} from '../../services/sacTokenService';
 import {addSupporter} from '../../services/supporterService';
 import {GetProducer} from '../../services/producerService';
+import {InvalidateInspection} from '../../services/sintropService';
 import {format} from 'date-fns';
 import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
@@ -18,6 +19,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useMainContext } from '../../hooks/useMainContext';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
+import { ConfirmDescart } from './ConfirmDescart';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const web3js = new Web3(window.ethereum);
@@ -37,6 +39,7 @@ export function Checkout(){
     const [imageProfile, setImageProfile] = useState('');
     const [balanceETH, setBalanceETH] = useState(0);
     const [balanceRCT, setBalanceRCT] = useState(0);
+    const [modalDescart, setModalDescart] = useState(false);
 
     useEffect(() => {
         if(walletAddress !== ''){
@@ -65,6 +68,7 @@ export function Checkout(){
             setTransactions(transactions);
             if(transactions[0].additionalData){
                 setAdditionalData(JSON.parse(transactions[0].additionalData))
+                console.log(JSON.parse(transactions[0].additionalData))
             }
         }
 
@@ -122,6 +126,9 @@ export function Checkout(){
         }
         if(transactions[0].type === 'burn-tokens'){
             burnTokens();
+        }
+        if(transactions[0].type === 'invalidate-inspection'){
+            invalidateInspection();
         }
     }
 
@@ -365,7 +372,7 @@ export function Checkout(){
     async function acceptInspection(){
         setModalTransaction(true);
         setLoadingTransaction(true);
-        console.log(additionalData.inspectionId)
+        console.log('13')
         AcceptInspection(String(additionalData.inspectionId), walletAddress)
         .then(async(res) => {
             setLogTransaction({
@@ -1310,8 +1317,8 @@ export function Checkout(){
 
             if(zone.arvores?.sampling2){
                 for(var s2 = 0; s2 < treesS2.length; s2++){
-                    const height = Number((treesS2[s2].height).replace(',','.'));
-                    const diameter = Number((treesS2[s2].ray).replace(',','.'));
+                    const height = Number((treesS2[s2].height));
+                    const diameter = Number((treesS2[s2].ray));
                     const ray = (diameter / 2) / 100;
     
                     const volumeTree = 3.14159 * ((Number(ray) ** 2) * Number(height));
@@ -1501,13 +1508,12 @@ export function Checkout(){
 
     async function finishNewVersion(){
         setLoading(true);
-        
         let pdfDevHash = '';
 
-        const inspectionData = await GetInspection(additionalData.inspectionId);
+        const inspectionData = await GetInspection(additionalData?.inspectionId);
         const producerData = await GetProducer(inspectionData?.createdBy);
 
-        const response = await api.get(`/inspection/${additionalData.inspectionId}`)
+        const response = await api.get(`/inspection/${additionalData?.inspectionId}`)
         if(response.data.inspection.status === 1){
             setLoading(false);
             return;
@@ -2157,7 +2163,8 @@ export function Checkout(){
         const additionalData = {
             userData,
             tokens: Number(tokens),
-            transactionHash: hash
+            transactionHash: hash,
+            reason: additionalData?.reason
         }
 
         try{
@@ -2184,6 +2191,53 @@ export function Checkout(){
         }
     }
     //------------ BURN TOKENS ---------------
+
+    //------------ Invalidate inspection ---------------
+    async function invalidateInspection(){
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        InvalidateInspection(walletAddress, additionalData?.inspection?.id, additionalData?.justification)
+        .then(async (res) => {
+            setLogTransaction({
+                type: res.type,
+                message: res.message,
+                hash: res.hashTransaction
+            });
+
+            if(res.type === 'success'){
+                api.put('/transactions-open/finish', {id: transactions[0].id});
+                getBalanceAccount();
+                setTransactions([]);
+
+                await api.post('/publication/new', {
+                    userId: userData?.id,
+                    type: 'vote-invalidate-inspection',
+                    origin: 'platform',
+                    additionalData: JSON.stringify(additionalData),
+                });
+
+            }
+            setLoadingTransaction(false);
+        })
+        .catch(err => {
+            setLoadingTransaction(false);
+            const message = String(err.message);
+            console.log(message);
+            if(message.includes("Request OPEN or ACCEPTED")){
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Request OPEN or ACCEPTED',
+                    hash: ''
+                })
+                return;
+            }
+            setLogTransaction({
+                type: 'error',
+                message: 'Something went wrong with the transaction, please try again!',
+                hash: ''
+            })
+        })
+    }
 
     return(
         <div className="flex flex-col items-center w-screen h-screen bg-[#062C01]">
@@ -2221,7 +2275,7 @@ export function Checkout(){
                     <div className='flex items-center justify-between my-3'>
                         <div>
                             <p className='font-bold text-white text-sm'>Olá, {userData?.name}</p>
-                            <p className='text-gray-200 text-xs'>Acompanhe aqui suas transações</p>
+                            <p className='text-gray-200 text-xs' onClick={finishNewVersion}>Acompanhe aqui suas transações</p>
                             <button
                                 className='font-bold text-red-500 text-xs'
                                 onClick={() => setWalletAddress('')}
@@ -2279,6 +2333,7 @@ export function Checkout(){
                                     {transactions[0].type === 'realize-inspection' && 'Finalizar inspeção'}
                                     {transactions[0].type === 'buy-tokens' && 'Compra de RCT'}
                                     {transactions[0].type === 'burn-tokens' && 'Contribuição'}
+                                    {transactions[0].type === 'invalidate-inspection' && 'Invalidar inspeção'}
                                 </p>
                             </p>
 
@@ -2291,11 +2346,7 @@ export function Checkout(){
 
                             <button 
                                 className="w-full rounded-md py-2 font-bold text-gray-500"
-                                onClick={async () => {
-                                    await api.put('/transactions-open/finish', {id: transactions[0].id});
-                                    setTransactions([]);
-                                    getDataWallet();
-                                }}
+                                onClick={async () => setModalDescart(true)}
                             >
                                 Descartar transação
                             </button>
@@ -2308,6 +2359,23 @@ export function Checkout(){
 
             {loadingData && (
                 <Loading/>
+            )}
+
+            {modalDescart && (
+                <>
+                <ConfirmDescart
+                    close={async (confirm) => {
+                        if(confirm){
+                            setModalDescart(false);
+                            await api.put('/transactions-open/finish', {id: transactions[0].id});
+                            setTransactions([]);
+                            getDataWallet();
+                        }else{
+                            setModalDescart(false);
+                        }
+                    }}
+                />
+                </>
             )}
 
             <div className="absolute z-50">
