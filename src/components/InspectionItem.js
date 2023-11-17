@@ -802,7 +802,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 inspectionId: String(data.id),
                 createdBy: String(data.createdBy),
                 createdAt: String(data.createdAtTimestamp),
-                userWallet: String(walletAddress).toUpperCase(),
+                userWallet: String('0XE85C393B185D9A57D68A3129E311FDA8EB0622DB').toUpperCase(),
                 propertyData
             })
         }catch(err){
@@ -1901,7 +1901,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                     <div className="flex gap-3 border-b-2 border-green-950">
                         <div className="flex flex-col">
                             <h5 className="font-bold text-white">ID</h5>
-                            <p className="text-[#ff9900]" onClick={finishNewVersion}>#{data.id}</p>
+                            <p className="text-[#ff9900]" onClick={registerInspectionAPI}>#{data.id}</p>
                         </div>
 
                         <div className="flex flex-col w-40 ml-2">

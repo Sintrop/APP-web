@@ -18,3 +18,26 @@ export const GetInspectors = async () => {
     console.log(inspectors);
     return inspectors;
 }
+
+export const WithdrawTokens = async (wallet) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
+    await InspectorContract.methods.withdraw().send({from: wallet})
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Token withdrawal successful!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        
+    })
+
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+}

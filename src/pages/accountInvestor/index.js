@@ -59,7 +59,7 @@ export default function AccountInvestor(){
     async function getReceipts(){
         //add try catch in future
         let receiptsArray = [];
-        const receipts = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=tokentx&contractaddress=0xf8033bbfe9c645f52d170ddd733274371e75369f&address=${walletSelected}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=ACCKTAAXZP7GYX6993CMR7BHQYKI7TJA8Q`);
+        const receipts = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=tokentx&contractaddress=${process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS}&address=${walletSelected}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=ACCKTAAXZP7GYX6993CMR7BHQYKI7TJA8Q`);
         if(receipts.data.status === '1'){
             const array = receipts.data.result;
             for(var i = 0; i < array.length; i++){

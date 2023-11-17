@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ConnectWallet from '../../services/connectWallet';
-import {api} from '../../services/api';
+import { api } from '../../services/api';
 import Loading from '../../components/Loading';
 import Web3 from 'web3';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from 'react-router';
-import {addProducer, addActivist, addInspector, addDeveloper} from '../../services/registerService';
-import {AcceptInspection, GetInspection, RealizeInspection, RequestInspection} from '../../services/manageInspectionsService';
-import {GetTokensBalance, BuyRCT, BurnTokens} from '../../services/sacTokenService';
-import {addSupporter} from '../../services/supporterService';
-import {GetProducer} from '../../services/producerService';
-import {InvalidateInspection} from '../../services/sintropService';
-import {format} from 'date-fns';
+import { addProducer, addActivist, addInspector, addDeveloper } from '../../services/registerService';
+import { AcceptInspection, GetInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
+import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
+import { addSupporter } from '../../services/supporterService';
+import { InvalidateInspection } from '../../services/sintropService';
+import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
+import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
+import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
+import {WithdrawTokens as WithdrawInspector} from '../../services/inspectorService';
+import { format } from 'date-fns';
 import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -20,12 +23,13 @@ import { useMainContext } from '../../hooks/useMainContext';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
 import { ConfirmDescart } from './ConfirmDescart';
+import { SendReportDev } from './SendReportDev';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const web3js = new Web3(window.ethereum);
 
-export function Checkout(){
-    const {impactPerToken} = useMainContext()
+export function Checkout() {
+    const { impactPerToken } = useMainContext()
     const [walletAddress, setWalletAddress] = useState('');
     const [loadingData, setLoadingData] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -40,33 +44,34 @@ export function Checkout(){
     const [balanceETH, setBalanceETH] = useState(0);
     const [balanceRCT, setBalanceRCT] = useState(0);
     const [modalDescart, setModalDescart] = useState(false);
+    const [modalDevReport, setModalDevReport] = useState(false);
 
     useEffect(() => {
-        if(walletAddress !== ''){
+        if (walletAddress !== '') {
             getDataWallet();
             getBalanceAccount();
         }
     }, [walletAddress]);
 
-    async function connect(){
+    async function connect() {
         const response = await ConnectWallet();
-        if(response.connectedStatus){
+        if (response.connectedStatus) {
             setWalletAddress(response.address[0]);
         }
     };
 
-    async function getDataWallet(){
+    async function getDataWallet() {
         setLoadingData(true);
         const responseUser = await api.get(`/user/${walletAddress}`);
         const responseTransactions = await api.get(`/transactions-open/${walletAddress}`);
         const user = responseUser.data.user;
         const transactions = responseTransactions.data.transactions;
-        
+
         getImageProfile(user)
         setUserData(user)
-        if(transactions.length > 0){
+        if (transactions.length > 0) {
             setTransactions(transactions);
-            if(transactions[0].additionalData){
+            if (transactions[0].additionalData) {
                 setAdditionalData(JSON.parse(transactions[0].additionalData))
                 console.log(JSON.parse(transactions[0].additionalData))
             }
@@ -75,60 +80,66 @@ export function Checkout(){
         setLoadingData(false);
     }
 
-    async function getImageProfile(user){
-        if(user?.userType === 7){
-            if(user?.imgProfileUrl){
+    async function getImageProfile(user) {
+        if (user?.userType === 7) {
+            if (user?.imgProfileUrl) {
                 const response = await axios.get(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`);
-            
-                if(response.data.includes('base64')){
+
+                if (response.data.includes('base64')) {
                     setImageProfile(response.data);
-                }else{
+                } else {
                     setImageProfile(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`)
                 }
-            }else{
+            } else {
                 setImageProfile('');
             }
-        }else{
+        } else {
             const response = await axios.get(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`);
-            
-            if(response.data.includes('base64')){
+
+            if (response.data.includes('base64')) {
                 setImageProfile(response.data);
-            }else{
+            } else {
                 setImageProfile(`https://ipfs.io/ipfs/${user?.imgProfileUrl}`)
             }
         }
     }
 
-    async function getBalanceAccount(){
+    async function getBalanceAccount() {
         const response = await web3js.eth.getBalance(walletAddress);
-        setBalanceETH(Number(response / 10**18).toFixed(5));
+        setBalanceETH(Number(response / 10 ** 18).toFixed(5));
 
         const response2 = await GetTokensBalance(walletAddress);
-        setBalanceRCT(Number(response2 / 10**18).toFixed(2).replace('.',','));
+        setBalanceRCT(Number(response2 / 10 ** 18).toFixed(2).replace('.', ','));
     }
 
-    async function executeTransaction(){
+    async function executeTransaction() {
         setLoading(true);
-        if(transactions[0].type === 'register'){
+        if (transactions[0].type === 'register') {
             register();
         }
-        if(transactions[0].type === 'accept-inspection'){
+        if (transactions[0].type === 'accept-inspection') {
             acceptInspection()
         }
-        if(transactions[0].type === 'realize-inspection'){
+        if (transactions[0].type === 'realize-inspection') {
             finishNewVersion();
         }
-        if(transactions[0].type === 'request-inspection'){
+        if (transactions[0].type === 'request-inspection') {
             requestInspection();
         }
-        if(transactions[0].type === 'buy-tokens'){
+        if (transactions[0].type === 'buy-tokens') {
             buyTokens();
         }
-        if(transactions[0].type === 'burn-tokens'){
+        if (transactions[0].type === 'burn-tokens') {
             burnTokens();
         }
-        if(transactions[0].type === 'invalidate-inspection'){
+        if (transactions[0].type === 'invalidate-inspection') {
             invalidateInspection();
+        }
+        if (transactions[0].type === 'dev-report') {
+            sendDevReport();
+        }
+        if (transactions[0].type === 'withdraw-tokens') {
+            withdraw();
         }
     }
 
@@ -137,325 +148,383 @@ export function Checkout(){
         const userData = response.data.user;
         setUserDataApi(userData);
         console.log(userData);
-        
-        if(userData.userType === 1){
+
+        if (userData.userType === 1) {
             const addressData = JSON.parse(userData.address);
             setModalTransaction(true);
             setLoadingTransaction(true);
             addProducer(walletAddress, userData.name, userData.imgProfileUrl, userData.geoLocation, addressData.areaProperty)
-            .then(async(res) => {
-                setLogTransaction({
-                    type: res.type,
-                    message: res.message,
-                    hash: res.hashTransaction
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
                 })
-                try{
-                    setLoading(true);
-                    await api.put('/user/on-blockchain', {userWallet: walletAddress})
-                    await api.put('/transactions-open/finish', {id: transactions[0].id});
-                }catch(err){
-                    console.log(err);
-                }finally{
-                    setLoading(false)
+                .catch(err => {
                     setLoadingTransaction(false);
-                }
-            })
-            .catch(err => {
-                setLoadingTransaction(false);
-                const message = String(err.message);
-                if(message.includes("Not allowed user")){
+                    const message = String(err.message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This producer already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This producer already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
                     setLogTransaction({
                         type: 'error',
-                        message: 'Not allowed user',
+                        message: 'Something went wrong with the transaction, please try again!',
                         hash: ''
                     })
-                    return;
-                }
-                if(message.includes("This producer already exist")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'This producer already exist',
-                        hash: ''
-                    })
-                    return;
-                }
-                if(message.includes("User already exists")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'User already exists',
-                        hash: ''
-                    })
-                    return;
-                }
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Something went wrong with the transaction, please try again!',
-                    hash: ''
-                })
-            });
+                });
         }
 
-        if(userData.userType === 2){
+        if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
             addInspector(walletAddress, userData?.name, userData.imgProfileUrl, userData.geoLocation)
-            .then(async (res) => {
-                setLogTransaction({
-                    type: res.type,
-                    message: res.message,
-                    hash: res.hashTransaction
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
                 })
-                try{
-                    setLoading(true);
-                    await api.put('/user/on-blockchain', {userWallet: walletAddress})
-                    await api.put('/transactions-open/finish', {id: transactions[0].id});
-                    
-                }catch(err){
-                    console.log(err);
-                }finally{
-                    setLoading(false)
+                .catch(err => {
                     setLoadingTransaction(false);
-                }
-            })
-            .catch(err => {
-                setLoadingTransaction(false);
-                const message = String(err.message);
-                console.log(message);
-                if(message.includes("Not allowed user")){
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This activist already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This activist already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
                     setLogTransaction({
                         type: 'error',
-                        message: 'Not allowed user',
+                        message: 'Something went wrong with the transaction, please try again!',
                         hash: ''
                     })
-                    return;
-                }
-                if(message.includes("This activist already exist")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'This activist already exist',
-                        hash: ''
-                    })
-                    return;
-                }
-                if(message.includes("User already exists")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'User already exists',
-                        hash: ''
-                    })
-                    return;
-                }
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Something went wrong with the transaction, please try again!',
-                    hash: ''
-                })
-            });
+                });
         }
 
-        if(userData.userType === 4){
+        if (userData.userType === 3) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addResearcher(walletAddress, userData?.name, userData.imgProfileUrl)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This activist already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This activist already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                });
+        }
+
+        if (userData.userType === 4) {
             setModalTransaction(true);
             setLoadingTransaction(true);
             addDeveloper(walletAddress, userData?.name, userData.imgProfileUrl)
-            .then(async(res) => {
-                setLogTransaction({
-                    type: res.type,
-                    message: res.message,
-                    hash: res.hashTransaction
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
                 })
-                try{
-                    setLoading(true);
-                    await api.put('/user/on-blockchain', {userWallet: walletAddress})
-                    await api.put('/transactions-open/finish', {id: transactions[0].id});
-                    
-                }catch(err){
-                    console.log(err);
-                }finally{
-                    setLoading(false)
+                .catch(err => {
                     setLoadingTransaction(false);
-                }
-            })
-            .catch(err => {
-                setLoadingTransaction(false);
-                const message = String(err.message);
-                if(message.includes("Not allowed user")){
+                    const message = String(err.message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This developer already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This developer already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
                     setLogTransaction({
                         type: 'error',
-                        message: 'Not allowed user',
+                        message: 'Something went wrong with the transaction, please try again!',
                         hash: ''
                     })
-                    return;
-                }
-                if(message.includes("This developer already exist")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'This developer already exist',
-                        hash: ''
-                    })
-                    return;
-                }
-                if(message.includes("User already exists")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'User already exists',
-                        hash: ''
-                    })
-                    return;
-                }
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Something went wrong with the transaction, please try again!',
-                    hash: ''
-                })
-            });
+                });
         }
 
-        if(userData.userType === 7){
+        if (userData.userType === 7) {
             setModalTransaction(true);
             setLoadingTransaction(true);
             addSupporter(walletAddress, userData?.name)
-            .then(async (res) => {
-                setLogTransaction({
-                    type: res.type,
-                    message: res.message,
-                    hash: res.hashTransaction
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
                 })
-                try{
-                    setLoading(true);
-                    await api.put('/user/on-blockchain', {userWallet: walletAddress})
-                    await api.put('/transactions-open/finish', {id: transactions[0].id});
-                    
-                }catch(err){
-                    console.log(err);
-                }finally{
-                    setLoading(false)
+                .catch(err => {
                     setLoadingTransaction(false);
-                }
-            })
-            .catch(err => {
-                setLoadingTransaction(false);
-                const message = String(err.message);
-                console.log(message);
-                if(message.includes("Not allowed user")){
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This supporter already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This supporter already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
                     setLogTransaction({
                         type: 'error',
-                        message: 'Not allowed user',
+                        message: 'Something went wrong with the transaction, please try again!',
                         hash: ''
                     })
-                    return;
-                }
-                if(message.includes("This supporter already exist")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'This supporter already exist',
-                        hash: ''
-                    })
-                    return;
-                }
-                if(message.includes("User already exists")){
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'User already exists',
-                        hash: ''
-                    })
-                    return;
-                }
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Something went wrong with the transaction, please try again!',
-                    hash: ''
-                })
-            });
+                });
         }
     }
 
-    async function acceptInspection(){
+    async function acceptInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
         console.log('13')
         AcceptInspection(String(additionalData.inspectionId), walletAddress)
-        .then(async(res) => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+
+                const dataNotification = {
+                    text1: 'Accept your inspection',
+                    text2: 'Wait for the inspector at your property'
+                }
+
+                if (res.type === 'success') {
+                    api.post('/notifications/send', {
+                        from: walletAddress,
+                        type: 'accept-inspection',
+                        data: JSON.stringify(dataNotification),
+                        for: additionalData?.createdBy
+                    });
+
+                    registerInspectionAPI();
+
+                    api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'accept-inspection',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            userData,
+                            inspectionId: additionalData?.inspectionId,
+                        }),
+                    });
+                    await api.put('/transactions-open/finish', { id: transactions[0].id })
+                }
             })
-            
-            const dataNotification = {
-                text1: 'Accept your inspection', 
-                text2: 'Wait for the inspector at your property'
-            }
-
-            if(res.type === 'success'){
-                api.post('/notifications/send', {
-                    from: walletAddress,
-                    type: 'accept-inspection', 
-                    data: JSON.stringify(dataNotification),
-                    for: additionalData?.createdBy
-                });
-
-                registerInspectionAPI();
-
-                api.post('/publication/new', {
-                    userId: userData?.id,
-                    type: 'accept-inspection',
-                    origin: 'platform',
-                    additionalData: JSON.stringify({
-                        userData,
-                        inspectionId: additionalData?.inspectionId,
-                    }),
-                });
-                await api.put('/transactions-open/finish', {id: transactions[0].id})
-            }
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            if(message.includes("Can't accept yet")){
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                if (message.includes("Can't accept yet")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Can't accept yet",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Please register as activist")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Please register as activist!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("This inspection don't exists")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "This inspection don't exists!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Already inspected this producer")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Already inspected this producer!",
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
-                    message: "Can't accept yet",
+                    message: 'Something went wrong with the transaction, please try again!',
                     hash: ''
                 })
-                return;
-            }
-            if(message.includes("Please register as activist")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "Please register as activist!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("This inspection don't exists")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "This inspection don't exists!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("Already inspected this producer")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "Already inspected this producer!",
-                    hash: ''
-                })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
             })
-        })
     }
 
-    async function registerInspectionAPI(){
+    async function registerInspectionAPI() {
         const resProducer = await api.get(`/user/${String(additionalData?.createdBy).toUpperCase()}`);
         const producerDataApi = resProducer.data.user;
         const producerData = await GetProducer(additionalData?.createdBy)
-        
+
         const producer = {
             name: producerData?.name,
             totalInspections: producerData?.totalInspections,
@@ -478,33 +547,33 @@ export function Checkout(){
 
         const propertyData = JSON.stringify(producer);
 
-        try{
-            await api.post('/inspections',{
+        try {
+            await api.post('/inspections', {
                 inspectionId: String(additionalData?.inspectionId),
                 createdBy: String(additionalData?.createdBy),
                 createdAt: String(additionalData?.createdAtTimestamp),
                 userWallet: String(walletAddress).toUpperCase(),
                 propertyData
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
-        }finally{
+        } finally {
             setLoadingTransaction(false);
         }
     }
 
     //----------- FINISH INSPECTION ---------------------
 
-    function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas){
+    function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas) {
         const {
-            bioPictures, 
-            bodyInsumos, 
-            bodyResultInsumos, 
-            bodyDegradacao, 
-            bodyArvoresAvulsas, 
+            bioPictures,
+            bodyInsumos,
+            bodyResultInsumos,
+            bodyDegradacao,
+            bodyArvoresAvulsas,
             bodyCoordsZones,
-            degenerationCarbon, 
-            degenerationWater, 
+            degenerationCarbon,
+            degenerationWater,
             degenerationSoil,
             degenerationBio,
             totalArvoresAvulsas,
@@ -547,102 +616,102 @@ export function Checkout(){
         let isaBio = '';
 
         //Transforma o isaindex em uma string legivel;
-        if(isas){
-            if(isas.carbon === 0){
+        if (isas) {
+            if (isas.carbon === 0) {
                 isaCarbon = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
-            if(isas.carbon === 1){
+            if (isas.carbon === 1) {
                 isaCarbon = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
-            if(isas.carbon === 2){
+            if (isas.carbon === 2) {
                 isaCarbon = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
-            if(isas.carbon === 3){
+            if (isas.carbon === 3) {
                 isaCarbon = 'Neutro = 0 Pontos de Regeneração'
             }
-            if(isas.carbon === 4){
+            if (isas.carbon === 4) {
                 isaCarbon = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
-            if(isas.carbon === 5){
+            if (isas.carbon === 5) {
                 isaCarbon = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
-            if(isas.carbon === 6){
+            if (isas.carbon === 6) {
                 isaCarbon = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
-        if(isas){
-            if(isas.water === 0){
+        if (isas) {
+            if (isas.water === 0) {
                 isaWater = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
-            if(isas.water === 1){
+            if (isas.water === 1) {
                 isaWater = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
-            if(isas.water === 2){
+            if (isas.water === 2) {
                 isaWater = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
-            if(isas.water === 3){
+            if (isas.water === 3) {
                 isaWater = 'Neutro = 0 Pontos de Regeneração'
             }
-            if(isas.water === 4){
+            if (isas.water === 4) {
                 isaWater = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
-            if(isas.water === 5){
+            if (isas.water === 5) {
                 isaWater = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
-            if(isas.water === 6){
+            if (isas.water === 6) {
                 isaWater = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
-        if(isas){
-            if(isas.soil === 0){
+        if (isas) {
+            if (isas.soil === 0) {
                 isaSoil = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
-            if(isas.soil === 1){
+            if (isas.soil === 1) {
                 isaSoil = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
-            if(isas.soil === 2){
+            if (isas.soil === 2) {
                 isaSoil = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
-            if(isas.soil === 3){
+            if (isas.soil === 3) {
                 isaSoil = 'Neutro = 0 Pontos de Regeneração'
             }
-            if(isas.soil === 4){
+            if (isas.soil === 4) {
                 isaSoil = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
-            if(isas.soil === 5){
+            if (isas.soil === 5) {
                 isaSoil = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
-            if(isas.soil === 6){
+            if (isas.soil === 6) {
                 isaSoil = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
 
-        if(isas){
-            if(isas.bio === 0){
+        if (isas) {
+            if (isas.bio === 0) {
                 isaBio = 'Regenerativo 3 = +20 Pontos de Regeneração'
             }
-            if(isas.bio === 1){
+            if (isas.bio === 1) {
                 isaBio = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
-            if(isas.bio === 2){
+            if (isas.bio === 2) {
                 isaBio = 'Regenerativo 1 = +5 Pontos de Regeneração'
             }
-            if(isas.bio === 3){
+            if (isas.bio === 3) {
                 isaBio = 'Neutro = 0 Pontos de Regeneração'
             }
-            if(isas.bio === 4){
+            if (isas.bio === 4) {
                 isaBio = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
             }
-            if(isas.bio === 5){
+            if (isas.bio === 5) {
                 isaBio = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
-            if(isas.bio === 6){
+            if (isas.bio === 6) {
                 isaBio = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
             }
         }
-        
+
         return {
             content: [
                 {
@@ -650,7 +719,7 @@ export function Checkout(){
                     width: 150
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Wallet Produtor: ',
                             style: 'label'
@@ -659,7 +728,7 @@ export function Checkout(){
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Nome do Produtor: ',
                             style: 'label'
@@ -668,7 +737,7 @@ export function Checkout(){
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Wallet do Inspetor: ',
                             style: 'label'
@@ -677,7 +746,7 @@ export function Checkout(){
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Área inspecionada: ',
                             style: 'label'
@@ -686,7 +755,7 @@ export function Checkout(){
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Data: ',
                             style: 'label'
@@ -704,9 +773,9 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Indice', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Indice', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyIndices
                         ]
                     }
@@ -716,9 +785,9 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyInsumos
                         ]
                     }
@@ -728,9 +797,9 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyResiduos
                         ]
                     }
@@ -740,9 +809,9 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Resultado', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Unidade', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyResultInsumos
                         ]
                     }
@@ -752,11 +821,11 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Insumo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Carbono', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Solo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyDegradacao,
-                            [{text: 'Total', style: 'tableHeader'}, {text: `${degenerationCarbon.toFixed(1).replace('.',',')} kg`, style: 'tableHeader'}, {text: `${degenerationWater.toFixed(1).replace('.',',')} m³`, style: 'tableHeader'}, {text: `${degenerationSoil.toFixed(1).replace('.',',')} m²`, style: 'tableHeader'}, {text: `${degenerationBio.toFixed(1).replace('.',',')} uv`, style: 'tableHeader'}],
+                            [{ text: 'Total', style: 'tableHeader' }, { text: `${degenerationCarbon.toFixed(1).replace('.', ',')} kg`, style: 'tableHeader' }, { text: `${degenerationWater.toFixed(1).replace('.', ',')} m³`, style: 'tableHeader' }, { text: `${degenerationSoil.toFixed(1).replace('.', ',')} m²`, style: 'tableHeader' }, { text: `${degenerationBio.toFixed(1).replace('.', ',')} uv`, style: 'tableHeader' }],
                         ]
                     }
                 },
@@ -769,9 +838,9 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Nome', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Coordenadas', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Nome', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Coordenadas', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyCoordsZonesTeste
                         ]
                     },
@@ -782,11 +851,11 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 1 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 2 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 3 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Ponto 4 [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biomassa úmida?', style: 'tableHeader', fillColor: '#C5E0B3'} ,{text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Ponto 1 [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Ponto 2 [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Ponto 3 [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Ponto 4 [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biomassa úmida?', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyAnaliseSoloZones,
-                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],
+                            [{ text: 'Total', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.', ',')}`, style: 'tableHeader' }],
                         ]
                     }
                 },
@@ -808,9 +877,9 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Coordenada', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Diâmetro [cm]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Altura [m]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Amostragem', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Coordenada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Diâmetro [cm]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Altura [m]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Volume [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Amostragem', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodySampling1
                         ]
                     }
@@ -828,12 +897,12 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         headerRows: 1,
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Plantas registradas', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área total das amostragens [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total estimado', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Plantas registradas', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área total das amostragens [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total estimado', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyEstimatedTrees,
-                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${estimatedTreesTotal}`, style: 'tableHeader'}],
+                            [{ text: 'Total', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: `${estimatedTreesTotal}`, style: 'tableHeader' }],
                         ]
                     }
                 },
@@ -850,12 +919,12 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         headerRows: 1,
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume total da amostra [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Área total da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área da zona [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Volume total da amostra [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área total da amostra [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyVolumeZones,
-                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${volumeTotalZonas.toFixed(4).replace('.',',')}`, style: 'tableHeader'}],
+                            [{ text: 'Total', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: `${volumeTotalZonas.toFixed(4).replace('.', ',')}`, style: 'tableHeader' }],
                         ]
                     }
                 },
@@ -872,11 +941,11 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Resultado [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyAguaEstocada,
-                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${totalAguaEstocadaZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],   
+                            [{ text: 'Total', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: `${totalAguaEstocadaZones.toFixed(2).replace('.', ',')}`, style: 'tableHeader' }],
                         ]
                     },
                 },
@@ -893,11 +962,11 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água estocada [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biomassa seca', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Resultado [t]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Volume da zona [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água estocada [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biomassa seca', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Resultado [t]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyCarbonoEstocado,
-                            [{text: 'Total', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: '', style: 'tableHeader'}, {text: `${totalCarbonEstocadoZones.toFixed(2).replace('.',',')}`, style: 'tableHeader'}],
+                            [{ text: 'Total', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: '', style: 'tableHeader' }, { text: `${totalCarbonEstocadoZones.toFixed(2).replace('.', ',')}`, style: 'tableHeader' }],
                         ]
                     }
                 },
@@ -925,9 +994,9 @@ export function Checkout(){
                     ul: bioPictures
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3'}],
+                            [{ text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyBio
                         ]
                     }
@@ -945,19 +1014,19 @@ export function Checkout(){
                     style: 'subTitle'
                 },
                 {
-                    table:{
+                    table: {
                         body: [
-                            [{text: '', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Carbono [kg]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Água [m³]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Solo [m²]', style: 'tableHeader', fillColor: '#C5E0B3'}, {text: 'Biodiversidade [uv]', style: 'tableHeader', fillColor: '#C5E0B3'}],
-                            ['Insumos', `${degenerationCarbon.toFixed(2).replace('.',',')}`, `${degenerationWater.toFixed(2).replace('.',',')}`, `${degenerationSoil.toFixed(2).replace('.',',')}`, `${degenerationBio.toFixed(0)}`],
+                            [{ text: '', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Carbono [kg]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Água [m³]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Solo [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade [uv]', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ['Insumos', `${degenerationCarbon.toFixed(2).replace('.', ',')}`, `${degenerationWater.toFixed(2).replace('.', ',')}`, `${degenerationSoil.toFixed(2).replace('.', ',')}`, `${degenerationBio.toFixed(0)}`],
                             ['Árvores', `${((totalCarbonEstocadoZones * -1) * 1000).toFixed(2).replace('.', ',')}`, `${totalAguaEstocadaZones.toFixed(2).replace('.', ',')}`, `0`, `0`],
-                            ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.',',')}`, `0`, `${saldoSoilAnaliseSoloZones.toFixed(2).replace('.',',')}`, `0`],
+                            ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`, `${saldoSoilAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`],
                             ['Biodiversidade', '0', '0', '0', `${(Number(bioPictures.length) ** 2).toFixed(0)}`],
                             [
-                                {text: 'Total', style: 'tableHeader'}, 
-                                {text: `${(degenerationCarbon + saldoCarbonAnaliseSoloZones + ((totalCarbonEstocadoZones * -1) * 1000)).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
-                                {text: `${(degenerationWater + totalAguaEstocadaZones).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
-                                {text: `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(2).replace('.',',')}`, style: 'tableHeader'},
-                                {text: `${(degenerationBio + (Number(bioPictures.length) ** 2)).toFixed(0)}`, style: 'tableHeader'},
+                                { text: 'Total', style: 'tableHeader' },
+                                { text: `${(degenerationCarbon + saldoCarbonAnaliseSoloZones + ((totalCarbonEstocadoZones * -1) * 1000)).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
+                                { text: `${(degenerationWater + totalAguaEstocadaZones).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
+                                { text: `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
+                                { text: `${(degenerationBio + (Number(bioPictures.length) ** 2)).toFixed(0)}`, style: 'tableHeader' },
                             ]
                         ]
                     },
@@ -968,34 +1037,34 @@ export function Checkout(){
                     style: 'label'
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Carbono: ',
                             style: 'label'
                         },
-                        `${Number(resultIndices?.carbon).toFixed(2).replace('.',',')} kg = ${isaCarbon}`
+                        `${Number(resultIndices?.carbon).toFixed(2).replace('.', ',')} kg = ${isaCarbon}`
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Água: ',
                             style: 'label'
                         },
-                        `${Number(resultIndices?.water).toFixed(2).replace('.',',')} m³ = ${isaWater}`
+                        `${Number(resultIndices?.water).toFixed(2).replace('.', ',')} m³ = ${isaWater}`
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Solo: ',
                             style: 'label'
                         },
-                        `${Number(resultIndices?.soil).toFixed(2).replace('.',',')} m² = ${isaSoil}`
+                        `${Number(resultIndices?.soil).toFixed(2).replace('.', ',')} m² = ${isaSoil}`
                     ]
                 },
                 {
-                    text:[
+                    text: [
                         {
                             text: 'Biodiversidade: ',
                             style: 'label'
@@ -1035,36 +1104,36 @@ export function Checkout(){
                     bold: true,
                     marginTop: 10
                 },
-                label:{
+                label: {
                     bold: true,
                     color: '#0a4303',
                     marginTop: 5,
                     marginBottom: 5
                 },
-                link:{
+                link: {
                     color: 'blue',
-                    marginBottom:5
+                    marginBottom: 5
                 },
-                explicacaoCalc:{
+                explicacaoCalc: {
                     marginBottom: 10,
                     italics: true,
                     color: '#0a4303'
                 },
-                titleExplic:{
+                titleExplic: {
                     color: '#0a4303',
                     italics: true
                 },
-                tableHeader:{
+                tableHeader: {
                     bold: true
                 },
-                table:{
+                table: {
                     marginBottom: 10
                 }
-            }   
+            }
         }
     }
 
-    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity){
+    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity) {
         const indiceAnaliseSolo = indices.filter(item => item.id === '14');
         const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
         const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
@@ -1072,7 +1141,7 @@ export function Checkout(){
         const indiceFatorUmidade = indices.filter(item => item.id === '30');
 
         let bodyInsumos = [];
-        for (var i = 0; i < indices.length; i++){
+        for (var i = 0; i < indices.length; i++) {
             let row = [];
             row.push(indices[i].title);
             row.push(indices[i].unity);
@@ -1081,13 +1150,13 @@ export function Checkout(){
             row.push(indices[i].soloValue);
             row.push(indices[i].bioValue);
 
-            if(indices[i].insumoCategory === 'insumo-quimico' || indices[i].insumoCategory === 'insumo-biologico' || indices[i].insumoCategory === 'insumo-mineral' || indices[i].insumoCategory === 'recurso-externo'){
+            if (indices[i].insumoCategory === 'insumo-quimico' || indices[i].insumoCategory === 'insumo-biologico' || indices[i].insumoCategory === 'insumo-mineral' || indices[i].insumoCategory === 'recurso-externo') {
                 bodyInsumos.push(row);
             }
         }
 
         let bodyResiduos = [];
-        for (var i = 0; i < indices.length; i++){
+        for (var i = 0; i < indices.length; i++) {
             let row = [];
             row.push(indices[i].title);
             row.push(indices[i].unity);
@@ -1096,13 +1165,13 @@ export function Checkout(){
             row.push(indices[i].soloValue);
             row.push(indices[i].bioValue);
 
-            if(indices[i].insumoCategory === 'embalagens'){
+            if (indices[i].insumoCategory === 'embalagens') {
                 bodyResiduos.push(row);
             }
         }
 
         let bodyIndices = [];
-        for (var i = 0; i < indices.length; i++){
+        for (var i = 0; i < indices.length; i++) {
             let row = [];
             row.push(indices[i].title);
             row.push(indices[i].unity);
@@ -1111,7 +1180,7 @@ export function Checkout(){
             row.push(indices[i].soloValue);
             row.push(indices[i].bioValue);
 
-            if(indices[i].insumoCategory === 'arvores' || indices[i].insumoCategory === 'biomassa'){
+            if (indices[i].insumoCategory === 'arvores' || indices[i].insumoCategory === 'biomassa') {
                 bodyIndices.push(row);
             }
         }
@@ -1121,7 +1190,7 @@ export function Checkout(){
         // const ArvoreJovem = resultCategories.filter(item => item.categoryId === '10');
         // const ArvoreAdulta = resultCategories.filter(item => item.categoryId === '11');
         // const ArvoreAncia = resultCategories.filter(item => item.categoryId === '12');
-        
+
 
         let bodyResultInsumos = [];
 
@@ -1131,7 +1200,7 @@ export function Checkout(){
         let degenerationWater = 0;
         let degenerationSoil = 0;
         let degenerationBio = 0;
-        
+
         //Variaveis das arvores
         let bodyArvoresAvulsas = [];
         let totalArvoresAvulsas = 0;
@@ -1145,7 +1214,7 @@ export function Checkout(){
         let bodyBio = [];
 
         //Cria a lista de link das fotos da biodiversidade
-        for(var i = 0; i < resultBiodiversity.length; i++){
+        for (var i = 0; i < resultBiodiversity.length; i++) {
             let dataBio = {
                 text: `ipfs.io/ipfs/${resultBiodiversity[i].photo}`,
                 link: `https://${window.location.host}/view-image/${resultBiodiversity[i].photo}`,
@@ -1164,32 +1233,32 @@ export function Checkout(){
 
 
         //For para calcular os resultados dos insumos e árvores avulsas
-        for (var i = 0; i < resultCategories.length; i++){
+        for (var i = 0; i < resultCategories.length; i++) {
             const category = JSON.parse(resultCategories[i].categoryDetails);
 
             //Lista os insumos registrados na inspeção
-            if(resultCategories[i].value !== '0'){
+            if (resultCategories[i].value !== '0') {
                 let row = [];
                 row.push(resultCategories[i].title);
                 row.push(resultCategories[i].value);
                 row.push(category.unity);
-                
-                if(category.id === '9' || category.id === '10' || category.id === '11' || category.id === '12' || category.id === '23'){
-                }else{
+
+                if (category.id === '9' || category.id === '10' || category.id === '11' || category.id === '12' || category.id === '23') {
+                } else {
                     bodyResultInsumos.push(row);
                 }
             }
 
             //Faz a contagem dos insumos de degeneração
-            if(category.category === '1'){
-                if(resultCategories[i].value !== '0'){
+            if (category.category === '1') {
+                if (resultCategories[i].value !== '0') {
                     let row = [];
                     row.push(resultCategories[i].title);
                     row.push(`${resultCategories[i].value} x ${category.carbonValue} = ${(Number(resultCategories[i].value) * Number(category.carbonValue)).toFixed(1)} kg`);
                     row.push(`${resultCategories[i].value} x ${category.aguaValue} = ${(Number(resultCategories[i].value) * Number(category.aguaValue)).toFixed(1)} m³`);
                     row.push(`${resultCategories[i].value} x ${category.soloValue} = ${(Number(resultCategories[i].value) * Number(category.soloValue)).toFixed(1)} m²`);
                     row.push(`${resultCategories[i].value} x ${category.bioValue} = ${(Number(resultCategories[i].value) * Number(category.bioValue)).toFixed(1)} uni`);
-                    
+
                     bodyDegradacao.push(row);
 
                     //Faz a soma da degeneração
@@ -1221,11 +1290,11 @@ export function Checkout(){
         let bodyInsetosAnaliseSoloZones = [];
 
         //novo método
-        
+
         let bodySampling1 = [];
-        
+
         let volumeTotalZonas = 0;
-        
+
         let totalAguaEstocadaZones = 0;
         let totalCarbonEstocadoZones = 0;
 
@@ -1234,9 +1303,9 @@ export function Checkout(){
         let bodyVolumeZones = [];
         let estimatedTreesTotal = 0;
         let bodyEstimatedTrees = [];
-        
+
         //For para calcular os resultados das zonas
-        for(var i = 0; i < resultZones.length; i++){
+        for (var i = 0; i < resultZones.length; i++) {
             let volumeTotalSampling1 = 0;
             let volumeTotalSampling2 = 0;
             let volumeAmostraAereaSampling1 = 0;
@@ -1246,7 +1315,7 @@ export function Checkout(){
             const titleZone = resultZones[i].title;
             const pathZone = resultZones[i].path;
             const areaZone = Number(zone.areaZone);
-            
+
             const treesS1 = zone.arvores?.sampling1?.trees;
             const treesS2 = zone.arvores?.sampling2?.trees;
 
@@ -1254,39 +1323,39 @@ export function Checkout(){
             let estimatedTreeZone = 0;
             let rowTreesZone = [];
 
-            if(zone.arvores?.sampling2){
+            if (zone.arvores?.sampling2) {
                 const estimatedTree = (areaZone * ((treesS1.length + treesS2.length) / (Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area))));
                 estimatedTreeZone += Number(estimatedTree).toFixed(0);
-                
+
                 const rowTree = [
                     titleZone,
-                    `${areaZone.toFixed(2).replace('.',',')}`,
+                    `${areaZone.toFixed(2).replace('.', ',')}`,
                     `${treesS1.length + treesS2.length}`,
                     `${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)}`,
-                    `${areaZone.toFixed(2).replace('.',',')} x (${treesS1.length + treesS2.length} / ${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)})`,
+                    `${areaZone.toFixed(2).replace('.', ',')} x (${treesS1.length + treesS2.length} / ${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)})`,
                     `${estimatedTree.toFixed(0)}`
                 ];
                 rowTreesZone = rowTree;
-            }else{
+            } else {
                 const estimatedTree = (areaZone * (treesS1.length / Number(zone.arvores?.sampling1.area)));
                 estimatedTreeZone += Number(estimatedTree).toFixed(0);
 
                 const rowTree = [
                     titleZone,
-                    `${areaZone.toFixed(2).replace('.',',')}`,
+                    `${areaZone.toFixed(2).replace('.', ',')}`,
                     `${treesS1.length}`,
                     `${Number(zone.arvores?.sampling1.area)}`,
-                    `${areaZone.toFixed(2).replace('.',',')} x (${treesS1.length} / ${Number(zone.arvores?.sampling1.area)})`,
+                    `${areaZone.toFixed(2).replace('.', ',')} x (${treesS1.length} / ${Number(zone.arvores?.sampling1.area)})`,
                     `${estimatedTree.toFixed(0)}`
                 ];
                 rowTreesZone = rowTree;
             }
-            
+
             bodyEstimatedTrees.push(rowTreesZone);
             estimatedTreesTotal += Number(estimatedTreeZone);
-        
+
             //For para listar e calcular cada árvore registrada
-            for(var s1 = 0; s1 < treesS1.length; s1++){
+            for (var s1 = 0; s1 < treesS1.length; s1++) {
                 const height = Number(treesS1[s1].height);
                 const diameter = Number(treesS1[s1].ray);
                 const ray = (diameter / 2) / 100;
@@ -1306,7 +1375,7 @@ export function Checkout(){
                 row.push(`${treesS1[s1].ray}`);
                 row.push(`${treesS1[s1].height}`);
                 row.push(imgTree);
-                row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.',',')}`);
+                row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.', ',')}`);
                 row.push(`1 - ${zone?.arvores?.sampling1?.area} m²`);
 
                 bodySampling1.push(row);
@@ -1315,15 +1384,15 @@ export function Checkout(){
             const totalSampling1 = Number(volumeAmostraAereaSampling1) * Number(indiceMultiplicadorRaiz[0].carbonValue);
             volumeTotalSampling1 = Number(totalSampling1);
 
-            if(zone.arvores?.sampling2){
-                for(var s2 = 0; s2 < treesS2.length; s2++){
+            if (zone.arvores?.sampling2) {
+                for (var s2 = 0; s2 < treesS2.length; s2++) {
                     const height = Number((treesS2[s2].height));
                     const diameter = Number((treesS2[s2].ray));
                     const ray = (diameter / 2) / 100;
-    
+
                     const volumeTree = 3.14159 * ((Number(ray) ** 2) * Number(height));
                     volumeAmostraAereaSampling2 += Number(volumeTree)
-                    
+
                     let row = [];
                     let imgTree = {
                         text: `Foto`,
@@ -1335,9 +1404,9 @@ export function Checkout(){
                     row.push(`${treesS2[s2].ray}`);
                     row.push(`${treesS2[s2].height}`);
                     row.push(imgTree);
-                    row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.',',')}`);
+                    row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.', ',')}`);
                     row.push(`2 - ${zone?.arvores?.sampling2?.area}`);
-    
+
                     bodySampling1.push(row);
                 }
                 const totalSampling2 = Number(volumeAmostraAereaSampling2) * Number(indiceMultiplicadorRaiz[0].carbonValue);
@@ -1349,16 +1418,16 @@ export function Checkout(){
             let volumeTotalAmostragem = 0
             let areaTotalAmostragem = 0;
 
-            if(zone.arvores?.sampling2){
+            if (zone.arvores?.sampling2) {
                 volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area) + (Number(volumeTotalSampling2) / Number(zone.arvores?.sampling2 ? zone.arvores?.sampling2?.area : 0))));
-                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area) + Number(zone.arvores?.sampling2?.area) ;
+                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area) + Number(zone.arvores?.sampling2?.area);
                 volumeTotalAmostragem += Number(volumeTotalSampling1) + Number(volumeTotalSampling2);
-            }else{
+            } else {
                 volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area)));
                 areaTotalAmostragem += Number(zone.arvores?.sampling1?.area);
                 volumeTotalAmostragem += Number(volumeTotalSampling1);
             }
-            
+
             volumeTotalZonas += volumeZona;
 
             let aguaEstocada = volumeZona * Number(indicePercentAguaEstocada[0].aguaValue);
@@ -1369,19 +1438,19 @@ export function Checkout(){
             totalCarbonEstocadoZones += Number(carbonoEstocado);
 
             bodyVolumeZones.push([
-                titleZone, 
-                `${areaZone.toFixed(2).replace('.',',')}`,
-                `${volumeTotalAmostragem.toFixed(4).replace('.',',')}`,
-                `${areaTotalAmostragem.toFixed(2).replace('.',',')}`,
-                `${areaZone.toFixed(2).replace('.', ',')} m² x (${volumeTotalAmostragem.toFixed(4).replace('.', ',')} m³ / ${areaTotalAmostragem.toFixed(2).replace('.',',')} m²)`,
-                `${volumeZona.toFixed(4).replace('.', ',')}`, 
+                titleZone,
+                `${areaZone.toFixed(2).replace('.', ',')}`,
+                `${volumeTotalAmostragem.toFixed(4).replace('.', ',')}`,
+                `${areaTotalAmostragem.toFixed(2).replace('.', ',')}`,
+                `${areaZone.toFixed(2).replace('.', ',')} m² x (${volumeTotalAmostragem.toFixed(4).replace('.', ',')} m³ / ${areaTotalAmostragem.toFixed(2).replace('.', ',')} m²)`,
+                `${volumeZona.toFixed(4).replace('.', ',')}`,
             ]);
 
             //Monta a tabela da água estocada
             let bodyAgua = [
                 titleZone,
-                `${Number(volumeZona).toFixed(4).replace('.',',')}`,
-                `${Number(volumeZona).toFixed(4).replace('.',',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
+                `${Number(volumeZona).toFixed(4).replace('.', ',')}`,
+                `${Number(volumeZona).toFixed(4).replace('.', ',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
                 `${aguaEstocada?.toFixed(2).replace('.', ',')}`,
             ];
 
@@ -1390,10 +1459,10 @@ export function Checkout(){
             //Monta a tabela do carbono estocad0
             let bodyCarbono = [
                 titleZone,
-                `${Number(volumeZona).toFixed(4).replace('.',',')}`,
+                `${Number(volumeZona).toFixed(4).replace('.', ',')}`,
                 `${aguaEstocada?.toFixed(2).replace('.', ',')}`,
-                `${Number(volumeZona).toFixed(4).replace('.',',')} - ${aguaEstocada?.toFixed(4).replace('.', ',')} = ${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.',',')}`,
-                `${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.',',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
+                `${Number(volumeZona).toFixed(4).replace('.', ',')} - ${aguaEstocada?.toFixed(4).replace('.', ',')} = ${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.', ',')}`,
+                `${(Number(volumeZona) - Number(aguaEstocada)).toFixed(2).replace('.', ',')} x ${Number(indicePercentAguaEstocada[0].aguaValue)}`,
                 `${carbonoEstocado?.toFixed(2).replace('.', ',')}`,
             ];
 
@@ -1404,8 +1473,8 @@ export function Checkout(){
                 titleZone,
             ];
             let stringCoords = '';
-            for(var c = 0; c < pathZone.length; c++){
-                stringCoords += `| Ponto ${c+1} - Lat: ${pathZone[c].lat}, Lng: ${pathZone[c].lng} `;
+            for (var c = 0; c < pathZone.length; c++) {
+                stringCoords += `| Ponto ${c + 1} - Lat: ${pathZone[c].lat}, Lng: ${pathZone[c].lng} `;
             }
             bodyTeste.push(stringCoords);
             bodyTeste.push(`${(resultZones[i].areaZone).toFixed(0)} m²`);
@@ -1416,12 +1485,12 @@ export function Checkout(){
             //Faz o cálculo da biomassa da zona
             let biomassaSolo = 0;
             saldoSoilAnaliseSoloZones += resultZones[i].areaZone;
-            
-            if(resultZones[i]?.soilUmid){
+
+            if (resultZones[i]?.soilUmid) {
                 const calculoBiomassaSolo = (Number((((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) / 0.5) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue)) * Number(indiceFatorUmidade[0].carbonValue);
                 saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
                 biomassaSolo += calculoBiomassaSolo;
-            }else{
+            } else {
                 const calculoBiomassaSolo = Number((((Number(analiseSolo[0].value) + Number(analiseSolo[1].value) + Number(analiseSolo[2].value) + Number(analiseSolo[3].value)) / 4) / 0.5) * resultZones[i].areaZone) * Number(indiceAnaliseSolo[0].carbonValue);
                 saldoCarbonAnaliseSoloZones += calculoBiomassaSolo;
                 biomassaSolo += calculoBiomassaSolo;
@@ -1430,15 +1499,15 @@ export function Checkout(){
             //Monta o item da tabela para a análise de solo;
             const analiseSoloZone = [
                 titleZone,
-                `${areaZone.toFixed(2).replace('.',',')}`,
+                `${areaZone.toFixed(2).replace('.', ',')}`,
                 `${analiseSolo[0].value}`,
                 `${analiseSolo[1].value}`,
                 `${analiseSolo[2].value}`,
                 `${analiseSolo[3].value}`,
                 '0,5',
                 `${resultZones[i]?.soilUmid ? 'Sim' : 'Não'}`,
-                `(((${analiseSolo[0].value} + ${analiseSolo[1].value} + ${analiseSolo[2].value} + ${analiseSolo[3].value} / 4) / 0,5) x ${areaZone.toFixed(2).replace('.',',')}) x ${indiceAnaliseSolo[0].carbonValue}`,
-                `${(biomassaSolo).toFixed(2).replace('.',',')} kg`
+                `(((${analiseSolo[0].value} + ${analiseSolo[1].value} + ${analiseSolo[2].value} + ${analiseSolo[3].value} / 4) / 0,5) x ${areaZone.toFixed(2).replace('.', ',')}) x ${indiceAnaliseSolo[0].carbonValue}`,
+                `${(biomassaSolo).toFixed(2).replace('.', ',')} kg`
             ]
             bodyAnaliseSoloZones.push(analiseSoloZone);
         }
@@ -1447,7 +1516,7 @@ export function Checkout(){
         let totalWater = degenerationWater + totalAguaEstocadaZones;
         let totalBio = degenerationBio + (Number(resultBiodiversity.length) * Number(resultBiodiversity.length));
         let totalSoil = degenerationSoil + saldoSoilAnaliseSoloZones;
-        
+
         const resultIndices = {
             carbon: totalCarbon.toFixed(2),
             water: totalWater.toFixed(2),
@@ -1500,13 +1569,13 @@ export function Checkout(){
             bodyEstimatedTrees
         }
 
-        return{
+        return {
             resultIndices,
             pdfData
         }
     }
 
-    async function finishNewVersion(){
+    async function finishNewVersion() {
         setLoading(true);
         let pdfDevHash = '';
 
@@ -1514,7 +1583,7 @@ export function Checkout(){
         const producerData = await GetProducer(inspectionData?.createdBy);
 
         const response = await api.get(`/inspection/${additionalData?.inspectionId}`)
-        if(response.data.inspection.status === 1){
+        if (response.data.inspection.status === 1) {
             setLoading(false);
             return;
         }
@@ -1522,20 +1591,20 @@ export function Checkout(){
         //Busca todos os indices
         const responseIndices = await api.get('/subCategories');
         const indices = responseIndices.data.subCategories;
-        
+
         const resultCategories = JSON.parse(response?.data?.inspection?.resultCategories);
         const inspection = response?.data?.inspection
         const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
         const resultZones = JSON.parse(response?.data?.inspection?.zones);
-        
+
         //Função que calcula os indices e retorna os dados para o pdf
         const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity);
 
-        await api.put('/update-result',{
+        await api.put('/update-result', {
             id: additionalData?.inspectionId,
             result: JSON.stringify(responseCalculo)
         })
-        
+
         const data1 = {
             resultIndices: responseCalculo.resultIndices,
             pdfBioHash: pdfDevHash,
@@ -1559,25 +1628,25 @@ export function Checkout(){
             soil: await calculateSolo(responseCalculo.resultIndices),
             bio: await calculateBio(responseCalculo.resultIndices),
         }
-        
+
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas));
-        
-        pdf.getBuffer(async(res) => {
+
+        pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
 
             createIsas(data1, 'phoenix', hash, producerData);
         })
     }
-    
-    async function createIsas(data, methodType, hashPdf, producerData){
+
+    async function createIsas(data, methodType, hashPdf, producerData) {
         setLoading(true)
-        
+
         const carbonResult = calculateCarboon(data?.resultIndices);
         const waterResult = calculateWater(data?.resultIndices);
         const bioResult = calculateBio(data?.resultIndices);
         const soloResult = calculateSolo(data?.resultIndices);
-    
+
         const carbonIndicator = Number(data?.resultIndices?.carbon).toFixed(0)
         const bioIndicator = Number(data?.resultIndices?.bio).toFixed(0)
         const aguaIndicator = Number(data?.resultIndices?.water).toFixed(0)
@@ -1589,7 +1658,7 @@ export function Checkout(){
             aguaIndicator,
             soloIndicator
         }
-        
+
         const carbon = {
             categoryId: 1,
             isaIndex: carbonResult,
@@ -1617,269 +1686,269 @@ export function Checkout(){
             report: hashPdf,
             indicator: soloIndicator
         }
-        
+
         setLoading(false);
         const arrayIsas = [
-            {categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, report: carbon.report, indicator: carbon.indicator},
-            {categoryId: bio.categoryId, isaIndex: bio.isaIndex, report: bio.report, indicator: bio.indicator},
-            {categoryId: solo.categoryId, isaIndex: solo.isaIndex, report: solo.report, indicator: solo.indicator},
-            {categoryId: water.categoryId, isaIndex: water.isaIndex, report: water.report, indicator: water.indicator}
+            { categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, report: carbon.report, indicator: carbon.indicator },
+            { categoryId: bio.categoryId, isaIndex: bio.isaIndex, report: bio.report, indicator: bio.indicator },
+            { categoryId: solo.categoryId, isaIndex: solo.isaIndex, report: solo.report, indicator: solo.indicator },
+            { categoryId: water.categoryId, isaIndex: water.isaIndex, report: water.report, indicator: water.indicator }
         ];
 
         console.log(arrayIsas)
 
         finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData)
     }
-    
+
     async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData) {
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(
-            String(additionalData?.inspectionId), 
-            isas, 
+            String(additionalData?.inspectionId),
+            isas,
             walletAddress
         )
-        .then(async(res) => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                })
+                attNetworkImpact(resultIndices, methodType);
+
+                const dataNotification = {
+                    text1: 'Completed your inspection',
+                    text2: 'Check the results of your inspection',
+                    inspectionId: additionalData?.inspectionId
+                }
+
+                if (res.type === 'success') {
+                    api.post('/notifications/send', {
+                        from: walletAddress,
+                        type: 'finalize-inspection',
+                        data: JSON.stringify(dataNotification),
+                        for: producerData?.producerWallet
+                    });
+
+                    api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'realize-inspection',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            userData,
+                            inspectionId: additionalData?.inspectionId,
+                        }),
+                    });
+                    await api.put('/transactions-open/finish', { id: transactions[0].id })
+                }
             })
-            attNetworkImpact(resultIndices, methodType);
-
-            const dataNotification = {
-                text1: 'Completed your inspection', 
-                text2: 'Check the results of your inspection',
-                inspectionId: additionalData?.inspectionId
-            }
-
-            if(res.type === 'success'){
-                api.post('/notifications/send', {
-                    from: walletAddress,
-                    type: 'finalize-inspection', 
-                    data: JSON.stringify(dataNotification),
-                    for: producerData?.producerWallet
-                });
-
-                api.post('/publication/new', {
-                    userId: userData?.id,
-                    type: 'realize-inspection',
-                    origin: 'platform',
-                    additionalData: JSON.stringify({
-                        userData,
-                        inspectionId: additionalData?.inspectionId,
-                    }),
-                });
-                await api.put('/transactions-open/finish', {id: transactions[0].id})
-            }
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            console.log(message)
-            if(message.includes("Can't accept yet")){
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message)
+                if (message.includes("Can't accept yet")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Can't accept yet",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Inspection Expired")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Inspection Expired!',
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Please register as activist")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Please register as activist!',
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("This inspection don't exists")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "This inspection don't exists!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Accept this inspection before")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Accept this inspection before!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("You not accepted this inspection")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "You not accepted this inspection!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Cannot read properties of undefined (reading 'length')")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Fill in all category data!",
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes('invalid BigNumber string (argument="value", value="", code=INVALID_ARGUMENT, version=bignumber/5.6.2)')) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: "Fill in all category data!",
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
-                    message: "Can't accept yet",
+                    message: 'Something went wrong with the transaction, please try again!',
                     hash: ''
                 })
-                return;
-            }
-            if(message.includes("Inspection Expired")){
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Inspection Expired!',
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("Please register as activist")){
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Please register as activist!',
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("This inspection don't exists")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "This inspection don't exists!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("Accept this inspection before")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "Accept this inspection before!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("You not accepted this inspection")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "You not accepted this inspection!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("Cannot read properties of undefined (reading 'length')")){
-                setLogTransaction({
-                    type: 'error',
-                    message: "Fill in all category data!",
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes('invalid BigNumber string (argument="value", value="", code=INVALID_ARGUMENT, version=bignumber/5.6.2)')){
-                setLogTransaction({
-                    type: 'error',
-                    message: "Fill in all category data!",
-                    hash: ''
-                })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
             })
-        })
-        
+
     }
 
-    function calculateCarboon(data){
+    function calculateCarboon(data) {
         let result = 3;
         const carbon = data.carbon;
 
-        if(carbon < 0){
-            if(Math.abs(carbon) > 0 && Math.abs(carbon) < 1000){
-                result = 2  
+        if (carbon < 0) {
+            if (Math.abs(carbon) > 0 && Math.abs(carbon) < 1000) {
+                result = 2
             }
-            if(Math.abs(carbon) >= 1000 && Math.abs(carbon) < 100000){
+            if (Math.abs(carbon) >= 1000 && Math.abs(carbon) < 100000) {
                 result = 1
             }
-            if(Math.abs(carbon) >= 100000 ){
+            if (Math.abs(carbon) >= 100000) {
                 result = 0
             }
         }
-        if(carbon >= 100000){
+        if (carbon >= 100000) {
             result = 6
         }
-        if(carbon >= 1000 && carbon < 100000){
-            result = 5  
+        if (carbon >= 1000 && carbon < 100000) {
+            result = 5
         }
-        if(carbon > 0 && carbon < 1000){
-            result = 4  
+        if (carbon > 0 && carbon < 1000) {
+            result = 4
         }
-        if(carbon === 0){
+        if (carbon === 0) {
             result = 3
         }
-        
+
         return result;
     }
 
-    function calculateWater(data){
+    function calculateWater(data) {
         let result = 0;
         const water = data.water;
 
-        if(water < 0){
-            if(Math.abs(water) > 0 && Math.abs(water) < 10){
+        if (water < 0) {
+            if (Math.abs(water) > 0 && Math.abs(water) < 10) {
                 result = 4
             }
-            if(Math.abs(water) < 100 && Math.abs(water) >= 10){
+            if (Math.abs(water) < 100 && Math.abs(water) >= 10) {
                 result = 5
             }
-            if(Math.abs(water) > 100){
+            if (Math.abs(water) > 100) {
                 result = 6
             }
         }
-        if(water >= 100){
-            result = 0 
+        if (water >= 100) {
+            result = 0
         }
-        if(water >= 10 && water < 100){
+        if (water >= 10 && water < 100) {
             result = 1
         }
-        if(water > 0 && water < 10){
-            result = 2  
+        if (water > 0 && water < 10) {
+            result = 2
         }
-        if(water === 0){
+        if (water === 0) {
             result = 3
         }
 
         return result;
     }
 
-    function calculateBio(data){
+    function calculateBio(data) {
         let result = 0;
         const bio = Number(data.bio);
 
-        if(bio < 0){
-            if(Math.abs(bio) > 0 && Math.abs(bio) < 100){
+        if (bio < 0) {
+            if (Math.abs(bio) > 0 && Math.abs(bio) < 100) {
                 result = 4
                 return result;
             }
-            if(Math.abs(bio) >= 100 && Math.abs(bio) < 1000){
+            if (Math.abs(bio) >= 100 && Math.abs(bio) < 1000) {
                 result = 5
                 return result;
             }
-            if(Math.abs(bio) >= 1000){
+            if (Math.abs(bio) >= 1000) {
                 result = 6
                 return result;
             }
         }
-        if(bio >= 1000){
-            result = 0 
+        if (bio >= 1000) {
+            result = 0
             return result;
         }
-        if(bio < 1000 && bio >= 100){
+        if (bio < 1000 && bio >= 100) {
             result = 1
             return result;
         }
-        if(bio < 100 && bio > 0){
-            result = 2  
+        if (bio < 100 && bio > 0) {
+            result = 2
             return result;
         }
-        if(bio === 0){
+        if (bio === 0) {
             result = 3
             return result;
         }
     }
 
-    function calculateSolo(data){
+    function calculateSolo(data) {
         const soil = Number(data.soil) / 10000;
 
         let result = 0;
-        if(soil < 0){
-            if(Math.abs(soil) > 0 && Math.abs(soil) < 1){
+        if (soil < 0) {
+            if (Math.abs(soil) > 0 && Math.abs(soil) < 1) {
                 result = 4
             }
-            if(Math.abs(soil) < 2 && Math.abs(soil) >= 1){
+            if (Math.abs(soil) < 2 && Math.abs(soil) >= 1) {
                 result = 5
             }
-            if(Math.abs(soil) >= 2){
+            if (Math.abs(soil) >= 2) {
                 result = 6
             }
         }
-        if(soil >= 100){
-            result = 0 
+        if (soil >= 100) {
+            result = 0
         }
-        if(soil >= 5 && soil < 100){
+        if (soil >= 5 && soil < 100) {
             result = 1
         }
-        if(soil > 0 && soil < 5){
-            result = 2  
+        if (soil > 0 && soil < 5) {
+            result = 2
         }
-        if(soil === 0){
+        if (soil === 0) {
             result = 3
         }
-        
+
         return result;
     }
 
-    async function attNetworkImpact(resultIndices, methodType){
+    async function attNetworkImpact(resultIndices, methodType) {
         let carbon = 0;
         let agua = 0;
         let bio = 0;
@@ -1895,20 +1964,20 @@ export function Checkout(){
 
         const responseImpact = await api.get('network-impact');
         const impact = responseImpact.data.impact;
-        for(var i = 0; i < impact.length; i++){
-            if(impact[i].id === '1'){
+        for (var i = 0; i < impact.length; i++) {
+            if (impact[i].id === '1') {
                 carbon = Number(impact[i]?.carbon);
                 agua = Number(impact[i]?.agua);
                 bio = Number(impact[i]?.bio);
                 solo = Number(impact[i]?.solo);
             }
-            if(impact[i].id === '2'){
+            if (impact[i].id === '2') {
                 carbonPhoenix = Number(impact[i]?.carbon);
                 aguaPhoenix = Number(impact[i]?.agua);
                 bioPhoenix = Number(impact[i]?.bio);
                 soloPhoenix = Number(impact[i]?.solo);
             }
-            if(impact[i].id === '3'){
+            if (impact[i].id === '3') {
                 carbonManual = Number(impact[i]?.carbon);
                 aguaManual = Number(impact[i]?.agua);
                 bioManual = Number(impact[i]?.bio);
@@ -1916,258 +1985,258 @@ export function Checkout(){
             }
         }
 
-        if(Number(resultIndices.carbonIndicator) < 0){
+        if (Number(resultIndices.carbonIndicator) < 0) {
             carbon += Number(resultIndices.carbonIndicator);
-            if(methodType === 'phoenix'){
+            if (methodType === 'phoenix') {
                 carbonPhoenix += Number(resultIndices.carbonIndicator);
             }
-            if(methodType === 'manual'){
+            if (methodType === 'manual') {
                 carbonManual += Number(resultIndices.carbonIndicator);
             }
         }
 
-        if(Number(resultIndices.bioIndicator) > 0){
+        if (Number(resultIndices.bioIndicator) > 0) {
             bio += Number(resultIndices.bioIndicator);
-            if(methodType === 'phoenix'){
+            if (methodType === 'phoenix') {
                 bioPhoenix += Number(resultIndices.bioIndicator);
             }
-            if(methodType === 'manual'){
+            if (methodType === 'manual') {
                 bioManual += Number(resultIndices.bioIndicator);
             }
         }
 
-        if(Number(resultIndices.aguaIndicator) > 0){
+        if (Number(resultIndices.aguaIndicator) > 0) {
             agua += Number(resultIndices.aguaIndicator)
-            if(methodType === 'phoenix'){
+            if (methodType === 'phoenix') {
                 aguaPhoenix += Number(resultIndices.aguaIndicator);
             }
-            if(methodType === 'manual'){
+            if (methodType === 'manual') {
                 aguaManual += Number(resultIndices.aguaIndicator);
             }
         }
 
-        if(Number(resultIndices.soloIndicator) > 0){
+        if (Number(resultIndices.soloIndicator) > 0) {
             solo += Number(resultIndices.soloIndicator)
-            if(methodType === 'phoenix'){
+            if (methodType === 'phoenix') {
                 soloPhoenix += Number(resultIndices.soloIndicator);
             }
-            if(methodType === 'manual'){
+            if (methodType === 'manual') {
                 soloManual += Number(resultIndices.soloIndicator);
             }
         }
 
-        await api.put('network-impact',{
+        await api.put('network-impact', {
             carbon,
             agua,
             bio,
-            solo, 
+            solo,
             id: '1'
         });
 
-        if(methodType === 'phoenix'){
-            await api.put('network-impact',{
+        if (methodType === 'phoenix') {
+            await api.put('network-impact', {
                 carbon: carbonPhoenix,
                 agua: aguaPhoenix,
                 bio: bioPhoenix,
-                solo: soloPhoenix, 
+                solo: soloPhoenix,
                 id: '2'
             });
         }
-        if(methodType === 'manual'){
-            await api.put('network-impact',{
+        if (methodType === 'manual') {
+            await api.put('network-impact', {
                 carbon: carbonManual,
                 agua: aguaManual,
                 bio: bioManual,
-                solo: soloManual, 
+                solo: soloManual,
                 id: '3'
             });
         }
-        await api.put('/transactions-open/finish', {id: transactions[0].id});
+        await api.put('/transactions-open/finish', { id: transactions[0].id });
         setLoadingTransaction(false);
     }
 
     //----------- FINISH INSPECTION ---------------------^^^^^^^^
 
-    async function requestInspection(){
+    async function requestInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
         RequestInspection(walletAddress)
-        .then(res => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
-            });
-            setLoadingTransaction(false);
-
-            const dataNotification = {
-                text1: 'Request new inspection', 
-                text2: ''
-            }
-
-            if(res.type === 'success'){
-                api.post('/notifications/send', {
-                    from: walletAddress,
-                    group: 'inspectors',
-                    type: 'request-inspection', 
-                    data: JSON.stringify(dataNotification),
-                    for: 'inspectors'
-                });
-
-                api.post('/publication/new', {
-                    userId: userData?.id,
-                    type: 'request-inspection',
-                    origin: 'platform',
-                    additionalData: JSON.stringify({
-                        userData
-                    })
-                });
-
-                api.put('/transactions-open/finish', {id: transactions[0].id});
-                setTransactions([]);
-            }
-
-            
-            
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            console.log(message);
-            if(message.includes("Request OPEN or ACCEPTED")){
+            .then(res => {
                 setLogTransaction({
-                    type: 'error',
-                    message: 'Request OPEN or ACCEPTED',
-                    hash: ''
-                })
-                return;
-            }
-            if(message.includes("Recent inspection")){
-                setLogTransaction({
-                    type: 'error',
-                    message: 'Recent inspection!',
-                    hash: ''
-                })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
+                setLoadingTransaction(false);
+
+                const dataNotification = {
+                    text1: 'Request new inspection',
+                    text2: ''
+                }
+
+                if (res.type === 'success') {
+                    api.post('/notifications/send', {
+                        from: walletAddress,
+                        group: 'inspectors',
+                        type: 'request-inspection',
+                        data: JSON.stringify(dataNotification),
+                        for: 'inspectors'
+                    });
+
+                    api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'request-inspection',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            userData
+                        })
+                    });
+
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    setTransactions([]);
+                }
+
+
+
             })
-        })
-        
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
+                if (message.includes("Recent inspection")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Recent inspection!',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            })
+
     }
 
-    async function handleRequestSepolia(){
-        if(loading) return;
-        try{
+    async function handleRequestSepolia() {
+        if (loading) return;
+        try {
             setLoadingData(true);
             await api.post('/request-faucet', {
                 wallet: walletAddress
             })
             alert('Requisição feita com sucesso! Em instantes nossa equipe enviará ETH para você')
-            emailjs.send('service_alygxgf', 'template_elsj08i', {walletAddress}, 'kuy2D_QzG95P7COQI')
-            .then(() => {
-            })
-            .catch(() => {
+            emailjs.send('service_alygxgf', 'template_elsj08i', { walletAddress }, 'kuy2D_QzG95P7COQI')
+                .then(() => {
+                })
+                .catch(() => {
 
-            })
-        }catch(err){
+                })
+        } catch (err) {
             console.log(err);
-        }finally{
+        } finally {
             setLoadingData(false);
         }
     }
 
-    async function buyTokens(){
+    async function buyTokens() {
         setModalTransaction(true);
         setLoadingTransaction(true);
         BuyRCT(walletAddress, additionalData?.value)
-        .then(res => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
-            });
-            setLoadingTransaction(false);
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
+                setLoadingTransaction(false);
 
-            if(res.type === 'success'){
-                api.put('/transactions-open/finish', {id: transactions[0].id});
-                getBalanceAccount();
-                setTransactions([]);
-            }
-            
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            console.log(message);
-            if(message.includes("Request OPEN or ACCEPTED")){
+                if (res.type === 'success') {
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    getBalanceAccount();
+                    setTransactions([]);
+                }
+
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
-                    message: 'Request OPEN or ACCEPTED',
+                    message: 'Something went wrong with the transaction, please try again!',
                     hash: ''
                 })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
             })
-        })
     }
 
     //------------ BURN TOKENS ---------------
-    async function burnTokens(){
+    async function burnTokens() {
         setModalTransaction(true);
         setLoadingTransaction(true);
-        BurnTokens(walletAddress, String(additionalData?.value)+'000000000000000000')
-        .then(res => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
-            });
+        BurnTokens(walletAddress, String(additionalData?.value) + '000000000000000000')
+            .then(res => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
 
-            if(res.type === 'success'){
-                api.put('/transactions-open/finish', {id: transactions[0].id});
-                registerTokensApi(additionalData?.value, res.hashTransaction)
-                getBalanceAccount();
-                setTransactions([]);
-            }
-            
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            console.log(message);
-            if(message.includes("Request OPEN or ACCEPTED")){
+                if (res.type === 'success') {
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    registerTokensApi(additionalData?.value, res.hashTransaction)
+                    getBalanceAccount();
+                    setTransactions([]);
+                }
+
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
-                    message: 'Request OPEN or ACCEPTED',
+                    message: 'Something went wrong with the transaction, please try again!',
                     hash: ''
                 })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
             })
-        })
     }
 
-    async function registerTokensApi(tokens, hash){
-        const additionalData = {
+    async function registerTokensApi(tokens, hash) {
+        const addData = {
             userData,
             tokens: Number(tokens),
             transactionHash: hash,
             reason: additionalData?.reason
         }
 
-        try{
+        try {
             await api.post('/tokens-burned', {
                 wallet: walletAddress.toUpperCase(),
                 tokens: Number(tokens),
@@ -2182,219 +2251,486 @@ export function Checkout(){
                 userId: userData?.id,
                 type: 'contribute-tokens',
                 origin: 'platform',
-                additionalData: JSON.stringify(additionalData),
+                additionalData: JSON.stringify(addData),
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
-        }finally{
+        } finally {
             setLoadingTransaction(false);
         }
     }
     //------------ BURN TOKENS ---------------
 
     //------------ Invalidate inspection ---------------
-    async function invalidateInspection(){
+    async function invalidateInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
         InvalidateInspection(walletAddress, additionalData?.inspection?.id, additionalData?.justification)
-        .then(async (res) => {
-            setLogTransaction({
-                type: res.type,
-                message: res.message,
-                hash: res.hashTransaction
-            });
-
-            if(res.type === 'success'){
-                api.put('/transactions-open/finish', {id: transactions[0].id});
-                getBalanceAccount();
-                setTransactions([]);
-
-                await api.post('/publication/new', {
-                    userId: userData?.id,
-                    type: 'vote-invalidate-inspection',
-                    origin: 'platform',
-                    additionalData: JSON.stringify(additionalData),
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
                 });
 
-            }
-            setLoadingTransaction(false);
-        })
-        .catch(err => {
-            setLoadingTransaction(false);
-            const message = String(err.message);
-            console.log(message);
-            if(message.includes("Request OPEN or ACCEPTED")){
+                if (res.type === 'success') {
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    getBalanceAccount();
+                    setTransactions([]);
+
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'vote-invalidate-inspection',
+                        origin: 'platform',
+                        additionalData: JSON.stringify(additionalData),
+                    });
+
+                }
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
                 setLogTransaction({
                     type: 'error',
-                    message: 'Request OPEN or ACCEPTED',
+                    message: 'Something went wrong with the transaction, please try again!',
                     hash: ''
                 })
-                return;
-            }
-            setLogTransaction({
-                type: 'error',
-                message: 'Something went wrong with the transaction, please try again!',
-                hash: ''
             })
-        })
     }
 
-    return(
+    //--------------- Relatório de desenvolvimento-----------------
+    async function sendDevReport() {
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        InvalidateInspection(walletAddress, additionalData?.inspection?.id, additionalData?.justification)
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
+
+                if (res.type === 'success') {
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    getBalanceAccount();
+                    setTransactions([]);
+
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'vote-invalidate-inspection',
+                        origin: 'platform',
+                        additionalData: JSON.stringify(additionalData),
+                    });
+
+                }
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            })
+    }
+
+    //----------------Sacar tokens -------------------------
+    async function withdraw() {
+        if (userData?.userType === 4) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawDeveloper(walletAddress)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+                    console.log(res)
+
+                    if (res.type === 'success') {
+                        api.put('/transactions-open/finish', { id: transactions[0].id });
+                        getBalanceAccount();
+                        setTransactions([]);
+
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 1) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawProducer(walletAddress)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+                    console.log(res)
+
+                    if (res.type === 'success') {
+                        api.put('/transactions-open/finish', { id: transactions[0].id });
+                        getBalanceAccount();
+                        setTransactions([]);
+
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 2) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawInspector(walletAddress)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+                    console.log(res)
+
+                    if (res.type === 'success') {
+                        api.put('/transactions-open/finish', { id: transactions[0].id });
+                        getBalanceAccount();
+                        setTransactions([]);
+
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 3) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawResearcher(walletAddress)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+                    console.log(res)
+
+                    if (res.type === 'success') {
+                        api.put('/transactions-open/finish', { id: transactions[0].id });
+                        getBalanceAccount();
+                        setTransactions([]);
+
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+    }
+
+    return (
         <div className="flex flex-col items-center w-screen h-screen bg-[#062C01]">
             {walletAddress === '' ? (
                 <>
-                <div className="flex flex-col h-screen w-screen items-center justify-center">
-                    <div className="max-w-[350px] w-full h-screen bg-checkout bg-contain bg-no-repeat bg-center flex flex-col justify-between px-3">
-                        <div className='mt-10'>
-                            <img
-                                src={require('../../assets/logo-branco.png')}
-                                className='w-[180px] object-contain'
-                            />
-                            <h2 className='font-bold text-xl text-white'>Payment System</h2>
+                    <div className="flex flex-col h-screen w-screen items-center justify-center">
+                        <div className="max-w-[350px] w-full h-screen bg-checkout bg-contain bg-no-repeat bg-center flex flex-col justify-between px-3">
+                            <div className='mt-10'>
+                                <img
+                                    src={require('../../assets/logo-branco.png')}
+                                    className='w-[180px] object-contain'
+                                />
+                                <h2 className='font-bold text-xl text-white'>Payment System</h2>
+                            </div>
+
+                            <h3 className='w-40 text-white text-3xl font-bold'>Transações simples e seguras</h3>
+
+                            <button
+                                className='px-3 py-2 rounded-lg bg-[#3E9EF5] font-bold text-white mt-2 mb-10'
+                                onClick={connect}
+                            >
+                                Sincronizar wallet
+                            </button>
                         </div>
-
-                        <h3 className='w-40 text-white text-3xl font-bold'>Transações simples e seguras</h3>
-
-                        <button 
-                            className='px-3 py-2 rounded-lg bg-[#3E9EF5] font-bold text-white mt-2 mb-10'
-                            onClick={connect}
-                        >
-                            Sincronizar wallet
-                        </button>
                     </div>
-                </div>
                 </>
             ) : (
                 <>
-                <div className="p-3 w-full max-w-[320px] flex flex-col">
-                    <img
-                        src={require('../../assets/logo-branco.png')}
-                        className='w-[100px] object-contain mt-3'
-                    />
-
-                    <div className='flex items-center justify-between my-3'>
-                        <div>
-                            <p className='font-bold text-white text-sm'>Olá, {userData?.name}</p>
-                            <p className='text-gray-200 text-xs' onClick={finishNewVersion}>Acompanhe aqui suas transações</p>
-                            <button
-                                className='font-bold text-red-500 text-xs'
-                                onClick={() => setWalletAddress('')}
-                            >
-                                Trocar wallet
-                            </button>
-                        </div>
-
+                    <div className="p-3 w-full max-w-[320px] flex flex-col">
                         <img
-                            src={imageProfile}
-                            className='w-[50px] h-[50px] rounded-full object-cover border-2'
+                            src={require('../../assets/logo-branco.png')}
+                            className='w-[100px] object-contain mt-3'
                         />
-                    </div>
 
-                    {balanceETH < 0.01 && (
-                        <button
-                            onClick={handleRequestSepolia}
-                            className='font-bold text-white text-center text-xs border-2 rounded-lg p-2'
-                        >Solicitar ETH</button>
-                    )}
-
-                    <div className="w-full h-[200px] flex flex-col justify-center p-2 bg-card bg-contain bg-center bg-no-repeat">
-                        <div className="flex flex-col">
-                            <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{walletAddress}</p>
-                            <p className="text-sm text-white">wallet</p>
-                        </div>
-
-                        <div className="flex items-center gap-5 mt-2">
-                            <div className="flex flex-col">
-                                <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceETH}</p>
-                                <p className="text-white text-sm">ETH</p>
+                        <div className='flex items-center justify-between my-3'>
+                            <div>
+                                <p className='font-bold text-white text-sm'>Olá, {userData?.name}</p>
+                                <p className='text-gray-200 text-xs' onClick={finishNewVersion}>Acompanhe aqui suas transações</p>
+                                <button
+                                    className='font-bold text-red-500 text-xs'
+                                    onClick={() => setWalletAddress('')}
+                                >
+                                    Trocar wallet
+                                </button>
                             </div>
 
+                            <img
+                                src={imageProfile}
+                                className='w-[50px] h-[50px] rounded-full object-cover border-2'
+                            />
+                        </div>
+
+                        {balanceETH < 0.01 && (
+                            <button
+                                onClick={handleRequestSepolia}
+                                className='font-bold text-white text-center text-xs border-2 rounded-lg p-2'
+                            >Solicitar ETH</button>
+                        )}
+
+                        {userData?.userType === 4 && (
+                            <button
+                                onClick={() => setModalDevReport(true)}
+                                className='font-bold text-white text-center text-xs border-2 rounded-lg p-2'
+                            >Relatório de contribuição</button>
+                        )}
+
+                        <div className="w-full h-[200px] flex flex-col justify-center p-2 bg-card bg-contain bg-center bg-no-repeat">
                             <div className="flex flex-col">
-                                <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceRCT}</p>
-                                <p className="text-white text-sm">RCT</p>
+                                <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{walletAddress}</p>
+                                <p className="text-sm text-white">wallet</p>
+                            </div>
+
+                            <div className="flex items-center gap-5 mt-2">
+                                <div className="flex flex-col">
+                                    <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceETH}</p>
+                                    <p className="text-white text-sm">ETH</p>
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{balanceRCT}</p>
+                                    <p className="text-white text-sm">RCT</p>
+                                </div>
                             </div>
                         </div>
+
+                        <p className='text-white'>Transação em fila</p>
+
+                        {transactions.length === 0 ? (
+                            <p className='font-bold text-center text-white'>Essa wallet não possui nenhuma transação em aberto</p>
+                        ) : (
+                            <>
+                                <div className='flex flex-col p-2 rounded-md w-full max-w-[320px] bg-[#0a4303]'>
+                                    <p className='font-bold text-sm flex gap-1 text-white'>
+                                        Tipo da transação:
+
+                                        <p className='font-normal'>
+                                            {transactions[0].type === 'register' && 'Cadastro'}
+                                            {transactions[0].type === 'request-inspection' && 'Solicitação de inspeção'}
+                                            {transactions[0].type === 'accept-inspection' && 'Aceitar inspeção'}
+                                            {transactions[0].type === 'realize-inspection' && 'Finalizar inspeção'}
+                                            {transactions[0].type === 'buy-tokens' && 'Compra de RCT'}
+                                            {transactions[0].type === 'burn-tokens' && 'Contribuição'}
+                                            {transactions[0].type === 'invalidate-inspection' && 'Invalidar inspeção'}
+                                            {transactions[0].type === 'dev-report' && 'Relatório de contribuição'}
+                                            {transactions[0].type === 'withdraw-tokens' && 'Sacar tokens'}
+                                        </p>
+                                    </p>
+
+                                    <button
+                                        className="w-full rounded-lg py-2 bg-[#3E9EF5] font-bold text-white mt-5"
+                                        onClick={executeTransaction}
+                                    >
+                                        Finalizar transação
+                                    </button>
+
+                                    <button
+                                        className="w-full rounded-md py-2 font-bold text-gray-500"
+                                        onClick={async () => setModalDescart(true)}
+                                    >
+                                        Descartar transação
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
-
-                    <p className='text-white'>Transação em fila</p>
-
-                    {transactions.length === 0 ? (
-                        <p className='font-bold text-center text-white'>Essa wallet não possui nenhuma transação em aberto</p>
-                    ) : (
-                        <>
-                        <div className='flex flex-col p-2 rounded-md w-full max-w-[320px] bg-[#0a4303]'>
-                            <p className='font-bold text-sm flex gap-1 text-white'>
-                                Tipo da transação: 
-
-                                <p className='font-normal'>
-                                    {transactions[0].type === 'register' && 'Cadastro'}
-                                    {transactions[0].type === 'request-inspection' && 'Solicitação de inspeção'}
-                                    {transactions[0].type === 'accept-inspection' && 'Aceitar inspeção'}
-                                    {transactions[0].type === 'realize-inspection' && 'Finalizar inspeção'}
-                                    {transactions[0].type === 'buy-tokens' && 'Compra de RCT'}
-                                    {transactions[0].type === 'burn-tokens' && 'Contribuição'}
-                                    {transactions[0].type === 'invalidate-inspection' && 'Invalidar inspeção'}
-                                </p>
-                            </p>
-
-                            <button 
-                                className="w-full rounded-lg py-2 bg-[#3E9EF5] font-bold text-white mt-5"
-                                onClick={executeTransaction}
-                            >
-                                Finalizar transação
-                            </button>
-
-                            <button 
-                                className="w-full rounded-md py-2 font-bold text-gray-500"
-                                onClick={async () => setModalDescart(true)}
-                            >
-                                Descartar transação
-                            </button>
-                        </div>
-                        </>
-                    )}
-                </div>
                 </>
             )}
 
             {loadingData && (
-                <Loading/>
+                <Loading />
             )}
 
             {modalDescart && (
                 <>
-                <ConfirmDescart
-                    close={async (confirm) => {
-                        if(confirm){
-                            setModalDescart(false);
-                            await api.put('/transactions-open/finish', {id: transactions[0].id});
-                            setTransactions([]);
-                            getDataWallet();
-                        }else{
-                            setModalDescart(false);
-                        }
-                    }}
-                />
+                    <ConfirmDescart
+                        close={async (confirm) => {
+                            if (confirm) {
+                                setModalDescart(false);
+                                await api.put('/transactions-open/finish', { id: transactions[0].id });
+                                setTransactions([]);
+                                getDataWallet();
+                            } else {
+                                setModalDescart(false);
+                            }
+                        }}
+                    />
                 </>
             )}
 
-            <div className="absolute z-50">
-            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
-                if(!loadingTransaction){
-                    setModalTransaction(open)
-                    setLoading(false);
-                    if(logTransaction.type === 'success'){
-                        alert('Transação finalizada com sucesso! Retorne ao App');
-                        setTransactions([]);
-                        getDataWallet();
-                    }
-                }
-            }}>
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
+            {modalDevReport && (
+                <SendReportDev
+                    close={() => setModalDevReport(false)}
+                    walletAddress={walletAddress}
+                    userData={userData}
                 />
-            </Dialog.Root>
+            )}
+
+            <div className="absolute z-50">
+                <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                    if (!loadingTransaction) {
+                        setModalTransaction(open)
+                        setLoading(false);
+                        if (logTransaction.type === 'success') {
+                            alert('Transação finalizada com sucesso! Retorne ao App');
+                            setTransactions([]);
+                            getDataWallet();
+                        }
+                    }
+                }}>
+                    <LoadingTransaction
+                        loading={loadingTransaction}
+                        logTransaction={logTransaction}
+                    />
+                </Dialog.Root>
             </div>
         </div>
     )
