@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useParams } from 'react-router';
-import {save, get} from '../config/infura';
 import Loading from './Loading';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { api } from '../services/api';
 
-export function ModalChangePassword({close}){
-    const {walletAddress} = useParams();
+export function ModalChangePassword({close, wallet}){
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,7 +25,7 @@ export function ModalChangePassword({close}){
         try{
             setLoading(true);
             await api.put('/auth/update-password',{
-                wallet: walletAddress,
+                wallet: wallet,
                 password
             })
             setPassword('');

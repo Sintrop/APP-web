@@ -802,7 +802,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                 inspectionId: String(data.id),
                 createdBy: String(data.createdBy),
                 createdAt: String(data.createdAtTimestamp),
-                userWallet: String('0XE85C393B185D9A57D68A3129E311FDA8EB0622DB').toUpperCase(),
+                userWallet: String('0X93CC2BF942A89935368B04CB5AA9A3AC23F38939').toUpperCase(),
                 propertyData
             })
         }catch(err){
@@ -1952,7 +1952,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                         <button
                             className='bg-[#229B13] text-white h-10 w-28 rounded-lg'
                             onClick={() => {
-                                handleAccept();
+                                //handleAccept();
                             }}
                         >
                             {t('Accept')}
@@ -1971,7 +1971,7 @@ export function InspectionItem({data, type, reload, statusExpired, startOpen}){
                         <button
                             className='bg-[#229B13] text-white h-10 w-36 rounded-lg'
                             onClick={() => {
-                                setOpenModalChooseMethod(true);
+                                //setOpenModalChooseMethod(true);
                             }}
                         >
                             {t('Realize Inspection')}

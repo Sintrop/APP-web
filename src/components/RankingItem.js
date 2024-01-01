@@ -5,6 +5,7 @@ import { useMainContext } from '../hooks/useMainContext';
 import { api } from '../services/api';
 import { NumericFormat } from 'react-number-format';
 import axios from 'axios';
+import {get} from '../config/infura';
 
 export function RankingItem({data, position, researchersCenter, developersCenter, filterSelect}){
     const {setWalletSelected} = useMainContext();
@@ -26,7 +27,7 @@ export function RankingItem({data, position, researchersCenter, developersCenter
     },[]);
 
     async function getImageProfile(photo){
-        const response = await axios.get(`https://ipfs.io/ipfs/${photo}`);
+        const response = await get(`https://ipfs.io/ipfs/${photo}`);
         
         if(response.data.includes('base64')){
             setImageProfile(response.data);

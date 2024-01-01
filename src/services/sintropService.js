@@ -29,3 +29,21 @@ export const InvalidateInspection = async (walletAddress, inspectionID, justific
         hashTransaction
     }
 }
+
+export const GetInspection = async (inspectionID) => {
+    let inspection = [];
+    await SintropContract.methods.getInspection(inspectionID).call({from: sintropContractAddress})
+    .then((res) => {
+        inspection = res;
+    })
+    return inspection;
+}
+
+export const GetIsa = async (inspectionId) => {
+    let isas = []
+    await SintropContract.methods.getIsa(inspectionId).call({from: sintropContractAddress})
+    .then((res) => {
+        isas = res;
+    })
+    return isas;
+}

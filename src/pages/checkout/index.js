@@ -6,15 +6,6 @@ import Web3 from 'web3';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from 'react-router';
-import { addProducer, addActivist, addInspector, addDeveloper } from '../../services/registerService';
-import { AcceptInspection, GetInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
-import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
-import { addSupporter } from '../../services/supporterService';
-import { InvalidateInspection } from '../../services/sintropService';
-import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
-import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
-import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
-import {WithdrawTokens as WithdrawInspector} from '../../services/inspectorService';
 import { format } from 'date-fns';
 import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
@@ -24,6 +15,23 @@ import axios from 'axios';
 import emailjs from '@emailjs/browser';
 import { ConfirmDescart } from './ConfirmDescart';
 import { SendReportDev } from './SendReportDev';
+import { ToastContainer, toast} from 'react-toastify';
+import { ChangePassword } from './ChangePassword';
+import "react-toastify/dist/ReactToastify.css";
+import { FiRefreshCcw } from "react-icons/fi";
+import { ModalPublishResearche } from './ModalPublishResearche';
+
+//Services Web3
+import { addProducer, addInspector, addDeveloper } from '../../services/registerService';
+import { AcceptInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
+import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
+import { addSupporter } from '../../services/supporterService';
+import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
+import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
+import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
+import { WithdrawTokens as WithdrawInspector } from '../../services/inspectorService';
+import { GetInspection, GetIsa, InvalidateInspection } from '../../services/sintropService';
+import { addActivist } from '../../services/activistService';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const web3js = new Web3(window.ethereum);
@@ -45,6 +53,8 @@ export function Checkout() {
     const [balanceRCT, setBalanceRCT] = useState(0);
     const [modalDescart, setModalDescart] = useState(false);
     const [modalDevReport, setModalDevReport] = useState(false);
+    const [modalChangePassword, setModalChangePassword] = useState(false);
+    const [modalPublishResearche, setModalPublishResearche] = useState(false);
 
     useEffect(() => {
         if (walletAddress !== '') {
@@ -113,7 +123,6 @@ export function Checkout() {
     }
 
     async function executeTransaction() {
-        setLoading(true);
         if (transactions[0].type === 'register') {
             register();
         }
@@ -359,6 +368,64 @@ export function Checkout() {
                         setLogTransaction({
                             type: 'error',
                             message: 'This developer already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                });
+        }
+
+        if (userData.userType === 6) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addActivist(walletAddress, userData?.name, userData?.imgProfileUrl)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/on-blockchain', { userWallet: walletAddress })
+                        await api.put('/transactions-open/finish', { id: transactions[0].id });
+
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This supporter already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This supporter already exist',
                             hash: ''
                         })
                         return;
@@ -2285,8 +2352,8 @@ export function Checkout() {
                         additionalData: JSON.stringify(additionalData),
                     });
 
+                    reduceImpact(additionalData?.inspection?.id)
                 }
-                setLoadingTransaction(false);
             })
             .catch(err => {
                 setLoadingTransaction(false);
@@ -2306,6 +2373,64 @@ export function Checkout() {
                     hash: ''
                 })
             })
+    }
+
+    async function reduceImpact(id) {
+        const inspection = await GetInspection(id);
+
+        if (Number(inspection?.validationsCount) !== 2) {
+            setLoadingTransaction(false);
+            return;
+        }
+
+        const isas = await GetIsa(id);
+
+        const carbon = isas.filter(item => item.categoryId === '1');
+        const bio = isas.filter(item => item.categoryId === '2');
+        const water = isas.filter(item => item.categoryId === '3');
+        const soil = isas.filter(item => item.categoryId === '4');
+
+        const response = await api.get('/network-impact');
+        const impact = response.data.impact;
+        const networkImpact = impact.filter(item => item.id === '1');
+        const sintropImpact = impact.filter(item => item.id === '2');
+
+        const newCarbonNetwork = networkImpact[0].carbon + Math.abs(carbon[0].indicator);
+        const newBioNetwork = networkImpact[0].bio - Math.abs(bio[0].indicator);
+        const newWaterNetwork = networkImpact[0].agua - Math.abs(water[0].indicator);
+        const newSoilNetwork = networkImpact[0].solo - Math.abs(soil[0].indicator);
+
+        try {
+            await api.put('/network-impact', {
+                carbon: newCarbonNetwork,
+                agua: newWaterNetwork,
+                bio: newBioNetwork,
+                solo: newSoilNetwork,
+                id: '1'
+            });
+        } catch (err) {
+
+        }
+
+        const newCarbonSintrop = sintropImpact[0].carbon + Math.abs(carbon[0].indicator);
+        const newBioSintrop = sintropImpact[0].bio - Math.abs(bio[0].indicator);
+        const newWaterSintrop = sintropImpact[0].agua - Math.abs(water[0].indicator);
+        const newSoilSintrop = sintropImpact[0].solo - Math.abs(soil[0].indicator);
+
+        try {
+            await api.put('/network-impact', {
+                carbon: newCarbonSintrop,
+                agua: newWaterSintrop,
+                bio: newBioSintrop,
+                solo: newSoilSintrop,
+                id: '2'
+            });
+        } catch (err) {
+
+        }
+
+
+        setLoadingTransaction(false);
     }
 
     //--------------- Relatório de desenvolvimento-----------------
@@ -2594,7 +2719,7 @@ export function Checkout() {
                         <div className='flex items-center justify-between my-3'>
                             <div>
                                 <p className='font-bold text-white text-sm'>Olá, {userData?.name}</p>
-                                <p className='text-gray-200 text-xs' onClick={finishNewVersion}>Acompanhe aqui suas transações</p>
+                                <p className='text-gray-200 text-xs' onClick={() => { }}>Acompanhe aqui suas transações</p>
                                 <button
                                     className='font-bold text-red-500 text-xs'
                                     onClick={() => setWalletAddress('')}
@@ -2623,6 +2748,18 @@ export function Checkout() {
                             >Relatório de contribuição</button>
                         )}
 
+                        {userData?.userType === 3 && (
+                            <button
+                                onClick={() => setModalPublishResearche(true)}
+                                className='font-bold text-white text-center text-xs border-2 rounded-lg p-2'
+                            >Publicar pesquisa</button>
+                        )}
+
+                        <button
+                            onClick={() => setModalChangePassword(true)}
+                            className='font-bold text-white text-center text-xs border-2 rounded-lg p-2 mt-2'
+                        >Alterar senha do app</button>
+
                         <div className="w-full h-[200px] flex flex-col justify-center p-2 bg-card bg-contain bg-center bg-no-repeat">
                             <div className="flex flex-col">
                                 <p className="text-white font-bold text-sm max-w-[40ch] text-ellipsis overflow-hidden">{walletAddress}</p>
@@ -2642,10 +2779,18 @@ export function Checkout() {
                             </div>
                         </div>
 
-                        <p className='text-white'>Transação em fila</p>
+                        <div className='flex items-center justify-between'>
+                            <p className='text-white'>Transação em aberto</p>
+
+                            <button
+                                onClick={() => getDataWallet()}
+                            >
+                                <FiRefreshCcw size={20} color='white'/>
+                            </button>
+                        </div>
 
                         {transactions.length === 0 ? (
-                            <p className='font-bold text-center text-white'>Essa wallet não possui nenhuma transação em aberto</p>
+                            <p className='font-bold text-center text-white mt-2'>Essa wallet não possui nenhuma transação em aberto</p>
                         ) : (
                             <>
                                 <div className='flex flex-col p-2 rounded-md w-full max-w-[320px] bg-[#0a4303]'>
@@ -2689,6 +2834,10 @@ export function Checkout() {
                 <Loading />
             )}
 
+            {loading && (
+                <Loading/>
+            )}
+
             {modalDescart && (
                 <>
                     <ConfirmDescart
@@ -2714,13 +2863,33 @@ export function Checkout() {
                 />
             )}
 
+            {modalChangePassword && (
+                <ChangePassword
+                    walletAddress={walletAddress}
+                    close={(success) => {
+                        if(success){
+                            setModalChangePassword(false);
+                            toast.success('Senha alterada com sucesso!')
+                        }else{
+                            setModalChangePassword(false);
+                        }
+                    }}
+                />
+            )}
+
+            <Dialog.Root open={modalPublishResearche} onOpenChange={(open) => setModalPublishResearche(open)}>
+                <ModalPublishResearche 
+                    close={() => setModalPublishResearche(false)}
+                    walletAddress={walletAddress}
+                />
+            </Dialog.Root>
+
             <div className="absolute z-50">
                 <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
                     if (!loadingTransaction) {
                         setModalTransaction(open)
                         setLoading(false);
                         if (logTransaction.type === 'success') {
-                            alert('Transação finalizada com sucesso! Retorne ao App');
                             setTransactions([]);
                             getDataWallet();
                         }
@@ -2732,6 +2901,8 @@ export function Checkout() {
                     />
                 </Dialog.Root>
             </div>
+
+            <ToastContainer position='top-center'/>
         </div>
     )
 }
