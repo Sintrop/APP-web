@@ -32,6 +32,7 @@ import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersSe
 import { WithdrawTokens as WithdrawInspector } from '../../services/inspectorService';
 import { GetInspection, GetIsa, InvalidateInspection } from '../../services/sintropService';
 import { addActivist } from '../../services/activistService';
+import {addValidation} from '../../services/validatorService';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const web3js = new Web3(window.ethereum);
@@ -149,6 +150,9 @@ export function Checkout() {
         }
         if (transactions[0].type === 'withdraw-tokens') {
             withdraw();
+        }
+        if (transactions[0].type === 'invalidate-user') {
+            invalidateUser();
         }
     }
 
@@ -2433,6 +2437,70 @@ export function Checkout() {
         setLoadingTransaction(false);
     }
 
+    async function invalidateUser() {
+        let walletToVote = '';
+
+        if(additionalData?.userToVote?.userType === 1){
+            walletToVote = additionalData?.userToVote?.producerWallet;
+        }
+        if(additionalData?.userToVote?.userType === 2){
+            walletToVote = additionalData?.userToVote?.inspectorWallet;
+        }
+        if(additionalData?.userToVote?.userType === 3){
+            walletToVote = additionalData?.userToVote?.researcherWallet;
+        }
+        if(additionalData?.userToVote?.userType === 4){
+            walletToVote = additionalData?.userToVote?.developerWallet;
+        }
+        if(additionalData?.userToVote?.userType === 7){
+            walletToVote = additionalData?.userToVote?.supporterWallet;
+        }
+
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        addValidation(walletAddress, walletToVote, additionalData?.justification)
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
+
+                if (res.type === 'success') {
+                    api.put('/transactions-open/finish', { id: transactions[0].id });
+                    getBalanceAccount();
+                    setTransactions([]);
+
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'vote-invalidate-user',
+                        origin: 'platform',
+                        additionalData: JSON.stringify(additionalData),
+                    });
+
+                    setLoadingTransaction(false);
+                }
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                console.log(message);
+                if (message.includes("Request OPEN or ACCEPTED")) {
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Request OPEN or ACCEPTED',
+                        hash: ''
+                    })
+                    return;
+                }
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            })
+    }
+
     //--------------- Relatório de desenvolvimento-----------------
     async function sendDevReport() {
         setModalTransaction(true);
@@ -2807,6 +2875,7 @@ export function Checkout() {
                                             {transactions[0].type === 'invalidate-inspection' && 'Invalidar inspeção'}
                                             {transactions[0].type === 'dev-report' && 'Relatório de contribuição'}
                                             {transactions[0].type === 'withdraw-tokens' && 'Sacar tokens'}
+                                            {transactions[0].type === 'invalidate-user' && 'Invalidar usuário'}
                                         </p>
                                     </p>
 
