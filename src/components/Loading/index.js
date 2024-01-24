@@ -2,7 +2,7 @@ import React from 'react';
 import './loading.css';
 import Loader from '../Loader';
 
-export default function Loading(){
+export default function Loading({text}){
     return(
         <div className="container-loading">
             <div className="card-loading">
@@ -11,6 +11,10 @@ export default function Loading(){
                     type='hash'
                     noText
                 />
+
+                {text && (
+                    <p className='text-xs text-center'>{text}</p>
+                )}
             </div>
         </div>
     )

@@ -14,6 +14,7 @@ import { PrivateSales } from "../pages/privateSales";
 import {Register} from "../pages/register";
 import { Checkout } from "../pages/checkout";
 import { ViewPdf } from "../pages/ViewPdf";
+import {Education} from '../pages/Education';
 
 export default function Router(){
     return(
@@ -33,6 +34,7 @@ export default function Router(){
                 <Route exact path="/register/:walletAddress" element={<Register/>}/>
                 <Route exact path="/checkout" element={<Checkout/>}/>
                 <Route exact path="/view-pdf/:hash" element={<ViewPdf/>}/>
+                <Route exact path="/education" element={<Education/>}/>
             </Routes>
         </BrowserRouter>
     );
