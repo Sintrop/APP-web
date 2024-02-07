@@ -618,31 +618,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bodyInsumos,
             bodyResultInsumos,
             bodyDegradacao,
-            bodyArvoresAvulsas,
-            bodyCoordsZones,
             degenerationCarbon,
             degenerationWater,
             degenerationSoil,
             degenerationBio,
-            totalArvoresAvulsas,
-            saldoCarbonArvores,
-            saldoWaterArvores,
-            saldoBioArvores,
-            saldoCarbonArvoresZones,
-            saldoWaterArvoresZones,
-            saldoBioArvoresZones,
             saldoCarbonAnaliseSoloZones,
             saldoSoilAnaliseSoloZones,
-            bodyPicturesZone,
-            bodyCoordsSubZones,
-            bodyPicturesSubZones,
-            bodyArvoresSubZone,
-            bodyArvoresZone,
-            bodyImpactCarbonArvoresZone,
-            bodyImpactWaterArvoresZone,
             bodyAnaliseSoloZones,
-            bodyInsetosAnaliseSoloZones,
-            bioInsetos,
             bodyCoordsZonesTeste,
             bodySampling1,
             bodyAguaEstocada,
@@ -655,7 +637,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bodyCarbonoEstocado,
             volumeTotalZonas,
             estimatedTreesTotal,
-            bodyEstimatedTrees
+            bodyEstimatedTrees,
+            bodySoilBioPhoto,
+            bodySoilBio,
+            totalSoilBio,
+            rowPhotosZone,
+            totalWaterSprings,
+            bodySprings
         } = pdfData;
 
         let isaCarbon = '';
@@ -666,97 +654,97 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         //Transforma o isaindex em uma string legivel;
         if (isas) {
             if (isas.carbon === 0) {
-                isaCarbon = 'Regenerativo 3 = +20 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 3 = +25 Pontos de Regeneração'
             }
             if (isas.carbon === 1) {
                 isaCarbon = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if (isas.carbon === 2) {
-                isaCarbon = 'Regenerativo 1 = +5 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 1 = +1 Pontos de Regeneração'
             }
             if (isas.carbon === 3) {
                 isaCarbon = 'Neutro = 0 Pontos de Regeneração'
             }
             if (isas.carbon === 4) {
-                isaCarbon = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
+                isaCarbon = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
             }
             if (isas.carbon === 5) {
                 isaCarbon = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if (isas.carbon === 6) {
-                isaCarbon = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
+                isaCarbon = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
             if (isas.water === 0) {
-                isaWater = 'Regenerativo 3 = +20 Pontos de Regeneração'
+                isaWater = 'Regenerativo 3 = +25 Pontos de Regeneração'
             }
             if (isas.water === 1) {
                 isaWater = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if (isas.water === 2) {
-                isaWater = 'Regenerativo 1 = +5 Pontos de Regeneração'
+                isaWater = 'Regenerativo 1 = +1 Pontos de Regeneração'
             }
             if (isas.water === 3) {
                 isaWater = 'Neutro = 0 Pontos de Regeneração'
             }
             if (isas.water === 4) {
-                isaWater = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
+                isaWater = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
             }
             if (isas.water === 5) {
                 isaWater = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if (isas.water === 6) {
-                isaWater = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
+                isaWater = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
             if (isas.soil === 0) {
-                isaSoil = 'Regenerativo 3 = +20 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 3 = +25 Pontos de Regeneração'
             }
             if (isas.soil === 1) {
                 isaSoil = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if (isas.soil === 2) {
-                isaSoil = 'Regenerativo 1 = +5 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 1 = +1 Pontos de Regeneração'
             }
             if (isas.soil === 3) {
                 isaSoil = 'Neutro = 0 Pontos de Regeneração'
             }
             if (isas.soil === 4) {
-                isaSoil = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
+                isaSoil = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
             }
             if (isas.soil === 5) {
                 isaSoil = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if (isas.soil === 6) {
-                isaSoil = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
+                isaSoil = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
             if (isas.bio === 0) {
-                isaBio = 'Regenerativo 3 = +20 Pontos de Regeneração'
+                isaBio = 'Regenerativo 3 = +25 Pontos de Regeneração'
             }
             if (isas.bio === 1) {
                 isaBio = 'Regenerativo 2 = +10 Pontos de Regeneração'
             }
             if (isas.bio === 2) {
-                isaBio = 'Regenerativo 1 = +5 Pontos de Regeneração'
+                isaBio = 'Regenerativo 1 = +1 Pontos de Regeneração'
             }
             if (isas.bio === 3) {
                 isaBio = 'Neutro = 0 Pontos de Regeneração'
             }
             if (isas.bio === 4) {
-                isaBio = 'Não Regenerativo 1 = -5 Pontos de Regeneração'
+                isaBio = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
             }
             if (isas.bio === 5) {
                 isaBio = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
             }
             if (isas.bio === 6) {
-                isaBio = 'Não Regenerativo 3 = -20 Pontos de Regeneração'
+                isaBio = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
             }
         }
 
@@ -890,6 +878,19 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         body: [
                             [{ text: 'Nome', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Coordenadas', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Área [m²]', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyCoordsZonesTeste
+                        ]
+                    },
+                    style: 'table'
+                },
+                {
+                    text: `Fotos das zonas:`,
+                    style: 'label'
+                },
+                {
+                    table: {
+                        body: [
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ...rowPhotosZone
                         ]
                     },
                     style: 'table'
@@ -1035,19 +1036,27 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     style: 'subTitle'
                 },
                 {
+                    table: {
+                        body: [
+                            [{ text: 'Tipo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ...bodyBio
+                        ]
+                    }
+                },
+                {
                     text: `Fotos Registradas:`,
                     style: 'label'
                 },
                 {
                     ul: bioPictures
                 },
+                
                 {
-                    table: {
-                        body: [
-                            [{ text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3' }],
-                            ...bodyBio
-                        ]
-                    }
+                    text: `Biodiversidade no solo`,
+                    style: 'label'
+                },
+                {
+                    ul: bodySoilBioPhoto
                 },
                 {
                     text: `-Cálculo da biodiversidade:`,
@@ -1056,6 +1065,18 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 {
                     text: `Biodiversidade total = Biodiversidade registrada ^ 2`,
                     style: 'explicacaoCalc'
+                },
+                {
+                    text: `Nascentes dentro da propriedade:`,
+                    style: 'label'
+                },
+                {
+                    table: {
+                        body: [
+                            [{ text: 'Geolocalização', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Fluxo de água', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ...bodySprings
+                        ]
+                    }
                 },
                 {
                     text: `5) Resultado Final:`,
@@ -1068,13 +1089,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             ['Insumos', `${degenerationCarbon.toFixed(2).replace('.', ',')}`, `${degenerationWater.toFixed(2).replace('.', ',')}`, `${degenerationSoil.toFixed(2).replace('.', ',')}`, `${degenerationBio.toFixed(0)}`],
                             ['Árvores', `${((totalCarbonEstocadoZones * -1) * 1000).toFixed(2).replace('.', ',')}`, `${totalAguaEstocadaZones.toFixed(2).replace('.', ',')}`, `0`, `0`],
                             ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`, `${saldoSoilAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`],
-                            ['Biodiversidade', '0', '0', '0', `${(Number(bioPictures.length) ** 2).toFixed(0)}`],
+                            ['Biodiversidade', '0', '0', '0', `${((Number(bioPictures.length) + totalSoilBio) ** 2).toFixed(0)}`],
+                            ['Nascentes', '0', `${Number(totalWaterSprings).toFixed(2)}`, '0', `0`],
                             [
                                 { text: 'Total', style: 'tableHeader' },
                                 { text: `${(degenerationCarbon + saldoCarbonAnaliseSoloZones + ((totalCarbonEstocadoZones * -1) * 1000)).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
-                                { text: `${(degenerationWater + totalAguaEstocadaZones).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
+                                { text: `${(degenerationWater + totalAguaEstocadaZones + totalWaterSprings).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
                                 { text: `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
-                                { text: `${(degenerationBio + (Number(bioPictures.length) ** 2)).toFixed(0)}`, style: 'tableHeader' },
+                                { text: `${(degenerationBio + ((Number(bioPictures.length) + totalSoilBio) ** 2)).toFixed(0)}`, style: 'tableHeader' },
                             ]
                         ]
                     },
@@ -1181,7 +1203,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
     }
 
-    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity) {
+    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, soilBiodiversity, springs) {
         const indiceAnaliseSolo = indices.filter(item => item.id === '14');
         const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
         const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
@@ -1233,13 +1255,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             }
         }
 
-        //Filtra os indices das árvores
-        // const ArvoreMuda = resultCategories.filter(item => item.categoryId === '9');
-        // const ArvoreJovem = resultCategories.filter(item => item.categoryId === '10');
-        // const ArvoreAdulta = resultCategories.filter(item => item.categoryId === '11');
-        // const ArvoreAncia = resultCategories.filter(item => item.categoryId === '12');
-
-
         let bodyResultInsumos = [];
 
         //Variaveis da degeneração
@@ -1249,22 +1264,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let degenerationSoil = 0;
         let degenerationBio = 0;
 
-        //Variaveis das arvores
-        let bodyArvoresAvulsas = [];
-        let totalArvoresAvulsas = 0;
-        let saldoCarbonArvores = 0;
-        let saldoWaterArvores = 0;
-        let saldoBioArvores = 0;
-
         //Variaveis da biodiversidade
         let bioPictures = [];
-        let bioInsetos = 0;
         let bodyBio = [];
 
         //Cria a lista de link das fotos da biodiversidade
         for (var i = 0; i < resultBiodiversity.length; i++) {
             let dataBio = {
-                text: `ipfs.io/ipfs/${resultBiodiversity[i].photo}`,
+                text: `${resultBiodiversity[i].photo}`,
                 link: `https://${window.location.host}/view-image/${resultBiodiversity[i].photo}`,
                 style: 'link'
             }
@@ -1273,14 +1280,48 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         let rowBio = [
+            'Fotos',
             `${resultBiodiversity.length}`,
-            `${resultBiodiversity.length} ^ 2`,
-            `${(Number(resultBiodiversity.length) ** 2).toFixed(0)}`
+            ``,
+            ``
         ];
         bodyBio.push(rowBio);
 
+        //Calculo de biodiversidade no solo
+        let totalSoilBio = 0;
+        let bodySoilBioPhoto = [];
+        let bodySoilBio = [];
+        for (var s = 0; s < soilBiodiversity.length; s++) {
+            totalSoilBio += Number(soilBiodiversity[s].value);
 
-        //For para calcular os resultados dos insumos e árvores avulsas
+            let rowSoilBioPhoto = {
+                text: `${soilBiodiversity[s].photo}`,
+                link: `https://${window.location.host}/view-image/${soilBiodiversity[s].photo}`,
+                style: 'link'
+            }
+
+            bodySoilBioPhoto.push(rowSoilBioPhoto);
+        }
+
+        let rowSoilBio = [
+            'Solo',
+            `${totalSoilBio}`,
+            ``,
+            ``
+        ];
+        bodyBio.push(rowSoilBio);
+        const totalBioRegistered = Number(totalSoilBio) + Number(resultBiodiversity.length)
+
+        let rowBioTotal = [
+            'Total',
+            `${totalBioRegistered}`,
+            `${totalBioRegistered} ^ 2`,
+            `${Number(totalBioRegistered ** 2).toFixed(0)} uv`
+        ]
+
+        bodyBio.push(rowBioTotal);
+
+        //For para calcular os resultados dos insumos
         for (var i = 0; i < resultCategories.length; i++) {
             const category = JSON.parse(resultCategories[i].categoryDetails);
 
@@ -1319,38 +1360,23 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         //Análise das zonas
-        let saldoCarbonArvoresZones = 0;
-        let saldoWaterArvoresZones = 0;
-        let saldoBioArvoresZones = 0;
         let saldoCarbonAnaliseSoloZones = 0;
         let saldoSoilAnaliseSoloZones = 0;
-
-        let bodyCoordsZones = [];
         let bodyCoordsZonesTeste = [];
-        let bodyCoordsSubZones = [];
-        let bodyPicturesZone = [];
-        let bodyPicturesSubZones = [];
-        let bodyArvoresSubZone = [];
-        let bodyArvoresZone = [];
-        let bodyImpactCarbonArvoresZone = [];
-        let bodyImpactWaterArvoresZone = [];
         let bodyAnaliseSoloZones = [];
-        let bodyInsetosAnaliseSoloZones = [];
 
         //novo método
 
         let bodySampling1 = [];
-
         let volumeTotalZonas = 0;
-
         let totalAguaEstocadaZones = 0;
         let totalCarbonEstocadoZones = 0;
-
         let bodyAguaEstocada = [];
         let bodyCarbonoEstocado = [];
         let bodyVolumeZones = [];
         let estimatedTreesTotal = 0;
         let bodyEstimatedTrees = [];
+        let rowPhotosZone = [];
 
         //For para calcular os resultados das zonas
         for (var i = 0; i < resultZones.length; i++) {
@@ -1363,6 +1389,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const titleZone = resultZones[i].title;
             const pathZone = resultZones[i].path;
             const areaZone = Number(zone.areaZone);
+            const photosZone = resultZones[i].photosZone
 
             const treesS1 = zone.arvores?.sampling1?.trees;
             const treesS2 = zone.arvores?.sampling2?.trees;
@@ -1558,11 +1585,49 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 `${(biomassaSolo).toFixed(2).replace('.', ',')} kg`
             ]
             bodyAnaliseSoloZones.push(analiseSoloZone);
+
+            //Imagem das zonas
+            for(var p = 0; p < photosZone.length; p++){
+                const dataImage = {
+                    text: `${photosZone[i].photo}`,
+                    link: `https://${window.location.host}/view-image/${photosZone[i].photo}`,
+                    style: 'link'
+                }
+                let row = []
+                row.push(titleZone);
+                row.push(dataImage);
+                rowPhotosZone.push(row);
+            }
+        }
+
+        //Verifica e calcula as nascentes
+        let totalWaterSprings = 0;
+        let bodySprings = [];
+        if(springs.length > 0){
+            for(var sp = 0; sp < springs.length; sp++){
+                if(Number(springs[sp].value) > 20){
+                    totalWaterSprings += 1000;
+                }
+                if(Number(springs[sp].value) <= 20){
+                    totalWaterSprings += 100;
+                }
+                const dataImage = {
+                    text: `${springs[sp].photo}`,
+                    link: `https://${window.location.host}/view-image/${springs[sp].photo}`,
+                    style: 'link'
+                }
+
+                let row = [];
+                row.push(`Lat: ${springs[sp].coord.lat} | Lng: ${springs[sp].coord.lng}`);
+                row.push(dataImage);
+                row.push(`${springs[sp].value} cm`);
+                bodySprings.push(row);
+            }
         }
 
         let totalCarbon = degenerationCarbon + ((totalCarbonEstocadoZones * -1) * 1000) + saldoCarbonAnaliseSoloZones;
-        let totalWater = degenerationWater + totalAguaEstocadaZones;
-        let totalBio = degenerationBio + (Number(resultBiodiversity.length) * Number(resultBiodiversity.length));
+        let totalWater = degenerationWater + totalAguaEstocadaZones + totalWaterSprings;
+        let totalBio = degenerationBio + ((Number(resultBiodiversity.length) + totalSoilBio) ** 2);
         let totalSoil = degenerationSoil + saldoSoilAnaliseSoloZones;
 
         const resultIndices = {
@@ -1574,7 +1639,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         const pdfData = {
             bioPictures,
-            bodyArvoresAvulsas,
             bodyDegradacao,
             bodyResultInsumos,
             bodyInsumos,
@@ -1582,26 +1646,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             degenerationWater,
             degenerationSoil,
             degenerationBio,
-            totalArvoresAvulsas,
-            saldoCarbonArvores,
-            saldoWaterArvores,
-            saldoBioArvores,
-            saldoCarbonArvoresZones,
-            saldoWaterArvoresZones,
-            saldoBioArvoresZones,
             saldoCarbonAnaliseSoloZones,
             saldoSoilAnaliseSoloZones,
-            bodyCoordsZones,
-            bodyPicturesZone,
-            bodyCoordsSubZones,
-            bodyPicturesSubZones,
-            bodyArvoresSubZone,
-            bodyArvoresZone,
-            bodyImpactCarbonArvoresZone,
-            bodyImpactWaterArvoresZone,
             bodyAnaliseSoloZones,
-            bodyInsetosAnaliseSoloZones,
-            bioInsetos,
             bodyCoordsZonesTeste,
             bodySampling1,
             bodyAguaEstocada,
@@ -1614,7 +1661,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bodyBio,
             volumeTotalZonas,
             estimatedTreesTotal,
-            bodyEstimatedTrees
+            bodyEstimatedTrees,
+            bodySoilBioPhoto,
+            bodySoilBio,
+            totalSoilBio,
+            rowPhotosZone,
+            totalWaterSprings,
+            bodySprings
         }
 
         return {
@@ -1624,7 +1677,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     }
 
     async function finishNewVersion() {
-        setLoading(true);
+        //setLoading(true);
         let pdfDevHash = '';
 
         const inspectionData = await GetInspection(additionalData?.inspectionId);
@@ -1644,9 +1697,15 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const inspection = response?.data?.inspection
         const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
         const resultZones = JSON.parse(response?.data?.inspection?.zones);
+        const soilBiodiversity = JSON.parse(response?.data?.inspection?.soilBiodiversity);
+        let springs = [];
+        if(response?.data?.inspection?.springs){
+            const jsonSprings = JSON.parse(response?.data?.inspection?.springs);
+            springs = jsonSprings;
+        }
 
         //Função que calcula os indices e retorna os dados para o pdf
-        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity);
+        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, soilBiodiversity, springs);
 
         await api.put('/update-result', {
             id: additionalData?.inspectionId,
@@ -1678,7 +1737,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas));
-
+        pdf.open()
+        return;
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
@@ -1710,51 +1770,48 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const carbon = {
             categoryId: 1,
             isaIndex: carbonResult,
-            report: hashPdf,
             indicator: carbonIndicator
         }
 
         const bio = {
             categoryId: 2,
             isaIndex: bioResult,
-            report: hashPdf,
             indicator: bioIndicator
         }
 
         const water = {
             categoryId: 3,
             isaIndex: waterResult,
-            report: hashPdf,
             indicator: aguaIndicator
         }
 
         const solo = {
             categoryId: 4,
             isaIndex: soloResult,
-            report: hashPdf,
             indicator: soloIndicator
         }
 
         setLoading(false);
         const arrayIsas = [
-            { categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, report: carbon.report, indicator: carbon.indicator },
-            { categoryId: bio.categoryId, isaIndex: bio.isaIndex, report: bio.report, indicator: bio.indicator },
-            { categoryId: solo.categoryId, isaIndex: solo.isaIndex, report: solo.report, indicator: solo.indicator },
-            { categoryId: water.categoryId, isaIndex: water.isaIndex, report: water.report, indicator: water.indicator }
+            { categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, indicator: carbon.indicator },
+            { categoryId: bio.categoryId, isaIndex: bio.isaIndex, indicator: bio.indicator },
+            { categoryId: solo.categoryId, isaIndex: solo.isaIndex, indicator: solo.indicator },
+            { categoryId: water.categoryId, isaIndex: water.isaIndex, indicator: water.indicator }
         ];
 
         console.log(arrayIsas)
 
-        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData)
+        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData, hashPdf)
     }
 
-    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData) {
+    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData, hashPdf) {
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(
             String(additionalData?.inspectionId),
             isas,
-            walletAddress
+            walletAddress,
+            hashPdf
         )
             .then(async (res) => {
                 setLogTransaction({
@@ -1872,23 +1929,23 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const carbon = data.carbon;
 
         if (carbon < 0) {
-            if (Math.abs(carbon) > 0 && Math.abs(carbon) < 1000) {
+            if (Math.abs(carbon) > 0 && Math.abs(carbon) < 100000) {
                 result = 2
             }
-            if (Math.abs(carbon) >= 1000 && Math.abs(carbon) < 100000) {
+            if (Math.abs(carbon) >= 100000 && Math.abs(carbon) < 1000000) {
                 result = 1
             }
-            if (Math.abs(carbon) >= 100000) {
+            if (Math.abs(carbon) >= 1000000) {
                 result = 0
             }
         }
-        if (carbon >= 100000) {
+        if (carbon >= 1000000) {
             result = 6
         }
-        if (carbon >= 1000 && carbon < 100000) {
+        if (carbon >= 100000 && carbon < 1000000) {
             result = 5
         }
-        if (carbon > 0 && carbon < 1000) {
+        if (carbon > 0 && carbon < 100000) {
             result = 4
         }
         if (carbon === 0) {
@@ -1983,10 +2040,10 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         if (soil >= 100) {
             result = 0
         }
-        if (soil >= 5 && soil < 100) {
+        if (soil >= 2 && soil < 100) {
             result = 1
         }
-        if (soil > 0 && soil < 5) {
+        if (soil > 0 && soil < 2) {
             result = 2
         }
         if (soil === 0) {
@@ -2219,7 +2276,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     async function burnTokens() {
         setModalTransaction(true);
         setLoadingTransaction(true);
-        if(userData.userType === 7){
+        if (userData.userType === 7) {
             BurnRCSupporter(walletAddress, String(additionalData?.value) + '000000000000000000')
                 .then(res => {
                     setLogTransaction({
@@ -2227,13 +2284,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         message: res.message,
                         hash: res.hashTransaction
                     });
-    
+
                     if (res.type === 'success') {
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
                     }
-    
+
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -2244,7 +2301,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         hash: ''
                     })
                 })
-        }else{
+        } else {
             BurnTokens(walletAddress, String(additionalData?.value) + '000000000000000000')
                 .then(res => {
                     setLogTransaction({
@@ -2252,13 +2309,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         message: res.message,
                         hash: res.hashTransaction
                     });
-    
+
                     if (res.type === 'success') {
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
                     }
-    
+
                 })
                 .catch(err => {
                     setLoadingTransaction(false);

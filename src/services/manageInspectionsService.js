@@ -70,11 +70,11 @@ export const AcceptInspection = async (inspectionID, walletAddress) => {
     }
 }
 
-export const RealizeInspection = async (inspectionID, isas, walletAddress) => {
+export const RealizeInspection = async (inspectionID, isas, walletAddress, report) => {
     let type = '';
     let message = '';
     let hashTransaction = '';
-    await SintropContract.methods.realizeInspection(inspectionID, isas).send({from: walletAddress})
+    await SintropContract.methods.realizeInspection(inspectionID, report, isas).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash

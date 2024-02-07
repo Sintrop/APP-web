@@ -11,7 +11,7 @@ const resources = {
 
 const config = {
     resources: resources,
-    lng: 'en-us',
+    lng: 'pt-BR',
     interpolation:{
         escapeValue: false
     }
