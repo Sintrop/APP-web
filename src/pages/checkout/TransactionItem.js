@@ -489,7 +489,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     async function acceptInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
-        console.log('13')
         AcceptInspection(String(additionalData.inspectionId), walletAddress)
             .then(async (res) => {
                 setLogTransaction({
@@ -601,7 +600,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 createdBy: String(additionalData?.createdBy),
                 createdAt: String(additionalData?.createdAtTimestamp),
                 userWallet: String(walletAddress).toUpperCase(),
-                propertyData
+                propertyData,
+                zones: producerDataApi?.zones
             })
         } catch (err) {
             console.log(err);
@@ -1677,7 +1677,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     }
 
     async function finishNewVersion() {
-        //setLoading(true);
+        setLoading(true);
         let pdfDevHash = '';
 
         const inspectionData = await GetInspection(additionalData?.inspectionId);
@@ -1737,8 +1737,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas));
-        pdf.open()
-        return;
+        
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
@@ -2413,7 +2412,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     async function reduceImpact(id) {
         const inspection = await GetInspection(id);
 
-        if (Number(inspection?.validationsCount) !== 2) {
+        if (Number(inspection?.validationsCount) !== 0) {
             setLoadingTransaction(false);
             return;
         }
