@@ -1818,7 +1818,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     message: res.message,
                     hash: res.hashTransaction
                 })
-                attNetworkImpact(resultIndices, methodType);
+                attNetworkImpact(resultIndices, methodType, producerData);
 
                 const dataNotification = {
                     text1: 'Completed your inspection',
@@ -2052,7 +2052,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         return result;
     }
 
-    async function attNetworkImpact(resultIndices, methodType) {
+    async function attNetworkImpact(resultIndices, methodType, producerData) {
         let carbon = 0;
         let agua = 0;
         let bio = 0;
@@ -2155,8 +2155,15 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 id: '3'
             });
         }
+        attImpactUser(producerData);
         await api.put('/transactions-open/finish', { id: transaction.id });
         setLoadingTransaction(false);
+    }
+
+    async function attImpactUser(producerData){
+        await api.put('/impact-user', {
+            producerWallet: producerData?.producerWallet
+        })
     }
 
     //----------- FINISH INSPECTION ---------------------^^^^^^^^
