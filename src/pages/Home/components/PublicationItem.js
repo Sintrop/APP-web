@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { FaRegHeart } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
 import { AcceptInspectionPubli } from "./AcceptInspectionPubli";
+import { DevReportPubli } from "./DevReportPubli";
 
 export function PublicationItem({ data }) {
     const additionalData = JSON.parse(data.additionalData);
@@ -53,6 +54,16 @@ export function PublicationItem({ data }) {
             <div>
                 {data.type === 'accept-inspection' && (
                     <AcceptInspectionPubli data={data}/>
+                )}
+
+                {data.type === 'request-inspection' && (
+                    <div className="">
+                        <p className="text-white">Requisitou uma nova inspeção</p>
+                    </div>
+                )}
+
+                {data.type === 'dev-report' && (
+                    <DevReportPubli additionalData={additionalData}/>
                 )}
             </div>
 
