@@ -10,17 +10,28 @@ import { RequestSepolia } from "../pages/RequestSepolia";
 import { ViewImage } from "../pages/ViewImage";
 import { ResearchersCenter } from "../pages/ResearchersCenter";
 import { DevelopersCenter } from "../pages/DevelopersCenter";
-import { PrivateSales } from "../pages/privateSales";
 import {Register} from "../pages/register";
 import { Checkout } from "../pages/checkout";
 import { ViewPdf } from "../pages/ViewPdf";
 import {Education} from '../pages/Education';
 
+//
+import { Home } from "../pages/Home";
+import { Centers } from "../pages/Centers";
+import { Market } from "../pages/Market";
+import { Community } from "../pages/Community";
+import { Actions } from '../pages/Actions';
+
 export default function Router(){
     return(
         <BrowserRouter>
             <Routes>
-                <Route exact path="/" element={<Login/>}/>
+                <Route exact path="/" element={<Home/>}/>
+                <Route exact path="/centers" element={<Centers/>}/>
+                <Route exact path="/market" element={<Market/>}/>
+                <Route exact path="/community" element={<Community/>}/>
+                <Route exact path="/actions" element={<Actions/>}/>
+
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
