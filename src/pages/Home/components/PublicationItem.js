@@ -11,6 +11,7 @@ import { AcceptInspectionPubli } from "./AcceptInspectionPubli";
 import { DevReportPubli } from "./DevReportPubli";
 import { WithdrawTokensPubli } from "./WithdrawTokensPubli";
 import { ContributeTokensPubli } from "./ContributeTokensPubli";
+import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
 
 export function PublicationItem({ data }) {
     const additionalData = JSON.parse(data.additionalData);
@@ -81,6 +82,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'contribute-tokens' && (
                     <ContributeTokensPubli data={data}/>
+                )}
+
+                {data.type === 'realize-inspection' && (
+                    <RealizeInspectionPubli data={data}/>
                 )}
             </div>
 

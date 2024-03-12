@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
-import { Blocks } from 'react-loader-spinner'
+import { Blocks } from 'react-loader-spinner';
 import { api } from "../../services/api";
 import { PublicationItem } from "./components/PublicationItem";
 
