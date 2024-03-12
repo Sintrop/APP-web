@@ -12,6 +12,7 @@ import { DevReportPubli } from "./DevReportPubli";
 import { WithdrawTokensPubli } from "./WithdrawTokensPubli";
 import { ContributeTokensPubli } from "./ContributeTokensPubli";
 import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
+import { NewUserPubli } from "./NewUserPubli";
 
 export function PublicationItem({ data }) {
     const additionalData = JSON.parse(data.additionalData);
@@ -33,7 +34,7 @@ export function PublicationItem({ data }) {
     }
 
     return (
-        <div className="min-w-[500px] max-w-[720px] bg-[#0a4303] p-2 rounded-lg flex flex-col gap-3">
+        <div className="w-[720px] bg-[#0a4303] p-2 rounded-lg flex flex-col gap-3">
             <div className="flex justify-between w-full">
                 <div className="flex">
                     <div className="w-14 h-14 rounded-full bg-gray-400">
@@ -86,6 +87,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'realize-inspection' && (
                     <RealizeInspectionPubli data={data}/>
+                )}
+
+                {data.type === 'new-user' && (
+                    <NewUserPubli userData={userData}/>
                 )}
             </div>
 
