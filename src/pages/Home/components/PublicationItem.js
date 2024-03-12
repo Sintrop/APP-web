@@ -5,9 +5,12 @@ import { format } from "date-fns";
 //icons
 import { FaRegHeart } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
+
+//components
 import { AcceptInspectionPubli } from "./AcceptInspectionPubli";
 import { DevReportPubli } from "./DevReportPubli";
 import { WithdrawTokensPubli } from "./WithdrawTokensPubli";
+import { ContributeTokensPubli } from "./ContributeTokensPubli";
 
 export function PublicationItem({ data }) {
     const additionalData = JSON.parse(data.additionalData);
@@ -74,6 +77,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'withdraw-tokens' && (
                     <WithdrawTokensPubli data={data} changeVisible={() => setVisiblePubli(false)}/>
+                )}
+
+                {data.type === 'contribute-tokens' && (
+                    <ContributeTokensPubli data={data}/>
                 )}
             </div>
 
