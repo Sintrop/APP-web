@@ -7,11 +7,13 @@ import { FaRegHeart } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
 import { AcceptInspectionPubli } from "./AcceptInspectionPubli";
 import { DevReportPubli } from "./DevReportPubli";
+import { WithdrawTokensPubli } from "./WithdrawTokensPubli";
 
 export function PublicationItem({ data }) {
     const additionalData = JSON.parse(data.additionalData);
     const userData = additionalData.userData;
     const [imageProfile, setImageProfile] = useState(null);
+    const [visiblePubli, setVisiblePubli] = useState(true);
 
     useEffect(() => {
         getImageProfile();
@@ -20,6 +22,10 @@ export function PublicationItem({ data }) {
     async function getImageProfile() {
         const imageUrl = await getImage(userData?.imgProfileUrl);
         setImageProfile(imageUrl);
+    }
+
+    if(!visiblePubli){
+        return <div/>
     }
 
     return (
@@ -64,6 +70,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'dev-report' && (
                     <DevReportPubli additionalData={additionalData}/>
+                )}
+
+                {data.type === 'withdraw-tokens' && (
+                    <WithdrawTokensPubli data={data} changeVisible={() => setVisiblePubli(false)}/>
                 )}
             </div>
 
