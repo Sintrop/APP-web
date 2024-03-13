@@ -21,6 +21,7 @@ import { Centers } from "../pages/Centers";
 import { Market } from "../pages/Market";
 import { Community } from "../pages/Community";
 import { Actions } from '../pages/Actions';
+import { UserDetails } from "../pages/UserDetails";
 
 export default function Router(){
     return(
@@ -31,6 +32,7 @@ export default function Router(){
                 <Route exact path="/market" element={<Market/>}/>
                 <Route exact path="/community" element={<Community/>}/>
                 <Route exact path="/actions" element={<Actions/>}/>
+                <Route exact path="/user-details/:wallet" element={<UserDetails/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 

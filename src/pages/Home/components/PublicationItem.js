@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getImage } from "../../../services/getImage";
 import { format } from "date-fns";
+import { useNavigate } from "react-router";
+
+import { getImage } from "../../../services/getImage";
 
 //icons
 import { FaRegHeart } from "react-icons/fa";
@@ -16,6 +18,7 @@ import { NewUserPubli } from "./NewUserPubli";
 import { PubliUser } from "./PubliUser";
 
 export function PublicationItem({ data }) {
+    const navigate = useNavigate();
     const additionalData = JSON.parse(data.additionalData);
     const userData = additionalData.userData;
     const [imageProfile, setImageProfile] = useState(null);
@@ -47,7 +50,10 @@ export function PublicationItem({ data }) {
                         )}
                     </div>
                     <div className="flex flex-col ml-2">
-                        <p className="text-white font-bold text-sm">{userData?.name}</p>
+                        <p 
+                            className="text-white font-bold text-sm hover:underline hover:cursor-pointer"
+                            onClick={() => navigate(`/user-details/${String(userData?.wallet).toLowerCase()}`)}
+                        >{userData?.name}</p>
                         <p className="text-gray-300 text-xs">
                             {userData?.userType === 1 && 'Produtor(a)'}
                             {userData?.userType === 2 && 'Inspetor(a)'}
