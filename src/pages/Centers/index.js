@@ -1,7 +1,10 @@
 import React from "react";
 import { Header } from "../../components/Header";
+import { useNavigate } from "react-router";
 
 export function Centers(){
+    const navigate = useNavigate();
+
     return(
         <div className="bg-[#062c01] flex flex-col h-[100vh]">
             <Header routeActive='centers'/>
@@ -20,6 +23,7 @@ export function Centers(){
 
                         <button 
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
+                            onClick={() => navigate('/inspections-center')}
                         >
                             Acessar centro
                         </button>
