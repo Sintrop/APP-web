@@ -16,6 +16,7 @@ import { ContributeTokensPubli } from "./ContributeTokensPubli";
 import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
 import { NewUserPubli } from "./NewUserPubli";
 import { PubliUser } from "./PubliUser";
+import { InvalidateUserPubli } from "./InvalidateUserPubli";
 
 export function PublicationItem({ data }) {
     const navigate = useNavigate();
@@ -42,18 +43,29 @@ export function PublicationItem({ data }) {
             <div className="flex justify-between w-full">
                 <div className="flex">
                     <div className="w-14 h-14 rounded-full bg-gray-400">
-                        {imageProfile && (
+                        {userData.userType === 8 ? (
                             <img
-                                src={imageProfile}
+                                src={require('../../../assets/icon-validator.png')}
                                 className="w-14 h-14 rounded-full object-cover"
                             />
+                        ) : (
+                            <>
+                            {imageProfile && (
+                                <img
+                                    src={imageProfile}
+                                    className="w-14 h-14 rounded-full object-cover"
+                                />
+                            )}
+                            </>
                         )}
                     </div>
                     <div className="flex flex-col ml-2">
                         <p 
                             className="text-white font-bold text-sm hover:underline hover:cursor-pointer"
                             onClick={() => navigate(`/user-details/${String(userData?.wallet).toLowerCase()}`)}
-                        >{userData?.name}</p>
+                        >
+                            {userData?.userType === 8 ? 'Validador(a)' : userData?.name}
+                        </p>
                         <p className="text-gray-300 text-xs">
                             {userData?.userType === 1 && 'Produtor(a)'}
                             {userData?.userType === 2 && 'Inspetor(a)'}
@@ -102,6 +114,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'new-user' && (
                     <NewUserPubli userData={userData}/>
+                )}
+
+                {data.type === 'vote-invalidate-user' && (
+                    <InvalidateUserPubli additionalData={additionalData}/>
                 )}
             </div>
 
