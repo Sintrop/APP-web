@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import { api } from '../../../services/api';
 import { getImage } from '../../../services/getImage';
+import { useNavigate } from 'react-router';
 
 export function AcceptInspectionPubli({data}){
+    const navigate = useNavigate();
     const additionalData = JSON.parse(data?.additionalData);
     const [inspectionData, setInspectionData] = useState({});
     const [imageUserSecondary, setImageUserSecondary] = useState(null);
@@ -30,7 +32,10 @@ export function AcceptInspectionPubli({data}){
 
             <p className='mt-3 text-sm text-gray-400'>Dados do produtor(a)</p>
 
-            <div className='items-center bg-[#0a4303] rounded-md p-2 flex gap-3'>
+            <button 
+                className='items-center bg-[#0a4303] rounded-md p-2 flex gap-3'
+                onClick={() => navigate(`/user-details/${String(inspectionData?.userData?.wallet).toLowerCase()}`)}
+            >
                 <div className='h-10 w-10 rounded-full bg-gray-500'>
                     {imageUserSecondary && (
                         <img
@@ -41,7 +46,7 @@ export function AcceptInspectionPubli({data}){
                 </div>
 
                 <p className='font-bold text-white text-sm'>{inspectionData?.userData?.name}</p>
-            </div>
+            </button>
         </div>
     )
 }

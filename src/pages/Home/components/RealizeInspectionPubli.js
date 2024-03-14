@@ -96,7 +96,8 @@ export function RealizeInspectionPubli({ data }) {
                     </div>
 
                     <p 
-                        className="mt-5 underline text-blue-400 text-center"
+                        className="mt-5 underline text-blue-400 text-center hover:cursor-pointer"
+                        onClick={() => navigate(`/result-inspection/${additionalData.inspectionId}`)}
                     >
                         Ver resultado detalhado
                     </p>
