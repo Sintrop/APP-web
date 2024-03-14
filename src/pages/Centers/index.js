@@ -41,6 +41,7 @@ export function Centers(){
 
                         <button 
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
+                            onClick={() => navigate('/researches-center')}
                         >
                             Acessar centro
                         </button>
