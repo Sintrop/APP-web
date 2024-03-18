@@ -9,6 +9,8 @@ import {GetBalanceContract} from '../services/producerPoolService';
 import {GetBalancePool} from '../services/developersPoolService';
 import {GetBalancePoolDevelopersInfura, GetBalancePoolProducersInfura} from '../services/methodsGetInfuraApi';
 import {api} from '../services/api';
+import { ToastContainer, toast } from "react-toastify";
+import { getImage } from "../services/getImage";
 
 export const MainContext = createContext({});
 
@@ -39,7 +41,7 @@ export default function MainProvider({children}){
     const [walletSelected, setWalletSelected] = useState(''); 
     const [modalRegister, setModalRegister] = useState(false);
     const [blockNumber, setBlockNumber] = useState(0);
-    const [mayAcceptInspection, setMayAcceptInspection] = useState(false);
+    const [imageProfile, setImageProfile] = useState('');
     const [menuOpen, setMenuOpen] = useState(true);
     const [language, setLanguage] = useState('en-us');
     const [modalChooseLang, setModalChooseLang] = useState(false);
@@ -62,11 +64,6 @@ export default function MainProvider({children}){
         getImpact();
         checkMode();
     }, []);
-
-    useEffect(() => {
-        if(user === '2'){
-        }
-    },[user]);
 
     useEffect(() => {
         getAtualBlockNumber();
@@ -122,9 +119,43 @@ export default function MainProvider({children}){
     async function Sync(){
         const wallet = await ConnectWallet();
         if(wallet.connectedStatus){
+            getUserDataApi(wallet.address[0]);
+            setWalletConnected(wallet.address[0]);
             return {
                 status: 'connected',
                 wallet: wallet.address[0]
+            }
+        }
+    }
+
+    async function loginWithWalletAndPassword(wallet, password){
+        try{
+            const response = await api.post('/login', {
+                wallet,
+                password,
+            });
+
+            if(response.data){
+                api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
+                getUserDataApi(wallet);
+                setWalletConnected(String(wallet).toLowerCase());
+            }
+
+            return true;
+        }catch(err){
+            if(err.response?.data?.message === 'User not found'){
+                toast.error('Usuário não encontrado!')
+                return false;
+            }
+
+            if(err.response?.data?.message === 'User deleted'){
+                toast.error('Essa conta foi excluida!')
+                return false;
+            }
+
+            if(err.response?.data?.message === 'Password incorrect'){
+                toast.error('Senha incorreta!')
+                return false;
             }
         }
     }
@@ -166,9 +197,12 @@ export default function MainProvider({children}){
     }
 
     async function getUserDataApi(wallet){
-        const resUser = await api.get(`/user/${wallet}`)
-        setUserData(resUser.data.user);
-        
+        const response = await api.get(`/user/${wallet}`);
+        const resUser = response.data.user
+        setUserData(resUser);
+
+        const image = await getImage(resUser.imgProfileUrl);
+        setImageProfile(image);
     }
 
     async function getAtualBlockNumber(){
@@ -319,10 +353,14 @@ export default function MainProvider({children}){
                 transactionOpen,
                 setTransactionOpen,
                 transactionOpened,
-                userData
+                userData,
+                loginWithWalletAndPassword,
+                imageProfile
             }}
         >
             {children}
+
+            <ToastContainer/>
         </MainContext.Provider>
     )
 }
