@@ -57,7 +57,7 @@ export function Home() {
                                 <>
                                     <img
                                         src={require('../../assets/anonimous.png')}
-                                        className="w-14 h-14 object-contain border-2 border-white"
+                                        className="w-14 h-14 object-contain rounded-full border-2 border-white"
                                     />
 
                                     <p className="font-bold text-white text-center text-sm mt-2">Você está no modo anônimo</p>

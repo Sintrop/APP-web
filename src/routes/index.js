@@ -25,6 +25,7 @@ import { UserDetails } from "../pages/UserDetails";
 import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
+import { Ranking } from "../pages/Ranking";
 
 export default function Router(){
     return(
@@ -39,6 +40,7 @@ export default function Router(){
                 <Route exact path="/inspections-center" element={<InspectionsCenter/>}/>
                 <Route exact path="/result-inspection/:id" element={<ResultInspection/>}/>
                 <Route exact path="/researches-center" element={<ResearchesCenter/>}/>
+                <Route exact path="/ranking/:userType" element={<Ranking/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
