@@ -24,9 +24,11 @@ export function PublicationItem({ data }) {
     const userData = additionalData.userData;
     const [imageProfile, setImageProfile] = useState(null);
     const [visiblePubli, setVisiblePubli] = useState(true);
+    const [likes, setLikes] = useState(0);
 
     useEffect(() => {
         getImageProfile();
+        setLikes(data.LikesPublication.length);
     }, []);
 
     async function getImageProfile() {
@@ -120,7 +122,13 @@ export function PublicationItem({ data }) {
                     <InvalidateUserPubli additionalData={additionalData}/>
                 )}
             </div>
-
+            
+            {likes > 0 && (
+                <button className="w-fit">
+                    <p className="text-white ">{likes} Curtida{likes > 1 && 's'}</p>
+                </button>
+            )}
+           
             <div className="flex items-center border-t border-green-950 pt-2 gap-5">
                 <button className="flex flex-col items-center">
                     <FaRegHeart color='white' size={20} />
