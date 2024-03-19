@@ -11,7 +11,7 @@ import { ActivityIndicator } from './ActivityIndicator';
 import {useMainContext} from '../hooks/useMainContext';
 
 export function ModalConnectAccount({ close }) {
-    const {loginWithWalletAndPassword} = useMainContext();
+    const {loginWithWalletAndPassword, Sync} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [viewForm, setViewForm] = useState(false);
     const [wallet, setWallet] = useState('');
@@ -46,6 +46,24 @@ export function ModalConnectAccount({ close }) {
             setPassword('');
         }
 
+    }
+
+    async function handleSyncWallet(){
+        if (!window.ethereum) {
+            toast.error('Você não tem um provedor ethereum em seu navegador!');
+            return;
+        }
+        setLoading();
+        
+        const response = await Sync();
+        
+        if(response?.status === 'connected'){
+            toast.success('Você se conectou com sucesso!')
+        }else{
+            toast.error('Operação cancelada!')
+        }
+
+        setLoading(false);
     }
 
     return (
@@ -103,16 +121,17 @@ export function ModalConnectAccount({ close }) {
 
                             <button
                                 className='flex items-center gap-2 p-2 rounded-md bg-orange-500 mt-5 w-full justify-center text-white'
-                                onClick={() => {
-                                    if (!window.ethereum) {
-                                        toast.error('Você não tem um provedor ethereum em seu navegador!')
-                                        return
-                                    }
-                                }}
+                                onClick={handleSyncWallet}
                             >
-                                <FaWallet color='white' size={25} />
+                                {loading ? (
+                                    <ActivityIndicator size={25}/>
+                                ) : (
+                                    <>
+                                        <FaWallet color='white' size={25} />
 
-                                Sincronizar wallet
+                                        Sincronizar wallet
+                                    </>
+                                )}
                             </button>
 
                             <button
