@@ -5,9 +5,7 @@ import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
 import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
-import {GetBalanceContract} from '../services/producerPoolService';
-import {GetBalancePool} from '../services/developersPoolService';
-import {GetBalancePoolDevelopersInfura, GetBalancePoolProducersInfura} from '../services/methodsGetInfuraApi';
+import io from 'socket.io-client';
 import {api} from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
@@ -58,6 +56,7 @@ export default function MainProvider({children}){
     const [viewMode, setViewMode] = useState(true);
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [transactionOpened, setTranscationsOpened] = useState([]);
+    const [socket, setSocket] = useState({});
 
     useEffect(() => {
         getStorageLanguage();
@@ -355,7 +354,8 @@ export default function MainProvider({children}){
                 transactionOpened,
                 userData,
                 loginWithWalletAndPassword,
-                imageProfile
+                imageProfile,
+                socket
             }}
         >
             {children}
