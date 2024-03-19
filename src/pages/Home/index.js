@@ -11,6 +11,7 @@ import { ImBooks } from "react-icons/im";
 import { FaCalculator } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { Chat } from "../../components/Chat";
 
 export function Home() {
     const { walletConnected, userData, imageProfile } = useMainContext();
@@ -183,6 +184,8 @@ export function Home() {
 
 
             </div>
+
+            <Chat/>
         </div>
     )
 }
