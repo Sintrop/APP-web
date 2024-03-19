@@ -26,6 +26,7 @@ import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
 import { Ranking } from "../pages/Ranking";
+import { IcoPage } from "../pages/IcoPage";
 
 export default function Router(){
     return(
@@ -41,6 +42,7 @@ export default function Router(){
                 <Route exact path="/result-inspection/:id" element={<ResultInspection/>}/>
                 <Route exact path="/researches-center" element={<ResearchesCenter/>}/>
                 <Route exact path="/ranking/:userType" element={<Ranking/>}/>
+                <Route exact path="/ico" element={<IcoPage/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 

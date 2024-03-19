@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
+import { useNavigate } from "react-router";
 
 export function Market() {
+    const navigate = useNavigate();
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
@@ -23,7 +25,7 @@ export function Market() {
 
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-green-500"
-                        onClick={() => alert('Disponível em breve')}
+                        onClick={() => navigate('/ico')}
                     >
                         <img
                             src={require('../../assets/market-icon.png')}
