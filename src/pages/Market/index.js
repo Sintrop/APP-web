@@ -13,7 +13,7 @@ export function Market() {
                 <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-blue-500"
-                        onClick={() => alert('Disponível em breve')}
+                        onClick={() => navigate('/contribute')}
                     >
                         <img
                             src={require('../../assets/icon-contribuir.png')}
