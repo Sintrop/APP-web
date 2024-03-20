@@ -54,7 +54,10 @@ export function ModalMessages({chat, imageProfile, participant, socket}) {
 
     async function sendMessage() {
         let hashPhotos = [];
-
+        if(sending){
+            return;
+        }
+        
         if(!imageToSend && !inputMessage.trim()){
             return;
         }

@@ -5,6 +5,7 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import format from "date-fns/format";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalMessages } from "./ModalMessages";
+import CryptoJS from "crypto-js";
 
 export function ChatItem({ data, socket }) {
     const { userData } = useMainContext();
@@ -30,7 +31,7 @@ export function ChatItem({ data, socket }) {
         const msgs = response.data.messages;
         setMessages(msgs);
         checkNotVisualized(msgs);
-        setTextMessage(msgs[0]?.message)
+        decryptMessage(msgs[0]?.message)
     }
 
     function checkNotVisualized(msgs) {
@@ -44,10 +45,10 @@ export function ChatItem({ data, socket }) {
         setCountNotVisualized(count);
     }
 
-    // function decryptMessage(msg) {
-    //     const decrypt = CryptoJS.AES.decrypt(msg, '84uriuUGjged76382Gdsj28ydsajjdb');
-    //     setTextMessage(decrypt.toString(CryptoJS.enc.Utf8));
-    // }
+    function decryptMessage(msg) {
+        const decrypt = CryptoJS.AES.decrypt(msg, process.env.REACT_APP_DECRYPT_MESSAGE_KEY);
+        setTextMessage(decrypt.toString(CryptoJS.enc.Utf8));
+    }
 
     return (
         <Dialog.Root open={modalMessages} onOpenChange={(open) => setModalMessages(open)}>

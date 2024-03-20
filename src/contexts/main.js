@@ -30,13 +30,12 @@ const startEra15 = 4056150;
 const startEra16 = 4089380;
 const startEra17 = 4122610;
 
-console.log(process.env.REACT_APP_RCTOKENICO_CONTRACT_ADDRESS)
-
 export default function MainProvider({children}){
     const {i18n} = useTranslation();
     const [user, setUser] = useState('0');
     const [walletConnected, setWalletConnected] = useState(''); 
     const [walletSelected, setWalletSelected] = useState(''); 
+    const [connectionType, setConnectionType] = useState('');
     const [modalRegister, setModalRegister] = useState(false);
     const [blockNumber, setBlockNumber] = useState(0);
     const [imageProfile, setImageProfile] = useState('');
@@ -56,7 +55,6 @@ export default function MainProvider({children}){
     const [viewMode, setViewMode] = useState(true);
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [transactionOpened, setTranscationsOpened] = useState([]);
-    const [socket, setSocket] = useState({});
 
     useEffect(() => {
         getStorageLanguage();
@@ -120,6 +118,7 @@ export default function MainProvider({children}){
         if(wallet.connectedStatus){
             getUserDataApi(wallet.address[0]);
             setWalletConnected(wallet.address[0]);
+            setConnectionType('provider');
             return {
                 status: 'connected',
                 wallet: wallet.address[0]
@@ -139,7 +138,7 @@ export default function MainProvider({children}){
                 getUserDataApi(wallet);
                 setWalletConnected(String(wallet).toLowerCase());
             }
-
+            setConnectionType('notprovider')
             return true;
         }catch(err){
             if(err.response?.data?.message === 'User not found'){
@@ -355,7 +354,7 @@ export default function MainProvider({children}){
                 userData,
                 loginWithWalletAndPassword,
                 imageProfile,
-                socket
+                connectionType
             }}
         >
             {children}
