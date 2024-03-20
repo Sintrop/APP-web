@@ -140,7 +140,7 @@ export function ResearchesCenter() {
                             Índice de sustentabilidade
                         </button>
 
-                        {userData?.userType === 4 && (
+                        {userData?.userType === 3 && (
                             <button
                                 className={`font-bold py-1 border-b-2 ${tabSelected === 'publish' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                                 onClick={() => setTabSelected('publish')}

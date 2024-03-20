@@ -4,15 +4,23 @@ import { api } from "../../services/api";
 import { useMainContext } from "../../hooks/useMainContext";
 import { FaChevronRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
+import * as Dialog from '@radix-ui/react-dialog';
+import { LoadingTransaction } from "../../components/LoadingTransaction";
+import {ActivityIndicator} from '../../components/ActivityIndicator';
+import { BurnTokens as BurnRCSupporter } from "../../services/supporterService";
+import { BurnTokens } from "../../services/sacTokenService";
 
 export function Contribute() {
-    const { walletConnected } = useMainContext();
+    const { walletConnected, connectionType, userData } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
     const [input, setInput] = useState('');
     const [impactToken, setImpactToken] = useState(null);
     const [balanceData, setBalanceData] = useState(null);
     const [maxAmmount, setMaxAmmount] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
 
     useEffect(() => {
         if (impactToken) {
@@ -62,22 +70,111 @@ export function Contribute() {
     }
 
     async function handleContribute() {
-        if(walletConnected === ''){
+        if (walletConnected === '') {
             toast.error('Você não está conectado!')
             return
         }
 
-        if(!input.trim()){
+        if (!input.trim()) {
             toast.error('Digite um valor para contribuir!')
             return
         }
 
-        if(maxAmmount){
+        if (maxAmmount) {
             toast.error('Saldo insuficiente!')
             return
         }
 
-        alert('Contribuição disponível em breve!')
+        if (connectionType === 'provider') {
+            contributeBlockchain();
+        } else {
+
+        }
+    }
+
+    async function contributeBlockchain() {
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        if (userData.userType === 7) {
+            BurnRCSupporter(walletConnected, String(input) + '000000000000000000')
+                .then(res => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        registerTokensApi(input, res.hashTransaction)
+                    }
+
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        } else {
+            BurnTokens(walletConnected, String(input) + '000000000000000000')
+                .then(res => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        registerTokensApi(input, res.hashTransaction)
+                    }
+
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+    }
+
+    async function registerTokensApi(tokens, hash) {
+        const addData = {
+            userData,
+            tokens: Number(tokens),
+            transactionHash: hash,
+            reason: '',
+            itens: ''
+        }
+
+        try {
+            await api.post('/tokens-burned', {
+                wallet: walletConnected.toUpperCase(),
+                tokens: Number(tokens),
+                transactionHash: hash,
+                carbon: Number(impactToken?.carbon),
+                water: Number(impactToken?.water),
+                bio: Number(impactToken?.bio),
+                soil: Number(impactToken?.soil)
+            });
+
+            await api.post('/publication/new', {
+                userId: userData?.id,
+                type: 'contribute-tokens',
+                origin: 'platform',
+                additionalData: JSON.stringify(addData),
+            })
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoadingTransaction(false);
+        }
     }
 
     return (
@@ -138,20 +235,42 @@ export function Contribute() {
                         className="w-full p-3 bg-blue-500 rounded-md flex justify-between items-center mt-3"
                         onClick={handleContribute}
                     >
-                        <div className="flex items-center gap-3">
-                            <img
-                                src={require('../../assets/icon-contribuir.png')}
-                                className="w-8 h-8 object-contain"
-                            />
-                            <p className="font-bold text-white">Contribuir</p>
-                        </div>
-
-                        <FaChevronRight size={20} color='white'/>
+                        {loading ? (
+                            <ActivityIndicator size={25}/>
+                        ) : (
+                            <>
+                            <div className="flex items-center gap-3">
+                                <img
+                                    src={require('../../assets/icon-contribuir.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
+                                <p className="font-bold text-white">Contribuir</p>
+                            </div>
+    
+                            <FaChevronRight size={20} color='white' />
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
 
-            <ToastContainer/>
+            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                if (!loadingTransaction) {
+                    setModalTransaction(open)
+                    setLoading(false);
+                    if (logTransaction.type === 'success') {
+                        toast.success('Contribuição feita com sucesso!');
+
+                    }
+                }
+            }}>
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
+
+            <ToastContainer />
         </div>
     )
 }
