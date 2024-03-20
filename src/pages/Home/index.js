@@ -51,7 +51,7 @@ export function Home() {
                         <ActivityIndicator size={50} />
                     </div>
                 )}
-                
+
                 <div className="flex gap-3 mt-3">
                     <div className="flex flex-col gap-3">
                         <div className="flex flex-col items-center w-[200px] h-[300px] p-3 bg-[#0a4303] rounded-md">
@@ -167,7 +167,7 @@ export function Home() {
                         <div className="flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
                             <p className="font-bold text-white text-xs text-center mb-3">Baixe nosso aplicativo</p>
                             <QRCode
-                                value='https://play.google.com/store/apps/details?id=com.sintrop.activistapp'
+                                value='https://www.sintrop.com/app'
                                 size={100}
                                 qrStyle="dots"
                                 logoPadding={2}
@@ -176,8 +176,6 @@ export function Home() {
                                 removeQrCodeBehindLogo
                                 eyeColor='#0a4303'
                             />
-
-                            <p className="text-gray-400 text-xs text-center mt-3">* Disponível para aparelhos Android</p>
                         </div>
                     </div>
                 </div>

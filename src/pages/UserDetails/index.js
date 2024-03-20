@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
-import { FaUser, FaListAlt } from "react-icons/fa";
+import { FaUser, FaListAlt, FaList, FaChevronRight } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
@@ -14,6 +14,7 @@ const containerMapStyle = {
 };
 
 export function UserDetails() {
+    const navigate = useNavigate();
     const { wallet } = useParams();
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState(null);
@@ -31,6 +32,12 @@ export function UserDetails() {
         getUserDetails();
     }, []);
 
+    useEffect(() => {
+        if(userData?.userType === 1 || userData?.userType === 2){
+            getInspections();
+        }
+    }, [userData]);
+
     async function getUserDetails() {
         setLoading(true);
 
@@ -47,8 +54,6 @@ export function UserDetails() {
             const path = JSON.parse(user.propertyGeolocation);
             fixCoordinatesProperty(path);
 
-            getInspections();
-
             if (user.geoLocation) {
                 setInitialRegion(JSON.parse(user.geoLocation));
             }
@@ -61,7 +66,6 @@ export function UserDetails() {
             const response = await api.get(`/web3/inspector-data/${String(user?.wallet).toLowerCase()}`);
             setBlockchainData(response.data)
             getProofPhoto(response.data.inspector.proofPhoto);
-            getInspections();
         }
 
         if (user?.userType === 4) {
@@ -201,12 +205,23 @@ export function UserDetails() {
                                     Publicações
                                 </button>
 
-                                {userData?.userType === 3 && (
+                                {userData?.userType === 1 && (
                                     <button
-                                        className={`font-bold py-1 border-b-2 ${tabSelected === 'publish' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                                        onClick={() => setTabSelected('publish')}
+                                        className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                                        onClick={() => setTabSelected('inspections')}
                                     >
-                                        Publicar pesquisa
+                                        <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
+                                        Inspeções
+                                    </button>
+                                )}
+
+                                {userData?.userType === 2 && (
+                                    <button
+                                        className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                                        onClick={() => setTabSelected('inspections')}
+                                    >
+                                        <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
+                                        Inspeções
                                     </button>
                                 )}
                             </div>
@@ -240,6 +255,34 @@ export function UserDetails() {
                                                         <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
                                                     </>
                                                 )}
+
+                                                {userData?.userType === 2 && (
+                                                    <>
+                                                        <p className="text-white font-bold text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
+                                                        <p className="text-white font-bold text-sm">Desistências: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
+                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                    </>
+                                                )}
+
+                                                {userData?.userType === 3 && (
+                                                    <>
+                                                        <p className="text-white font-bold text-sm">Pesquisas publicadas: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
+                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                    </>
+                                                )}
+
+                                                {userData?.userType === 4 && (
+                                                    <>
+                                                        <p className="text-white font-bold text-sm">Nível: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
+                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                    </>
+                                                )}
+
+                                                {userData?.userType === 6 && (
+                                                    <>
+                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                    </>
+                                                )}
                                             </div>
 
                                         </div>
@@ -257,13 +300,13 @@ export function UserDetails() {
                                                             >
                                                                 <GoogleMap
                                                                     mapContainerStyle={containerMapStyle}
-                                                                    center={{lat: initialRegion?.latitude, lng: initialRegion?.longitude}}
+                                                                    center={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
                                                                     zoom={15}
                                                                     mapTypeId="hybrid"
                                                                 >
 
                                                                     <Marker
-                                                                        position={{lat: initialRegion?.latitude, lng: initialRegion?.longitude}}
+                                                                        position={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
                                                                     />
 
                                                                 </GoogleMap>
@@ -276,6 +319,26 @@ export function UserDetails() {
                                                 </div>
                                             </>
                                         )}
+                                    </div>
+                                </>
+                            )}
+
+                            {tabSelected === 'inspections' && (
+                                <>
+                                    <div className="flex flex-col mt-5 gap-4">
+                                        {inspections.map(item => (
+                                            <button
+                                                key={item.id}
+                                                className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
+                                                onClick={() => navigate(`/result-inspection/${item.id}`)}
+                                            >
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="font-bold text-white text-sm">Inspeção #{item.id}</p>
+                                                </div>
+
+                                                <FaChevronRight color='white' size={20} />
+                                            </button>
+                                        ))}
                                     </div>
                                 </>
                             )}
