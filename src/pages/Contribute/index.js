@@ -9,6 +9,7 @@ import { LoadingTransaction } from "../../components/LoadingTransaction";
 import {ActivityIndicator} from '../../components/ActivityIndicator';
 import { BurnTokens as BurnRCSupporter } from "../../services/supporterService";
 import { BurnTokens } from "../../services/sacTokenService";
+import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
 
 export function Contribute() {
     const { walletConnected, connectionType, userData } = useMainContext();
@@ -21,6 +22,9 @@ export function Contribute() {
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [reason, setReason] = useState('');
+    const [itens, setItens] = useState([]);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
 
     useEffect(() => {
         if (impactToken) {
@@ -88,7 +92,7 @@ export function Contribute() {
         if (connectionType === 'provider') {
             contributeBlockchain();
         } else {
-
+            createTransaction();
         }
     }
 
@@ -177,6 +181,29 @@ export function Contribute() {
         }
     }
 
+    async function createTransaction(){
+        try {
+            setLoading(true);
+            await api.post('/transactions-open/create', {
+                wallet: userData?.wallet,
+                type: 'burn-tokens',
+                additionalData: JSON.stringify({
+                    value: Number(input),
+                    reason,
+                    itens: itens ? itens : []
+                }),
+            })
+            setInput('');
+            setCreatedTransaction(true);
+        } catch (err) {
+            if(err.response?.data?.message === 'open transaction of the same type'){
+                toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
             <Header />
@@ -236,7 +263,11 @@ export function Contribute() {
                         onClick={handleContribute}
                     >
                         {loading ? (
-                            <ActivityIndicator size={25}/>
+                            <>
+                            <div/>
+                                <ActivityIndicator size={25}/>
+                            <div/>
+                            </>
                         ) : (
                             <>
                             <div className="flex items-center gap-3">
@@ -269,6 +300,12 @@ export function Contribute() {
                     logTransaction={logTransaction}
                 />
             </Dialog.Root>
+
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => setCreatedTransaction(false)}
+                />
+            )}
 
             <ToastContainer />
         </div>
