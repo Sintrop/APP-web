@@ -5,7 +5,7 @@ import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
 import {GetBalanceDeveloper} from '../services/developersPoolService';
 import {GetBalanceProducer} from '../services/producerPoolService';
-import io from 'socket.io-client';
+import CryptoJS from "crypto-js";
 import {api} from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
@@ -116,12 +116,26 @@ export default function MainProvider({children}){
     async function Sync(){
         const wallet = await ConnectWallet();
         if(wallet.connectedStatus){
-            getUserDataApi(wallet.address[0]);
-            setWalletConnected(wallet.address[0]);
-            setConnectionType('provider');
-            return {
-                status: 'connected',
-                wallet: wallet.address[0]
+            const encrypt = CryptoJS.AES.encrypt(process.env.REACT_APP_LOGIN_SECRET_PASS, process.env.REACT_APP_LOGIN_SECURITY_KEY);
+
+            try{
+                const response = await api.post('/login/with-secure-key', {
+                    wallet: wallet.address[0],
+                    secureKey: encrypt.toString(),
+                })
+                
+                if(response.data){
+                    api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
+                    getUserDataApi(wallet.address[0]);
+                    setWalletConnected(String(wallet.address[0]).toLowerCase());
+                    setConnectionType('provider');
+                }
+                return {
+                    status: 'connected',
+                    wallet: wallet.address[0]
+                }
+            }catch(err){
+                console.log(err?.message)
             }
         }
     }

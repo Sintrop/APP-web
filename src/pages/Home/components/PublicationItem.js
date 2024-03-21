@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { getImage } from "../../../services/getImage";
 
 //icons
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
 
 //components
@@ -17,23 +17,80 @@ import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
 import { NewUserPubli } from "./NewUserPubli";
 import { PubliUser } from "./PubliUser";
 import { InvalidateUserPubli } from "./InvalidateUserPubli";
+import {useMainContext} from '../../../hooks/useMainContext';
+import { toast, ToastContainer } from "react-toastify";
+import { api } from "../../../services/api";
 
 export function PublicationItem({ data }) {
+    const {walletConnected, userData: user} = useMainContext();
     const navigate = useNavigate();
     const additionalData = JSON.parse(data.additionalData);
     const userData = additionalData.userData;
     const [imageProfile, setImageProfile] = useState(null);
     const [visiblePubli, setVisiblePubli] = useState(true);
     const [likes, setLikes] = useState(0);
+    const [liked, setLiked] = useState(false);
 
     useEffect(() => {
         getImageProfile();
         setLikes(data.LikesPublication.length);
     }, []);
 
+    useEffect(() => {
+        if(walletConnected !== '')checkLiked();
+    }, [walletConnected]);
+
     async function getImageProfile() {
         const imageUrl = await getImage(userData?.imgProfileUrl);
         setImageProfile(imageUrl);
+    }
+
+    async function handleLike() {
+        if (walletConnected === '') {
+            toast.error('Você não está conectado!')
+            return;
+        }
+
+        if (userData?.accountStatus === 'guest' || userData?.accountStatus === 'pending') {
+            toast.error('Você ainda não efetivou seu cadastro na Blockchain')
+            return;
+        }
+        setLiked(!liked);
+        if (liked) {
+            setLikes(likes - 1);
+            try {
+                await api.delete(`/publication/like/${data.id}/${user.id}`);
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            setLikes(likes + 1);
+            toast.success('Você curtiu uma publicação!')
+            await api.post('/publication/like', {
+                idPubli: data.id,
+                userData: JSON.stringify(user),
+                userId: user.id,
+                ownerId: data?.userId
+            })
+            await api.post('/notifications/send', {
+                from: user.wallet,
+                for: userData?.wallet,
+                type: 'like-publication',
+                data: JSON.stringify({
+                    text1: 'Liked your post',
+                    publiId: data.id
+                }),
+            })
+        }
+    }
+
+    async function checkLiked() {
+        const response = await api.get(`/check-liked/${user?.id}/${data?.id}`);
+        if (response.data.liked) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
     }
 
     if(!visiblePubli){
@@ -130,8 +187,8 @@ export function PublicationItem({ data }) {
             )}
            
             <div className="flex items-center border-t border-green-950 pt-2 gap-5">
-                <button className="flex flex-col items-center">
-                    <FaRegHeart color='white' size={20} />
+                <button className="flex flex-col items-center" onClick={handleLike}>
+                    {liked ? <FaHeart color='red' size={20} /> : <FaRegHeart color='white' size={20} />}
                     <p className="text-white font-bold text-sm">Curtir</p>
                 </button>
 
@@ -140,6 +197,8 @@ export function PublicationItem({ data }) {
                     <p className="text-white font-bold text-sm">Comentar</p>
                 </button>
             </div>
+
+            <ToastContainer/>
         </div>
     );
 }
