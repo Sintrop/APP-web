@@ -49,11 +49,15 @@ export function ModalConnectAccount({ close }) {
     }
 
     async function handleSyncWallet(){
+        if(loading){
+            return;
+        }
+        
         if (!window.ethereum) {
             toast.error('Você não tem um provedor ethereum em seu navegador!');
             return;
         }
-        setLoading();
+        setLoading(true);
         
         const response = await Sync();
         

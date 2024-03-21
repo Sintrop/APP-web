@@ -4,9 +4,10 @@ import { useParams, useNavigate } from "react-router";
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
-import { FaUser, FaListAlt, FaList, FaChevronRight } from "react-icons/fa";
+import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 
 const containerMapStyle = {
     width: '100%',
@@ -19,7 +20,7 @@ export function UserDetails() {
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState(null);
     const [imageProfile, setImageProfile] = useState(null);
-    const [tabSelected, setTabSelected] = useState('data');
+    const [tabSelected, setTabSelected] = useState('certificates');
     const [inspections, setInspections] = useState([]);
     const [proofPhoto, setProofPhoto] = useState(null);
     const [blockchainData, setBlockchainData] = useState({});
@@ -33,7 +34,7 @@ export function UserDetails() {
     }, []);
 
     useEffect(() => {
-        if(userData?.userType === 1 || userData?.userType === 2){
+        if (userData?.userType === 1 || userData?.userType === 2) {
             getInspections();
         }
     }, [userData]);
@@ -190,6 +191,14 @@ export function UserDetails() {
 
                             <div className="flex items-center gap-8 mt-2">
                                 <button
+                                    className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'certificates' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                                    onClick={() => setTabSelected('certificates')}
+                                >
+                                    <FaQrcode size={18} color={tabSelected === 'certificates' ? 'green' : 'white'} />
+                                    Certificados
+                                </button>
+
+                                <button
                                     className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'data' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                                     onClick={() => setTabSelected('data')}
                                 >
@@ -253,6 +262,8 @@ export function UserDetails() {
                                                         <p className="text-white font-bold text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.producer?.totalInspections}</span></p>
                                                         <p className="text-white font-bold text-sm">Score de regeneração: <span className="font-normal">{blockchainData?.producer?.isa?.isaScore} pts</span></p>
                                                         <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
+                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.producer?.proofPhoto}</span></p>
+                                                        <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.producer?.userType}</span></p>
                                                     </>
                                                 )}
 
@@ -261,6 +272,9 @@ export function UserDetails() {
                                                         <p className="text-white font-bold text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
                                                         <p className="text-white font-bold text-sm">Desistências: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
                                                         <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.inspector?.pool?.currentEra}</span></p>
+                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.inspector?.proofPhoto}</span></p>
+                                                        <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.inspector?.userType}</span></p>
                                                     </>
                                                 )}
 
@@ -268,6 +282,9 @@ export function UserDetails() {
                                                     <>
                                                         <p className="text-white font-bold text-sm">Pesquisas publicadas: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
                                                         <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.researcher?.pool?.currentEra}</span></p>
+                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.researcher?.proofPhoto}</span></p>
+                                                        <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.researcher?.userType}</span></p>
                                                     </>
                                                 )}
 
@@ -275,12 +292,18 @@ export function UserDetails() {
                                                     <>
                                                         <p className="text-white font-bold text-sm">Nível: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
                                                         <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.developer?.pool?.currentEra}</span></p>
+                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.developer?.proofPhoto}</span></p>
+                                                        <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.developer?.userType}</span></p>
                                                     </>
                                                 )}
 
                                                 {userData?.userType === 6 && (
                                                     <>
                                                         <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.activist?.pool?.currentEra}</span></p>
+                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.activist?.proofPhoto}</span></p>
+                                                        <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.activist?.userType}</span></p>
                                                     </>
                                                 )}
                                             </div>
@@ -341,6 +364,26 @@ export function UserDetails() {
                                         ))}
                                     </div>
                                 </>
+                            )}
+
+                            {tabSelected === 'certificates' && (
+                                <div className="mt-5 gap-5 flex flex-col">
+                                    {userData?.userType === 1 && (
+                                        <>
+                                            <ProducerCertificate
+                                                certificateType='long'
+                                                userData={userData}
+                                                blockchainData={blockchainData}
+                                            />
+
+                                            <ProducerCertificate
+                                                certificateType='short'
+                                                userData={userData}
+                                                blockchainData={blockchainData}
+                                            />
+                                        </>
+                                    )}
+                                </div>
                             )}
                         </>
                     )}
