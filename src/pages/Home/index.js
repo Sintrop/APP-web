@@ -12,6 +12,8 @@ import { FaCalculator } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
+import { NewPubli } from "./components/NewPubli";
+import { toast, ToastContainer } from "react-toastify";
 
 export function Home() {
     const { walletConnected, userData, imageProfile } = useMainContext();
@@ -146,6 +148,13 @@ export function Home() {
                         </div>
 
                         <div className="flex flex-col gap-3">
+                            {walletConnected !== '' && (
+                                <NewPubli attPublis={() => {
+                                    setPage(0)
+                                    getPublications();
+                                    toast.success('Publicação feita com sucesso!')
+                                }}/>
+                            )}
                             {publications.length > 0 && (
                                 <>
                                     {publications.map(item => (
@@ -180,7 +189,8 @@ export function Home() {
                     </div>
                 )}
             </div>
-
+            
+            <ToastContainer/>
             <Chat />
         </div>
     )

@@ -18,7 +18,7 @@ import {Education} from '../pages/Education';
 //
 import { Home } from "../pages/Home";
 import { Centers } from "../pages/Centers";
-import { Market } from "../pages/Market";
+import { RegenerationCredit } from "../pages/RegenerationCredit";
 import { Community } from "../pages/Community";
 import { Actions } from '../pages/Actions';
 import { UserDetails } from "../pages/UserDetails";
@@ -26,7 +26,7 @@ import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
 import { Ranking } from "../pages/Ranking";
-import { IcoPage } from "../pages/IcoPage";
+import { Market } from "../pages/Market";
 import { Contribute } from "../pages/Contribute";
 
 export default function Router(){
@@ -35,7 +35,7 @@ export default function Router(){
             <Routes>
                 <Route exact path="/" element={<Home/>}/>
                 <Route exact path="/centers" element={<Centers/>}/>
-                <Route exact path="/market" element={<Market/>}/>
+                <Route exact path="/regeneration-credit" element={<RegenerationCredit/>}/>
                 <Route exact path="/community" element={<Community/>}/>
                 <Route exact path="/actions" element={<Actions/>}/>
                 <Route exact path="/user-details/:wallet" element={<UserDetails/>}/>
@@ -43,7 +43,7 @@ export default function Router(){
                 <Route exact path="/result-inspection/:id" element={<ResultInspection/>}/>
                 <Route exact path="/researches-center" element={<ResearchesCenter/>}/>
                 <Route exact path="/ranking/:userType" element={<Ranking/>}/>
-                <Route exact path="/ico" element={<IcoPage/>}/>
+                <Route exact path="/market" element={<Market/>}/>
                 <Route exact path="/contribute" element={<Contribute/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>

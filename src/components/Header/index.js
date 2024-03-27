@@ -42,15 +42,15 @@ export function Header({routeActive}){
 
                     <button 
                         className="flex flex-col items-center hover:text-white w-[100px]"
-                        onClick={() => navigate('/market')}
+                        onClick={() => navigate('/regeneration-credit')}
                     >
                         <img
                             src={require('../../assets/token.png')}
                             className="w-6 h-6 object-contain"
                         />
-                        <p className={`${routeActive === 'market' ? 'text-white' : 'text-[#ccc]'}`}>Mercado</p>
+                        <p className={`${routeActive === 'regeneration-credit' ? 'text-white' : 'text-[#ccc]'}`}>Crédito</p>
 
-                        {routeActive === 'market' && (
+                        {routeActive === 'regeneration-credit' && (
                             <div className="w-full h-1 bg-white rounded-full"/>
                         )}
                     </button>
