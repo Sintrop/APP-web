@@ -236,7 +236,7 @@ export function Contribute() {
                                     <p className="text-white text-xs">Seu saldo</p>
                                     <div className="flex items-center gap-2 bg-green-950 p-2 rounded-md">
                                         <img
-                                            src={require('../../assets/token.png')}
+                                            src={require('../../../assets/token.png')}
                                             className="w-8 h-8 object-contain"
                                         />
 
@@ -272,7 +272,7 @@ export function Contribute() {
                             <>
                             <div className="flex items-center gap-3">
                                 <img
-                                    src={require('../../assets/icon-contribuir.png')}
+                                    src={require('../../../assets/icon-contribuir.png')}
                                     className="w-8 h-8 object-contain"
                                 />
                                 <p className="font-bold text-white">Contribuir</p>

@@ -49,7 +49,7 @@ export function RegenerationCredit() {
 
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
-                        onClick={() => alert('Disponível em breve')}
+                        onClick={() => navigate('/services')}
                     >
                         <img
                             src={require('../../assets/token.png')}

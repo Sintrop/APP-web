@@ -37,7 +37,7 @@ export function Market() {
 
                         <div className="flex items-center gap-2 mt-5">
                             <img
-                                src={require('../../assets/token.png')}
+                                src={require('../../../assets/token.png')}
                                 className="w-10 h-10 object-contain"
                             />
 
@@ -96,7 +96,7 @@ export function Market() {
                         target="_blank"
                     >
                         <img
-                            src={require('../../assets/uniswap.png')}
+                            src={require('../../../assets/uniswap.png')}
                             className="w-26 h-8 "
                         />
 
@@ -109,7 +109,7 @@ export function Market() {
                         target="_blank"
                     >
                         <img
-                            src={require('../../assets/mercado-bitcoin.png')}
+                            src={require('../../../assets/mercado-bitcoin.png')}
                             className="w-26 h-8 "
                         />
 
