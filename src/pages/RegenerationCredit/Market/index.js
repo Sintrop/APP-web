@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../../components/Header";
 import { FaEyeSlash, FaRegEye, FaChevronRight } from "react-icons/fa";
-import { useMainContext } from "../../hooks/useMainContext";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
-import { api } from "../../services/api";
+import { useMainContext } from "../../../hooks/useMainContext";
+import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { api } from "../../../services/api";
 
 export function Market() {
     const {walletConnected} = useMainContext();

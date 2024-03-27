@@ -26,8 +26,8 @@ import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
 import { Ranking } from "../pages/Ranking";
-import { Market } from "../pages/Market";
-import { Contribute } from "../pages/Contribute";
+import { Market } from "../pages/RegenerationCredit/Market";
+import { Contribute } from "../pages/RegenerationCredit/Contribute";
 
 export default function Router(){
     return(
