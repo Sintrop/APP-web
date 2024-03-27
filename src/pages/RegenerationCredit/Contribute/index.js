@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
-import { api } from "../../services/api";
-import { useMainContext } from "../../hooks/useMainContext";
+import { Header } from "../../../components/Header";
+import { api } from "../../../services/api";
+import { useMainContext } from "../../../hooks/useMainContext";
 import { FaChevronRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
-import { LoadingTransaction } from "../../components/LoadingTransaction";
-import {ActivityIndicator} from '../../components/ActivityIndicator';
-import { BurnTokens as BurnRCSupporter } from "../../services/supporterService";
-import { BurnTokens } from "../../services/sacTokenService";
-import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
+import { LoadingTransaction } from "../../../components/LoadingTransaction";
+import {ActivityIndicator} from '../../../components/ActivityIndicator';
+import { BurnTokens as BurnRCSupporter } from "../../../services/supporterService";
+import { BurnTokens } from "../../../services/sacTokenService";
+import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 
 export function Contribute() {
     const { walletConnected, connectionType, userData } = useMainContext();
