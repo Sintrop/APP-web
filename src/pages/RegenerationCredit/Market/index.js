@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header";
-import { FaEyeSlash, FaRegEye, FaChevronRight } from "react-icons/fa";
-import { useMainContext } from "../../../hooks/useMainContext";
+import { FaChevronRight } from "react-icons/fa";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
-import { api } from "../../../services/api";
+import { useNavigate } from "react-router";
 
 export function Market() {
-    const {walletConnected} = useMainContext();
-    const [balanceVisible, setBalanceVisible] = useState(false);
-    const [balanceData, setBalanceData] = useState(254256.451);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-
-
-    useEffect(() => {
-        if (walletConnected !== '') getBalanceData();
-    }, []);
-
-    async function getBalanceData() {
-        setLoading(true);
-        const response = await api.get(`/web3/balance-tokens/${walletConnected}`);
-        setBalanceData(response.data);
-        setLoading(false);
-    }
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
@@ -32,36 +17,6 @@ export function Market() {
                     <ActivityIndicator size={60}/>
                 )}
                 <div className="flex gap-1 flex-col max-w-[1024px] mt-3 items-start">
-                    <div className="flex flex-col bg-card bg-no-repeat bg-cover w-[365px] h-[200px] rounded-md p-3">
-                        <p className="text-xs text-gray-300">Meu patrimônio em</p>
-
-                        <div className="flex items-center gap-2 mt-5">
-                            <img
-                                src={require('../../../assets/token.png')}
-                                className="w-10 h-10 object-contain"
-                            />
-
-                            <h3 className="font-bold text-white text-xl">RC</h3>
-                        </div>
-
-                        <div className="flex items-center gap-5 mt-3">
-                            <div className="flex flex-col">
-                                <p className="font-bold text-white text-lg">{balanceVisible ? Intl.NumberFormat('pt-BR').format(Number(balanceData?.balance).toFixed(5)) : '*********'}</p>
-                                <p className="text-gray-300">{balanceVisible ? Intl.NumberFormat('pt-BR').format(Number(balanceData?.balance_reais).toFixed(2)) : '*********'}</p>
-                            </div>
-
-                            <button
-                                onClick={() => setBalanceVisible(!balanceVisible)}
-                            >
-                                {balanceVisible ? (
-                                    <FaRegEye color='white' size={25} />
-                                ) : (
-                                    <FaEyeSlash color='white' size={25} />
-                                )}
-                            </button>
-                        </div>
-                    </div>
-
                     <p className="font-bold text-white text-lg mt-3">Comprar</p>
                     <div className="flex flex-wrap justify-center gap-3">
                         <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-[400px]">
@@ -70,7 +25,7 @@ export function Market() {
 
                             <button
                                 className="font-bold text-white px-2 py-1 rounded-md bg-blue-600 mt-2"
-                                onClick={() => alert('Disponível em breve!')}
+                                onClick={() => navigate('/ico')}
                             >
                                 Comprar
                             </button>
@@ -82,7 +37,7 @@ export function Market() {
 
                             <button
                                 className="font-bold text-white px-2 py-1 rounded-md bg-blue-600 mt-2"
-                                onClick={() => alert('Disponível em breve!')}
+                                onClick={() => navigate('/pre-sale')}
                             >
                                 Comprar
                             </button>

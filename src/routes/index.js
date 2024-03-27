@@ -30,6 +30,9 @@ import { Market } from "../pages/RegenerationCredit/Market";
 import { Contribute } from "../pages/RegenerationCredit/Contribute";
 import { Pools } from "../pages/RegenerationCredit/Pools";
 import { Services } from "../pages/RegenerationCredit/Services";
+import { MyTokens } from "../pages/RegenerationCredit/MyTokens";
+import { Ico } from "../pages/RegenerationCredit/Ico";
+import { PreSale } from "../pages/RegenerationCredit/PreSale";
 
 export default function Router(){
     return(
@@ -49,6 +52,9 @@ export default function Router(){
                 <Route exact path="/contribute" element={<Contribute/>}/>
                 <Route exact path="/services" element={<Services/>}/>
                 <Route exact path="/pools/:poolType" element={<Pools/>}/>
+                <Route exact path="/my-tokens" element={<MyTokens/>}/>
+                <Route exact path="/ico" element={<Ico/>}/>
+                <Route exact path="/pre-sale" element={<PreSale/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 

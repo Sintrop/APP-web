@@ -58,6 +58,18 @@ export function RegenerationCredit() {
 
                         <p className="font-bold text-white text-xl mt-2">Recompensas</p>
                     </button>
+
+                    <button 
+                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
+                        onClick={() => navigate('/my-tokens')}
+                    >
+                        <img
+                            src={require('../../assets/token.png')}
+                            className="h-20 w-20 object-contain"
+                        />
+
+                        <p className="font-bold text-white text-xl mt-2">Meus tokens</p>
+                    </button>
                 </div>
             </div>
         </div>
