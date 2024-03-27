@@ -5,16 +5,19 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ModalBuyRc } from "./components/ModalBuyRc";
+import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 
 export function Ico() {
-    const { walletConnected } = useMainContext();
-    const [balanceVisible, setBalanceVisible] = useState(false);
     const [icoData, setIcoData] = useState({});
     const [loading, setLoading] = useState(false);
     const [totalSupply, setTotalSupply] = useState(0);
     const [totalWithdraw, setTotalWithdraw] = useState(0);
     const [totalAvaliable, setTotalAvaliable] = useState(0);
     const [series, setSeries] = useState([]);
+    const [modalBuy, setModalBuy] = useState(false);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
 
 
     useEffect(() => {
@@ -85,20 +88,37 @@ export function Ico() {
                                 <p className="text-white">Cotação</p>
                                 <h3 className="font-bold text-white text-xl mt-1">1 RC = 0,0000125 ETH</h3>
 
-                                <button
-                                    className="flex items-center justify-center w-full gap-2 bg-blue-500 font-bold text-white mt-3 rounded-md py-2"
-                                >
-                                    <img
-                                        src={require('../../../assets/token.png')}
-                                        className="w-5 h-5 object-contain"
+                                <Dialog.Root open={modalBuy} onOpenChange={(open) => setModalBuy(open)}>
+                                    <Dialog.Trigger
+                                        className="flex items-center justify-center w-full gap-2 bg-blue-500 font-bold text-white mt-3 rounded-md py-2"
+                                    >
+                                        <img
+                                            src={require('../../../assets/token.png')}
+                                            className="w-5 h-5 object-contain"
+                                        />
+                                        Comprar RC
+                                    </Dialog.Trigger>
+
+                                    <ModalBuyRc
+                                        close={(success) => {
+                                            setModalBuy(false);
+                                            if(success){
+                                                setCreatedTransaction(true);
+                                            }
+                                        }}
                                     />
-                                    Comprar RC
-                                </button>
+                                </Dialog.Root>
                             </div>
                         </div>
                     </div>
                 )}
             </div>
+
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => setCreatedTransaction(false)}
+                />
+            )}
         </div>
     )
 }
