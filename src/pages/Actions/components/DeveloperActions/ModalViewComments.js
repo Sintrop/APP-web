@@ -23,7 +23,7 @@ export function ModalViewComments({data, userData}){
 
     async function getComments() {
         setLoading(true);
-        const response = await api.get(`/feedback/comments/${Number(data.id)}`);
+        const response = await api.get(`/feedback/comments/${data.id}`);
         setComments(response.data.comments);
         setLoading(false);
     }
@@ -35,6 +35,7 @@ export function ModalViewComments({data, userData}){
                 walletAuthor: userData.wallet,
                 comment: comment,
                 feedbackId: data.id,
+                userData: JSON.stringify(userData),
             })
             comments.push(createComment.data.createComment);
             setComment('');
@@ -49,7 +50,7 @@ export function ModalViewComments({data, userData}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-black/60 fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[800px] h-[500px] bg-black rounded-md m-auto inset-0 border-2'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[800px] h-[500px] bg-[#0a4303] rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between mb-5'>
                     <div className='w-[25px]'/>
                     <Dialog.Title className='font-bold text-white'>{t('Comments')}</Dialog.Title>
@@ -79,7 +80,7 @@ export function ModalViewComments({data, userData}){
                     <div className='flex flex-col w-full mt-[-5px]'>
                         <div className='flex items-center gap-4 w-full justify-end mt-2'>
                         <textarea
-                            className='bg-black border rounded-md w-full p-2 h-12 text-white'
+                            className='bg-green-950 border rounded-md w-full p-2 h-12 text-white'
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder='Escreva aqui seu comentário'

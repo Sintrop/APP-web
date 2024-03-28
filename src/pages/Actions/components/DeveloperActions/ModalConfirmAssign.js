@@ -13,22 +13,17 @@ export function ModalConfirmAssign({data, close}){
     const [loading, setLoading] = useState(false);
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState('');
-    const [loadingPostComment, setLoadingPostComment] = useState(true);
-    const [responsibles, setResponsibles] = useState([]);
-
-    useEffect(() => {
-        responsibles.push(data.wallet);
-    },[]);
 
     async function handleAssign(){
         try{
             setLoading(true);
             const updatedFeedback = await api.put('/feedback/assign', {
                 id: data.id,
-                wallet: JSON.stringify(responsibles),
+                wallet: data.wallet,
             })
             close(updatedFeedback.data.feedbackUpdated);
         }catch(err){
+            console.log(err)
             toast.error(`${t('Algo deu errado, tente novamente!')}`)
         }finally{
             setLoading(false)

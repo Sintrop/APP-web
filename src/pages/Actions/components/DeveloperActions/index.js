@@ -3,7 +3,7 @@ import { api } from "../../../../services/api";
 import { ActivityIndicator } from '../../../../components/ActivityIndicator';
 import { FeedbackItem } from "./feedbackItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
-import {SendReportDev} from '../../../checkout/SendReportDev';
+import { SendReportDev } from '../../../checkout/SendReportDev';
 
 export function DeveloperActions() {
     const { userData, walletConnected } = useMainContext();
@@ -11,6 +11,7 @@ export function DeveloperActions() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [historyFeedbacks, setHistoryFeedbacks] = useState([]);
     const [modalDevReport, setModalDevReport] = useState(false);
+    const [tabSelected, setTabSelected] = useState('open')
 
     useEffect(() => {
         getFeedbacks();
@@ -53,16 +54,48 @@ export function DeveloperActions() {
             </div>
 
             <p className="text-gray-400 mt-5">Feedbacks/tasks</p>
+            <div className="flex items-center gap-8 mb-2">
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'open' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('open')}
+                >
+                    Abertas
+                </button>
+
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'history' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('history')}
+                >
+                    Histórico
+                </button>
+            </div>
             {loading && (
                 <ActivityIndicator size={50} />
             )}
-            {feedbacks.map(item => (
-                <FeedbackItem
-                    key={item.id}
-                    data={item}
-                    userData={userData}
-                />
-            ))}
+
+            {tabSelected === 'open' && (
+                <>
+                    {feedbacks.map(item => (
+                        <FeedbackItem
+                            key={item.id}
+                            data={item}
+                            userData={userData}
+                        />
+                    ))}
+                </>
+            )}
+
+            {tabSelected === 'history' && (
+                <>
+                    {historyFeedbacks.map(item => (
+                        <FeedbackItem
+                            key={item.id}
+                            data={item}
+                            userData={userData}
+                        />
+                    ))}
+                </>
+            )}
 
             {modalDevReport && (
                 <SendReportDev

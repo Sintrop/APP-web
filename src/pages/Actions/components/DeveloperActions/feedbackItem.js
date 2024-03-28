@@ -10,12 +10,14 @@ import { ModalViewComments } from './ModalViewComments';
 import { ModalConfirmAssign } from './ModalConfirmAssign';
 import Loader from '../../../../components/Loader';
 import { Marker } from './Marker';
+import { getImage } from '../../../../services/getImage';
+import { format } from 'date-fns';
 
 export function FeedbackItem({data, userData}){
     const {t} = useTranslation();
     const {walletAddress} = useParams();
     const [loadingPostComment, setLoadingPostComment] = useState(false);
-    const [imgBase64, setImgBase64] = useState('');
+    const [img, setImg] = useState('');
     const [editStatus, setEditStatus] = useState(false);
     const [status, setStatus] = useState(0);
     const [openAreaComment, setOpenAreaComment] = useState(false);
@@ -26,14 +28,15 @@ export function FeedbackItem({data, userData}){
     const [responsible, setResponsible] = useState(null);
     const [responsibleData, setResponsibleData] = useState(null);
     const [loadingResponsible, setLoadingResponsible] = useState(false);
+    const [imageProfile, setImageProfile] = useState('');
 
     useEffect(() => {
-        //getBase64();
+        getImageFeedback();
         setStatus(Number(data.status));
         setComments(data.CommentsFeedback);
-        // if(data.responsible){
-        //     if(data.responsible !== '[NULL]')setResponsible(JSON.parse(data.responsible)[0]);
-        // }
+        if(data.responsible){
+            setResponsible(data?.responsible)
+        }
     },[]);
 
     useEffect(() => {
@@ -46,6 +49,7 @@ export function FeedbackItem({data, userData}){
             const response = await api.get(`/user/${responsible}`);
             if(response.data.user){
                 setResponsibleData(response.data.user)
+                getImageProfile(response.data.user.imgProfileUrl)
             }
         }catch(err){
 
@@ -54,9 +58,14 @@ export function FeedbackItem({data, userData}){
         }
     }
 
-    async function getBase64(){
-        const response = await get(JSON.parse(data.photoHash)[0]);
-        setImgBase64(response);
+    async function getImageFeedback(){
+        const response = await getImage(JSON.parse(data.photoHash)[0]);
+        setImg(response);
+    }
+
+    async function getImageProfile(hash){
+        const response = await getImage(hash);
+        setImageProfile(response)
     }
 
     async function updateStatus(value){
@@ -77,6 +86,7 @@ export function FeedbackItem({data, userData}){
                 walletAuthor: userData.wallet,
                 comment: comment,
                 feedbackId: data.id,
+                userData: JSON.stringify(userData)
             })
             comments.push(createComment.data.createComment);
             setComment('');
@@ -91,7 +101,7 @@ export function FeedbackItem({data, userData}){
     return(
         <div key={data.id} className='flex flex-col w-full bg-[#0a4303] rounded-md p-5 mb-5'>
             <div className='flex items-center justify-between'>
-                <p className='font-bold text-[#ff9900] text-lg'>#{data.id} - {data.title}</p>
+                <p className='font-bold text-blue-500 text-lg'>#{data.id} - {data.title}</p>
 
                 <div className='flex items-center gap-2'>
                     {data.type === 'feedback' ? (
@@ -131,14 +141,16 @@ export function FeedbackItem({data, userData}){
                 </div>
             </div>
             <p className='text-justify text-white'>{data.description}</p>
-            {imgBase64 && (
+            {img && (
                 <img
-                    src={`data:image/png;base64,${imgBase64}`}
+                    src={img}
                     className='lg:h-[350px] object-contain'
                 />
             )}
-            <p className='text-sm mt-3'>{data.createdAt}</p>
-            <p className='text-sm'>{data.id}</p>
+
+            {data.createdAt && (
+                <p className='text-xs mt-3 text-gray-300'>{format(new Date(data.createdAt), 'dd/MM/yyyy - kk:mm')}</p>
+            )}
 
             {openAreaComment ? (
                 <div className='flex w-full gap-3'>
@@ -148,7 +160,7 @@ export function FeedbackItem({data, userData}){
                     />
 
                     <div className='flex flex-col w-full mt-[-5px]'>
-                        <p className='font-bold text-[#ff9900] mb-1'>{userData.name}</p>
+                        <p className='font-bold text-blue-500 mb-1'>{userData.name}</p>
                         <textarea
                             className='bg-green-950 border rounded-md w-full p-2 h-20 text-white'
                             value={comment}
@@ -169,7 +181,7 @@ export function FeedbackItem({data, userData}){
                             </button>
 
                             <button
-                                className='px-3 py-2 text-white font-bold rounded-md bg-[#ff9900]'
+                                className='px-3 py-2 text-white font-bold rounded-md bg-blue-500'
                                 onClick={handleComment}
                             >
                                 {t('Comment')}
@@ -206,12 +218,12 @@ export function FeedbackItem({data, userData}){
                                     ) : (
                                         <>
                                             <div className='flex flex-col items-end'>
-                                                <p className='text-[#ff9900] font-bold text-sm'>{t('Responsible for the task')}</p>
+                                                <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
                                                 <div className='flex gap-2 items-center mb-2'>
                                                     <p className='text-white font-bold text-sm'>{responsibleData?.name}</p>
                                                     <img
                                                         className='w-[40px] h-[40px] rounded-full border-2'
-                                                        src={`https://ipfs.io/ipfs/${responsibleData?.imgProfileUrl}`}
+                                                        src={imageProfile}
                                                     />
                                                 </div>
 
@@ -277,7 +289,7 @@ export function FeedbackItem({data, userData}){
                                 <>
                                 {userData?.userType === 4 ? (
                                     <button
-                                        className='px-3 py-2 bg-[#ff9900] rounded-md text-white font-bold text-sm'
+                                        className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
                                         onClick={() => setModalAssign(true)}
                                     >
                                         Atribuir para mim
@@ -331,7 +343,7 @@ export function FeedbackItem({data, userData}){
                     }}
                     close={(data) => {
                         setModalAssign(false);
-                        setResponsible(JSON.parse(data.responsible)[0]);
+                        setResponsible(data.responsible);
                     }}
                 />
             </Dialog.Root>
