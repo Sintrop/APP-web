@@ -33,6 +33,7 @@ import { Services } from "../pages/RegenerationCredit/Services";
 import { MyTokens } from "../pages/RegenerationCredit/MyTokens";
 import { Ico } from "../pages/RegenerationCredit/Ico";
 import { PreSale } from "../pages/RegenerationCredit/PreSale";
+import { Publication } from "../pages/Publication";
 
 export default function Router(){
     return(
@@ -55,6 +56,7 @@ export default function Router(){
                 <Route exact path="/my-tokens" element={<MyTokens/>}/>
                 <Route exact path="/ico" element={<Ico/>}/>
                 <Route exact path="/pre-sale" element={<PreSale/>}/>
+                <Route exact path="/publication/:id" element={<Publication/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
