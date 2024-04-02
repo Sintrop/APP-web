@@ -6,9 +6,18 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import Chart from "react-apexcharts";
 import { UserRankingItem } from "../../Ranking/components/UserRankingItem";
+import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
+import * as Dialog from '@radix-ui/react-dialog';
+import { LoadingTransaction } from "../../../components/LoadingTransaction";
+import { ToastContainer, toast } from "react-toastify";
+
+import { WithdrawTokens as WithdrawDeveloper } from "../../../services/developersService";
+import { WithdrawTokens as WithdrawResearcher } from "../../../services/researchersService";
+import { WithdrawTokens as WithdrawProducer } from "../../../services/producerService";
+import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
 
 export function Pools({ }) {
-    const { userData } = useMainContext();
+    const { userData, connectionType, walletConnected } = useMainContext();
     const { poolType } = useParams();
     const [loading, setLoading] = useState(false);
     const [poolData, setPoolData] = useState({});
@@ -23,6 +32,10 @@ export function Pools({ }) {
     const [totalSupply, setTotalSupply] = useState(0);
     const [totalWithdraw, setTotalWithdraw] = useState(0);
     const [series, setSeries] = useState([44, 55]);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
 
     useEffect(() => {
         getPoolData();
@@ -163,22 +176,212 @@ export function Pools({ }) {
         setLoadingUsers(false);
     }
 
-    // async function handleWithdraw() {
-    //     try {
-    //         setLoading(true);
-    //         await api.post('/transactions-open/create', {
-    //             wallet: userData?.wallet,
-    //             type: 'withdraw-tokens'
-    //         });
-    //         setModalQueue(true);
-    //     } catch (err) {
-    //         if (err.response?.data?.message === 'open transaction of the same type') {
-    //             alert('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
-    //         }
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
+    function handleWithdraw() {
+        if (connectionType === 'provider') {
+            withdrawOnBlockchain();
+        } else {
+            withdrawOnCheckout();
+        }
+    }
+
+    async function withdrawOnCheckout() {
+        try {
+            setLoading(true);
+            await api.post('/transactions-open/create', {
+                wallet: userData?.wallet,
+                type: 'withdraw-tokens'
+            });
+            setCreatedTransaction(true);
+        } catch (err) {
+            if (err.response?.data?.message === 'open transaction of the same type') {
+                alert('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    async function withdrawOnBlockchain() {
+        if (userData?.userType === 4) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawDeveloper(walletConnected)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+                        toast.success('Saque realizado com sucesso!');
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 1) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawProducer(walletConnected)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+                        toast.success('Saque realizado com sucesso!');
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 2) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawInspector(walletConnected)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+                        toast.success('Saque realizado com sucesso!');
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+
+        if (userData?.userType === 3) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            WithdrawResearcher(walletConnected)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'withdraw-tokens',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                transactionHash: res.hashTransaction
+                            }),
+                        });
+                        toast.success('Saque realizado com sucesso!');
+                    }
+                    setLoadingTransaction(false);
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Request OPEN or ACCEPTED")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Request OPEN or ACCEPTED',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+    }
 
     const options = {
         chart: {
@@ -261,7 +464,7 @@ export function Pools({ }) {
                                     </div>
 
                                     {nextApprove < 0 && (
-                                        <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500">
+                                        <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500" onClick={handleWithdraw}>
                                             Sacar tokens
                                         </button>
                                     )}
@@ -279,6 +482,26 @@ export function Pools({ }) {
                     )}
                 </div>
             </div>
+
+            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                if (!loadingTransaction) {
+                    setModalTransaction(open)
+                    setLoading(false);
+                }
+            }}>
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
+
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => setCreatedTransaction(false)}
+                />
+            )}
+
+            <ToastContainer/>
         </div>
     )
 }
