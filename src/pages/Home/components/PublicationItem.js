@@ -17,12 +17,13 @@ import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
 import { NewUserPubli } from "./NewUserPubli";
 import { PubliUser } from "./PubliUser";
 import { InvalidateUserPubli } from "./InvalidateUserPubli";
-import {useMainContext} from '../../../hooks/useMainContext';
+import { useMainContext } from '../../../hooks/useMainContext';
 import { toast, ToastContainer } from "react-toastify";
 import { api } from "../../../services/api";
+import { InvalidateInspectionPubli } from "./InvalidateInspectionPubli";
 
 export function PublicationItem({ data }) {
-    const {walletConnected, userData: user} = useMainContext();
+    const { walletConnected, userData: user } = useMainContext();
     const navigate = useNavigate();
     const additionalData = JSON.parse(data.additionalData);
     const userData = additionalData.userData;
@@ -37,7 +38,7 @@ export function PublicationItem({ data }) {
     }, []);
 
     useEffect(() => {
-        if(walletConnected !== '')checkLiked();
+        if (walletConnected !== '') checkLiked();
     }, [walletConnected]);
 
     async function getImageProfile() {
@@ -93,8 +94,8 @@ export function PublicationItem({ data }) {
         }
     }
 
-    if(!visiblePubli){
-        return <div/>
+    if (!visiblePubli) {
+        return <div />
     }
 
     return (
@@ -109,17 +110,17 @@ export function PublicationItem({ data }) {
                             />
                         ) : (
                             <>
-                            {imageProfile && (
-                                <img
-                                    src={imageProfile}
-                                    className="w-14 h-14 rounded-full object-cover"
-                                />
-                            )}
+                                {imageProfile && (
+                                    <img
+                                        src={imageProfile}
+                                        className="w-14 h-14 rounded-full object-cover"
+                                    />
+                                )}
                             </>
                         )}
                     </div>
                     <div className="flex flex-col ml-2">
-                        <p 
+                        <p
                             className="text-white font-bold text-sm hover:underline hover:cursor-pointer"
                             onClick={() => navigate(`/user-details/${String(userData?.wallet).toLowerCase()}`)}
                         >
@@ -142,11 +143,11 @@ export function PublicationItem({ data }) {
 
             <div>
                 {data.type === 'publi-user' && (
-                    <PubliUser data={data}/>
+                    <PubliUser data={data} />
                 )}
 
                 {data.type === 'accept-inspection' && (
-                    <AcceptInspectionPubli data={data}/>
+                    <AcceptInspectionPubli data={data} />
                 )}
 
                 {data.type === 'request-inspection' && (
@@ -156,36 +157,40 @@ export function PublicationItem({ data }) {
                 )}
 
                 {data.type === 'dev-report' && (
-                    <DevReportPubli additionalData={additionalData}/>
+                    <DevReportPubli additionalData={additionalData} />
                 )}
 
                 {data.type === 'withdraw-tokens' && (
-                    <WithdrawTokensPubli data={data} changeVisible={() => setVisiblePubli(false)}/>
+                    <WithdrawTokensPubli data={data} changeVisible={() => setVisiblePubli(false)} />
                 )}
 
                 {data.type === 'contribute-tokens' && (
-                    <ContributeTokensPubli data={data}/>
+                    <ContributeTokensPubli data={data} />
                 )}
 
                 {data.type === 'realize-inspection' && (
-                    <RealizeInspectionPubli data={data}/>
+                    <RealizeInspectionPubli data={data} />
                 )}
 
                 {data.type === 'new-user' && (
-                    <NewUserPubli userData={userData}/>
+                    <NewUserPubli userData={userData} />
                 )}
 
                 {data.type === 'vote-invalidate-user' && (
-                    <InvalidateUserPubli additionalData={additionalData}/>
+                    <InvalidateUserPubli additionalData={additionalData} />
+                )}
+
+                {data.type === 'vote-invalidate-inspection' && (
+                    <InvalidateInspectionPubli additionalData={additionalData} />
                 )}
             </div>
-            
+
             {likes > 0 && (
                 <button className="w-fit">
                     <p className="text-white ">{likes} Curtida{likes > 1 && 's'}</p>
                 </button>
             )}
-           
+
             <div className="flex items-center border-t border-green-950 pt-2 gap-5">
                 <button className="flex flex-col items-center" onClick={handleLike}>
                     {liked ? <FaHeart color='red' size={20} /> : <FaRegHeart color='white' size={20} />}
@@ -197,7 +202,7 @@ export function PublicationItem({ data }) {
                     <p className="text-white font-bold text-sm">Comentar</p>
                 </button>
 
-                <button 
+                <button
                     className="flex flex-col items-center"
                     onClick={() => {
                         navigator.clipboard.writeText(`https://app.sintrop.com/publication/${data?.id}`);
@@ -209,7 +214,7 @@ export function PublicationItem({ data }) {
                 </button>
             </div>
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 }
