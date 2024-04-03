@@ -55,6 +55,7 @@ export function Checkout() {
 
     async function connect() {
         const response = await ConnectWallet();
+        console.log(response);
         if (response.connectedStatus) {
             setWalletAddress(response.address[0]);
         }
