@@ -116,7 +116,6 @@ export default function MainProvider({children}){
     async function Sync(){
         const wallet = await ConnectWallet();
         if(wallet.connectedStatus){
-            console.log(wallet)
             const encrypt = CryptoJS.AES.encrypt(process.env.REACT_APP_LOGIN_SECRET_PASS, process.env.REACT_APP_LOGIN_SECURITY_KEY);
 
             try{

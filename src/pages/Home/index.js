@@ -49,8 +49,8 @@ export function Home() {
 
             <div className="flex flex-col items-center w-full mt-20 overflow-auto">
                 {loading ? (
-                    <div className="mt-3">
-                        <ActivityIndicator size={50} />
+                    <div className="mt-3 flex items-center justify-center h-[100vh]">
+                        <ActivityIndicator size={180} />
                     </div>
                 ) : (
                     <div className="flex gap-3 mt-3">

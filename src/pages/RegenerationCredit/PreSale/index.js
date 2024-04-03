@@ -5,6 +5,8 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ModalReserve } from "./components/ModalReserve";
 
 export function PreSale() {
     const { walletConnected } = useMainContext();
@@ -17,6 +19,7 @@ export function PreSale() {
     const [totalReserved, setTotalReserved] = useState(0);
     const [series, setSeries] = useState([]);
     const [bookings, setBookings] = useState([]);
+    const [modalReserve, setModalReserve] = useState(false);
 
 
     useEffect(() => {
@@ -95,15 +98,27 @@ export function PreSale() {
                                 <p className="text-white">Cotação</p>
                                 <h3 className="font-bold text-white text-xl mt-1">1 RC = R$ 0,0282</h3>
 
-                                <button
-                                    className="flex items-center justify-center w-full gap-2 bg-blue-500 font-bold text-white mt-3 rounded-md py-2"
-                                >
-                                    <img
-                                        src={require('../../../assets/token.png')}
-                                        className="w-5 h-5 object-contain"
+                                <Dialog.Root open={modalReserve} onOpenChange={(open) => setModalReserve(open)}>
+                                    <Dialog.Trigger
+                                        className="flex items-center justify-center w-full gap-2 bg-blue-500 font-bold text-white mt-3 rounded-md py-2"
+                                    >
+                                        <img
+                                            src={require('../../../assets/token.png')}
+                                            className="w-5 h-5 object-contain"
+                                        />
+                                        Reservar RC
+                                    </Dialog.Trigger>
+
+                                    <ModalReserve
+                                        reserved={(data) => {
+                                            bookings.push(data);
+                                            setTimeout(() => {
+                                                setModalReserve(false);
+                                                alert('Reserva feita com sucesso! Em breve nossa equipe entrará em contato para alinhar os próximos passos.')
+                                            }, 2000);
+                                        }}
                                     />
-                                    Comprar RC
-                                </button>
+                                </Dialog.Root>
                             </div>
                         </div>
 

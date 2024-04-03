@@ -10,7 +10,7 @@ export function ActivityIndicator({size}){
 
             <img
                 src={require('../assets/logos-green.png')}
-                className={`w-[15px] h-[15px] object-contain absolute`}
+                className={`${size > 150 ? 'w-[100px] h-[100px]' : 'w-[15px] h-[15px]'} object-contain absolute`}
             />
         </div>
     )
