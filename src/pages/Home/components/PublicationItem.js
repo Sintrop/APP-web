@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { getImage } from "../../../services/getImage";
 
 //icons
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaShare } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
 
 //components
@@ -195,6 +195,17 @@ export function PublicationItem({ data }) {
                 <button className="flex flex-col items-center">
                     <BsChat color='white' size={20} />
                     <p className="text-white font-bold text-sm">Comentar</p>
+                </button>
+
+                <button 
+                    className="flex flex-col items-center"
+                    onClick={() => {
+                        navigator.clipboard.writeText(`https://app.sintrop.com/publication/${data?.id}`);
+                        toast.success('Link copiado para área de transferência.')
+                    }}
+                >
+                    <FaShare color='white' size={20} />
+                    <p className="text-white font-bold text-sm">Compartilhar</p>
                 </button>
             </div>
 
