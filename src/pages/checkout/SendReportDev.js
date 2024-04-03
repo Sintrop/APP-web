@@ -5,9 +5,11 @@ import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { api } from '../../services/api';
 import { AddContribution } from '../../services/developersService';
-import { useParams } from 'react-router';
+import { useMainContext } from '../../hooks/useMainContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 export function SendReportDev({ close, walletAddress, userData }) {
+    const {connectionType} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [pathPDF, setPathPDF] = useState('');
     const [loadingTransaction, setLoadingTransaction] = useState(false);
@@ -22,6 +24,11 @@ export function SendReportDev({ close, walletAddress, userData }) {
     }
 
     async function handleSend() {
+        if(connectionType === 'notprovider'){
+            toast.error('Você só pode realizar essa ação em um navegador com provedor ethereum!')
+            return
+        }
+        
         if(pathPDF === '') return;
 
         setModalTransaction(true);
