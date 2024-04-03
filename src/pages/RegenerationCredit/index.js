@@ -37,14 +37,14 @@ export function RegenerationCredit() {
 
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
-                        onClick={() => alert('Disponível em breve')}
+                        onClick={() => navigate('/impact')}
                     >
                         <img
                             src={require('../../assets/network.png')}
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Impacto da rede</p>
+                        <p className="font-bold text-white text-xl mt-2">Impacto e estatísticas</p>
                     </button>
 
                     <button 
