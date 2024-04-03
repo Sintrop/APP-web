@@ -57,13 +57,13 @@ export default function Router(){
                 <Route exact path="/ico" element={<Ico/>}/>
                 <Route exact path="/pre-sale" element={<PreSale/>}/>
                 <Route exact path="/publication/:id" element={<Publication/>}/>
+                <Route exact path="/producer/:walletSelected" element={<AccountProducer/>}/>
+                <Route exact path="/supporter/:walletSelected" element={<AccountInvestor/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
-                <Route exact path="/account-producer/:walletSelected" element={<AccountProducer/>}/>
-                <Route exact path="/account-investor/:walletSelected" element={<AccountInvestor/>}/>
                 <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
                 <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
