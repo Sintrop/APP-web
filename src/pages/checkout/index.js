@@ -55,8 +55,6 @@ export function Checkout() {
 
     async function connect() {
         const response = await ConnectWallet();
-        console.log(response);
-        console.log(process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS);
         if (response.connectedStatus) {
             setWalletAddress(response.address[0]);
         }
