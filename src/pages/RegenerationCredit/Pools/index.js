@@ -416,8 +416,8 @@ export function Pools({ }) {
             <div className="flex flex-col items-center w-full mt-20">
                 <div className="flex flex-col max-w-[1024px]">
                     {loading ? (
-                        <div className="flex justify-center mt-3">
-                            <ActivityIndicator size={60} />
+                        <div className="flex justify-center items-center mt-3 h-[90vh]">
+                            <ActivityIndicator size={180} />
                         </div>
                     ) : (
                         <div className="flex flex-col mt-3">

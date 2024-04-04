@@ -28,7 +28,7 @@ export function Services({}){
                         onClick={() => navigate('/pools/developers')}
                     >
                         <img
-                            src={require('../../../assets/icon-dev-2.png')}
+                            src={require('../../../assets/centro-dev.png')}
                             className="h-20 w-20 object-contain"
                         />
 
@@ -40,7 +40,7 @@ export function Services({}){
                         onClick={() => navigate('/pools/researchers')}
                     >
                         <img
-                            src={require('../../../assets/icon-pesquisadores.png')}
+                            src={require('../../../assets/centro-pesquisa.png')}
                             className="h-20 w-20 object-contain"
                         />
 
@@ -52,7 +52,7 @@ export function Services({}){
                         onClick={() => navigate('/pools/inspectors')}
                     >
                         <img
-                            src={require('../../../assets/icon-inspetor.png')}
+                            src={require('../../../assets/centro-inspecao.png')}
                             className="h-20 w-20 object-contain"
                         />
 
