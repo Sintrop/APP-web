@@ -55,11 +55,13 @@ export default function MainProvider({children}){
     const [viewMode, setViewMode] = useState(true);
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [transactionOpened, setTranscationsOpened] = useState([]);
+    const [accountStatus, setAccountStatus] = useState('pending');
+    const [blockchainData, setBlockchainData] = useState({});
 
     useEffect(() => {
         getStorageLanguage();
         getImpact();
-        checkMode();
+        //checkMode();
     }, []);
 
     useEffect(() => {
@@ -69,16 +71,16 @@ export default function MainProvider({children}){
         }, 10000)
     }, [getAtualBlock])
 
-    useEffect(() => {
-        getNotifications();
-        setTimeout(() => {
-            setAttNotifications(!attNotifications);
-        }, 10000)
-    }, [attNotifications]);
+    // useEffect(() => {
+    //     getNotifications();
+    //     setTimeout(() => {
+    //         setAttNotifications(!attNotifications);
+    //     }, 10000)
+    // }, [attNotifications]);
 
-    useEffect(() => {
-        if(walletConnected !== '')checkTransactionQueue();
-    }, [walletConnected]);
+    // useEffect(() => {
+    //     if(walletConnected !== '')checkTransactionQueue();
+    // }, [walletConnected]);
 
     async function checkTransactionQueue(){
         const response = await api.get(`/transactions-open/${walletConnected}`);
@@ -212,9 +214,46 @@ export default function MainProvider({children}){
         const response = await api.get(`/user/${wallet}`);
         const resUser = response.data.user
         setUserData(resUser);
+        setAccountStatus(resUser?.accountStatus);
+        
+        if(resUser?.accountStatus === 'blockchain'){
+            getUserBlockchainData(wallet, resUser?.userType);
+        }
 
         const image = await getImage(resUser.imgProfileUrl);
         setImageProfile(image);
+    }
+
+    async function getUserBlockchainData(wallet, userType){
+        if (userType === 1) {
+            const response = await api.get(`/web3/producer-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
+
+        if (userType === 2) {
+            const response = await api.get(`/web3/inspector-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
+
+        if (userType === 4) {
+            const response = await api.get(`/web3/developer-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
+
+        if (userType === 3) {
+            const response = await api.get(`/web3/researcher-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
+
+        if (userType === 6) {
+            const response = await api.get(`/web3/activist-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
+
+        if (userType === 8) {
+            const response = await api.get(`/web3/validator-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+        }
     }
 
     async function getAtualBlockNumber(){
@@ -368,7 +407,9 @@ export default function MainProvider({children}){
                 userData,
                 loginWithWalletAndPassword,
                 imageProfile,
-                connectionType
+                connectionType,
+                accountStatus,
+                blockchainData
             }}
         >
             {children}

@@ -8,14 +8,16 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../components/ModalConnectAccount";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
-import { FaCalculator } from "react-icons/fa";
+import { FaCalculator, FaChevronRight } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
+import {useNavigate} from 'react-router-dom';
 
 export function Home() {
+    const navigate = useNavigate();
     const { walletConnected, userData, imageProfile } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [publications, setPublications] = useState([]);
@@ -96,6 +98,14 @@ export function Home() {
                                             {userData?.userType === 8 && 'Validador(a)'}
                                         </p>
                                         <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
+
+                                        <button
+                                            className="w-full flex items-center justify-between text-semibold text-white text-sm mt-5"
+                                            onClick={() => navigate('/profile')}
+                                        >
+                                            Accessar perfil
+                                            <FaChevronRight size={15} color='white' />
+                                        </button>
                                     </>
                                 )}
                             </div>
