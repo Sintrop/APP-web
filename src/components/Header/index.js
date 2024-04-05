@@ -48,7 +48,7 @@ export function Header({routeActive}){
                             src={require('../../assets/token.png')}
                             className="w-6 h-6 object-contain"
                         />
-                        <p className={`${routeActive === 'regeneration-credit' ? 'text-white' : 'text-[#ccc]'}`}>Crédito</p>
+                        <p className={`${routeActive === 'regeneration-credit' ? 'text-white' : 'text-[#ccc]'}`}>CR</p>
 
                         {routeActive === 'regeneration-credit' && (
                             <div className="w-full h-1 bg-white rounded-full"/>

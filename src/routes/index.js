@@ -35,6 +35,7 @@ import { Ico } from "../pages/RegenerationCredit/Ico";
 import { PreSale } from "../pages/RegenerationCredit/PreSale";
 import { Publication } from "../pages/Publication";
 import { Impact } from "../pages/RegenerationCredit/Impact";
+import { ViewBooking } from "../pages/RegenerationCredit/PreSale/ViewBookings";
 
 export default function Router(){
     return(
@@ -61,6 +62,7 @@ export default function Router(){
                 <Route exact path="/producer/:walletSelected" element={<AccountProducer/>}/>
                 <Route exact path="/supporter/:walletSelected" element={<AccountInvestor/>}/>
                 <Route exact path="/impact" element={<Impact/>}/>
+                <Route exact path="/bookings" element={<ViewBooking/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 

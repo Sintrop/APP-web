@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header";
-import { FaEyeSlash, FaRegEye, FaChevronRight } from "react-icons/fa";
+import { FaEyeSlash, FaRegEye, FaChevronRight, FaMobile } from "react-icons/fa";
+import { SiGooglesheets, SiReadthedocs } from "react-icons/si";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalReserve } from "./components/ModalReserve";
+import {useCountdown} from '../../../hooks/useCountdown';
 
 export function PreSale() {
+    const [day, hour, minute, second] = useCountdown('2024-06-25 23:59:59');
     const { walletConnected } = useMainContext();
     const [balanceVisible, setBalanceVisible] = useState(false);
     const [icoData, setIcoData] = useState({});
@@ -54,7 +57,7 @@ export function PreSale() {
             width: 380,
             type: 'pie',
         },
-        labels: [`Saldo disponível (${Intl.NumberFormat('pt-BR').format(totalAvaliable)})`, `Reservado (${Intl.NumberFormat('pt-BR').format(totalReserved)})`],
+        labels: [`Tokens disponíveis (${Intl.NumberFormat('pt-BR').format(totalAvaliable)})`, `Reservado (${Intl.NumberFormat('pt-BR').format(totalReserved)})`],
         responsive: [{
             breakpoint: 480,
             options: {
@@ -80,10 +83,12 @@ export function PreSale() {
 
             <div className="flex flex-col items-center w-full mt-20 overflow-auto">
                 {loading ? (
-                    <ActivityIndicator size={60} />
+                    <div className="flex items-center h-[100vh]">
+                        <ActivityIndicator size={180} />
+                    </div>
                 ) : (
                     <div className="flex flex-col max-w-[1024px] mt-3">
-                        <h3 className="font-bold text-xl text-white">Pré venda</h3>
+                        <h3 className="font-bold text-xl text-white">Pré venda do Crédito de Regeneração</h3>
                         <div className="flex bg-[#0a4303] p-3 rounded-md w-[800px]">
                             <div className="flex flex-col items-center w-[50%]">
                                 <Chart
@@ -95,18 +100,58 @@ export function PreSale() {
                             </div>
 
                             <div className="flex flex-col justify-center w-[50%]">
-                                <p className="text-white">Cotação</p>
-                                <h3 className="font-bold text-white text-xl mt-1">1 RC = R$ 0,0282</h3>
+                                <p className="text-center text-sm text-white">Essa oferta encerra em (25/06/2024)</p>
+                                <div className="flex items-center justify-center gap-2">
+                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
+                                        <p className="font-bold text-white text-xl">{day}</p>
+                                        <p className="text-center text-xs text-white">Dias</p>
+                                    </div>
+                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
+                                        <p className="font-bold text-white text-xl">{hour}</p>
+                                        <p className="text-center text-xs text-white">Horas</p>
+                                    </div>
+                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
+                                        <p className="font-bold text-white text-xl">{minute}</p>
+                                        <p className="text-center text-xs text-white">Minutos</p>
+                                    </div>
+                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
+                                        <p className="font-bold text-white text-xl">{second}</p>
+                                        <p className="text-center text-xs text-white">Segundos</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col border rounded-md p-2 gap-1 mt-3">
+                                    <div className="flex items-center w-full justify-between">
+                                        <h3 className="text-gray-300 text-sm">Tokens ofertados</h3>
+                                        <p className="font-bold text-white">39.000.000</p>
+                                    </div>
+                                    <div className="flex items-center w-full justify-between">
+                                        <h3 className="text-gray-300 text-sm">% da oferta privada</h3>
+                                        <p className="font-bold text-white">8,97 %</p>
+                                    </div>
+                                    <div className="flex items-center w-full justify-between">
+                                        <h3 className="text-gray-300 text-sm">Valor unitário</h3>
+                                        <p className="font-bold text-white">R$ 0,0282</p>
+                                    </div>
+                                    <div className="flex items-center w-full justify-between">
+                                        <h3 className="text-gray-300 text-sm">Alvo de capitalização</h3>
+                                        <p className="font-bold text-white">R$ 1.100.000,00</p>
+                                    </div>
+                                    <div className="flex items-center w-full justify-between">
+                                        <h3 className="text-gray-300 text-sm">Capitalização de mercado</h3>
+                                        <p className="font-bold text-white">R$ 12.267.000,00</p>
+                                    </div>
+                                </div>
 
                                 <Dialog.Root open={modalReserve} onOpenChange={(open) => setModalReserve(open)}>
                                     <Dialog.Trigger
-                                        className="flex items-center justify-center w-full gap-2 bg-blue-500 font-bold text-white mt-3 rounded-md py-2"
+                                        className="flex items-center justify-center w-full gap-2 bg-orange-500 font-bold text-white mt-3 rounded-md py-2"
                                     >
                                         <img
                                             src={require('../../../assets/token.png')}
                                             className="w-5 h-5 object-contain"
                                         />
-                                        Reservar RC
+                                        QUERO INVESTIR
                                     </Dialog.Trigger>
 
                                     <ModalReserve
@@ -119,6 +164,52 @@ export function PreSale() {
                                         }}
                                     />
                                 </Dialog.Root>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md w-[800px] mt-3">
+                            <p className="text-xs text-white">Convidamos pessoas que se importam com a regeneração do Planeta para ter acesso a uma oportunidade de investimento em um criptoativo verde, com a ambição de ajudar o Planeta e trazer ganhos econômicos ao mesmo tempo. </p>
+                            <p className="text-xs text-white mt-2">O problema que almejamos é resolver é a falta de incentivo econômico para a regeneração de ecossistemas. O crédito de carbono é um sistema que não oferece a solução que a humanidade necessita para enfrentar os gigantes desafios que tem pela frente, com o advento do aquecimento global e esgotamento dos recursos naturais. Nossa solução é o Crédito de Regeneração, criptoativo descentralizado de recompensa por serviços ambientais. Uma solução baseada na Natureza, totalmente inovadora, com uma metodologia de certificação descentralizada inédita e com a utilização da tecnologia da blockchain, trazendo transparência sobre os dados e confiança em contratos inteligentes.</p>
+                        </div>
+
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md w-[800px] mt-3">
+                            <p className="text-xs text-gray-400">Links</p>
+                            <div className="flex items-center flex-wrap gap-2 mt-1">
+                                <a 
+                                    href='https://docs.sintrop.com/suporte/acoes/apoiador/pre-venda-dos-tokens'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <SiReadthedocs size={25} color='white'/>
+                                    <p className="font-bold text-white text-sm">Tutorial</p>
+                                </a>
+
+                                <a 
+                                    href='https://www.sintrop.com/assets/qr-code/whitepaper.pdf'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <SiGooglesheets size={25} color='white'/>
+                                    <p className="font-bold text-white text-sm">Whitepaper (pt-BR)</p>
+                                </a>
+
+                                <a 
+                                    href='https://www.sintrop.com/assets/qr-code/whitepaper-EN.pdf'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <SiGooglesheets size={25} color='white'/>
+                                    <p className="font-bold text-white text-sm">Whitepaper (en-US)</p>
+                                </a>
+
+                                <a 
+                                    href='https://www.sintrop.com/app'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <FaMobile size={25} color='white'/>
+                                    <p className="font-bold text-white text-sm">App mobile</p>
+                                </a>
                             </div>
                         </div>
 

@@ -7,18 +7,22 @@ import { api } from '../../services/api';
 
 //services
 import {GetSupporter, GetCertificateTokens} from '../../services/accountProducerService';
+import {getImage} from '../../services/getImage';
+import { ContributeCertificate } from '../../components/Certificates/ContributeCertificate';
 
 export default function AccountInvestor(){
     const {t} = useTranslation();
     const {walletSelected} = useParams();
     const [investorData, setInvestorData] = useState([]);
+    const [userData, setUserData] = useState({});
     const [tokens, setTokens] = useState('0');
     const [proofPhotoBase64, setProofPhotoBase64] = useState('');
     const [receipts, setReceipts] = useState([]);
     const [impactInvestor, setImpactInvestor] = useState({});
+    const [imageProfile, setImageProfile] = useState(null);
 
     useEffect(() => {
-        getInvestor();
+        getSupporter();
         getReceipts();
         getImpact();
     },[]);
@@ -42,18 +46,20 @@ export default function AccountInvestor(){
         setImpactInvestor({carbon, water, bio, soil})
     }
 
-    async function getInvestor(){
-        const response = await GetSupporter(walletSelected);
-        if(response.userType === '0'){
-            let data = {
-                name: 'Investidor Anônimo'
-            }
-            setInvestorData(data);
-        }else{
-            setInvestorData(response);
+    async function getSupporter(){
+        const response = await api.get(`/user/${walletSelected}`);
+        setUserData(response.data.user);
+        if(response.data.user.imgProfileUrl){
+            getImageProfile(response.data.user.imgProfileUrl);
         }
-        const tokens = await GetCertificateTokens(walletSelected);
-        setTokens((Number(tokens) / 10**18));
+
+        const contributions = await api.get(`/web3/contributions/${String(walletSelected).toLowerCase()}`);
+        setTokens(contributions.data.tokensBurned)
+    }
+
+    async function getImageProfile(hash){
+        const response = await getImage(hash);
+        setImageProfile(response);
     }
 
     async function getReceipts(){
@@ -72,109 +78,76 @@ export default function AccountInvestor(){
     }
 
     return(
-        <div className="w-full flex flex-col  items-center bg-green-950">
-            <div className='w-full h-20 bg-gradient-to-r from-[#FFD875] to-[#461D03] flex items-center justify-center lg:justify-start lg:px-16'>
-                <img
-                    src={require('../../assets/logo-branco.png')}
-                    className='w-[170px] object-contain'
-                />
-            </div>
-
-            <div className='flex flex-col lg:w-[1000px] lg:flex-row w-full gap-5 lg:gap-10 items-center justify-center lg:px-30 lg:mt-10'>
+        <div className="w-full flex flex-col  items-center bg-green-950 pt-5 px-2 overflow-x-hidden">
+            
+            <img
+                src={require('../../assets/logo-branco.png')}
+                className='w-[140px] lg:w-[170px] object-contain'
+            />
+            
+            <div className='flex flex-col items-center lg:w-[1000px] lg:flex-row mt-5 w-full gap-5 lg:gap-5 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3'>
                 <img 
-                    src={`data:image/png;base64,${proofPhotoBase64}`} 
-                    className='h-[200px] w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
+                    src={imageProfile ? imageProfile : require('../../assets/token.png')} 
+                    className='h-[150px] w-[150px] lg:h-[200px] lg:w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
                 />
 
                 <div className='flex flex-col items-center lg:items-start'>
-                    <h1 className='font-bold text-center lg:text-left text-2xl text-white'>{investorData?.name}</h1>
-                    <h1 className='text-center lg:text-left text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h1>
-                    <div className='flex items-center justify-center px-5 py-3 bg-[#0a4303] rounded-md mt-2'>
-                        <p className='font-bold text-white'>{Number(tokens).toFixed(2).replace('.',',')} Créditos de Regeneração</p>
+                    <h1 className='font-bold text-center lg:text-left lg:text-2xl text-white'>{userData?.name}</h1>
+                    <h1 className='text-center lg:text-left lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h1>
+                    <div className='flex flex-col items-center lg:items-start px-5 py-3 bg-green-950 rounded-md mt-3'>
+                        <p className='text-white text-sm'>Contribuiu com</p>
+                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(tokens)} Créditos de Regeneração</p>
                     </div>
                 </div>
-
             </div>
 
-            <div className="flex flex-col items-center w-full mt-5 lg:mt-10 px-2 lg:px-0">
-                    <h3 className="font-bold text-white lg:text-3xl text-center lg:w-[700px] border-b-2 pb-5">A terra agradece sua contribuição, juntos tornaremos a agricultura regenerativa</h3>
-                
-                    <div className="flex flex-col w-full lg:w-[800px] mt-10 bg-[#0A4303] rounded-md border-2  px-2 py-4">
-                        <div className="flex w-full py-1 items-center justify-center bg-[#783E19] rounded-md">
-                            <p className="font-bold text-white text-xl">Meu impacto</p>
-                        </div>
-                        <div className="flex flex-col lg:flex-row w-full justify-center flex-wrap gap-2 mt-5">
-                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col lg:w-[30%] items-center">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Carbono</p>
-                                    <img
-                                        src={require('../../assets/icon-co2.png')}
-                                        className="w-[70px] h-[60px] object-cover"
-                                    />
-                                </div>
-                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.carbon).toFixed(2)}</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">kg</p>
-                                </div>
-                            </div>
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Impacto das contribuições</h3>
 
-                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col items-center lg:w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Solo</p>
-                                    <img
-                                        src={require('../../assets/icon-solo.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.soil).toFixed(2)}</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">m²</p>
-                                </div>
-                            </div>
+                <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
+                    <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                        <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.carbon)} kg</p>
+                        <p className='text-white text-xs lg:text-base'>Carbono</p>
+                    </div>
 
-                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col items-center lg:w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Biodiversidade</p>
-                                    <img
-                                        src={require('../../assets/icon-bio.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.bio).toFixed(2)}</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">uv</p>
-                                </div>
-                            </div>
+                    <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                        <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.soil)} m²</p>
+                        <p className='text-white text-xs lg:text-base'>Solo</p>
+                    </div>
 
-                            <div className="flex flex-col lg:flex-row lg:w-[49%] bg-white rounded-md px-4 py-5">
-                                <div className="flex flex-col items-center lg:w-[30%]">
-                                    <p className="font-bold text-[#0A4303] text-2xl">Água</p>
-                                    <img
-                                        src={require('../../assets/icon-agua.png')}
-                                        className="w-[50px] h-[50px] object-contain"
-                                    />
-                                </div>
-                                <div className="flex lg:w-[70%] h-full items-center justify-center mt-2">
-                                    <p className="font-bold text-[#0a4303] text-4xl lg:text-[50px]">{Number(impactInvestor?.water).toFixed(2)}</p>
-                                    <p className="font-bold text-[#0a4303] text-3xl">m³</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                        <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.water)} m³</p>
+                        <p className='text-white text-xs lg:text-base'>Água</p>
+                    </div>
+
+                    <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                        <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.bio)} uv</p>
+                        <p className='text-white text-xs lg:text-base'>Biodver.</p>
                     </div>
                 </div>
-
-            <div className="flex lg:w-[1000px] justify-center flex-wrap gap-10 mt-10">
-                    {receipts.length !== 0 && (
-                        <>
-                        {receipts.map((item, index) => (
-                            <ItemReceipt
-                                data={item}
-                                index={index + 1}
-                            />
-                        ))}
-                        </>
-                    )}
             </div>
+
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Certificado de contribuição</h3>
+                <ContributeCertificate wallet={walletSelected}/>
+            </div>
+
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3 mb-5'>
+                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Recibos de contribuição</h3>
+                <div className="flex lg:w-[1000px] justify-center flex-wrap gap-10">
+                        {receipts.length !== 0 && (
+                            <>
+                            {receipts.map((item, index) => (
+                                <ItemReceipt
+                                    data={item}
+                                    index={index + 1}
+                                />
+                            ))}
+                            </>
+                        )}
+                </div>
+            </div>
+
         </div>
     )
 }

@@ -37,7 +37,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData 
 
                     <div className="w-[250px] flex flex-col gap-1 bg-[#0a4303] rounded-md items-center justify-center">
                         <QRCode
-                            value={`https://${window.location.host}/account-producer/${blockchainData?.producer?.wallet}`}
+                            value={`https://${window.location.host}/producer/${blockchainData?.producer?.wallet}`}
                             size={140}
                             qrStyle="dots"
                             logoImage={require('../../assets/icone.png')}
@@ -78,7 +78,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData 
 
                     <div className="w-full flex flex-col p-4 bg-[#0a4303] rounded-md items-center justify-center">
                         <QRCode
-                            value={`https://${window.location.host}/account-producer/${blockchainData?.producer?.wallet}`}
+                            value={`https://${window.location.host}/producer/${blockchainData?.producer?.wallet}`}
                             size={140}
                             qrStyle="dots"
                             logoImage={require('../../assets/icone.png')}
