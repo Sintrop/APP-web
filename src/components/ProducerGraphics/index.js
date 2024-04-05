@@ -185,7 +185,7 @@ export function ProducerGraphics({ inspections }) {
                         {statisticType === 'bio' && 'Biodiversidade (uv)'}
                     </p>
                     <Chart series={seriesGraphic} options={configData} type='line' height={350} />
-                    <p className="text-white text-xs text-center mt-[-35px]">ID da inspeção</p>
+                    <p className="text-white text-xs text-center mt-[-30px]">ID da inspeção</p>
 
                     <div className="flex items-center gap-7 overflow-x-auto">
                         <button
