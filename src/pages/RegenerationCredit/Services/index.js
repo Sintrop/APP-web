@@ -58,6 +58,30 @@ export function Services({}){
 
                         <p className="font-bold text-white text-xl mt-2">Inspeção</p>
                     </button>
+
+                    <button 
+                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
+                        onClick={() => navigate('/pools/validators')}
+                    >
+                        <img
+                            src={require('../../../assets/validacao-icon.png')}
+                            className="h-20 w-20 object-contain"
+                        />
+
+                        <p className="font-bold text-white text-xl mt-2">Validação</p>
+                    </button>
+
+                    <button 
+                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
+                        onClick={() => alert('disponível em breve')}
+                    >
+                        <img
+                            src={require('../../../assets/icon-ativista.png')}
+                            className="h-20 w-20 object-contain"
+                        />
+
+                        <p className="font-bold text-white text-xl mt-2">Ativismo</p>
+                    </button>
                 </div>
             </div>
         </div>
