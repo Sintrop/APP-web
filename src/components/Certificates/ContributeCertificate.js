@@ -35,24 +35,24 @@ export function ContributeCertificate({wallet}){
     }
 
     return(
-        <div className="flex flex-col bg-green-950 rounded-md border-2 border-white lg:nw-[500px]">
+        <div className="flex flex-col bg-green-950 rounded-md border-2 border-white lg:w-[500px]">
             <div className="flex w-full items-center justify-center py-3 border-b border-green-500">
-                <p className="text-white text-sm">Já contribuiu com: <span className="font-bold text-white text-base">{Intl.NumberFormat('pt-BR').format(Number(userData?.tokensBurned))}</span> Créditos de Regeneração</p>
+                <p className="text-white text-center text-xs lg:text-sm">Já contribuiu com: <span className="font-bold text-white text-base">{Intl.NumberFormat('pt-BR').format(Number(userData?.tokensBurned))}</span> Créditos de Regeneração</p>
             </div>
             <div className="flex w-full items-center pl-3 py-3 border-b border-green-500">
-                <p className="text-sm text-white">Financiando o impacto de:</p>
+                <p className="text-xs lg:text-sm text-white">Financiando o impacto de:</p>
             </div>
             <div className="flex w-full items-center py-3">
                 <div className="flex flex-col pl-3 w-[50%]">
-                    <p className="text-white">Carbono: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.carbon)} kg</span></p>
-                    <p className="text-white">Solo: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.soil)} m²</span></p>
-                    <p className="text-white">Água: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.water)} m³</span></p>
-                    <p className="text-white">Biodiversidade: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.bio)} uv</span></p>
+                    <p className="text-white text-xs lg:text-base">Carbono: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.carbon)} kg</span></p>
+                    <p className="text-white text-xs lg:text-base">Solo: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.soil)} m²</span></p>
+                    <p className="text-white text-xs lg:text-base">Água: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.water)} m³</span></p>
+                    <p className="text-white text-xs lg:text-base">Biodiversidade: <span className="font-bold">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactInvestor?.bio)} uv</span></p>
                 </div>
 
                 <div className="flex flex-col w-[50%] items-end pr-3">
                     <div className="flex bg-green-950 p-3 rounded-md w-fit">
-                        <div className="flex bg-white p-1 rounded-md">
+                        <div className="bg-white p-1 rounded-md hidden lg:flex">
                             <QRCode
                                 value={`https://${window.location.host}/supporter/${wallet}`}
                                 size={120}
@@ -61,6 +61,20 @@ export function ContributeCertificate({wallet}){
                                 logoPadding={2}
                                 logoPaddingStyle="square"
                                 logoWidth={30}
+                                removeQrCodeBehindLogo
+                                eyeColor='#0a4303'
+                            />
+                        </div>
+
+                        <div className="bg-white p-1 rounded-md lg:hidden flex">
+                            <QRCode
+                                value={`https://${window.location.host}/supporter/${wallet}`}
+                                size={80}
+                                qrStyle="dots"
+                                logoImage={require('../../assets/token.png')}
+                                logoPadding={1}
+                                logoPaddingStyle="square"
+                                logoWidth={20}
                                 removeQrCodeBehindLogo
                                 eyeColor='#0a4303'
                             />
