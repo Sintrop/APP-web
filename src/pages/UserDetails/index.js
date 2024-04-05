@@ -8,6 +8,7 @@ import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode } from "react-icons
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
+import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
 
 const containerMapStyle = {
     width: '100%',
@@ -383,6 +384,11 @@ export function UserDetails() {
                                                     />
                                                 </>
                                             )}
+
+                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                <h3 className="font-bold text-white">Certificado curto</h3>
+                                                <ContributeCertificate wallet={wallet} />
+                                            </div>
                                         </div>
                                     )}
                                 </>
