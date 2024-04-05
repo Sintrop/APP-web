@@ -87,7 +87,7 @@ export function PreSale() {
                         <ActivityIndicator size={180} />
                     </div>
                 ) : (
-                    <div className="flex flex-col w-full lg:max-w-[1024px] mt-3">
+                    <div className="flex flex-col w-full lg:max-w-[1024px] lg:w-auto mt-3">
                         <h3 className="font-bold text-center lg:text-left lg:text-xl text-white">Pré venda do Crédito de Regeneração</h3>
                         <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:flex-row lg:w-[800px]">
                             <div className="flex flex-col items-center w-full lg:w-[50%]">
