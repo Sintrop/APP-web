@@ -9,7 +9,7 @@ export function Header({routeActive}){
 
     return(
         <div className="w-full flex items-center justify-center h-[80px] bg-[#0a4303] py-2 fixed top-0 left-0 border-b-2 border-green-700">
-            <div className="flex items-center justify-between min-w-[1024px]">
+            <div className="flex items-center justify-between w-full overflow-x-auto lg:min-w-[1024px]">
                 <div>
                     <img
                         src={require('../../assets/logo-branco.png')}
