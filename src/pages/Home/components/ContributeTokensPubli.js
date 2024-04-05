@@ -76,7 +76,7 @@ export function ContributeTokensPubli({ data }) {
 
                     <a 
                         className="mt-5 underline text-blue-400"
-                        href={`https://${window.location.host}/account-investor/${String(userData?.wallet).toLowerCase()}`}
+                        href={`https://${window.location.host}/supporter/${String(userData?.wallet).toLowerCase()}`}
                         target="_blank"
                     >
                         Ver contribuções
@@ -85,7 +85,7 @@ export function ContributeTokensPubli({ data }) {
 
                 <div className="flex bg-[#0a4303] p-3 rounded-md">
                     <QRCode
-                        value={`https://${window.location.host}/account-investor/${String(userData?.wallet).toLowerCase()}`}
+                        value={`https://${window.location.host}/supporter/${String(userData?.wallet).toLowerCase()}`}
                         size={120}
                         logoImage={require('../../../assets/icone.png')}
                         qrStyle="dots"
