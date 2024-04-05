@@ -81,16 +81,16 @@ export function PreSale() {
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full mt-20 overflow-auto px-2 lg:px-0">
                 {loading ? (
                     <div className="flex items-center h-[100vh]">
                         <ActivityIndicator size={180} />
                     </div>
                 ) : (
-                    <div className="flex flex-col max-w-[1024px] mt-3">
-                        <h3 className="font-bold text-xl text-white">Pré venda do Crédito de Regeneração</h3>
-                        <div className="flex bg-[#0a4303] p-3 rounded-md w-[800px]">
-                            <div className="flex flex-col items-center w-[50%]">
+                    <div className="flex flex-col w-full lg:max-w-[1024px] lg:w-auto mt-3">
+                        <h3 className="font-bold text-center lg:text-left lg:text-xl text-white">Pré venda do Crédito de Regeneração</h3>
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:flex-row lg:w-[800px]">
+                            <div className="flex flex-col items-center w-full lg:w-[50%]">
                                 <Chart
                                     options={options}
                                     series={series}
@@ -99,7 +99,7 @@ export function PreSale() {
                                 />
                             </div>
 
-                            <div className="flex flex-col justify-center w-[50%]">
+                            <div className="flex flex-col justify-center w-full mt-5 lg:mt-0 lg:w-[50%]">
                                 <p className="text-center text-sm text-white">Essa oferta encerra em (25/06/2024)</p>
                                 <div className="flex items-center justify-center gap-2">
                                     <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
@@ -122,24 +122,24 @@ export function PreSale() {
 
                                 <div className="flex flex-col border rounded-md p-2 gap-1 mt-3">
                                     <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-sm">Tokens ofertados</h3>
-                                        <p className="font-bold text-white">39.000.000</p>
+                                        <h3 className="text-gray-300 text-xs lg:text-sm">Tokens ofertados</h3>
+                                        <p className="font-bold text-white text-sm lg:text-base">39.000.000</p>
                                     </div>
                                     <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-sm">% da oferta privada</h3>
-                                        <p className="font-bold text-white">8,97 %</p>
+                                        <h3 className="text-gray-300 text-xs lg:text-sm">% da oferta privada</h3>
+                                        <p className="font-bold text-white text-sm lg:text-base">8,97 %</p>
                                     </div>
                                     <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-sm">Valor unitário</h3>
-                                        <p className="font-bold text-white">R$ 0,0282</p>
+                                        <h3 className="text-gray-300 text-xs lg:text-sm">Valor unitário</h3>
+                                        <p className="font-bold text-white text-sm lg:text-base">R$ 0,0282</p>
                                     </div>
                                     <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-sm">Alvo de capitalização</h3>
-                                        <p className="font-bold text-white">R$ 1.100.000,00</p>
+                                        <h3 className="text-gray-300 text-xs lg:text-sm">Alvo de capitalização</h3>
+                                        <p className="font-bold text-white text-sm lg:text-base">R$ 1.100.000,00</p>
                                     </div>
                                     <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-sm">Capitalização de mercado</h3>
-                                        <p className="font-bold text-white">R$ 12.267.000,00</p>
+                                        <h3 className="text-gray-300 text-xs lg:text-sm">Capitalização de mercado</h3>
+                                        <p className="font-bold text-white text-sm lg:text-base">R$ 12.267.000,00</p>
                                     </div>
                                 </div>
 
@@ -167,12 +167,12 @@ export function PreSale() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md w-[800px] mt-3">
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[800px] mt-3">
                             <p className="text-xs text-white">Convidamos pessoas que se importam com a regeneração do Planeta para ter acesso a uma oportunidade de investimento em um criptoativo verde, com a ambição de ajudar o Planeta e trazer ganhos econômicos ao mesmo tempo. </p>
                             <p className="text-xs text-white mt-2">O problema que almejamos é resolver é a falta de incentivo econômico para a regeneração de ecossistemas. O crédito de carbono é um sistema que não oferece a solução que a humanidade necessita para enfrentar os gigantes desafios que tem pela frente, com o advento do aquecimento global e esgotamento dos recursos naturais. Nossa solução é o Crédito de Regeneração, criptoativo descentralizado de recompensa por serviços ambientais. Uma solução baseada na Natureza, totalmente inovadora, com uma metodologia de certificação descentralizada inédita e com a utilização da tecnologia da blockchain, trazendo transparência sobre os dados e confiança em contratos inteligentes.</p>
                         </div>
 
-                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md w-[800px] mt-3">
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[800px] mt-3">
                             <p className="text-xs text-gray-400">Links</p>
                             <div className="flex items-center flex-wrap gap-2 mt-1">
                                 <a 

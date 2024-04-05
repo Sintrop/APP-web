@@ -36,6 +36,7 @@ import { PreSale } from "../pages/RegenerationCredit/PreSale";
 import { Publication } from "../pages/Publication";
 import { Impact } from "../pages/RegenerationCredit/Impact";
 import { ViewBooking } from "../pages/RegenerationCredit/PreSale/ViewBookings";
+import { Profile } from "../pages/Profile";
 
 export default function Router(){
     return(
@@ -63,6 +64,7 @@ export default function Router(){
                 <Route exact path="/supporter/:walletSelected" element={<AccountInvestor/>}/>
                 <Route exact path="/impact" element={<Impact/>}/>
                 <Route exact path="/bookings" element={<ViewBooking/>}/>
+                <Route exact path="/profile" element={<Profile/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 

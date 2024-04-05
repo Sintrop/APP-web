@@ -386,7 +386,7 @@ export function UserDetails() {
                                             )}
 
                                             <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
-                                                <h3 className="font-bold text-white">Certificado curto</h3>
+                                                <h3 className="font-bold text-white">Certificado de contribuição</h3>
                                                 <ContributeCertificate wallet={wallet} />
                                             </div>
                                         </div>

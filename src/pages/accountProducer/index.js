@@ -1,35 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './accountProducer.css';
 import { get } from '../../config/infura';
-import * as Dialog from '@radix-ui/react-dialog';
-import { IsProducerSyntropic } from '../../components/IsProducerSyntropic';
 import { useTranslation } from 'react-i18next';
-import { ModalChooseTypeDelation } from '../../components/ModalChooseTypeDelation';
 import { api } from '../../services/api';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
+import {FaChevronRight} from 'react-icons/fa';
 
 //services
 import { GetDelation, GetInspections, GetProducer } from '../../services/accountProducerService';
 
 //components
-import ItemInspection from '../../components/ProducerPageComponents/ItemInspection';
-import { InspectionItemResult } from './inspectionItemResult';
-import { Warning } from '../../components/Warning';
-import { ModalChooseLang } from '../../components/ModalChooseLang';
+
 import { useMainContext } from '../../hooks/useMainContext';
-import { ModalViewPhoto } from '../../components/ModalViewPhoto';
 import { getImage } from '../../services/getImage';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
-
-const containerStyle = {
-    width: '100%',
-    height: '400px',
-    borderWidth: 4,
-    borderRadius: 8,
-    borderColor: '#3E9EF5'
-};
 
 const containerMapStyle = {
     width: '100%',
@@ -37,18 +23,13 @@ const containerMapStyle = {
 };
 
 export default function AccountProducer() {
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const { walletSelected } = useParams();
-    const { modalChooseLang } = useMainContext();
     const [producerData, setProducerData] = useState([]);
     const [producerAddress, setProducerAddress] = useState([]);
     const [center, setCenter] = useState({})
     const [inspections, setInspections] = useState([]);
-    const [delationsReiceved, setDelationsReiceved] = useState('0');
-    const [proofPhotoBase64, setProofPhotoBase64] = useState('');
-    const [modalChooseTypeDelation, setModalChooseTypeDelation] = useState(false);
-    const [modalViewPhoto, setModalViewPhoto] = useState(false);
-    const [hashSelected, setHashSelected] = useState('');
     const [imageProfile, setImageProfile] = useState(null);
     const [userData, setUserData] = useState({});
     const [initialRegion, setInitialRegion] = useState(null);
@@ -63,9 +44,7 @@ export default function AccountProducer() {
         const response = await GetProducer(walletSelected);
         setProducerData(response);
         fixCoordinates(JSON.parse(response.propertyAddress.coordinate));
-        getBase64(response.proofPhoto);
         const delations = await GetDelation(response.producerWallet);
-        setDelationsReiceved(delations.length);
         getInspections();
     }
 
@@ -126,11 +105,6 @@ export default function AccountProducer() {
         setLoadingInspections(false);
     }
 
-    async function getBase64(path) {
-        const base64 = await get(path);
-        setProofPhotoBase64(base64);
-    }
-
     async function getProducerApi() {
         try {
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
@@ -167,7 +141,14 @@ export default function AccountProducer() {
                 <div className='flex flex-col items-center lg:items-start'>
                     <h1 className='font-bold text-center lg:text-left lg:text-2xl text-white'>{userData?.name}</h1>
                     <h3 className='text-center lg:text-left lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h3>
-                    <p className='lg:text-lg text-center lg:text-left text-white mt-2'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                    <p className='text-center lg:text-left text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+
+                    <button 
+                        className='font-semibold text-white px-3 py-1 rounded-md bg-blue-500 mt-2'
+                        onClick={() => navigate(`/user-details/${walletSelected}`)}
+                    >
+                        Ver perfil
+                    </button>
                 </div>
             </div>
 
@@ -195,7 +176,7 @@ export default function AccountProducer() {
                         <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
                     </div>
                 </div>
-
+    
                 <ProducerGraphics inspections={inspections}/>
             </div>
 
@@ -229,6 +210,32 @@ export default function AccountProducer() {
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3 mb-10'>
                 <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Inspeções recebidas</h3>
+
+                {inspections.map(item => (
+                    <div className='w-full flex flex-col lg:flex-row items-center justify-between bg-green-950 p-2 rounded-md mb-1'>
+                        <div className='flex flex-col w-full lg:w-fit'>
+                            <p className='font-bold text-white'>Inspeção #{item?.id}</p>
+
+                            <div className='p-2 rounded-md flex flex-col border mt-1'>
+                                <p className='text-white text-sm'>Pontuação: <span className='font-bold'>{item?.isaScore} pts</span></p>
+                                <p className='text-white text-sm max-w-[30ch] overflow-hidden text-ellipsis lg:max-w-[100ch]'>Wallet inspetor: 
+                                    <span 
+                                        className='font-bold cursor-pointer underline text-blue-400'
+                                        onClick={() => navigate(`/user-details/${item?.acceptedBy}`)}
+                                    > {item?.acceptedBy}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <button 
+                            className='flex items-center gap-2 font-bold text-white text-sm mt-5 lg:mt-0'
+                            onClick={() => navigate(`/result-inspection/${item?.id}`)}
+                        >
+                            Ver inspeção
+                            <FaChevronRight size={20} color='white' />
+                        </button>
+                    </div>
+                ))}
             </div>
         </div>
     )
