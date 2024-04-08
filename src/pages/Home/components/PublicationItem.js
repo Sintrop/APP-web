@@ -21,6 +21,7 @@ import { useMainContext } from '../../../hooks/useMainContext';
 import { toast, ToastContainer } from "react-toastify";
 import { api } from "../../../services/api";
 import { InvalidateInspectionPubli } from "./InvalidateInspectionPubli";
+import { ModalLikes } from "./ModalLikes";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -31,6 +32,7 @@ export function PublicationItem({ data }) {
     const [visiblePubli, setVisiblePubli] = useState(true);
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
+    const [modalLikes, setModalLikes] = useState(false);
 
     useEffect(() => {
         getImageProfile();
@@ -186,7 +188,7 @@ export function PublicationItem({ data }) {
             </div>
 
             {likes > 0 && (
-                <button className="w-fit">
+                <button className="w-fit" onClick={() => setModalLikes(true)}>
                     <p className="text-white ">{likes} Curtida{likes > 1 && 's'}</p>
                 </button>
             )}
@@ -213,6 +215,10 @@ export function PublicationItem({ data }) {
                     <p className="text-white font-bold text-sm">Compartilhar</p>
                 </button>
             </div>
+
+            {modalLikes && (
+                <ModalLikes close={() => setModalLikes(false)} publiId={data.id}/>
+            )}
 
             <ToastContainer />
         </div>
