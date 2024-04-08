@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import {useMainContext} from '../../hooks/useMainContext';
 import { DeveloperActions } from "./components/DeveloperActions";
+import { ValidatorActions } from "./components/ValidatorActions";
 
 export function Actions() {
     const {walletConnected, userData, connectionType} = useMainContext();
@@ -20,6 +21,10 @@ export function Actions() {
                         <div className="w-full flex flex-col">
                             {userData?.userType === 4 && (
                                 <DeveloperActions/>
+                            )}
+
+                            {userData?.userType === 8 && (
+                                <ValidatorActions/>
                             )}
                         </div>
                     )}

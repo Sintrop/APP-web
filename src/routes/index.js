@@ -37,6 +37,7 @@ import { Impact } from "../pages/RegenerationCredit/Impact";
 import { ViewBooking } from "../pages/RegenerationCredit/PreSale/ViewBookings";
 import { Profile } from "../pages/Profile";
 import { DeveloperCenter } from "../pages/Centers/DeveloperCenter";
+import { ValidationCenter } from "../pages/Centers/ValidationCenter";
 
 export default function Router(){
     return(
@@ -66,6 +67,7 @@ export default function Router(){
                 <Route exact path="/bookings" element={<ViewBooking/>}/>
                 <Route exact path="/profile" element={<Profile/>}/>
                 <Route exact path="/development-center" element={<DeveloperCenter/>}/>
+                <Route exact path="/validation-center" element={<ValidationCenter/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
