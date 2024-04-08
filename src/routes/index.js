@@ -9,7 +9,6 @@ import IndicesControl from "../pages/indicesControl";
 import { RequestSepolia } from "../pages/RequestSepolia";
 import { ViewImage } from "../pages/ViewImage";
 import { ResearchersCenter } from "../pages/ResearchersCenter";
-import { DevelopersCenter } from "../pages/DevelopersCenter";
 import {Register} from "../pages/register";
 import { Checkout } from "../pages/checkout";
 import { ViewPdf } from "../pages/ViewPdf";
@@ -37,6 +36,7 @@ import { Publication } from "../pages/Publication";
 import { Impact } from "../pages/RegenerationCredit/Impact";
 import { ViewBooking } from "../pages/RegenerationCredit/PreSale/ViewBookings";
 import { Profile } from "../pages/Profile";
+import { DeveloperCenter } from "../pages/Centers/DeveloperCenter";
 
 export default function Router(){
     return(
@@ -65,6 +65,7 @@ export default function Router(){
                 <Route exact path="/impact" element={<Impact/>}/>
                 <Route exact path="/bookings" element={<ViewBooking/>}/>
                 <Route exact path="/profile" element={<Profile/>}/>
+                <Route exact path="/development-center" element={<DeveloperCenter/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
@@ -73,7 +74,6 @@ export default function Router(){
                 <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
                 <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
-                <Route exact path="/developers-center/:walletAddress/:typeUser" element={<DevelopersCenter/>}/>
                 <Route exact path="/register/:walletAddress" element={<Register/>}/>
                 <Route exact path="/checkout" element={<Checkout/>}/>
                 <Route exact path="/view-pdf/:hash" element={<ViewPdf/>}/>
