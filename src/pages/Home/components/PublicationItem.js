@@ -101,7 +101,7 @@ export function PublicationItem({ data }) {
     }
 
     return (
-        <div className="w-[600px] bg-[#0a4303] p-2 rounded-lg flex flex-col gap-3">
+        <div className="w-full lg:w-[600px] bg-[#0a4303] p-2 rounded-lg flex flex-col gap-3">
             <div className="flex justify-between w-full">
                 <div className="flex">
                     <div className="w-14 h-14 rounded-full bg-gray-400">
