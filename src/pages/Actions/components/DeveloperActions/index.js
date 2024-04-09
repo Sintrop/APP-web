@@ -43,15 +43,17 @@ export function DeveloperActions() {
         <div className="flex flex-col w-[800px]">
             <h3 className="font-bold text-white text-lg">Centro de desenvolvimento</h3>
 
-            <div className="flex flex-col p-2 bg-[#0a4303] rounded-md mt-5">
-                <p className="text-gray-400">Relatório de desenvolvimento</p>
-                <button
-                    className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-1"
-                    onClick={() => setModalDevReport(true)}
-                >
-                    Enviar relatório
-                </button>
-            </div>
+            {userData?.userType === 4 && (
+                <div className="flex flex-col p-2 bg-[#0a4303] rounded-md mt-5">
+                    <p className="text-gray-400">Relatório de desenvolvimento</p>
+                    <button
+                        className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-1"
+                        onClick={() => setModalDevReport(true)}
+                    >
+                        Enviar relatório
+                    </button>
+                </div>
+            )}
 
             <p className="text-gray-400 mt-5">Feedbacks/tasks</p>
             <div className="flex items-center gap-8 mb-2">

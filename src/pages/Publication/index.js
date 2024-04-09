@@ -25,8 +25,8 @@ export function Publication() {
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3 items-center">
+            <div className="flex flex-col items-center mt-20 overflow-auto">
+                <div className={`flex flex-col w-[${window.screen.width}px] lg:w-[1024px] mt-3 items-center`}>
                     {loading && (
                         <ActivityIndicator size={50}/>
                     )}

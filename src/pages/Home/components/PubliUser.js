@@ -47,7 +47,7 @@ export function PubliUser({ data }) {
             </div>
 
             {imagesPubli.length > 0 && (
-                <div className="flex w-full h-[600px]">
+                <div className={`flex w-full h-[${window.screen.width}px] lg:h-[600px] `}>
                     {loadingImages && (
                         <div className="flex items-center justify-center w-full h-full">
                             <Blocks
@@ -64,7 +64,7 @@ export function PubliUser({ data }) {
 
                     <img
                         src={images[0]}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                     />
                 </div>
             )}
