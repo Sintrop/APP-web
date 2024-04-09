@@ -22,6 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { api } from "../../../services/api";
 import { InvalidateInspectionPubli } from "./InvalidateInspectionPubli";
 import { ModalLikes } from "./ModalLikes";
+import { ModalComments } from "./ModalComments";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -33,10 +34,13 @@ export function PublicationItem({ data }) {
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
     const [modalLikes, setModalLikes] = useState(false);
+    const [modalComments, setModalComments] = useState(false);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         getImageProfile();
         setLikes(data.LikesPublication.length);
+        setComments(data?.CommentsPublication)
     }, []);
 
     useEffect(() => {
@@ -199,7 +203,7 @@ export function PublicationItem({ data }) {
                     <p className="text-white font-bold text-sm">Curtir</p>
                 </button>
 
-                <button className="flex flex-col items-center">
+                <button className="flex flex-col items-center" onClick={() => setModalComments(true)}>
                     <BsChat color='white' size={20} />
                     <p className="text-white font-bold text-sm">Comentar</p>
                 </button>
@@ -216,8 +220,25 @@ export function PublicationItem({ data }) {
                 </button>
             </div>
 
+            {comments.length > 0 && (
+                <>
+                <div className="flex flex-col">
+                    <p className="text-white text-sm font-bold">{JSON.parse(comments[Number(comments?.length) - 1]?.userData).name}</p>
+                    <p className="text-white text-sm">{comments[Number(comments?.length) - 1]?.text}</p>
+                </div>
+
+                {comments.length > 1 && (
+                    <p className="text-gray-400 text-sm cursor-pointer" onClick={() => setModalComments(true)}>Ver todos os comentários</p>
+                )}
+                </>
+            )}
+
             {modalLikes && (
                 <ModalLikes close={() => setModalLikes(false)} publiId={data.id}/>
+            )}
+
+            {modalComments && (
+                <ModalComments close={() => setModalComments(false)} dataPubli={data}/>
             )}
 
             <ToastContainer />
