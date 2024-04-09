@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { format } from "date-fns";
 import {useNavigate} from 'react-router-dom';
+import { ModalValidation } from "./ModalValidation";
+import {useMainContext} from '../../../../hooks/useMainContext';
 
 export function InspectionValidation({data, validatorsCount}){
+    const {userData} = useMainContext();
     const navigate = useNavigate();
+    const [modalValidation, setModalValidation] = useState(false);
 
     return(
         <div className="flex flex-col w-full p-3 rounded-md bg-[#0a4303]">
@@ -29,13 +33,26 @@ export function InspectionValidation({data, validatorsCount}){
                 </div>
             </div>
             
-            <div className="flex items-center justify-center mt-5">
+            <div className="flex items-center justify-center mt-5 gap-5">
                 {data?.status === 2 && (
                     <button className="font-semibold text-white px-3 py-1 rounded-md bg-blue-500" onClick={() => navigate(`/result-inspection/${data?.id}`)}>
                         Ver inspeção
                     </button>
                 )}
+
+                {userData?.userType === 8 && (
+                    <button className="font-semibold text-white px-3 py-1 rounded-md bg-green-600" onClick={() => setModalValidation(true)}>
+                        Votar para invalidar
+                    </button>
+                )}
             </div>
+
+            {modalValidation && (
+                <ModalValidation
+                    close={() => setModalValidation(false)}
+                    data={data}
+                />
+            )}
         </div>
     )
 }
