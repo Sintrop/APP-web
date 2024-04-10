@@ -368,6 +368,12 @@ export default function MainProvider({children}){
         const responseNotifications = await api.get(`/notifications/${walletConnected}`);
         setNotifications(responseNotifications.data.notifications.Notifications)
     }
+
+    function logout(){
+        setWalletConnected('');
+        setUserData({});
+        setBlockchainData({});
+    }
     
     return(
         <MainContext.Provider
@@ -416,6 +422,7 @@ export default function MainProvider({children}){
                 setTokensToContribute,
                 itemsCalculator,
                 setItemsCalculator,
+                logout
             }}
         >
             {children}

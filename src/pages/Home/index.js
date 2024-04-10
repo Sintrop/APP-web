@@ -9,12 +9,14 @@ import { ModalConnectAccount } from "../../components/ModalConnectAccount";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
 import {useNavigate} from 'react-router-dom';
+import { ModalLogout } from "./components/ModalLogout";
 
 export function Home() {
     const navigate = useNavigate();
@@ -23,6 +25,7 @@ export function Home() {
     const [publications, setPublications] = useState([]);
     const [page, setPage] = useState(0);
     const [modalConnect, setModalConnect] = useState(false);
+    const [modalLogout, setModalLogout] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -105,6 +108,14 @@ export function Home() {
                                         >
                                             Accessar perfil
                                             <FaChevronRight size={15} color='white' />
+                                        </button>
+
+                                        <button
+                                            className="w-full flex items-center justify-between text-semibold text-[#ff0000] text-sm mt-5"
+                                            onClick={() => setModalLogout(true)}
+                                        >
+                                            Desconectar
+                                            <MdLogout size={15} color='#ff0000' />
                                         </button>
                                     </>
                                 )}
@@ -200,6 +211,14 @@ export function Home() {
                 )}
             </div>
             
+            {modalLogout && (
+                <ModalLogout
+                    close={() => {
+                        setModalLogout(false);
+                        setModalConnect(false);
+                    }}
+                />
+            )}
             <ToastContainer/>
             <Chat />
         </div>
