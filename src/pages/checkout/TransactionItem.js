@@ -2257,7 +2257,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const responseImpact = await api.get('network-impact');
         const impact = responseImpact.data.impact;
         for (var i = 0; i < impact.length; i++) {
-            if (impact[i].id === '1') {
+            if (impact[i].id === '6') {
                 carbon = Number(impact[i]?.carbon);
                 agua = Number(impact[i]?.agua);
                 bio = Number(impact[i]?.bio);
@@ -2322,7 +2322,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             agua,
             bio,
             solo,
-            id: '1'
+            id: '6'
         });
 
         if (methodType === 'phoenix') {
