@@ -136,7 +136,7 @@ export function Home() {
 
                                     <button
                                         className="flex flex-col items-center w-16"
-                                        onClick={() => alert('Disponível em breve!')}
+                                        onClick={() => navigate('/impact-calculator')}
                                     >
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <FaCalculator color='white' size={25} />
