@@ -12,7 +12,7 @@ import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 
 export function Contribute() {
-    const { walletConnected, connectionType, userData } = useMainContext();
+    const { walletConnected, connectionType, userData, itemsCalculator, tokensToContribute } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
     const [input, setInput] = useState('');
@@ -64,7 +64,10 @@ export function Contribute() {
     async function getImpact() {
         setLoading(true);
         const response = await api.get('/impact-per-token');
-        setImpactToken(response.data.impact)
+        setImpactToken(response.data.impact);
+        if(tokensToContribute > 0){
+            setInput(tokensToContribute);
+        }
         setLoading(false);
     }
 
@@ -154,7 +157,7 @@ export function Contribute() {
             tokens: Number(tokens),
             transactionHash: hash,
             reason: '',
-            itens: ''
+            itens: itemsCalculator
         }
 
         try {
@@ -190,7 +193,7 @@ export function Contribute() {
                 additionalData: JSON.stringify({
                     value: Number(input),
                     reason,
-                    itens: itens ? itens : []
+                    itens: itemsCalculator ? itemsCalculator : []
                 }),
             })
             setInput('');

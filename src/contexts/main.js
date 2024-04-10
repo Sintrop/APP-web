@@ -57,6 +57,8 @@ export default function MainProvider({children}){
     const [transactionOpened, setTranscationsOpened] = useState([]);
     const [accountStatus, setAccountStatus] = useState('pending');
     const [blockchainData, setBlockchainData] = useState({});
+    const [itemsCalculator, setItemsCalculator] = useState([]);
+    const [tokensToContribute, setTokensToContribute] = useState(0);
 
     useEffect(() => {
         getStorageLanguage();
@@ -409,7 +411,11 @@ export default function MainProvider({children}){
                 imageProfile,
                 connectionType,
                 accountStatus,
-                blockchainData
+                blockchainData,
+                tokensToContribute,
+                setTokensToContribute,
+                itemsCalculator,
+                setItemsCalculator,
             }}
         >
             {children}
