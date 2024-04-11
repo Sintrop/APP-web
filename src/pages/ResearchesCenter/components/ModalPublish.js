@@ -29,6 +29,11 @@ export function ModalPublish({close, loadingPublish, publish, publishType}) {
             return;
         }
 
+        if(publishType === 'method'){
+            publish(`Sugestão Novo Método - ${title}`, thesis, pdf);
+            return;
+        }
+
         publish(title, thesis, pdf);
     }
 
@@ -43,7 +48,7 @@ export function ModalPublish({close, loadingPublish, publish, publishType}) {
                     <p className="font-bold text-white text-center">
                         {publishType === 'normal' && 'Publicar pesquisa'}
                         {publishType === 'calculator' && 'Sugerir item calculadora'}
-                        {publishType === 'metodologia' && 'Sugerir nova metodologia'}
+                        {publishType === 'method' && 'Sugerir nova metodologia'}
                     </p>
                     <div className="w-10"/>
                 </div>

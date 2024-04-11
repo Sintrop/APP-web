@@ -13,6 +13,7 @@ import { TopBar } from '../../components/TopBar';
 import { CategorieItem } from "./components/CategorieItem";
 import { Item } from '../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
+import { FaChevronRight } from "react-icons/fa";
 
 export function ResearchesCenter() {
     const { userData, walletConnected, connectionType } = useMainContext();
@@ -62,7 +63,7 @@ export function ResearchesCenter() {
             return;
         }
 
-        if(walletConnected === ''){
+        if (walletConnected === '') {
             toast.error('Você não está conectado!')
             return;
         }
@@ -72,7 +73,7 @@ export function ResearchesCenter() {
         if (connectionType === 'provider') {
             publishBlockchain(title, thesis, response);
         } else {
-
+            toast.error('Conecte-se em um navegador com provedor Ethereum!')
         }
     }
 
@@ -157,14 +158,12 @@ export function ResearchesCenter() {
                             Itens calculadora
                         </button>
 
-                        {userData?.userType === 3 && (
-                            <button
-                                className={`font-bold py-1 border-b-2 ${tabSelected === 'publish' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                                onClick={() => setTabSelected('publish')}
-                            >
-                                Publicar pesquisa
-                            </button>
-                        )}
+                        <button
+                            className={`font-bold py-1 border-b-2 ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            onClick={() => setTabSelected('methods')}
+                        >
+                            Métodos de avaliação
+                        </button>
                     </div>
 
                     {loading ? (
@@ -179,7 +178,7 @@ export function ResearchesCenter() {
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                             <p className="font-semibold text-white">Deseja publicar uma nova pesquisa?</p>
 
-                                            <button 
+                                            <button
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
                                                 onClick={() => {
                                                     setPublishType('normal');
@@ -210,7 +209,7 @@ export function ResearchesCenter() {
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                             <p className="font-semibold text-white">Deseja sugerir um novo item?</p>
 
-                                            <button 
+                                            <button
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
                                                 onClick={() => {
                                                     setPublishType('calculator');
@@ -224,6 +223,38 @@ export function ResearchesCenter() {
                                     {items.map(item => (
                                         <Item data={item} hiddenButton />
                                     ))}
+                                </>
+                            )}
+
+                            {tabSelected === 'methods' && (
+                                <>
+                                    {true && (
+                                        <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
+                                            <p className="font-semibold text-white">Deseja sugerir um novo método?</p>
+
+                                            <button
+                                                className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
+                                                onClick={() => {
+                                                    setPublishType('method');
+                                                    setModalPublish(true);
+                                                }}
+                                            >
+                                                Sugerir
+                                            </button>
+                                        </div>
+                                    )}
+                                    
+                                    <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between">
+                                        <div className="flex flex-col gap-1">
+                                            <p className="font-bold text-white text-lg mb-1">Método Sintrop</p>
+                                            <img
+                                                src={require('../../assets/logo-branco.png')}
+                                                className="w-32 h-9 object-contain"
+                                            />
+                                        </div>
+
+                                        <FaChevronRight size={30} color='white'/>
+                                    </button>
                                 </>
                             )}
                         </div>

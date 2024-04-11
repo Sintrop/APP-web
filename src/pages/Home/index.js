@@ -54,7 +54,7 @@ export function Home() {
             <TopBar/>
             <Header routeActive='home' />
 
-            <div className="flex flex-col items-center w-full mt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 {loading ? (
                     <div className="mt-3 flex items-center justify-center h-[100vh]">
                         <ActivityIndicator size={180} />
