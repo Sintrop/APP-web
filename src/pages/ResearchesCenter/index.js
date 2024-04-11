@@ -9,6 +9,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { PublishResearch } from "../../services/researchersService";
 import { save } from "../../config/infura";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
+import {TopBar} from '../../components/TopBar';
+import { CategorieItem } from "./components/CategorieItem";
 
 export function ResearchesCenter() {
     const { userData, walletConnected, connectionType } = useMainContext();
@@ -22,20 +24,35 @@ export function ResearchesCenter() {
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
         if (tabSelected === 'researches') {
             getResearches();
         }
-        if (tabSelected === 'isa') {
-
-        }
+        if (tabSelected === 'isa') getIndices();
+        if (tabSelected === 'calculator-itens') getCalculatorItens();
     }, [tabSelected]);
 
     async function getResearches() {
         setLoading(true);
         const response = await api.get('/web3/researches');
         setResearches(response.data.researches);
+        setLoading(false);
+    }
+
+    async function getIndices() {
+        setLoading(true);
+        const response = await api.get('/isa-categories');
+        setCategories(response.data.categories);
+        setLoading(false);
+    }
+
+    async function getCalculatorItens() {
+        setLoading(true);
+        const response = await api.get('calculator/items')
+        setItems(response.data.items)
         setLoading(false);
     }
 
@@ -119,9 +136,10 @@ export function ResearchesCenter() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     <p className="font-bold text-white text-xl">Centro de pesquisas</p>
 
@@ -212,6 +230,14 @@ export function ResearchesCenter() {
                                             )}
                                         </button>
                                     </div>
+                                </>
+                            )}
+
+                            {tabSelected === 'isa' && (
+                                <>
+                                    {categories.map(item => (
+                                        <CategorieItem data={item} />
+                                    ))}
                                 </>
                             )}
                         </div>
