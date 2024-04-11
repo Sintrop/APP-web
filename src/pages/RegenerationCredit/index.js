@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { useNavigate } from "react-router";
+import { TopBar } from "../../components/TopBar";
 
 export function RegenerationCredit() {
     const navigate = useNavigate();
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header routeActive='regeneration-credit' />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full mt-32 overflow-auto">
                 <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-blue-500"

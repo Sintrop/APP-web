@@ -4,6 +4,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { api } from "../../services/api";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { TopBar } from "../../components/TopBar";
 
 const containerMapStyle = {
     width: '100vw',
@@ -44,9 +45,10 @@ export function Community() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden`}>
+            <TopBar/>
             <Header routeActive='community' />
 
-            <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center w-full mt-32">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                     libraries={['drawing']}

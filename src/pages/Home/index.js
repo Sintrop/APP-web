@@ -17,6 +17,7 @@ import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
 import {useNavigate} from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
+import { TopBar } from "../../components/TopBar";
 
 export function Home() {
     const navigate = useNavigate();
@@ -50,9 +51,10 @@ export function Home() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header routeActive='home' />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full mt-32 overflow-auto">
                 {loading ? (
                     <div className="mt-3 flex items-center justify-center h-[100vh]">
                         <ActivityIndicator size={180} />

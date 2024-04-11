@@ -5,6 +5,7 @@ import { Item } from "./components/Item";
 import { ToastContainer, toast } from "react-toastify";
 import {useMainContext} from '../../hooks/useMainContext';
 import {useNavigate} from 'react-router-dom';
+import { TopBar } from "../../components/TopBar";
 
 export function ImpactCalculator() {
     const navigate = useNavigate();
@@ -55,9 +56,10 @@ export function ImpactCalculator() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full mt-28 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     <p className="font-bold text-white">Calculadora de impacto</p>
 

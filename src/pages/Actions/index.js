@@ -3,15 +3,17 @@ import { Header } from "../../components/Header";
 import {useMainContext} from '../../hooks/useMainContext';
 import { DeveloperActions } from "./components/DeveloperActions";
 import { ValidatorActions } from "./components/ValidatorActions";
+import { TopBar } from "../../components/TopBar";
 
 export function Actions() {
     const {walletConnected, userData, connectionType} = useMainContext();
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header routeActive='actions' />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-y-auto">
+            <div className="flex flex-col items-center w-full mt-32 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
                     {walletConnected === '' ? (
                         <div className="mt-3 flex justify-center">
