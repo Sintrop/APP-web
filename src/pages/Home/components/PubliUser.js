@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../services/getImage";
 import { Blocks } from 'react-loader-spinner';
+import { ActivityIndicator } from "../../../components/ActivityIndicator";
 
 export function PubliUser({ data }) {
     const imagesPubli = JSON.parse(data?.images);
@@ -47,25 +48,18 @@ export function PubliUser({ data }) {
             </div>
 
             {imagesPubli.length > 0 && (
-                <div className={`flex w-full h-[${window.screen.width}px] lg:h-[600px] `}>
-                    {loadingImages && (
+                <div className={`flex w-[${window.screen.width - 25}px] h-[${window.screen.width - 25}px] lg:h-[600px] max-h-[600px]`}>
+                    {loadingImages ? (
                         <div className="flex items-center justify-center w-full h-full">
-                            <Blocks
-                                height="40"
-                                width="40"
-                                color="#4fa94d"
-                                ariaLabel="blocks-loading"
-                                wrapperStyle={{}}
-                                wrapperClass="blocks-wrapper"
-                                visible={true}
-                            />
+                            <ActivityIndicator size={50}/>
                         </div>
+                    ) : (
+                        <img
+                            src={images[0]}
+                            className="w-full h-full max-h-[600px] object-cover"
+                        />
                     )}
 
-                    <img
-                        src={images[0]}
-                        className="w-full h-full object-contain"
-                    />
                 </div>
             )}
         </div>
