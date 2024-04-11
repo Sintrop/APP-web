@@ -11,8 +11,8 @@ export function TopBar() {
     const blocosEmDias = blocosEmHoras / 24
 
     return (
-        <div className="w-[100vw] h-[40px] bg-green-700 flex fixed top-0 left-0 items-center z-50">
-            <div className='flex items-center gap-5 px-5'>
+        <div className="w-full h-[40px] bg-green-700 flex fixed top-0 left-0 items-center z-50 overflow-auto">
+            <div className="flex items-center min-w-[1400px] px-3 gap-5">
                 <p className=" text-gray-200 text-xs">Era atual: <span className="font-bold text-green-300">{era}</span></p>
 
                 <p className=" text-gray-200 text-xs">
@@ -25,20 +25,22 @@ export function TopBar() {
                     </span>
                 </p>
 
-                <div className="lg:flex items-center gap-1 hidden">
+                <div className="flex items-center gap-1">
                     <img src={require('../../assets/token.png')} className="w-5 h-5 object-contain" />
                     <p className="font-bold text-white text-xs">R$ 0,0282</p>
                 </div>
 
-                <p className=" text-gray-200 text-xs hidden lg:flex gap-3">
+                
+                <p className=" text-gray-200 text-xs gap-3">
                     Impacto por token:
-                    <span className="font-bold text-green-300 ml-[-10px]"> Carbono: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.carbon * 1000)} g</span>
+                    <span className="font-bold text-green-300"> Carbono: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.carbon * 1000)} g</span>
                     <span className="font-bold text-green-300"> | Água: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.water * 1000)} L</span>
                     <span className="font-bold text-green-300"> | Solo: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.soil * 10000)} cm²</span>
                     <span className="font-bold text-green-300"> | Biodver.: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.bio)} uv</span>
                 </p>
+                
 
-                <div className="items-center justify-center h-8 w-60 rounded-md bg-red-500 hidden lg:flex">
+                <div className="items-center justify-center h-8 w-60 rounded-md bg-red-500 flex">
                     <p className="font-bold text-white text-xs">Banner pré venda</p>
                 </div>
             </div>
