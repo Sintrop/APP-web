@@ -59,19 +59,27 @@ export default function MainProvider({children}){
     const [blockchainData, setBlockchainData] = useState({});
     const [itemsCalculator, setItemsCalculator] = useState([]);
     const [tokensToContribute, setTokensToContribute] = useState(0);
+    const [nextEra, setNextEra] = useState(0);
+    const [impactToken, setImpactToken] = useState({});
 
     useEffect(() => {
-        getStorageLanguage();
+        getEraInfo();
         getImpact();
-        //checkMode();
     }, []);
 
     useEffect(() => {
-        getAtualBlockNumber();
         setTimeout(() => {
-            setGetAtualBlock(!getAtualBlock)
-        }, 10000)
-    }, [getAtualBlock])
+            const next = nextEra - 1;
+            setNextEra(next);
+        }, 13500);
+    }, [nextEra]);
+
+    // useEffect(() => {
+    //     getAtualBlockNumber();
+    //     setTimeout(() => {
+    //         setGetAtualBlock(!getAtualBlock)
+    //     }, 10000)
+    // }, [getAtualBlock])
 
     // useEffect(() => {
     //     getNotifications();
@@ -83,6 +91,17 @@ export default function MainProvider({children}){
     // useEffect(() => {
     //     if(walletConnected !== '')checkTransactionQueue();
     // }, [walletConnected]);
+
+    async function getEraInfo() {
+        const response = await api.get('/web3/era-info');
+        setNextEra(response.data.nextEraIn);
+        setEra(response.data.eraAtual)
+    }
+
+    async function getImpact() {
+        const response = await api.get('/impact-per-token');
+        setImpactToken(response.data.impact);
+    }
 
     async function checkTransactionQueue(){
         const response = await api.get(`/transactions-open/${walletConnected}`);
@@ -358,11 +377,6 @@ export default function MainProvider({children}){
         }
     }
 
-    async function getImpact(){
-        const response = await api.get('/impact-per-token')
-        setImpactPerToken(response.data.impact);
-    }
-
     async function getNotifications(){
         //const responseWallet = await Sync();
         const responseNotifications = await api.get(`/notifications/${walletConnected}`);
@@ -422,7 +436,9 @@ export default function MainProvider({children}){
                 setTokensToContribute,
                 itemsCalculator,
                 setItemsCalculator,
-                logout
+                logout,
+                nextEra,
+                impactToken
             }}
         >
             {children}
