@@ -4,6 +4,7 @@ import { api } from "../../services/api";
 import { useParams } from "react-router";
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { UserRankingItem } from "./components/UserRankingItem";
+import { TopBar } from "../../components/TopBar";
 
 export function Ranking() {
     const { userType } = useParams();
@@ -49,9 +50,10 @@ export function Ranking() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <h1 className="font-bold text-white text-xl mt-3">
                     {userType === '1' && 'Produtores'}
                     {userType === '2' && 'Inspetores'}
