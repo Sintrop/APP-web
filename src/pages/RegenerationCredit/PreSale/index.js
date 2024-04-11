@@ -217,7 +217,7 @@ export function PreSale() {
 
                         <p className="text-gray-400 text-sm mt-5">Reservas feitas</p>
                         {bookings.map(item => (
-                            <div className="flex items-center justify-between w-full p-2 rounded-md mb-3 bg-[#0a4303]">
+                            <div className="flex flex-col lg:flex-row items-center lg:justify-between w-full p-2 rounded-md mb-3 bg-[#0a4303]">
                                 <p className="text-white text-sm">{item?.reservedBy}</p>
 
                                 <div className="flex items-center gap-2">
