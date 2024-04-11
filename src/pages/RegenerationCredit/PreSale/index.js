@@ -9,6 +9,7 @@ import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalReserve } from "./components/ModalReserve";
 import {useCountdown} from '../../../hooks/useCountdown';
+import { TopBar } from "../../../components/TopBar";
 
 export function PreSale() {
     const [day, hour, minute, second] = useCountdown('2024-06-25 23:59:59');
@@ -79,9 +80,10 @@ export function PreSale() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto px-2 lg:px-0">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto px-2 lg:px-0">
                 {loading ? (
                     <div className="flex items-center h-[100vh]">
                         <ActivityIndicator size={180} />

@@ -8,6 +8,7 @@ import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalBuyRc } from "./components/ModalBuyRc";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
+import { TopBar } from "../../../components/TopBar";
 
 export function Ico() {
     const [icoData, setIcoData] = useState({});
@@ -66,9 +67,10 @@ export function Ico() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 {loading ? (
                     <ActivityIndicator size={60} />
                 ) : (

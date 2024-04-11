@@ -3,6 +3,7 @@ import { Blocks } from 'react-loader-spinner';
 import { Header } from "../../components/Header";
 import { api } from "../../services/api";
 import { InspectionItem } from "./components/InspectionItem";
+import { TopBar } from "../../components/TopBar";
 
 export function InspectionsCenter() {
     const [tabSelected, setTabSelected] = useState('history');
@@ -34,9 +35,10 @@ export function InspectionsCenter() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header/>
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     <p className="font-bold text-white text-xl">Centro de inspeções</p> 
 

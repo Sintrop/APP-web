@@ -10,6 +10,7 @@ import {ActivityIndicator} from '../../../components/ActivityIndicator';
 import { BurnTokens as BurnRCSupporter } from "../../../services/supporterService";
 import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
+import { TopBar } from "../../../components/TopBar";
 
 export function Contribute() {
     const { walletConnected, connectionType, userData, itemsCalculator, tokensToContribute } = useMainContext();
@@ -209,9 +210,10 @@ export function Contribute() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center w-full pt-32">
                 <div className="flex flex-col max-w-[1024px]">
                     <div className="flex bg-[#0a4303] p-3 rounded-md mt-3 gap-8">
                         <div className="flex flex-col w-[300px]">
