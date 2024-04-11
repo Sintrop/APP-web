@@ -6,6 +6,7 @@ import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { api } from "../../../services/api";
 import axios from 'axios'
 import { TxItem } from "./components/TxItem";
+import { TopBar } from "../../../components/TopBar";
 
 export function MyTokens() {
     const {walletConnected} = useMainContext();
@@ -39,9 +40,10 @@ export function MyTokens() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 {loading ? (
                     <div className="flex items-center h-[100vh]">
                         <ActivityIndicator size={180}/>

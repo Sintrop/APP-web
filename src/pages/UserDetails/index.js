@@ -9,6 +9,7 @@ import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
+import {TopBar} from '../../components/TopBar';
 
 const containerMapStyle = {
     width: '100%',
@@ -137,9 +138,10 @@ export function UserDetails() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     {loading ? (
                         <div className="flex justify-center">
@@ -387,7 +389,7 @@ export function UserDetails() {
 
                                             <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
                                                 <h3 className="font-bold text-white">Certificado de contribuição</h3>
-                                                <ContributeCertificate wallet={wallet} />
+                                                <ContributeCertificate wallet={wallet} user={userData}/>
                                             </div>
                                         </div>
                                     )}

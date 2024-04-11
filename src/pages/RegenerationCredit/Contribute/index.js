@@ -10,9 +10,10 @@ import {ActivityIndicator} from '../../../components/ActivityIndicator';
 import { BurnTokens as BurnRCSupporter } from "../../../services/supporterService";
 import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
+import { TopBar } from "../../../components/TopBar";
 
 export function Contribute() {
-    const { walletConnected, connectionType, userData } = useMainContext();
+    const { walletConnected, connectionType, userData, itemsCalculator, tokensToContribute } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
     const [input, setInput] = useState('');
@@ -64,7 +65,10 @@ export function Contribute() {
     async function getImpact() {
         setLoading(true);
         const response = await api.get('/impact-per-token');
-        setImpactToken(response.data.impact)
+        setImpactToken(response.data.impact);
+        if(tokensToContribute > 0){
+            setInput(tokensToContribute);
+        }
         setLoading(false);
     }
 
@@ -154,7 +158,7 @@ export function Contribute() {
             tokens: Number(tokens),
             transactionHash: hash,
             reason: '',
-            itens: ''
+            itens: itemsCalculator
         }
 
         try {
@@ -190,7 +194,7 @@ export function Contribute() {
                 additionalData: JSON.stringify({
                     value: Number(input),
                     reason,
-                    itens: itens ? itens : []
+                    itens: itemsCalculator ? itemsCalculator : []
                 }),
             })
             setInput('');
@@ -206,9 +210,10 @@ export function Contribute() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center w-full pt-32">
                 <div className="flex flex-col max-w-[1024px]">
                     <div className="flex bg-[#0a4303] p-3 rounded-md mt-3 gap-8">
                         <div className="flex flex-col w-[300px]">

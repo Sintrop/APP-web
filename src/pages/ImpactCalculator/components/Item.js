@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { ModalAddItem } from "./ModalAddItem";
 
-export function Item({data, addItem}){
+export function Item({data, addItem, hiddenButton}){
     const [modalAddItem, setModalAddItem] = useState(false);
 
     return(
@@ -32,13 +32,15 @@ export function Item({data, addItem}){
                     <p className="text-white text-xs">Fonte: <a target="_blank" href={data?.source} className="text-blue-400 underline">{data?.source}</a></p>
                 )}
             </div>
-
-            <button
-                className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600"
-                onClick={() => setModalAddItem(true)}
-            >
-                Adicionar item
-            </button>
+            
+            {!hiddenButton && (
+                <button
+                    className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600"
+                    onClick={() => setModalAddItem(true)}
+                >
+                    Adicionar item
+                </button>
+            )}
 
             {modalAddItem && (
                 <ModalAddItem

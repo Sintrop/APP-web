@@ -7,6 +7,7 @@ import { Blocks } from "react-loader-spinner";
 import { ZoneItem } from "./components/ZoneItem";
 import { FaDotCircle } from "react-icons/fa";
 import format from "date-fns/format";
+import {ActivityIndicator} from '../../components/ActivityIndicator';
 
 export function ResultInspection() {
     const { id } = useParams();
@@ -99,24 +100,16 @@ export function ResultInspection() {
             <Header />
 
             <div className="flex flex-col items-center w-full mt-20 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+                <div className="flex flex-col w-full lg:w-[1024px] mt-3 p-2 lg:p-0">
                     <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
                     {loading ? (
                         <div className="flex justify-center">
-                            <Blocks
-                                height="60"
-                                width="60"
-                                color="#4fa94d"
-                                ariaLabel="blocks-loading"
-                                wrapperStyle={{}}
-                                wrapperClass="blocks-wrapper"
-                                visible={true}
-                            />
+                            <ActivityIndicator size={180}/>
                         </div>
                     ) : (
                         <>
                             <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
-                                <div className="flex flex-col w-[49%]">
+                                <div className="flex flex-col lg:w-[49%]">
                                     <p className="text-gray-400 text-xs">Produtor(a)</p>
                                     <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full">
                                         <div className="h-14 w-14 rounded-full bg-gray-400">
@@ -128,12 +121,12 @@ export function ResultInspection() {
 
                                         <div className="flex flex-col gap-1 items-start">
                                             <p className="font-bold text-white text-sm">{producerData?.name}</p>
-                                            <p className="text-white text-sm">{String(producerData?.wallet).toLowerCase()}</p>
+                                            <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(producerData?.wallet).toLowerCase()}</p>
                                         </div>
                                     </button>
                                 </div>
 
-                                <div className="flex flex-col w-[49%]">
+                                <div className="flex flex-col lg:w-[49%]">
                                     <p className="text-gray-400 text-xs">Inspetor(a)</p>
                                     <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full">
                                         <div className="h-14 w-14 rounded-full bg-gray-400">
@@ -145,7 +138,7 @@ export function ResultInspection() {
 
                                         <div className="flex flex-col gap-1 items-start">
                                             <p className="font-bold text-white text-sm">{inspectorData?.name}</p>
-                                            <p className="text-white text-sm">{String(inspectorData?.wallet).toLowerCase()}</p>
+                                            <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(inspectorData?.wallet).toLowerCase()}</p>
                                         </div>
                                     </button>
                                 </div>
@@ -161,7 +154,7 @@ export function ResultInspection() {
                             </div>
 
                             <div className="flex flex-wrap items-center p-3 gap-3 rounded-md bg-[#0a4303] w-full mt-3">
-                                <div className="flex flex-col w-[49%] items-start gap-4">
+                                <div className="flex flex-col w-full lg:w-[49%] items-start gap-4">
                                     <div className="flex items-center gap-3">
                                         <FaDotCircle size={20} color='green' />
 
@@ -192,7 +185,7 @@ export function ResultInspection() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col w-[49%] gap-1">
+                                <div className="flex flex-col w-full lg:w-[49%] gap-1">
                                     <div className="flex flex-col bg-green-950 p-2 rounded-md">
                                         <div className="flex w-full items-center justify-between">
                                             <div className="flex items-center gap-2">

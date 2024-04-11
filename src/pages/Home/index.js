@@ -9,12 +9,15 @@ import { ModalConnectAccount } from "../../components/ModalConnectAccount";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
 import {useNavigate} from 'react-router-dom';
+import { ModalLogout } from "./components/ModalLogout";
+import { TopBar } from "../../components/TopBar";
 
 export function Home() {
     const navigate = useNavigate();
@@ -23,6 +26,7 @@ export function Home() {
     const [publications, setPublications] = useState([]);
     const [page, setPage] = useState(0);
     const [modalConnect, setModalConnect] = useState(false);
+    const [modalLogout, setModalLogout] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -47,9 +51,10 @@ export function Home() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header routeActive='home' />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 {loading ? (
                     <div className="mt-3 flex items-center justify-center h-[100vh]">
                         <ActivityIndicator size={180} />
@@ -106,6 +111,14 @@ export function Home() {
                                             Accessar perfil
                                             <FaChevronRight size={15} color='white' />
                                         </button>
+
+                                        <button
+                                            className="w-full flex items-center justify-between text-semibold text-[#ff0000] text-sm mt-5"
+                                            onClick={() => setModalLogout(true)}
+                                        >
+                                            Desconectar
+                                            <MdLogout size={15} color='#ff0000' />
+                                        </button>
                                     </>
                                 )}
                             </div>
@@ -136,7 +149,7 @@ export function Home() {
 
                                     <button
                                         className="flex flex-col items-center w-16"
-                                        onClick={() => alert('Disponível em breve!')}
+                                        onClick={() => navigate('/impact-calculator')}
                                     >
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <FaCalculator color='white' size={25} />
@@ -200,6 +213,14 @@ export function Home() {
                 )}
             </div>
             
+            {modalLogout && (
+                <ModalLogout
+                    close={() => {
+                        setModalLogout(false);
+                        setModalConnect(false);
+                    }}
+                />
+            )}
             <ToastContainer/>
             <Chat />
         </div>

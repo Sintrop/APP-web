@@ -4,6 +4,7 @@ import { api } from "../../services/api";
 import { useParams } from "react-router";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { PublicationItem } from "../Home/components/PublicationItem";
+import { TopBar } from "../../components/TopBar";
 
 export function Publication() {
     const {id} = useParams();
@@ -23,9 +24,10 @@ export function Publication() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center mt-20 overflow-auto">
+            <div className="flex flex-col items-center pt-32 overflow-auto pb-5">
                 <div className={`flex flex-col w-[${window.screen.width}px] lg:w-[1024px] mt-3 items-center`}>
                     {loading && (
                         <ActivityIndicator size={50}/>

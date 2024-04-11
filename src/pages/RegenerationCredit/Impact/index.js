@@ -3,6 +3,7 @@ import { Header } from '../../../components/Header';
 import { ActivityIndicator } from '../../../components/ActivityIndicator';
 import { api } from '../../../services/api';
 import Chart from 'react-apexcharts';
+import { TopBar } from '../../../components/TopBar';
 
 export function Impact() {
     const [loading, setLoading] = useState(true);
@@ -150,9 +151,10 @@ export function Impact() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 {loading ? (
                     <div className='flex items-center justify-center h-[100vh] w-full'>
                         <ActivityIndicator size={180} />

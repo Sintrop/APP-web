@@ -40,7 +40,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData 
                             value={`https://${window.location.host}/producer/${blockchainData?.producer?.wallet}`}
                             size={140}
                             qrStyle="dots"
-                            logoImage={require('../../assets/icone.png')}
+                            logoImage={require('../../assets/token.png')}
                             logoPadding={2}
                             logoPaddingStyle="square"
                             logoWidth={30}
@@ -81,7 +81,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData 
                             value={`https://${window.location.host}/producer/${blockchainData?.producer?.wallet}`}
                             size={140}
                             qrStyle="dots"
-                            logoImage={require('../../assets/icone.png')}
+                            logoImage={require('../../assets/token.png')}
                             logoPadding={2}
                             logoPaddingStyle="square"
                             logoWidth={30}

@@ -1,15 +1,17 @@
 import React from "react";
 import { Header } from "../../../components/Header";
 import { useNavigate } from "react-router";
+import { TopBar } from "../../../components/TopBar";
 
 export function Services({}){
     const navigate = useNavigate();
 
     return(
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center w-full pt-32">
                 <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"

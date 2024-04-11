@@ -15,6 +15,7 @@ import { WithdrawTokens as WithdrawDeveloper } from "../../../services/developer
 import { WithdrawTokens as WithdrawResearcher } from "../../../services/researchersService";
 import { WithdrawTokens as WithdrawProducer } from "../../../services/producerService";
 import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
+import { TopBar } from "../../../components/TopBar";
 
 export function Pools({ }) {
     const { userData, connectionType, walletConnected } = useMainContext();
@@ -411,9 +412,10 @@ export function Pools({ }) {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20">
+            <div className="flex flex-col items-center w-full pt-32">
                 <div className="flex flex-col max-w-[1024px]">
                     {loading ? (
                         <div className="flex justify-center items-center mt-3 h-[90vh]">
