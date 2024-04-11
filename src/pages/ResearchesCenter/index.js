@@ -172,12 +172,12 @@ export function ResearchesCenter() {
                             <ActivityIndicator size={50} />
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-4 mt-5">
+                        <div className="flex flex-col gap-4 mt-5 mb-5">
                             {tabSelected === 'researches' && (
                                 <>
-                                    {true && (
+                                    {userData?.userType === 3 && (
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
-                                            <p className="font-semibold text-white">Deseja spublicar uma nova pesquisa?</p>
+                                            <p className="font-semibold text-white">Deseja publicar uma nova pesquisa?</p>
 
                                             <button 
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
@@ -206,11 +206,17 @@ export function ResearchesCenter() {
 
                             {tabSelected === 'calculator-items' && (
                                 <>
-                                    {true && (
+                                    {userData?.userType === 3 && (
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                             <p className="font-semibold text-white">Deseja sugerir um novo item?</p>
 
-                                            <button className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold">
+                                            <button 
+                                                className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
+                                                onClick={() => {
+                                                    setPublishType('calculator');
+                                                    setModalPublish(true);
+                                                }}
+                                            >
                                                 Sugerir
                                             </button>
                                         </div>
