@@ -28,7 +28,7 @@ export function Publication() {
             <Header />
 
             <div className="flex flex-col items-center pt-32 overflow-auto pb-5">
-                <div className={`flex flex-col w-[${window.screen.width}px] lg:w-[1024px] mt-3 items-center`}>
+                <div className={`flex flex-col w-[100vw] lg:w-[1024px] mt-3 items-center`}>
                     {loading && (
                         <ActivityIndicator size={50}/>
                     )}
