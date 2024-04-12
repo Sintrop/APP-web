@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getImage } from "../../../services/getImage";
+import { getImage } from "../../../../services/getImage";
 import { Blocks } from 'react-loader-spinner';
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 
 export function PubliUser({ data }) {
     const imagesPubli = JSON.parse(data?.images);

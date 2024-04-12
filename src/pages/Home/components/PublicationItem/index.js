@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router";
 
-import { getImage } from "../../../services/getImage";
+import { getImage } from "../../../../services/getImage";
 
 //icons
 import { FaRegHeart, FaHeart, FaShare } from "react-icons/fa";
@@ -17,12 +17,13 @@ import { RealizeInspectionPubli } from "./RealizeInspectionPubli";
 import { NewUserPubli } from "./NewUserPubli";
 import { PubliUser } from "./PubliUser";
 import { InvalidateUserPubli } from "./InvalidateUserPubli";
-import { useMainContext } from '../../../hooks/useMainContext';
+import { useMainContext } from '../../../../hooks/useMainContext';
 import { toast, ToastContainer } from "react-toastify";
-import { api } from "../../../services/api";
+import { api } from "../../../../services/api";
 import { InvalidateInspectionPubli } from "./InvalidateInspectionPubli";
-import { ModalLikes } from "./ModalLikes";
-import { ModalComments } from "./ModalComments";
+import { ModalLikes } from "../ModalLikes";
+import { ModalComments } from "../ModalComments";
+import { PublishResearche } from "./PublishResearche";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -111,7 +112,7 @@ export function PublicationItem({ data }) {
                     <div className="w-14 h-14 rounded-full bg-gray-400">
                         {userData.userType === 8 ? (
                             <img
-                                src={require('../../../assets/icon-validator.png')}
+                                src={require('../../../../assets/icon-validator.png')}
                                 className="w-14 h-14 rounded-full object-cover"
                             />
                         ) : (
@@ -188,6 +189,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'vote-invalidate-inspection' && (
                     <InvalidateInspectionPubli additionalData={additionalData} />
+                )}
+
+                {data.type === 'publish-researche' && (
+                    <PublishResearche data={data}/>
                 )}
             </div>
 

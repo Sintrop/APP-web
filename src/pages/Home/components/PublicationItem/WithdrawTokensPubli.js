@@ -34,7 +34,7 @@ export function WithdrawTokensPubli({data, changeVisible}){
     return(
         <div className="flex flex-col rounded-md bg-green-950 gap-3 pt-3">
             <img
-                src={require('../../../assets/token.png')}
+                src={require('../../../../assets/token.png')}
                 className="h-10 w-10 rounded-full object-contain ml-3"            
             />
 
