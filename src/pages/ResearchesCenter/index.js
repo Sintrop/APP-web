@@ -14,8 +14,10 @@ import { CategorieItem } from "./components/CategorieItem";
 import { Item } from '../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
 import { FaChevronRight } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
 export function ResearchesCenter() {
+    const navigate = useNavigate();
     const { userData, walletConnected, connectionType } = useMainContext();
     const [tabSelected, setTabSelected] = useState('researches');
     const [loading, setLoading] = useState(false);
@@ -228,7 +230,7 @@ export function ResearchesCenter() {
 
                             {tabSelected === 'methods' && (
                                 <>
-                                    {true && (
+                                    {userData?.userType === 3 && (
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                             <p className="font-semibold text-white">Deseja sugerir um novo método?</p>
 
@@ -244,7 +246,7 @@ export function ResearchesCenter() {
                                         </div>
                                     )}
                                     
-                                    <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between">
+                                    <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between" onClick={() => navigate('/methods/sintrop')}>
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-white text-lg mb-1">Método Sintrop</p>
                                             <img

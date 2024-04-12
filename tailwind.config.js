@@ -11,7 +11,8 @@ module.exports = {
         'centro-pesquisa2': "url('/src/assets/bg-centro-pesquisa2.png')",
         'centro-dev': "url('/src/assets/bg-dev-center.png')",
         'checkout': "url('/src/assets/bg-s-checkout.png')",
-        'card': "url('/src/assets/card.png')"
+        'card': "url('/src/assets/card.png')",
+        'presale': "url('/src/assets/bg-presale.png')",
       }
     },
   },

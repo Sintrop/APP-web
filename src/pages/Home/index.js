@@ -27,13 +27,20 @@ export function Home() {
     const [page, setPage] = useState(0);
     const [modalConnect, setModalConnect] = useState(false);
     const [modalLogout, setModalLogout] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
 
     useEffect(() => {
         getPublications();
     }, [page]);
 
     async function getPublications() {
-        setLoading(true);
+        if(firstLoad){
+            setLoading(true);
+            setFirstLoad(false);
+        }else{
+            setLoadingMore(true);
+        }
 
         const response = await api.get(`/publications/get-all/${page}`);
         const resPublis = response.data.publications;
@@ -46,6 +53,7 @@ export function Home() {
             }
         }
 
+        setLoadingMore(false);
         setLoading(false);
     }
 
@@ -54,7 +62,7 @@ export function Home() {
             <TopBar/>
             <Header routeActive='home' />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 pb-16 lg:pb-5 lg:pt-32 overflow-auto">
                 {loading ? (
                     <div className="mt-3 flex items-center justify-center h-[100vh]">
                         <ActivityIndicator size={180} />
@@ -62,7 +70,7 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3">
-                            <div className="flex flex-col items-center w-[200px] h-[300px] p-3 bg-[#0a4303] rounded-md">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[300px] p-3 bg-[#0a4303] rounded-md">
                                 {walletConnected === '' ? (
                                     <>
                                         <img
@@ -123,7 +131,7 @@ export function Home() {
                                 )}
                             </div>
 
-                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
                                 <p className="text-gray-400 text-xs text-left">Atalhos</p>
 
                                 <div className="flex flex-wrap justify-center gap-5 mt-3">
@@ -170,7 +178,7 @@ export function Home() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-3">
+                        <div className={`flex flex-col gap-3 w-[100vw] lg:w-auto`}>
                             {walletConnected !== '' && (
                                 <NewPubli attPublis={() => {
                                     setPage(0)
@@ -187,14 +195,18 @@ export function Home() {
                                         />
                                     ))}
 
-                                    <button onClick={() => setPage(page + 1)}>
-                                        Ver mais
-                                    </button>
+                                    {loadingMore ? (
+                                        <ActivityIndicator size={40}/>
+                                    ) : (
+                                        <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
+                                            Ver mais
+                                        </button>
+                                    )}
                                 </>
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-3">
+                        <div className="hidden lg:flex flex-col gap-3">
                             <div className="flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
                                 <p className="font-bold text-white text-xs text-center mb-3">Baixe nosso aplicativo</p>
                                 <QRCode
@@ -222,7 +234,10 @@ export function Home() {
                 />
             )}
             <ToastContainer/>
-            <Chat />
+
+            <div className="hidden lg:flex">
+                <Chat />
+            </div>
         </div>
     )
 }

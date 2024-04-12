@@ -10,7 +10,7 @@ export function DevReportPubli({additionalData}){
 
             <div className="items-center flex flex-col mt-3">
                 <a
-                    href={`https://v5-sintrop.netlify.app/view-pdf/${additionalData?.report}`}
+                    href={`https://app.sintrop.com/view-pdf/${additionalData?.report}`}
                     className="px-4 py-1 rounded-md bg-blue-500 font-bold text-white text-sm"
                     target="_blank"
                 >

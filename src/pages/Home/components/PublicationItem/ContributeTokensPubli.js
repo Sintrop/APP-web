@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../services/api";
+import { api } from "../../../../services/api";
 import { QRCode } from "react-qrcode-logo";
 
 export function ContributeTokensPubli({ data }) {
@@ -47,7 +47,7 @@ export function ContributeTokensPubli({ data }) {
                 </p>
 
                 <img
-                    src={require('../../../assets/token.png')}
+                    src={require('../../../../assets/token.png')}
                     className="h-6 w-6 rounded-full object-contain ml-3"
                 />
             </div>
@@ -87,7 +87,7 @@ export function ContributeTokensPubli({ data }) {
                     <QRCode
                         value={`https://${window.location.host}/supporter/${String(userData?.wallet).toLowerCase()}`}
                         size={120}
-                        logoImage={require('../../../assets/icone.png')}
+                        logoImage={require('../../../../assets/icone.png')}
                         qrStyle="dots"
                         logoPadding={2}
                         logoPaddingStyle="square"

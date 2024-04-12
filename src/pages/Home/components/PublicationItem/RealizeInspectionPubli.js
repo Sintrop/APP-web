@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { api } from "../../../services/api";
+import { api } from "../../../../services/api";
 import { Blocks } from 'react-loader-spinner';
 
 export function RealizeInspectionPubli({ data }) {
@@ -49,7 +49,7 @@ export function RealizeInspectionPubli({ data }) {
                     <div className="flex w-full items-center justify-between p-2 bg-green-950 rounded-md">
                         <div className="flex items-center gap-2">
                             <img
-                                src={require('../../../assets/co2.png')}
+                                src={require('../../../../assets/co2.png')}
                                 className="h-5 w-5 object-contain"
                             />
 
@@ -61,7 +61,7 @@ export function RealizeInspectionPubli({ data }) {
                     <div className="flex w-full items-center justify-between p-2 bg-green-950 rounded-md mt-2">
                         <div className="flex items-center gap-2">
                             <img
-                                src={require('../../../assets/solo.png')}
+                                src={require('../../../../assets/solo.png')}
                                 className="h-5 w-5 object-contain"
                             />
 
@@ -73,7 +73,7 @@ export function RealizeInspectionPubli({ data }) {
                     <div className="flex w-full items-center justify-between p-2 bg-green-950 rounded-md mt-2">
                         <div className="flex items-center gap-2">
                             <img
-                                src={require('../../../assets/agua.png')}
+                                src={require('../../../../assets/agua.png')}
                                 className="h-5 w-5 object-contain"
                             />
 
@@ -85,7 +85,7 @@ export function RealizeInspectionPubli({ data }) {
                     <div className="flex w-full items-center justify-between p-2 bg-green-950 rounded-md mt-2">
                         <div className="flex items-center gap-2">
                             <img
-                                src={require('../../../assets/bio.png')}
+                                src={require('../../../../assets/bio.png')}
                                 className="h-5 w-5 object-contain"
                             />
 

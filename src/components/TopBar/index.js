@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../services/api";
 import { useMainContext } from "../../hooks/useMainContext";
+import { useNavigate } from "react-router";
 
 export function TopBar() {
+    const navigate = useNavigate();
     const { era, nextEra, impactToken } = useMainContext();
 
     const blocosEmSegundos = nextEra * 13.5
@@ -40,9 +41,13 @@ export function TopBar() {
                 </p>
                 
 
-                <div className="items-center justify-center h-8 w-60 rounded-md bg-red-500 flex">
-                    <p className="font-bold text-white text-xs">Banner pré venda</p>
-                </div>
+                <button className="items-center justify-center h-8 px-2 rounded-md bg-red-500 flex gap-2" onClick={() => navigate('/pre-sale')}>
+                    <img
+                        src={require('../../assets/token.png')}
+                        className="w-5 h-5 object-contain"
+                    />
+                    <p className="font-bold text-white text-xs">Apresentação e pré-venda do Crédito De Regeneração</p>
+                </button>
             </div>
         </div>
     )
