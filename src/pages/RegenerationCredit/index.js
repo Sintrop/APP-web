@@ -38,6 +38,18 @@ export function RegenerationCredit() {
                     </button>
 
                     <button 
+                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-orange-500"
+                        onClick={() => navigate('/services')}
+                    >
+                        <img
+                            src={require('../../assets/recompensas.png')}
+                            className="h-20 w-20 object-contain"
+                        />
+
+                        <p className="font-bold text-white text-xl mt-2">Recompensas</p>
+                    </button>
+
+                    <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
                         onClick={() => navigate('/impact')}
                     >
@@ -49,17 +61,6 @@ export function RegenerationCredit() {
                         <p className="font-bold text-white text-xl mt-2">Impacto e estatísticas</p>
                     </button>
 
-                    <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
-                        onClick={() => navigate('/services')}
-                    >
-                        <img
-                            src={require('../../assets/recompensas.png')}
-                            className="h-20 w-20 object-contain"
-                        />
-
-                        <p className="font-bold text-white text-xl mt-2">Recompensas</p>
-                    </button>
 
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
