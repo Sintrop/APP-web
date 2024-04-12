@@ -62,7 +62,7 @@ export function Home() {
             <TopBar/>
             <Header routeActive='home' />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 pb-16 lg:pb-5 lg:pt-32 overflow-auto">
                 {loading ? (
                     <div className="mt-3 flex items-center justify-center h-[100vh]">
                         <ActivityIndicator size={180} />
@@ -178,7 +178,7 @@ export function Home() {
                             </div>
                         </div>
 
-                        <div className={`flex flex-col gap-3 w-[100vw]`}>
+                        <div className={`flex flex-col gap-3 w-[100vw] lg:w-auto`}>
                             {walletConnected !== '' && (
                                 <NewPubli attPublis={() => {
                                     setPage(0)
@@ -234,7 +234,10 @@ export function Home() {
                 />
             )}
             <ToastContainer/>
-            <Chat />
+
+            <div className="hidden lg:flex">
+                <Chat />
+            </div>
         </div>
     )
 }
