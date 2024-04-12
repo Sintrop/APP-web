@@ -90,91 +90,93 @@ export function PreSale() {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full lg:max-w-[1024px] lg:w-auto mt-3">
-                        <h3 className="font-bold text-center lg:text-left lg:text-xl text-white">Pré venda do Crédito de Regeneração</h3>
-                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:flex-row lg:w-[800px]">
-                            <div className="flex flex-col items-center w-full lg:w-[50%]">
-                                <Chart
-                                    options={options}
-                                    series={series}
-                                    type="pie"
-                                    width="400"
-                                />
-                            </div>
+                        <div className="flex flex-col bg-[#0a4303] p-2 rounded-md lg:w-[900px] lg:h-[500px]">
+                            <div className="flex flex-col items-center bg-presale bg-center bg-cover bg-no-repeat p-3 rounded-md w-full h-full lg:flex-row">
+                                <div className="flex flex-col justify-center w-full mt-5 lg:mt-0 lg:w-[50%]">
+                                    <h3 className="font-bold text-center lg:text-left lg:text-4xl text-white">PRÉ-VENDA</h3>
+                                    <h3 className="font-bold text-center lg:text-left lg:text-3xl text-white">Crédito de Regeneração</h3>
+                                    <p className="text-center text-sm text-white mt-5">Essa oferta encerra em (25/06/2024)</p>
+                                    <div className="flex items-center justify-center gap-2">
+                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                            <p className="font-bold text-white text-xl">{day}</p>
+                                            <p className="text-center text-xs text-white">Dias</p>
+                                        </div>
+                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                            <p className="font-bold text-white text-xl">{hour}</p>
+                                            <p className="text-center text-xs text-white">Horas</p>
+                                        </div>
+                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                            <p className="font-bold text-white text-xl">{minute}</p>
+                                            <p className="text-center text-xs text-white">Minutos</p>
+                                        </div>
+                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                            <p className="font-bold text-white text-xl">{second}</p>
+                                            <p className="text-center text-xs text-white">Segundos</p>
+                                        </div>
+                                    </div>
 
-                            <div className="flex flex-col justify-center w-full mt-5 lg:mt-0 lg:w-[50%]">
-                                <p className="text-center text-sm text-white">Essa oferta encerra em (25/06/2024)</p>
-                                <div className="flex items-center justify-center gap-2">
-                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
-                                        <p className="font-bold text-white text-xl">{day}</p>
-                                        <p className="text-center text-xs text-white">Dias</p>
+                                    <div className="flex flex-col border border-green-500 bg-[rgba(0,0,0,0.6)] rounded-md p-2 gap-1 mt-3">
+                                        <div className="flex items-center w-full justify-between">
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">Tokens ofertados</h3>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">39.000.000</p>
+                                        </div>
+                                        <div className="flex items-center w-full justify-between">
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">% da oferta privada</h3>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">8,97 %</p>
+                                        </div>
+                                        <div className="flex items-center w-full justify-between">
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">Valor unitário</h3>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">R$ 0,0282</p>
+                                        </div>
+                                        <div className="flex items-center w-full justify-between">
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">Alvo de capitalização</h3>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">R$ 1.100.000,00</p>
+                                        </div>
+                                        <div className="flex items-center w-full justify-between">
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">Capitalização de mercado</h3>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">R$ 12.267.000,00</p>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
-                                        <p className="font-bold text-white text-xl">{hour}</p>
-                                        <p className="text-center text-xs text-white">Horas</p>
-                                    </div>
-                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
-                                        <p className="font-bold text-white text-xl">{minute}</p>
-                                        <p className="text-center text-xs text-white">Minutos</p>
-                                    </div>
-                                    <div className="flex flex-col p-2 rounded-md bg-green-950 w-16 items-center">
-                                        <p className="font-bold text-white text-xl">{second}</p>
-                                        <p className="text-center text-xs text-white">Segundos</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex flex-col border rounded-md p-2 gap-1 mt-3">
-                                    <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-xs lg:text-sm">Tokens ofertados</h3>
-                                        <p className="font-bold text-white text-sm lg:text-base">39.000.000</p>
-                                    </div>
-                                    <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-xs lg:text-sm">% da oferta privada</h3>
-                                        <p className="font-bold text-white text-sm lg:text-base">8,97 %</p>
-                                    </div>
-                                    <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-xs lg:text-sm">Valor unitário</h3>
-                                        <p className="font-bold text-white text-sm lg:text-base">R$ 0,0282</p>
-                                    </div>
-                                    <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-xs lg:text-sm">Alvo de capitalização</h3>
-                                        <p className="font-bold text-white text-sm lg:text-base">R$ 1.100.000,00</p>
-                                    </div>
-                                    <div className="flex items-center w-full justify-between">
-                                        <h3 className="text-gray-300 text-xs lg:text-sm">Capitalização de mercado</h3>
-                                        <p className="font-bold text-white text-sm lg:text-base">R$ 12.267.000,00</p>
-                                    </div>
-                                </div>
+                                    <Dialog.Root open={modalReserve} onOpenChange={(open) => setModalReserve(open)}>
+                                        <Dialog.Trigger
+                                            className="flex items-center justify-center w-full gap-2 bg-orange-500 font-bold text-white mt-3 rounded-md py-2"
+                                        >
+                                            <img
+                                                src={require('../../../assets/token.png')}
+                                                className="w-5 h-5 object-contain"
+                                            />
+                                            QUERO INVESTIR
+                                        </Dialog.Trigger>
 
-                                <Dialog.Root open={modalReserve} onOpenChange={(open) => setModalReserve(open)}>
-                                    <Dialog.Trigger
-                                        className="flex items-center justify-center w-full gap-2 bg-orange-500 font-bold text-white mt-3 rounded-md py-2"
-                                    >
-                                        <img
-                                            src={require('../../../assets/token.png')}
-                                            className="w-5 h-5 object-contain"
+                                        <ModalReserve
+                                            reserved={(data) => {
+                                                bookings.push(data);
+                                                setTimeout(() => {
+                                                    setModalReserve(false);
+                                                    alert('Reserva feita com sucesso! Em breve nossa equipe entrará em contato para alinhar os próximos passos.')
+                                                }, 2000);
+                                            }}
                                         />
-                                        QUERO INVESTIR
-                                    </Dialog.Trigger>
-
-                                    <ModalReserve
-                                        reserved={(data) => {
-                                            bookings.push(data);
-                                            setTimeout(() => {
-                                                setModalReserve(false);
-                                                alert('Reserva feita com sucesso! Em breve nossa equipe entrará em contato para alinhar os próximos passos.')
-                                            }, 2000);
-                                        }}
+                                    </Dialog.Root>
+                                </div>
+                                <div className="flex flex-col items-center w-full mt-5 lg:mt-0 lg:w-[50%]">
+                                    <Chart
+                                        options={options}
+                                        series={series}
+                                        type="pie"
+                                        width="400"
                                     />
-                                </Dialog.Root>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[800px] mt-3">
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
                             <p className="text-xs text-white">Convidamos pessoas que se importam com a regeneração do Planeta para ter acesso a uma oportunidade de investimento em um criptoativo verde, com a ambição de ajudar o Planeta e trazer ganhos econômicos ao mesmo tempo. </p>
                             <p className="text-xs text-white mt-2">O problema que almejamos é resolver é a falta de incentivo econômico para a regeneração de ecossistemas. O crédito de carbono é um sistema que não oferece a solução que a humanidade necessita para enfrentar os gigantes desafios que tem pela frente, com o advento do aquecimento global e esgotamento dos recursos naturais. Nossa solução é o Crédito de Regeneração, criptoativo descentralizado de recompensa por serviços ambientais. Uma solução baseada na Natureza, totalmente inovadora, com uma metodologia de certificação descentralizada inédita e com a utilização da tecnologia da blockchain, trazendo transparência sobre os dados e confiança em contratos inteligentes.</p>
                         </div>
 
-                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[800px] mt-3">
+                        <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
                             <p className="text-xs text-gray-400">Links</p>
                             <div className="flex items-center flex-wrap gap-2 mt-1">
                                 <a 
