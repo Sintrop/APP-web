@@ -11,7 +11,7 @@ export function WithdrawTokensPubli({data, changeVisible}){
     }, []);
 
     async function getTokensWithdraw(hash, wallet) {
-        const response = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=txlist&contractaddress=${process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS}&address=${wallet}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`)
+        const response = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=tokentx&contractaddress=${process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS}&address=${wallet}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`)
         const transactions = response.data.result;
         
         for (var i = 0; i < transactions.length; i++) {
@@ -27,7 +27,9 @@ export function WithdrawTokensPubli({data, changeVisible}){
 
     if(tokensWithdraw === 0){
         return(
-            <div/>
+            <div className="flex flex-col text-white">
+                <p>Avançou de Era na pool de distribuição de tokens</p>
+            </div>
         )
     }
 

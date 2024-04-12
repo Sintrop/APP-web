@@ -27,13 +27,20 @@ export function Home() {
     const [page, setPage] = useState(0);
     const [modalConnect, setModalConnect] = useState(false);
     const [modalLogout, setModalLogout] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
 
     useEffect(() => {
         getPublications();
     }, [page]);
 
     async function getPublications() {
-        setLoading(true);
+        if(firstLoad){
+            setLoading(true);
+            setFirstLoad(false);
+        }else{
+            setLoadingMore(true);
+        }
 
         const response = await api.get(`/publications/get-all/${page}`);
         const resPublis = response.data.publications;
@@ -46,6 +53,7 @@ export function Home() {
             }
         }
 
+        setLoadingMore(false);
         setLoading(false);
     }
 
@@ -187,9 +195,13 @@ export function Home() {
                                         />
                                     ))}
 
-                                    <button onClick={() => setPage(page + 1)}>
-                                        Ver mais
-                                    </button>
+                                    {loadingMore ? (
+                                        <ActivityIndicator size={40}/>
+                                    ) : (
+                                        <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
+                                            Ver mais
+                                        </button>
+                                    )}
                                 </>
                             )}
                         </div>
