@@ -228,7 +228,7 @@ export function ResearchesCenter() {
 
                             {tabSelected === 'methods' && (
                                 <>
-                                    {true && (
+                                    {userData?.userType === 3 && (
                                         <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                             <p className="font-semibold text-white">Deseja sugerir um novo método?</p>
 
