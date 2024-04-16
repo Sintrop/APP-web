@@ -39,7 +39,7 @@ export function ResultInspection() {
     const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true)
 
     useEffect(() => {
-        //getInspectionData();
+        getInspectionData();
     }, []);
 
     async function getInspectionData() {
@@ -384,12 +384,37 @@ export function ResultInspection() {
                                     ))}
 
                                     <p className="text-white font-bold text-lg">Resultado das zonas</p>
-                                    <p className="text-white">Biomassa no solo: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.saldoSoilAnaliseSoloZones).toFixed(0))}</span> kg</p>
 
-                                    <p className="text-white font-bold">Árvores</p>
-                                    <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
-                                    <p className="text-white">CO² estocado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
-                                    <p className="text-white">Água estocada: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
+                                    <div className="flex gap-2 flex-wrap items-center flex-col lg:flex-row">
+                                        <div className="flex items-center justify-between p-2 rounded-md border w-[49%]">
+                                            <div className="flex flex-col gap-1 h-[110px]">
+                                                <p className="text-white font-bold">Árvores</p>
+                                                <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
+                                                <p className="text-white">CO² estocado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
+                                                <p className="text-white">Água estocada: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
+                                            </div>
+
+                                            <img
+                                                src={require('../../assets/arvore.png')}
+                                                className="w-14 h-16 object-contain"
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center justify-between p-2 rounded-md border w-[49%]">
+                                            <div className="flex flex-col gap-1 h-[110px]">
+                                                <p className="text-white font-bold">Biomassa</p>
+                                                <p className="text-white">Biomassa no solo: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.saldoSoilAnaliseSoloZones).toFixed(0))}</span> kg</p>
+
+                                            </div>
+
+                                            <img
+                                                src={require('../../assets/fertilizante-orgânico.png')}
+                                                className="w-14 h-16 object-contain"
+                                            />
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             )}
                         </>
