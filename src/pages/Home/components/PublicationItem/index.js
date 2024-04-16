@@ -59,7 +59,7 @@ export function PublicationItem({ data }) {
             return;
         }
 
-        if (userData?.accountStatus === 'guest' || userData?.accountStatus === 'pending') {
+        if (user?.accountStatus === 'guest' || user?.accountStatus === 'pending') {
             toast.error('Você ainda não efetivou seu cadastro na Blockchain')
             return;
         }
