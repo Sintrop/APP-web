@@ -3,11 +3,19 @@ import { Header } from "../../components/Header";
 import { getImage } from '../../services/getImage';
 import { useNavigate, useParams } from "react-router";
 import { api } from "../../services/api";
-import { Blocks } from "react-loader-spinner";
 import { ZoneItem } from "./components/ZoneItem";
 import { FaDotCircle } from "react-icons/fa";
 import format from "date-fns/format";
-import {ActivityIndicator} from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ImageItem } from "./components/ImageItem";
+import { TopBar } from '../../components/TopBar';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { PolylineItemZone } from "./components/PolylineItemZone";
+
+const containerMapStyle = {
+    width: '100%',
+    height: '300px',
+};
 
 export function ResultInspection() {
     const { id } = useParams();
@@ -31,7 +39,7 @@ export function ResultInspection() {
     const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true)
 
     useEffect(() => {
-        getInspectionData();
+        //getInspectionData();
     }, []);
 
     async function getInspectionData() {
@@ -97,14 +105,15 @@ export function ResultInspection() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-20 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 p-2 lg:p-0">
                     <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
                     {loading ? (
                         <div className="flex justify-center">
-                            <ActivityIndicator size={180}/>
+                            <ActivityIndicator size={180} />
                         </div>
                     ) : (
                         <>
@@ -183,6 +192,14 @@ export function ResultInspection() {
                                         <p className="font-bold text-white">{inspectionData?.isaScore}</p>
                                         <p className="text-white text-xs">Pontos de regeneração</p>
                                     </div>
+
+                                    <a
+                                        className="font-semibold text-white px-3 py-1 mt-1 bg-blue-500 rounded-md"
+                                        target="_blank"
+                                        href={`https://app.sintrop.com/view-pdf/${inspectionData?.report}`}
+                                    >
+                                        Ver relatório
+                                    </a>
                                 </div>
 
                                 <div className="flex flex-col w-full lg:w-[49%] gap-1">
@@ -294,25 +311,17 @@ export function ResultInspection() {
 
                                 {loadingBiodiversityImages ? (
                                     <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <Blocks
-                                            height="60"
-                                            width="60"
-                                            color="#4fa94d"
-                                            ariaLabel="blocks-loading"
-                                            wrapperStyle={{}}
-                                            wrapperClass="blocks-wrapper"
-                                            visible={true}
-                                        />
+                                        <ActivityIndicator size={50} />
                                         <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                                     </div>
                                 ) : (
                                     <div className="flex gap-3 overflow-auto">
                                         {biodiversity.map(item => (
-                                            <img
-                                                key={item}
-                                                src={item}
-                                                className="w-[200px] h-[300px] object-cover"
-                                            />
+                                            <div key={item} className="w-[250px] h-[300px]">
+                                                <ImageItem
+                                                    src={item}
+                                                />
+                                            </div>
                                         ))}
                                     </div>
                                 )}
@@ -321,25 +330,18 @@ export function ResultInspection() {
 
                                 {loadingBiodiversitySoil ? (
                                     <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <Blocks
-                                            height="60"
-                                            width="60"
-                                            color="#4fa94d"
-                                            ariaLabel="blocks-loading"
-                                            wrapperStyle={{}}
-                                            wrapperClass="blocks-wrapper"
-                                            visible={true}
-                                        />
+                                        <ActivityIndicator size={50} />
                                         <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                                     </div>
                                 ) : (
                                     <div className="flex gap-3 overflow-auto">
                                         {biodiversitySoil.map(item => (
-                                            <img
-                                                key={item.photo}
-                                                src={item.photo}
-                                                className="w-[200px] h-[300px] object-cover"
-                                            />
+                                            <div key={item} className="w-[250px] h-[300px]">
+                                                <ImageItem
+                                                    src={item}
+                                                    type='biodiversity-soil'
+                                                />
+                                            </div>
                                         ))}
                                     </div>
                                 )}
@@ -347,9 +349,33 @@ export function ResultInspection() {
 
                             {zones.length > 0 && (
                                 <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                                    <p className="text-white font-bold text-lg">Zonas de regeneração</p>
-                                    <div className="mt-2 w-full h-[300px] bg-gray-400">
+                                    <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
+                                        <p className="text-white font-bold text-lg">Zonas de regeneração</p>
 
+                                        <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                            {zones.length > 0 && (
+                                                <LoadScript
+                                                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                                    libraries={['drawing']}
+                                                >
+                                                    <GoogleMap
+                                                        mapContainerStyle={containerMapStyle}
+                                                        center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
+                                                        zoom={15}
+                                                        mapTypeId="hybrid"
+                                                    >
+                                                        {zones.map((item, index) => (
+                                                            <PolylineItemZone
+                                                                data={item.path}
+                                                                index={index}
+                                                            />
+                                                        ))}
+
+                                                    </GoogleMap>
+
+                                                </LoadScript>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <p className="text-white mt-3">Detalhes das zonas</p>
