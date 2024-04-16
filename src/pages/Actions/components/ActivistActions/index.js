@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
+import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 
 export function ActivistActions({ }) {
     const { userData, walletConnected, connectionType } = useMainContext();
@@ -21,10 +22,12 @@ export function ActivistActions({ }) {
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [createdTransaction, setCreatedTransaction] = useState(false);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        getRegisters();
-    }, []);
+        if (tabSelected === 'registers') getRegisters();
+        if (tabSelected === 'users') getUsers();
+    }, [tabSelected]);
 
     async function getRegisters() {
         setLoading(true);
@@ -46,7 +49,7 @@ export function ActivistActions({ }) {
     }
 
     function handleInvite(data) {
-        if(loadingInvite || loadingTransaction){
+        if (loadingInvite || loadingTransaction) {
             return
         }
 
@@ -112,6 +115,13 @@ export function ActivistActions({ }) {
 
     }
 
+    async function getUsers() {
+        setLoading(true);
+        const response = await api.get('/web3/activists');
+        setUsers(response.data.activists);
+        setLoading(false);
+    }
+
     return (
         <div className="flex flex-col lg:w-[1024px] pb-10">
             <h3 className="font-bold text-white text-lg">Centro comercial</h3>
@@ -132,27 +142,34 @@ export function ActivistActions({ }) {
                         Convidar usuário
                     </button>
                 )}
+
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('users')}
+                >
+                    Usuários
+                </button>
             </div>
 
             <div className="flex flex-col mt-3 gap-3">
                 {tabSelected === 'registers' && (
                     <>
-                    {loading ? (
-                        <div className="w-full h-[70vh] flex items-center justify-center">
-                            <ActivityIndicator size={180}/>
-                        </div>
-                    ) : (
-                        <>
-                            {registers.map(item => (
-                                <UserInvite
-                                    key={item?.id}
-                                    data={item}
-                                    inviteUser={(data) => handleInvite(data)}
-                                    loadingInvite={loadingInvite}
-                                />
-                            ))}
-                        </>
-                    )}
+                        {loading ? (
+                            <div className="w-full h-[70vh] flex items-center justify-center">
+                                <ActivityIndicator size={180} />
+                            </div>
+                        ) : (
+                            <>
+                                {registers.map(item => (
+                                    <UserInvite
+                                        key={item?.id}
+                                        data={item}
+                                        inviteUser={(data) => handleInvite(data)}
+                                        loadingInvite={loadingInvite}
+                                    />
+                                ))}
+                            </>
+                        )}
                     </>
                 )}
 
@@ -186,9 +203,19 @@ export function ActivistActions({ }) {
                             }}
                         >
                             {loadingInvite ? (
-                                <ActivityIndicator size={20}/>
+                                <ActivityIndicator size={20} />
                             ) : 'Convidar'}
                         </button>
+                    </div>
+                )}
+
+                {tabSelected === 'users' && (
+                    <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                        {users.map(item => (
+                            <UserRankingItem
+                                data={item}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
@@ -216,7 +243,7 @@ export function ActivistActions({ }) {
                 />
             )}
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     )
 }
