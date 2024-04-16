@@ -10,12 +10,12 @@ export function Header({routeActive}){
     return(
         <div className="w-full flex items-center justify-center h-[60px] lg:h-[80px] bg-[#0a4303] py-2 fixed bottom-0 lg:top-10 left-0 border-b-2 border-green-700 z-50">
             <div className="flex items-center justify-between overflow-x-auto lg:min-w-[1024px]">
-                <div>
+                <button onClick={() => navigate('/')}>
                     <img
                         src={require('../../assets/logo-branco.png')}
                         className="w-[120px] h-[80px] object-contain"
                     />
-                </div>
+                </button>
                 <div className="flex items-center">
                     <button 
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
