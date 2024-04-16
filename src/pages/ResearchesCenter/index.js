@@ -150,7 +150,7 @@ export function ResearchesCenter() {
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('isa')}
                         >
-                            Índice de sustentabilidade
+                            Índice de regeneração
                         </button>
 
                         <button
