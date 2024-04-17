@@ -15,6 +15,7 @@ import { Item } from '../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 
 export function ResearchesCenter() {
     const navigate = useNavigate();
@@ -30,6 +31,7 @@ export function ResearchesCenter() {
     const [items, setItems] = useState([]);
     const [modalPublish, setModalPublish] = useState(false);
     const [publishType, setPublishType] = useState('normal');
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         if (tabSelected === 'researches') {
@@ -37,6 +39,7 @@ export function ResearchesCenter() {
         }
         if (tabSelected === 'isa') getIndices();
         if (tabSelected === 'calculator-items') getCalculatorItens();
+        if (tabSelected === 'users') getUsers();
     }, [tabSelected]);
 
     async function getResearches() {
@@ -57,6 +60,13 @@ export function ResearchesCenter() {
         setLoading(true);
         const response = await api.get('calculator/items')
         setItems(response.data.items)
+        setLoading(false);
+    }
+
+    async function getUsers() {
+        setLoading(true);
+        const response = await api.get('/web3/researchers');
+        setUsers(response.data.researchers);
         setLoading(false);
     }
 
@@ -150,7 +160,7 @@ export function ResearchesCenter() {
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('isa')}
                         >
-                            Índice de sustentabilidade
+                            Índice de regeneração
                         </button>
 
                         <button
@@ -165,6 +175,13 @@ export function ResearchesCenter() {
                             onClick={() => setTabSelected('methods')}
                         >
                             Métodos de avaliação
+                        </button>
+
+                        <button
+                            className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            onClick={() => setTabSelected('users')}
+                        >
+                            Usuários
                         </button>
                     </div>
 
@@ -245,7 +262,7 @@ export function ResearchesCenter() {
                                             </button>
                                         </div>
                                     )}
-                                    
+
                                     <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between" onClick={() => navigate('/methods/sintrop')}>
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-white text-lg mb-1">Método Sintrop</p>
@@ -255,9 +272,19 @@ export function ResearchesCenter() {
                                             />
                                         </div>
 
-                                        <FaChevronRight size={30} color='white'/>
+                                        <FaChevronRight size={30} color='white' />
                                     </button>
                                 </>
+                            )}
+
+                            {tabSelected === 'users' && (
+                                <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                                    {users.map(item => (
+                                        <UserRankingItem
+                                            data={item}
+                                        />
+                                    ))}
+                                </div>
                             )}
                         </div>
                     )}

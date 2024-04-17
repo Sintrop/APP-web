@@ -46,7 +46,7 @@ export function TopBar() {
                         src={require('../../assets/token.png')}
                         className="w-5 h-5 object-contain"
                     />
-                    <p className="font-bold text-white text-xs">Apresentação e pré-venda do Crédito De Regeneração</p>
+                    <p className="font-bold text-white text-xs">Pré-venda do Crédito De Regeneração</p>
                 </button>
             </div>
         </div>

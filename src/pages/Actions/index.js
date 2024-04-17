@@ -4,6 +4,7 @@ import {useMainContext} from '../../hooks/useMainContext';
 import { DeveloperActions } from "./components/DeveloperActions";
 import { ValidatorActions } from "./components/ValidatorActions";
 import { TopBar } from "../../components/TopBar";
+import { ActivistActions } from "./components/ActivistActions";
 
 export function Actions() {
     const {walletConnected, userData, connectionType} = useMainContext();
@@ -27,6 +28,10 @@ export function Actions() {
 
                             {userData?.userType === 8 && (
                                 <ValidatorActions/>
+                            )}
+
+                            {userData?.userType === 6 && (
+                                <ActivistActions/>
                             )}
                         </div>
                     )}

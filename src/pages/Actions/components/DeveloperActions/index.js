@@ -4,6 +4,7 @@ import { ActivityIndicator } from '../../../../components/ActivityIndicator';
 import { FeedbackItem } from "./feedbackItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { SendReportDev } from '../../../checkout/SendReportDev';
+import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 
 export function DeveloperActions() {
     const { userData, walletConnected } = useMainContext();
@@ -11,11 +12,13 @@ export function DeveloperActions() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [historyFeedbacks, setHistoryFeedbacks] = useState([]);
     const [modalDevReport, setModalDevReport] = useState(false);
-    const [tabSelected, setTabSelected] = useState('open')
+    const [tabSelected, setTabSelected] = useState('open');
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        getFeedbacks();
-    }, []);
+        if(tabSelected === 'open' || tabSelected === 'history')getFeedbacks();
+        if(tabSelected === 'users')getUsers();
+    }, [tabSelected]);
 
     async function getFeedbacks() {
         setLoading(true);
@@ -39,8 +42,15 @@ export function DeveloperActions() {
         setLoading(false);
     }
 
+    async function getUsers(){
+        setLoading(true);
+        const response = await api.get('/web3/developers');
+        setUsers(response.data.developers);
+        setLoading(false);
+    }
+
     return (
-        <div className="flex flex-col w-[800px]">
+        <div className="flex flex-col lg:w-[1024px]">
             <h3 className="font-bold text-white text-lg">Centro de desenvolvimento</h3>
 
             {userData?.userType === 4 && (
@@ -70,6 +80,13 @@ export function DeveloperActions() {
                 >
                     Histórico
                 </button>
+
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('users')}
+                >
+                    Usuários
+                </button>
             </div>
             {loading && (
                 <ActivityIndicator size={50} />
@@ -97,6 +114,16 @@ export function DeveloperActions() {
                         />
                     ))}
                 </>
+            )}
+
+            {tabSelected === 'users' && (
+                <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                    {users.map(item => (
+                        <UserRankingItem
+                            data={item}
+                        />
+                    ))}
+                </div>
             )}
 
             {modalDevReport && (

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../services/getImage";
 import { Blocks } from "react-loader-spinner";
+import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ImageItem } from "./ImageItem";
 
 export function ZoneItem({ data, index }) {
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
@@ -104,29 +106,30 @@ export function ZoneItem({ data, index }) {
     return (
         <div className="flex flex-col bg-green-950 p-2 rounded-md">
             <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR').format(Number(data?.areaZone).toFixed(2))} m²</p>
+            <p className="text-white text-sm">
+                Cor no mapa: 
+                {color === 'red' && ' Vermelho'}
+                {color === 'green' && ' Verde'}
+                {color === 'blue' && ' Azul'}
+                {color === 'yellow' && ' Amarelo'}
+                {color === 'purple' && ' Roxo'}
+            </p>
             <p className="text-white">Fotos da zona</p>
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <Blocks
-                        height="60"
-                        width="60"
-                        color="#4fa94d"
-                        ariaLabel="blocks-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="blocks-wrapper"
-                        visible={true}
-                    />
+                    <ActivityIndicator size={50}/>
                     <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesZones.map(item => (
-                        <img
-                            key={item.photo}
-                            src={item.photo}
-                            className="w-[200px] h-[300px] object-cover"
-                        />
+                        <div key={item.photo} className="w-[250px] h-[300px]">
+                            <ImageItem
+                                src={item}
+                                type='photos-zone'
+                            />
+                        </div>
                     ))}
                 </div>
             )}
@@ -135,25 +138,18 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <Blocks
-                        height="60"
-                        width="60"
-                        color="#4fa94d"
-                        ariaLabel="blocks-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="blocks-wrapper"
-                        visible={true}
-                    />
+                    <ActivityIndicator size={50}/>
                     <p className="text-white mt-1">Carregando dados, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesAnaliseSoil.map(item => (
-                        <img
-                            key={item.photo}
-                            src={item.photo}
-                            className="w-[200px] h-[300px] object-cover"
-                        />
+                        <div key={item.photo} className="w-[250px] h-[300px]">
+                            <ImageItem
+                                src={item}
+                                type='analise-soil'
+                            />
+                        </div>
                     ))}
                 </div>
             )}
@@ -173,25 +169,18 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <Blocks
-                        height="60"
-                        width="60"
-                        color="#4fa94d"
-                        ariaLabel="blocks-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="blocks-wrapper"
-                        visible={true}
-                    />
+                    <ActivityIndicator size={50}/>
                     <p className="text-white mt-1">Carregando fotos, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesTreesS1.map(item => (
-                        <img
-                            key={item.photo}
-                            src={item.photo}
-                            className="w-[200px] h-[300px] object-cover"
-                        />
+                        <div key={item.photo} className="w-[250px] h-[300px]">
+                            <ImageItem
+                                src={item}
+                                type='trees'
+                            />
+                        </div>
                     ))}
                 </div>
             )}

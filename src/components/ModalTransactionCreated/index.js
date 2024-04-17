@@ -23,7 +23,7 @@ export function ModalTransactionCreated({close}){
                     <button
                         className="text-white font-bold px-3 py-2 rounded-md bg-blue-600"
                         onClick={async() => {
-                            await navigator.clipboard.writeText('https://v5-sintrop.netlify.app/checkout')
+                            await navigator.clipboard.writeText('https://app.sintrop.com/checkout')
                             toast.success('Link copiado para a área de transferência!')
                         }}
                     >
