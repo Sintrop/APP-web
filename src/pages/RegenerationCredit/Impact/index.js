@@ -37,7 +37,7 @@ export function Impact() {
             {
                 name: 'Carbono',
                 data: [
-                    Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Math.abs(confirm[0]?.carbon).toFixed(0)),
+                    Number(Math.abs(confirm[0]?.carbon) / 1000).toFixed(0),
                     Number(Math.abs(impact[0]?.carbon) / 1000).toFixed(0),
                     Number(Math.abs(burned[0]?.carbon) / 1000).toFixed(2)
                 ]
@@ -49,7 +49,7 @@ export function Impact() {
                 {
                     name: 'Solo',
                     data: [
-                        Number(confirm[0]?.solo).toFixed(0),
+                        Number(confirm[0]?.solo / 10000).toFixed(0),
                         Number(impact[0]?.solo / 10000).toFixed(2),
                         Number(burned[0]?.solo / 10000).toFixed(2)
                     ]
@@ -175,7 +175,7 @@ export function Impact() {
                                 <div className='flex flex-col items-center gap-5'>
                                     <div className='flex flex-col items-center'>
                                         <h3 className='text-white text-sm'>Carbono</h3>
-                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.carbon * 1000)} g</p>
+                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(impactToken?.carbon * 1000)} g</p>
                                     </div>
 
                                     <div className='flex flex-col items-center'>
