@@ -5,7 +5,7 @@ import { get } from '../../config/infura';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
-import {FaChevronRight} from 'react-icons/fa';
+import { FaChevronRight } from 'react-icons/fa';
 
 //services
 import { GetDelation, GetInspections, GetProducer } from '../../services/accountProducerService';
@@ -16,6 +16,7 @@ import { useMainContext } from '../../hooks/useMainContext';
 import { getImage } from '../../services/getImage';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
+import { Inspection } from '../ResultInspection/components/Inspection';
 
 const containerMapStyle = {
     width: '100%',
@@ -41,10 +42,8 @@ export default function AccountProducer() {
     }, []);
 
     async function getProducer() {
-        const response = await GetProducer(walletSelected);
-        setProducerData(response);
-        fixCoordinates(JSON.parse(response.propertyAddress.coordinate));
-        const delations = await GetDelation(response.producerWallet);
+        const response = await api.get(`/web3/producer-data/${String(walletSelected).toLowerCase()}`);
+        setProducerData(response.data.producer);
         getInspections();
     }
 
@@ -101,7 +100,7 @@ export default function AccountProducer() {
 
         const filter = array.filter(item => String(item.createdBy).toUpperCase() === String(walletSelected).toUpperCase());
         setInspections(filter);
-        
+
         setLoadingInspections(false);
     }
 
@@ -109,9 +108,12 @@ export default function AccountProducer() {
         try {
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
             const address = JSON.parse(response.data.user?.address)
+            const path = JSON.parse(response.data.user.propertyGeolocation);
+            
             setProducerAddress(address);
             setUserData(response.data.user);
             getImageProfile(response.data.user.imgProfileUrl);
+            fixCoordinates(path);
             if (response.data.user.geoLocation) {
                 setInitialRegion(JSON.parse(response.data.user.geoLocation));
             }
@@ -140,10 +142,10 @@ export default function AccountProducer() {
 
                 <div className='flex flex-col items-center lg:items-start'>
                     <h1 className='font-bold text-center lg:text-left lg:text-2xl text-white'>{userData?.name}</h1>
-                    <h3 className='text-center lg:text-left lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h3>
-                    <p className='text-center lg:text-left text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
+                    <h3 className='text-center text-xs lg:text-left lg:text-lg text-white lg:max-w-full'>{walletSelected}</h3>
+                    <p className='text-center text-sm lg:text-left text-white'>{producerAddress?.city}/{producerAddress?.state}, {producerAddress?.street}</p>
 
-                    <button 
+                    <button
                         className='font-semibold text-white px-3 py-1 rounded-md bg-blue-500 mt-2'
                         onClick={() => navigate(`/user-details/${walletSelected}`)}
                     >
@@ -176,8 +178,8 @@ export default function AccountProducer() {
                         <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
                     </div>
                 </div>
-    
-                <ProducerGraphics inspections={inspections}/>
+
+                <ProducerGraphics inspections={inspections} />
             </div>
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
@@ -208,33 +210,14 @@ export default function AccountProducer() {
                 </div>
             </div>
 
-            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3 mb-10'>
-                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Inspeções recebidas</h3>
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 rounded-md p-1 lg:p-0 mb-10'>
+                <h3 className='font-bold text-white text-center lg:text-lg'>Inspeções recebidas</h3>
 
                 {inspections.map(item => (
-                    <div className='w-full flex flex-col lg:flex-row items-center justify-between bg-green-950 p-2 rounded-md mb-1'>
-                        <div className='flex flex-col w-full lg:w-fit'>
-                            <p className='font-bold text-white'>Inspeção #{item?.id}</p>
-
-                            <div className='p-2 rounded-md flex flex-col border mt-1'>
-                                <p className='text-white text-sm'>Pontuação: <span className='font-bold'>{item?.isaScore} pts</span></p>
-                                <p className='text-white text-sm max-w-[30ch] overflow-hidden text-ellipsis lg:max-w-[100ch]'>Wallet inspetor: 
-                                    <span 
-                                        className='font-bold cursor-pointer underline text-blue-400'
-                                        onClick={() => navigate(`/user-details/${item?.acceptedBy}`)}
-                                    > {item?.acceptedBy}</span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <button 
-                            className='flex items-center gap-2 font-bold text-white text-sm mt-5 lg:mt-0'
-                            onClick={() => navigate(`/result-inspection/${item?.id}`)}
-                        >
-                            Ver inspeção
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-                    </div>
+                    <Inspection
+                        id={item?.id}
+                        key={item?.id}
+                    />
                 ))}
             </div>
         </div>
