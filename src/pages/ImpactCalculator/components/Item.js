@@ -38,7 +38,7 @@ export function Item({data, addItem, hiddenButton}){
                     className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600"
                     onClick={() => setModalAddItem(true)}
                 >
-                    Adicionar item
+                    Compensar item
                 </button>
             )}
 

@@ -20,7 +20,7 @@ import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 export function ResearchesCenter() {
     const navigate = useNavigate();
     const { userData, walletConnected, connectionType } = useMainContext();
-    const [tabSelected, setTabSelected] = useState('researches');
+    const [tabSelected, setTabSelected] = useState('users');
     const [loading, setLoading] = useState(false);
     const [loadingPublish, setLoadingPublish] = useState(false);
     const [researches, setResearches] = useState([]);
@@ -150,6 +150,13 @@ export function ResearchesCenter() {
 
                     <div className="flex items-center gap-8 mt-2">
                         <button
+                            className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            onClick={() => setTabSelected('users')}
+                        >
+                            Perquisadores
+                        </button>
+
+                        <button
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'researches' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('researches')}
                         >
@@ -175,13 +182,6 @@ export function ResearchesCenter() {
                             onClick={() => setTabSelected('methods')}
                         >
                             Métodos de avaliação
-                        </button>
-
-                        <button
-                            className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                            onClick={() => setTabSelected('users')}
-                        >
-                            Usuários
                         </button>
                     </div>
 
@@ -278,7 +278,7 @@ export function ResearchesCenter() {
                             )}
 
                             {tabSelected === 'users' && (
-                                <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                                <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-start' : 'justify-center'}`}>
                                     {users.map(item => (
                                         <UserRankingItem
                                             data={item}

@@ -34,7 +34,7 @@ export function TopBar() {
                 
                 <p className=" text-gray-200 text-xs gap-3">
                     Impacto por token:
-                    <span className="font-bold text-green-300"> Carbono: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.carbon * 1000)} g</span>
+                    <span className="font-bold text-green-300"> Carbono: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(impactToken?.carbon * 1000)} g</span>
                     <span className="font-bold text-green-300"> | Água: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.water * 1000)} L</span>
                     <span className="font-bold text-green-300"> | Solo: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.soil * 10000)} cm²</span>
                     <span className="font-bold text-green-300"> | Biodver.: {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.bio)} uv</span>

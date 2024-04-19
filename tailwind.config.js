@@ -13,6 +13,7 @@ module.exports = {
         'checkout': "url('/src/assets/bg-s-checkout.png')",
         'card': "url('/src/assets/card.png')",
         'presale': "url('/src/assets/bg-presale.png')",
+        'certificate': "url('/src/assets/bg-certificate.png')"
       }
     },
   },

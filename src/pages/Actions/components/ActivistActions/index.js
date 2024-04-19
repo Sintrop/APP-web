@@ -12,7 +12,7 @@ import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 
 export function ActivistActions({ }) {
     const { userData, walletConnected, connectionType } = useMainContext();
-    const [tabSelected, setTabSelected] = useState('registers');
+    const [tabSelected, setTabSelected] = useState('users');
     const [loading, setLoading] = useState(false);
     const [registers, setRegisters] = useState([]);
     const [loadingInvite, setLoadingInvite] = useState(false);
@@ -128,6 +128,13 @@ export function ActivistActions({ }) {
 
             <div className="flex items-center gap-8 mb-2">
                 <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('users')}
+                >
+                    Ativistas
+                </button>
+
+                <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'registers' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('registers')}
                 >
@@ -142,13 +149,6 @@ export function ActivistActions({ }) {
                         Convidar usuário
                     </button>
                 )}
-
-                <button
-                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                    onClick={() => setTabSelected('users')}
-                >
-                    Usuários
-                </button>
             </div>
 
             <div className="flex flex-col mt-3 gap-3">
@@ -210,7 +210,7 @@ export function ActivistActions({ }) {
                 )}
 
                 {tabSelected === 'users' && (
-                    <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                    <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-start' : 'justify-center'}`}>
                         {users.map(item => (
                             <UserRankingItem
                                 data={item}

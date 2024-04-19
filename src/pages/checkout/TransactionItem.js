@@ -800,7 +800,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
     //----------- FINISH INSPECTION ---------------------
 
-    function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas) {
+    function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas, proofPhoto) {
         const {
             bioPictures,
             bodyInsumos,
@@ -985,6 +985,19 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             style: 'label'
                         },
                         `${infoData?.date}`
+                    ]
+                },
+                {
+                    text: [
+                        {
+                            text: 'Foto de prova: ',
+                            style: 'label'
+                        },
+                        {
+                            text: `${proofPhoto}`,
+                            link: `https://app.sintrop.com/view-image/${proofPhoto}`,
+                            style: 'link'
+                        }
                     ]
                 },
                 {
@@ -1896,7 +1909,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, soilBiodiversity, springs);
 
         await api.put('/update-result', {
-            id: additionalData?.inspectionId,
+            id: String(additionalData?.inspectionId),
             result: JSON.stringify(responseCalculo)
         })
 
@@ -1924,7 +1937,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bio: await calculateBio(responseCalculo.resultIndices),
         }
 
-        const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas));
+        const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
         
         pdf.getBuffer(async (res) => {
             const hash = await save(res);

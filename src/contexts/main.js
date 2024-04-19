@@ -74,24 +74,6 @@ export default function MainProvider({children}){
         }, 13500);
     }, [nextEra]);
 
-    // useEffect(() => {
-    //     getAtualBlockNumber();
-    //     setTimeout(() => {
-    //         setGetAtualBlock(!getAtualBlock)
-    //     }, 10000)
-    // }, [getAtualBlock])
-
-    // useEffect(() => {
-    //     getNotifications();
-    //     setTimeout(() => {
-    //         setAttNotifications(!attNotifications);
-    //     }, 10000)
-    // }, [attNotifications]);
-
-    // useEffect(() => {
-    //     if(walletConnected !== '')checkTransactionQueue();
-    // }, [walletConnected]);
-
     async function getEraInfo() {
         const response = await api.get('/web3/era-info');
         setNextEra(response.data.nextEraIn);

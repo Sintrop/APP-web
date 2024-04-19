@@ -12,7 +12,7 @@ export function DeveloperActions() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [historyFeedbacks, setHistoryFeedbacks] = useState([]);
     const [modalDevReport, setModalDevReport] = useState(false);
-    const [tabSelected, setTabSelected] = useState('open');
+    const [tabSelected, setTabSelected] = useState('users');
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -68,6 +68,13 @@ export function DeveloperActions() {
             <p className="text-gray-400 mt-5">Feedbacks/tasks</p>
             <div className="flex items-center gap-8 mb-2">
                 <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('users')}
+                >
+                    Desenvolvedores
+                </button>
+
+                <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'open' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('open')}
                 >
@@ -81,12 +88,6 @@ export function DeveloperActions() {
                     Histórico
                 </button>
 
-                <button
-                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                    onClick={() => setTabSelected('users')}
-                >
-                    Usuários
-                </button>
             </div>
             {loading && (
                 <ActivityIndicator size={50} />
