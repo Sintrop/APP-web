@@ -2254,117 +2254,116 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     }
 
     async function attNetworkImpact(resultIndices, methodType, producerData) {
-        let carbon = 0;
-        let agua = 0;
-        let bio = 0;
-        let solo = 0;
-        let carbonPhoenix = 0;
-        let aguaPhoenix = 0;
-        let bioPhoenix = 0;
-        let soloPhoenix = 0;
-        let carbonManual = 0;
-        let aguaManual = 0;
-        let bioManual = 0;
-        let soloManual = 0;
+        // let carbon = 0;
+        // let agua = 0;
+        // let bio = 0;
+        // let solo = 0;
+        // let carbonPhoenix = 0;
+        // let aguaPhoenix = 0;
+        // let bioPhoenix = 0;
+        // let soloPhoenix = 0;
+        // let carbonManual = 0;
+        // let aguaManual = 0;
+        // let bioManual = 0;
+        // let soloManual = 0;
 
-        const responseImpact = await api.get('network-impact');
-        const impact = responseImpact.data.impact;
-        for (var i = 0; i < impact.length; i++) {
-            if (impact[i].id === '6') {
-                carbon = Number(impact[i]?.carbon);
-                agua = Number(impact[i]?.agua);
-                bio = Number(impact[i]?.bio);
-                solo = Number(impact[i]?.solo);
-            }
-            if (impact[i].id === '2') {
-                carbonPhoenix = Number(impact[i]?.carbon);
-                aguaPhoenix = Number(impact[i]?.agua);
-                bioPhoenix = Number(impact[i]?.bio);
-                soloPhoenix = Number(impact[i]?.solo);
-            }
-            if (impact[i].id === '3') {
-                carbonManual = Number(impact[i]?.carbon);
-                aguaManual = Number(impact[i]?.agua);
-                bioManual = Number(impact[i]?.bio);
-                soloManual = Number(impact[i]?.solo);
-            }
-        }
+        // const responseImpact = await api.get('network-impact');
+        // const impact = responseImpact.data.impact;
+        // for (var i = 0; i < impact.length; i++) {
+        //     if (impact[i].id === '6') {
+        //         carbon = Number(impact[i]?.carbon);
+        //         agua = Number(impact[i]?.agua);
+        //         bio = Number(impact[i]?.bio);
+        //         solo = Number(impact[i]?.solo);
+        //     }
+        //     if (impact[i].id === '2') {
+        //         carbonPhoenix = Number(impact[i]?.carbon);
+        //         aguaPhoenix = Number(impact[i]?.agua);
+        //         bioPhoenix = Number(impact[i]?.bio);
+        //         soloPhoenix = Number(impact[i]?.solo);
+        //     }
+        //     if (impact[i].id === '3') {
+        //         carbonManual = Number(impact[i]?.carbon);
+        //         aguaManual = Number(impact[i]?.agua);
+        //         bioManual = Number(impact[i]?.bio);
+        //         soloManual = Number(impact[i]?.solo);
+        //     }
+        // }
 
-        if (Number(resultIndices.carbonIndicator) < 0) {
-            carbon += Number(resultIndices.carbonIndicator);
-            if (methodType === 'phoenix') {
-                carbonPhoenix += Number(resultIndices.carbonIndicator);
-            }
-            if (methodType === 'manual') {
-                carbonManual += Number(resultIndices.carbonIndicator);
-            }
-        }
+        // if (Number(resultIndices.carbonIndicator) < 0) {
+        //     carbon += Number(resultIndices.carbonIndicator);
+        //     if (methodType === 'phoenix') {
+        //         carbonPhoenix += Number(resultIndices.carbonIndicator);
+        //     }
+        //     if (methodType === 'manual') {
+        //         carbonManual += Number(resultIndices.carbonIndicator);
+        //     }
+        // }
 
-        if (Number(resultIndices.bioIndicator) > 0) {
-            bio += Number(resultIndices.bioIndicator);
-            if (methodType === 'phoenix') {
-                bioPhoenix += Number(resultIndices.bioIndicator);
-            }
-            if (methodType === 'manual') {
-                bioManual += Number(resultIndices.bioIndicator);
-            }
-        }
+        // if (Number(resultIndices.bioIndicator) > 0) {
+        //     bio += Number(resultIndices.bioIndicator);
+        //     if (methodType === 'phoenix') {
+        //         bioPhoenix += Number(resultIndices.bioIndicator);
+        //     }
+        //     if (methodType === 'manual') {
+        //         bioManual += Number(resultIndices.bioIndicator);
+        //     }
+        // }
 
-        if (Number(resultIndices.aguaIndicator) > 0) {
-            agua += Number(resultIndices.aguaIndicator)
-            if (methodType === 'phoenix') {
-                aguaPhoenix += Number(resultIndices.aguaIndicator);
-            }
-            if (methodType === 'manual') {
-                aguaManual += Number(resultIndices.aguaIndicator);
-            }
-        }
+        // if (Number(resultIndices.aguaIndicator) > 0) {
+        //     agua += Number(resultIndices.aguaIndicator)
+        //     if (methodType === 'phoenix') {
+        //         aguaPhoenix += Number(resultIndices.aguaIndicator);
+        //     }
+        //     if (methodType === 'manual') {
+        //         aguaManual += Number(resultIndices.aguaIndicator);
+        //     }
+        // }
 
-        if (Number(resultIndices.soloIndicator) > 0) {
-            solo += Number(resultIndices.soloIndicator)
-            if (methodType === 'phoenix') {
-                soloPhoenix += Number(resultIndices.soloIndicator);
-            }
-            if (methodType === 'manual') {
-                soloManual += Number(resultIndices.soloIndicator);
-            }
-        }
+        // if (Number(resultIndices.soloIndicator) > 0) {
+        //     solo += Number(resultIndices.soloIndicator)
+        //     if (methodType === 'phoenix') {
+        //         soloPhoenix += Number(resultIndices.soloIndicator);
+        //     }
+        //     if (methodType === 'manual') {
+        //         soloManual += Number(resultIndices.soloIndicator);
+        //     }
+        // }
 
-        await api.put('network-impact', {
-            carbon,
-            agua,
-            bio,
-            solo,
-            id: '6'
-        });
+        // await api.put('network-impact', {
+        //     carbon,
+        //     agua,
+        //     bio,
+        //     solo,
+        //     id: '6'
+        // });
 
-        if (methodType === 'phoenix') {
-            await api.put('network-impact', {
-                carbon: carbonPhoenix,
-                agua: aguaPhoenix,
-                bio: bioPhoenix,
-                solo: soloPhoenix,
-                id: '2'
-            });
-        }
-        if (methodType === 'manual') {
-            await api.put('network-impact', {
-                carbon: carbonManual,
-                agua: aguaManual,
-                bio: bioManual,
-                solo: soloManual,
-                id: '3'
-            });
-        }
-        attImpactUser(producerData);
-        await api.put('/transactions-open/finish', { id: transaction.id });
-        setLoadingTransaction(false);
-    }
-
-    async function attImpactUser(producerData){
+        // if (methodType === 'phoenix') {
+        //     await api.put('network-impact', {
+        //         carbon: carbonPhoenix,
+        //         agua: aguaPhoenix,
+        //         bio: bioPhoenix,
+        //         solo: soloPhoenix,
+        //         id: '2'
+        //     });
+        // }
+        // if (methodType === 'manual') {
+        //     await api.put('network-impact', {
+        //         carbon: carbonManual,
+        //         agua: aguaManual,
+        //         bio: bioManual,
+        //         solo: soloManual,
+        //         id: '3'
+        //     });
+        // }
+        //attImpactUser(producerData);
         await api.put('/impact-user', {
             producerWallet: producerData?.producerWallet
-        })
+        });
+
+        const response = await api.get('/new-network-impact');
+        await api.put('/transactions-open/finish', { id: transaction.id });
+        setLoadingTransaction(false);
     }
 
     //----------- FINISH INSPECTION ---------------------^^^^^^^^
