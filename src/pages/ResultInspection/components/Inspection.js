@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 import { FaDotCircle } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { ViewImage } from "../../../components/ViewImage";
 
 const containerMapStyle = {
     width: '100%',
@@ -37,6 +38,8 @@ export function Inspection({ id }) {
     const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true);
     const [loadingImagesProperty, setLoadingImagesProperty] = useState(true);
     const [imagesProperty, setImagesProperty] = useState([]);
+    const [viewImage, setViewImage] = useState(false);
+    const [imageSelected, setImageSelected] = useState('');
 
     useEffect(() => {
         getInspectionData();
@@ -58,7 +61,7 @@ export function Inspection({ id }) {
         setInsumos(JSON.parse(responseApi.data?.inspectionApiData.resultCategories));
         setLoading(false);
 
-        if(responseApi?.data?.inspectionApiData?.propertyPhotos){
+        if (responseApi?.data?.inspectionApiData?.propertyPhotos) {
             await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
         }
         await getImagesBiodiversitySoil(JSON.parse(responseApi.data?.inspectionApiData?.soilBiodiversity));
@@ -345,12 +348,19 @@ export function Inspection({ id }) {
                                     ) : (
                                         <div className="flex gap-3 overflow-auto mt-3">
                                             {imagesProperty.map(item => (
-                                                <div key={item} className="w-[250px] h-[300px]">
+                                                <button 
+                                                    key={item} 
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item.photo);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
                                                     <ImageItem
                                                         src={item}
                                                         type='photos-zone'
                                                     />
-                                                </div>
+                                                </button>
                                             ))}
                                         </div>
                                     )}
@@ -371,11 +381,18 @@ export function Inspection({ id }) {
                         ) : (
                             <div className="flex gap-3 overflow-auto">
                                 {biodiversity.map(item => (
-                                    <div key={item} className="w-[250px] h-[300px]">
+                                    <button 
+                                        key={item} 
+                                        className="w-[250px] h-[300px]" 
+                                        onClick={() => {
+                                            setImageSelected(item);
+                                            setViewImage(true);
+                                        }}
+                                    >
                                         <ImageItem
                                             src={item}
                                         />
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         )}
@@ -390,12 +407,19 @@ export function Inspection({ id }) {
                         ) : (
                             <div className="flex gap-3 overflow-auto">
                                 {biodiversitySoil.map(item => (
-                                    <div key={item} className="w-[250px] h-[300px]">
+                                    <button 
+                                        key={item} 
+                                        className="w-[250px] h-[300px]"
+                                        onClick={() => {
+                                            setImageSelected(item.photo);
+                                            setViewImage(true);
+                                        }}
+                                    >
                                         <ImageItem
                                             src={item}
                                             type='biodiversity-soil'
                                         />
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         )}
@@ -489,6 +513,16 @@ export function Inspection({ id }) {
                         </div>
                     )}
                 </>
+            )}
+
+            {viewImage && (
+                <ViewImage
+                    close={() => {
+                        setViewImage(false);
+                        setImageSelected('');
+                    }}
+                    uri={imageSelected}
+                />
             )}
         </div>
     )
