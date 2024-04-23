@@ -51,13 +51,33 @@ export function PubliUser({ data }) {
                 <div className={`flex w-[${window.screen.width - 25}px] h-[${window.screen.width - 25}px] lg:h-[600px] max-h-[600px]`}>
                     {loadingImages ? (
                         <div className="flex items-center justify-center w-full h-full">
-                            <ActivityIndicator size={50}/>
+                            <ActivityIndicator size={50} />
                         </div>
                     ) : (
-                        <img
-                            src={images[0]}
-                            className="w-full h-full max-h-[600px] object-cover"
-                        />
+                        <>
+                            {images.length < 2 ? (
+                                <img
+                                    src={images[0]}
+                                    className="w-full h-full max-h-[600px] object-cover"
+                                />
+                            ) : (
+                                <div className="flex gap-2 overflow-x-auto">
+                                    {images.map((item, index) => (
+                                        <>
+                                            <img
+                                                src={item}
+                                                key={item}
+                                                className={`w-[${window.screen.width - 25}px] h-[${window.screen.width - 25}px] lg:h-[600px] max-h-[600px] object-cover`}
+                                            />
+                                            <div className="px-2 py-1 rounded-lg bg-gray-500 relative top-2 right-2 h-fit ml-[-40px]">
+                                                <p className="font-semibold text-xs text-white">{index + 1}/{images.length}</p>
+                                            </div>
+                                            
+                                        </>
+                                    ))}
+                                </div>
+                            )}
+                        </>
                     )}
 
                 </div>

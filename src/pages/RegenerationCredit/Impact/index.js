@@ -16,6 +16,7 @@ export function Impact() {
     const [graphicSoil, setGraphicSoil] = useState(null);
     const [graphicWater, setGraphicWater] = useState(null);
     const [graphicBio, setGraphicBio] = useState(null);
+    const [estimatedImpact, setEstimatedImpact] = useState({});
 
     useEffect(() => {
         getImpact()
@@ -84,7 +85,8 @@ export function Impact() {
         )
 
         const response2 = await api.get('/impact-per-token');
-        setImpactToken(response2.data.impact)
+        setImpactToken(response2.data.impact);
+        setEstimatedImpact(response2.data.estimatedImpact)
         setLoading(false);
     }
 
@@ -122,8 +124,8 @@ export function Impact() {
                 tooltip: {
                     enabled: true,
                 },
-                labels:{
-                    style:{
+                labels: {
+                    style: {
                         colors: ['#fff', '#fff', '#fff']
                     }
                 }
@@ -140,7 +142,7 @@ export function Impact() {
                     formatter: function (val) {
                         return val + "";
                     },
-                    style:{
+                    style: {
                         colors: ['#fff']
                     }
                 },
@@ -151,7 +153,7 @@ export function Impact() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header />
 
             <div className="flex flex-col items-center w-full pt-32 overflow-auto">
@@ -161,38 +163,77 @@ export function Impact() {
                     </div>
                 ) : (
                     <div className="flex flex-col max-w-[1024px] mt-3 mb-5">
-                        <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
-                            <div className='flex items-center gap-2'>
-                                <img
-                                    src={require('../../../assets/token.png')}
-                                    className='w-7 h-7 object-contain'
-                                />
+                        <div className='flex gap-4'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                                <div className='flex items-center gap-2'>
+                                    <img
+                                        src={require('../../../assets/token.png')}
+                                        className='w-7 h-7 object-contain'
+                                    />
 
-                                <p className='font-bold text-white'>Impacto por token</p>
-                            </div>
-
-                            <div className='flex items-center gap-20 w-full mt-3 justify-center'>
-                                <div className='flex flex-col items-center gap-5'>
-                                    <div className='flex flex-col items-center'>
-                                        <h3 className='text-white text-sm'>Carbono</h3>
-                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(impactToken?.carbon * 1000)} g</p>
-                                    </div>
-
-                                    <div className='flex flex-col items-center'>
-                                        <h3 className='text-white text-sm'>Água</h3>
-                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.water * 1000)} L</p>
-                                    </div>
+                                    <p className='font-bold text-white'>Impacto por token</p>
                                 </div>
 
-                                <div className='flex flex-col items-center gap-5'>
-                                    <div className='flex flex-col items-center'>
-                                        <h3 className='text-white text-sm'>Solo</h3>
-                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.soil * 10000)} cm²</p>
+                                <div className='flex items-center gap-20 w-full mt-3 justify-center'>
+                                    <div className='flex flex-col items-center gap-5'>
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(impactToken?.carbon * 1000)} g</p>
+                                        </div>
+
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.water * 1000)} L</p>
+                                        </div>
                                     </div>
 
-                                    <div className='flex flex-col items-center'>
-                                        <h3 className='text-white text-sm'>Biodver.</h3>
-                                        <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.bio)} uv</p>
+                                    <div className='flex flex-col items-center gap-5'>
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.soil * 10000)} cm²</p>
+                                        </div>
+
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.bio)} uv</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                                <div className='flex items-center gap-2'>
+                                    <img
+                                        src={require('../../../assets/token.png')}
+                                        className='w-7 h-7 object-contain'
+                                    />
+
+                                    <p className='font-bold text-white'>Projeção do impacto por token</p>
+                                </div>
+
+                                <div className='flex items-center gap-20 w-full mt-3 justify-center'>
+                                    <div className='flex flex-col items-center gap-5'>
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(estimatedImpact?.carbon * 1000)} g</p>
+                                        </div>
+
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.water * 1000)} L</p>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex flex-col items-center gap-5'>
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.soil * 10000)} cm²</p>
+                                        </div>
+
+                                        <div className='flex flex-col items-center'>
+                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.bio)} uv</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

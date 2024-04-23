@@ -15,13 +15,13 @@ import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 
 export function Home() {
     const navigate = useNavigate();
-    const { walletConnected, userData, imageProfile } = useMainContext();
+    const { walletConnected, userData, imageProfile, blockchainData } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [publications, setPublications] = useState([]);
     const [page, setPage] = useState(0);
@@ -35,10 +35,10 @@ export function Home() {
     }, [page]);
 
     async function getPublications() {
-        if(firstLoad){
+        if (firstLoad) {
             setLoading(true);
             setFirstLoad(false);
-        }else{
+        } else {
             setLoadingMore(true);
         }
 
@@ -59,7 +59,7 @@ export function Home() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header routeActive='home' />
 
             <div className="flex flex-col items-center w-full pt-10 pb-16 lg:pb-5 lg:pt-32 overflow-auto">
@@ -70,7 +70,7 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3">
-                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[300px] p-3 bg-[#0a4303] rounded-md">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#0a4303] rounded-md relative">
                                 {walletConnected === '' ? (
                                     <>
                                         <img
@@ -92,14 +92,14 @@ export function Home() {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="w-14 h-14 rounded-full bg-gray-500">
+                                        <div className="w-14 h-14 rounded-full bg-gray-500 cursor-pointer" onClick={() => navigate('/profile')}>
                                             <img
                                                 src={imageProfile}
                                                 className="w-14 h-14 rounded-full object-cover border-2 border-white"
                                             />
                                         </div>
 
-                                        <p className="font-bold text-white text-center text-sm mt-2">{userData?.name}</p>
+                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline" onClick={() => navigate('/profile')}>{userData?.name}</p>
                                         <p className="text-gray-300 text-center text-xs">
                                             {userData?.userType === 1 && 'Produtor(a)'}
                                             {userData?.userType === 2 && 'Inspetor(a)'}
@@ -112,20 +112,29 @@ export function Home() {
                                         </p>
                                         <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
-                                        <button
-                                            className="w-full flex items-center justify-between text-semibold text-white text-sm mt-5"
-                                            onClick={() => navigate('/profile')}
-                                        >
-                                            Accessar perfil
-                                            <FaChevronRight size={15} color='white' />
-                                        </button>
+                                        <div className="flex flex-col mt-2 w-full items-center">
+                                            <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
+                                                <p className="text-4xl font-bold text-green-500">
+                                                    {userData?.userType === 1 && blockchainData?.producer?.isa?.isaScore}
+                                                    {userData?.userType === 2 && blockchainData?.inspector?.totalInspections}
+                                                    {userData?.userType === 3 && blockchainData?.researcher?.publishedWorks}
+                                                    {userData?.userType === 4 && blockchainData?.developer?.pool?.level}
+                                                </p>
+                                            </div>
+                                            <p className="text-xs text-gray-200">
+                                                {userData?.userType === 1 && 'Pontuação de regeneração'}
+                                                {userData?.userType === 2 && 'Inspeções realizadas'}
+                                                {userData?.userType === 3 && 'Pesquisas publicadas'}
+                                                {userData?.userType === 4 && 'Seu nível'}
+                                            </p>
+                                        </div>
 
                                         <button
-                                            className="w-full flex items-center justify-between text-semibold text-[#ff0000] text-sm mt-5"
+                                            className="absolute top-2 right-2"
+                                            title="Desconectar"
                                             onClick={() => setModalLogout(true)}
                                         >
-                                            Desconectar
-                                            <MdLogout size={15} color='#ff0000' />
+                                            <MdLogout color='white' size={18}/>
                                         </button>
                                     </>
                                 )}
@@ -184,7 +193,7 @@ export function Home() {
                                     setPage(0)
                                     getPublications();
                                     toast.success('Publicação feita com sucesso!')
-                                }}/>
+                                }} />
                             )}
                             {publications.length > 0 && (
                                 <>
@@ -196,7 +205,7 @@ export function Home() {
                                     ))}
 
                                     {loadingMore ? (
-                                        <ActivityIndicator size={40}/>
+                                        <ActivityIndicator size={40} />
                                     ) : (
                                         <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
                                             Ver mais
@@ -224,7 +233,7 @@ export function Home() {
                     </div>
                 )}
             </div>
-            
+
             {modalLogout && (
                 <ModalLogout
                     close={() => {
@@ -233,7 +242,7 @@ export function Home() {
                     }}
                 />
             )}
-            <ToastContainer/>
+            <ToastContainer />
 
             <div className="hidden lg:flex">
                 <Chat />

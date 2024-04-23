@@ -83,7 +83,7 @@ export function Contribute() {
             return
         }
 
-        if (!input.trim()) {
+        if (input === '') {
             toast.error('Digite um valor para contribuir!')
             return
         }

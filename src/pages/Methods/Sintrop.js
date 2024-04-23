@@ -23,11 +23,6 @@ export function MethodSintrop() {
             <div className="flex flex-col items-center w-full pt-32 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     <div className="flex flex-col items-center">
-                        <img
-                            src={require('../../assets/logo-branco.png')}
-                            className="w-48 h-32 object-contain"
-                        />
-
                         <h3 className="font-bold text-4xl text-center text-white">Método Sintrop</h3>
                     </div>
 
