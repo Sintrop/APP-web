@@ -38,7 +38,7 @@ export function RegenerationCredit() {
                     </button>
 
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-yellow-500"
+                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-yellow-600"
                         onClick={() => navigate('/services')}
                     >
                         <img
@@ -46,7 +46,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Recompensas</p>
+                        <p className="font-bold text-white text-xl mt-2">Pagamento por serviços ambientais</p>
                     </button>
 
                     <button 
