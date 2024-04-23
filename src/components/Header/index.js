@@ -1,13 +1,31 @@
-import React, {useEffect, useState} from "react";
-import { FaHome, FaUsers } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaHome, FaUsers, FaRegUser } from "react-icons/fa";
 import { RiComputerFill } from "react-icons/ri";
 import { BsFillGearFill } from "react-icons/bs";
 import { useNavigate } from "react-router";
+import { useMainContext } from '../../hooks/useMainContext';
+import { ModalConnectAccount } from "../ModalConnectAccount";
+import * as Dialog from '@radix-ui/react-dialog';
+import { getImage } from "../../services/getImage";
 
-export function Header({routeActive}){
+export function Header({ routeActive }) {
+    const { walletConnected, userData } = useMainContext();
     const navigate = useNavigate();
+    const [modalConnect, setModalConnect] = useState(false);
+    const [imageProfile, setImageProfile] = useState(null)
 
-    return(
+    useEffect(() => {
+        if(userData?.name){
+            getImageProfile();
+        }
+    }, [userData]);
+
+    async function getImageProfile(){
+        const response = await getImage(userData?.imgProfileUrl);
+        setImageProfile(response)
+    }
+
+    return (
         <div className="w-full flex items-center justify-center h-[60px] lg:h-[80px] bg-[#0a4303] py-2 fixed bottom-0 lg:top-10 left-0 border-b-2 border-green-700 z-50">
             <div className="flex items-center justify-between overflow-x-auto lg:min-w-[1024px]">
                 <button onClick={() => navigate('/')}>
@@ -17,40 +35,40 @@ export function Header({routeActive}){
                     />
                 </button>
                 <div className="flex items-center">
-                    <button 
+                    <button
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                         onClick={() => navigate('/')}
                     >
                         <div className="hidden lg:flex">
-                            <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={25}/>
+                            <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={25} />
                         </div>
                         <div className="lg:hidden">
-                            <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18}/>
+                            <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
                         </div>
                         <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Início</p>
 
                         {routeActive === 'home' && (
-                            <div className="w-full h-1 bg-white rounded-full"/>
+                            <div className="w-full h-1 bg-white rounded-full" />
                         )}
                     </button>
-                    <button 
+                    <button
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                         onClick={() => navigate('/centers')}
                     >
                         <div className="hidden lg:flex">
-                            <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={25}/>
+                            <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={25} />
                         </div>
                         <div className="lg:hidden">
-                            <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18}/>
+                            <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18} />
                         </div>
                         <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Centros</p>
 
                         {routeActive === 'centers' && (
-                            <div className="w-full h-1 bg-white rounded-full"/>
+                            <div className="w-full h-1 bg-white rounded-full" />
                         )}
                     </button>
 
-                    <button 
+                    <button
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                         onClick={() => navigate('/regeneration-credit')}
                     >
@@ -62,45 +80,78 @@ export function Header({routeActive}){
                         </div>
 
                         {routeActive === 'regeneration-credit' && (
-                            <div className="w-full h-1 bg-white rounded-full"/>
+                            <div className="w-full h-1 bg-white rounded-full" />
                         )}
                     </button>
 
-                    <button 
+                    <button
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                         onClick={() => navigate('/community')}
                     >
                         <div className="hidden lg:flex">
-                            <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={25}/>
+                            <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={25} />
                         </div>
                         <div className="lg:hidden">
-                            <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={18}/>
+                            <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={18} />
                         </div>
-                        
+
                         <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Comunidade</p>
 
                         {routeActive === 'community' && (
-                            <div className="w-full h-1 bg-white rounded-full"/>
+                            <div className="w-full h-1 bg-white rounded-full" />
                         )}
                     </button>
 
-                    <button 
+                    <button
                         className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                         onClick={() => navigate('/actions')}
                     >
                         <div className="hidden lg:flex">
-                            <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={25}/>
+                            <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={25} />
                         </div>
                         <div className="lg:hidden">
-                            <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={18}/>
+                            <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={18} />
                         </div>
-                        
+
                         <p className={`${routeActive === 'actions' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Ações</p>
 
                         {routeActive === 'actions' && (
-                            <div className="w-full h-1 bg-white rounded-full"/>
+                            <div className="w-full h-1 bg-white rounded-full" />
                         )}
                     </button>
+
+                    <div className="flex flex-col items-center">
+                        <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
+                            <ModalConnectAccount close={() => setModalConnect(false)}/>
+                        </Dialog.Root>
+
+                        <button
+                            className="flex flex-col items-center justify-center w-7 h-7 bg-gray-200 rounded-full"
+                            onClick={() => {
+                                if(walletConnected === ''){
+                                    setModalConnect(true);
+                                }else{
+                                    navigate('/profile')
+                                }
+                            }}
+                        >
+                            {walletConnected === '' ? (
+                                <>
+                                    <FaRegUser color='#aaa' size={15} />
+                                </>
+                            ) : (
+                                <>
+                                    {imageProfile && (
+                                        <img
+                                            src={imageProfile}
+                                            className="w-7 h-7 rounded-full object-cover"
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </button>
+                        <p className="text-xs text-white font-semibold">{walletConnected === '' ? 'Conecte-se' : 'Conectado'}</p>
+                    </div>
                 </div>
             </div>
         </div>

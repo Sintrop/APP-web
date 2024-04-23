@@ -122,7 +122,7 @@ export function PreSale() {
                                         </div>
                                         <div className="flex items-center w-full justify-between">
                                             <h3 className="text-gray-200 text-xs lg:text-sm">% da oferta privada</h3>
-                                            <p className="font-bold text-green-500 text-sm lg:text-base">8,97 %</p>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">9,12 %</p>
                                         </div>
                                         <div className="flex items-center w-full justify-between">
                                             <h3 className="text-gray-200 text-xs lg:text-sm">Valor unitário</h3>
@@ -134,7 +134,7 @@ export function PreSale() {
                                         </div>
                                         <div className="flex items-center w-full justify-between">
                                             <h3 className="text-gray-200 text-xs lg:text-sm">Capitalização de mercado</h3>
-                                            <p className="font-bold text-green-500 text-sm lg:text-base">R$ 12.267.000,00</p>
+                                            <p className="font-bold text-green-500 text-sm lg:text-base">R$ 12.057.692,31</p>
                                         </div>
                                     </div>
 

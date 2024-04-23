@@ -12,8 +12,9 @@ module.exports = {
         'centro-dev': "url('/src/assets/bg-dev-center.png')",
         'checkout': "url('/src/assets/bg-s-checkout.png')",
         'card': "url('/src/assets/card.png')",
-        'presale': "url('/src/assets/bg-presale.png')",
-        'certificate': "url('/src/assets/bg-certificate.png')"
+        'presale': "url('/src/assets/bg-presale.jpg')",
+        'certificate': "url('/src/assets/bg-certificate.png')",
+        'activity': "url('/src/assets/activity.png')"
       }
     },
   },

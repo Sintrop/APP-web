@@ -62,7 +62,8 @@ export function ModalConnectAccount({ close }) {
         const response = await Sync();
         
         if(response?.status === 'connected'){
-            toast.success('Você se conectou com sucesso!')
+            toast.success('Você se conectou com sucesso!');
+            close();
         }else{
             toast.error('Operação cancelada!')
         }
