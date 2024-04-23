@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from '../../hooks/useMainContext';
 import { useNavigate } from 'react-router-dom';
 import { TopBar } from "../../components/TopBar";
+import { Info } from "../../components/Info";
 
 export function ImpactCalculator() {
     const navigate = useNavigate();
@@ -62,6 +63,12 @@ export function ImpactCalculator() {
             <div className="flex flex-col items-center w-full mt-28 overflow-auto">
                 <div className="flex flex-col w-[1024px] mt-3">
                     <p className="font-bold text-white">Calculadora de impacto</p>
+
+                    <Info
+                        text1='Reduzir é obrigação. Regenerar é a solução.'
+                        text2='Precisamos deixar de produzir e consumir produtos que destroem o planeta.'
+                        text3='Na calculadora, compense os itens que você consumiu/produziu para financiar o impacto equivalente através do Crédito de Regeneração. Caminhe na direção de deixar de usá-los.'
+                    />
 
                     <div className="flex flex-col w-full p-2 rounded-md bg-[#0a4303] mt-3">
                         <p className="text-white font-semibold">Itens da sua lista</p>

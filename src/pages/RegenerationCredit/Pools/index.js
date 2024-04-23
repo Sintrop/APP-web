@@ -16,6 +16,7 @@ import { WithdrawTokens as WithdrawResearcher } from "../../../services/research
 import { WithdrawTokens as WithdrawProducer } from "../../../services/producerService";
 import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
 import { TopBar } from "../../../components/TopBar";
+import { Info } from "../../../components/Info";
 
 export function Pools({ }) {
     const { userData, connectionType, walletConnected } = useMainContext();
@@ -416,21 +417,53 @@ export function Pools({ }) {
             <Header />
 
             <div className="flex flex-col items-center w-full pt-32">
-                <div className="flex flex-col max-w-[1024px]">
+                <div className="flex flex-col lg:w-[1024px]">
                     {loading ? (
                         <div className="flex justify-center items-center mt-3 h-[90vh]">
                             <ActivityIndicator size={180} />
                         </div>
                     ) : (
                         <div className="flex flex-col mt-3">
-                            <h3 className="font-bold text-xl text-white">
+                            <h3 className="font-bold text-xl text-white mb-1">
                                 {poolType === 'producers' && 'Pool dos produtores'}
                                 {poolType === 'developers' && 'Pool dos desenvolvedores'}
                                 {poolType === 'inspectors' && 'Pool dos inspetores'}
                                 {poolType === 'researchers' && 'Pool dos pesquisadores'}
                                 {poolType === 'validators' && 'Pool dos validadores'}
                             </h3>
-                            <div className="p-3 rounded-md bg-[#0a4303] flex min-w-[800px] w-full">
+
+                            {poolType === 'producers' && (
+                                <Info
+                                    text1='O(a) produtor(a) para ser aprovado precisa atender todos os requisitos abaixo:'
+                                    text2='- Mínimo de 3 inspeções concluídas;'
+                                    text3='- Score de regeneração positivo;'
+                                    text4='- Ter recebido pelo menos 1 inspeção na ERA anterior.'
+                                />
+                            )}
+
+                            {poolType === 'inspectors' && (
+                                <Info
+                                    text1='O(a) inspetor(a) para ser aprovado precisa atender todos os requisitos abaixo:'
+                                    text2='- Mínimo de 3 inspeções concluídas;'
+                                    text3='- Mínimo de 1 inspeções realizada na ERA anterior;'
+                                    text4='- Máximo de 3 desistências;'
+                                    text5='- Máximo de 3 inspeções penalizadas.'
+                                />
+                            )}
+
+                            {poolType === 'researchers' && (
+                                <Info
+                                    text1='O(a) pesquisador(a) para ser aprovado precisa ter publicado pelo menos 1 pesquisa na era anterior.'
+                                />
+                            )}
+
+                            {poolType === 'developers' && (
+                                <Info
+                                    text1='O(a) desenvolvedor(a) para ser aprovado precisa ter publicado o relatório de contribuição na era anterior.'
+                                />
+                            )}
+
+                            <div className="p-3 rounded-md bg-[#0a4303] flex min-w-[800px] w-full mt-2">
                                 <div className="w-[50%] flex flex-col">
                                     <Chart
                                         options={options}
@@ -474,7 +507,7 @@ export function Pools({ }) {
                             )}
 
                             <p className="text-sm text-gray-500 mt-5">Usuários aprovados</p>
-                            <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
+                            <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-start': 'justify-center'}`}>
                                 {users.map(item => (
                                     <UserRankingItem data={item} />
                                 ))}
