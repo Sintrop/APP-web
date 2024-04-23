@@ -34,7 +34,9 @@ export function Inspection({ id }) {
     const [inspectorImageProfile, setInspectorImageProfile] = useState(null);
     const [proofPhoto, setProofPhoto] = useState(null);
     const [loadingBiodiversityImages, setLoadingBiodiversityImages] = useState(true);
-    const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true)
+    const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true);
+    const [loadingImagesProperty, setLoadingImagesProperty] = useState(true);
+    const [imagesProperty, setImagesProperty] = useState([]);
 
     useEffect(() => {
         getInspectionData();
@@ -54,10 +56,11 @@ export function Inspection({ id }) {
         setZones(JSON.parse(responseApi.data?.inspectionApiData?.zones));
         setResult(JSON.parse(responseApi.data?.inspectionApiData?.resultInspection).pdfData);
         setInsumos(JSON.parse(responseApi.data?.inspectionApiData.resultCategories));
-
         setLoading(false);
 
-
+        if(responseApi?.data?.inspectionApiData?.propertyPhotos){
+            await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
+        }
         await getImagesBiodiversitySoil(JSON.parse(responseApi.data?.inspectionApiData?.soilBiodiversity));
         await getImagesBiodiversity(JSON.parse(responseApi.data?.inspectionApiData?.biodversityIndice));
     }
@@ -99,6 +102,22 @@ export function Inspection({ id }) {
 
         setBiodiversitySoil(newArray);
         setLoadingBiodiversitySoil(false)
+    }
+
+    async function getImagesProperty(array) {
+        setLoadingImagesProperty(true);
+
+        let newArray = [];
+        for (var i = 0; i < array.length; i++) {
+            const response = await getImage(array[i].photo);
+            newArray.push({
+                ...array[i],
+                photo: response,
+            });
+        }
+
+        setImagesProperty(newArray);
+        setLoadingImagesProperty(false)
     }
 
     return (
@@ -297,6 +316,48 @@ export function Inspection({ id }) {
                             </div>
                         </div>
                     </div>
+
+                    {inspectionDataApi?.urlVideo && inspectionDataApi?.propertyPhotos && (
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                            <p className="text-white font-bold text-lg">Imagens da propriedade</p>
+
+                            {inspectionDataApi?.urlVideo && (
+                                <div className="flex justify-center">
+                                    <iframe
+                                        width="560"
+                                        height="315"
+                                        src={inspectionDataApi?.urlVideo}
+                                        title="YouTube video player"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                                    ></iframe>
+                                </div>
+                            )}
+
+                            {inspectionDataApi?.propertyPhotos && (
+                                <>
+                                    {loadingImagesProperty ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto mt-3">
+                                            {imagesProperty.map(item => (
+                                                <div key={item} className="w-[250px] h-[300px]">
+                                                    <ImageItem
+                                                        src={item}
+                                                        type='photos-zone'
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
 
                     <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
                         <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
