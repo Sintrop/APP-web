@@ -416,7 +416,7 @@ export function Pools({ }) {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32">
+            <div className="flex flex-col items-center w-full lg:pt-32 pt-10 lg:pb-5 pb-20 overflow-y-auto">
                 <div className="flex flex-col lg:w-[1024px]">
                     {loading ? (
                         <div className="flex justify-center items-center mt-3 h-[90vh]">
