@@ -67,7 +67,7 @@ export function ModalComments({close, dataPubli}){
     return(
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0' onClick={close}/>
-            <div className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
+            <div className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                         <button
