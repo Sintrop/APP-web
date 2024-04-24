@@ -18,7 +18,7 @@ export function Market() {
                 {loading && (
                     <ActivityIndicator size={60}/>
                 )}
-                <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0 lg:flex-row">
+                <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0">
                     <p className="font-bold text-white text-lg mt-3">Comprar</p>
                     <div className="flex flex-wrap justify-center gap-3">
                         <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[400px] border-green-600 border">
