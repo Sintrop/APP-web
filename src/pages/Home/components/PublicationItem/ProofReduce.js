@@ -3,7 +3,8 @@ import { getImage } from "../../../../services/getImage";
 import { Blocks } from 'react-loader-spinner';
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 
-export function PubliUser({ data }) {
+export function ProofReduce({ data }) {
+    const additionalData = JSON.parse(data?.additionalData);
     const imagesPubli = JSON.parse(data?.images);
     const [seeMore, setSeeMore] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
@@ -48,7 +49,7 @@ export function PubliUser({ data }) {
             </div>
 
             {imagesPubli.length > 0 && (
-                <div className={`flex w-[${window.screen.width - 25}px] h-[${window.screen.width}px] lg:h-[600px] max-h-[600px]`}>
+                <div className={`flex w-[${window.screen.width - 25}px] h-[${window.screen.width}px] lg:h-[600px] max-h-[600px] border-[10px] rounded-md border-green-500 relative`}>
                     {loadingImages ? (
                         <div className="flex items-center justify-center w-full h-full">
                             <ActivityIndicator size={50} />
@@ -79,7 +80,16 @@ export function PubliUser({ data }) {
                             )}
                         </>
                     )}
-
+                    <div className="w-full bg-green-500 p-2 absolute bottom-0 h-14 lg:h-20 rounded-t-xl flex items-center">
+                        <div className="flex flex-col">
+                            <p className="font-bold text-white text-xs lg:text-base">
+                                #ReduzirÉObrigaçãoRegenerarÉASolução
+                            </p>
+                            <p className="font-regular text-white text-xs lg:text-base">
+                                Prova de redução do item {additionalData?.nameItem} da calculadora de impacto.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
