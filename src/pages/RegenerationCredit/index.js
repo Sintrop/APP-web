@@ -11,7 +11,7 @@ export function RegenerationCredit() {
             <TopBar/>
             <Header routeActive='regeneration-credit' />
 
-            <div className="flex flex-col items-center w-full mt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-blue-500"

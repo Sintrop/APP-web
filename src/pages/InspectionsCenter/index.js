@@ -4,6 +4,7 @@ import { Header } from "../../components/Header";
 import { api } from "../../services/api";
 import { InspectionItem } from "./components/InspectionItem";
 import { TopBar } from "../../components/TopBar";
+import { ActivityIndicator } from "../../components/ActivityIndicator";
 
 export function InspectionsCenter() {
     const [tabSelected, setTabSelected] = useState('history');
@@ -38,11 +39,11 @@ export function InspectionsCenter() {
             <TopBar/>
             <Header/>
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
+                <div className="flex flex-col lg:w-[1024px] mt-3 px-2 lg:px-0">
                     <p className="font-bold text-white text-xl">Centro de inspeções</p> 
 
-                    <div className="flex items-center gap-8 mt-2">
+                    <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                         <button 
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'history' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('history')}
@@ -60,15 +61,7 @@ export function InspectionsCenter() {
 
                     {loading ? (
                         <div className="flex justify-center">
-                            <Blocks
-                                height="60"
-                                width="60"
-                                color="#4fa94d"
-                                ariaLabel="blocks-loading"
-                                wrapperStyle={{}}
-                                wrapperClass="blocks-wrapper"
-                                visible={true}
-                            />
+                            <ActivityIndicator size={50}/>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-3 mt-5">
