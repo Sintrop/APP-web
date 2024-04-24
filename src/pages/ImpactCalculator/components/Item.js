@@ -10,11 +10,11 @@ export function Item({data, addItem, hiddenButton}){
     const [proofReduce, setProofReduce] = useState(false);
 
     return(
-        <div className="flex w-full items-center justify-between p-2 rounded-md bg-[#0a4303]">
-            <div className="flex flex-col">
+        <div className="flex flex-col w-full items-center justify-between p-2 rounded-md bg-[#0a4303] lg:flex-row">
+            <div className="flex flex-col w-full lg:w-fit">
                 <p className="font-bold text-white">{data?.name} <span className="text-sm text-green-600">(Utilizado {data?.utilization}x)</span></p>
 
-                <div className="flex items-center gap-1 mt-3 border rounded-md p-1 w-fit">
+                <div className="flex items-center gap-1 mt-3 border rounded-md p-1 w-full lg:w-fit">
                     <div className="flex flex-col items-center w-20">
                         <p className="font-semibold text-white">{data?.carbon} kg</p>
                         <p className="text-sm text-white">Carbono</p>
@@ -39,7 +39,7 @@ export function Item({data, addItem, hiddenButton}){
             </div>
             
             {!hiddenButton && (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center mt-3 lg:mt-0">
                     <button
                         className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600 text-sm"
                         onClick={() => setModalAddItem(true)}

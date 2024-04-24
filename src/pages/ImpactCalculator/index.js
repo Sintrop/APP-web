@@ -60,8 +60,8 @@ export function ImpactCalculator() {
             <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full mt-28 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
+                <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
                     <p className="font-bold text-white">Calculadora de impacto</p>
 
                     <Info
@@ -70,11 +70,11 @@ export function ImpactCalculator() {
                         text3='Na calculadora, compense os itens que você consumiu/produziu para financiar o impacto equivalente através do Crédito de Regeneração. Caminhe na direção de deixar de usá-los.'
                     />
 
-                    <div className="flex flex-col w-full p-2 rounded-md bg-[#0a4303] mt-3">
+                    <div className="flex flex-col w-full p-2 rounded-t-md bg-[#0a4303] mt-3 overflow-x-auto">
                         <p className="text-white font-semibold">Itens da sua lista</p>
 
-                        <div className="flex w-full justify-between h-8 bg-blue-700 rounded-t-md py-1 px-3">
-                            <div className="flex items-center justify-start w-[40%]">
+                        <div className="flex w-fit lg:w-full justify-between h-8 bg-blue-700 rounded-t-md py-1 px-3">
+                            <div className="flex items-center justify-start w-[150px] lg:w-[40%]">
                                 <p className="text-sm font-semibold text-white">Item</p>
                             </div>
 
@@ -102,8 +102,8 @@ export function ImpactCalculator() {
                         </div>
                         <div className="flex flex-col min-h-28 border-b border-green-700 pb-3">
                             {myList.map(item => (
-                                <div className="flex w-full justify-between h-8 py-1 px-3" key={item.id}>
-                                    <div className="flex items-center justify-start w-[40%]">
+                                <div className="flex w-fit lg:w-full justify-between h-8 py-1 px-3" key={item.id}>
+                                    <div className="flex items-center justify-start w-[150px] lg:w-[40%]">
                                         <p className="text-sm font-semibold text-white">{item?.name}</p>
                                     </div>
 
@@ -137,9 +137,11 @@ export function ImpactCalculator() {
                                 </div>
                             )}
                         </div>
-
-                        <div className="flex gap-3 mt-2">
-                            <div className="flex flex-col p-2 rounded-md border w-fit">
+                    </div>
+                    
+                    <div className="flex flex-col w-full p-2 rounded-b-md bg-[#0a4303]">
+                        <div className="flex flex-col gap-3 mt-2 lg:flex-row">
+                            <div className="flex flex-col p-2 rounded-md border w-full lg:w-fit">
                                 <p className="text-white font-semibold">Cálculo do seu impacto</p>
 
                                 <div className="flex">
@@ -164,7 +166,7 @@ export function ImpactCalculator() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col p-2 rounded-md border w-fit">
+                            <div className="flex flex-col p-2 rounded-md border w-full lg:w-fit">
                                 <p className="text-white font-semibold">Compense seu impacto</p>
 
                                 <p className="text-white mt-3">Você deve contribuir com</p>
