@@ -156,15 +156,15 @@ export function Impact() {
             <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 {loading ? (
                     <div className='flex items-center justify-center h-[100vh] w-full'>
                         <ActivityIndicator size={180} />
                     </div>
                 ) : (
-                    <div className="flex flex-col max-w-[1024px] mt-3 mb-5">
-                        <div className='flex gap-4'>
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                    <div className="flex flex-col w-full lg:max-w-[1024px] mt-3 mb-5 px-2 lg:px-0">
+                        <div className='flex flex-col gap-4 lg:flex-row'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
                                 <div className='flex items-center gap-2'>
                                     <img
                                         src={require('../../../assets/token.png')}
@@ -201,7 +201,7 @@ export function Impact() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
                                 <div className='flex items-center gap-2'>
                                     <img
                                         src={require('../../../assets/token.png')}
