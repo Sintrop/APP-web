@@ -11,7 +11,7 @@ export function Centers(){
             <TopBar/>
             <Header routeActive='centers'/>
 
-            <div className="flex flex-col items-center w-full mt-32">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <div className="flex flex-col justify-between bg-[#0a4303] p-3 rounded-md w-[300px] h-[350px]">
                         <div>

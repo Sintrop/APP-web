@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../services/getImage";
-import { Blocks } from "react-loader-spinner";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { ImageItem } from "./ImageItem";
+import { ViewImage } from "../../../components/ViewImage";
 
 export function ZoneItem({ data, index }) {
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
@@ -21,6 +21,8 @@ export function ZoneItem({ data, index }) {
     const [loadingImagesZones, setLoadingImageZones] = useState(true);
     const [loadingImagesAnalise, setLoadingImageAnalise] = useState(true);
     const [loadingImagesTreesS1, setLoadingImagesTreesS1] = useState(true);
+    const [viewImage, setViewImage] = useState(false);
+    const [imageSelected, setImageSelected] = useState('');
 
     useEffect(() => {
         if (index === 0) {
@@ -107,7 +109,7 @@ export function ZoneItem({ data, index }) {
         <div className="flex flex-col bg-green-950 p-2 rounded-md">
             <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR').format(Number(data?.areaZone).toFixed(2))} m²</p>
             <p className="text-white text-sm">
-                Cor no mapa: 
+                Cor no mapa:
                 {color === 'red' && ' Vermelho'}
                 {color === 'green' && ' Verde'}
                 {color === 'blue' && ' Azul'}
@@ -118,18 +120,25 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50}/>
+                    <ActivityIndicator size={50} />
                     <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesZones.map(item => (
-                        <div key={item.photo} className="w-[250px] h-[300px]">
+                        <button
+                            key={item.photo}
+                            className="w-[250px] h-[300px]"
+                            onClick={() => {
+                                setImageSelected(item.photo);
+                                setViewImage(true);
+                            }}
+                        >
                             <ImageItem
                                 src={item}
                                 type='photos-zone'
                             />
-                        </div>
+                        </button>
                     ))}
                 </div>
             )}
@@ -138,18 +147,25 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50}/>
+                    <ActivityIndicator size={50} />
                     <p className="text-white mt-1">Carregando dados, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesAnaliseSoil.map(item => (
-                        <div key={item.photo} className="w-[250px] h-[300px]">
+                        <button
+                            key={item.photo}
+                            className="w-[250px] h-[300px]"
+                            onClick={() => {
+                                setImageSelected(item.photo);
+                                setViewImage(true);
+                            }}
+                        >
                             <ImageItem
                                 src={item}
                                 type='analise-soil'
                             />
-                        </div>
+                        </button>
                     ))}
                 </div>
             )}
@@ -169,20 +185,34 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50}/>
+                    <ActivityIndicator size={50} />
                     <p className="text-white mt-1">Carregando fotos, aguarde...</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
                     {imagesTreesS1.map(item => (
-                        <div key={item.photo} className="w-[250px] h-[300px]">
+                        <button
+                            key={item.photo}
+                            className="w-[250px] h-[300px]"
+                            onClick={() => {
+                                setImageSelected(item.photo);
+                                setViewImage(true);
+                            }}
+                        >
                             <ImageItem
                                 src={item}
                                 type='trees'
                             />
-                        </div>
+                        </button>
                     ))}
                 </div>
+            )}
+
+            {viewImage && (
+                <ViewImage
+                    close={() => setViewImage(false)}
+                    uri={imageSelected}
+                />
             )}
         </div>
     )

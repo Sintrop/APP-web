@@ -374,6 +374,13 @@ export function UserDetails() {
                                             {userData?.userType === 1 && (
                                                 <>
                                                     <ProducerCertificate
+                                                        certificateType='new-long'
+                                                        userData={userData}
+                                                        blockchainData={blockchainData}
+                                                        imageProfile={imageProfile}
+                                                    />
+
+                                                    <ProducerCertificate
                                                         certificateType='long'
                                                         userData={userData}
                                                         blockchainData={blockchainData}

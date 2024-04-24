@@ -144,11 +144,11 @@ export function ResearchesCenter() {
             <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto px-2 lg:px-0">
+                <div className="flex flex-col w-full lg:w-[1024px] mt-3">
                     <p className="font-bold text-white text-xl">Centro de pesquisas</p>
 
-                    <div className="flex items-center gap-8 mt-2">
+                    <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                         <button
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('users')}
@@ -164,21 +164,21 @@ export function ResearchesCenter() {
                         </button>
 
                         <button
-                            className={`font-bold py-1 border-b-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('isa')}
                         >
                             Índice de regeneração
                         </button>
 
                         <button
-                            className={`font-bold py-1 border-b-2 ${tabSelected === 'calculator-items' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'calculator-items' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('calculator-items')}
                         >
                             Itens calculadora
                         </button>
 
                         <button
-                            className={`font-bold py-1 border-b-2 ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                            className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('methods')}
                         >
                             Métodos de avaliação
@@ -190,7 +190,7 @@ export function ResearchesCenter() {
                             <ActivityIndicator size={50} />
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-4 mt-5 mb-5">
+                        <div className="flex flex-col gap-4 mt-2 lg:mt-5 mb-5">
                             {tabSelected === 'researches' && (
                                 <>
                                     {userData?.userType === 3 && (
@@ -278,7 +278,7 @@ export function ResearchesCenter() {
                             )}
 
                             {tabSelected === 'users' && (
-                                <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-start' : 'justify-center'}`}>
+                                <div className={`flex gap-3 flex-wrap lg:max-w-[1024px] mt-3 ${users.length < 4 ? 'lg:justify-start justify-center' : 'justify-center'}`}>
                                     {users.map(item => (
                                         <UserRankingItem
                                             data={item}

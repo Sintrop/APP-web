@@ -72,9 +72,9 @@ export function ModalConnectAccount({ close }) {
     }
 
     return (
-        <Dialog.Portal className='flex justify-center items-center inset-0'>
-            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0' />
-            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
+        <Dialog.Portal className='flex justify-center items-center inset-0 '>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0 ' />
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
 
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]' />

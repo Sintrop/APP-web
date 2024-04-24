@@ -20,8 +20,8 @@ export function MethodSintrop() {
             <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto px-2 lg:px-0">
+                <div className="flex flex-col w-full lg:w-[1024px] mt-3">
                     <div className="flex flex-col items-center">
                         <h3 className="font-bold text-4xl text-center text-white">Método Sintrop</h3>
                     </div>
@@ -40,7 +40,7 @@ export function MethodSintrop() {
                         <p className="text-white m-2">Nessa etapa iremos registrar todos insumos provenientes de fora da propriedade. Tudo que vem de fora, de alguma forma possui algum impacto no Planeta e deverá ser contabilizado negativamente. A utilização de insumos químicos deverá inviabilizar o produtor de ter uma nota positiva, não tem como ser regenerativo usando veneno que destrói e mata a biodiversidade. Cada insumo, terá um índice de penalização, o qual deverá ser avaliado e otimizado para melhor coerência. Você poderá propor mudança no índice e também sugerir novos insumos.</p>
                     </div>
 
-                    <div className="mt-5 flex flex-col rounded-md bg-[#0a4303] w-full">
+                    <div className="mt-5 flex flex-col rounded-md bg-[#0a4303] w-full overflow-x-auto">
                         <div className="flex flex-col py-2 border-b border-green-500">
                             <p className="text-white mx-2 font-bold">Tabela de insumos</p>
                         </div>

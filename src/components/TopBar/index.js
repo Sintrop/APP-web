@@ -14,7 +14,7 @@ export function TopBar() {
     const blocosEmDias = blocosEmHoras / 24
 
     return (
-        <div className="w-full h-[40px] bg-green-700 flex fixed top-0 left-0 items-center z-50 overflow-auto">
+        <div className="w-full h-[40px] bg-green-700 flex fixed top-0 left-0 items-center z-40 overflow-auto">
             <div className="flex items-center min-w-[1400px] px-3 gap-5">
                 <p className=" text-gray-200 text-xs">Era atual: <span className="font-bold text-green-300">{era}</span></p>
 

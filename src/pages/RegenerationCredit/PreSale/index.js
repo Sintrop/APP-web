@@ -83,7 +83,7 @@ export function PreSale() {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto px-2 lg:px-0">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto px-2 lg:px-0">
                 {loading ? (
                     <div className="flex items-center h-[100vh]">
                         <ActivityIndicator size={180} />
@@ -220,9 +220,9 @@ export function PreSale() {
                         <p className="text-gray-400 text-sm mt-5">Reservas feitas</p>
                         {bookings.map(item => (
                             <div className="flex flex-col lg:flex-row items-center lg:justify-between w-full p-2 rounded-md mb-3 bg-[#0a4303]">
-                                <p className="text-white text-sm">{item?.reservedBy}</p>
+                                <p className="text-white text-xs lg:text-sm">{item?.reservedBy}</p>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 mt-3 lg:mt-0">
                                     <img
                                         src={require('../../../assets/token.png')}
                                         className="w-5 h-5 object-contain"

@@ -416,8 +416,8 @@ export function Pools({ }) {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32">
-                <div className="flex flex-col lg:w-[1024px]">
+            <div className="flex flex-col items-center w-full lg:pt-32 pt-10 lg:pb-5 pb-20 overflow-y-auto">
+                <div className="flex flex-col w-full lg:w-[1024px] px-2 lg:px-0">
                     {loading ? (
                         <div className="flex justify-center items-center mt-3 h-[90vh]">
                             <ActivityIndicator size={180} />
@@ -463,8 +463,8 @@ export function Pools({ }) {
                                 />
                             )}
 
-                            <div className="p-3 rounded-md bg-[#0a4303] flex min-w-[800px] w-full mt-2">
-                                <div className="w-[50%] flex flex-col">
+                            <div className="p-3 rounded-md bg-[#0a4303] flex flex-col w-full lg:min-w-[800px] w-full mt-2 lg:flex-row">
+                                <div className="w-full lg:w-[50%] flex flex-col">
                                     <Chart
                                         options={options}
                                         series={series}
@@ -473,7 +473,7 @@ export function Pools({ }) {
                                     />
                                 </div>
 
-                                <div className="w-[50%] flex flex-col gap-3">
+                                <div className="w-full lg:w-[50%] flex flex-col gap-3">
                                     <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">Saldo disponível</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.balanceContract))}</p>
@@ -507,7 +507,7 @@ export function Pools({ }) {
                             )}
 
                             <p className="text-sm text-gray-500 mt-5">Usuários aprovados</p>
-                            <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-start': 'justify-center'}`}>
+                            <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-center lg:justify-start': 'justify-center'}`}>
                                 {users.map(item => (
                                     <UserRankingItem data={item} />
                                 ))}

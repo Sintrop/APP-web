@@ -15,7 +15,7 @@ export function TxItem({ data }) {
     }, []);
 
     return (
-        <div className="flex justify-between gap-2 p-2 rounded-md bg-[#0a4303] w-full mb-2">
+        <div className="flex flex-col justify-between gap-2 p-2 rounded-md bg-[#0a4303] w-full mb-2 lg:flex-row">
             <div className="flex gap-2">
                 <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center">
                     {revenue ? (
@@ -27,7 +27,7 @@ export function TxItem({ data }) {
                 
                 <div className="flex flex-col">
                     <p className="text-sm text-gray-300">{revenue ? 'Você recebeu de' : 'Você enviou para'}</p>
-                    <p className="text-white">{revenue ? data?.from : data?.to}</p>
+                    <p className="text-white text-xs lg:text-base">{revenue ? data?.from : data?.to}</p>
                     <p className="text-xs text-white">Hash: <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data?.hash}`} className="text-blue-400 underline">{data.hash}</a></p>
                 </div>
             </div>

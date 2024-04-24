@@ -14,14 +14,14 @@ export function Market() {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 {loading && (
                     <ActivityIndicator size={60}/>
                 )}
-                <div className="flex gap-1 flex-col max-w-[1024px] mt-3 items-start">
+                <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0 lg:flex-row">
                     <p className="font-bold text-white text-lg mt-3">Comprar</p>
                     <div className="flex flex-wrap justify-center gap-3">
-                        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-[400px] border-green-600 border">
+                        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[400px] border-green-600 border">
                             <h3 className="font-bold text-green-600 text-lg">Pré venda de tokens reais</h3>
                             <h4 className="font-bold text-white">1 RC = R$ 0,0282</h4>
 
@@ -33,7 +33,7 @@ export function Market() {
                             </button>
                         </div>
 
-                        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-[400px]">
+                        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[400px]">
                             <h3 className="font-bold text-green-600 text-lg">ICO - Initial Coin Offer</h3>
                             <h4 className="font-bold text-white">1 RC = 0,0000125 ETH</h4>
 

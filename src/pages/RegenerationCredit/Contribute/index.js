@@ -2,17 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header";
 import { api } from "../../../services/api";
 import { useMainContext } from "../../../hooks/useMainContext";
-import { FaChevronRight } from "react-icons/fa";
+import { FaCalculator, FaChevronRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../components/LoadingTransaction";
-import {ActivityIndicator} from '../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../components/ActivityIndicator';
 import { BurnTokens as BurnRCSupporter } from "../../../services/supporterService";
 import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 import { TopBar } from "../../../components/TopBar";
+import { useNavigate } from "react-router";
 
 export function Contribute() {
+    const navigate = useNavigate();
     const { walletConnected, connectionType, userData, itemsCalculator, tokensToContribute } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
@@ -66,7 +68,7 @@ export function Contribute() {
         setLoading(true);
         const response = await api.get('/impact-per-token');
         setImpactToken(response.data.impact);
-        if(tokensToContribute > 0){
+        if (tokensToContribute > 0) {
             setInput(tokensToContribute);
         }
         setLoading(false);
@@ -185,7 +187,7 @@ export function Contribute() {
         }
     }
 
-    async function createTransaction(){
+    async function createTransaction() {
         try {
             setLoading(true);
             await api.post('/transactions-open/create', {
@@ -200,7 +202,7 @@ export function Contribute() {
             setInput('');
             setCreatedTransaction(true);
         } catch (err) {
-            if(err.response?.data?.message === 'open transaction of the same type'){
+            if (err.response?.data?.message === 'open transaction of the same type') {
                 toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
             }
         } finally {
@@ -210,13 +212,13 @@ export function Contribute() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32">
-                <div className="flex flex-col max-w-[1024px]">
-                    <div className="flex bg-[#0a4303] p-3 rounded-md mt-3 gap-8">
-                        <div className="flex flex-col w-[300px]">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
+                <div className="flex flex-col w-full lg:max-w-[1024px] px-2 lg:px-0">
+                    <div className="flex flex-col bg-[#0a4303] p-3 rounded-md mt-3 gap-8 lg:flex-row">
+                        <div className="flex flex-col w-full lg:w-[300px]">
                             <p className="text-gray-300 text-sm">Veja o impacto da sua contribuição</p>
 
                             <div className="w-full border-b border-green-600 my-3" />
@@ -269,23 +271,35 @@ export function Contribute() {
                     >
                         {loading ? (
                             <>
-                            <div/>
-                                <ActivityIndicator size={25}/>
-                            <div/>
+                                <div />
+                                <ActivityIndicator size={25} />
+                                <div />
                             </>
                         ) : (
                             <>
-                            <div className="flex items-center gap-3">
-                                <img
-                                    src={require('../../../assets/icon-contribuir.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-                                <p className="font-bold text-white">Contribuir</p>
-                            </div>
-    
-                            <FaChevronRight size={20} color='white' />
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        src={require('../../../assets/icon-contribuir.png')}
+                                        className="w-8 h-8 object-contain"
+                                    />
+                                    <p className="font-bold text-white">Contribuir</p>
+                                </div>
+
+                                <FaChevronRight size={20} color='white' />
                             </>
                         )}
+                    </button>
+
+                    <button
+                        className="w-full p-3 bg-green-500 rounded-md flex justify-between items-center mt-3"
+                        onClick={() => navigate('/impact-calculator')}
+                    >
+                        <div className="flex items-center gap-3">
+                            <FaCalculator color='white' size={30} />
+                            <p className="font-bold text-white">Calculadora de impacto</p>
+                        </div>
+
+                        <FaChevronRight size={20} color='white' />
                     </button>
                 </div>
             </div>

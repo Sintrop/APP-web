@@ -59,10 +59,28 @@ export function UserRankingItem({ data }) {
                         className="h-20 w-20 rounded-full object-cover"
                     />
                 ) : (
-                    <img
-                        src={imageProfile}
-                        className="h-20 w-20 rounded-full object-cover"
-                    />
+                    <>
+                        {data?.userType === 7 ? (
+                            <>
+                                {imageProfile !== '' ? (
+                                    <img
+                                        src={imageProfile}
+                                        className="h-20 w-20 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <img
+                                        src={require('../../../assets/token.png')}
+                                        className="h-20 w-20 rounded-full object-cover"
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <img
+                                src={imageProfile}
+                                className="h-20 w-20 rounded-full object-cover"
+                            />
+                        )}
+                    </>
                 )}
             </div>
 
@@ -96,6 +114,11 @@ export function UserRankingItem({ data }) {
                             <p className="font-bold text-white text-sm">Inspeções recebidas</p>
                             <p className="font-bold text-green-600 text-sm">{data?.totalInspections}</p>
                         </div>
+
+                        <div className="flex items-center justify-between w-full">
+                            <p className="font-bold text-white text-sm">Era na pool</p>
+                            <p className="font-bold text-green-600 text-sm">{data?.pool?.currentEra}</p>
+                        </div>
                     </>
                 )}
 
@@ -108,7 +131,7 @@ export function UserRankingItem({ data }) {
 
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Desistências</p>
-                            <p className="font-bold text-green-600 text-sm">{data?.giveUps}</p>
+                            <p className="font-bold text-red-600 text-sm">{data?.giveUps}</p>
                         </div>
                     </>
                 )}
@@ -127,6 +150,20 @@ export function UserRankingItem({ data }) {
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Nível</p>
                             <p className="font-bold text-green-600 text-sm">{data?.pool.level}</p>
+                        </div>
+
+                        <div className="flex items-center justify-between w-full">
+                            <p className="font-bold text-white text-sm">Era na pool</p>
+                            <p className="font-bold text-green-600 text-sm">{data?.pool?.currentEra}</p>
+                        </div>
+                    </>
+                )}
+
+                {data?.userType === 7 && (
+                    <>
+                        <div className="flex items-center justify-between w-full">
+                            <p className="font-bold text-white text-sm">Tokens compensados</p>
+                            <p className="font-bold text-green-600 text-sm">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(data?.tokensBurned)}</p>
                         </div>
                     </>
                 )}

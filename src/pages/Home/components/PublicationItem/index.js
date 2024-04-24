@@ -24,6 +24,7 @@ import { InvalidateInspectionPubli } from "./InvalidateInspectionPubli";
 import { ModalLikes } from "../ModalLikes";
 import { ModalComments } from "../ModalComments";
 import { PublishResearche } from "./PublishResearche";
+import { ProofReduce } from "./ProofReduce";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -193,6 +194,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'publish-researche' && (
                     <PublishResearche data={data}/>
+                )}
+
+                {data.type === 'proof-reduce' && (
+                    <ProofReduce data={data} />
                 )}
             </div>
 

@@ -26,7 +26,7 @@ export function Header({ routeActive }) {
     }
 
     return (
-        <div className="w-full flex items-center justify-center h-[60px] lg:h-[80px] bg-[#0a4303] py-2 fixed bottom-0 lg:top-10 left-0 border-b-2 border-green-700 z-50">
+        <div className="w-full flex items-center justify-center h-[60px] lg:h-[80px] bg-[#0a4303] py-2 fixed bottom-0 lg:top-10 left-0 border-b-2 border-green-700 z-40">
             <div className="flex items-center justify-between overflow-x-auto lg:min-w-[1024px]">
                 <button onClick={() => navigate('/')}>
                     <img
@@ -150,7 +150,7 @@ export function Header({ routeActive }) {
                                 </>
                             )}
                         </button>
-                        <p className="text-xs text-white font-semibold">{walletConnected === '' ? 'Conecte-se' : 'Conectado'}</p>
+                        <p className="text-xs text-white text-center font-semibold">{walletConnected === '' ? 'Conecte-se' : 'Conectado'}</p>
                     </div>
                 </div>
             </div>

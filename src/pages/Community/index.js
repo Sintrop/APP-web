@@ -48,7 +48,7 @@ export function Community() {
             <TopBar/>
             <Header routeActive='community' />
 
-            <div className="flex flex-col items-center w-full mt-32">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                     libraries={['drawing']}
@@ -71,7 +71,7 @@ export function Community() {
                     </GoogleMap>
 
                 </LoadScript>
-                <div className="absolute flex flex-col w-[300px] gap-2 left-3 top-36">
+                <div className="absolute flex flex-col w-[300px] gap-2 left-3 lg:top-36 top-28">
                     <button 
                         className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
                         onClick={() => navigate('/ranking/1')}
