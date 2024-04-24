@@ -11,7 +11,7 @@ export function Services({}){
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
                     <button 
                         className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
