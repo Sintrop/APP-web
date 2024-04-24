@@ -213,10 +213,10 @@ export function Contribute() {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32">
-                <div className="flex flex-col max-w-[1024px]">
-                    <div className="flex bg-[#0a4303] p-3 rounded-md mt-3 gap-8">
-                        <div className="flex flex-col w-[300px]">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
+                <div className="flex flex-col w-full lg:max-w-[1024px] px-2 lg:px-0">
+                    <div className="flex flex-col bg-[#0a4303] p-3 rounded-md mt-3 gap-8 lg:flex-row">
+                        <div className="flex flex-col w-full lg:w-[300px]">
                             <p className="text-gray-300 text-sm">Veja o impacto da sua contribuição</p>
 
                             <div className="w-full border-b border-green-600 my-3" />
