@@ -43,7 +43,7 @@ export function MyTokens() {
             <TopBar/>
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 {loading ? (
                     <div className="flex items-center h-[100vh]">
                         <ActivityIndicator size={180}/>
@@ -55,8 +55,8 @@ export function MyTokens() {
                             <h3 className="text-center mt-3 text-white">Você não está conectado!</h3>
                         </div>
                     ) : (
-                        <div className="flex gap-1 flex-col lg:w-[800px] max-w-[1024px] mt-3 items-start">
-                            <div className="flex flex-col bg-card bg-no-repeat bg-cover w-[365px] h-[200px] rounded-md p-3">
+                        <div className="flex gap-1 flex-col lg:w-[800px] w-full mt-3 items-start px-2 lg:px-0">
+                            <div className="flex flex-col bg-card bg-no-repeat bg-cover w-full lg:w-[365px] h-[200px] rounded-md p-3">
                                 <p className="text-xs text-gray-300">Meu patrimônio em</p>
 
                                 <div className="flex items-center gap-2 mt-5">
