@@ -45,7 +45,7 @@ export default function MainProvider({children}){
     const [modalTutorial, setModalTutorial] = useState(false);
     const [modalFeedback, setModalFeedback] = useState(false);
     const [balanceUser, setBalanceUser] = useState(0);
-    const [userData, setUserData] = useState(0);
+    const [userData, setUserData] = useState(null);
     const [era, setEra] = useState(1);
     const [nextEraIn, setNextEraIn] = useState(0);
     const [impactPerToken, setImpactPerToken] = useState({});
@@ -367,7 +367,7 @@ export default function MainProvider({children}){
 
     function logout(){
         setWalletConnected('');
-        setUserData({});
+        setUserData(null);
         setBlockchainData({});
     }
     

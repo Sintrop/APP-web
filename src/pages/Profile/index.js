@@ -9,6 +9,8 @@ import {ProducerCertificate} from '../../components/Certificates/ProducerCertifi
 import {ContributeCertificate} from '../../components/Certificates/ContributeCertificate';
 import { format } from "date-fns";
 import {useNavigate} from 'react-router-dom';
+import { MdLogout } from "react-icons/md";
+import {ModalLogout} from '../Home/components/ModalLogout';
 
 export function Profile() {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ export function Profile() {
     const [proofPhoto, setProofPhoto] = useState('');
     const [pathProperty, setPathProperty] = useState([]);
     const [inspections, setInspections] = useState([]);
+    const [modalLogout, setModalLogout] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -56,8 +59,8 @@ export function Profile() {
             <TopBar />
             <Header />
 
-            <div className="flex flex-col items-center w-full pt-32 overflow-auto">
-                <div className="flex flex-col w-[1024px] mt-3">
+            <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto overflow-x-hidden">
+                <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
                     {loading ? (
                         <div className="flex justify-center h-[90vh]">
                             <ActivityIndicator size={180} />
@@ -79,14 +82,14 @@ export function Profile() {
                                                     )}
                                                 </div>
 
-                                                <div className="flex flex-col items-center ml-10">
+                                                <div className="flex flex-col items-center ml-4 lg:ml-10">
                                                     <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white">Seguidores</p>
+                                                    <p className=" text-white text-xs lg:text-base">Seguidores</p>
                                                 </div>
 
                                                 <div className="flex flex-col items-center">
                                                     <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white">Seguindo</p>
+                                                    <p className=" text-white text-xs lg:text-base">Seguindo</p>
                                                 </div>
                                             </div>
 
@@ -102,12 +105,22 @@ export function Profile() {
                                                 {userData?.userType === 8 && 'Validador(a)'}
                                             </p>
                                             <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
-                                                <p className="text-white">Wallet: {walletConnected}</p>
+                                                <p className="text-white text-xs lg:text-base">Wallet: {walletConnected}</p>
+                                            </div>
+
+                                            <div className="flex gap-1 mt-2 p-1 border rounded-md w-fit">
+                                                <button
+                                                    className="flex items-center gap-2 text-[#ff0000] font-semibold text-sm"
+                                                    onClick={() => setModalLogout(true)}
+                                                >
+                                                    <MdLogout size={20} color='#ff0000'/>
+                                                    Desconectar
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-8 mt-2">
+                                    <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                                         <button
                                             className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'certificates' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                                             onClick={() => setTabSelected('certificates')}
@@ -156,7 +169,7 @@ export function Profile() {
                                     {tabSelected === 'data' && (
                                         <>
                                             <div className="flex items-center flex-col gap-4 mt-2">
-                                                <div className="p-2 rounded-md flex bg-[#0a4303] gap-2 w-full">
+                                                <div className="p-2 rounded-md flex flex-col bg-[#0a4303] gap-2 w-full lg:flex-row">
                                                     <div className="flex flex-col">
                                                         <div className="w-[200px] h-[200px] rounded-md bg-gray-400">
                                                             {proofPhoto && (
@@ -310,12 +323,20 @@ export function Profile() {
                                     )}
                                 </>
                             ) : (
-                                <></>
+                                <>
+                                <p className="font-bold text-white text-center">Você não está conectado</p>
+                                </>
                             )}
                         </>
                     )}
                 </div>
             </div>
+
+            {modalLogout && (
+                <ModalLogout
+                    close={() => setModalLogout(false)}
+                />
+            )}
         </div>
     );
 }
