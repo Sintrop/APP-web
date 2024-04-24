@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { ModalAddItem } from "./ModalAddItem";
+import { ModalProofReduce } from "./ModalProofReduce";
+import { useMainContext } from "../../../hooks/useMainContext";
+import { ToastContainer, toast } from "react-toastify";
 
 export function Item({data, addItem, hiddenButton}){
+    const {walletConnected} = useMainContext();
     const [modalAddItem, setModalAddItem] = useState(false);
+    const [proofReduce, setProofReduce] = useState(false);
 
     return(
         <div className="flex w-full items-center justify-between p-2 rounded-md bg-[#0a4303]">
@@ -34,12 +39,28 @@ export function Item({data, addItem, hiddenButton}){
             </div>
             
             {!hiddenButton && (
-                <button
-                    className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600"
-                    onClick={() => setModalAddItem(true)}
-                >
-                    Compensar item
-                </button>
+                <div className="flex flex-col items-center">
+                    <button
+                        className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600 text-sm"
+                        onClick={() => setModalAddItem(true)}
+                    >
+                        Compensar item
+                    </button>
+
+                    <button
+                        className="font-semibold text-white flex items-center gap-2 text-sm mt-2"
+                        onClick={() => {
+                            if(walletConnected === ''){
+                                toast.error('Você não está conectado!')
+                                return;
+                            }
+                            setProofReduce(true)
+                        }}
+                    >
+                        Provar redução
+                    </button>
+                    <ToastContainer/>
+                </div>
             )}
 
             {modalAddItem && (
@@ -47,6 +68,13 @@ export function Item({data, addItem, hiddenButton}){
                     data={data}
                     close={() => setModalAddItem(false)}
                     addItem={(itemAdded) => addItem(itemAdded)}
+                />
+            )}
+
+            {proofReduce && (
+                <ModalProofReduce
+                    close={() => setProofReduce(false)}
+                    nameItem={data?.name}
                 />
             )}
         </div>
