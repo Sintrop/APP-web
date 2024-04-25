@@ -114,11 +114,12 @@ export function Home() {
 
                                         <div className="flex flex-col mt-2 w-full items-center">
                                             <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                                <p className="text-4xl font-bold text-green-500">
+                                                <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
                                                     {userData?.userType === 1 && blockchainData?.producer?.isa?.isaScore}
                                                     {userData?.userType === 2 && blockchainData?.inspector?.totalInspections}
                                                     {userData?.userType === 3 && blockchainData?.researcher?.publishedWorks}
                                                     {userData?.userType === 4 && blockchainData?.developer?.pool?.level}
+                                                    {userData?.userType === 7 && blockchainData?.tokensBurned}
                                                 </p>
                                             </div>
                                             <p className="text-xs text-gray-200">
@@ -126,6 +127,7 @@ export function Home() {
                                                 {userData?.userType === 2 && 'Inspeções realizadas'}
                                                 {userData?.userType === 3 && 'Pesquisas publicadas'}
                                                 {userData?.userType === 4 && 'Seu nível'}
+                                                {userData?.userType === 7 && 'Tokens contribuidos'}
                                             </p>
                                         </div>
 
