@@ -37,7 +37,7 @@ import { Invite } from '../../services/invitationService';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export function TransactionItem({ transaction, attTransactions, walletAddress, userData }) {
-    const { impactPerToken } = useMainContext()
+    const { impactToken, impactPerToken } = useMainContext();
     const [loadingData, setLoadingData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingTransaction, setLoadingTransaction] = useState(false);
@@ -2549,10 +2549,10 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 wallet: walletAddress.toUpperCase(),
                 tokens: Number(tokens),
                 transactionHash: hash,
-                carbon: Number(impactPerToken?.carbon),
-                water: Number(impactPerToken?.water),
-                bio: Number(impactPerToken?.bio),
-                soil: Number(impactPerToken?.soil)
+                carbon: Number(impactToken?.carbon),
+                water: Number(impactToken?.water),
+                bio: Number(impactToken?.bio),
+                soil: Number(impactToken?.soil)
             });
 
             await api.post('/publication/new', {
