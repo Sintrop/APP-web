@@ -253,6 +253,12 @@ export default function MainProvider({children}){
             setBlockchainData(response.data);
         }
 
+        if (userType === 7) {
+            const response = await api.get(`/web3/supporter-data/${String(wallet).toLowerCase()}`);
+            setBlockchainData(response.data);
+            console.log(response.data)
+        }
+
         if (userType === 8) {
             const response = await api.get(`/web3/validator-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
