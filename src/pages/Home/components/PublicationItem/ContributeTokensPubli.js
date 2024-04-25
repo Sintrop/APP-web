@@ -102,18 +102,20 @@ export function ContributeTokensPubli({ data }) {
                 </div>
             </div>
 
-            <button className="flex items-center justify-between mt-2 bg-green-600 rounded-md px-3 py-2" onClick={() => setModalItems(true)}>
-                <div className="flex items-center gap-1">
-                    <FaCalculator size={25} color='white'/>
+            {itemsCalculator.length > 0 && (
+                <button className="flex items-center justify-between mt-2 bg-green-600 rounded-md px-3 py-2" onClick={() => setModalItems(true)}>
+                    <div className="flex items-center gap-1">
+                        <FaCalculator size={25} color='white'/>
 
-                    <div className="flex flex-col items-start">
-                        <p className="font-semibold text-white text-sm">Esta contribuição foi feita com a calculadora de impacto</p>
-                        <p className="text-gray-300 text-xs">Toque para ver detalhes</p>
+                        <div className="flex flex-col items-start">
+                            <p className="font-semibold text-white text-sm">Esta contribuição foi feita com a calculadora de impacto</p>
+                            <p className="text-gray-300 text-xs">Toque para ver detalhes</p>
+                        </div>
                     </div>
-                </div>
 
-                <FaChevronRight size={20} color='white' />
-            </button>
+                    <FaChevronRight size={20} color='white' />
+                </button>
+            )}
 
             {modalItems && (
                 <ItemsCalculator
