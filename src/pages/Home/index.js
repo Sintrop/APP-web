@@ -18,6 +18,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
+import { ModalSignOut } from "../../components/ModalSignOut";
 
 export function Home() {
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ export function Home() {
     const [modalLogout, setModalLogout] = useState(false);
     const [firstLoad, setFirstLoad] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [signOut, setSignOut] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -89,6 +91,13 @@ export function Home() {
 
                                             <ModalConnectAccount close={() => setModalConnect(false)} />
                                         </Dialog.Root>
+
+                                        <button
+                                            className="text-white text-center mt-3 text-sm"
+                                            onClick={() => setSignOut(true)}
+                                        >
+                                            Cadastre-se
+                                        </button>
                                     </>
                                 ) : (
                                     <>
@@ -242,6 +251,12 @@ export function Home() {
                         setModalLogout(false);
                         setModalConnect(false);
                     }}
+                />
+            )}
+
+            {signOut && (
+                <ModalSignOut
+                    close={() => setSignOut(false)}
                 />
             )}
             <ToastContainer />
