@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header";
 import { FaEyeSlash, FaRegEye, FaChevronRight, FaMobile } from "react-icons/fa";
 import { SiGooglesheets, SiReadthedocs } from "react-icons/si";
+import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { api } from "../../../services/api";
@@ -179,6 +180,15 @@ export function PreSale() {
                         <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
                             <p className="text-xs text-gray-400">Links</p>
                             <div className="flex items-center flex-wrap gap-2 mt-1">
+                                <a 
+                                    href='https://docs.google.com/presentation/d/1ioehpLRKNhgCp0QruvDINKdQl_nooPXTPCNOkwOl6t0'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <HiOutlinePresentationChartLine size={25} color='white'/>
+                                    <p className="font-bold text-white text-sm">Apresentação</p>
+                                </a>
+
                                 <a 
                                     href='https://docs.sintrop.com/suporte/acoes/apoiador/pre-venda-dos-tokens'
                                     target="_blank"
