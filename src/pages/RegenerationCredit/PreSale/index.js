@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header";
-import { FaEyeSlash, FaRegEye, FaChevronRight, FaMobile } from "react-icons/fa";
+import { FaMobile } from "react-icons/fa";
+import { MdVideoCall } from "react-icons/md";
 import { SiGooglesheets, SiReadthedocs } from "react-icons/si";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { useMainContext } from "../../../hooks/useMainContext";
@@ -9,7 +10,7 @@ import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalReserve } from "./components/ModalReserve";
-import {useCountdown} from '../../../hooks/useCountdown';
+import { useCountdown } from '../../../hooks/useCountdown';
 import { TopBar } from "../../../components/TopBar";
 
 export function PreSale() {
@@ -81,7 +82,7 @@ export function PreSale() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto px-2 lg:px-0">
@@ -180,51 +181,73 @@ export function PreSale() {
                         <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
                             <p className="text-xs text-gray-400">Links</p>
                             <div className="flex items-center flex-wrap gap-2 mt-1">
-                                <a 
+                                <a
                                     href='https://docs.google.com/presentation/d/1ioehpLRKNhgCp0QruvDINKdQl_nooPXTPCNOkwOl6t0'
                                     target="_blank"
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
-                                    <HiOutlinePresentationChartLine size={25} color='white'/>
+                                    <HiOutlinePresentationChartLine size={25} color='white' />
                                     <p className="font-bold text-white text-sm">Apresentação</p>
                                 </a>
 
-                                <a 
+                                <a
+                                    href='https://calendly.com/andre-sintrop/agendar'
+                                    target="_blank"
+                                    className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                >
+                                    <MdVideoCall size={25} color='white' />
+                                    <p className="font-bold text-white text-sm">Agendar reunião</p>
+                                </a>
+
+                                <a
                                     href='https://docs.sintrop.com/suporte/acoes/apoiador/pre-venda-dos-tokens'
                                     target="_blank"
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
-                                    <SiReadthedocs size={25} color='white'/>
+                                    <SiReadthedocs size={25} color='white' />
                                     <p className="font-bold text-white text-sm">Tutorial</p>
                                 </a>
 
-                                <a 
+                                <a
                                     href='https://www.sintrop.com/assets/qr-code/whitepaper.pdf'
                                     target="_blank"
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
-                                    <SiGooglesheets size={25} color='white'/>
+                                    <SiGooglesheets size={25} color='white' />
                                     <p className="font-bold text-white text-sm">Whitepaper (pt-BR)</p>
                                 </a>
 
-                                <a 
+                                <a
                                     href='https://www.sintrop.com/assets/qr-code/whitepaper-EN.pdf'
                                     target="_blank"
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
-                                    <SiGooglesheets size={25} color='white'/>
+                                    <SiGooglesheets size={25} color='white' />
                                     <p className="font-bold text-white text-sm">Whitepaper (en-US)</p>
                                 </a>
 
-                                <a 
+                                <a
                                     href='https://www.sintrop.com/app'
                                     target="_blank"
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
-                                    <FaMobile size={25} color='white'/>
+                                    <FaMobile size={25} color='white' />
                                     <p className="font-bold text-white text-sm">App mobile</p>
                                 </a>
                             </div>
+                        </div>
+                        
+                        <div className="mt-3">
+                            <iframe 
+                                width="900" 
+                                height="400" 
+                                src="https://www.youtube.com/embed/fG8SjM_U5M8?si=QDT8ZJIK_smsFx9X" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin" 
+                                allowfullscreen>
+                            </iframe>
                         </div>
 
                         <p className="text-gray-400 text-sm mt-5">Reservas feitas</p>
