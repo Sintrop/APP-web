@@ -10,6 +10,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
 import {TopBar} from '../../components/TopBar';
+import {PublicationItem} from '../Home/components/PublicationItem';
 
 const containerMapStyle = {
     width: '100%',
@@ -30,16 +31,28 @@ export function UserDetails() {
     const [loadingInspections, setLoadingInspections] = useState(false);
     const [initialRegion, setInitialRegion] = useState(null);
     const [pathProperty, setPathProperty] = useState([]);
+    const [publications, setPublications] = useState([]);
+    const [loadingPubli, setLoadingPubli] = useState(false);
 
     useEffect(() => {
         getUserDetails();
     }, []);
 
     useEffect(() => {
-        if (userData?.userType === 1 || userData?.userType === 2) {
-            getInspections();
+        if(userData){
+            if (userData?.userType === 1 || userData?.userType === 2) {
+                getInspections();
+            }
+            getPublications()
         }
     }, [userData]);
+
+    async function getPublications() {
+        setLoadingPubli(true);
+        const response = await api.get(`/publications/${userData.id}`);
+        setPublications(response.data.publications);
+        setLoadingPubli(false);
+    }
 
     async function getUserDetails() {
         setLoading(true);
@@ -398,6 +411,16 @@ export function UserDetails() {
                                                 <h3 className="font-bold text-white">Certificado de contribuição</h3>
                                                 <ContributeCertificate wallet={wallet} user={userData}/>
                                             </div>
+                                        </div>
+                                    )}
+
+                                    {tabSelected === 'publis' && (
+                                        <div className="mt-5 gap-5 flex flex-col items-center w-full">
+                                            {publications.map(item => (
+                                                <PublicationItem
+                                                    data={item}
+                                                />
+                                            ))}
                                         </div>
                                     )}
                                 </>
