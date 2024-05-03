@@ -7,6 +7,7 @@ import { addSupporter } from "../../services/supporterService";
 import { api } from "../../services/api";
 import { ModalTransactionCreated } from "../ModalTransactionCreated";
 import { ActivityIndicator } from "../ActivityIndicator";
+import { Info } from "../Info";
 
 export function ModalSignOut({ close }) {
     const [step, setStep] = useState(1);
@@ -184,7 +185,7 @@ export function ModalSignOut({ close }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[400px] justify-between bg-[#0a4303] rounded-md m-auto inset-0 border-2'>
+            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[400px] justify-between bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-20'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-[25px]" />
 
@@ -219,7 +220,7 @@ export function ModalSignOut({ close }) {
                         <>
                             <p className="font-semibold text-white text-center">Agora escolha o tipo de usuário que deseja se cadastrar</p>
 
-                            <div className="flex flex-wrap justify-center mt-3">
+                            <div className="flex flex-wrap justify-center my-3">
                                 <button
                                     className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 7 ? 'border-white' : 'border-transparent'}`}
                                     onClick={() => setUserType(7)}
@@ -231,6 +232,10 @@ export function ModalSignOut({ close }) {
                                     Apoiador
                                 </button>
                             </div>
+
+                            <Info
+                                text1='Para se cadastrar como outros usuários, baixe nosso aplicativo móvel!'
+                            />
                         </>
                     )}
 

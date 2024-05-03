@@ -9,6 +9,7 @@ import Loader from './Loader';
 import { FaWallet, FaKey } from "react-icons/fa";
 import { ActivityIndicator } from './ActivityIndicator';
 import {useMainContext} from '../hooks/useMainContext';
+import { ModalSignOut } from './ModalSignOut';
 
 export function ModalConnectAccount({ close }) {
     const {loginWithWalletAndPassword, Sync} = useMainContext();
@@ -16,10 +17,7 @@ export function ModalConnectAccount({ close }) {
     const [viewForm, setViewForm] = useState(false);
     const [wallet, setWallet] = useState('');
     const [password, setPassword] = useState('');
-
-    useEffect(() => {
-
-    }, []);
+    const [modalSignOut, setModalSignOut] = useState(false);
 
     async function handleLogin(){
         if(loading){
@@ -74,7 +72,7 @@ export function ModalConnectAccount({ close }) {
     return (
         <Dialog.Portal className='flex justify-center items-center inset-0 '>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0 ' />
-            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-10'>
 
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]' />
@@ -156,6 +154,12 @@ export function ModalConnectAccount({ close }) {
             </Dialog.Content>
 
             <ToastContainer />
+
+            {modalSignOut && (
+                <ModalSignOut
+                    close={() => setModalSignOut(false)}
+                />
+            )}
         </Dialog.Portal>
     )
 }
