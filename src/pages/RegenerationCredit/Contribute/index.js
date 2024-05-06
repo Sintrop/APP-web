@@ -180,6 +180,13 @@ export function Contribute() {
                 origin: 'platform',
                 additionalData: JSON.stringify(addData),
             })
+
+            if(itemsCalculator.length > 0){
+                await api.post('/calculator/items/contribution', {
+                    userId: userData?.id,
+                    items: JSON.stringify(itemsCalculator)
+                })
+            }
         } catch (err) {
             console.log(err);
         } finally {

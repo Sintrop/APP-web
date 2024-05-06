@@ -2467,7 +2467,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 type: 'contribute-tokens',
                 origin: 'platform',
                 additionalData: JSON.stringify(addData),
-            })
+            });
+
+            if(additionalData?.itens.length > 0){
+                await api.post('/calculator/items/contribution', {
+                    userId: userData?.id,
+                    items: JSON.stringify(additionalData?.itens)
+                })
+            }
         } catch (err) {
             console.log(err);
         } finally {
