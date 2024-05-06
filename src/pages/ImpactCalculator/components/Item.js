@@ -4,11 +4,74 @@ import { ModalProofReduce } from "./ModalProofReduce";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { ToastContainer, toast } from "react-toastify";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { api } from "../../../services/api";
 
-export function Item({ data, addItem, hiddenButton, type, deleteItem }) {
+export function Item({ data, addItem, hiddenButton, type, deleteItem, userId }) {
     const { walletConnected } = useMainContext();
     const [modalAddItem, setModalAddItem] = useState(false);
     const [proofReduce, setProofReduce] = useState(false);
+    const [contributions, setContributions] = useState([]);
+    const [quant, setQuant] = useState(0);
+
+    useEffect(() => {
+        if(type === 'demonstration')getContributionDetails();
+    }, []);
+
+    async function getContributionDetails(){
+        const response = await api.get(`/contributions/${userId}/${data?.id}`);
+        const array = response.data.contributions
+        setContributions(array);
+
+        let count = 0;
+        for(var i = 0; i < array.length; i++){
+            count += Number(array[i].quant);
+        }
+
+        setQuant(count)
+    }
+
+    if (type === 'demonstration') {
+        return (
+            <div className="flex flex-col items-center p-2 rounded-md border-2 border-white w-[200px]">
+                <div className="flex flex-col w-full lg:w-fit">
+                    <div className="flex items-center justify-between">
+                        <p className="font-bold text-white text-lg">{data?.name}</p>
+                    </div>
+
+                    
+                </div>
+
+                <div className="flex flex-col mt-3 items-center">
+                    <p className="font-bold text-3xl text-white">{contributions.length}</p>
+                    <p className="text-sm text-white">Compesações feitas</p>
+
+                    <p className="font-bold text-3xl text-white mt-3">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(quant)} {data?.unit}</p>
+                    <p className="text-sm text-white">Quantidade</p>
+                </div>
+
+                {data?.source && (
+                    <div className="flex w-full mt-4">
+                        <p className="text-white text-xs">Fonte: <a target="_blank" href={data?.source} className="text-blue-400 underline">{data?.source}</a></p>
+                    </div>
+                )}
+
+                {modalAddItem && (
+                    <ModalAddItem
+                        data={data}
+                        close={() => setModalAddItem(false)}
+                        addItem={(itemAdded) => addItem(itemAdded)}
+                    />
+                )}
+
+                {proofReduce && (
+                    <ModalProofReduce
+                        close={() => setProofReduce(false)}
+                        nameItem={data?.name}
+                    />
+                )}
+            </div>
+        );
+    }
 
     if (type === 'list-items-to-reduce') {
         return (
