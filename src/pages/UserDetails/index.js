@@ -9,8 +9,9 @@ import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
-import {TopBar} from '../../components/TopBar';
-import {PublicationItem} from '../Home/components/PublicationItem';
+import { TopBar } from '../../components/TopBar';
+import { PublicationItem } from '../Home/components/PublicationItem';
+import { Item } from "../ImpactCalculator/components/Item";
 
 const containerMapStyle = {
     width: '100%',
@@ -33,13 +34,14 @@ export function UserDetails() {
     const [pathProperty, setPathProperty] = useState([]);
     const [publications, setPublications] = useState([]);
     const [loadingPubli, setLoadingPubli] = useState(false);
+    const [itemsToReduce, setItemsToReduce] = useState([]);
 
     useEffect(() => {
         getUserDetails();
     }, []);
 
     useEffect(() => {
-        if(userData){
+        if (userData) {
             if (userData?.userType === 1 || userData?.userType === 2) {
                 getInspections();
             }
@@ -62,6 +64,10 @@ export function UserDetails() {
 
         setUserData(user);
         getImageProfile(user.imgProfileUrl);
+
+        if (user?.itemsToReduce) {
+            setItemsToReduce(JSON.parse(user?.itemsToReduce));
+        }
 
         if (user?.userType === 1) {
             const response = await api.get(`/web3/producer-data/${String(user?.wallet).toLowerCase()}`);
@@ -151,7 +157,7 @@ export function UserDetails() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header />
 
             <div className="flex flex-col items-center w-full pt-10 px-1 lg:px-0 lg:pt-32 overflow-auto">
@@ -409,7 +415,24 @@ export function UserDetails() {
 
                                             <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
                                                 <h3 className="font-bold text-white">Certificado de contribuição</h3>
-                                                <ContributeCertificate wallet={wallet} user={userData}/>
+                                                <ContributeCertificate wallet={wallet} user={userData} />
+                                            </div>
+
+                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
+                                                {itemsToReduce.length === 0 && (
+                                                    <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
+                                                )}
+                                                <div className="flex flex-wrap gap-3">
+                                                    {itemsToReduce.map(item => (
+                                                        <Item
+                                                            key={item?.id}
+                                                            data={item}
+                                                            type='demonstration'
+                                                            userId={userData?.id}
+                                                        />
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     )}

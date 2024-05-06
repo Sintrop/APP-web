@@ -8,8 +8,10 @@ import { api } from "../../services/api";
 import { ModalTransactionCreated } from "../ModalTransactionCreated";
 import { ActivityIndicator } from "../ActivityIndicator";
 import { Info } from "../Info";
+import { useMainContext } from "../../hooks/useMainContext";
 
 export function ModalSignOut({ close }) {
+    const {walletConnected, Sync, loginWithWalletAndPassword} = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -34,6 +36,12 @@ export function ModalSignOut({ close }) {
             setPassNotMatch(false);
         }
     }, [password, confirmPass]);
+
+    useEffect(() => {
+        if(walletConnected !== ''){
+            setWallet(walletConnected)
+        }
+    }, [walletConnected]);
 
     function nextStep() {
         if (step === 1 && !wallet.trim()) {
@@ -164,7 +172,7 @@ export function ModalSignOut({ close }) {
                     return;
                 }
             }
-            
+
         } catch (err) {
             console.log(err);
             if (err.response?.data.error === 'User already exists') {
@@ -182,10 +190,26 @@ export function ModalSignOut({ close }) {
         return
     }
 
+    async function handleSyncWallet(){
+        if(loading){
+            return;
+        }
+        
+        if (!window.ethereum) {
+            toast.error('Você não tem um provedor ethereum em seu navegador!');
+            return;
+        }
+        setLoading(true);
+        
+        const response = await Sync();
+
+        setLoading(false);
+    }
+
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[400px] justify-between bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-20'>
+            <div className='absolute flex flex-col p-3 lg:w-[400px] h-[400px] justify-between bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-20'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-[25px]" />
 
@@ -207,12 +231,40 @@ export function ModalSignOut({ close }) {
                             >
                                 Veja aqui como criar
                             </a>
-                            <input
-                                placeholder="Digite aqui sua wallet"
-                                className="mt-3 rounded-md p-2 bg-green-950 text-white"
-                                value={wallet}
-                                onChange={(e) => setWallet(e.target.value)}
-                            />
+
+                            <div className="flex flex-col w-full mt-3">
+                                <label className="font-semibold text-sm text-blue-500">Wallet:</label>
+                                <input
+                                    placeholder="Digite aqui sua wallet"
+                                    className="rounded-md p-2 bg-green-950 text-white"
+                                    value={wallet}
+                                    onChange={(e) => setWallet(e.target.value)}
+                                />
+                            </div>
+
+                            {walletConnected === '' && (
+                                <>
+                                    {window.ethereum && (
+                                        <>
+                                            <p className="font-semibold text-white text-center">Ou</p>
+
+                                            <button
+                                                className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
+                                                onClick={handleSyncWallet}
+                                            >
+                                                {loading ? (
+                                                    <ActivityIndicator
+                                                        size={25}
+                                                    />
+                                                ) : 'Sincronize sua wallet'}
+                                            </button>
+                                        </>
+                                    )}
+                                
+                                </>
+                            )}
+
+
                         </>
                     )}
 
@@ -295,7 +347,7 @@ export function ModalSignOut({ close }) {
                                 onClick={handleRegister}
                             >
                                 {loading ? (
-                                    <ActivityIndicator size={20}/>
+                                    <ActivityIndicator size={20} />
                                 ) : 'Finalizar cadastro'}
                             </button>
                         </>
@@ -337,7 +389,8 @@ export function ModalSignOut({ close }) {
                     setModalTransaction(open)
                     setLoading(false);
                     if (logTransaction.type === 'success') {
-                        toast.success('Cadastro realizado com sucesso! Conecte sua wallet.');
+                        toast.success('Cadastro realizado com sucesso!');
+                        loginWithWalletAndPassword(wallet, password);
                         setTimeout(() => {
                             close();
                         }, 2000);
