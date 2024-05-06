@@ -10,11 +10,12 @@ import { Info } from "../../components/Info";
 
 export function ImpactCalculator() {
     const navigate = useNavigate();
-    const { setItemsCalculator, setTokensToContribute } = useMainContext();
+    const { setItemsCalculator, setTokensToContribute, userData, getUserDataApi } = useMainContext();
     const [items, setItems] = useState([]);
     const [myList, setMyList] = useState([]);
     const [impact, setImpact] = useState({});
     const [impactToken, setImpactToken] = useState({});
+    const [itemsToReduce, setItemsToReduce] = useState([])
 
     const razaoTokenCompensar = ((impact?.carbon * 1000) / (Number(impactToken.carbon) * 1000).toFixed(1)).toFixed(0) * -1
 
@@ -22,6 +23,12 @@ export function ImpactCalculator() {
         getItems();
         getImpactToken();
     }, []);
+
+    useEffect(() => {
+        if(userData?.itemsToReduce){
+            setItemsToReduce(JSON.parse(userData?.itemsToReduce));
+        }
+    }, [userData]);
 
     async function getImpactToken() {
         const response = await api.get('/impact-per-token');
@@ -55,6 +62,40 @@ export function ImpactCalculator() {
         setImpact({ carbon, soil, water, bio })
     }
 
+    async function addItemToListToReduce(item){
+        const existsItem = itemsToReduce.filter(data => data.id === item.id);
+        if(existsItem.length > 0){
+            toast.error('Você já tem esse item na sua lista de redução!');
+            return;
+        }
+
+        let array = [];
+        array = itemsToReduce;
+        array.push(item)
+        setItemsToReduce(array);
+        toast.success('Item adicionado a sua lista de redução!')
+
+        await api.put('/user/items-to-reduce', {
+            userId: userData?.id,
+            items: JSON.stringify(array)
+        });
+
+        getUserDataApi(userData?.wallet);
+    }
+
+    async function deleteItem(item){
+        const filter = itemsToReduce.filter(data => data?.id !== item.id);
+        setItemsToReduce(filter);
+        toast.success('Item removido da sua lista!');
+
+        await api.put('/user/items-to-reduce', {
+            userId: userData?.id,
+            items: JSON.stringify(filter)
+        }); 
+
+        getUserDataApi(userData?.wallet);
+    }
+
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
             <TopBar />
@@ -71,7 +112,7 @@ export function ImpactCalculator() {
                     />
 
                     <div className="flex flex-col w-full p-2 rounded-t-md bg-[#0a4303] mt-3 overflow-x-auto">
-                        <p className="text-white font-semibold">Itens da sua lista</p>
+                        <p className="text-white font-semibold">Itens para compensar</p>
 
                         <div className="flex w-fit lg:w-full justify-between h-8 bg-blue-700 rounded-t-md py-1 px-3">
                             <div className="flex items-center justify-start w-[150px] lg:w-[40%]">
@@ -133,7 +174,7 @@ export function ImpactCalculator() {
                             
                             {myList.length === 0 && (
                                 <div className="flex justify-center items-center h-20">
-                                    <p className="text-white">Nenhum item na lista</p>
+                                    <p className="text-white">Nenhum item adicionado</p>
                                 </div>
                             )}
                         </div>
@@ -194,13 +235,30 @@ export function ImpactCalculator() {
                         </div>
                     </div>
 
-                    <p className="font-semibold text-white mt-3">Adicione itens a sua lista</p>
+                    <p className="font-semibold text-white mt-3">Itens que você quer reduzir</p>
+                    {itemsToReduce.length === 0 && (
+                        <p className="text-white text-center mt-4 mb-8">Você não tem nenhum item para reduzir na sua lista, adicione-os abaixo</p>
+                    )}
+                    <div className="flex flex-wrap gap-3">
+                        {itemsToReduce.map(item => (
+                            <Item
+                                key={item?.id}
+                                data={item}
+                                addItem={(itemAdded) => addItemToList(itemAdded)}
+                                type='list-items-to-reduce'
+                                deleteItem={(item) => deleteItem(item)}
+                            />
+                        ))}
+                    </div>
+
+                    <p className="font-semibold text-white mt-5">Adicione itens a sua lista</p>
                     <div className="flex flex-col gap-3">
                         {items.map(item => (
                             <Item
                                 key={item?.id}
                                 data={item}
-                                addItem={(itemAdded) => addItemToList(itemAdded)}
+                                addItem={(itemAdded) => addItemToListToReduce(itemAdded)}
+                                type='list-items-calculator'
                             />
                         ))}
                     </div>
