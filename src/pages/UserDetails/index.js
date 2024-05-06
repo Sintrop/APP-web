@@ -418,8 +418,8 @@ export function UserDetails() {
                                                 <ContributeCertificate wallet={wallet} user={userData} />
                                             </div>
 
-                                            <div className="flex flex-col">
-                                                <h3 className="font-bold text-white">Compromisso de redução</h3>
+                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
                                                 {itemsToReduce.length === 0 && (
                                                     <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
                                                 )}
@@ -428,8 +428,8 @@ export function UserDetails() {
                                                         <Item
                                                             key={item?.id}
                                                             data={item}
-                                                            type='list-items-to-reduce'
-                                                            hiddenButton
+                                                            type='demonstration'
+                                                            userId={userData?.id}
                                                         />
                                                     ))}
                                                 </div>

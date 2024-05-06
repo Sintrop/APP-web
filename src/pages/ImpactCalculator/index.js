@@ -192,7 +192,7 @@ export function ImpactCalculator() {
                                             </span>
                                         </p>
                                         <p className="text-white">Solo: <span className="font-bold">
-                                            {myList.length === 0 ? '0 m2' : `-${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impact?.soil)} m²`}
+                                            {myList.length === 0 ? '0 m²' : `-${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impact?.soil)} m²`}
                                             </span>
                                         </p>
                                         <p className="text-white">Água: <span className="font-bold">
