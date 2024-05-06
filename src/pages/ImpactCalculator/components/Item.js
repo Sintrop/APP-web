@@ -17,9 +17,11 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem }) {
                     <div className="flex items-center justify-between">
                         <p className="font-bold text-white text-lg">{data?.name}</p>
 
-                        <button onClick={() => deleteItem(data)}>
-                            <FaRegTrashAlt size={17} color='red' />
-                        </button>
+                        {!hiddenButton && (
+                            <button onClick={() => deleteItem(data)}>
+                                <FaRegTrashAlt size={17} color='red' />
+                            </button>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-3 mt-3 border rounded-md p-1">
