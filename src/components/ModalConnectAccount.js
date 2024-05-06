@@ -63,7 +63,7 @@ export function ModalConnectAccount({ close }) {
             toast.success('Você se conectou com sucesso!');
             close();
         }else{
-            toast.error('Operação cancelada!')
+            close();
         }
 
         setLoading(false);

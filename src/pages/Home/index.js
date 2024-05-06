@@ -121,24 +121,37 @@ export function Home() {
                                         </p>
                                         <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
-                                        <div className="flex flex-col mt-2 w-full items-center">
-                                            <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                                <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                    {userData?.userType === 1 && blockchainData?.producer?.isa?.isaScore}
-                                                    {userData?.userType === 2 && blockchainData?.inspector?.totalInspections}
-                                                    {userData?.userType === 3 && blockchainData?.researcher?.publishedWorks}
-                                                    {userData?.userType === 4 && blockchainData?.developer?.pool?.level}
-                                                    {userData?.userType === 7 && blockchainData?.tokensBurned}
+                                        {userData?.userType === 0 ? (
+                                            <div className="flex flex-col mt-5">
+                                                <p className="text-center text-white">Wallet não cadastrada</p>
+
+                                                <button
+                                                    className="mt-2 text-white py-2 px-5 bg-blue-500 rounded-md font-semibold text-sm"
+                                                    onClick={() => setSignOut(true)}
+                                                >
+                                                    Cadastre-se
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col mt-2 w-full items-center">
+                                                <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
+                                                    <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
+                                                        {userData?.userType === 1 && blockchainData?.producer?.isa?.isaScore}
+                                                        {userData?.userType === 2 && blockchainData?.inspector?.totalInspections}
+                                                        {userData?.userType === 3 && blockchainData?.researcher?.publishedWorks}
+                                                        {userData?.userType === 4 && blockchainData?.developer?.pool?.level}
+                                                        {userData?.userType === 7 && blockchainData?.tokensBurned}
+                                                    </p>
+                                                </div>
+                                                <p className="text-xs text-gray-200">
+                                                    {userData?.userType === 1 && 'Pontuação de regeneração'}
+                                                    {userData?.userType === 2 && 'Inspeções realizadas'}
+                                                    {userData?.userType === 3 && 'Pesquisas publicadas'}
+                                                    {userData?.userType === 4 && 'Seu nível'}
+                                                    {userData?.userType === 7 && 'Tokens contribuidos'}
                                                 </p>
                                             </div>
-                                            <p className="text-xs text-gray-200">
-                                                {userData?.userType === 1 && 'Pontuação de regeneração'}
-                                                {userData?.userType === 2 && 'Inspeções realizadas'}
-                                                {userData?.userType === 3 && 'Pesquisas publicadas'}
-                                                {userData?.userType === 4 && 'Seu nível'}
-                                                {userData?.userType === 7 && 'Tokens contribuidos'}
-                                            </p>
-                                        </div>
+                                        )}
 
                                         <button
                                             className="absolute top-2 right-2"
@@ -155,6 +168,16 @@ export function Home() {
                                 <p className="text-gray-400 text-xs text-left">Atalhos</p>
 
                                 <div className="flex flex-wrap justify-center gap-5 mt-3">
+                                    <button
+                                        className="flex flex-col items-center w-16"
+                                        onClick={() => navigate('/impact-calculator')}
+                                    >
+                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
+                                            <FaCalculator color='white' size={25} />
+                                        </div>
+                                        <p className="text-white text-xs text-center">Calculadora de impacto</p>
+                                    </button>
+
                                     <button
                                         className="flex flex-col items-center w-16"
                                         onClick={() => alert('Disponível em breve!')}
@@ -175,15 +198,6 @@ export function Home() {
                                         <p className="text-white text-xs text-center">Educação</p>
                                     </button>
 
-                                    <button
-                                        className="flex flex-col items-center w-16"
-                                        onClick={() => navigate('/impact-calculator')}
-                                    >
-                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
-                                            <FaCalculator color='white' size={25} />
-                                        </div>
-                                        <p className="text-white text-xs text-center">Calculadora de impacto</p>
-                                    </button>
 
                                     <button
                                         className="flex flex-col items-center w-16"

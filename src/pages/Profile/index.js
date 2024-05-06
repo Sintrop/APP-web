@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import {useNavigate} from 'react-router-dom';
 import { MdLogout } from "react-icons/md";
 import {ModalLogout} from '../Home/components/ModalLogout';
+import { Item } from "../ImpactCalculator/components/Item";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -22,10 +23,15 @@ export function Profile() {
     const [pathProperty, setPathProperty] = useState([]);
     const [inspections, setInspections] = useState([]);
     const [modalLogout, setModalLogout] = useState(false);
+    const [itemsToReduce, setItemsToReduce] = useState([]);
 
     useEffect(() => {
         if (userData) {
             getImageProfile(userData?.imgProfileUrl);
+        }
+
+        if (userData?.itemsToReduce) {
+            setItemsToReduce(JSON.parse(userData?.itemsToReduce));
         }
     }, [userData]);
 
@@ -318,6 +324,23 @@ export function Profile() {
                                             <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
                                                 <h3 className="font-bold text-white">Certificado de contribuição</h3>
                                                 <ContributeCertificate wallet={walletConnected} user={userData} />
+                                            </div>
+
+                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
+                                                {itemsToReduce.length === 0 && (
+                                                    <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
+                                                )}
+                                                <div className="flex flex-wrap gap-3">
+                                                    {itemsToReduce.map(item => (
+                                                        <Item
+                                                            key={item?.id}
+                                                            data={item}
+                                                            type='demonstration'
+                                                            userId={userData?.id}
+                                                        />
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     )}

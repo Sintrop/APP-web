@@ -24,7 +24,7 @@ export function LoadingTransaction({loading, logTransaction, action}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0 z-50'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center bg-[#0a4303] h-[350px] rounded-md m-auto inset-0 md:w-[400px] px-5'>
+            <Dialog.Content className='absolute flex flex-col items-center bg-[#0a4303] h-[400px] rounded-md m-auto inset-0 md:w-[400px] px-5 z-50'>
 
                 <div className='flex flex-col p-3 justify-between h-full w-full'>
 
