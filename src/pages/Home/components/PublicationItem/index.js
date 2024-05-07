@@ -118,9 +118,14 @@ export function PublicationItem({ data }) {
                             />
                         ) : (
                             <>
-                                {imageProfile && (
+                                {imageProfile ? (
                                     <img
                                         src={imageProfile}
+                                        className="w-14 h-14 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <img
+                                        src={require('../../../../assets/icon-validator.png')}
                                         className="w-14 h-14 rounded-full object-cover"
                                     />
                                 )}
@@ -193,7 +198,7 @@ export function PublicationItem({ data }) {
                 )}
 
                 {data.type === 'publish-researche' && (
-                    <PublishResearche data={data}/>
+                    <PublishResearche data={data} />
                 )}
 
                 {data.type === 'proof-reduce' && (
@@ -232,23 +237,23 @@ export function PublicationItem({ data }) {
 
             {comments.length > 0 && (
                 <>
-                <div className="flex flex-col">
-                    <p className="text-white text-sm font-bold">{JSON.parse(comments[Number(comments?.length) - 1]?.userData).name}</p>
-                    <p className="text-white text-sm">{comments[Number(comments?.length) - 1]?.text}</p>
-                </div>
+                    <div className="flex flex-col">
+                        <p className="text-white text-sm font-bold">{JSON.parse(comments[Number(comments?.length) - 1]?.userData).name}</p>
+                        <p className="text-white text-sm">{comments[Number(comments?.length) - 1]?.text}</p>
+                    </div>
 
-                {comments.length > 1 && (
-                    <p className="text-gray-400 text-sm cursor-pointer" onClick={() => setModalComments(true)}>Ver todos os comentários</p>
-                )}
+                    {comments.length > 1 && (
+                        <p className="text-gray-400 text-sm cursor-pointer" onClick={() => setModalComments(true)}>Ver todos os comentários</p>
+                    )}
                 </>
             )}
 
             {modalLikes && (
-                <ModalLikes close={() => setModalLikes(false)} publiId={data.id}/>
+                <ModalLikes close={() => setModalLikes(false)} publiId={data.id} />
             )}
 
             {modalComments && (
-                <ModalComments close={() => setModalComments(false)} dataPubli={data}/>
+                <ModalComments close={() => setModalComments(false)} dataPubli={data} />
             )}
 
             <ToastContainer />
