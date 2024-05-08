@@ -205,6 +205,21 @@ export function PublicationItem({ data }) {
                     <ProofReduce data={data} />
                 )}
             </div>
+            
+            {additionalData?.hash && (
+                <div>
+                    <p className="text-gray-200 text-xs">
+                        Hash da transação: 
+                        <a 
+                            className="ml-1 underline text-blue-300"
+                            href={`https://sepolia.etherscan.io/tx/${additionalData?.hash}`}
+                            target="_blank"
+                        >
+                            {additionalData?.hash}
+                        </a>
+                    </p>
+                </div>
+            )}
 
             {likes > 0 && (
                 <button className="w-fit" onClick={() => setModalLikes(true)}>
