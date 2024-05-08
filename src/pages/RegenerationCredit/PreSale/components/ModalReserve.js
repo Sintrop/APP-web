@@ -43,6 +43,7 @@ export function ModalReserve({ reserved }) {
         const encryptMarital = CryptoJS.AES.encrypt(maritalStatus, keySecret);
         const encryptTel = CryptoJS.AES.encrypt(tel, keySecret);
         const encryptEmail = CryptoJS.AES.encrypt(email, keySecret);
+        const encryptAddress = CryptoJS.AES.encrypt(address, keySecret);
 
         try {
             setLoadingBuy(true);
@@ -56,6 +57,7 @@ export function ModalReserve({ reserved }) {
                 tel: encryptTel.toString(),
                 email: encryptEmail.toString(),
                 value: Number(credits),
+                address: encryptAddress.toString(),
             });
 
             toast.success('Reserva feita com sucesso!');

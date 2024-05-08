@@ -4,6 +4,8 @@ async function ConnectWallet(){
             const address = await window.ethereum.request({
                 method: 'eth_requestAccounts'
             })
+
+            console.log(address)
     
             const object = {
                 connectedStatus: true,

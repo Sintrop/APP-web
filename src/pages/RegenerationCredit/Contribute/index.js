@@ -160,7 +160,8 @@ export function Contribute() {
             tokens: Number(tokens),
             transactionHash: hash,
             reason: '',
-            itens: itemsCalculator
+            itens: itemsCalculator,
+            hash
         }
 
         try {

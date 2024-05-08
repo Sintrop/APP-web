@@ -99,19 +99,19 @@ export function PreSale() {
                                     <h3 className="font-bold text-center lg:text-left lg:text-3xl text-white">Crédito de Regeneração</h3>
                                     <p className="text-center text-sm text-white mt-5">Essa oferta encerra em (25/06/2024)</p>
                                     <div className="flex items-center justify-center gap-2">
-                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                        <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
                                             <p className="font-bold text-white text-xl">{day}</p>
                                             <p className="text-center text-xs text-white">Dias</p>
                                         </div>
-                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                        <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
                                             <p className="font-bold text-white text-xl">{hour}</p>
                                             <p className="text-center text-xs text-white">Horas</p>
                                         </div>
-                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                        <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
                                             <p className="font-bold text-white text-xl">{minute}</p>
                                             <p className="text-center text-xs text-white">Minutos</p>
                                         </div>
-                                        <div className="flex flex-col p-2 rounded-md bg-orange-500 w-16 items-center">
+                                        <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
                                             <p className="font-bold text-white text-xl">{second}</p>
                                             <p className="text-center text-xs text-white">Segundos</p>
                                         </div>
@@ -148,7 +148,7 @@ export function PreSale() {
                                                 src={require('../../../assets/token.png')}
                                                 className="w-5 h-5 object-contain"
                                             />
-                                            QUERO INVESTIR
+                                            RESERVAR
                                         </Dialog.Trigger>
 
                                         <ModalReserve
@@ -242,6 +242,19 @@ export function PreSale() {
                                 width="900" 
                                 height="400" 
                                 src="https://www.youtube.com/embed/fG8SjM_U5M8?si=QDT8ZJIK_smsFx9X" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+
+                        <div className="mt-3">
+                            <iframe 
+                                width="900" 
+                                height="400" 
+                                src="https://www.youtube.com/embed/eNGsss9mrd0?si=kSP1PbYh440bAGjT" 
                                 title="YouTube video player" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
