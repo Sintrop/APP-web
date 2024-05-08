@@ -104,6 +104,7 @@ export function ModalSignOut({ close }) {
                             origin: 'platform',
                             additionalData: JSON.stringify({
                                 userData: response.data.user,
+                                hash: res.hashTransaction
                             }),
                         });
                     } catch (err) {
