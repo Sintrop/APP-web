@@ -3,6 +3,33 @@ import { getImage } from "../../../services/getImage";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { ImageItem } from "./ImageItem";
 import { ViewImage } from "../../../components/ViewImage";
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { FaMapMarker } from "react-icons/fa";
+
+const containerMapStyle = {
+    width: '100%',
+    height: '300px',
+};
+
+const markerSolo = {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "blue",
+    fillOpacity: 1,
+    strokeWeight: 2,
+    rotation: 0,
+    scale: 2,
+    strokeColor: '#fff'
+};
+
+const markerTree = {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "yellow",
+    fillOpacity: 1,
+    strokeWeight: 2,
+    rotation: 0,
+    scale: 2,
+    strokeColor: '#fff'
+};
 
 export function ZoneItem({ data, index }) {
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
@@ -144,6 +171,29 @@ export function ZoneItem({ data, index }) {
             )}
 
             <p className="text-white mt-2">Análise de solo</p>
+            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                <LoadScript
+                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                    libraries={['drawing']}
+                >
+                    <GoogleMap
+                        mapContainerStyle={containerMapStyle}
+                        center={{ lat: data.analiseSolo[0].coord?.lat, lng: data.analiseSolo[0].coord?.lng }}
+                        zoom={18}
+                        mapTypeId="hybrid"
+                    >
+                        {data.analiseSolo.map((analise, index) => (
+                            <Marker
+                                position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                            />
+                        ))}
+                    </GoogleMap>
+                </LoadScript>
+            </div>
+            <div className="flex items-center gap-1 mt-1 mb-4">
+                <FaMapMarker color='red' size={20}/>
+                <p className="text-white text-xs">Localização das coletas</p>
+            </div>
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
@@ -181,7 +231,31 @@ export function ZoneItem({ data, index }) {
                 <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number((treesS1 / areaSampling1) * areaZone).toFixed(0))}</span></p>
             </div>
 
-            <p className="text-white mt-2">Fotos das plantas registradas (Amostragem 1)</p>
+            <p className="text-white mt-2">Plantas registradas (Amostragem 1)</p>
+            
+            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                <LoadScript
+                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                    libraries={['drawing']}
+                >
+                    <GoogleMap
+                        mapContainerStyle={containerMapStyle}
+                        center={{ lat: data.arvores.sampling1.trees[0].lat, lng: data.arvores.sampling1.trees[0].lng }}
+                        zoom={18}
+                        mapTypeId="hybrid"
+                    >
+                        {data.arvores.sampling1.trees.map(tree => (
+                            <Marker
+                                position={{ lat: tree.lat, lng: tree.lng }}
+                            />
+                        ))}
+                    </GoogleMap>
+                </LoadScript>
+            </div>
+            <div className="flex items-center gap-1 mt-1 mb-4">
+                <FaMapMarker color='red' size={20}/>
+                <p className="text-white text-xs">Localização da planta</p>
+            </div>
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">

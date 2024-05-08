@@ -9,12 +9,32 @@ import { ImageItem } from "./ImageItem";
 import { useNavigate } from "react-router";
 import { FaDotCircle } from "react-icons/fa";
 import format from "date-fns/format";
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ViewImage } from "../../../components/ViewImage";
 
 const containerMapStyle = {
     width: '100%',
     height: '300px',
+};
+
+const markerSolo = {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "blue",
+    fillOpacity: 1,
+    strokeWeight: 2,
+    rotation: 0,
+    scale: 2,
+    strokeColor: '#fff'
+};
+
+const markerTree = {
+    path: "M55.7,28.1 c0,15.2-12.4,27.6-27.6,27.6 S0.5,43.3,0.5,28.1 S12.9,0.5,28.1,0.5 S55.7,12.9,55.7,28.1z",
+    fillColor: "green",
+    fillOpacity: 1,
+    strokeWeight: 2,
+    rotation: 0,
+    scale: 2,
+    strokeColor: '#fff'
 };
 
 export function Inspection({ id }) {
@@ -60,6 +80,7 @@ export function Inspection({ id }) {
         setResult(JSON.parse(responseApi.data?.inspectionApiData?.resultInspection).pdfData);
         setInsumos(JSON.parse(responseApi.data?.inspectionApiData.resultCategories));
         setLoading(false);
+        console.log(JSON.parse(responseApi.data?.inspectionApiData?.zones))
 
         if (responseApi?.data?.inspectionApiData?.propertyPhotos) {
             await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
@@ -439,15 +460,34 @@ export function Inspection({ id }) {
                                             <GoogleMap
                                                 mapContainerStyle={containerMapStyle}
                                                 center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
-                                                zoom={15}
+                                                zoom={16}
                                                 mapTypeId="hybrid"
                                             >
                                                 {zones.map((item, index) => (
-                                                    <PolylineItemZone
-                                                        data={item.path}
-                                                        index={index}
-                                                    />
+                                                    <>
+                                                        <PolylineItemZone
+                                                            data={item.path}
+                                                            index={index}
+                                                        />
+
+                                                        {item.analiseSolo.map((analise, index) => (
+                                                            <Marker
+                                                                position={{lat: analise?.coord?.lat, lng: analise?.coord?.lng}}
+                                                                title={`Análise Solo #${index + 1}`}
+                                                                label={`Análise Solo #${index + 1}`}
+                                                                icon={markerSolo}
+                                                            />
+                                                        ))}
+
+                                                        {item.arvores.sampling1.trees.map(tree => (
+                                                            <Marker
+                                                                position={{lat: tree.lat, lng: tree.lng}}
+                                                                icon={markerTree}
+                                                            />
+                                                        ))}
+                                                    </>
                                                 ))}
+
 
                                             </GoogleMap>
 
