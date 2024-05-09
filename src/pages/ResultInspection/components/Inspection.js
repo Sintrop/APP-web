@@ -7,7 +7,7 @@ import { PolylineItemZone } from "./PolylineItemZone";
 import { ZoneItem } from "./ZoneItem";
 import { ImageItem } from "./ImageItem";
 import { useNavigate } from "react-router";
-import { FaDotCircle } from "react-icons/fa";
+import { FaDotCircle, FaMapMarker } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ViewImage } from "../../../components/ViewImage";
@@ -28,8 +28,18 @@ const markerSolo = {
 };
 
 const markerTree = {
-    path: "M55.7,28.1 c0,15.2-12.4,27.6-27.6,27.6 S0.5,43.3,0.5,28.1 S12.9,0.5,28.1,0.5 S55.7,12.9,55.7,28.1z",
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
     fillColor: "green",
+    fillOpacity: 1,
+    strokeWeight: 2,
+    rotation: 0,
+    scale: 2,
+    strokeColor: '#fff'
+};
+
+const markerBioSoil = {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "yellow",
     fillOpacity: 1,
     strokeWeight: 2,
     rotation: 0,
@@ -341,6 +351,67 @@ export function Inspection({ id }) {
                         </div>
                     </div>
 
+                    <div className="flex flex-col bg-[#0a4303] mt-3 p-2 rounded-md">
+                        <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                            {zones.length > 0 && (
+                                <LoadScript
+                                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                    libraries={['drawing']}
+                                >
+                                    <GoogleMap
+                                        mapContainerStyle={containerMapStyle}
+                                        center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
+                                        zoom={16}
+                                        mapTypeId="hybrid"
+                                    >
+                                        {zones.map((item, index) => (
+                                            <>
+                                                <PolylineItemZone
+                                                    data={item.path}
+                                                    index={index}
+                                                />
+
+                                                {item.analiseSolo.map((analise, index) => (
+                                                    <Marker
+                                                        position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                                                        icon={markerSolo}
+                                                    />
+                                                ))}
+
+                                                {item.arvores.sampling1.trees.map(tree => (
+                                                    <Marker
+                                                        position={{ lat: tree.lat, lng: tree.lng }}
+                                                        icon={markerTree}
+                                                    />
+                                                ))}
+
+                                                {biodiversitySoil.map(bioSoil => (
+                                                    <Marker
+                                                        position={{ lat: bioSoil?.coord?.lat, lng: bioSoil?.coord?.lng }}
+                                                        icon={markerBioSoil}
+                                                    />
+                                                ))}
+                                            </>
+                                        ))}
+                                    </GoogleMap>
+                                </LoadScript>
+                            )}
+                        </div>
+
+                        <div className="flex items-center gap-1 mt-1">
+                            <FaMapMarker color='blue' size={20} />
+                            <p className="text-white text-xs">Análises de solo</p>
+                        </div>
+                        <div className="flex items-center gap-1 mt-1">
+                            <FaMapMarker color='green' size={20} />
+                            <p className="text-white text-xs">Plantas registradas</p>
+                        </div>
+                        <div className="flex items-center gap-1 mt-1">
+                            <FaMapMarker color='yellow' size={20} />
+                            <p className="text-white text-xs">Biodiversidade no solo</p>
+                        </div>
+                    </div>
+
                     {inspectionDataApi?.urlVideo && inspectionDataApi?.propertyPhotos && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
                             <p className="text-white font-bold text-lg">Imagens da propriedade</p>
@@ -369,8 +440,8 @@ export function Inspection({ id }) {
                                     ) : (
                                         <div className="flex gap-3 overflow-auto mt-3">
                                             {imagesProperty.map(item => (
-                                                <button 
-                                                    key={item} 
+                                                <button
+                                                    key={item}
                                                     className="w-[250px] h-[300px]"
                                                     onClick={() => {
                                                         setImageSelected(item.photo);
@@ -402,9 +473,9 @@ export function Inspection({ id }) {
                         ) : (
                             <div className="flex gap-3 overflow-auto">
                                 {biodiversity.map(item => (
-                                    <button 
-                                        key={item} 
-                                        className="w-[250px] h-[300px]" 
+                                    <button
+                                        key={item}
+                                        className="w-[250px] h-[300px]"
                                         onClick={() => {
                                             setImageSelected(item);
                                             setViewImage(true);
@@ -419,30 +490,62 @@ export function Inspection({ id }) {
                         )}
 
                         <p className="text-white mt-3">Solo</p>
-
                         {loadingBiodiversitySoil ? (
                             <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                 <ActivityIndicator size={50} />
                                 <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                             </div>
                         ) : (
-                            <div className="flex gap-3 overflow-auto">
-                                {biodiversitySoil.map(item => (
-                                    <button 
-                                        key={item} 
-                                        className="w-[250px] h-[300px]"
-                                        onClick={() => {
-                                            setImageSelected(item.photo);
-                                            setViewImage(true);
-                                        }}
-                                    >
-                                        <ImageItem
-                                            src={item}
-                                            type='biodiversity-soil'
-                                        />
-                                    </button>
-                                ))}
-                            </div>
+                            <>
+                                <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                    {biodiversitySoil.length > 0 && (
+                                        <LoadScript
+                                            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                                            libraries={['drawing']}
+                                        >
+                                            <GoogleMap
+                                                mapContainerStyle={containerMapStyle}
+                                                center={{ lat: biodiversitySoil[0]?.coord?.lat, lng: biodiversitySoil[0]?.coord?.lng }}
+                                                zoom={16}
+                                                mapTypeId="hybrid"
+                                            >
+                                                {zones.map((item, index) => (
+                                                    <>
+                                                        {biodiversitySoil.map(bioSoil => (
+                                                            <Marker
+                                                                position={{ lat: bioSoil?.coord?.lat, lng: bioSoil?.coord?.lng }}
+                                                                icon={markerBioSoil}
+                                                            />
+                                                        ))}
+                                                    </>
+                                                ))}
+                                            </GoogleMap>
+                                        </LoadScript>
+                                    )}
+                                </div>
+                                <div className="flex items-center gap-1 mt-1 mb-3">
+                                    <FaMapMarker color='yellow' size={20} />
+                                    <p className="text-white text-xs">Localização da coleta</p>
+                                </div>
+
+                                <div className="flex gap-3 overflow-auto">
+                                    {biodiversitySoil.map(item => (
+                                        <button
+                                            key={item}
+                                            className="w-[250px] h-[300px]"
+                                            onClick={() => {
+                                                setImageSelected(item.photo);
+                                                setViewImage(true);
+                                            }}
+                                        >
+                                            <ImageItem
+                                                src={item}
+                                                type='biodiversity-soil'
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
                         )}
                     </div>
 
@@ -469,22 +572,6 @@ export function Inspection({ id }) {
                                                             data={item.path}
                                                             index={index}
                                                         />
-
-                                                        {item.analiseSolo.map((analise, index) => (
-                                                            <Marker
-                                                                position={{lat: analise?.coord?.lat, lng: analise?.coord?.lng}}
-                                                                title={`Análise Solo #${index + 1}`}
-                                                                label={`Análise Solo #${index + 1}`}
-                                                                icon={markerSolo}
-                                                            />
-                                                        ))}
-
-                                                        {item.arvores.sampling1.trees.map(tree => (
-                                                            <Marker
-                                                                position={{lat: tree.lat, lng: tree.lng}}
-                                                                icon={markerTree}
-                                                            />
-                                                        ))}
                                                     </>
                                                 ))}
 
@@ -553,17 +640,20 @@ export function Inspection({ id }) {
                         </div>
                     )}
                 </>
-            )}
+            )
+            }
 
-            {viewImage && (
-                <ViewImage
-                    close={() => {
-                        setViewImage(false);
-                        setImageSelected('');
-                    }}
-                    uri={imageSelected}
-                />
-            )}
-        </div>
+            {
+                viewImage && (
+                    <ViewImage
+                        close={() => {
+                            setViewImage(false);
+                            setImageSelected('');
+                        }}
+                        uri={imageSelected}
+                    />
+                )
+            }
+        </div >
     )
 }
