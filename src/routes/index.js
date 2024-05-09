@@ -41,6 +41,7 @@ import { ValidationCenter } from "../pages/Centers/ValidationCenter";
 import { ImpactCalculator } from "../pages/ImpactCalculator";
 import { MethodSintrop } from "../pages/Methods/Sintrop";
 import { ActivistCenter } from "../pages/Centers/ActivistCenter";
+import { Researche } from "../pages/Researche";
 
 export default function Router(){
     return(
@@ -74,6 +75,7 @@ export default function Router(){
                 <Route exact path="/activist-center" element={<ActivistCenter/>}/>
                 <Route exact path="/impact-calculator" element={<ImpactCalculator/>}/>
                 <Route exact path="/methods/sintrop" element={<MethodSintrop/>}/>
+                <Route exact path="/researche/:id" element={<Researche/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
