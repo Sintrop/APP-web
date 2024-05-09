@@ -497,7 +497,7 @@ export function Inspection({ id }) {
                             </div>
                         ) : (
                             <>
-                                <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                                     {biodiversitySoil.length > 0 && (
                                         <LoadScript
                                             googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
@@ -526,7 +526,7 @@ export function Inspection({ id }) {
                                 <div className="flex items-center gap-1 mt-1 mb-3">
                                     <FaMapMarker color='yellow' size={20} />
                                     <p className="text-white text-xs">Localização da coleta</p>
-                                </div>
+                                </div> */}
 
                                 <div className="flex gap-3 overflow-auto">
                                     {biodiversitySoil.map(item => (

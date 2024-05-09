@@ -9,6 +9,7 @@ import CryptoJS from "crypto-js";
 import { api } from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
+import {addDays, compareAsc} from "date-fns";
 
 export const MainContext = createContext({});
 
@@ -65,6 +66,7 @@ export default function MainProvider({ children }) {
     useEffect(() => {
         getEraInfo();
         getImpact();
+        checkUserConnected();
     }, []);
 
     useEffect(() => {
@@ -73,6 +75,25 @@ export default function MainProvider({ children }) {
             setNextEra(next);
         }, 13500);
     }, [nextEra]);
+
+    async function checkUserConnected() {
+        const response = localStorage.getItem('user_connected');
+
+        if (response) {
+            const data = JSON.parse(response);
+            const expireToken = addDays(data?.createdAt, 7)
+
+            if (compareAsc(data?.createdAt, expireToken) === 1) {
+                localStorage.removeItem('user_connected');
+                return;
+            }
+
+            api.defaults.headers.common['Authorization'] = `Bearer ${data?.token}`;
+            getUserDataApi(data?.wallet);
+            setWalletConnected(data?.wallet);
+            setConnectionType(data?.connection);
+        }
+    }
 
     async function getEraInfo() {
         const response = await api.get('/web3/era-info');
@@ -134,13 +155,14 @@ export default function MainProvider({ children }) {
                     getUserDataApi(wallet.address[0]);
                     setWalletConnected(String(wallet.address[0]).toLowerCase());
                     setConnectionType('provider');
+                    storageUser(response.data, wallet.address[0], 'provider');
                 }
                 return {
                     status: 'connected',
                     wallet: wallet.address[0]
                 }
             } catch (err) {
-                if(err?.response.data.message === 'User not found'){
+                if (err?.response.data.message === 'User not found') {
                     setWalletConnected(String(wallet.address[0]).toLowerCase());
                     setUserData({
                         id: 'anonimous',
@@ -165,8 +187,9 @@ export default function MainProvider({ children }) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
                 getUserDataApi(wallet);
                 setWalletConnected(String(wallet).toLowerCase());
+                setConnectionType('notprovider');
+                storageUser(response.data, String(wallet).toLowerCase(), 'notprovider');
             }
-            setConnectionType('notprovider')
             return true;
         } catch (err) {
             if (err.response?.data?.message === 'User not found') {
@@ -184,6 +207,17 @@ export default function MainProvider({ children }) {
                 return false;
             }
         }
+    }
+
+    async function storageUser(token, wallet, connection) {
+        const data = {
+            token,
+            wallet,
+            connection,
+            createdAt: new Date()
+        }
+
+        localStorage.setItem('user_connected', JSON.stringify(data));
     }
 
     async function getBalanceUser(typeUser, wallet) {
@@ -384,6 +418,7 @@ export default function MainProvider({ children }) {
         setWalletConnected('');
         setUserData(null);
         setBlockchainData({});
+        localStorage.removeItem('user_connected');
     }
 
     return (

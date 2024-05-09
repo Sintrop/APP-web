@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { getImage } from "../../../services/getImage";
 import { useNavigate } from "react-router";
+import { FaFileAlt, FaShare } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 
 export function ResearcheItem({ data }) {
     const navigate = useNavigate();
@@ -51,16 +53,32 @@ export function ResearcheItem({ data }) {
             <h3 className="font-bold text-white">#{data?.id} - {data?.title}</h3>
             <p className="text-white text-sm">{data?.thesis}</p>
 
-            <a
-                href={`https://${window.location.host}/view-pdf/${data?.file}`}
-                target="_blank"
-            >
-                <button
-                    className="px-2 py-1 rounded-md font-bold text-white bg-blue-500 mt-5 w-fit"
+            <div className="flex items-center gap-5 border-t border-green-950 w-full mt-4 pt-3">
+                <a
+                    href={`https://ipfs.io/ipfs/${data?.file}`}
+                    target="_blank"
                 >
-                    Ver PDF
+                    <button
+                        className="flex flex-col items-center gap-1 font-bold text-white text-sm"
+                    >
+                        <FaFileAlt size={20} color='white'/>
+                        Ver PDF
+                    </button>
+                </a>
+
+                <button
+                    className="flex flex-col items-center"
+                    onClick={() => {
+                        navigator.clipboard.writeText(`https://app.sintrop.com/researche/${data?.id}`);
+                        toast.success('Link copiado para área de transferência.')
+                    }}
+                >
+                    <FaShare color='white' size={20} />
+                    <p className="text-white font-bold text-sm">Compartilhar</p>
                 </button>
-            </a>
+            </div>
+            
+            <ToastContainer/>
         </div>
     )
 }
