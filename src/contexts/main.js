@@ -418,6 +418,7 @@ export default function MainProvider({ children }) {
         setWalletConnected('');
         setUserData(null);
         setBlockchainData({});
+        localStorage.removeItem('user_connected');
     }
 
     return (
