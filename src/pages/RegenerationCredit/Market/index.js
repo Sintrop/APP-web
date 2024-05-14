@@ -4,20 +4,34 @@ import { FaChevronRight } from "react-icons/fa";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../../components/TopBar";
+import { api } from "../../../services/api";
+import { OfferItem } from "./components/OfferItem";
+import { Chat } from '../../../components/Chat';
+import { ModalCreateOffer } from "./components/ModalCreateOffer";
 
 export function Market() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [offers, setOffers] = useState([]);
+    const [modalCreateOffer, setModalCreateOffer] = useState(false);
+
+    useEffect(() => {
+        getOffers();
+    }, []);
+
+    async function getOffers() {
+        setLoading(true);
+        const response = await api.get('/offers');
+        setOffers(response.data.offers);
+        setLoading(false);
+    }
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
-            <TopBar/>
+            <TopBar />
             <Header />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
-                {loading && (
-                    <ActivityIndicator size={60}/>
-                )}
                 <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0">
                     <p className="font-bold text-white text-lg mt-3">Comprar</p>
                     <div className="flex flex-wrap justify-center gap-3">
@@ -46,8 +60,29 @@ export function Market() {
                         </div>
                     </div>
 
+                    <div className="flex items-center justify-between w-full mt-5">
+                        <p className="font-bold text-white text-lg">Ofertas</p>
+
+                        <button
+                            className="bg-blue-500 rounded-md text-white font-semibold px-5 py-1"
+                            onClick={() => setModalCreateOffer(true)}
+                        >
+                            Criar oferta
+                        </button>
+                    </div>
+                    {loading && (
+                        <ActivityIndicator size={60} />
+                    )}
+                    <div className="flex flex-wrap gap-3">
+                        {offers.map(item => (
+                            <OfferItem
+                                data={item}
+                                attOffers={getOffers}
+                            />
+                        ))}
+                    </div>
                     <p className="font-bold text-white text-lg mt-3">Vender</p>
-                    <a 
+                    <a
                         className="flex items-center justify-between gap-2 px-2 py-3 bg-white rounded-md w-full"
                         href="https://app.uniswap.org/"
                         target="_blank"
@@ -60,7 +95,7 @@ export function Market() {
                         <FaChevronRight size={20} color='black' />
                     </a>
 
-                    <a 
+                    <a
                         className="flex items-center justify-between gap-2 px-2 py-3 bg-white rounded-md w-full mt-3"
                         href="https://conta.mercadobitcoin.com.br/cadastro?mgm_token=0d304a9086d7032fe736027f74013a2ab815933c7df44cc08f8b7aa3a81d4d05&utm_campaign=mgm&utm_source=web&utm_medium=link-copy"
                         target="_blank"
@@ -74,6 +109,20 @@ export function Market() {
                     </a>
                 </div>
             </div>
+
+            <div className="hidden lg:flex">
+                <Chat />
+            </div>
+
+            {modalCreateOffer && (
+                <ModalCreateOffer
+                    close={() => setModalCreateOffer(false)}
+                    offerCreated={() => {
+                        setModalCreateOffer(false);
+                        getOffers();
+                    }}
+                />
+            )}
         </div>
     )
 }
