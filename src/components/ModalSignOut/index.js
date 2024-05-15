@@ -11,7 +11,7 @@ import { Info } from "../Info";
 import { useMainContext } from "../../hooks/useMainContext";
 
 export function ModalSignOut({ close }) {
-    const {walletConnected, Sync, loginWithWalletAndPassword} = useMainContext();
+    const { walletConnected, Sync, loginWithWalletAndPassword } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -38,7 +38,7 @@ export function ModalSignOut({ close }) {
     }, [password, confirmPass]);
 
     useEffect(() => {
-        if(walletConnected !== ''){
+        if (walletConnected !== '') {
             setWallet(walletConnected)
         }
     }, [walletConnected]);
@@ -191,17 +191,17 @@ export function ModalSignOut({ close }) {
         return
     }
 
-    async function handleSyncWallet(){
-        if(loading){
+    async function handleSyncWallet() {
+        if (loading) {
             return;
         }
-        
+
         if (!window.ethereum) {
             toast.error('Você não tem um provedor ethereum em seu navegador!');
             return;
         }
         setLoading(true);
-        
+
         const response = await Sync();
 
         setLoading(false);
@@ -233,39 +233,35 @@ export function ModalSignOut({ close }) {
                                 Veja aqui como criar
                             </a>
 
-                            <div className="flex flex-col w-full mt-3">
-                                <label className="font-semibold text-sm text-blue-500">Wallet:</label>
-                                <input
-                                    placeholder="Digite aqui sua wallet"
-                                    className="rounded-md p-2 bg-green-950 text-white"
-                                    value={wallet}
-                                    onChange={(e) => setWallet(e.target.value)}
-                                />
-                            </div>
-
-                            {walletConnected === '' && (
-                                <>
-                                    {window.ethereum && (
-                                        <>
-                                            <p className="font-semibold text-white text-center">Ou</p>
-
-                                            <button
-                                                className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
-                                                onClick={handleSyncWallet}
-                                            >
-                                                {loading ? (
-                                                    <ActivityIndicator
-                                                        size={25}
-                                                    />
-                                                ) : 'Sincronize sua wallet'}
-                                            </button>
-                                        </>
-                                    )}
-                                
-                                </>
+                            {!window.ethereum && (
+                                <div className="flex flex-col w-full mt-3">
+                                    <label className="font-semibold text-sm text-blue-500">Wallet:</label>
+                                    <input
+                                        placeholder="Digite aqui sua wallet"
+                                        className="rounded-md p-2 bg-green-950 text-white"
+                                        value={wallet}
+                                        onChange={(e) => setWallet(e.target.value)}
+                                    />
+                                </div>
                             )}
 
 
+                            {window.ethereum && (
+                                <>
+                                    <p className="font-semibold text-white text-center mt-5">{walletConnected}</p>
+
+                                    <button
+                                        className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
+                                        onClick={handleSyncWallet}
+                                    >
+                                        {loading ? (
+                                            <ActivityIndicator
+                                                size={25}
+                                            />
+                                        ) : 'Sincronize sua wallet'}
+                                    </button>
+                                </>
+                            )}
                         </>
                     )}
 

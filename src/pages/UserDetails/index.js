@@ -163,35 +163,30 @@ export function UserDetails() {
             <div className="flex flex-col items-center w-full pt-10 px-1 lg:px-0 lg:pt-32 overflow-auto">
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 mb-20">
                     {loading ? (
-                        <div className="flex justify-center">
+                        <div className="flex justify-center mt-10">
                             <ActivityIndicator size={60} />
                         </div>
                     ) : (
                         <>
                             {userData && (
                                 <>
-                                    <p className="font-bold text-white">Perfil do usuário</p>
                                     <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
+                                        <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
+                                            {userData?.bannerUrl && (
+                                                <img
+                                                    src={userData?.bannerUrl}
+                                                    className="w-full h-full object-cover rounded-t-md"
+                                                />
+                                            )}
+                                        </div>
                                         <div className="flex flex-col bg-green-950 p-3 rounded">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-20 h-20 rounded-full bg-gray-400">
-                                                    {imageProfile && (
-                                                        <img
-                                                            src={imageProfile}
-                                                            className="w-20 h-20 rounded-full object-cover"
-                                                        />
-                                                    )}
-                                                </div>
-
-                                                <div className="flex flex-col items-center lg:ml-10 ml-2">
-                                                    <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white text-sm">Seguidores</p>
-                                                </div>
-
-                                                <div className="flex flex-col items-center">
-                                                    <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white text-sm">Seguindo</p>
-                                                </div>
+                                            <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-[-90px]">
+                                                {imageProfile && (
+                                                    <img
+                                                        src={imageProfile}
+                                                        className="rounded-full object-cover"
+                                                    />
+                                                )}
                                             </div>
 
                                             <p className="font-bold text-white mt-3 text-sm lg:text-base">{userData?.name}</p>

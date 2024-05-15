@@ -7,7 +7,7 @@ import { ActivityIndicator } from '../ActivityIndicator';
 import io from 'socket.io-client';
 import { ChatItem } from './components/ChatItem';
 
-export function Chat(){
+export function Chat({openChat}){
     const {walletConnected, userData} = useMainContext();
     const [open, setOpen] = useState(false);
     const [chats, setChats] = useState([]);
@@ -15,6 +15,12 @@ export function Chat(){
     const [loadingCreate, setLoadingCreate] = useState(false);
     const [modalNewChat, setModalNewChat] = useState(false);
     const [socket, setSocket] = useState(null);
+
+    useEffect(() => {
+        if(openChat){
+            setOpen(true)
+        }
+    }, [openChat])
 
     useEffect(() => {
         if (!socket) return;
