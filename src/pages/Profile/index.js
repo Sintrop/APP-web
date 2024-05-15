@@ -5,12 +5,12 @@ import { useMainContext } from "../../hooks/useMainContext";
 import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode } from "react-icons/fa";
 import { getImage } from "../../services/getImage";
 import { TopBar } from '../../components/TopBar';
-import {ProducerCertificate} from '../../components/Certificates/ProducerCertificate';
-import {ContributeCertificate} from '../../components/Certificates/ContributeCertificate';
+import { ProducerCertificate } from '../../components/Certificates/ProducerCertificate';
+import { ContributeCertificate } from '../../components/Certificates/ContributeCertificate';
 import { format } from "date-fns";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MdLogout } from "react-icons/md";
-import {ModalLogout} from '../Home/components/ModalLogout';
+import { ModalLogout } from '../Home/components/ModalLogout';
 import { Item } from "../ImpactCalculator/components/Item";
 
 export function Profile() {
@@ -77,26 +77,22 @@ export function Profile() {
                                 <>
                                     <p className="font-bold text-white">Seu perfil</p>
                                     <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
+                                        <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
+                                            {userData?.bannerUrl && (
+                                                <img
+                                                    src={userData?.bannerUrl}
+                                                    className="w-full h-full object-cover rounded-t-md"
+                                                />
+                                            )}
+                                        </div>
                                         <div className="flex flex-col bg-green-950 p-3 rounded">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-20 h-20 rounded-full bg-gray-400">
-                                                    {imageProfile && (
-                                                        <img
-                                                            src={imageProfile}
-                                                            className="w-20 h-20 rounded-full object-cover"
-                                                        />
-                                                    )}
-                                                </div>
-
-                                                <div className="flex flex-col items-center ml-4 lg:ml-10">
-                                                    <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white text-xs lg:text-base">Seguidores</p>
-                                                </div>
-
-                                                <div className="flex flex-col items-center">
-                                                    <p className="font-bold text-white">0</p>
-                                                    <p className=" text-white text-xs lg:text-base">Seguindo</p>
-                                                </div>
+                                            <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-[-90px]">
+                                                {imageProfile && (
+                                                    <img
+                                                        src={imageProfile}
+                                                        className="rounded-full object-cover"
+                                                    />
+                                                )}
                                             </div>
 
                                             <p className="font-bold text-white mt-3">{userData?.name}</p>
@@ -119,7 +115,7 @@ export function Profile() {
                                                     className="flex items-center gap-2 text-[#ff0000] font-semibold text-sm"
                                                     onClick={() => setModalLogout(true)}
                                                 >
-                                                    <MdLogout size={20} color='#ff0000'/>
+                                                    <MdLogout size={20} color='#ff0000' />
                                                     Desconectar
                                                 </button>
                                             </div>
@@ -347,7 +343,7 @@ export function Profile() {
                                 </>
                             ) : (
                                 <>
-                                <p className="font-bold text-white text-center">Você não está conectado</p>
+                                    <p className="font-bold text-white text-center">Você não está conectado</p>
                                 </>
                             )}
                         </>

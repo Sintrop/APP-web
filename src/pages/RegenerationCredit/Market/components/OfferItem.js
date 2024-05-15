@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
 
-export function OfferItem({ data, attOffers }) {
+export function OfferItem({ data, attOffers, buy }) {
     const {userData: user, walletConnected} = useMainContext();
     const [userData, setUserData] = useState(null);
     const [imageProfile, setImageProfile] = useState(null);
@@ -75,6 +75,7 @@ export function OfferItem({ data, attOffers }) {
                     photos: JSON.stringify(hashPhotos)
                 })
                 toast.success('Foi enviada uma mensagem para o comprador, acesse seu chat!');
+                buy(chatId);
             } catch (err) {
                 console.log(err)
                 toast.error('Algo deu errado, tente novamente!');
@@ -102,6 +103,7 @@ export function OfferItem({ data, attOffers }) {
                     photos: JSON.stringify(hashPhotos)
                 });
                 toast.success('Foi enviada uma mensagem para o comprador, acesse seu chat!');
+                buy(response.data.chat.id);
                 //await socket.emit('message', { message: encrypt.toString(), chatId, userId: user.id });
             } catch (err) {
                 console.log(err);

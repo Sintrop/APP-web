@@ -222,7 +222,8 @@ export function Pools({ }) {
                             origin: 'platform',
                             additionalData: JSON.stringify({
                                 userData,
-                                transactionHash: res.hashTransaction
+                                transactionHash: res.hashTransaction,
+                                hash: res.hashTransaction
                             }),
                         });
                         toast.success('Saque realizado com sucesso!');
@@ -267,7 +268,8 @@ export function Pools({ }) {
                             origin: 'platform',
                             additionalData: JSON.stringify({
                                 userData,
-                                transactionHash: res.hashTransaction
+                                transactionHash: res.hashTransaction,
+                                hash: res.hashTransaction
                             }),
                         });
                         toast.success('Saque realizado com sucesso!');
@@ -312,7 +314,8 @@ export function Pools({ }) {
                             origin: 'platform',
                             additionalData: JSON.stringify({
                                 userData,
-                                transactionHash: res.hashTransaction
+                                transactionHash: res.hashTransaction,
+                                hash: res.hashTransaction
                             }),
                         });
                         toast.success('Saque realizado com sucesso!');
@@ -357,7 +360,8 @@ export function Pools({ }) {
                             origin: 'platform',
                             additionalData: JSON.stringify({
                                 userData,
-                                transactionHash: res.hashTransaction
+                                transactionHash: res.hashTransaction,
+                                hash: res.hashTransaction
                             }),
                         });
                         toast.success('Saque realizado com sucesso!');
