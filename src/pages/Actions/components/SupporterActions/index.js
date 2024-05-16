@@ -46,7 +46,16 @@ export function SupporterActions() {
                 });
 
                 if (res.type === 'success') {
-                    
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'invite-wallet',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            hash: res.hashTransaction,
+                            walletInvited: wallet,
+                            userType: 7,
+                        }),
+                    });
                 }
                 setLoadingTransaction(false);
             })
