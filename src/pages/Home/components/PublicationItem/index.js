@@ -25,6 +25,7 @@ import { ModalLikes } from "../ModalLikes";
 import { ModalComments } from "../ModalComments";
 import { PublishResearche } from "./PublishResearche";
 import { ProofReduce } from "./ProofReduce";
+import { InviteWalletPubli } from "./InviteWalletPubli";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -203,6 +204,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'proof-reduce' && (
                     <ProofReduce data={data} />
+                )}
+
+                {data.type === 'invite-wallet' && (
+                    <InviteWalletPubli data={data} />
                 )}
             </div>
             
