@@ -18,7 +18,7 @@ export function InviteWalletPubli({data}){
                     {additionalData?.userType === 7 && ' Apoiador(a) '}
                     {additionalData?.userType === 8 && ' Validador(a) '}
                 </span>
-                no Sistema Descentralizado de Regeneração da Natureza
+                no Sistema Descentralizado de Regeneração da Natureza e receberá 1% de comissão sobre as contribuições realizadas
             </p>
         </div>
     )
