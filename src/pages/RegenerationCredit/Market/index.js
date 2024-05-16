@@ -8,8 +8,11 @@ import { api } from "../../../services/api";
 import { OfferItem } from "./components/OfferItem";
 import { Chat } from '../../../components/Chat';
 import { ModalCreateOffer } from "./components/ModalCreateOffer";
+import { useMainContext } from "../../../hooks/useMainContext";
+import { ToastContainer, toast } from "react-toastify";
 
 export function Market() {
+    const {walletConnected, userData} = useMainContext();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [offers, setOffers] = useState([]);
@@ -66,13 +69,33 @@ export function Market() {
 
                         <button
                             className="bg-blue-500 rounded-md text-white font-semibold px-5 py-1 w-fit"
-                            onClick={() => setModalCreateOffer(true)}
+                            onClick={() => {
+                                if(walletConnected === ''){
+                                    toast.error('Você não está conectado!')
+                                    return;
+                                }
+                                if(userData?.accountStatus !== 'blockchain'){
+                                    toast.error('Você precisa estar cadastrado no sistema!')
+                                    return;
+                                }
+                                if(userData?.userType === 7){
+                                    toast.error('Um apoiador não pode criar oferta de venda!')
+                                    return;
+                                }
+                                setModalCreateOffer(true)
+                            }}
                         >
                             Criar oferta
                         </button>
                     </div>
-                    {loading && (
+                    {loading ? (
                         <ActivityIndicator size={60} />
+                    ) : (
+                        <>
+                            {offers.length === 0 && (
+                                <p className="text-white text-center my-5 w-full">Nenhuma oferta no momento!</p>
+                            )}
+                        </>
                     )}
                     <div className="flex flex-wrap gap-3">
                         {offers.map(item => (
@@ -127,6 +150,8 @@ export function Market() {
                     }}
                 />
             )}
+
+            <ToastContainer/>
         </div>
     )
 }

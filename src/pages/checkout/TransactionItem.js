@@ -2928,6 +2928,18 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 });
 
                 if (res.type === 'success') {
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'invite-wallet',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            hash: res.hashTransaction,
+                            walletInvited: additionalData?.userWallet,
+                            userType: Number(additionalData?.userType),
+                            userData
+                        }),
+                    });
+
                     api.put('/transactions-open/finish', { id: transaction.id });
                     attTransactions();
                 }

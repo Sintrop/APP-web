@@ -87,11 +87,27 @@ export function Profile() {
                                         </div>
                                         <div className="flex flex-col bg-green-950 p-3 rounded">
                                             <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-[-90px]">
-                                                {imageProfile && (
+                                                {imageProfile ? (
                                                     <img
                                                         src={imageProfile}
                                                         className="rounded-full object-cover"
                                                     />
+                                                ) : (
+                                                    <>
+                                                        {userData?.userType === 7 && (
+                                                            <img
+                                                                src={require('../../assets/icon-validator.png')}
+                                                                className="rounded-full object-cover w-full h-full"
+                                                            />
+                                                        )}
+
+                                                        {userData?.userType === 8 && (
+                                                            <img
+                                                                src={require('../../assets/icon-validator.png')}
+                                                                className="rounded-full object-cover w-full h-full"
+                                                            />
+                                                        )}
+                                                    </>
                                                 )}
                                             </div>
 

@@ -7,28 +7,55 @@ import { useMainContext } from '../../hooks/useMainContext';
 import { useNavigate } from 'react-router-dom';
 import { TopBar } from "../../components/TopBar";
 import { Info } from "../../components/Info";
+import { BurnTokens as BurnRCSupporter } from "../../services/supporterService";
+import { BurnTokens } from "../../services/sacTokenService";
+import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
+import { LoadingTransaction } from "../../components/LoadingTransaction";
+import { ActivityIndicator } from "../../components/ActivityIndicator";
+import * as Dialog from '@radix-ui/react-dialog';
 
 export function ImpactCalculator() {
     const navigate = useNavigate();
-    const { setItemsCalculator, setTokensToContribute, userData, getUserDataApi } = useMainContext();
+    const { setItemsCalculator, setTokensToContribute, userData, getUserDataApi, walletConnected, connectionType } = useMainContext();
     const [items, setItems] = useState([]);
     const [myList, setMyList] = useState([]);
     const [impact, setImpact] = useState({});
     const [impactToken, setImpactToken] = useState({});
-    const [itemsToReduce, setItemsToReduce] = useState([])
+    const [itemsToReduce, setItemsToReduce] = useState([]);
+    const [balanceData, setBalanceData] = useState({});
+    const [maxAmmount, setMaxAmmount] = useState(false);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const razaoTokenCompensar = ((impact?.carbon * 1000) / (Number(impactToken.carbon) * 1000).toFixed(1)).toFixed(0) * -1
 
     useEffect(() => {
         getItems();
         getImpactToken();
-    }, []);
+        if (walletConnected !== '')getBalance();
+    }, [walletConnected]); 
 
     useEffect(() => {
         if(userData?.itemsToReduce){
             setItemsToReduce(JSON.parse(userData?.itemsToReduce));
         }
     }, [userData]);
+
+    useEffect(() => {
+        if (Number(razaoTokenCompensar) > Number(balanceData?.balance)) {
+            setMaxAmmount(true);
+        } else {
+            setMaxAmmount(false);
+        }
+    }, [razaoTokenCompensar]);
+
+    async function getBalance() {
+        const response = await api.get(`/web3/balance-tokens/${walletConnected}`);
+        setBalanceData(response.data);
+    }
 
     async function getImpactToken() {
         const response = await api.get('/impact-per-token');
@@ -94,6 +121,148 @@ export function ImpactCalculator() {
         }); 
 
         getUserDataApi(userData?.wallet);
+    }
+
+    async function handleContribute() {
+        if(myList.length === 0){
+            toast.error('Compense algum item!')
+            return;
+        }
+        if (walletConnected === '') {
+            toast.error('Você não está conectado!')
+            return
+        }
+
+        if (razaoTokenCompensar === '') {
+            toast.error('Digite um valor para contribuir!')
+            return
+        }
+
+        if (maxAmmount) {
+            toast.error('Saldo insuficiente!')
+            return
+        }
+
+        if (connectionType === 'provider') {
+            contributeBlockchain();
+        } else {
+            createTransaction();
+        }
+    }
+
+    async function contributeBlockchain() {
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        if (userData.userType === 7) {
+            BurnRCSupporter(walletConnected, String(razaoTokenCompensar) + '000000000000000000')
+                .then(res => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        registerTokensApi(razaoTokenCompensar, res.hashTransaction)
+                    }
+
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        } else {
+            BurnTokens(walletConnected, String(razaoTokenCompensar) + '000000000000000000')
+                .then(res => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    });
+
+                    if (res.type === 'success') {
+                        registerTokensApi(razaoTokenCompensar, res.hashTransaction)
+                    }
+
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                })
+        }
+    }
+
+    async function registerTokensApi(tokens, hash) {
+        const addData = {
+            userData,
+            tokens: Number(tokens),
+            transactionHash: hash,
+            reason: '',
+            itens: myList,
+            hash
+        }
+
+        try {
+            await api.post('/tokens-burned', {
+                wallet: walletConnected.toUpperCase(),
+                tokens: Number(tokens),
+                transactionHash: hash,
+                carbon: Number(impactToken?.carbon),
+                water: Number(impactToken?.water),
+                bio: Number(impactToken?.bio),
+                soil: Number(impactToken?.soil)
+            });
+
+            await api.post('/publication/new', {
+                userId: userData?.id,
+                type: 'contribute-tokens',
+                origin: 'platform',
+                additionalData: JSON.stringify(addData),
+            })
+
+            if(myList.length > 0){
+                await api.post('/calculator/items/contribution', {
+                    userId: userData?.id,
+                    items: JSON.stringify(myList)
+                })
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoadingTransaction(false);
+        }
+    }
+
+    async function createTransaction() {
+        try {
+            setLoading(true);
+            await api.post('/transactions-open/create', {
+                wallet: userData?.wallet,
+                type: 'burn-tokens',
+                additionalData: JSON.stringify({
+                    value: Number(razaoTokenCompensar),
+                    reason: '',
+                    itens: myList ? myList : []
+                }),
+            })
+            setCreatedTransaction(true);
+        } catch (err) {
+            if (err.response?.data?.message === 'open transaction of the same type') {
+                toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+            }
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -221,15 +390,26 @@ export function ImpactCalculator() {
                                     </p>
                                 </div>
 
+                                <p className="text-white mt-3">Seu saldo</p>
+                                <div className="flex items-center p-2 rounded-md bg-green-950 gap-3">
+                                    <img
+                                        src={require('../../assets/token.png')}
+                                        className="w-8 h-8 object-contain"
+                                    />
+                                    <p className="text-white font-semibold">
+                                        {Intl.NumberFormat('pt-BR').format(balanceData?.balance)} RC
+                                    </p>
+                                </div>
+
                                 <button
                                     className="text-white font-semibold py-1 mt-2 bg-blue-500 rounded-md"
-                                    onClick={() => {
-                                        setTokensToContribute(razaoTokenCompensar)
-                                        setItemsCalculator(myList);
-                                        navigate('/contribute');
-                                    }}
+                                    onClick={handleContribute}
                                 >
-                                    Contribuir
+                                    {loading ? (
+                                        <ActivityIndicator size={20}/>
+                                    ) : (
+                                        'Contribuir'
+                                    )}
                                 </button>
                             </div>
                         </div>
@@ -264,6 +444,28 @@ export function ImpactCalculator() {
                     </div>
                 </div>
             </div>
+
+            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                if (!loadingTransaction) {
+                    setModalTransaction(open)
+                    setLoading(false);
+                    if (logTransaction.type === 'success') {
+                        toast.success('Contribuição feita com sucesso!');
+                        setMyList([]);
+                    }
+                }
+            }}>
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
+
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => setCreatedTransaction(false)}
+                />
+            )}
 
             <ToastContainer />
         </div>
