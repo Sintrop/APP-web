@@ -54,6 +54,7 @@ export function SupporterActions() {
                             hash: res.hashTransaction,
                             walletInvited: wallet,
                             userType: 7,
+                            userData
                         }),
                     });
                 }

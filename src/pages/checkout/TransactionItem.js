@@ -2936,6 +2936,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             hash: res.hashTransaction,
                             walletInvited: additionalData?.userWallet,
                             userType: Number(additionalData?.userType),
+                            userData
                         }),
                     });
 
