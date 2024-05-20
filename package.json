@@ -26,6 +26,7 @@
     "ipfs-http-client": "^58.0.1",
     "pdfmake": "^0.2.7",
     "react": "^18.1.0",
+    "react-advanced-cropper": "^0.19.6",
     "react-apexcharts": "^1.4.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.1.0",
