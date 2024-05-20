@@ -114,7 +114,7 @@ export function Profile() {
                                             </div>
 
                                             <p className="font-bold text-white mt-3">{userData?.name}</p>
-                                            <p className="text-gray-300">
+                                            <p className="text-gray-300 text-sm">
                                                 {userData?.userType === 1 && 'Produtor(a)'}
                                                 {userData?.userType === 2 && 'Inspetor(a)'}
                                                 {userData?.userType === 3 && 'Pesquisador(a)'}
@@ -124,6 +124,10 @@ export function Profile() {
                                                 {userData?.userType === 7 && 'Apoiador(a)'}
                                                 {userData?.userType === 8 && 'Validador(a)'}
                                             </p>
+
+                                            {userData?.bio && (
+                                                <p className="text-sm text-white">{userData?.bio}</p>
+                                            )}
                                             <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
                                                 <p className="text-white text-xs lg:text-base">Wallet: {walletConnected}</p>
                                             </div>
