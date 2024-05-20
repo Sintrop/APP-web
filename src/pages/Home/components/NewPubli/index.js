@@ -5,6 +5,7 @@ import { api } from "../../../../services/api";
 import {ActivityIndicator} from '../../../../components/ActivityIndicator';
 import { CropImage } from "../../../../components/CropImage";
 import { MdFactCheck, MdOutlinePhoto } from "react-icons/md";
+import { IoIosCloseCircle } from "react-icons/io";
 
 export function NewPubli({attPublis}){
     const {userData} = useMainContext();
@@ -26,7 +27,9 @@ export function NewPubli({attPublis}){
 
         setLoading(true);
         let imagesPubli = [];
-        imagesPubli.push(hashImage);
+        if(image){
+            imagesPubli.push(hashImage);
+        }
 
         // if(images.length > 0){
         //     for(var i = 0; i < images.length; i++){
@@ -48,6 +51,7 @@ export function NewPubli({attPublis}){
                 images: JSON.stringify(imagesPubli),
                 additionalData: JSON.stringify(data)
             });
+            setImage(null);
             setInput('');
             attPublis();
         }catch(err){
@@ -77,10 +81,19 @@ export function NewPubli({attPublis}){
             </div>
 
             {image && (
-                <img
-                    src={image}
-                    className="w-[100px] h-[100px] rounded-md object-cover mt-2"
-                />
+                <div className="flex w-[150px] h-[150px] relative ">
+                    <img
+                        src={image}
+                        className="w-[150px] h-[150px] rounded-md object-cover mt-2"
+                    />
+
+                    <button
+                        className="absolute top-2 right-1"
+                        onClick={() => setImage(null)}
+                    >
+                        <IoIosCloseCircle color='#ddd' size={25}/>
+                    </button>
+                </div>
             )}
 
             <div className="flex gap-2 w-full justify-between mt-2">
