@@ -216,6 +216,11 @@ export function UserDetails() {
                                                 {userData?.userType === 7 && 'Apoiador(a)'}
                                                 {userData?.userType === 8 && 'Validador(a)'}
                                             </p>
+
+                                            {userData?.bio && (
+                                                <p className="text-sm text-white">{userData?.bio}</p>
+                                            )}
+                                            
                                             <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
                                                 <p className="text-white text-xs lg:text-base">Wallet: {wallet}</p>
                                             </div>
