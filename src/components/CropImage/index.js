@@ -7,6 +7,7 @@ import { ActivityIndicator } from "../ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../services/api";
 import { save } from "../../config/infura";
+import axios from "axios";
 
 export function CropImage({ close, file, returnType, returnUri }) {
     const [base64, setBase64] = useState('');
@@ -31,6 +32,10 @@ export function CropImage({ close, file, returnType, returnUri }) {
     }
 
     function handleContinue(){
+        if(base64 === ''){
+            toast.error('Ajuste sua imagem!')
+            return
+        }
         if(loading)return;
 
         if(returnType === 'hash'){
@@ -44,7 +49,7 @@ export function CropImage({ close, file, returnType, returnUri }) {
         setLoading(true);
 
         const res = await fetch(base64);
-        const blob = await res.blob();
+        const blob = await res.blob()
         
         const storageRef = ref(storage, `/images/${parseInt(Math.random() * 13546584654)}`);
         uploadBytesResumable(storageRef, blob)
@@ -126,7 +131,7 @@ export function CropImage({ close, file, returnType, returnUri }) {
                         onClick={handleContinue}
                     >
                         {loading ? (
-                            <ActivityIndicator size={20}/>
+                            <ActivityIndicator size={25}/>
                         ) : (
                             'Continuar'
                         )}
