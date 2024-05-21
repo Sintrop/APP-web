@@ -42,6 +42,7 @@ import { ImpactCalculator } from "../pages/ImpactCalculator";
 import { MethodSintrop } from "../pages/Methods/Sintrop";
 import { ActivistCenter } from "../pages/Centers/ActivistCenter";
 import { Researche } from "../pages/Researche";
+import { ContentDetails } from "../pages/Education/ContentDetails";
 
 export default function Router(){
     return(
@@ -76,6 +77,8 @@ export default function Router(){
                 <Route exact path="/impact-calculator" element={<ImpactCalculator/>}/>
                 <Route exact path="/methods/sintrop" element={<MethodSintrop/>}/>
                 <Route exact path="/researche/:id" element={<Researche/>}/>
+                <Route exact path="/education" element={<Education/>}/>
+                <Route exact path="/content/:id" element={<ContentDetails/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
@@ -87,7 +90,6 @@ export default function Router(){
                 <Route exact path="/register/:walletAddress" element={<Register/>}/>
                 <Route exact path="/checkout" element={<Checkout/>}/>
                 <Route exact path="/view-pdf/:hash" element={<ViewPdf/>}/>
-                <Route exact path="/education" element={<Education/>}/>
             </Routes>
         </BrowserRouter>
     );
