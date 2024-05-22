@@ -43,6 +43,7 @@ import { MethodSintrop } from "../pages/Methods/Sintrop";
 import { ActivistCenter } from "../pages/Centers/ActivistCenter";
 import { Researche } from "../pages/Researche";
 import { ContentDetails } from "../pages/Education/ContentDetails";
+import { Player } from "../pages/Education/Player";
 
 export default function Router(){
     return(
@@ -79,6 +80,7 @@ export default function Router(){
                 <Route exact path="/researche/:id" element={<Researche/>}/>
                 <Route exact path="/education" element={<Education/>}/>
                 <Route exact path="/content/:id" element={<ContentDetails/>}/>
+                <Route exact path="/content/player/:fileServer" element={<Player/>}/>
 
                 <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
