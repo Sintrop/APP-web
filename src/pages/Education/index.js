@@ -3,12 +3,13 @@ import axios from 'axios';
 import { api } from '../../services/api';
 import Loading from '../../components/Loading';
 import { ToastContainer, toast } from 'react-toastify';
-import { get, save } from '../../config/infura';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { FaPlay } from 'react-icons/fa'
 import { ContentItem } from './components/ContentItem';
+import { useNavigate } from 'react-router';
 
 export function Education() {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [contents, setContents] = useState([]);
     const [contentsTrainning, setContentsTranning] = useState([]);
@@ -18,6 +19,7 @@ export function Education() {
     const [mostSeen, setMostSeen] = useState([]);
     const [ebooks, setEbooks] = useState([]);
     const [top10, setTop10] = useState([]);
+    const [loadingPlay, setLoadingPlay] = useState(false);
 
     useEffect(() => {
         getContents();
@@ -39,6 +41,37 @@ export function Education() {
         setEbooks(ebooks);
         setTop10(top10);
         setLoaded(true);
+    }
+
+    async function play() {
+        if (loadingPlay) {
+            return;
+        }
+        if(emphasi.type === 'serie'){
+            navigate(`/content/${emphasi?.id}`);
+            return;
+        }
+
+        if (!emphasi?.fileServer) {
+            return toast.error('Conteúdo indisponível!')
+        }
+        const controller = new AbortController();
+
+        setLoadingPlay(true);
+        axios.get(`http://edevappsserver.ddns.net:5000/teste`, { signal: controller.signal })
+            .then(res => {
+                navigate(`/content/player/${emphasi?.fileServer}`);
+                setLoadingPlay(false);
+                api.put('/content/play', {
+                    contentId: emphasi?.id
+                })
+            })
+            .catch(err => {
+                toast.warn('Serviço de streaming indisponível no momento. Tente novamente mais tarde!')
+                setLoadingPlay(false);
+            })
+
+        setTimeout(() => controller.abort(), 15000)
     }
 
     if (contents.length === 0) {
@@ -68,12 +101,31 @@ export function Education() {
                         <h1 className='font-bold text-white text-7xl'>{emphasi?.title}</h1>
                         <h2 className='font-bold text-white mt-2'>{emphasi?.description}</h2>
 
-                        <button
-                            className='font-bold px-5 h-10 flex items-center justify-center rounded-md bg-white w-fit mt-5 gap-2'
-                        >
-                            <FaPlay color='black' size={20} />
-                            Assistir
-                        </button>
+                        {emphasi.type !== 'ebook' && (
+                            <button
+                                className='font-bold w-32 h-10 flex items-center justify-center rounded-md bg-white mt-5 gap-2'
+                                onClick={play}
+                            >
+                                {loadingPlay ? (
+                                    <ActivityIndicator size={30} />
+                                ) : (
+                                    <>
+                                        <FaPlay color='black' size={20} />
+                                        Assistir
+                                    </>
+                                )}
+                            </button>
+                        )}
+
+                        {emphasi?.type === 'ebook' && (
+                            <a
+                                className='font-bold w-32 h-10 flex items-center justify-center rounded-md bg-white mt-5 gap-2'
+                                href={emphasi?.fileServer}
+                                target="_blank"
+                            >
+                                Ler ebook
+                            </a>
+                        )}
                     </div>
                 </div>
 
