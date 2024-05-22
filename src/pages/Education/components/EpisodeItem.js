@@ -4,8 +4,9 @@ import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { api } from "../../../services/api";
 
-export function EpisodeItem({data}){
+export function EpisodeItem({data, contentData}){
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -22,8 +23,10 @@ export function EpisodeItem({data}){
         axios.get(`http://edevappsserver.ddns.net:5000/teste`, {signal: controller.signal})
         .then(res => {
             navigate(`/content/player/${data?.fileServer}`);
-            //play();
             setLoading(false);
+            api.put('/content/play', {
+                contentId: contentData?.id
+            })
         })
         .catch(err => {
             toast.warn('Serviço de streaming indisponível no momento. Tente novamente mais tarde!')
@@ -53,7 +56,7 @@ export function EpisodeItem({data}){
 
                 <div className="w-[150px]">
                     <p className="font-bold text-white">{data?.numberEp} - {data?.title}</p>
-                    <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[200ch]">{data?.description}</p>
+                    <p className="text-white text-sm text-ellipsis overflow-hidden truncate">{data?.description}</p>
                 </div>
             </div>
 
