@@ -84,7 +84,7 @@ export function UserRankingItem({ data }) {
             </div>
 
             <p
-                className="font-bold text-white text-center hover:underline hover:cursor-pointer overflow-hidden text-ellipsis truncate"
+                className="font-bold text-white text-center hover:underline hover:cursor-pointer overflow-hidden text-ellipsis truncate w-[230px]"
                 onClick={clickUser}
             >
                 {data?.userType === 8 ? 'Validador(a)' : data?.name}
