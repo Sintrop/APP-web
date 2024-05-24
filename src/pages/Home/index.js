@@ -178,15 +178,16 @@ export function Home() {
                                         <p className="text-white text-xs text-center">Calculadora de impacto</p>
                                     </button>
 
-                                    <button
+                                    <a
                                         className="flex flex-col items-center w-16"
-                                        onClick={() => alert('Disponível em breve!')}
+                                        href="https://docs.sintrop.com"
+                                        target="_blank"
                                     >
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <IoMdHelp color='white' size={30} />
                                         </div>
                                         <p className="text-white text-xs text-center">Ajuda</p>
-                                    </button>
+                                    </a>
 
                                     <button
                                         className="flex flex-col items-center w-16"
