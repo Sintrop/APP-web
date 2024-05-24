@@ -108,7 +108,7 @@ export function Home() {
                                             />
                                         </div>
 
-                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline" onClick={() => navigate('/profile')}>{userData?.name}</p>
+                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate" onClick={() => navigate('/profile')}>{userData?.name}</p>
                                         <p className="text-gray-300 text-center text-xs">
                                             {userData?.userType === 1 && 'Produtor(a)'}
                                             {userData?.userType === 2 && 'Inspetor(a)'}
@@ -135,13 +135,15 @@ export function Home() {
                                         ) : (
                                             <div className="flex flex-col mt-2 w-full items-center">
                                                 <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                                    <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                        {userData?.userType === 1 && blockchainData?.producer?.isa?.isaScore}
-                                                        {userData?.userType === 2 && blockchainData?.inspector?.totalInspections}
-                                                        {userData?.userType === 3 && blockchainData?.researcher?.publishedWorks}
-                                                        {userData?.userType === 4 && blockchainData?.developer?.pool?.level}
-                                                        {userData?.userType === 7 && blockchainData?.tokensBurned}
-                                                    </p>
+                                                    {blockchainData && (
+                                                        <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
+                                                            {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
+                                                            {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
+                                                            {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
+                                                            {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
+                                                            {userData?.userType === 7 && parseInt(blockchainData?.tokensBurned)}
+                                                        </p>
+                                                    )}
                                                 </div>
                                                 <p className="text-xs text-gray-200">
                                                     {userData?.userType === 1 && 'Pontuação de regeneração'}
