@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
-import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode } from "react-icons/fa";
+import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaHandHoldingUsd, FaUserCheck } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
@@ -184,7 +184,7 @@ export function UserDetails() {
                                                 {imageProfile ? (
                                                     <img
                                                         src={imageProfile}
-                                                        className="rounded-full object-cover"
+                                                        className="rounded-full object-cover w-full h-full"
                                                     />
                                                 ) : (
                                                     <>
@@ -220,9 +220,31 @@ export function UserDetails() {
                                             {userData?.bio && (
                                                 <p className="text-sm text-white">{userData?.bio}</p>
                                             )}
-                                            
+
                                             <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
                                                 <p className="text-white text-xs lg:text-base">Wallet: {wallet}</p>
+                                            </div>
+
+                                            <div className="flex gap-3 mt-2 ">
+                                                {userData?.userType === 1 && (
+                                                    <a
+                                                        className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#0a4303]"
+                                                        href={`https://app.sintrop.com/producer/${String(userData?.wallet).toLowerCase()}`}
+                                                        target="_blank"
+                                                    >
+                                                        <FaUserCheck color='white' size={20} />
+                                                        Página do produtor
+                                                    </a>
+                                                )}
+
+                                                <a
+                                                    className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#0a4303]"
+                                                    href={`https://app.sintrop.com/supporter/${String(userData?.wallet).toLowerCase()}`}
+                                                    target="_blank"
+                                                >
+                                                    <FaHandHoldingUsd color='white' size={20} />
+                                                    Página do apoiador
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -413,12 +435,6 @@ export function UserDetails() {
                                                         userData={userData}
                                                         blockchainData={blockchainData}
                                                         imageProfile={imageProfile}
-                                                    />
-
-                                                    <ProducerCertificate
-                                                        certificateType='long'
-                                                        userData={userData}
-                                                        blockchainData={blockchainData}
                                                     />
 
                                                     <ProducerCertificate
