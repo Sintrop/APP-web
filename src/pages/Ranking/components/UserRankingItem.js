@@ -9,7 +9,6 @@ export function UserRankingItem({ data }) {
 
     useEffect(() => {
         getImageProfile();
-        console.log(data)
     }, []);
 
     async function getImageProfile() {
