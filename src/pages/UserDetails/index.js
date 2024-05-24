@@ -416,12 +416,6 @@ export function UserDetails() {
                                                     />
 
                                                     <ProducerCertificate
-                                                        certificateType='long'
-                                                        userData={userData}
-                                                        blockchainData={blockchainData}
-                                                    />
-
-                                                    <ProducerCertificate
                                                         certificateType='short'
                                                         userData={userData}
                                                         blockchainData={blockchainData}
