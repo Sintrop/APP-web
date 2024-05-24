@@ -10,7 +10,7 @@ import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 
 const containerMapStyle = {
     width: '100vw',
-    height: '50vh',
+    height: '100%',
 };
 
 const center = {
@@ -95,7 +95,7 @@ export function Community() {
 
             <div className="flex flex-col overflow-scroll" >
                 <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
-                    <div className="flex w-full">
+                    <div className="flex w-full h-[440px]">
                         <LoadScript
                             googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                             libraries={['drawing']}
