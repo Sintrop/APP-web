@@ -11,6 +11,7 @@ import { ModalConnectAccount } from "../../components/ModalConnectAccount";
 import { MdHelpOutline } from "react-icons/md";
 import { SiReadthedocs } from 'react-icons/si';
 import { FaMobile } from 'react-icons/fa';
+import { QRCode } from "react-qrcode-logo";
 
 export function Actions() {
     const { walletConnected, userData, connectionType } = useMainContext();
@@ -65,6 +66,86 @@ export function Actions() {
                         </div>
                     ) : (
                         <div className="w-full flex flex-col">
+                            {userData?.userType === 1 && (
+                                <div className="flex flex-col w-full">
+                                    <p className="font-semibold text-white">As ações do produtor só estão disponíveis em nosso aplicativo mobile</p>
+
+                                    <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
+                                        <div className="flex items-center gap-2">
+                                            <FaMobile color='white' size={25} />
+                                            <p className="font-semibold text-white">Baixe nosso aplicativo</p>
+                                        </div>
+
+                                        <div className="flex mt-5 items-center gap-8">
+                                            <div className="flex flex-col items-center gap-1">
+                                                <QRCode
+                                                    value='https://www.sintrop.com/app'
+                                                    size={120}
+                                                    qrStyle="dots"
+                                                    logoPadding={2}
+                                                    logoPaddingStyle="square"
+                                                    logoWidth={30}
+                                                    removeQrCodeBehindLogo
+                                                    eyeColor='#0a4303'
+                                                />
+
+                                                <p className="text-sm text-gray-300">Leia o QRCode</p>
+                                            </div>
+
+                                            <p className="text-sm text-gray-300">Ou</p>
+
+                                            <a
+                                                className="py-1 px-5 rounded-md text-white font-semibold bg-blue-500"
+                                                href="https://www.sintrop.com/app"
+                                                target="_blank"
+                                            >
+                                                Clique aqui para acessar 
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {userData?.userType === 2 && (
+                                <div className="flex flex-col w-full">
+                                    <p className="font-semibold text-white">As ações do inspetor só estão disponíveis em nosso aplicativo mobile</p>
+
+                                    <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
+                                        <div className="flex items-center gap-2">
+                                            <FaMobile color='white' size={25} />
+                                            <p className="font-semibold text-white">Baixe nosso aplicativo</p>
+                                        </div>
+
+                                        <div className="flex mt-5 items-center gap-8">
+                                            <div className="flex flex-col items-center gap-1">
+                                                <QRCode
+                                                    value='https://www.sintrop.com/app'
+                                                    size={120}
+                                                    qrStyle="dots"
+                                                    logoPadding={2}
+                                                    logoPaddingStyle="square"
+                                                    logoWidth={30}
+                                                    removeQrCodeBehindLogo
+                                                    eyeColor='#0a4303'
+                                                />
+
+                                                <p className="text-sm text-gray-300">Leia o QRCode</p>
+                                            </div>
+
+                                            <p className="text-sm text-gray-300">Ou</p>
+
+                                            <a
+                                                className="py-1 px-5 rounded-md text-white font-semibold bg-blue-500"
+                                                href="https://www.sintrop.com/app"
+                                                target="_blank"
+                                            >
+                                                Clique aqui para acessar 
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {userData?.userType === 4 && (
                                 <DeveloperActions />
                             )}
