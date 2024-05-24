@@ -153,7 +153,7 @@ export function OfferItem({ data, attOffers, buy }) {
                     {imageProfile && (
                         <img
                             src={imageProfile}
-                            className="w-19 h-19 object-cover rounded-full"
+                            className="w-full h-full object-cover rounded-full"
                         />
                     )}
                 </div>
