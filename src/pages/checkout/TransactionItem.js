@@ -789,6 +789,46 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         const propertyData = JSON.stringify(producer);
 
+        const zones = JSON.parse(producerDataApi?.zones);
+        
+        let pointsSortedZones = []; 
+        for(var i = 0; i < zones.length; i++){
+            const pointsToSort = zones[i]?.pointsToSort;
+
+            const sortAnaliseBiomass1 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass2 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass3 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass4 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil1 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil2 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil3 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil4 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseTrees = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseAudio = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+
+            let data = {
+                title: zones[i].title,
+                analiseBiomass1: pointsToSort[sortAnaliseBiomass1],
+                analiseBiomass2: pointsToSort[sortAnaliseBiomass2],
+                analiseBiomass3: pointsToSort[sortAnaliseBiomass3],
+                analiseBiomass4: pointsToSort[sortAnaliseBiomass4],
+                analiseBioSoil1: pointsToSort[sortAnaliseBioSoil1],
+                analiseBioSoil2: pointsToSort[sortAnaliseBioSoil2],
+                analiseBioSoil3: pointsToSort[sortAnaliseBioSoil3],
+                analiseBioSoil4: pointsToSort[sortAnaliseBioSoil4],
+                analiseTree: pointsToSort[sortAnaliseTrees],
+                analiseAudio: pointsToSort[sortAnaliseAudio],
+            }
+
+            pointsSortedZones.push(data);
+        }
+
+        const addData = {
+            coordsToAnalise: pointsSortedZones
+        }
+
+        console.log(addData);
+
         try {
             await api.post('/inspections', {
                 inspectionId: String(additionalData?.inspectionId),
@@ -796,7 +836,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 createdAt: String(additionalData?.createdAtTimestamp),
                 userWallet: String(walletAddress).toUpperCase(),
                 propertyData,
-                zones: producerDataApi?.zones
+                zones: producerDataApi?.zones,
+                additionalData: JSON.stringify(addData),
             })
         } catch (err) {
             console.log(err);
