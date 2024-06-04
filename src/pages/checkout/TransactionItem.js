@@ -789,6 +789,46 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         const propertyData = JSON.stringify(producer);
 
+        const zones = JSON.parse(producerDataApi?.zones);
+        
+        let pointsSortedZones = []; 
+        for(var i = 0; i < zones.length; i++){
+            const pointsToSort = zones[i]?.pointsToSort;
+
+            const sortAnaliseBiomass1 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass2 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass3 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBiomass4 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil1 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil2 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil3 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBioSoil4 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseTrees = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseAudio = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+
+            let data = {
+                title: zones[i].title,
+                analiseBiomass1: pointsToSort[sortAnaliseBiomass1],
+                analiseBiomass2: pointsToSort[sortAnaliseBiomass2],
+                analiseBiomass3: pointsToSort[sortAnaliseBiomass3],
+                analiseBiomass4: pointsToSort[sortAnaliseBiomass4],
+                analiseBioSoil1: pointsToSort[sortAnaliseBioSoil1],
+                analiseBioSoil2: pointsToSort[sortAnaliseBioSoil2],
+                analiseBioSoil3: pointsToSort[sortAnaliseBioSoil3],
+                analiseBioSoil4: pointsToSort[sortAnaliseBioSoil4],
+                analiseTree: pointsToSort[sortAnaliseTrees],
+                analiseAudio: pointsToSort[sortAnaliseAudio],
+            }
+
+            pointsSortedZones.push(data);
+        }
+
+        const addData = {
+            coordsToAnalise: pointsSortedZones
+        }
+
+        console.log(addData);
+
         try {
             await api.post('/inspections', {
                 inspectionId: String(additionalData?.inspectionId),
@@ -796,7 +836,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 createdAt: String(additionalData?.createdAtTimestamp),
                 userWallet: String(walletAddress).toUpperCase(),
                 propertyData,
-                zones: producerDataApi?.zones
+                zones: producerDataApi?.zones,
+                additionalData: JSON.stringify(addData),
             })
         } catch (err) {
             console.log(err);
@@ -1258,7 +1299,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 {
                     ul: bioPictures
                 },
-                
                 {
                     text: `Biodiversidade no solo`,
                     style: 'label'
@@ -1411,7 +1451,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
     }
 
-    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, soilBiodiversity, springs) {
+    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, springs) {
         const indiceAnaliseSolo = indices.filter(item => item.id === '14');
         const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
         const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
@@ -1495,39 +1535,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         ];
         bodyBio.push(rowBio);
 
-        //Calculo de biodiversidade no solo
-        let totalSoilBio = 0;
-        let bodySoilBioPhoto = [];
-        let bodySoilBio = [];
-        for (var s = 0; s < soilBiodiversity.length; s++) {
-            totalSoilBio += Number(soilBiodiversity[s].value);
-
-            let rowSoilBioPhoto = {
-                text: `${soilBiodiversity[s].photo}`,
-                link: `https://${window.location.host}/view-image/${soilBiodiversity[s].photo}`,
-                style: 'link'
-            }
-
-            bodySoilBioPhoto.push(rowSoilBioPhoto);
-        }
-
-        let rowSoilBio = [
-            'Solo',
-            `${totalSoilBio}`,
-            ``,
-            ``
-        ];
-        bodyBio.push(rowSoilBio);
-        const totalBioRegistered = Number(totalSoilBio) + Number(resultBiodiversity.length)
-
-        let rowBioTotal = [
-            'Total',
-            `${totalBioRegistered}`,
-            `${totalBioRegistered} ^ 2`,
-            `${Number(totalBioRegistered ** 2).toFixed(0)} uv`
-        ]
-
-        bodyBio.push(rowBioTotal);
+        
 
         //For para calcular os resultados dos insumos
         for (var i = 0; i < resultCategories.length; i++) {
@@ -1586,6 +1594,12 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let bodyEstimatedTrees = [];
         let rowPhotosZone = [];
 
+        //Variáveis da biodivesidade no solo
+        let totalSoilBio = 0;
+        let bodySoilBioPhoto = [];
+        let bodySoilBio = [];
+        
+
         //For para calcular os resultados das zonas
         for (var i = 0; i < resultZones.length; i++) {
             let volumeTotalSampling1 = 0;
@@ -1597,7 +1611,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const titleZone = resultZones[i].title;
             const pathZone = resultZones[i].path;
             const areaZone = Number(zone.areaZone);
-            const photosZone = resultZones[i].photosZone
+            const photosZone = resultZones[i].photosZone;
+            const bioSoil = resultZones[i].bioSoil;
 
             const treesS1 = zone.arvores?.sampling1?.trees;
             const treesS2 = zone.arvores?.sampling2?.trees;
@@ -1806,7 +1821,38 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 row.push(dataImage);
                 rowPhotosZone.push(row);
             }
+
+            //Cáculo da biodiversidade no solo de cada zona
+            for (var s = 0; s < bioSoil.length; s++) {
+                totalSoilBio += Number(bioSoil[s].value);
+    
+                let rowSoilBioPhoto = {
+                    text: `${bioSoil[s].photo}`,
+                    link: `https://${window.location.host}/view-image/${bioSoil[s].photo}`,
+                    style: 'link'
+                }
+    
+                bodySoilBioPhoto.push(rowSoilBioPhoto);
+            }
         }
+
+        let rowSoilBio = [
+            'Solo',
+            `${totalSoilBio}`,
+            ``,
+            ``
+        ];
+        bodyBio.push(rowSoilBio);
+        const totalBioRegistered = Number(totalSoilBio) + Number(resultBiodiversity.length)
+
+        let rowBioTotal = [
+            'Total',
+            `${totalBioRegistered}`,
+            `${totalBioRegistered} ^ 2`,
+            `${Number(totalBioRegistered ** 2).toFixed(0)} uv`
+        ]
+
+        bodyBio.push(rowBioTotal);
 
         //Verifica e calcula as nascentes
         let totalWaterSprings = 0;
@@ -1905,7 +1951,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const inspection = response?.data?.inspection
         const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
         const resultZones = JSON.parse(response?.data?.inspection?.zones);
-        const soilBiodiversity = JSON.parse(response?.data?.inspection?.soilBiodiversity);
+
         let springs = [];
         if(response?.data?.inspection?.springs){
             const jsonSprings = JSON.parse(response?.data?.inspection?.springs);
@@ -1913,8 +1959,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         //Função que calcula os indices e retorna os dados para o pdf
-        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, soilBiodiversity, springs);
-
+        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, springs);
+    
         await api.put('/update-result', {
             id: String(additionalData?.inspectionId),
             result: JSON.stringify(responseCalculo)
