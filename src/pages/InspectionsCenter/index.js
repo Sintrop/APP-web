@@ -5,6 +5,7 @@ import { api } from "../../services/api";
 import { InspectionItem } from "./components/InspectionItem";
 import { TopBar } from "../../components/TopBar";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { Feedback } from "../../components/Feedback";
 
 export function InspectionsCenter() {
     const [tabSelected, setTabSelected] = useState('history');
@@ -75,6 +76,10 @@ export function InspectionsCenter() {
                         </div>
                     )}  
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

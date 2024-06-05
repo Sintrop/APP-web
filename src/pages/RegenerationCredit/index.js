@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
+import { Feedback } from "../../components/Feedback";
 
 export function RegenerationCredit() {
     const navigate = useNavigate();
@@ -74,6 +75,10 @@ export function RegenerationCredit() {
                         <p className="font-bold text-white text-xl mt-2">Meus tokens</p>
                     </button>
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

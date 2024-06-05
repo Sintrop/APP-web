@@ -3,7 +3,7 @@ import { Header } from "../../components/Header";
 import { api } from "../../services/api";
 import { useParams } from "react-router";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
-import { ResearcheItem } from '../ResearchesCenter/components/ResearcheItem';
+import { ResearcheItem } from "../Actions/components/ResearcherActions/components/ResearcheItem";
 import { TopBar } from "../../components/TopBar";
 
 export function Researche() {

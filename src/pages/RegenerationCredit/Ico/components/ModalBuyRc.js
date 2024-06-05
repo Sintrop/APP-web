@@ -85,7 +85,7 @@ export function ModalBuyRc({diferenca, close}){
     async function buyOnBlockchain() {
         setModalTransaction(true);
         setLoadingTransaction(true);
-        BuyRCT(walletConnected, credits)
+        BuyRCT(walletConnected, Number(String(input).replace(',', '.')))
             .then(res => {
                 setLogTransaction({
                     type: res.type,
@@ -95,7 +95,6 @@ export function ModalBuyRc({diferenca, close}){
                 setLoadingTransaction(false);
 
                 if (res.type === 'success') {
-                    toast.success('Compra efetuada com sucesso! Veja seu saldo no menu "Meus tokens"');
                     setInput(0);
                     getBalanceETH();
                 }
@@ -198,9 +197,9 @@ export function ModalBuyRc({diferenca, close}){
                 if (!loadingTransaction) {
                     setModalTransaction(open)
                     setLoadingBuy(false);
-                    if (logTransaction.type === 'success') {
-                        toast.success('Contribuição feita com sucesso!');
 
+                    if (logTransaction.type === 'success') {
+                        toast.success('Compra efetuada com sucesso! Veja seu saldo no menu "Meus tokens"');
                     }
                 }
             }}>

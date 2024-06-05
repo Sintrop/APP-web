@@ -12,6 +12,7 @@ import { ContributeCertificate } from "../../components/Certificates/ContributeC
 import { TopBar } from '../../components/TopBar';
 import { PublicationItem } from '../Home/components/PublicationItem';
 import { Item } from "../ImpactCalculator/components/Item";
+import { Feedback } from "../../components/Feedback";
 
 const containerMapStyle = {
     width: '100%',
@@ -484,6 +485,10 @@ export function UserDetails() {
                     )}
 
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

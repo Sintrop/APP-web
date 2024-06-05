@@ -13,7 +13,6 @@ import { TopBarStatus } from '../../components/TopBarStatus';
 import { TopBarMobile } from '../../components/TopBarMobile';
 import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 import { Assistent } from '../../components/Assistent';
-import { ModalFeedback } from '../../components/ModalFeedback';
 import { ModalChooseLang } from '../../components/ModalChooseLang';
 import ModalRegister from '../../components/ModalRegister';
 
@@ -473,20 +472,6 @@ export default function Dashboard(){
                     close={chooseModalRegister}
                 />
             )}
-
-            <Dialog.Root
-                open={modalFeedback}
-                onOpenChange={(open) => {
-                    chooseModalFeedBack()
-                }}  
-            >
-                <ModalFeedback
-                    close={() => {
-                        toast.success('Feedback enviado com sucesso! Agradecemos a sua colaboração.')
-                        chooseModalFeedBack();
-                    }}
-                />
-            </Dialog.Root>
 
             <Dialog.Root
                 open={modalChooseLang}

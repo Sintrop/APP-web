@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { PublicationItem } from "../Home/components/PublicationItem";
 import { TopBar } from "../../components/TopBar";
+import { Feedback } from "../../components/Feedback";
 
 export function Publication() {
     const {id} = useParams();
@@ -40,6 +41,10 @@ export function Publication() {
                         />
                     )}
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

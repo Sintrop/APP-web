@@ -17,7 +17,7 @@ export function LoadingTransaction({loading, logTransaction, action}){
 
     useEffect(() => {
         if(!loading && logTransaction.type === 'success'){
-            toast.success('Transação concluida com sucesso! Retorne ao aplicativo')
+            
         }
     }, [logTransaction])
     

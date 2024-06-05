@@ -17,6 +17,7 @@ import { Item } from "../ImpactCalculator/components/Item";
 import { ModalEditProfile } from "./components/ModalEditProfile";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../components/ModalConnectAccount";
+import { Feedback } from "../../components/Feedback";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -434,6 +435,10 @@ export function Profile() {
                     imageProfile={imageProfile}
                 />
             )}
+
+            <div className="hidden lg:flex">
+                <Feedback />
+            </div>
         </div>
     );
 }

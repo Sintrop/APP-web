@@ -12,6 +12,8 @@ import { MdHelpOutline } from "react-icons/md";
 import { SiReadthedocs } from 'react-icons/si';
 import { FaMobile } from 'react-icons/fa';
 import { QRCode } from "react-qrcode-logo";
+import { Feedback } from "../../components/Feedback";
+import { ResearcherActions } from "./components/ResearcherActions";
 
 export function Actions() {
     const { walletConnected, userData, connectionType } = useMainContext();
@@ -146,6 +148,10 @@ export function Actions() {
                                 </div>
                             )}
 
+                            {userData?.userType === 3 && (
+                                <ResearcherActions/>
+                            )}
+
                             {userData?.userType === 4 && (
                                 <DeveloperActions />
                             )}
@@ -164,6 +170,10 @@ export function Actions() {
                         </div>
                     )}
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

@@ -13,6 +13,7 @@ import { ModalTransactionCreated } from "../../components/ModalTransactionCreate
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import * as Dialog from '@radix-ui/react-dialog';
+import { Feedback } from "../../components/Feedback";
 
 export function ImpactCalculator() {
     const navigate = useNavigate();
@@ -468,6 +469,10 @@ export function ImpactCalculator() {
             )}
 
             <ToastContainer />
+
+            <div className="hidden lg:flex">
+                <Feedback />
+            </div>
         </div>
     )
 }

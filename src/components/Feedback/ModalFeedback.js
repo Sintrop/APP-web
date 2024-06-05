@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useParams } from 'react-router';
-import {save, get} from '../config/infura';
-import Loading from './Loading';
+import {save, get} from '../../config/infura';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { api } from '../services/api';
+import { api } from '../../services/api';
+import { ActivityIndicator } from '../ActivityIndicator';
+import { storage } from '../../services/firebase';
+import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
+import { useMainContext } from '../../hooks/useMainContext';
 
-export function ModalFeedback({close}){
+export function ModalFeedback({close, success}){
     const {walletAddress} = useParams();
+    const {userData} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -26,32 +30,60 @@ export function ModalFeedback({close}){
     async function getBase64(path){
         const base64 = await get(path);
         setBase64(base64);
+        uploadImageForFirebase(base64);
         setLoading(false);
     }
 
-    async function handleSend(){
+    async function uploadImageForFirebase(base64){
+        const res = await fetch(`data:image/png;base64,${base64}`);
+        const blob = await res.blob();
+
+        const storageRef = ref(storage, `/images/${photoHash[0]}.png`);
+        uploadBytesResumable(storageRef, blob)
+        .then(async (res) => {
+            const url = await getDownloadURL(storageRef);
+            console.log(url)
+            createImageDB(url, photoHash[0])
+            setLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            setLoading(false);
+            toast.error('Algo deu errado, tente novamente!')
+        })
+    }
+
+    async function createImageDB(url, hash){
+        await api.post('/image', {
+            url,
+            hash
+        })
+    }
+
+    async function handleSend() {
+        if(loading){
+            return;
+        }
         if(!title.trim() || !description.trim()){
             toast.error('Preencha pelo menos o título e a descrição!')
             return;
         }
-        
-        try{
-            setLoading(true);
+
+        setLoading(true);
+
+        try {
             await api.post('/feedback', {
-                wallet: String(walletAddress).toUpperCase(),
+                wallet: userData?.wallet,
                 title: title,
                 description: description,
                 photoHash: JSON.stringify(photoHash),
                 type: 'feedback'
-            })
-            setTitle('');
-            setDescription('');
-            setPhotoHash([]);
-            setBase64('');
-            close()
-        }catch(err){
-            console.log(err)
-        }finally{
+            });
+            success();
+            close();
+        } catch (err) {
+            console.log(err);
+        } finally {
             setLoading(false);
         }
     }
@@ -69,7 +101,7 @@ export function ModalFeedback({close}){
                 </div>
                 
                 <div className="flex flex-col w-full">
-                    <p className="font-bold text-[#ff9900]">Título do feedback:</p>
+                    <p className="font-bold text-white">Título do feedback:</p>
                     <input
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -78,7 +110,7 @@ export function ModalFeedback({close}){
                         maxLength={50}
                     />
 
-                    <p className="font-bold text-[#ff9900] mt-3">Descrição:</p>
+                    <p className="font-bold text-white mt-3">Descrição:</p>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -86,7 +118,7 @@ export function ModalFeedback({close}){
                         className='bg-[#0a4303] rounded-md border-2 px-2 w-full text-white '
                     />
 
-                    <p className="font-bold text-[#ff9900]">Anexe uma imagem(Opcional):</p>
+                    <p className="font-bold text-white mt-2">Anexe uma imagem(Opcional):</p>
                     <div className='flex flex-col items-center gap-3 mt-3'>
                         <input 
                             type='file' 
@@ -116,18 +148,20 @@ export function ModalFeedback({close}){
                 <div className='flex items-center justify-end w-full gap-3'>
                     <button 
                         onClick={handleSend}
-                        className='px-3 py-2 rounded-md text-white font-bold bg-[#ff9900]'
-                    >Enviar</button>
+                        className='w-32 h-10 rounded-md text-white font-bold bg-blue-500'
+                    >
+                        {loading ? (
+                            <ActivityIndicator size={25}/>
+                        ) : (
+                            'Enviar'
+                        )}
+                    </button>
                 </div>
             </Dialog.Content>
 
             <ToastContainer
                 position='top-center'
             />
-
-            {loading && (
-                <Loading/>
-            )}
         </Dialog.Portal>
     )
 }

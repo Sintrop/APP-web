@@ -8,7 +8,6 @@ import OnlyOwner from "../pages/onlyOwner";
 import IndicesControl from "../pages/indicesControl";
 import { RequestSepolia } from "../pages/RequestSepolia";
 import { ViewImage } from "../pages/ViewImage";
-import { ResearchersCenter } from "../pages/ResearchersCenter";
 import {Register} from "../pages/register";
 import { Checkout } from "../pages/checkout";
 import { ViewPdf } from "../pages/ViewPdf";
@@ -88,7 +87,6 @@ export default function Router(){
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
                 <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
-                <Route exact path="/researchers-center/:walletAddress/:typeUser" element={<ResearchersCenter/>}/>
                 <Route exact path="/register/:walletAddress" element={<Register/>}/>
                 <Route exact path="/checkout" element={<Checkout/>}/>
                 <Route exact path="/view-pdf/:hash" element={<ViewPdf/>}/>
