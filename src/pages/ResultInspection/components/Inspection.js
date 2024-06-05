@@ -70,6 +70,8 @@ export function Inspection({ id }) {
     const [imagesProperty, setImagesProperty] = useState([]);
     const [viewImage, setViewImage] = useState(false);
     const [imageSelected, setImageSelected] = useState('');
+    const [biodiversityFauna, setBiodiversityFauna] = useState([]);
+    const [biodiversityFlora, setBiodiversityFlora] = useState([]);
 
     useEffect(() => {
         getInspectionData();
@@ -95,7 +97,6 @@ export function Inspection({ id }) {
         if (responseApi?.data?.inspectionApiData?.propertyPhotos) {
             await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
         }
-        await getImagesBiodiversitySoil(JSON.parse(responseApi.data?.inspectionApiData?.soilBiodiversity));
         await getImagesBiodiversity(JSON.parse(responseApi.data?.inspectionApiData?.biodversityIndice));
     }
 
@@ -112,30 +113,24 @@ export function Inspection({ id }) {
 
     async function getImagesBiodiversity(array) {
         setLoadingBiodiversityImages(true);
-        let newArray = [];
+
+        let newArrayFauna = [];
+        let newArrayFlora = [];
+
         for (var i = 0; i < array.length; i++) {
             const response = await getImage(array[i].photo);
-            newArray.push(response);
+            if (array[i].type === 'fauna') {
+                newArrayFauna.push(response);
+            }
+
+            if (array[i].type === 'flora') {
+                newArrayFlora.push(response);
+            }
         }
 
-        setBiodiversity(newArray);
+        setBiodiversityFlora(newArrayFlora);
+        setBiodiversityFauna(newArrayFauna);
         setLoadingBiodiversityImages(false)
-    }
-
-    async function getImagesBiodiversitySoil(array) {
-        setLoadingBiodiversitySoil(true);
-
-        let newArray = [];
-        for (var i = 0; i < array.length; i++) {
-            const response = await getImage(array[i].photo);
-            newArray.push({
-                ...array[i],
-                photo: response,
-            });
-        }
-
-        setBiodiversitySoil(newArray);
-        setLoadingBiodiversitySoil(false)
     }
 
     async function getImagesProperty(array) {
@@ -463,7 +458,7 @@ export function Inspection({ id }) {
 
                     <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
                         <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
-                        <p className="text-white">Imagens</p>
+                        <p className="text-white">Fauna</p>
 
                         {loadingBiodiversityImages ? (
                             <div className="flex flex-col items-center justify-center w-full h-[315px]">
@@ -472,7 +467,7 @@ export function Inspection({ id }) {
                             </div>
                         ) : (
                             <div className="flex gap-3 overflow-auto">
-                                {biodiversity.map(item => (
+                                {biodiversityFauna.map(item => (
                                     <button
                                         key={item}
                                         className="w-[250px] h-[300px]"
@@ -489,63 +484,29 @@ export function Inspection({ id }) {
                             </div>
                         )}
 
-                        <p className="text-white mt-3">Solo</p>
-                        {loadingBiodiversitySoil ? (
+                        <p className="text-white mt-3">Flora</p>
+                        {loadingBiodiversityImages ? (
                             <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                 <ActivityIndicator size={50} />
                                 <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                             </div>
                         ) : (
-                            <>
-                                {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                                    {biodiversitySoil.length > 0 && (
-                                        <LoadScript
-                                            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                            libraries={['drawing']}
-                                        >
-                                            <GoogleMap
-                                                mapContainerStyle={containerMapStyle}
-                                                center={{ lat: biodiversitySoil[0]?.coord?.lat, lng: biodiversitySoil[0]?.coord?.lng }}
-                                                zoom={16}
-                                                mapTypeId="hybrid"
-                                            >
-                                                {zones.map((item, index) => (
-                                                    <>
-                                                        {biodiversitySoil.map(bioSoil => (
-                                                            <Marker
-                                                                position={{ lat: bioSoil?.coord?.lat, lng: bioSoil?.coord?.lng }}
-                                                                icon={markerBioSoil}
-                                                            />
-                                                        ))}
-                                                    </>
-                                                ))}
-                                            </GoogleMap>
-                                        </LoadScript>
-                                    )}
-                                </div>
-                                <div className="flex items-center gap-1 mt-1 mb-3">
-                                    <FaMapMarker color='yellow' size={20} />
-                                    <p className="text-white text-xs">Localização da coleta</p>
-                                </div> */}
-
-                                <div className="flex gap-3 overflow-auto">
-                                    {biodiversitySoil.map(item => (
-                                        <button
-                                            key={item}
-                                            className="w-[250px] h-[300px]"
-                                            onClick={() => {
-                                                setImageSelected(item.photo);
-                                                setViewImage(true);
-                                            }}
-                                        >
-                                            <ImageItem
-                                                src={item}
-                                                type='biodiversity-soil'
-                                            />
-                                        </button>
-                                    ))}
-                                </div>
-                            </>
+                            <div className="flex gap-3 overflow-auto">
+                                {biodiversityFlora.map(item => (
+                                    <button
+                                        key={item}
+                                        className="w-[250px] h-[300px]"
+                                        onClick={() => {
+                                            setImageSelected(item);
+                                            setViewImage(true);
+                                        }}
+                                    >
+                                        <ImageItem
+                                            src={item}
+                                        />
+                                    </button>
+                                ))}
+                            </div>
                         )}
                     </div>
 
