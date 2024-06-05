@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { UserRankingItem } from "../Ranking/components/UserRankingItem";
+import { Feedback } from "../../components/Feedback";
 
 const containerMapStyle = {
     width: '100vw',
@@ -260,6 +261,10 @@ export function Community() {
                         ))}
                     </div>
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

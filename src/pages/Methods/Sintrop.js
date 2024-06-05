@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TopBar } from '../../components/TopBar';
 import { Header } from '../../components/Header';
 import { api } from "../../services/api";
+import { Feedback } from "../../components/Feedback";
 
 export function MethodSintrop() {
     const [categories, setCategories] = useState([]);
@@ -127,6 +128,10 @@ export function MethodSintrop() {
                         <p className="text-white m-2">Em todas as etapas da inspeção, o inspetor deverá registrar com uma foto toda a biodiversidade encontrada, tanto de plantas quanto de fungos e animais. Cada registro contará 1 unidade de vida.</p>
                     </div>
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

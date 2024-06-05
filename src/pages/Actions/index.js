@@ -12,6 +12,7 @@ import { MdHelpOutline } from "react-icons/md";
 import { SiReadthedocs } from 'react-icons/si';
 import { FaMobile } from 'react-icons/fa';
 import { QRCode } from "react-qrcode-logo";
+import { Feedback } from "../../components/Feedback";
 
 export function Actions() {
     const { walletConnected, userData, connectionType } = useMainContext();
@@ -164,6 +165,10 @@ export function Actions() {
                         </div>
                     )}
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

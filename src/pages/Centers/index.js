@@ -2,6 +2,7 @@ import React from "react";
 import { Header } from "../../components/Header";
 import { useNavigate } from "react-router";
 import {TopBar} from '../../components/TopBar';
+import {Feedback} from '../../components/Feedback';
 
 export function Centers(){
     const navigate = useNavigate();
@@ -103,6 +104,10 @@ export function Centers(){
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )

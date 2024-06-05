@@ -3,6 +3,7 @@ import { Header } from "../../components/Header";
 import { useParams } from "react-router";
 import { TopBar } from '../../components/TopBar';
 import { Inspection } from "./components/Inspection";
+import { Feedback } from "../../components/Feedback";
 
 export function ResultInspection() {
     const { id } = useParams();
@@ -16,6 +17,10 @@ export function ResultInspection() {
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 p-2 lg:p-0">
                     <Inspection id={id}/>
                 </div>
+            </div>
+
+            <div className="hidden lg:flex">
+                <Feedback />
             </div>
         </div>
     )
