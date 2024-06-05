@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../../components/ActivityIndicator";
 import {FaChevronLeft} from 'react-icons/fa';
 
 export function ModalPublish({close, loadingPublish, publish, publishType}) {

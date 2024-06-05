@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../services/api";
-import { getImage } from "../../../services/getImage";
+import { api } from "../../../../../services/api";
+import { getImage } from "../../../../../services/getImage";
 import { useNavigate } from "react-router";
 import { FaFileAlt, FaShare } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
