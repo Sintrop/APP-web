@@ -10,8 +10,8 @@ export function Feedback(){
         <div>
 
             <Dialog.Root open={modal} onOpenChange={(open) => setModal(open)}>
-                <Dialog.Trigger className="absolute left-5 bottom-5 w-10 h-10 bg-red-500">
-
+                <Dialog.Trigger className="absolute left-5 bottom-5 h-10 bg-red-500 font-bold text-white rounded-md px-5">
+                    Feedback
                 </Dialog.Trigger>
                 <ModalFeedback
                     close={() => setModal(false)}
