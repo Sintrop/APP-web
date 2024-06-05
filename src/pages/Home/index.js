@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 import { ModalSignOut } from "../../components/ModalSignOut";
+import { Feedback } from "../../components/Feedback";
 
 export function Home() {
     const navigate = useNavigate();
@@ -160,7 +161,7 @@ export function Home() {
                                             title="Desconectar"
                                             onClick={() => setModalLogout(true)}
                                         >
-                                            <MdLogout color='white' size={18}/>
+                                            <MdLogout color='white' size={18} />
                                         </button>
                                     </>
                                 )}
@@ -280,7 +281,9 @@ export function Home() {
 
             <div className="hidden lg:flex">
                 <Chat />
+                <Feedback />
             </div>
+
         </div>
     )
 }
