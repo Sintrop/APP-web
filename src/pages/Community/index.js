@@ -33,6 +33,17 @@ export function Community() {
     }, []);
 
     useEffect(() => {
+        const div = document.querySelector('#div-main-scroll')
+        div.addEventListener('scroll', (e) => {
+            if (e.srcElement.scrollTop > 30) {
+                setVisibleBtns(false);
+            } else {
+                setVisibleBtns(true);
+            }
+        })
+    }, []);
+
+    useEffect(() => {
         getUsersRanking();
     }, [userType]);
 
@@ -90,11 +101,11 @@ export function Community() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden teste`}>
+        <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden`} >
             <TopBar />
             <Header routeActive='community' />
 
-            <div className="flex flex-col overflow-scroll" >
+            <div className="flex flex-col overflow-scroll" id="div-main-scroll">
                 <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
                     <div className="flex w-full h-[440px]">
                         <LoadScript
@@ -120,121 +131,119 @@ export function Community() {
                         </LoadScript>
                     </div>
 
-                    {visibleBtns && (
-                        <div className="absolute flex flex-col w-[210px] gap-2 left-3 lg:top-36 top-28">
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('1')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-produtor.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                    <div className={`absolute flex flex-col w-[210px] gap-2 lg:top-36 top-28 duration-300 ${visibleBtns ? 'left-3' : 'left-[-250px]'}`}>
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('1')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-produtor.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Produtores</p>
-                                </div>
+                                <p className="font-bold text-white">Produtores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('2')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-inspetor.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('2')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-inspetor.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Inspetores</p>
-                                </div>
+                                <p className="font-bold text-white">Inspetores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('3')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-pesquisadores.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('3')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-pesquisadores.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Pesquisadores</p>
-                                </div>
+                                <p className="font-bold text-white">Pesquisadores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('4')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/centro-dev.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('4')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/centro-dev.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Desenvolvedores</p>
-                                </div>
+                                <p className="font-bold text-white">Desenvolvedores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('6')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-ativista.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('6')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-ativista.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Ativistas</p>
-                                </div>
+                                <p className="font-bold text-white">Ativistas</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('8')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-validator.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('8')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-validator.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Validadores</p>
-                                </div>
+                                <p className="font-bold text-white">Validadores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
+                            <FaChevronRight size={20} color='white' />
+                        </button>
 
-                            <button
-                                className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                                onClick={() => setUserType('7')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={require('../../assets/icon-apoiador.png')}
-                                        className="w-8 h-8 object-contain"
-                                    />
+                        <button
+                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
+                            onClick={() => setUserType('7')}
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={require('../../assets/icon-apoiador.png')}
+                                    className="w-8 h-8 object-contain"
+                                />
 
-                                    <p className="font-bold text-white">Apoiadores</p>
-                                </div>
+                                <p className="font-bold text-white">Apoiadores</p>
+                            </div>
 
-                                <FaChevronRight size={20} color='white' />
-                            </button>
-                        </div>
-                    )}
+                            <FaChevronRight size={20} color='white' />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex flex-col pb-20 lg:pb-5 px-3">
