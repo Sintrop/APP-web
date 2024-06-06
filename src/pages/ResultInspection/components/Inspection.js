@@ -65,7 +65,6 @@ export function Inspection({ id }) {
     const [inspectorImageProfile, setInspectorImageProfile] = useState(null);
     const [proofPhoto, setProofPhoto] = useState(null);
     const [loadingBiodiversityImages, setLoadingBiodiversityImages] = useState(true);
-    const [loadingBiodiversitySoil, setLoadingBiodiversitySoil] = useState(true);
     const [loadingImagesProperty, setLoadingImagesProperty] = useState(true);
     const [imagesProperty, setImagesProperty] = useState([]);
     const [imagesPropertyAerial, setImagesPropertyAerial] = useState([]);
@@ -188,6 +187,11 @@ export function Inspection({ id }) {
                 </div>
             ) : (
                 <>
+                    {inspectionData?.status === 4 && (
+                        <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
+                            <p className="font-bold text-white text-xl">Inspeção invalidada</p>
+                        </div>
+                    )}
                     <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
                     <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
                         <div className="flex flex-col lg:w-[49%]">
@@ -410,13 +414,6 @@ export function Inspection({ id }) {
                                                         icon={markerTree}
                                                     />
                                                 ))}
-
-                                                {biodiversitySoil.map(bioSoil => (
-                                                    <Marker
-                                                        position={{ lat: bioSoil?.coord?.lat, lng: bioSoil?.coord?.lng }}
-                                                        icon={markerBioSoil}
-                                                    />
-                                                ))}
                                             </>
                                         ))}
                                     </GoogleMap>
@@ -431,10 +428,6 @@ export function Inspection({ id }) {
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='green' size={20} />
                             <p className="text-white text-xs">Plantas registradas</p>
-                        </div>
-                        <div className="flex items-center gap-1 mt-1">
-                            <FaMapMarker color='yellow' size={20} />
-                            <p className="text-white text-xs">Biodiversidade no solo</p>
                         </div>
                     </div>
 

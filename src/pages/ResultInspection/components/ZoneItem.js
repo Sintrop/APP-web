@@ -5,6 +5,7 @@ import { ImageItem } from "./ImageItem";
 import { ViewImage } from "../../../components/ViewImage";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { FaMapMarker } from "react-icons/fa";
+import { ModalCollectDetails } from "./ModalCollectDetails";
 
 const containerMapStyle = {
     width: '100%',
@@ -38,18 +39,23 @@ export function ZoneItem({ data, index }) {
     const areaSampling2 = Number(data?.arvores?.sampling2?.area);
     const areaZone = Number(data?.areaZone);
     const analiseSolo = data?.analiseSolo;
+    const bioSoil = data?.bioSoil;
     const photosZone = data?.photosZone;
 
     const [color, setColor] = useState('red');
     const [modalCoords, setModalCoords] = useState(false);
     const [imagesZones, setImagesZones] = useState([]);
     const [imagesAnaliseSoil, setImagesAnaliseSoil] = useState([]);
+    const [imagesBioSoil, setImagesBioSoil] = useState([]);
     const [imagesTreesS1, setImagesTressS1] = useState([]);
     const [loadingImagesZones, setLoadingImageZones] = useState(true);
     const [loadingImagesAnalise, setLoadingImageAnalise] = useState(true);
+    const [loadingImagesBioSoil, setLoadingImageBioSoil] = useState(true);
     const [loadingImagesTreesS1, setLoadingImagesTreesS1] = useState(true);
     const [viewImage, setViewImage] = useState(false);
     const [imageSelected, setImageSelected] = useState('');
+    const [collectDetails, setCollectDetails] = useState(false);
+    const [collectSelected, setCollectSelected] = useState(null);
 
     useEffect(() => {
         if (index === 0) {
@@ -81,6 +87,7 @@ export function ZoneItem({ data, index }) {
     async function getImages() {
         await getImagesZone();
         await getImagesAnaliseSoil();
+        await getImagesBioSoil();
         await getImagesTreesS1();
     }
 
@@ -106,14 +113,35 @@ export function ZoneItem({ data, index }) {
         let newArray = [];
         for (var i = 0; i < analiseSolo.length; i++) {
             const response = await getImage(analiseSolo[i].photo)
+            const response2 = await getImage(analiseSolo[i]?.addPhoto1)
+            const response3 = await getImage(analiseSolo[i]?.addPhoto2)
             newArray.push({
                 ...analiseSolo[i],
-                photo: response
+                photo: response,
+                addPhoto1: response2,
+                addPhoto2: response3,
             })
         }
 
         setImagesAnaliseSoil(newArray);
         setLoadingImageAnalise(false);
+    }
+
+    async function getImagesBioSoil() {
+        setLoadingImageBioSoil(true);
+
+        let newArray = [];
+        for (var i = 0; i < bioSoil.length; i++) {
+            const response = await getImage(bioSoil[i].photo)
+
+            newArray.push({
+                ...bioSoil[i],
+                photo: response,
+            })
+        }
+
+        setImagesBioSoil(newArray);
+        setLoadingImageBioSoil(false);
     }
 
     async function getImagesTreesS1() {
@@ -170,7 +198,7 @@ export function ZoneItem({ data, index }) {
                 </div>
             )}
 
-            <p className="text-white mt-2">Análise de solo</p>
+            <p className="text-white mt-5 text-center font-bold">Análise de biomassa do solo</p>
             <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
@@ -207,13 +235,66 @@ export function ZoneItem({ data, index }) {
                             key={item.photo}
                             className="w-[250px] h-[300px]"
                             onClick={() => {
-                                setImageSelected(item.photo);
-                                setViewImage(true);
+                                setCollectDetails(true);
+                                setCollectSelected(item)
+                                // setImageSelected(item.photo);
+                                // setViewImage(true);
                             }}
                         >
                             <ImageItem
                                 src={item}
                                 type='analise-soil'
+                            />
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
+            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                <LoadScript
+                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                >
+                    <GoogleMap
+                        mapContainerStyle={containerMapStyle}
+                        center={{ lat: bioSoil[0].coord?.lat, lng: bioSoil[0].coord?.lng }}
+                        zoom={18}
+                        mapTypeId="hybrid"
+                    >
+                        {bioSoil.map((analise, index) => (
+                            <Marker
+                                position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                            />
+                        ))}
+                    </GoogleMap>
+                </LoadScript>
+            </div>
+            <div className="flex items-center gap-1 mt-1 mb-4">
+                <FaMapMarker color='red' size={20}/>
+                <p className="text-white text-xs">Localização das coletas</p>
+            </div>
+
+            {loadingImagesBioSoil ? (
+                <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                    <ActivityIndicator size={50} />
+                    <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                </div>
+            ) : (
+                <div className="flex gap-3 overflow-auto">
+                    {imagesBioSoil.map(item => (
+                        <button
+                            key={item.photo}
+                            className="w-[250px] h-[300px]"
+                            onClick={() => {
+                                setCollectDetails(true);
+                                setCollectSelected(item)
+                                // setImageSelected(item.photo);
+                                // setViewImage(true);
+                            }}
+                        >
+                            <ImageItem
+                                src={item}
+                                type='biodiversity-soil'
                             />
                         </button>
                     ))}
@@ -286,6 +367,13 @@ export function ZoneItem({ data, index }) {
                 <ViewImage
                     close={() => setViewImage(false)}
                     uri={imageSelected}
+                />
+            )}
+
+            {collectDetails && (
+                <ModalCollectDetails
+                    close={() => setCollectDetails(false)}
+                    data={collectSelected}
                 />
             )}
         </div>
