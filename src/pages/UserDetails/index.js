@@ -171,6 +171,11 @@ export function UserDetails() {
                         <>
                             {userData && (
                                 <>
+                                    {blockchainData?.userType === 9 && (
+                                        <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
+                                            <p className="font-bold text-white text-xl">Usuário invalidado</p>
+                                        </div>
+                                    )}
                                     <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
                                         <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
                                             {userData?.bannerUrl && (
