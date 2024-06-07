@@ -27,25 +27,21 @@ export function ModalCollectDetails({ close, data }) {
 
                     <div className="flex flex-col overflow-y-auto mt-2">
                         <div className="flex flex-col bg-gray-300 rounded-md w-full h-[150px]">
-                            <LoadScript
-                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                            <GoogleMap
+                                mapContainerStyle={containerMapStyle}
+                                center={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
+                                zoom={18}
+                                mapTypeId="hybrid"
                             >
-                                <GoogleMap
-                                    mapContainerStyle={containerMapStyle}
-                                    center={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
-                                    zoom={18}
-                                    mapTypeId="hybrid"
-                                >
-                                    <Marker
-                                        position={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
-                                    />
+                                <Marker
+                                    position={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
+                                />
 
-                                    <Marker
-                                        position={{ lat: data?.coord?.lat, lng: data?.coord?.lng }}
-                                        icon={"http://maps.google.com/mapfiles/ms/icons/yellow.png"}
-                                    />
-                                </GoogleMap>
-                            </LoadScript>
+                                <Marker
+                                    position={{ lat: data?.coord?.lat, lng: data?.coord?.lng }}
+                                    icon={"http://maps.google.com/mapfiles/ms/icons/yellow.png"}
+                                />
+                            </GoogleMap>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='red' size={20} />

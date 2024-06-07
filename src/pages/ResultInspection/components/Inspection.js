@@ -182,213 +182,213 @@ export function Inspection({ id }) {
 
     return (
         <div className="flex flex-col">
-            {loading ? (
-                <div className="flex justify-center">
-                    <ActivityIndicator size={50} />
-                </div>
-            ) : (
-                <>
-                    {inspectionData?.status === 4 && (
-                        <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
-                            <p className="font-bold text-white text-xl">Inspeção invalidada</p>
-                        </div>
-                    )}
-                    <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
-                    <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
-                        <div className="flex flex-col lg:w-[49%]">
-                            <p className="text-gray-400 text-xs">Produtor(a)</p>
-                            <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${producerData?.wallet}`)}>
-                                <div className="h-14 w-14 rounded-full bg-gray-400">
-                                    <img
-                                        src={imageProfile}
-                                        className="h-14 w-14 rounded-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col gap-1 items-start">
-                                    <p className="font-bold text-white text-sm">{producerData?.name}</p>
-                                    <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(producerData?.wallet).toLowerCase()}</p>
-                                </div>
-                            </button>
-                        </div>
-
-                        <div className="flex flex-col lg:w-[49%]">
-                            <p className="text-gray-400 text-xs">Inspetor(a)</p>
-                            <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${inspectorData?.wallet}`)}>
-                                <div className="h-14 w-14 rounded-full bg-gray-400">
-                                    <img
-                                        src={inspectorImageProfile}
-                                        className="h-14 w-14 rounded-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col gap-1 items-start">
-                                    <p className="font-bold text-white text-sm">{inspectorData?.name}</p>
-                                    <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(inspectorData?.wallet).toLowerCase()}</p>
-                                </div>
-                            </button>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-gray-400 text-xs">Foto de prova</p>
-                            <img
-                                src={proofPhoto}
-                                className="h-[300px] w-[200px] rounded-md object-cover"
-                            />
-
-                        </div>
+            <LoadScript
+                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
+                libraries={['drawing']}
+            >
+                {loading ? (
+                    <div className="flex justify-center">
+                        <ActivityIndicator size={50} />
                     </div>
+                ) : (
+                    <>
+                        {inspectionData?.status === 4 && (
+                            <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
+                                <p className="font-bold text-white text-xl">Inspeção invalidada</p>
+                            </div>
+                        )}
+                        <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
+                        <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
+                            <div className="flex flex-col lg:w-[49%]">
+                                <p className="text-gray-400 text-xs">Produtor(a)</p>
+                                <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${producerData?.wallet}`)}>
+                                    <div className="h-14 w-14 rounded-full bg-gray-400">
+                                        <img
+                                            src={imageProfile}
+                                            className="h-14 w-14 rounded-full object-cover"
+                                        />
+                                    </div>
 
-                    <div className="flex flex-wrap items-center p-3 gap-3 rounded-md bg-[#0a4303] w-full mt-3">
-                        <div className="flex flex-col w-full lg:w-[49%] items-start gap-4">
-                            <div className="flex items-center gap-3">
-                                <FaDotCircle size={20} color='green' />
-
-                                <p className="text-white">
-                                    Criada em: {inspectionData?.createdAtTimestamp && format(new Date(Number(inspectionData?.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
-                                </p>
+                                    <div className="flex flex-col gap-1 items-start">
+                                        <p className="font-bold text-white text-sm">{producerData?.name}</p>
+                                        <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(producerData?.wallet).toLowerCase()}</p>
+                                    </div>
+                                </button>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <FaDotCircle size={20} color='green' />
+                            <div className="flex flex-col lg:w-[49%]">
+                                <p className="text-gray-400 text-xs">Inspetor(a)</p>
+                                <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${inspectorData?.wallet}`)}>
+                                    <div className="h-14 w-14 rounded-full bg-gray-400">
+                                        <img
+                                            src={inspectorImageProfile}
+                                            className="h-14 w-14 rounded-full object-cover"
+                                        />
+                                    </div>
 
-                                <p className="text-white">
-                                    Aceita em: {inspectionData?.acceptedAtTimestamp && format(new Date(Number(inspectionData?.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
-                                </p>
+                                    <div className="flex flex-col gap-1 items-start">
+                                        <p className="font-bold text-white text-sm">{inspectorData?.name}</p>
+                                        <p className="text-white text-sm text-ellipsis overflow-hidden max-w-[25ch] lg:max-w-[100ch]">{String(inspectorData?.wallet).toLowerCase()}</p>
+                                    </div>
+                                </button>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <FaDotCircle size={20} color='green' />
+                            <div className="flex flex-col">
+                                <p className="text-gray-400 text-xs">Foto de prova</p>
+                                <img
+                                    src={proofPhoto}
+                                    className="h-[300px] w-[200px] rounded-md object-cover"
+                                />
 
-                                <p className="text-white">
-                                    Realizada em: {inspectionData?.inspectedAtTimestamp && format(new Date(Number(inspectionData?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
-                                </p>
                             </div>
-
-                            <div className="flex flex-col items-center justify-center p-2 bg-green-950 border-2 border-white rounded-md">
-                                <p className="font-bold text-white">{inspectionData?.isaScore}</p>
-                                <p className="text-white text-xs">Pontos de regeneração</p>
-                            </div>
-
-                            <a
-                                className="font-semibold text-white px-3 py-1 mt-1 bg-blue-500 rounded-md"
-                                target="_blank"
-                                href={`https://app.sintrop.com/view-pdf/${inspectionData?.report}`}
-                            >
-                                Ver relatório
-                            </a>
                         </div>
 
-                        <div className="flex flex-col w-full lg:w-[49%] gap-1">
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md">
-                                <div className="flex w-full items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={require('../../../assets/co2.png')}
-                                            className="h-5 w-5 object-contain"
-                                        />
+                        <div className="flex flex-wrap items-center p-3 gap-3 rounded-md bg-[#0a4303] w-full mt-3">
+                            <div className="flex flex-col w-full lg:w-[49%] items-start gap-4">
+                                <div className="flex items-center gap-3">
+                                    <FaDotCircle size={20} color='green' />
 
-                                        <p className="font-bold text-white text-sm">Carbono</p>
-                                    </div>
-
-                                    <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number((isaData?.carbon?.indicator) / 1000).toFixed(1))} t</p>
+                                    <p className="text-white">
+                                        Criada em: {inspectionData?.createdAtTimestamp && format(new Date(Number(inspectionData?.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    </p>
                                 </div>
 
-                                <p className="text-xs text-white text-center">
-                                    {isaData?.carbon?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.carbon?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.carbon?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
-                                    {isaData?.carbon?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.carbon?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.carbon?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.carbon?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
-                                </p>
-                            </div>
+                                <div className="flex items-center gap-3">
+                                    <FaDotCircle size={20} color='green' />
 
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
-                                <div className="flex w-full items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={require('../../../assets/solo.png')}
-                                            className="h-5 w-5 object-contain"
-                                        />
-
-                                        <p className="font-bold text-white text-sm">Solo</p>
-                                    </div>
-
-                                    <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.soil?.indicator).toFixed(0))} m²</p>
+                                    <p className="text-white">
+                                        Aceita em: {inspectionData?.acceptedAtTimestamp && format(new Date(Number(inspectionData?.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    </p>
                                 </div>
 
-                                <p className="text-xs text-white text-center">
-                                    {isaData?.soil?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.soil?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.soil?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
-                                    {isaData?.soil?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.soil?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.soil?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.soil?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
-                                </p>
-                            </div>
+                                <div className="flex items-center gap-3">
+                                    <FaDotCircle size={20} color='green' />
 
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
-                                <div className="flex w-full items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={require('../../../assets/agua.png')}
-                                            className="h-5 w-5 object-contain"
-                                        />
-
-                                        <p className="font-bold text-white text-sm">Água</p>
-                                    </div>
-
-                                    <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.water?.indicator).toFixed(0))} m³</p>
+                                    <p className="text-white">
+                                        Realizada em: {inspectionData?.inspectedAtTimestamp && format(new Date(Number(inspectionData?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    </p>
                                 </div>
 
-                                <p className="text-xs text-white text-center">
-                                    {isaData?.water?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.water?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.water?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
-                                    {isaData?.water?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.water?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.water?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.water?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
-                                <div className="flex w-full items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={require('../../../assets/bio.png')}
-                                            className="h-5 w-5 object-contain"
-                                        />
-
-                                        <p className="font-bold text-white text-sm">Biodiversidade</p>
-                                    </div>
-
-                                    <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.bio?.indicator).toFixed(0))} uv</p>
+                                <div className="flex flex-col items-center justify-center p-2 bg-green-950 border-2 border-white rounded-md">
+                                    <p className="font-bold text-white">{inspectionData?.isaScore}</p>
+                                    <p className="text-white text-xs">Pontos de regeneração</p>
                                 </div>
 
-                                <p className="text-xs text-white text-center">
-                                    {isaData?.bio?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.bio?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.bio?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
-                                    {isaData?.bio?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.bio?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.bio?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.bio?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col bg-[#0a4303] mt-3 p-2 rounded-md">
-                        <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                            {zones.length > 0 && (
-                                <LoadScript
-                                    googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                    libraries={['drawing']}
+                                <a
+                                    className="font-semibold text-white px-3 py-1 mt-1 bg-blue-500 rounded-md"
+                                    target="_blank"
+                                    href={`https://app.sintrop.com/view-pdf/${inspectionData?.report}`}
                                 >
+                                    Ver relatório
+                                </a>
+                            </div>
+
+                            <div className="flex flex-col w-full lg:w-[49%] gap-1">
+                                <div className="flex flex-col bg-green-950 p-2 rounded-md">
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={require('../../../assets/co2.png')}
+                                                className="h-5 w-5 object-contain"
+                                            />
+
+                                            <p className="font-bold text-white text-sm">Carbono</p>
+                                        </div>
+
+                                        <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number((isaData?.carbon?.indicator) / 1000).toFixed(1))} t</p>
+                                    </div>
+
+                                    <p className="text-xs text-white text-center">
+                                        {isaData?.carbon?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
+                                        {isaData?.carbon?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
+                                        {isaData?.carbon?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                        {isaData?.carbon?.isaIndex === 3 && 'Neutro = 0 pts'}
+                                        {isaData?.carbon?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
+                                        {isaData?.carbon?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
+                                        {isaData?.carbon?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={require('../../../assets/solo.png')}
+                                                className="h-5 w-5 object-contain"
+                                            />
+
+                                            <p className="font-bold text-white text-sm">Solo</p>
+                                        </div>
+
+                                        <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.soil?.indicator).toFixed(0))} m²</p>
+                                    </div>
+
+                                    <p className="text-xs text-white text-center">
+                                        {isaData?.soil?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
+                                        {isaData?.soil?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
+                                        {isaData?.soil?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                        {isaData?.soil?.isaIndex === 3 && 'Neutro = 0 pts'}
+                                        {isaData?.soil?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
+                                        {isaData?.soil?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
+                                        {isaData?.soil?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={require('../../../assets/agua.png')}
+                                                className="h-5 w-5 object-contain"
+                                            />
+
+                                            <p className="font-bold text-white text-sm">Água</p>
+                                        </div>
+
+                                        <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.water?.indicator).toFixed(0))} m³</p>
+                                    </div>
+
+                                    <p className="text-xs text-white text-center">
+                                        {isaData?.water?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
+                                        {isaData?.water?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
+                                        {isaData?.water?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                        {isaData?.water?.isaIndex === 3 && 'Neutro = 0 pts'}
+                                        {isaData?.water?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
+                                        {isaData?.water?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
+                                        {isaData?.water?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={require('../../../assets/bio.png')}
+                                                className="h-5 w-5 object-contain"
+                                            />
+
+                                            <p className="font-bold text-white text-sm">Biodiversidade</p>
+                                        </div>
+
+                                        <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.bio?.indicator).toFixed(0))} uv</p>
+                                    </div>
+
+                                    <p className="text-xs text-white text-center">
+                                        {isaData?.bio?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
+                                        {isaData?.bio?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
+                                        {isaData?.bio?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                        {isaData?.bio?.isaIndex === 3 && 'Neutro = 0 pts'}
+                                        {isaData?.bio?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
+                                        {isaData?.bio?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
+                                        {isaData?.bio?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col bg-[#0a4303] mt-3 p-2 rounded-md">
+                            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                {zones.length > 0 && (
                                     <GoogleMap
                                         mapContainerStyle={containerMapStyle}
                                         center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
@@ -419,11 +419,10 @@ export function Inspection({ id }) {
                                             </>
                                         ))}
                                     </GoogleMap>
-                                </LoadScript>
-                            )}
-                        </div>
+                                )}
+                            </div>
 
-                        {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                             {zones.length > 0 && (
                                 <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}>
                                     <Map
@@ -454,203 +453,199 @@ export function Inspection({ id }) {
                             )}
                         </div> */}
 
-                        <div className="flex items-center gap-1 mt-1">
-                            <FaMapMarker color='blue' size={20} />
-                            <p className="text-white text-xs">Análises de solo</p>
+                            <div className="flex items-center gap-1 mt-1">
+                                <FaMapMarker color='blue' size={20} />
+                                <p className="text-white text-xs">Análises de solo</p>
+                            </div>
+                            <div className="flex items-center gap-1 mt-1">
+                                <FaMapMarker color='green' size={20} />
+                                <p className="text-white text-xs">Plantas registradas</p>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-1 mt-1">
-                            <FaMapMarker color='green' size={20} />
-                            <p className="text-white text-xs">Plantas registradas</p>
-                        </div>
-                    </div>
 
-                    {inspectionDataApi?.propertyPhotos && (
+                        {inspectionDataApi?.propertyPhotos && (
+                            <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                                <p className="text-white font-bold text-lg">Imagens da propriedade</p>
+                                {inspectionDataApi?.propertyPhotos && (
+                                    <>
+                                        {loadingImagesProperty ? (
+                                            <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                                <ActivityIndicator size={50} />
+                                                <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex gap-3 overflow-auto mt-3">
+                                                {imagesProperty.length === 0 ? (
+                                                    <>
+                                                        <p className="text-white my-5">Nenhuma imagem registrada</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {imagesProperty.map(item => (
+                                                            <button
+                                                                key={item}
+                                                                className="w-[250px] h-[300px]"
+                                                                onClick={() => {
+                                                                    setImageSelected(item.photo);
+                                                                    setViewImage(true);
+                                                                }}
+                                                            >
+                                                                <ImageItem
+                                                                    src={item}
+                                                                    type='photos-zone'
+                                                                />
+                                                            </button>
+                                                        ))}
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+                                <p className="text-white mt-3">Imagens aéreas</p>
+                                {loadingImagesProperty ? (
+                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                        <ActivityIndicator size={50} />
+                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                    </div>
+                                ) : (
+                                    <div className="flex gap-3 overflow-auto mt-1">
+                                        {imagesPropertyAerial.length === 0 ? (
+                                            <>
+                                                <p className="text-white my-5">Nenhuma imagem registrada</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {imagesPropertyAerial.map(item => (
+                                                    <button
+                                                        key={item}
+                                                        className="w-[250px] h-[300px]"
+                                                        onClick={() => {
+                                                            setImageSelected(item.photo);
+                                                            setViewImage(true);
+                                                        }}
+                                                    >
+                                                        <ImageItem
+                                                            src={item}
+                                                            type='photos-zone'
+                                                        />
+                                                    </button>
+                                                ))}
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                                {inspectionDataApi?.urlVideo && (
+                                    <div className="flex justify-center">
+                                        <iframe
+                                            width="560"
+                                            height="315"
+                                            src={inspectionDataApi?.urlVideo}
+                                            title="YouTube video player"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                                        ></iframe>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <p className="text-white font-bold text-lg">Imagens da propriedade</p>
-                            {inspectionDataApi?.propertyPhotos && (
+                            <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
+
+                            {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
+                            {!oldMetodologie ? (
                                 <>
-                                    {loadingImagesProperty ? (
+                                    <p className="text-white">Fauna</p>
+                                    {loadingBiodiversityImages ? (
                                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                             <ActivityIndicator size={50} />
                                             <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                                         </div>
                                     ) : (
-                                        <div className="flex gap-3 overflow-auto mt-3">
-                                            {imagesProperty.length === 0 ? (
-                                                <>
-                                                    <p className="text-white my-5">Nenhuma imagem registrada</p>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {imagesProperty.map(item => (
-                                                        <button
-                                                            key={item}
-                                                            className="w-[250px] h-[300px]"
-                                                            onClick={() => {
-                                                                setImageSelected(item.photo);
-                                                                setViewImage(true);
-                                                            }}
-                                                        >
-                                                            <ImageItem
-                                                                src={item}
-                                                                type='photos-zone'
-                                                            />
-                                                        </button>
-                                                    ))}
-                                                </>
-                                            )}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-
-                            <p className="text-white mt-3">Imagens aéreas</p>
-                            {loadingImagesProperty ? (
-                                <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                    <ActivityIndicator size={50} />
-                                    <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                </div>
-                            ) : (
-                                <div className="flex gap-3 overflow-auto mt-1">
-                                    {imagesPropertyAerial.length === 0 ? (
-                                        <>
-                                            <p className="text-white my-5">Nenhuma imagem registrada</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {imagesPropertyAerial.map(item => (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversityFauna.map(item => (
                                                 <button
                                                     key={item}
                                                     className="w-[250px] h-[300px]"
                                                     onClick={() => {
-                                                        setImageSelected(item.photo);
+                                                        setImageSelected(item);
                                                         setViewImage(true);
                                                     }}
                                                 >
                                                     <ImageItem
                                                         src={item}
-                                                        type='photos-zone'
                                                     />
                                                 </button>
                                             ))}
-                                        </>
+                                        </div>
                                     )}
-                                </div>
-                            )}
 
-                            {inspectionDataApi?.urlVideo && (
-                                <div className="flex justify-center">
-                                    <iframe
-                                        width="560"
-                                        height="315"
-                                        src={inspectionDataApi?.urlVideo}
-                                        title="YouTube video player"
-                                        frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
-                                    ></iframe>
-                                </div>
+                                    <p className="text-white mt-3">Flora</p>
+                                    {loadingBiodiversityImages ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversityFlora.map(item => (
+                                                <button
+                                                    key={item}
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
+                                                    <ImageItem
+                                                        src={item}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-white mt-3">Imagens</p>
+                                    {loadingBiodiversityImages ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversity.map(item => (
+                                                <button
+                                                    key={item}
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
+                                                    <ImageItem
+                                                        src={item}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
-                    )}
 
-                    <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                        <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
+                        {zones.length > 0 && (
+                            <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                                <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
+                                    <p className="text-white font-bold text-lg">Zonas de regeneração</p>
 
-                        {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
-                        {!oldMetodologie ? (
-                            <>
-                                <p className="text-white">Fauna</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversityFauna.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <p className="text-white mt-3">Flora</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversityFlora.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-white mt-3">Imagens</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversity.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
-
-                    {zones.length > 0 && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
-                                <p className="text-white font-bold text-lg">Zonas de regeneração</p>
-
-                                {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                                    {zones.length > 0 && (
-                                        <LoadScript
-                                            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                            libraries={['drawing']}
-                                        >
+                                    <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                        {zones.length > 0 && (
                                             <GoogleMap
                                                 mapContainerStyle={containerMapStyle}
                                                 center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
@@ -665,74 +660,72 @@ export function Inspection({ id }) {
                                                         />
                                                     </>
                                                 ))}
-
-
                                             </GoogleMap>
-
-                                        </LoadScript>
-                                    )}
-                                </div> */}
-                            </div>
-
-                            <p className="text-white mt-3">Detalhes das zonas</p>
-                            {zones.map((item, index) => (
-                                <ZoneItem data={item} index={index} />
-                            ))}
-
-                            <p className="text-white font-bold text-lg">Resultado das zonas</p>
-
-                            <div className="flex gap-2 flex-wrap items-center flex-col lg:flex-row">
-                                <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
-                                    <div className="flex flex-col gap-1 h-[110px]">
-                                        <p className="text-white font-bold">Árvores</p>
-                                        <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
-                                        <p className="text-white">CO² estocado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
-                                        <p className="text-white">Água estocada: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
+                                        )}
                                     </div>
-
-                                    <img
-                                        src={require('../../../assets/arvore.png')}
-                                        className="w-14 h-16 object-contain"
-                                    />
                                 </div>
 
-                                <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
-                                    <div className="flex flex-col gap-1 h-[110px]">
-                                        <p className="text-white font-bold">Biomassa</p>
-                                        <p className="text-white">Biomassa no solo: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(Math.abs(result?.saldoCarbonAnaliseSoloZones))}</span> kg</p>
+                                <p className="text-white mt-3">Detalhes das zonas</p>
+                                {zones.map((item, index) => (
+                                    <ZoneItem data={item} index={index} />
+                                ))}
 
-                                    </div>
+                                <p className="text-white font-bold text-lg">Resultado das zonas</p>
 
-                                    <img
-                                        src={require('../../../assets/fertilizante-orgânico.png')}
-                                        className="w-14 h-16 object-contain"
-                                    />
-                                </div>
-                            </div>
+                                <div className="flex gap-2 flex-wrap items-center flex-col lg:flex-row">
+                                    <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
+                                        <div className="flex flex-col gap-1 h-[110px]">
+                                            <p className="text-white font-bold">Árvores</p>
+                                            <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
+                                            <p className="text-white">CO² estocado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
+                                            <p className="text-white">Água estocada: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
+                                        </div>
 
-
-                        </div>
-                    )}
-
-                    {insumos.length > 0 && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <div className="mt-2 flex flex-col">
-                                <p className="text-white font-bold text-lg">Insumos registrados</p>
-
-                                <div className="flex flex-col mt-2">
-                                    {insumos.map(item => (
-                                        <InsumoItem
-                                            key={item?.id}
-                                            data={item}
+                                        <img
+                                            src={require('../../../assets/arvore.png')}
+                                            className="w-14 h-16 object-contain"
                                         />
-                                    ))}
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
+                                        <div className="flex flex-col gap-1 h-[110px]">
+                                            <p className="text-white font-bold">Biomassa</p>
+                                            <p className="text-white">Biomassa no solo: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(Math.abs(result?.saldoCarbonAnaliseSoloZones))}</span> kg</p>
+
+                                        </div>
+
+                                        <img
+                                            src={require('../../../assets/fertilizante-orgânico.png')}
+                                            className="w-14 h-16 object-contain"
+                                        />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        )}
+
+                        {insumos.length > 0 && (
+                            <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                                <div className="mt-2 flex flex-col">
+                                    <p className="text-white font-bold text-lg">Insumos registrados</p>
+
+                                    <div className="flex flex-col mt-2">
+                                        {insumos.map(item => (
+                                            <InsumoItem
+                                                key={item?.id}
+                                                data={item}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
-                </>
-            )
-            }
+                        )}
+                    </>
+                )
+                }
+
+            </LoadScript>
 
             {
                 viewImage && (
