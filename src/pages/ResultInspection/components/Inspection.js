@@ -11,6 +11,7 @@ import { FaDotCircle, FaMapMarker } from "react-icons/fa";
 import format from "date-fns/format";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ViewImage } from "../../../components/ViewImage";
+import { APIProvider, Map, Marker as NewMarker, AdvancedMarker, Pin, AdvancedMarkerContext } from '@vis.gl/react-google-maps';
 
 const containerMapStyle = {
     width: '100%',
@@ -391,6 +392,7 @@ export function Inspection({ id }) {
                                     <GoogleMap
                                         mapContainerStyle={containerMapStyle}
                                         center={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
+                                        //center={{ lat: -23.6464511, lng: -46.5656102 }}
                                         zoom={16}
                                         mapTypeId="hybrid"
                                     >
@@ -420,6 +422,37 @@ export function Inspection({ id }) {
                                 </LoadScript>
                             )}
                         </div>
+
+                        {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                            {zones.length > 0 && (
+                                <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}>
+                                    <Map
+                                        style={{ width: '100%', height: '100%' }}
+                                        defaultCenter={{ lat: zones[0]?.path[0]?.lat, lng: zones[0]?.path[0]?.lng }}
+                                        defaultZoom={18}
+                                        gestureHandling={'greedy'}
+                                        mapTypeId="hybrid"
+                                    >
+                                        {zones.map((item, index) => (
+                                            <>
+                                                <PolylineItemZone
+                                                    data={item.path}
+                                                    index={index}
+                                                />
+
+                                                {item.analiseSolo.map((analise, index) => (
+                                                    <NewMarker
+                                                        position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                                                    />
+                                                ))}
+
+
+                                            </>
+                                        ))}
+                                    </Map>
+                                </APIProvider>
+                            )}
+                        </div> */}
 
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='blue' size={20} />
@@ -612,7 +645,7 @@ export function Inspection({ id }) {
                             <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
                                 <p className="text-white font-bold text-lg">Zonas de regeneração</p>
 
-                                <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                                {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                                     {zones.length > 0 && (
                                         <LoadScript
                                             googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
@@ -638,7 +671,7 @@ export function Inspection({ id }) {
 
                                         </LoadScript>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
 
                             <p className="text-white mt-3">Detalhes das zonas</p>

@@ -6,6 +6,7 @@ import { ViewImage } from "../../../components/ViewImage";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { FaMapMarker } from "react-icons/fa";
 import { ModalCollectDetails } from "./ModalCollectDetails";
+import { APIProvider, Map, Marker as NewMarker, AdvancedMarker, Pin, AdvancedMarkerContext } from '@vis.gl/react-google-maps';
 
 const containerMapStyle = {
     width: '100%',
@@ -56,6 +57,7 @@ export function ZoneItem({ data, index }) {
     const [imageSelected, setImageSelected] = useState('');
     const [collectDetails, setCollectDetails] = useState(false);
     const [collectSelected, setCollectSelected] = useState(null);
+    const [defaultLocationTrees, setDefaultLocationTrees] = useState(null);
 
     useEffect(() => {
         if (index === 0) {
@@ -199,7 +201,7 @@ export function ZoneItem({ data, index }) {
             )}
 
             <p className="text-white mt-5 text-center font-bold">Análise de biomassa do solo</p>
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                     libraries={['drawing']}
@@ -217,11 +219,11 @@ export function ZoneItem({ data, index }) {
                         ))}
                     </GoogleMap>
                 </LoadScript>
-            </div>
-            <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20}/>
+            </div> */}
+            {/* <div className="flex items-center gap-1 mt-1 mb-4">
+                <FaMapMarker color='red' size={20} />
                 <p className="text-white text-xs">Localização das coletas</p>
-            </div>
+            </div> */}
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
@@ -251,7 +253,7 @@ export function ZoneItem({ data, index }) {
             )}
 
             <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                 >
@@ -268,11 +270,27 @@ export function ZoneItem({ data, index }) {
                         ))}
                     </GoogleMap>
                 </LoadScript>
+            </div> */}
+            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}>
+                    <Map
+                        style={{ width: '100%', height: '100%' }}
+                        center={{ lat: bioSoil[0].coord?.lat, lng: bioSoil[0].coord?.lng }}
+                        defaultZoom={18}
+                        mapTypeId="hybrid"
+                    >
+                        {bioSoil.map((analise, index) => (
+                            <NewMarker
+                                position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                            />
+                        ))}
+                    </Map>
+                </APIProvider>
             </div>
             <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20}/>
+                <FaMapMarker color='red' size={20} />
                 <p className="text-white text-xs">Localização das coletas</p>
-            </div>
+            </div> */}
 
             {loadingImagesBioSoil ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
@@ -313,8 +331,8 @@ export function ZoneItem({ data, index }) {
             </div>
 
             <p className="text-white mt-2">Plantas registradas (Amostragem 1)</p>
-            
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+
+            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                 <LoadScript
                     googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
                     libraries={['drawing']}
@@ -332,11 +350,27 @@ export function ZoneItem({ data, index }) {
                         ))}
                     </GoogleMap>
                 </LoadScript>
+            </div> */}
+            {/* <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}>
+                    <Map
+                        style={{ width: '100%', height: '100%' }}
+                        center={{ lat: data.arvores.sampling1.trees[0].lat, lng: data.arvores.sampling1.trees[0].lng }}
+                        defaultZoom={18}
+                        mapTypeId="hybrid"
+                    >
+                        {data.arvores.sampling1.trees.map(tree => (
+                            <NewMarker
+                                position={{ lat: tree.lat, lng: tree.lng }}
+                            />
+                        ))}
+                    </Map>
+                </APIProvider>
             </div>
             <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20}/>
+                <FaMapMarker color='red' size={20} />
                 <p className="text-white text-xs">Localização da planta</p>
-            </div>
+            </div> */}
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
