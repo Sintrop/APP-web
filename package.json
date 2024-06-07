@@ -49,7 +49,8 @@
     "swr": "^2.0.1",
     "uint8arrays": "^4.0.2",
     "web-vitals": "^2.1.4",
-    "web3": "^1.7.3"
+    "web3": "^1.7.3",
+    "@vis.gl/react-google-maps": "latest"
   },
   "scripts": {
     "start": "react-app-rewired start",

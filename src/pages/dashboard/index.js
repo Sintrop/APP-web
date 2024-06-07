@@ -14,7 +14,6 @@ import { TopBarMobile } from '../../components/TopBarMobile';
 import { ModalTutorial } from '../../components/Tutorial/ModalTutorial';
 import { Assistent } from '../../components/Assistent';
 import { ModalChooseLang } from '../../components/ModalChooseLang';
-import ModalRegister from '../../components/ModalRegister';
 
 //Tabs
 import ISA from '../../components/Tabs/ISA';
@@ -26,7 +25,6 @@ import DevelopersPool from '../../components/Tabs/Pools/Developers';
 import ReportsPage from '../../components/Tabs/Reports';
 import ProducersPool from '../../components/Tabs/Pools/Producers';
 import ResearchesPage from '../../components/Tabs/Researches';
-import { UserDetails } from '../../components/Tabs/UserDetails';
 import { NetworkImpact } from '../../components/Tabs/NetworkImpact';
 import { Market } from '../../components/Tabs/Market';
 import { ResultInspection } from '../../components/Tabs/ResultInspection';
@@ -419,16 +417,6 @@ export default function Dashboard(){
                     />
                 )}
 
-                {activeTab === 'user-details' && (
-                    <UserDetails 
-                        user={user} 
-                        wallet={walletAddress}
-                        setTab={(tab, wallet) => {
-                            setWalletSelect(wallet)
-                            setActiveTab(tab)
-                        }}
-                    />
-                )}
 
                 {activeTab === 'market' && (
                     <Market 
@@ -466,12 +454,6 @@ export default function Dashboard(){
                     />
                 )}
             </div>
-
-            {modalRegister && (
-                <ModalRegister
-                    close={chooseModalRegister}
-                />
-            )}
 
             <Dialog.Root
                 open={modalChooseLang}
