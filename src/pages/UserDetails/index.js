@@ -13,6 +13,7 @@ import { TopBar } from '../../components/TopBar';
 import { PublicationItem } from '../Home/components/PublicationItem';
 import { Item } from "../ImpactCalculator/components/Item";
 import { Feedback } from "../../components/Feedback";
+import {ProducerGraphics} from '../../components/ProducerGraphics';
 
 const containerMapStyle = {
     width: '100%',
@@ -303,6 +304,36 @@ export function UserDetails() {
 
                                     {tabSelected === 'data' && (
                                         <>
+                                            {userData?.userType === 1 && (
+                                                <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                                                    <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Estatísticas do(a) produtor(a)</h3>
+
+                                                    <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
+                                                        <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                                                            <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.totalInspections} </p>
+                                                            <p className='text-white text-xs lg:text-base'>Inspeções recebidas</p>
+                                                        </div>
+
+                                                        <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                                                            <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.isa?.isaScore}</p>
+                                                            <p className='text-white text-xs lg:text-base'>Pontuação</p>
+                                                        </div>
+
+                                                        <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                                                            <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(blockchainData?.producer?.isa?.isaScore / blockchainData?.producer?.totalInspections)}</p>
+                                                            <p className='text-white text-xs lg:text-base'>Média</p>
+                                                        </div>
+
+                                                        <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
+                                                            <p className='font-bold text-white text-xl lg:text-3xl'>0</p>
+                                                            <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <ProducerGraphics inspections={inspections} />
+                                                </div>
+                                            )}
+
                                             <div className="flex items-center flex-col gap-4 mt-2 w-full">
                                                 <div className="p-2 rounded-md flex flex-col items-center bg-[#0a4303] gap-2 w-full lg:flex-row lg:items-start">
                                                     <div className="flex flex-col">

@@ -280,7 +280,7 @@ export function Contribute() {
                         {loading ? (
                             <>
                                 <div />
-                                <ActivityIndicator size={25} />
+                                    <ActivityIndicator size={25} />
                                 <div />
                             </>
                         ) : (

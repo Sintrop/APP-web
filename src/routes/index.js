@@ -24,7 +24,6 @@ import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
 import { Ranking } from "../pages/Ranking";
 import { Market } from "../pages/RegenerationCredit/Market";
-import { Contribute } from "../pages/RegenerationCredit/Contribute";
 import { Pools } from "../pages/RegenerationCredit/Pools";
 import { Services } from "../pages/RegenerationCredit/Services";
 import { MyTokens } from "../pages/RegenerationCredit/MyTokens";
@@ -58,7 +57,6 @@ export default function Router(){
                 <Route exact path="/researches-center" element={<ResearchesCenter/>}/>
                 <Route exact path="/ranking/:userType" element={<Ranking/>}/>
                 <Route exact path="/market" element={<Market/>}/>
-                <Route exact path="/contribute" element={<Contribute/>}/>
                 <Route exact path="/services" element={<Services/>}/>
                 <Route exact path="/pools/:poolType" element={<Pools/>}/>
                 <Route exact path="/my-tokens" element={<MyTokens/>}/>

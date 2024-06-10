@@ -54,7 +54,7 @@ export function DeveloperActions() {
             <h3 className="font-bold text-white text-lg">Centro de desenvolvimento</h3>
 
             {userData?.userType === 4 && (
-                <div className="flex flex-col p-2 bg-[#0a4303] rounded-md mt-5">
+                <div className="flex flex-col p-2 bg-[#0a4303] rounded-md mt-1">
                     <p className="text-gray-400">Relatório de desenvolvimento</p>
                     <button
                         className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-1"
