@@ -13,26 +13,6 @@ const containerMapStyle = {
     height: '300px',
 };
 
-const markerSolo = {
-    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-    fillColor: "blue",
-    fillOpacity: 1,
-    strokeWeight: 2,
-    rotation: 0,
-    scale: 2,
-    strokeColor: '#fff'
-};
-
-const markerTree = {
-    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-    fillColor: "yellow",
-    fillOpacity: 1,
-    strokeWeight: 2,
-    rotation: 0,
-    scale: 2,
-    strokeColor: '#fff'
-};
-
 export function ZoneItem({ data, index }) {
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
     const areaSampling1 = Number(data?.arvores?.sampling1?.area);
@@ -89,8 +69,10 @@ export function ZoneItem({ data, index }) {
     async function getImages() {
         await getImagesZone();
         await getImagesAnaliseSoil();
-        await getImagesBioSoil();
         await getImagesTreesS1();
+        if(bioSoil.length > 0){
+            await getImagesBioSoil();
+        }
     }
 
     async function getImagesZone() {
@@ -247,51 +229,56 @@ export function ZoneItem({ data, index }) {
                 </div>
             )}
 
-            <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                <GoogleMap
-                    mapContainerStyle={containerMapStyle}
-                    center={{ lat: bioSoil[0].coord?.lat, lng: bioSoil[0].coord?.lng }}
-                    zoom={18}
-                    mapTypeId="hybrid"
-                >
-                    {bioSoil.map((analise, index) => (
-                        <Marker
-                            position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
-                        />
-                    ))}
-                </GoogleMap>
-            </div>
-            <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20} />
-                <p className="text-white text-xs">Localização das coletas</p>
-            </div>
-
-            {loadingImagesBioSoil ? (
-                <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} />
-                    <p className="text-white mt-1">Carregando dados, aguarde...</p>
-                </div>
-            ) : (
-                <div className="flex gap-3 overflow-auto">
-                    {imagesBioSoil.map(item => (
-                        <button
-                            key={item.photo}
-                            className="w-[250px] h-[300px]"
-                            onClick={() => {
-                                setCollectDetails(true);
-                                setCollectSelected(item)
-                                // setImageSelected(item.photo);
-                                // setViewImage(true);
-                            }}
+            {bioSoil?.length > 0 && (
+                <>
+                    <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
+                    <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
+                        <GoogleMap
+                            mapContainerStyle={containerMapStyle}
+                            center={{ lat: bioSoil[0]?.coord?.lat, lng: bioSoil[0]?.coord?.lng }}
+                            zoom={18}
+                            mapTypeId="hybrid"
                         >
-                            <ImageItem
-                                src={item}
-                                type='biodiversity-soil'
-                            />
-                        </button>
-                    ))}
-                </div>
+                            {bioSoil.map((analise, index) => (
+                                <Marker
+                                    position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                                />
+                            ))}
+                        </GoogleMap>
+                    </div>
+                    <div className="flex items-center gap-1 mt-1 mb-4">
+                        <FaMapMarker color='red' size={20} />
+                        <p className="text-white text-xs">Localização das coletas</p>
+                    </div>
+
+                    {loadingImagesBioSoil ? (
+                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                            <ActivityIndicator size={50} />
+                            <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                        </div>
+                    ) : (
+                        <div className="flex gap-3 overflow-auto">
+                            {imagesBioSoil.map(item => (
+                                <button
+                                    key={item.photo}
+                                    className="w-[250px] h-[300px]"
+                                    onClick={() => {
+                                        setCollectDetails(true);
+                                        setCollectSelected(item)
+                                        // setImageSelected(item.photo);
+                                        // setViewImage(true);
+                                    }}
+                                >
+                                    <ImageItem
+                                        src={item}
+                                        type='biodiversity-soil'
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                
+                </>
             )}
 
             <p className="text-white mt-3">Análise de árvores</p>

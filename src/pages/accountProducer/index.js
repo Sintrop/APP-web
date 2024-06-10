@@ -109,7 +109,7 @@ export default function AccountProducer() {
             const response = await api.get(`/user/${String(walletSelected).toUpperCase()}`);
             const address = JSON.parse(response.data.user?.address)
             const path = JSON.parse(response.data.user.propertyGeolocation);
-            
+
             setProducerAddress(address);
             setUserData(response.data.user);
             getImageProfile(response.data.user.imgProfileUrl);
@@ -214,10 +214,17 @@ export default function AccountProducer() {
                 <h3 className='font-bold text-white text-center lg:text-lg'>Inspeções recebidas</h3>
 
                 {inspections.map(item => (
-                    <Inspection
-                        id={item?.id}
-                        key={item?.id}
-                    />
+                    <button
+                        key={item.id}
+                        className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
+                        onClick={() => navigate(`/result-inspection/${item.id}`)}
+                    >
+                        <div className="flex flex-col gap-1">
+                            <p className="font-bold text-white text-sm">Inspeção #{item.id}</p>
+                        </div>
+
+                        <FaChevronRight color='white' size={20} />
+                    </button>
                 ))}
             </div>
         </div>
