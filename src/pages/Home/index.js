@@ -109,7 +109,7 @@ export function Home() {
                                             />
                                         </div>
 
-                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate" onClick={() => navigate('/profile')}>{userData?.name}</p>
+                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
                                         <p className="text-gray-300 text-center text-xs">
                                             {userData?.userType === 1 && 'Produtor(a)'}
                                             {userData?.userType === 2 && 'Inspetor(a)'}
@@ -142,7 +142,7 @@ export function Home() {
                                                             {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
                                                             {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
                                                             {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
-                                                            {userData?.userType === 7 && parseInt(blockchainData?.tokensBurned)}
+                                                            {userData?.userType === 7 && Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(blockchainData?.tokensBurned)}
                                                         </p>
                                                     )}
                                                 </div>
