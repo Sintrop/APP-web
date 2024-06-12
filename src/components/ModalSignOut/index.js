@@ -15,7 +15,7 @@ import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { save } from "../../config/infura";
 
 export function ModalSignOut({ close }) {
-    const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi } = useMainContext();
+    const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -339,16 +339,25 @@ export function ModalSignOut({ close }) {
                                 <>
                                     <p className="font-semibold text-white text-center mt-5">{walletConnected}</p>
 
-                                    <button
-                                        className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
-                                        onClick={handleSyncWallet}
-                                    >
-                                        {loading ? (
-                                            <ActivityIndicator
-                                                size={25}
-                                            />
-                                        ) : 'Sincronize sua wallet'}
-                                    </button>
+                                    {walletConnected === '' ? (
+                                        <button
+                                            className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
+                                            onClick={handleSyncWallet}
+                                        >
+                                            {loading ? (
+                                                <ActivityIndicator
+                                                    size={25}
+                                                />
+                                            ) : 'Sincronize sua wallet'}
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="font-bold text-white px-5 py-2 underline mt-1"
+                                            onClick={logout}
+                                        >
+                                            Desconectar wallet
+                                        </button>
+                                    )}
                                 </>
                             )}
                         </>
