@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FiRefreshCcw } from "react-icons/fi";
 import { ModalPublishResearche } from './ModalPublishResearche';
 
+
 //Services Web3
 import { addProducer, addInspector, addDeveloper } from '../../services/registerService';
 import { AcceptInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
@@ -33,6 +34,7 @@ import { GetInspection, GetIsa, InvalidateInspection } from '../../services/sint
 import { addActivist } from '../../services/activistService';
 import { addValidation } from '../../services/validatorService';
 import { Invite } from '../../services/invitationService';
+import { addValidator } from '../../services/validatorService';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -441,6 +443,72 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             setModalTransaction(true);
             setLoadingTransaction(true);
             addSupporter(walletAddress, userData?.name)
+                .then(async (res) => {
+                    setLogTransaction({
+                        type: res.type,
+                        message: res.message,
+                        hash: res.hashTransaction
+                    })
+                    try {
+                        setLoading(true);
+                        await api.put('/user/account-status', { userWallet: walletAddress, status: 'blockchain' });
+                        await api.put('/transactions-open/finish', { id: transaction?.id });
+                        await api.post('/publication/new', {
+                            userId: userData?.id,
+                            type: 'new-user',
+                            origin: 'platform',
+                            additionalData: JSON.stringify({
+                                userData,
+                                hash: res?.hashTransaction
+                            }),
+                        });
+                    } catch (err) {
+                        console.log(err);
+                    } finally {
+                        setLoading(false)
+                        setLoadingTransaction(false);
+                    }
+                })
+                .catch(err => {
+                    setLoadingTransaction(false);
+                    const message = String(err.message);
+                    console.log(message);
+                    if (message.includes("Not allowed user")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'Not allowed user',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("This supporter already exist")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'This supporter already exist',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    if (message.includes("User already exists")) {
+                        setLogTransaction({
+                            type: 'error',
+                            message: 'User already exists',
+                            hash: ''
+                        })
+                        return;
+                    }
+                    setLogTransaction({
+                        type: 'error',
+                        message: 'Something went wrong with the transaction, please try again!',
+                        hash: ''
+                    })
+                });
+        }
+
+        if (userData.userType === 8) {
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+            addValidator(walletAddress)
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,
