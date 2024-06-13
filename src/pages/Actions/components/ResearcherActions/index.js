@@ -14,6 +14,7 @@ import { ModalPublish } from "./components/ModalPublish";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
+import { Invite } from "../../../../services/invitationService";
 
 export function ResearcherActions() {
     const navigate = useNavigate();
@@ -30,6 +31,7 @@ export function ResearcherActions() {
     const [modalPublish, setModalPublish] = useState(false);
     const [publishType, setPublishType] = useState('normal');
     const [users, setUsers] = useState([]);
+    const [wallet, setWallet] = useState('');
 
     useEffect(() => {
         if (tabSelected === 'researches') {
@@ -137,9 +139,81 @@ export function ResearcherActions() {
             })
     }
 
+    function handleInvite() {
+        if (!wallet.trim()) {
+            toast.error('Digite uma wallet!');
+            return
+        }
+        if (window.ethereum) {
+            inviteUser();
+        } else {
+            toast.error('Você precisa estar em um navegador com provedor Ethereum!')
+        }
+    }
+
+    async function inviteUser() {
+        setModalTransaction(true);
+        setLoadingTransaction(true);
+        Invite(walletConnected, String(wallet).toLowerCase(), 3)
+            .then(async (res) => {
+                setLogTransaction({
+                    type: res.type,
+                    message: res.message,
+                    hash: res.hashTransaction
+                });
+
+                if (res.type === 'success') {
+                    await api.post('/publication/new', {
+                        userId: userData?.id,
+                        type: 'invite-wallet',
+                        origin: 'platform',
+                        additionalData: JSON.stringify({
+                            hash: res.hashTransaction,
+                            walletInvited: wallet,
+                            userType: 3,
+                            userData
+                        }),
+                    });
+                }
+                setLoadingTransaction(false);
+            })
+            .catch(err => {
+                setLoadingTransaction(false);
+                const message = String(err.message);
+                setLogTransaction({
+                    type: 'error',
+                    message: 'Something went wrong with the transaction, please try again!',
+                    hash: ''
+                })
+            })
+
+    }
+
     return (
         <div>
             <div className="flex flex-col w-full lg:w-[1024px] mt-3">
+                {userData?.userType === 3 && (
+                    <>
+                        <p className="font-bold text-white text-lg">Convidar pesquisador</p>
+                        <div className="flex flex-col p-3 rounded-md bg-[#0a4303] mb-5">
+                            <p className="text-white">Para convidar outro pesquisador, basta inserir a wallet dele abaixo</p>
+                            <p className="mt-2 font-bold text-blue-500">Wallet</p>
+                            <input
+                                value={wallet}
+                                onChange={(e) => setWallet(e.target.value)}
+                                className="px-3 py-2 rounded-md text-white bg-green-950 max-w-[400px]"
+                                placeholder="Digite aqui"
+                            />
+                            <button
+                                className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-3"
+                                onClick={handleInvite}
+                            >
+                                Convidar
+                            </button>
+                        </div>
+                    </>
+                )}
+
                 <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                     <button
                         className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}

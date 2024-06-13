@@ -9,9 +9,13 @@ import { ModalTransactionCreated } from "../ModalTransactionCreated";
 import { ActivityIndicator } from "../ActivityIndicator";
 import { Info } from "../Info";
 import { useMainContext } from "../../hooks/useMainContext";
+import { WebcamCapture } from "./components/WebCam";
+import { storage } from "../../services/firebase";
+import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
+import { save } from "../../config/infura";
 
-export function ModalSignOut({ close }) {
-    const { walletConnected, Sync, loginWithWalletAndPassword } = useMainContext();
+export function ModalSignOut({ close, success }) {
+    const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -24,6 +28,7 @@ export function ModalSignOut({ close }) {
     const [loading, setLoading] = useState(false);
     const [passNotMatch, setPassNotMatch] = useState(false);
     const [createdTransaction, setCreatedTransaction] = useState(false);
+    const [proofPhoto64, setProofPhoto64] = useState(null);
 
     useEffect(() => {
         if (confirmPass.length > 0) {
@@ -52,7 +57,18 @@ export function ModalSignOut({ close }) {
             toast.error('Selecione um tipo de usuário!');
             return;
         }
-        if (step === 3) {
+
+        if (step === 2 && userType === 7) {
+            setStep(4);
+            return;
+        }
+
+        if (step === 3 && !proofPhoto64) {
+            toast.error('A foto é obrigatória!')
+            return
+        }
+
+        if (step === 4) {
             if (!name.trim() || !password.trim() || !confirmPass.trim()) {
                 toast.error('Preencha todos os campos!');
                 return;
@@ -66,18 +82,26 @@ export function ModalSignOut({ close }) {
     }
 
     function previousStep() {
+        if (step === 4 && userType === 7) {
+            setStep(2);
+            return;
+        }
         setStep(step - 1);
     }
 
     async function handleRegister() {
-        if (window.ethereum) {
-            registerBlockchain();
-        } else {
-            registerOnCheckout();
+        if(userType === 7){
+            if (window.ethereum) {
+                registerSupporterBlockchain();
+            } else {
+                registerSupporterOnCheckout();
+            }
+        }else{
+            registerOnApi();
         }
     }
 
-    async function registerBlockchain() {
+    async function registerSupporterBlockchain() {
         if (userType === 7) {
             setModalTransaction(true);
             setLoadingTransaction(true);
@@ -151,7 +175,7 @@ export function ModalSignOut({ close }) {
         }
     }
 
-    async function registerOnCheckout() {
+    async function registerSupporterOnCheckout() {
         try {
             await api.post('/users', {
                 name,
@@ -207,6 +231,72 @@ export function ModalSignOut({ close }) {
         setLoading(false);
     }
 
+    async function savePhotoIpfs(){
+        const res = await fetch(proofPhoto64);
+        const blob = await res.blob();
+
+        const hash = await save(blob);
+        
+
+        const storageRef = ref(storage, `/images/${hash}.png`);
+        const response = await uploadBytesResumable(storageRef, blob)
+        if(response.state === 'success'){
+            const url = await getDownloadURL(storageRef);
+            createImageDB(url, hash)
+            return hash;
+        }else{
+            return false;
+        }
+    }
+
+    function createImageDB(url, hash){
+        try{
+            api.post('/image', {
+                url,
+                hash
+            })
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    async function registerOnApi(){
+        setLoading(true);
+        
+        const hashProofPhoto = await savePhotoIpfs();
+
+        if(!hashProofPhoto){
+            toast.error('Erro ao carregar imagem de prova, tente novamente!');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await api.post('/users', {
+                name,
+                wallet: String(wallet).toUpperCase(),
+                userType: Number(userType),
+                imgProfileUrl: hashProofPhoto,
+                level: 1,
+                password,
+            });
+            //Cadastro realizado
+            toast.success('Cadastro realizado com sucesso!');
+            getUserDataApi();
+            setTimeout(() => close(), 1000);
+            success();
+        } catch (err) {
+            console.log(err);
+            if (err.response?.data.error === 'User already exists') {
+                toast.error('Essa carteira já está cadastrada!')
+                return;
+            }
+            toast.error('Erro no cadastro, tente novamente!')
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
@@ -250,16 +340,25 @@ export function ModalSignOut({ close }) {
                                 <>
                                     <p className="font-semibold text-white text-center mt-5">{walletConnected}</p>
 
-                                    <button
-                                        className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
-                                        onClick={handleSyncWallet}
-                                    >
-                                        {loading ? (
-                                            <ActivityIndicator
-                                                size={25}
-                                            />
-                                        ) : 'Sincronize sua wallet'}
-                                    </button>
+                                    {walletConnected === '' ? (
+                                        <button
+                                            className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
+                                            onClick={handleSyncWallet}
+                                        >
+                                            {loading ? (
+                                                <ActivityIndicator
+                                                    size={25}
+                                                />
+                                            ) : 'Sincronize sua wallet'}
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="font-bold text-white px-5 py-2 underline mt-1"
+                                            onClick={logout}
+                                        >
+                                            Desconectar wallet
+                                        </button>
+                                    )}
                                 </>
                             )}
                         </>
@@ -269,7 +368,7 @@ export function ModalSignOut({ close }) {
                         <>
                             <p className="font-semibold text-white text-center">Agora escolha o tipo de usuário que deseja se cadastrar</p>
 
-                            <div className="flex flex-wrap justify-center my-3">
+                            <div className="flex flex-wrap justify-center my-3 gap-5">
                                 <button
                                     className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 7 ? 'border-white' : 'border-transparent'}`}
                                     onClick={() => setUserType(7)}
@@ -280,6 +379,39 @@ export function ModalSignOut({ close }) {
                                     />
                                     Apoiador
                                 </button>
+
+                                <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 3 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(3)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-pesquisadores.png')}
+                                        className="w-6 h-6 object-contain"
+                                    />
+                                    Pesquisador
+                                </button>
+
+                                <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 2 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(2)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-inspetor.png')}
+                                        className="w-6 h-6 object-contain"
+                                    />
+                                    Inspetor
+                                </button>
+
+                                <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 6 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(6)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-ativista.png')}
+                                        className="w-6 h-6 object-contain"
+                                    />
+                                    Ativista
+                                </button>
                             </div>
 
                             <Info
@@ -289,6 +421,33 @@ export function ModalSignOut({ close }) {
                     )}
 
                     {step === 3 && (
+                        <>
+                            <p className="font-semibold text-white text-center">Precisamos de uma foto sua, essa será seua foto de prova no sistema</p>
+
+                            {proofPhoto64 ? (
+                                <div className="flex flex-col items-center mt-5">
+                                    <img
+                                        src={proofPhoto64}
+                                        className="w-[180px] h-[160px] object-cover rounded-md"
+                                    />
+
+                                    <button
+                                        className="text-white underline"
+                                        onClick={() => setProofPhoto64(null)}
+                                    >Tirar outra</button>
+                                </div>
+                            ) : (
+                                <WebcamCapture
+                                    captured={(base64) => {
+                                        setProofPhoto64(base64);
+                                    }}
+                                />
+                            )}
+
+                        </>
+                    )}
+
+                    {step === 4 && (
                         <>
                             <p className="font-semibold text-white text-center">Agora precisamos de alguns dados seus</p>
                             <p className="text-sm text-white text-center">Preencha corretamente, não será possível alterar depois</p>
@@ -335,7 +494,7 @@ export function ModalSignOut({ close }) {
                         </>
                     )}
 
-                    {step === 4 && (
+                    {step === 5 && (
                         <>
                             <p className="font-semibold text-white text-center">Tudo certo, vamos finalizar seu cadastro</p>
 
@@ -361,7 +520,7 @@ export function ModalSignOut({ close }) {
                         </button>
                     )}
 
-                    {step < 4 && (
+                    {step < 5 && (
                         <button
                             onClick={nextStep}
                             className="text-white font-semibold px-5 py-1 rounded-md bg-blue-500"

@@ -15,7 +15,7 @@ import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 import { ModalSignOut } from "../../components/ModalSignOut";
@@ -32,10 +32,15 @@ export function Home() {
     const [firstLoad, setFirstLoad] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
     const [signOut, setSignOut] = useState(false);
+    const [news, setNews] = useState([]);
 
     useEffect(() => {
         getPublications();
     }, [page]);
+
+    useEffect(() => {
+        getNews();
+    }, []);
 
     async function getPublications() {
         if (firstLoad) {
@@ -58,6 +63,11 @@ export function Home() {
 
         setLoadingMore(false);
         setLoading(false);
+    }
+
+    async function getNews() {
+        const response = await api.get('/news');
+        setNews(response.data.news);
     }
 
     return (
@@ -135,24 +145,35 @@ export function Home() {
                                             </div>
                                         ) : (
                                             <div className="flex flex-col mt-2 w-full items-center">
-                                                <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                                    {blockchainData && (
-                                                        <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                            {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
-                                                            {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
-                                                            {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
-                                                            {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
-                                                            {userData?.userType === 7 && Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(blockchainData?.tokensBurned)}
+                                                {userData?.accountStatus === 'blockchain' ? (
+                                                    <>
+                                                        <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
+                                                            {blockchainData && (
+                                                                <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
+                                                                    {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
+                                                                    {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
+                                                                    {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
+                                                                    {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
+                                                                    {userData?.userType === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(blockchainData?.tokensBurned)}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-xs text-gray-200">
+                                                            {userData?.userType === 1 && 'Pontuação de regeneração'}
+                                                            {userData?.userType === 2 && 'Inspeções realizadas'}
+                                                            {userData?.userType === 3 && 'Pesquisas publicadas'}
+                                                            {userData?.userType === 4 && 'Seu nível'}
+                                                            {userData?.userType === 7 && 'Tokens contribuidos'}
                                                         </p>
-                                                    )}
-                                                </div>
-                                                <p className="text-xs text-gray-200">
-                                                    {userData?.userType === 1 && 'Pontuação de regeneração'}
-                                                    {userData?.userType === 2 && 'Inspeções realizadas'}
-                                                    {userData?.userType === 3 && 'Pesquisas publicadas'}
-                                                    {userData?.userType === 4 && 'Seu nível'}
-                                                    {userData?.userType === 7 && 'Tokens contribuidos'}
-                                                </p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <p className="text-yellow-500 font-semibold text-center mt-3">Cadastro na blockchain pendente</p>
+                                                        <button className="underline text-white" onClick={() => navigate('/profile')}>
+                                                            Saiba mais aqui
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         )}
 
@@ -217,7 +238,31 @@ export function Home() {
                         </div>
 
                         <div className={`flex flex-col gap-3 w-[100vw] lg:w-auto`}>
-                            {walletConnected !== '' && (
+                            {news.length > 0 && (
+                                <div className="flex w-full lg:max-w-[600px] h-[150px] rounded-md overflow-hidden">
+                                    {news.map(item => (
+                                        <button
+                                            key={item?.id}
+                                        >
+                                            {item?.action === 'open-url' ? (
+                                                <a href={item?.link} target="_blank">
+                                                    <img
+                                                        src={item?.bannerUrl}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </a>
+                                            ) : (
+                                                <img
+                                                    src={item?.bannerUrl}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {userData?.accountStatus === 'blockchain' && (
                                 <NewPubli attPublis={() => {
                                     setPage(0)
                                     getPublications();
@@ -275,6 +320,7 @@ export function Home() {
             {signOut && (
                 <ModalSignOut
                     close={() => setSignOut(false)}
+                    success={() => navigate('/profile')}
                 />
             )}
             <ToastContainer />
