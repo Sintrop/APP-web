@@ -320,6 +320,7 @@ export function Home() {
             {signOut && (
                 <ModalSignOut
                     close={() => setSignOut(false)}
+                    success={() => navigate('/profile')}
                 />
             )}
             <ToastContainer />

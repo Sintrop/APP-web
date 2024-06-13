@@ -860,6 +860,7 @@ export function Profile() {
             {modalSignOut && (
                 <ModalSignOut
                     close={() => setModalSignOut(false)}
+                    success={() => {}}
                 />
             )}
 

@@ -14,7 +14,7 @@ import { storage } from "../../services/firebase";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { save } from "../../config/infura";
 
-export function ModalSignOut({ close }) {
+export function ModalSignOut({ close, success }) {
     const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
@@ -284,6 +284,7 @@ export function ModalSignOut({ close }) {
             toast.success('Cadastro realizado com sucesso!');
             getUserDataApi();
             setTimeout(() => close(), 1000);
+            success();
         } catch (err) {
             console.log(err);
             if (err.response?.data.error === 'User already exists') {
