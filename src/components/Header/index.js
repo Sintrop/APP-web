@@ -4,7 +4,7 @@ import { RiComputerFill } from "react-icons/ri";
 import { BsFillGearFill } from "react-icons/bs";
 import { useNavigate } from "react-router";
 import { useMainContext } from '../../hooks/useMainContext';
-import { ModalConnectAccount } from "../ModalConnectAccount";
+import { ModalConnectAccount } from "../ModalConnectAccount/index.js";
 import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
 
