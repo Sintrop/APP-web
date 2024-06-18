@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './accountProducer.css';
-import { get } from '../../config/infura';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import { FaChevronRight } from 'react-icons/fa';
 
-//services
-import { GetDelation, GetInspections, GetProducer } from '../../services/accountProducerService';
-
 //components
-
-import { useMainContext } from '../../hooks/useMainContext';
 import { getImage } from '../../services/getImage';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
-import { Inspection } from '../ResultInspection/components/Inspection';
+import { Helmet } from "react-helmet";
 
 const containerMapStyle = {
     width: '100%',
@@ -129,6 +123,16 @@ export default function AccountProducer() {
 
     return (
         <div className="w-full flex flex-col items-center bg-green-950 h-[100vh] pt-5 overflow-y-auto overflow-x-hidden px-2">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Produtor - Sintrop</title>
+                <link rel="canonical" href={`https://app.sintrop.com/producer/${String(walletSelected).toLowerCase()}`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <img
                 src={require('../../assets/logo-branco.png')}
                 className='w-[140px] lg:w-[170px] object-contain'

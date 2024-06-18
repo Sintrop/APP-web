@@ -14,6 +14,7 @@ import { PublicationItem } from '../Home/components/PublicationItem';
 import { Item } from "../ImpactCalculator/components/Item";
 import { Feedback } from "../../components/Feedback";
 import {ProducerGraphics} from '../../components/ProducerGraphics';
+import { Helmet } from "react-helmet";
 
 const containerMapStyle = {
     width: '100%',
@@ -159,6 +160,16 @@ export function UserDetails() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Sintrop App</title>
+                <link rel="canonical" href={`https://app.sintrop.com/user-details/${String(wallet).toLowerCase()}`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar />
             <Header />
 

@@ -3,12 +3,23 @@ import { Header } from "../../components/Header";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
 import { Feedback } from "../../components/Feedback";
+import { Helmet } from "react-helmet";
 
 export function RegenerationCredit() {
     const navigate = useNavigate();
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Crédito de Regeneração - Sintrop</title>
+                <link rel="canonical" href={`https://app.sintrop.com/regeneration-credit`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar/>
             <Header routeActive='regeneration-credit' />
 

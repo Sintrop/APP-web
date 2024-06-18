@@ -27,6 +27,7 @@ import { addInspector } from "../../services/registerService";
 import { addActivist } from "../../services/activistService";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { toast, ToastContainer } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -318,6 +319,16 @@ export function Profile() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Sintrop App</title>
+                <link rel="canonical" href={`https://app.sintrop.com/profile`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar />
             <Header />
 

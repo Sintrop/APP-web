@@ -22,6 +22,7 @@ import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { FaChevronRight } from "react-icons/fa";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
+import { Helmet } from "react-helmet";
 
 export function Actions() {
     const { walletConnected, userData, connectionType } = useMainContext();
@@ -219,6 +220,16 @@ export function Actions() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Sintrop App</title>
+                <link rel="canonical" href={`https://app.sintrop.com/actions`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar />
             <Header routeActive='actions' />
 
