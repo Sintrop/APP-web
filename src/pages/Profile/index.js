@@ -16,7 +16,7 @@ import { ModalLogout } from '../Home/components/ModalLogout';
 import { Item } from "../ImpactCalculator/components/Item";
 import { ModalEditProfile } from "./components/ModalEditProfile";
 import * as Dialog from '@radix-ui/react-dialog';
-import { ModalConnectAccount } from "../../components/ModalConnectAccount";
+import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { Feedback } from "../../components/Feedback";
 import { ProducerGraphics } from "../../components/ProducerGraphics";
 import { ModalSignOut } from "../../components/ModalSignOut";
@@ -123,7 +123,7 @@ export function Profile() {
         if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInspector(walletConnected, userData?.name, userData.imgProfileUrl, userData.geoLocation)
+            addInspector(walletConnected, userData?.name, userData?.imgProfileUrl, 'geolocation')
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,

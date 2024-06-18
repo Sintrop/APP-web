@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useParams } from 'react-router';
-import Loading from './Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import axios from 'axios';
-import Loader from './Loader';
 import { FaWallet, FaKey } from "react-icons/fa";
-import { ActivityIndicator } from './ActivityIndicator';
-import {useMainContext} from '../hooks/useMainContext';
-import { ModalSignOut } from './ModalSignOut';
+import { ActivityIndicator } from '../ActivityIndicator';
+import {useMainContext} from '../../hooks/useMainContext';
+import { ModalSignOut } from '../ModalSignOut';
 
 export function ModalConnectAccount({ close }) {
     const {loginWithWalletAndPassword, Sync} = useMainContext();

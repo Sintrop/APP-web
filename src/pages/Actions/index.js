@@ -7,7 +7,7 @@ import { TopBar } from "../../components/TopBar";
 import { ActivistActions } from "./components/ActivistActions";
 import { SupporterActions } from "./components/SupporterActions";
 import * as Dialog from '@radix-ui/react-dialog';
-import { ModalConnectAccount } from "../../components/ModalConnectAccount";
+import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { MdHelpOutline } from "react-icons/md";
 import { SiReadthedocs } from 'react-icons/si';
 import { FaMobile } from 'react-icons/fa';

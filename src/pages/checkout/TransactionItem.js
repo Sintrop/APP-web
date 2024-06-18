@@ -179,7 +179,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInspector(walletAddress, userData?.name, userData.imgProfileUrl, userData.geoLocation)
+            addInspector(walletAddress, userData?.name, userData.imgProfileUrl, 'geolocation')
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,
@@ -208,7 +208,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
-                    const message = String(err.message);
+                    const message = String(err?.message);
                     console.log(message);
                     if (message.includes("Not allowed user")) {
                         setLogTransaction({

@@ -2,24 +2,13 @@ import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import './loadingTransaction.css';
 import { useTranslation } from 'react-i18next';
-import { MissaoCheck } from '../MissaoCheck';
-import { useMainContext } from '../../hooks/useMainContext';
 import Loader from '../Loader';
 import format from 'date-fns/format';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 export function LoadingTransaction({loading, logTransaction, action}){
-    const {userData} = useMainContext();
     const {t} = useTranslation();
-    const [count, setCount] = useState(1);
-    const [missaoCheck, setMissaoCheck] = useState(false);
-
-    useEffect(() => {
-        if(!loading && logTransaction.type === 'success'){
-            
-        }
-    }, [logTransaction])
     
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0 z-50'>
@@ -78,15 +67,6 @@ export function LoadingTransaction({loading, logTransaction, action}){
                     )}
                 </div>
             </Dialog.Content>
-
-            <Dialog.Root
-                open={missaoCheck}
-                onOpenChange={(open) => setMissaoCheck(open)}
-            >
-                <MissaoCheck
-                    action={action}
-                />
-            </Dialog.Root>
 
             <ToastContainer
                 position='top-center'

@@ -5,7 +5,7 @@ import { api } from "../../services/api";
 import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ModalConnectAccount } from "../../components/ModalConnectAccount";
+import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";

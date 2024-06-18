@@ -1,7 +1,5 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-import Login from "../pages/login";
-import Dashboard from '../pages/dashboard';
 import AccountProducer from "../pages/accountProducer";
 import AccountInvestor from '../pages/accountInvestor';
 import OnlyOwner from "../pages/onlyOwner";
@@ -77,8 +75,6 @@ export default function Router(){
                 <Route exact path="/education" element={<Education/>}/>
                 <Route exact path="/content/:id" element={<ContentDetails/>}/>
                 <Route exact path="/content/player/:fileServer" element={<Player/>}/>
-
-                <Route path="/dashboard/:walletAddress/:tabActive/:typeUser/:walletSelected" element={<Dashboard/>}/>
                 
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>

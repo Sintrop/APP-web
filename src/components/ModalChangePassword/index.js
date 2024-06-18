@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import Loading from './Loading';
+import Loading from '../Loading';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { api } from '../services/api';
+import { api } from '../../services/api';
 
 export function ModalChangePassword({close, wallet}){
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
 
     async function handleChangePassword(){
         if(!password.trim() || !confirmPassword.trim()){
