@@ -20,6 +20,7 @@ import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 import { ModalSignOut } from "../../components/ModalSignOut";
 import { Feedback } from "../../components/Feedback";
+import { Helmet } from "react-helmet";
 
 export function Home() {
     const navigate = useNavigate();
@@ -72,6 +73,16 @@ export function Home() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Sintrop App</title>
+                <link rel="canonical" href={`https://app.sintrop.com`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar />
             <Header routeActive='home' />
 

@@ -8,6 +8,7 @@ import { TopBar } from "../../components/TopBar";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 import { Feedback } from "../../components/Feedback";
+import { Helmet } from "react-helmet";
 
 const containerMapStyle = {
     width: '100vw',
@@ -102,6 +103,16 @@ export function Community() {
 
     return (
         <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden`} >
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Comunidade - Sintrop</title>
+                <link rel="canonical" href={`https://app.sintrop.com/community`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
             <TopBar />
             <Header routeActive='community' />
 

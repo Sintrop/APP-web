@@ -6,6 +6,7 @@ import { ItemReceipt } from './ItemReceipts';
 import { api } from '../../services/api';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { Item } from '../ImpactCalculator/components/Item';
+import { Helmet } from "react-helmet";
 
 //services
 import { getImage } from '../../services/getImage';
@@ -97,6 +98,16 @@ export default function AccountInvestor() {
 
     return (
         <div className="w-full flex flex-col  items-center bg-green-950 pt-5 px-2 overflow-x-hidden">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Apoiador - Sintrop</title>
+                <link rel="canonical" href={`https://app.sintrop.com/supporter/${String(walletSelected).toLowerCase()}`} />
+                <link rel="icon" href="/favicon.png" />
+                <meta
+                    name="description"
+                    content="Sistema Descentralizado de Regeneração da Natureza"
+                />
+            </Helmet>
 
             <img
                 src={require('../../assets/logo-branco.png')}
