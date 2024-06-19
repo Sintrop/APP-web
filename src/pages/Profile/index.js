@@ -64,8 +64,10 @@ export function Profile() {
         }
 
         if (userData?.id !== 'anonimous') {
-            checkInvite();
-            getProportion();
+            if(userData?.accountStatus !== 'blockchain'){
+                checkInvite();
+                getProportion();
+            }
         }
     }, [userData]);
 
