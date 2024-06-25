@@ -20,7 +20,7 @@ import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 import { ModalSignOut } from "../../components/ModalSignOut";
 import { Feedback } from "../../components/Feedback";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 export function Home() {
     const navigate = useNavigate();

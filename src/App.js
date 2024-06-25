@@ -2,12 +2,15 @@ import React from "react";
 import MainProvider from "./contexts/main";
 import Router from "./routes";
 import "./app.css";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
     return (
-        <MainProvider>
-            <Router />
-        </MainProvider>
+        <HelmetProvider>
+            <MainProvider>
+                <Router />
+            </MainProvider>
+        </HelmetProvider>
     );
 }
 
