@@ -111,10 +111,12 @@ export function Profile() {
         if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
             setAccountStatus('guest');
             setInviteData(invite);
-            // api.put('/user/account-status', {
-            //     userWallet: userData?.wallet,
-            //     status: 'guest',
-            // })
+            if(accountStatus === 'pending'){
+                api.put('/user/account-status', {
+                    userWallet: userData?.wallet,
+                    status: 'guest',
+                })
+            }
         }
     }
 
