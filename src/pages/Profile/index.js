@@ -362,7 +362,7 @@ export function Profile() {
                                                 Cadastre-se
                                             </button>
 
-                                            {true && (
+                                            {inviteData && (
                                                 <div className="flex flex-col mt-3 w-fit p-3 rounded-md border border-white">
                                                     <p className="text-white">Você recebeu um convite nessa wallet para se cadastrar como:</p>
                                                     <p className="font-bold text-green-600 text-2xl">
