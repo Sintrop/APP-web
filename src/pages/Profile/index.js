@@ -49,6 +49,7 @@ export function Profile() {
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [inviteData, setInviteData] = useState(null);
 
     useEffect(() => {
         if (userData) {
@@ -64,11 +65,14 @@ export function Profile() {
         }
 
         if (userData?.id !== 'anonimous') {
-            if(userData?.accountStatus !== 'blockchain'){
+            if (userData?.accountStatus !== 'blockchain') {
                 checkInvite();
                 getProportion();
             }
+        } else {
+            checkInvite();
         }
+
     }, [userData]);
 
     useEffect(() => {
@@ -106,10 +110,13 @@ export function Profile() {
         }
         if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
             setAccountStatus('guest');
-            api.put('/user/account-status', {
-                userWallet: userData?.wallet,
-                status: 'guest',
-            })
+            setInviteData(invite);
+            if(accountStatus === 'pending'){
+                api.put('/user/account-status', {
+                    userWallet: userData?.wallet,
+                    status: 'guest',
+                })
+            }
         }
     }
 
@@ -354,6 +361,26 @@ export function Profile() {
                                             >
                                                 Cadastre-se
                                             </button>
+
+                                            {true && (
+                                                <div className="flex flex-col mt-3 w-fit p-3 rounded-md border border-white">
+                                                    <p className="text-white">Você recebeu um convite nessa wallet para se cadastrar como:</p>
+                                                    <p className="font-bold text-green-600 text-2xl">
+                                                        {inviteData?.userType === 1 && 'Produtor(a)'}
+                                                        {inviteData?.userType === 2 && 'Inspetor(a)'}
+                                                        {inviteData?.userType === 3 && 'Pesquisador(a)'}
+                                                        {inviteData?.userType === 4 && 'Desenvolvedor(a)'}
+                                                        {inviteData?.userType === 5 && 'Contribuidor(a)'}
+                                                        {inviteData?.userType === 6 && 'Ativista'}
+                                                        {inviteData?.userType === 7 && 'Apoiador(a)'}
+                                                        {inviteData?.userType === 8 && 'Validador(a)'}
+                                                    </p>
+
+                                                    <p className="text-white mt-3">Você foi convidado por:</p>
+                                                    <p className="font-bold text-green-600">{inviteData?.inviter}</p>
+                                                </div>
+                                            )}
+
                                             <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
                                                 <div className="flex items-center gap-2">
                                                     <MdHelpOutline color='white' size={25} />
@@ -710,105 +737,109 @@ export function Profile() {
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-col items-center">
-                                            <p className="font-bold text-white">Cadastro na Blockchain pendente</p>
-                                            <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-5">
-                                                {imageProfile ? (
-                                                    <img
-                                                        src={imageProfile}
-                                                        className="rounded-full object-cover w-full h-full"
-                                                    />
-                                                ) : (
-                                                    <>
-                                                        {userData?.userType === 7 && (
+                                        <>
+                                            {userData?.id !== 'anonimous' && (
+                                                <div className="flex flex-col items-center">
+                                                    <p className="font-bold text-white">Cadastro na Blockchain pendente</p>
+                                                    <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-5">
+                                                        {imageProfile ? (
                                                             <img
-                                                                src={require('../../assets/icon-validator.png')}
+                                                                src={imageProfile}
                                                                 className="rounded-full object-cover w-full h-full"
                                                             />
+                                                        ) : (
+                                                            <>
+                                                                {userData?.userType === 7 && (
+                                                                    <img
+                                                                        src={require('../../assets/icon-validator.png')}
+                                                                        className="rounded-full object-cover w-full h-full"
+                                                                    />
+                                                                )}
+
+                                                                {userData?.userType === 8 && (
+                                                                    <img
+                                                                        src={require('../../assets/icon-validator.png')}
+                                                                        className="rounded-full object-cover w-full h-full"
+                                                                    />
+                                                                )}
+                                                            </>
                                                         )}
-
-                                                        {userData?.userType === 8 && (
-                                                            <img
-                                                                src={require('../../assets/icon-validator.png')}
-                                                                className="rounded-full object-cover w-full h-full"
-                                                            />
-                                                        )}
-                                                    </>
-                                                )}
-                                            </div>
-                                            <p className="font-bold text-white mt-1">{userData?.name}</p>
-                                            <p className="text-gray-300 text-sm">
-                                                {userData?.userType === 1 && 'Produtor(a)'}
-                                                {userData?.userType === 2 && 'Inspetor(a)'}
-                                                {userData?.userType === 3 && 'Pesquisador(a)'}
-                                                {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                                                {userData?.userType === 5 && 'Contribuidor(a)'}
-                                                {userData?.userType === 6 && 'Ativista'}
-                                                {userData?.userType === 7 && 'Apoiador(a)'}
-                                                {userData?.userType === 8 && 'Validador(a)'}
-                                            </p>
-
-                                            <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-3 lg:w-[720px]">
-                                                <p className="text-gray-200 text-sm text-center">Status do convite</p>
-                                                <p className="font-bold text-green-600 text-4xl text-center">
-                                                    {accountStatus === 'pending' ? 'Aguardando convite' : 'Convite recebido'}
-                                                </p>
-
-                                                {accountStatus === 'pending' && (
-                                                    <div className="flex mt-5 items-center justify-center gap-2">
-                                                        <MdInfo size={20} color='#ddd' />
-                                                        <p className="text-[#ddd] text-sm">
-                                                            {userData?.userType === 1 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                            {userData?.userType === 2 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                            {userData?.userType === 3 && 'Para entrar no sistema você precisa ser convidado por um pesquisador.'}
-                                                            {userData?.userType === 4 && 'Para entrar no sistema você precisa ser convidado por um desenvolvedor.'}
-                                                            {userData?.userType === 6 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                            {userData?.userType === 8 && 'Para entrar no sistema você precisa ser convidado por um validador.'}
-                                                        </p>
                                                     </div>
-                                                )}
-                                            </div>
-
-                                            {accountStatus === 'guest' && (
-                                                <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-10 lg:w-[720px]">
-                                                    <p className="text-gray-200 text-sm text-center">Vagas disponíveis</p>
-                                                    <p className="font-bold text-green-600 text-4xl text-center">
-                                                        {vacancyAvaliable ? 'Vaga disponível' : 'Não há vaga no momento'}
-                                                    </p>
-                                                    <p className="text-white text-center">
-                                                        {vacancyAvaliable ?
-                                                            `Há ${amountVacancy} vaga(s) disponível`
-                                                            :
-                                                            `Precisa de mais ${amountVacancy} produtor(es) para liberar uma vaga`
-                                                        }
+                                                    <p className="font-bold text-white mt-1">{userData?.name}</p>
+                                                    <p className="text-gray-300 text-sm">
+                                                        {userData?.userType === 1 && 'Produtor(a)'}
+                                                        {userData?.userType === 2 && 'Inspetor(a)'}
+                                                        {userData?.userType === 3 && 'Pesquisador(a)'}
+                                                        {userData?.userType === 4 && 'Desenvolvedor(a)'}
+                                                        {userData?.userType === 5 && 'Contribuidor(a)'}
+                                                        {userData?.userType === 6 && 'Ativista'}
+                                                        {userData?.userType === 7 && 'Apoiador(a)'}
+                                                        {userData?.userType === 8 && 'Validador(a)'}
                                                     </p>
 
-                                                    {vacancyAvaliable && (
-                                                        <button
-                                                            className="mt-5 bg-blue-500 rounded-md text-white font-semibold px-5 h-10"
-                                                            onClick={() => {
-                                                                if(window.ethereum){
-                                                                    registerBlockchain();
-                                                                }else{
-                                                                    toast.error('Conecte-se em um navegador com provedor Ethereum!')
-                                                                }
-                                                            }}
-                                                        >
-                                                            Efetivar cadastro
-                                                        </button>
-                                                    )}
+                                                    <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-3 lg:w-[720px]">
+                                                        <p className="text-gray-200 text-sm text-center">Status do convite</p>
+                                                        <p className="font-bold text-green-600 text-4xl text-center">
+                                                            {accountStatus === 'pending' ? 'Aguardando convite' : 'Convite recebido'}
+                                                        </p>
 
-                                                    {accountStatus === 'pending' && (
-                                                        <div className="flex mt-5 items-center justify-center gap-2">
-                                                            <MdInfo size={20} color='#ddd' />
-                                                            <p className="text-[#ddd] text-sm max-w-[90%]">
-                                                                Nosso sistema, possui uma lógica de proporção, para o cadastro dos usuários, que tem como base a quantidade de produtores no sistema! Isso significa que, para você efetivar seu cadastro, esteja disponível uma vaga para você
+                                                        {accountStatus === 'pending' && (
+                                                            <div className="flex mt-5 items-center justify-center gap-2">
+                                                                <MdInfo size={20} color='#ddd' />
+                                                                <p className="text-[#ddd] text-sm">
+                                                                    {userData?.userType === 1 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
+                                                                    {userData?.userType === 2 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
+                                                                    {userData?.userType === 3 && 'Para entrar no sistema você precisa ser convidado por um pesquisador.'}
+                                                                    {userData?.userType === 4 && 'Para entrar no sistema você precisa ser convidado por um desenvolvedor.'}
+                                                                    {userData?.userType === 6 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
+                                                                    {userData?.userType === 8 && 'Para entrar no sistema você precisa ser convidado por um validador.'}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {accountStatus === 'guest' && (
+                                                        <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-10 lg:w-[720px]">
+                                                            <p className="text-gray-200 text-sm text-center">Vagas disponíveis</p>
+                                                            <p className="font-bold text-green-600 text-4xl text-center">
+                                                                {vacancyAvaliable ? 'Vaga disponível' : 'Não há vaga no momento'}
                                                             </p>
+                                                            <p className="text-white text-center">
+                                                                {vacancyAvaliable ?
+                                                                    `Há ${amountVacancy} vaga(s) disponível`
+                                                                    :
+                                                                    `Precisa de mais ${amountVacancy} produtor(es) para liberar uma vaga`
+                                                                }
+                                                            </p>
+
+                                                            {vacancyAvaliable && (
+                                                                <button
+                                                                    className="mt-5 bg-blue-500 rounded-md text-white font-semibold px-5 h-10"
+                                                                    onClick={() => {
+                                                                        if (window.ethereum) {
+                                                                            registerBlockchain();
+                                                                        } else {
+                                                                            toast.error('Conecte-se em um navegador com provedor Ethereum!')
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    Efetivar cadastro
+                                                                </button>
+                                                            )}
+
+                                                            {accountStatus === 'pending' && (
+                                                                <div className="flex mt-5 items-center justify-center gap-2">
+                                                                    <MdInfo size={20} color='#ddd' />
+                                                                    <p className="text-[#ddd] text-sm max-w-[90%]">
+                                                                        Nosso sistema, possui uma lógica de proporção, para o cadastro dos usuários, que tem como base a quantidade de produtores no sistema! Isso significa que, para você efetivar seu cadastro, esteja disponível uma vaga para você
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
-                                        </div>
+                                        </>
                                     )}
                                 </>
                             ) : (
@@ -873,7 +904,7 @@ export function Profile() {
             {modalSignOut && (
                 <ModalSignOut
                     close={() => setModalSignOut(false)}
-                    success={() => {}}
+                    success={() => { }}
                 />
             )}
 
@@ -896,7 +927,7 @@ export function Profile() {
                 />
             </Dialog.Root>
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 }

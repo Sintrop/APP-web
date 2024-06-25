@@ -29,6 +29,8 @@ export function ModalSignOut({ close, success }) {
     const [passNotMatch, setPassNotMatch] = useState(false);
     const [createdTransaction, setCreatedTransaction] = useState(false);
     const [proofPhoto64, setProofPhoto64] = useState(null);
+    const [checkingWallet, setCheckingWallet] = useState(false);
+    const [walletAvaliable, setWalletAvaliable] = useState(true);
 
     useEffect(() => {
         if (confirmPass.length > 0) {
@@ -48,7 +50,30 @@ export function ModalSignOut({ close, success }) {
         }
     }, [walletConnected]);
 
+    useEffect(() => {
+        if(wallet.length > 10){
+            checkWallet();
+        }
+    }, [wallet]);
+
+    async function checkWallet(){
+        setCheckingWallet(true);
+        try{
+            const response = await api.get(`/user/${wallet}`);
+            setWalletAvaliable(false);
+        }catch(err){
+            if(err.response.data.error === 'user not found'){
+                setWalletAvaliable(true);
+            }
+        }
+        setCheckingWallet(false);
+    }
+
     function nextStep() {
+        if(step === 1 && !walletAvaliable){
+            toast.error('Essa wallet não está disponível para cadastro!')
+            return;
+        }
         if (step === 1 && !wallet.trim()) {
             toast.error('Digite uma wallet!');
             return;
@@ -358,6 +383,21 @@ export function ModalSignOut({ close, success }) {
                                         >
                                             Desconectar wallet
                                         </button>
+                                    )}
+                                </>
+                            )}
+
+                            {checkingWallet ? (
+                                <div className="flex items-center justify-center gap-2 mt-3">
+                                    
+                                    <p className="font-bold text-white">Verificando wallet...</p>
+                                </div>
+                            ) : (
+                                <>
+                                    {wallet !== '' && (
+                                        <div className="flex flex-col mt-3 items-center">
+                                            <p className={`font-semibold ${walletAvaliable ? 'text-green-600' : 'text-yellow-500'}`}>{walletAvaliable ? 'Wallet disponível' : 'Wallet já cadastrada no sistema!'}</p>
+                                        </div>
                                     )}
                                 </>
                             )}

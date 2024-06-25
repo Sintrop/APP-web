@@ -169,7 +169,8 @@ export default function MainProvider({ children }) {
                         name: 'anonimous',
                         wallet: String(wallet.address[0]).toLowerCase(),
                         userType: 0,
-                        imgProfileUrl: null
+                        imgProfileUrl: null,
+                        accountStatus: 'pending'
                     })
                 }
             }
