@@ -82,6 +82,8 @@ export function Home() {
                     name="description"
                     content="Sistema Descentralizado de Regeneração da Natureza"
                 />
+                <meta name="og:title" property="og:title" content="Sintrop App"/>
+                <meta name="og:description" property="og:description" content="Sistema Descentralizado de Regeneração da Natureza"/>
             </Helmet>
             <TopBar />
             <Header routeActive='home' />

@@ -58,7 +58,6 @@ export function Inspection({ id }) {
     const [address, setAddress] = useState({});
     const [isaData, setIsaData] = useState({});
     const [biodiversity, setBiodiversity] = useState([]);
-    const [biodiversitySoil, setBiodiversitySoil] = useState([]);
     const [zones, setZones] = useState([]);
     const [result, setResult] = useState({});
     const [insumos, setInsumos] = useState([]);
@@ -74,6 +73,7 @@ export function Inspection({ id }) {
     const [biodiversityFauna, setBiodiversityFauna] = useState([]);
     const [biodiversityFlora, setBiodiversityFlora] = useState([]);
     const [oldMetodologie, setOldMetodologie] = useState(false);
+    const [embedUrl, setEmbedUrl] = useState(null);
 
     useEffect(() => {
         getInspectionData();
@@ -99,6 +99,8 @@ export function Inspection({ id }) {
         setResult(JSON.parse(responseApi.data?.inspectionApiData?.resultInspection).pdfData);
         setInsumos(JSON.parse(responseApi.data?.inspectionApiData.resultCategories));
         setLoading(false);
+        
+        fixUrlEmbedYoutube(responseApi.data?.inspectionApiData?.urlVideo);
 
         if (responseApi?.data?.inspectionApiData?.propertyPhotos) {
             await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
@@ -178,6 +180,17 @@ export function Inspection({ id }) {
         setImagesProperty(newArray);
         setImagesPropertyAerial(newArrayAerial);
         setLoadingImagesProperty(false)
+    }
+
+    function fixUrlEmbedYoutube(url){
+        if(!url){
+            return;
+        }
+
+        const split = url.split('/');
+        const idVideo = split[split.length - 1];
+        const newUrl = `https://www.youtube.com/embed/${idVideo}`;
+        setEmbedUrl(newUrl);
     }
 
     return (
@@ -537,12 +550,12 @@ export function Inspection({ id }) {
                                     </div>
                                 )}
 
-                                {inspectionDataApi?.urlVideo && (
+                                {embedUrl && (
                                     <div className="flex justify-center">
                                         <iframe
                                             width="560"
                                             height="315"
-                                            src={inspectionDataApi?.urlVideo}
+                                            src={embedUrl}
                                             title="YouTube video player"
                                             frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

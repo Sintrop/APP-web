@@ -126,7 +126,7 @@ export function PublicationItem({ data }) {
                                     />
                                 ) : (
                                     <img
-                                        src={require('../../../../assets/icon-validator.png')}
+                                        src={require('../../../../assets/perfil_sem_foto.png')}
                                         className="w-14 h-14 rounded-full object-cover"
                                     />
                                 )}
