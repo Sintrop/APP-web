@@ -83,7 +83,7 @@ export function ModalReserve({ reserved }) {
 
                 <div className="flex flex-col w-full overflow-y-auto mt-3">
                     <div className="flex flex-col w-full p-2 rounded-md bg-green-950">
-                        <p className="font-bold text-sm text-blue-500">Quanto você deseja investir?</p>
+                        <p className="font-bold text-sm text-blue-500">Quanto você pretende investir?</p>
                         <div className="flex items-center gap-2 mt-1">
                             <p className="font-bold text-sm text-white">R$</p>
                             <input
@@ -122,7 +122,7 @@ export function ModalReserve({ reserved }) {
                         placeholder="Digite aqui"
                     />
 
-                    <label className="font-bold text-blue-500 mt-2">CPF:</label>
+                    <label className="font-bold text-blue-500 mt-2">CPF (Sem pontos, hífen.):</label>
                     <input
                         value={cpf}
                         onChange={(e) => setCpf(e.target.value)}
@@ -131,7 +131,7 @@ export function ModalReserve({ reserved }) {
                         type="number"
                     />
 
-                    <label className="font-bold text-blue-500 mt-2">Documento de identidade (RG):</label>
+                    <label className="font-bold text-blue-500 mt-2">Documento de identidade (RG) (Sem pontos, hífen.):</label>
                     <input
                         value={rg}
                         onChange={(e) => setRg(e.target.value)}
@@ -140,7 +140,7 @@ export function ModalReserve({ reserved }) {
                         type="number"
                     />
 
-                    <label className="font-bold text-blue-500 mt-2">Celular:</label>
+                    <label className="font-bold text-blue-500 mt-2">Celular (Sem pontos, hífen.):</label>
                     <input
                         value={tel}
                         onChange={(e) => setTel(e.target.value)}
@@ -187,7 +187,7 @@ export function ModalReserve({ reserved }) {
                         {loadingBuy ? (
                             <ActivityIndicator size={30}/>
                         ) : (
-                            'Fazer reserva'
+                            'Entrar na lista de espera'
                         )}
                     </button>
                 </div>

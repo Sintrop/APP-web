@@ -14,7 +14,6 @@ import { useCountdown } from '../../../hooks/useCountdown';
 import { TopBar } from "../../../components/TopBar";
 
 export function PreSale() {
-    const [day, hour, minute, second] = useCountdown('2024-06-25 23:59:59');
     const { walletConnected } = useMainContext();
     const [balanceVisible, setBalanceVisible] = useState(false);
     const [icoData, setIcoData] = useState({});
@@ -100,19 +99,19 @@ export function PreSale() {
                                     <p className="text-center text-sm text-white mt-5">Essa oferta encerra em (25/06/2024)</p>
                                     <div className="flex items-center justify-center gap-2">
                                         <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
-                                            <p className="font-bold text-white text-xl">{day}</p>
+                                            <p className="font-bold text-white text-xl">0</p>
                                             <p className="text-center text-xs text-white">Dias</p>
                                         </div>
                                         <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
-                                            <p className="font-bold text-white text-xl">{hour}</p>
+                                            <p className="font-bold text-white text-xl">0</p>
                                             <p className="text-center text-xs text-white">Horas</p>
                                         </div>
                                         <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
-                                            <p className="font-bold text-white text-xl">{minute}</p>
+                                            <p className="font-bold text-white text-xl">0</p>
                                             <p className="text-center text-xs text-white">Minutos</p>
                                         </div>
                                         <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
-                                            <p className="font-bold text-white text-xl">{second}</p>
+                                            <p className="font-bold text-white text-xl">0</p>
                                             <p className="text-center text-xs text-white">Segundos</p>
                                         </div>
                                     </div>
@@ -148,7 +147,7 @@ export function PreSale() {
                                                 src={require('../../../assets/token.png')}
                                                 className="w-5 h-5 object-contain"
                                             />
-                                            RESERVAR
+                                            Lista de espera
                                         </Dialog.Trigger>
 
                                         <ModalReserve
@@ -156,7 +155,7 @@ export function PreSale() {
                                                 bookings.push(data);
                                                 setTimeout(() => {
                                                     setModalReserve(false);
-                                                    alert('Reserva feita com sucesso! Em breve nossa equipe entrará em contato para alinhar os próximos passos.')
+                                                    alert('Você acabou de entrar na lista de espera. Em breve nossa equipe entrará em contato com você.')
                                                 }, 2000);
                                             }}
                                         />
