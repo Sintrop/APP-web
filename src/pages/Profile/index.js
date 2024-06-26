@@ -339,7 +339,7 @@ export function Profile() {
                 />
             </Helmet>
             <TopBar />
-            <Header />
+            <Header routeActive='profile'/>
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
