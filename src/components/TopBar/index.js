@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { useCountdown } from '../../hooks/useCountdown';
 
 export function TopBar() {
-    const [day, hour, minute, second] = useCountdown('2024-06-25 23:59:59');
     const navigate = useNavigate();
     const { era, nextEra, impactToken } = useMainContext();
 
@@ -52,7 +51,7 @@ export function TopBar() {
 
                     <div className="flex items-center gap-1">
                         <div className="flex flex-col items-center justify-center h-6 rounded-md bg-green-500 px-1">
-                            <p className="font-bold text-xs">{day} dias e {hour} horas</p>
+                            <p className="font-bold text-xs">Lista de espera</p>
                         </div>
                     </div>
                 </button>
