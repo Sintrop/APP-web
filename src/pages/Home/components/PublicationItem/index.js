@@ -26,6 +26,7 @@ import { ModalComments } from "../ModalComments";
 import { PublishResearche } from "./PublishResearche";
 import { ProofReduce } from "./ProofReduce";
 import { InviteWalletPubli } from "./InviteWalletPubli";
+import { NewZonePubli } from "./NewZonePubli";
 
 export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
@@ -209,13 +210,17 @@ export function PublicationItem({ data }) {
                 {data.type === 'invite-wallet' && (
                     <InviteWalletPubli data={data} />
                 )}
+
+                {data.type === 'new-zone' && (
+                    <NewZonePubli data={data} />
+                )}
             </div>
-            
+
             {additionalData?.hash && (
                 <div>
                     <p className="text-gray-200 text-xs">
-                        Hash da transação: 
-                        <a 
+                        Hash da transação:
+                        <a
                             className="ml-1 underline text-blue-300"
                             href={`https://sepolia.etherscan.io/tx/${additionalData?.hash}`}
                             target="_blank"
