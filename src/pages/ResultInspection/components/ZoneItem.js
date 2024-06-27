@@ -3,10 +3,11 @@ import { getImage } from "../../../services/getImage";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { ImageItem } from "./ImageItem";
 import { ViewImage } from "../../../components/ViewImage";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { FaMapMarker } from "react-icons/fa";
 import { ModalCollectDetails } from "./ModalCollectDetails";
-import { APIProvider, Map, Marker as NewMarker, AdvancedMarker, Pin, AdvancedMarkerContext } from '@vis.gl/react-google-maps';
+import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Polyline } from "../../../components/Mapbox/Polyline";
 
 const containerMapStyle = {
     width: '100%',
@@ -16,8 +17,6 @@ const containerMapStyle = {
 export function ZoneItem({ data, index }) {
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
     const areaSampling1 = Number(data?.arvores?.sampling1?.area);
-    const treesS2 = data?.arvores?.sampling2?.trees?.length;
-    const areaSampling2 = Number(data?.arvores?.sampling2?.area);
     const areaZone = Number(data?.areaZone);
     const analiseSolo = data?.analiseSolo;
     const bioSoil = data?.bioSoil;
@@ -38,39 +37,29 @@ export function ZoneItem({ data, index }) {
     const [collectDetails, setCollectDetails] = useState(false);
     const [collectSelected, setCollectSelected] = useState(null);
     const [defaultLocationTrees, setDefaultLocationTrees] = useState(null);
+    const [mapZone, setMapZone] = useState(null);
+    const [pathZone, setPathZone] = useState([]);
 
     useEffect(() => {
-        if (index === 0) {
-            setColor('red');
-        }
-
-        if (index === 1) {
-            setColor('blue');
-        }
-
-
-        if (index === 2) {
-            setColor('green');
-        }
-
-
-        if (index === 3) {
-            setColor('yellow');
-        }
-
-
-        if (index === 4) {
-            setColor('purple');
-        }
-
         getImages();
+        fixCoordinatesZone(data?.path);
+        setMapZone({ latitude: data?.path[0].lat, longitude: data?.path[0].lng })
     }, []);
+
+    function fixCoordinatesZone(coords) {
+        let array = [];
+        for (var i = 0; i < coords.length; i++) {
+            array.push([coords[i].lng, coords[i].lat]);
+        }
+        array.push([coords[0].lng, coords[0].lat]);
+        setPathZone(array);
+    }
 
     async function getImages() {
         await getImagesZone();
         await getImagesAnaliseSoil();
         await getImagesTreesS1();
-        if(bioSoil.length > 0){
+        if (bioSoil.length > 0) {
             await getImagesBioSoil();
         }
     }
@@ -146,16 +135,72 @@ export function ZoneItem({ data, index }) {
 
     return (
         <div className="flex flex-col bg-green-950 p-2 rounded-md">
-            <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR').format(Number(data?.areaZone).toFixed(2))} m²</p>
-            <p className="text-white text-sm">
-                Cor no mapa:
-                {color === 'red' && ' Vermelho'}
-                {color === 'green' && ' Verde'}
-                {color === 'blue' && ' Azul'}
-                {color === 'yellow' && ' Amarelo'}
-                {color === 'purple' && ' Roxo'}
-            </p>
-            <p className="text-white">Fotos da zona</p>
+            <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(Number(data?.areaZone))} m²</p>
+            {mapZone && (
+                <ReactMapGL
+                    style={{ width: '100%', height: 300 }}
+                    mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                    mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                    latitude={mapZone?.latitude}
+                    longitude={mapZone?.longitude}
+                    onDrag={(e) => {
+                        setMapZone({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                    }}
+                    minZoom={14}
+                    maxZoom={20}
+                >
+                    <Polyline
+                        lineColor='red'
+                        lineWidth={4}
+                        coordinates={pathZone}
+                    />
+
+                    {data.arvores.sampling1.trees.map(tree => (
+                        <Marker
+                            key={tree.lat}
+                            latitude={tree.lat}
+                            longitude={tree.lng}
+                            color="green"
+                        />
+                    ))}
+
+                    {data.analiseSolo.map((analise, index) => (
+                        <Marker
+                            key={analise?.coord?.lat}
+                            latitude={analise?.coord?.lat}
+                            longitude={analise?.coord?.lng}
+                            color="#ff4af9"
+                        />
+                    ))}
+
+                    {bioSoil.map((analise, index) => (
+                        <Marker
+                            key={analise?.coord?.lat}
+                            latitude={analise?.coord?.lat}
+                            longitude={analise?.coord?.lng}
+                            color="#911c0f"
+                        />
+                    ))}
+                </ReactMapGL>
+            )}
+            <div className="flex items-center gap-1 mt-1">
+                <div className="w-5 h-1 rounded-md bg-red-500" />
+                <p className="text-white text-xs">Zona</p>
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+                <FaMapMarker color='#ff4af9' size={20} />
+                <p className="text-white text-xs">Coletas de biomassa</p>
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+                <FaMapMarker color='#911c0f' size={20} />
+                <p className="text-white text-xs">Coletas de biomassa no solo</p>
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+                <FaMapMarker color='green' size={20} />
+                <p className="text-white text-xs">Plantas registradas</p>
+            </div>
+
+            <p className="text-white mt-5">Fotos da zona</p>
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
@@ -183,22 +228,37 @@ export function ZoneItem({ data, index }) {
             )}
 
             <p className="text-white mt-5 text-center font-bold">Análise de biomassa do solo</p>
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                <GoogleMap
-                    mapContainerStyle={containerMapStyle}
-                    center={{ lat: data.analiseSolo[0].coord?.lat, lng: data.analiseSolo[0].coord?.lng }}
-                    zoom={18}
-                    mapTypeId="hybrid"
+            {mapZone && (
+                <ReactMapGL
+                    style={{ width: '100%', height: 200 }}
+                    mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                    mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                    latitude={mapZone?.latitude}
+                    longitude={mapZone?.longitude}
+                    onDrag={(e) => {
+                        setMapZone({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                    }}
+                    minZoom={14}
+                    maxZoom={20}
                 >
+                    <Polyline
+                        lineColor='red'
+                        lineWidth={4}
+                        coordinates={pathZone}
+                    />
+
                     {data.analiseSolo.map((analise, index) => (
                         <Marker
-                            position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                            key={analise?.coord?.lat}
+                            latitude={analise?.coord?.lat}
+                            longitude={analise?.coord?.lng}
+                            color="#ff4af9"
                         />
                     ))}
-                </GoogleMap>
-            </div>
+                </ReactMapGL>
+            )}
             <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20} />
+                <FaMapMarker color='#ff4af9' size={20} />
                 <p className="text-white text-xs">Localização das coletas</p>
             </div>
 
@@ -232,22 +292,38 @@ export function ZoneItem({ data, index }) {
             {bioSoil?.length > 0 && (
                 <>
                     <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
-                    <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                        <GoogleMap
-                            mapContainerStyle={containerMapStyle}
-                            center={{ lat: bioSoil[0]?.coord?.lat, lng: bioSoil[0]?.coord?.lng }}
-                            zoom={18}
-                            mapTypeId="hybrid"
+                    {mapZone && (
+                        <ReactMapGL
+                            style={{ width: '100%', height: 200 }}
+                            mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                            mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                            latitude={mapZone?.latitude}
+                            longitude={mapZone?.longitude}
+                            onDrag={(e) => {
+                                setMapZone({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                            }}
+                            minZoom={14}
+                            maxZoom={20}
                         >
+                            <Polyline
+                                lineColor='red'
+                                lineWidth={4}
+                                coordinates={pathZone}
+                            />
+
                             {bioSoil.map((analise, index) => (
                                 <Marker
-                                    position={{ lat: analise?.coord?.lat, lng: analise?.coord?.lng }}
+                                    key={analise?.coord?.lat}
+                                    latitude={analise?.coord?.lat}
+                                    longitude={analise?.coord?.lng}
+                                    color="#911c0f"
                                 />
                             ))}
-                        </GoogleMap>
-                    </div>
+                        </ReactMapGL>
+                    )}
+
                     <div className="flex items-center gap-1 mt-1 mb-4">
-                        <FaMapMarker color='red' size={20} />
+                        <FaMapMarker color='#911c0f' size={20} />
                         <p className="text-white text-xs">Localização das coletas</p>
                     </div>
 
@@ -277,7 +353,7 @@ export function ZoneItem({ data, index }) {
                             ))}
                         </div>
                     )}
-                
+
                 </>
             )}
 
@@ -292,23 +368,39 @@ export function ZoneItem({ data, index }) {
                 <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number((treesS1 / areaSampling1) * areaZone).toFixed(0))}</span></p>
             </div>
 
-            <p className="text-white mt-2">Plantas registradas (Amostragem 1)</p>
-            <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                <GoogleMap
-                    mapContainerStyle={containerMapStyle}
-                    center={{ lat: data.arvores.sampling1.trees[0].lat, lng: data.arvores.sampling1.trees[0].lng }}
-                    zoom={18}
-                    mapTypeId="hybrid"
+            <p className="text-white mt-2">Plantas registradas</p>
+            {mapZone && (
+                <ReactMapGL
+                    style={{ width: '100%', height: 200 }}
+                    mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                    mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                    latitude={mapZone?.latitude}
+                    longitude={mapZone?.longitude}
+                    onDrag={(e) => {
+                        setMapZone({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                    }}
+                    minZoom={14}
+                    maxZoom={20}
                 >
+                    <Polyline
+                        lineColor='red'
+                        lineWidth={4}
+                        coordinates={pathZone}
+                    />
+
                     {data.arvores.sampling1.trees.map(tree => (
                         <Marker
-                            position={{ lat: tree.lat, lng: tree.lng }}
+                            key={tree.lat}
+                            latitude={tree.lat}
+                            longitude={tree.lng}
+                            color="green"
                         />
                     ))}
-                </GoogleMap>
-            </div>
+                </ReactMapGL>
+            )}
+
             <div className="flex items-center gap-1 mt-1 mb-4">
-                <FaMapMarker color='red' size={20} />
+                <FaMapMarker color='green' size={20} />
                 <p className="text-white text-xs">Localização da planta</p>
             </div>
 
