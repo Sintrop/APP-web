@@ -45,9 +45,9 @@ export function PubliUser({ data }) {
     return (
         <div className="flex flex-col">
             {seeMore ? (
-                <p className="text-white text-sm">{data?.description}</p>
+                <p className="text-white">{data?.description}</p>
             ) : (
-                <p className="text-white text-sm text-ellipsis overflow-hidden truncate">{data?.description}</p>
+                <p className="text-white text-ellipsis overflow-hidden truncate">{data?.description}</p>
             )}
 
             <div className="flex justify-start">
