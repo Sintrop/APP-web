@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
-import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaHandHoldingUsd, FaUserCheck } from "react-icons/fa";
+import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaHandHoldingUsd, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";
 import format from "date-fns/format";
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
@@ -311,7 +311,7 @@ export function UserDetails() {
                                                     className={`text-sm font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'zones' ? ' border-green-600 text-green-600' : 'text-white border-transparent'} lg:text-base`}
                                                     onClick={() => setTabSelected('zones')}
                                                 >
-                                                    <FaList size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
+                                                    <FaMapMarkedAlt size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
                                                     Zonas de regeneração
                                                 </button>
                                             </>
