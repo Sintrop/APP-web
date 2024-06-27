@@ -440,7 +440,6 @@ export function UserDetails() {
 
                                                             <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                                                                 <ReactMapGL
-
                                                                     style={{ width: '100%', height: '100%' }}
                                                                     mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
                                                                     mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
