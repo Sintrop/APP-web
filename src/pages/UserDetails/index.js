@@ -6,15 +6,18 @@ import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
 import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaHandHoldingUsd, FaUserCheck } from "react-icons/fa";
 import format from "date-fns/format";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { ProducerCertificate } from "../../components/Certificates/ProducerCertificate";
 import { ContributeCertificate } from "../../components/Certificates/ContributeCertificate";
 import { TopBar } from '../../components/TopBar';
 import { PublicationItem } from '../Home/components/PublicationItem';
 import { Item } from "../ImpactCalculator/components/Item";
 import { Feedback } from "../../components/Feedback";
-import {ProducerGraphics} from '../../components/ProducerGraphics';
+import { ProducerGraphics } from '../../components/ProducerGraphics';
 import { Helmet } from "react-helmet";
+import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Polyline } from "../../components/Mapbox/Polyline";
+import { RegenerationZoneProfile } from "../Profile/components/RegenerationZoneProfile";
 
 const containerMapStyle = {
     width: '100%',
@@ -38,6 +41,7 @@ export function UserDetails() {
     const [publications, setPublications] = useState([]);
     const [loadingPubli, setLoadingPubli] = useState(false);
     const [itemsToReduce, setItemsToReduce] = useState([]);
+    const [mapProperty, setMapProperty] = useState()
 
     useEffect(() => {
         getUserDetails();
@@ -81,6 +85,7 @@ export function UserDetails() {
 
             if (user.geoLocation) {
                 setInitialRegion(JSON.parse(user.geoLocation));
+                setMapProperty(JSON.parse(user.geoLocation));
             }
             if (user.zones) {
                 setZones(JSON.parse(user.zones));
@@ -142,9 +147,9 @@ export function UserDetails() {
     function fixCoordinatesProperty(coords) {
         let array = [];
         for (var i = 0; i < coords.length; i++) {
-            array.push(coords[i]);
+            array.push([coords[i].longitude, coords[i].latitude]);
         }
-        array.push(coords[0]);
+        array.push([coords[0].longitude, coords[0].latitude]);
         setPathProperty(array);
     }
 
@@ -293,13 +298,23 @@ export function UserDetails() {
                                         </button>
 
                                         {userData?.userType === 1 && (
-                                            <button
-                                                className={`text-sm font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'} lg:text-base`}
-                                                onClick={() => setTabSelected('inspections')}
-                                            >
-                                                <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                Inspeções
-                                            </button>
+                                            <>
+                                                <button
+                                                    className={`text-sm font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'} lg:text-base`}
+                                                    onClick={() => setTabSelected('inspections')}
+                                                >
+                                                    <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
+                                                    Inspeções
+                                                </button>
+
+                                                <button
+                                                    className={`text-sm font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'zones' ? ' border-green-600 text-green-600' : 'text-white border-transparent'} lg:text-base`}
+                                                    onClick={() => setTabSelected('zones')}
+                                                >
+                                                    <FaList size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
+                                                    Zonas de regeneração
+                                                </button>
+                                            </>
                                         )}
 
                                         {userData?.userType === 2 && (
@@ -424,28 +439,26 @@ export function UserDetails() {
                                                             <p className="text-xs text-center text-gray-400 mb-1">Mapa da propriedade</p>
 
                                                             <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                                                                {initialRegion ? (
-                                                                    <LoadScript
-                                                                        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                                                        libraries={['drawing']}
-                                                                    >
-                                                                        <GoogleMap
-                                                                            mapContainerStyle={containerMapStyle}
-                                                                            center={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                                                            zoom={15}
-                                                                            mapTypeId="hybrid"
-                                                                        >
+                                                                <ReactMapGL
 
-                                                                            <Marker
-                                                                                position={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                                                            />
+                                                                    style={{ width: '100%', height: '100%' }}
+                                                                    mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                                                                    mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                                                                    latitude={mapProperty?.latitude}
+                                                                    longitude={mapProperty?.longitude}
+                                                                    onDrag={(e) => {
+                                                                        setMapProperty({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                                                                    }}
+                                                                    minZoom={12}
+                                                                >
+                                                                    <Marker latitude={initialRegion?.latitude} longitude={initialRegion?.longitude} color="red" />
 
-                                                                        </GoogleMap>
-
-                                                                    </LoadScript>
-                                                                ) : (
-                                                                    <ActivityIndicator size={60} />
-                                                                )}
+                                                                    <Polyline
+                                                                        coordinates={pathProperty}
+                                                                        lineColor='yellow'
+                                                                        lineWidth={4}
+                                                                    />
+                                                                </ReactMapGL>
                                                             </div>
                                                         </div>
                                                     </>
@@ -524,6 +537,23 @@ export function UserDetails() {
                                                     data={item}
                                                 />
                                             ))}
+                                        </div>
+                                    )}
+
+                                    {tabSelected === 'zones' && (
+                                        <div className="mt-5 gap-5 flex flex-col items-center w-full">
+                                            {zones.length === 0 ? (
+                                                <p className="text-white text-center">Esse produtor não tem nenhuma zona de regeneração cadastrada!</p>
+                                            ) : (
+                                                <>
+                                                    {zones.map(item => (
+                                                        <RegenerationZoneProfile
+                                                            key={item?.title}
+                                                            data={item}
+                                                        />
+                                                    ))}
+                                                </>
+                                            )}
                                         </div>
                                     )}
                                 </>
