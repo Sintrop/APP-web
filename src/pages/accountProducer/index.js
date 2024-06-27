@@ -3,19 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './accountProducer.css';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
-import { GoogleMap, LoadScript, DrawingManager, Marker, Polyline } from '@react-google-maps/api';
 import { FaChevronRight } from 'react-icons/fa';
+import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Polyline } from '../../components/Mapbox/Polyline';
 
 //components
 import { getImage } from '../../services/getImage';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
 import { Helmet } from "react-helmet";
-
-const containerMapStyle = {
-    width: '100%',
-    height: '300px',
-};
+import {Inspection} from '../ResultInspection/components/Inspection';
 
 export default function AccountProducer() {
     const navigate = useNavigate();
@@ -23,12 +21,12 @@ export default function AccountProducer() {
     const { walletSelected } = useParams();
     const [producerData, setProducerData] = useState([]);
     const [producerAddress, setProducerAddress] = useState([]);
-    const [center, setCenter] = useState({})
     const [inspections, setInspections] = useState([]);
     const [imageProfile, setImageProfile] = useState(null);
     const [userData, setUserData] = useState({});
     const [initialRegion, setInitialRegion] = useState(null);
     const [loadingInspections, setLoadingInspections] = useState(false);
+    const [pathProperty, setPathProperty] = useState([]);
 
     useEffect(() => {
         getProducer();
@@ -39,50 +37,6 @@ export default function AccountProducer() {
         const response = await api.get(`/web3/producer-data/${String(walletSelected).toLowerCase()}`);
         setProducerData(response.data.producer);
         getInspections();
-    }
-
-    async function fixCoordinates(coords) {
-        const arrayLat = String(coords.lat).split('');
-        const arrayLng = String(coords.lng).split('');
-        let newLat = '';
-        let newLng = '';
-
-        for (var i = 0; i < arrayLat.length; i++) {
-            if (i === 3) {
-                if (arrayLat[i] === '.') {
-                    newLat += arrayLat[i]
-                } else {
-                    if (arrayLat[i] === ',') {
-                        newLat += '.'
-                    } else {
-                        newLat += `.${arrayLat[i]}`
-                    }
-                }
-            } else {
-                newLat += arrayLat[i]
-            }
-
-        }
-
-        for (var i = 0; i < arrayLng.length; i++) {
-            if (i === 3) {
-                if (arrayLng[i] === '.') {
-                    newLng += arrayLng[i]
-                } else {
-                    if (arrayLng[i] === ',') {
-                        newLng += '.'
-                    } else {
-                        newLng += `.${arrayLng[i]}`
-                    }
-                }
-            } else {
-                newLng += arrayLng[i]
-            }
-        }
-        setCenter({
-            lat: Number(newLat),
-            lng: Number(newLng)
-        })
     }
 
     async function getInspections() {
@@ -107,7 +61,7 @@ export default function AccountProducer() {
             setProducerAddress(address);
             setUserData(response.data.user);
             getImageProfile(response.data.user.imgProfileUrl);
-            fixCoordinates(path);
+            fixCoordinatesProperty(JSON.parse(response.data.user.propertyGeolocation))
             if (response.data.user.geoLocation) {
                 setInitialRegion(JSON.parse(response.data.user.geoLocation));
             }
@@ -119,6 +73,15 @@ export default function AccountProducer() {
     async function getImageProfile(hash) {
         const response = await getImage(hash);
         setImageProfile(response);
+    }
+
+    function fixCoordinatesProperty(coords) {
+        let array = [];
+        for (var i = 0; i < coords.length; i++) {
+            array.push([coords[i].longitude, coords[i].latitude]);
+        }
+        array.push([coords[0].longitude, coords[0].latitude]);
+        setPathProperty(array);
     }
 
     return (
@@ -188,30 +151,25 @@ export default function AccountProducer() {
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
                 <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Mapa da propriedade</h3>
-                <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                    {initialRegion ? (
-                        <LoadScript
-                            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                            libraries={['drawing']}
-                        >
-                            <GoogleMap
-                                mapContainerStyle={containerMapStyle}
-                                center={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                zoom={15}
-                                mapTypeId="hybrid"
-                            >
-
-                                <Marker
-                                    position={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                />
-
-                            </GoogleMap>
-
-                        </LoadScript>
-                    ) : (
-                        <ActivityIndicator size={60} />
-                    )}
-                </div>
+                {initialRegion && (
+                    <ReactMapGL
+                        style={{ width: '100%', height: 300 }}
+                        mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                        mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                        latitude={initialRegion?.latitude}
+                        longitude={initialRegion?.longitude}
+                        onDrag={(e) => {
+                            setInitialRegion({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                        }}
+                        minZoom={16}
+                    >
+                        <Polyline
+                            coordinates={pathProperty}
+                            lineColor='yellow'
+                            lineWidth={4}
+                        />
+                    </ReactMapGL>
+                )}
             </div>
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 rounded-md p-1 lg:p-0 mb-10'>

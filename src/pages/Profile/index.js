@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { useMainContext } from "../../hooks/useMainContext";
-import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaMobile } from "react-icons/fa";
+import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaMobile, FaMapMarkedAlt } from "react-icons/fa";
 import { MdHelpOutline, MdInfo } from "react-icons/md";
 import { SiReadthedocs } from 'react-icons/si';
 import { getImage } from "../../services/getImage";
@@ -28,6 +28,8 @@ import { addActivist } from "../../services/activistService";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
+import { RegenerationZoneProfile } from "./components/RegenerationZoneProfile.js";
+import QRCode from "react-qr-code";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -50,6 +52,7 @@ export function Profile() {
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [inviteData, setInviteData] = useState(null);
+    const [zones, setZones] = useState([]);
 
     useEffect(() => {
         if (userData) {
@@ -62,6 +65,10 @@ export function Profile() {
 
         if (userData?.accountStatus) {
             setAccountStatus(userData?.accountStatus);
+        }
+
+        if (userData?.zones) {
+            setZones(JSON.parse(userData?.zones))
         }
 
         if (userData?.id !== 'anonimous') {
@@ -111,7 +118,7 @@ export function Profile() {
         if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
             setAccountStatus('guest');
             setInviteData(invite);
-            if(accountStatus === 'pending'){
+            if (accountStatus === 'pending') {
                 api.put('/user/account-status', {
                     userWallet: userData?.wallet,
                     status: 'guest',
@@ -339,7 +346,7 @@ export function Profile() {
                 />
             </Helmet>
             <TopBar />
-            <Header />
+            <Header routeActive='profile' />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
@@ -513,13 +520,23 @@ export function Profile() {
                                                 </button>
 
                                                 {userData?.userType === 1 && (
-                                                    <button
-                                                        className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                                                        onClick={() => setTabSelected('inspections')}
-                                                    >
-                                                        <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                        Inspeções
-                                                    </button>
+                                                    <>
+                                                        <button
+                                                            className={`font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                                                            onClick={() => setTabSelected('inspections')}
+                                                        >
+                                                            <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
+                                                            Inspeções
+                                                        </button>
+
+                                                        <button
+                                                            className={`text-sm font-bold py-1 border-b-2 flex items-center gap-1 ${tabSelected === 'zones' ? ' border-green-600 text-green-600' : 'text-white border-transparent'} lg:text-base`}
+                                                            onClick={() => setTabSelected('zones')}
+                                                        >
+                                                            <FaMapMarkedAlt size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
+                                                            Zonas de regeneração
+                                                        </button>
+                                                    </>
                                                 )}
 
                                                 {userData?.userType === 2 && (
@@ -733,6 +750,60 @@ export function Profile() {
                                                             ))}
                                                         </div>
                                                     </div>
+                                                </div>
+                                            )}
+
+                                            {tabSelected === 'zones' && (
+                                                <div className="mt-5 gap-5 flex flex-col items-center w-full">
+                                                    {zones.length === 0 ? (
+                                                        <>
+                                                            <p className="text-white text-center">Você não tem nenhuma zona de regeneração cadastrada!</p>
+
+                                                            <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-2">
+                                                                <p className="font-semibold text-white">Para criar uma zona você deve baixar nosso aplicativo mobile</p>
+                                                                <div className="flex items-center gap-2 mt-3">
+                                                                    <FaMobile color='white' size={25} />
+                                                                    <p className="font-semibold text-white">Baixe nosso aplicativo</p>
+                                                                </div>
+
+                                                                <div className="flex mt-5 items-center gap-8">
+                                                                    <div className="flex flex-col items-center gap-1">
+                                                                        <QRCode
+                                                                            value='https://www.sintrop.com/app'
+                                                                            size={120}
+                                                                            qrStyle="dots"
+                                                                            logoPadding={2}
+                                                                            logoPaddingStyle="square"
+                                                                            logoWidth={30}
+                                                                            removeQrCodeBehindLogo
+                                                                            eyeColor='#0a4303'
+                                                                        />
+
+                                                                        <p className="text-sm text-gray-300">Leia o QRCode</p>
+                                                                    </div>
+
+                                                                    <p className="text-sm text-gray-300">Ou</p>
+
+                                                                    <a
+                                                                        className="py-1 px-5 rounded-md text-white font-semibold bg-blue-500"
+                                                                        href="https://www.sintrop.com/app"
+                                                                        target="_blank"
+                                                                    >
+                                                                        Clique aqui para acessar
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {zones.map(item => (
+                                                                <RegenerationZoneProfile
+                                                                    key={item?.title}
+                                                                    data={item}
+                                                                />
+                                                            ))}
+                                                        </>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>

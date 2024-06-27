@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { FaMapMarker } from "react-icons/fa";
 import { ImageItem } from "./ImageItem";
-
-const containerMapStyle = {
-    width: '100%',
-    height: '150px',
-};
+import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export function ModalCollectDetails({ close, data }) {
-    console.log(data)
+    const [mapCollect, setMapCollect] = useState(null);
+
+    useEffect(() => {
+        setMapCollect({latitude: data?.coord?.lat, longitude: data?.coord?.lng})
+    }, []);
+
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0'>
@@ -26,23 +27,32 @@ export function ModalCollectDetails({ close, data }) {
                     </div>
 
                     <div className="flex flex-col overflow-y-auto mt-2">
-                        <div className="flex flex-col bg-gray-300 rounded-md w-full h-[150px]">
-                            <GoogleMap
-                                mapContainerStyle={containerMapStyle}
-                                center={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
-                                zoom={18}
-                                mapTypeId="hybrid"
+                        {mapCollect && (
+                            <ReactMapGL
+                                style={{ width: '100%', height: 200 }}
+                                mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                                mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                                latitude={mapCollect?.latitude}
+                                longitude={mapCollect?.longitude}
+                                onDrag={(e) => {
+                                    setMapCollect({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                                }}
+                                minZoom={14}
+                                maxZoom={20}
                             >
                                 <Marker
-                                    position={{ lat: data?.coordRef?.lat, lng: data?.coordRef?.lng }}
+                                    latitude={data?.coordRef?.lat}
+                                    longitude={data?.coordRef?.lng}
+                                    color="red"
                                 />
 
                                 <Marker
-                                    position={{ lat: data?.coord?.lat, lng: data?.coord?.lng }}
-                                    icon={"http://maps.google.com/mapfiles/ms/icons/yellow.png"}
+                                    latitude={data?.coord?.lat}
+                                    longitude={data?.coord?.lng}
+                                    color="yellow"
                                 />
-                            </GoogleMap>
-                        </div>
+                            </ReactMapGL>
+                        )}
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='red' size={20} />
                             <p className="text-white text-xs">Local escolhido pelo sistema para coleta</p>
