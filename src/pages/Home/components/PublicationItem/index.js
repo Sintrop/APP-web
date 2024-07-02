@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { getImage } from "../../../../services/getImage";
 
 //icons
-import { FaRegHeart, FaHeart, FaShare } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaShare, FaExternalLinkAlt } from "react-icons/fa";
 import { BsChat } from "react-icons/bs";
 
 //components
@@ -217,18 +217,18 @@ export function PublicationItem({ data }) {
             </div>
 
             {additionalData?.hash && (
-                <div>
-                    <p className="text-gray-200 text-xs">
-                        Hash da transação:
-                        <a
-                            className="ml-1 underline text-blue-300"
-                            href={`https://sepolia.etherscan.io/tx/${additionalData?.hash}`}
-                            target="_blank"
-                        >
-                            {additionalData?.hash}
-                        </a>
+                <a
+                    className="flex items-center gap-1"
+                    href={`https://sepolia.etherscan.io/tx/${additionalData?.hash}`}
+                    target="_blank"
+                >
+                    <FaExternalLinkAlt className="text-blue-300" size={18} />
+                    <p
+                        className="underline text-blue-300"
+                    >
+                        Hash da transação
                     </p>
-                </div>
+                </a>
             )}
 
             {likes > 0 && (
