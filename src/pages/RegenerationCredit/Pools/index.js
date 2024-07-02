@@ -492,6 +492,11 @@ export function Pools({ }) {
                                         <p className="text-white text-sm">ERA atual do contrato</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.currentEraContract))}</p>
                                     </div>
+
+                                    <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
+                                        <p className="text-white text-sm">Época atual</p>
+                                        <p className="text-white font-bold">{poolData?.epoch}</p>
+                                    </div>
                                 </div>
                             </div>
 
