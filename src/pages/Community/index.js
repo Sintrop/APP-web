@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { api } from "../../services/api";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
@@ -9,16 +8,8 @@ import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
-
-const containerMapStyle = {
-    width: '100vw',
-    height: '100%',
-};
-
-const center = {
-    lat: -11.680854,
-    lng: -51.9245419
-};
+import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export function Community() {
     const navigate = useNavigate();
@@ -27,10 +18,12 @@ export function Community() {
     const [users, setUsers] = useState([]);
     const [usersRanking, setUsersRanking] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [visibleBtns, setVisibleBtns] = useState(true)
+    const [visibleBtns, setVisibleBtns] = useState(true);
+    const [mapCommunity, setMapCommunity] = useState({});
 
     useEffect(() => {
         getUsers();
+        setMapCommunity({latitude: -11.680854, longitude: -51.9245419})
     }, []);
 
     useEffect(() => {
@@ -65,6 +58,7 @@ export function Community() {
         }
 
         setMarkers(newArray);
+        console.log(newArray)
     }
 
     async function getUsersRanking() {
@@ -118,28 +112,34 @@ export function Community() {
 
             <div className="flex flex-col overflow-scroll" id="div-main-scroll">
                 <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
-                    <div className="flex w-full h-[440px]">
-                        <LoadScript
-                            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                            libraries={['drawing']}
+                    <div className="flex w-full h-[440px] bg-black/70">
+                        <ReactMapGL
+                            style={{ width: '100%', height: '100%' }}
+                            mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                            mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                            latitude={mapCommunity?.latitude}
+                            longitude={mapCommunity?.longitude}
+                            onDrag={(e) => {
+                                setMapCommunity({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                            }}
+                            minZoom={1}
+                            projection='globe'
                         >
-                            <GoogleMap
-                                mapContainerStyle={containerMapStyle}
-                                center={center}
-                                zoom={4}
-                                mapTypeId="hybrid"
-                            >
-                                {markers.map(item => {
-                                    const location = JSON.parse(item?.geoLocation);
-
-                                    return (
-                                        <Marker
-                                            position={{ lat: location?.latitude, lng: location?.longitude }}
-                                        />
-                                    )
-                                })}
-                            </GoogleMap>
-                        </LoadScript>
+                            
+                            {userType === '1' && (
+                                <>
+                                    {markers.map(item => {
+                                        const coord = JSON.parse(item?.geoLocation)
+                                        if(coord?.latitude){
+                                            return(
+                                                <Marker latitude={coord?.latitude} longitude={coord?.longitude} color="red" key={item.id} />
+                                            )
+                                        }
+                                    })}
+                                </>
+                            )}
+                            
+                        </ReactMapGL>
                     </div>
 
                     <div className={`absolute flex flex-col w-[210px] gap-2 lg:top-36 top-28 duration-300 ${visibleBtns ? 'left-3' : 'left-[-250px]'}`}>
