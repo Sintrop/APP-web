@@ -6,6 +6,7 @@ import format from "date-fns/format";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalMessages } from "./ModalMessages";
 import CryptoJS from "crypto-js";
+import { MdGroups } from "react-icons/md";
 
 export function ChatItem({ data, socket }) {
     const { userData } = useMainContext();
@@ -54,17 +55,37 @@ export function ChatItem({ data, socket }) {
         <Dialog.Root open={modalMessages} onOpenChange={(open) => setModalMessages(open)}>
             <Dialog.Trigger className="flex justify-between px-3 py-2">
                 <div className="flex flex-2 gap-2">
-                    <div className="w-10 h-10 bg-gray-400 rounded-full">
-                        {imageProfile && (
-                            <img
-                                src={imageProfile}
-                                className="w-10 h-10 object-cover rounded-full"
-                            />
-                        )}
-                    </div>
+                    {data?.chat?.type === 'private' ? (
+                        <div className="w-10 h-10 bg-gray-400 rounded-full">
+                            {imageProfile ? (
+                                <img
+                                    src={imageProfile}
+                                    className="w-10 h-10 object-cover rounded-full"
+                                />
+                            ) : (
+                                <img
+                                    src={require('../../../assets/perfil_sem_foto.png')}
+                                    className="w-10 h-10 object-cover rounded-full"
+                                />
+                            )}
+                        </div>
+                    ) : (
+                        <div className="w-10 h-10 bg-green-500 rounded-full items-center justify-center flex">
+                            {data?.chat?.imageUrl ? (
+                                <img
+                                    src={data?.chat?.imageUrl}
+                                    className="w-10 h-10 object-cover rounded-full"
+                                />
+                            ) : (
+                                <MdGroups size={23} color='white' />
+                            )}
+                        </div>
+                    )}
 
                     <div className="flex flex-col items-start">
-                        <p className="font-bold text-white text-sm max-w-[120px] text-ellipsis overflow-hidden truncate">{participant?.name}</p>
+                        <p className="font-bold text-white text-sm max-w-[120px] text-ellipsis overflow-hidden truncate">
+                            {data?.chat?.type === 'private' ? participant.name : data?.chat?.title}
+                        </p>
                         {messages[0]?.type === 'image' ? (
                             <div className="flex items-center mt-1">
                                 <p className="text-xs text-white">{messages[0]?.userId === userData.id && 'Você: '} Imagem</p>
@@ -98,6 +119,7 @@ export function ChatItem({ data, socket }) {
                 imageProfile={imageProfile}
                 participant={participant}
                 socket={socket}
+                typeChat={data?.chat?.type}
             />
         </Dialog.Root>
     )

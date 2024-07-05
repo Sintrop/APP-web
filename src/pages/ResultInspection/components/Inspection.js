@@ -388,7 +388,7 @@ export function Inspection({ id }) {
                                                         key={analise?.coord?.lng}
                                                         latitude={analise?.coord?.lat}
                                                         longitude={analise?.coord?.lng}
-                                                        color="pink"
+                                                        color="#ff4af9"
                                                     />
                                                 ))}
 
@@ -408,8 +408,8 @@ export function Inspection({ id }) {
                         </div>
 
                         <div className="flex items-center gap-1 mt-1">
-                            <FaMapMarker color='blue' size={20} />
-                            <p className="text-white text-xs">Análises de solo</p>
+                            <FaMapMarker color='#ff4af9' size={20} />
+                            <p className="text-white text-xs">Análises de biomassa</p>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='green' size={20} />

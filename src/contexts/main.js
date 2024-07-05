@@ -13,24 +13,6 @@ import {addDays, compareAsc} from "date-fns";
 
 export const MainContext = createContext({});
 
-const blockDeployContract = 3590930;
-const startEra2 = 3624160;
-const startEra3 = 3657390;
-const startEra4 = 3690620;
-const startEra5 = 3723850;
-const startEra6 = 3757080;
-const startEra7 = 3790310;
-const startEra8 = 3823540;
-const startEra9 = 3856770;
-const startEra10 = 3890000;
-const startEra11 = 3923230;
-const startEra12 = 3956460;
-const startEra13 = 3989690;
-const startEra14 = 4022920;
-const startEra15 = 4056150;
-const startEra16 = 4089380;
-const startEra17 = 4122610;
-
 export default function MainProvider({ children }) {
     const { i18n } = useTranslation();
     const [user, setUser] = useState('0');
@@ -61,6 +43,7 @@ export default function MainProvider({ children }) {
     const [itemsCalculator, setItemsCalculator] = useState([]);
     const [tokensToContribute, setTokensToContribute] = useState(0);
     const [nextEra, setNextEra] = useState(0);
+    const [epoch, setEpoch] = useState(1)
     const [impactToken, setImpactToken] = useState({});
 
     useEffect(() => {
@@ -98,7 +81,8 @@ export default function MainProvider({ children }) {
     async function getEraInfo() {
         const response = await api.get('/web3/era-info');
         setNextEra(response.data.nextEraIn);
-        setEra(response.data.eraAtual)
+        setEra(response.data.eraAtual);
+        setEpoch(response.data.epoch)
     }
 
     async function getImpact() {
@@ -314,70 +298,7 @@ export default function MainProvider({ children }) {
         await web3js.eth.getBlockNumber()
             .then(res => {
                 setBlockNumber(res)
-                checkAtualEra(res);
             })
-    }
-
-    async function checkAtualEra(blockNumber) {
-        if (Number(blockNumber) >= startEra2 && Number(blockNumber) < startEra3) {
-            setEra(2);
-            setNextEraIn(startEra3 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra3 && Number(blockNumber) < startEra4) {
-            setEra(3);
-            setNextEraIn(startEra4 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra4 && Number(blockNumber) < startEra5) {
-            setEra(4);
-            setNextEraIn(startEra5 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra5 && Number(blockNumber) < startEra6) {
-            setEra(5);
-            setNextEraIn(startEra6 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra6 && Number(blockNumber) < startEra7) {
-            setEra(6);
-            setNextEraIn(startEra7 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra7 && Number(blockNumber) < startEra8) {
-            setEra(7);
-            setNextEraIn(startEra8 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra8 && Number(blockNumber) < startEra9) {
-            setEra(8);
-            setNextEraIn(startEra9 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra9 && Number(blockNumber) < startEra10) {
-            setEra(9);
-            setNextEraIn(startEra10 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra10 && Number(blockNumber) < startEra11) {
-            setEra(10);
-            setNextEraIn(startEra11 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra11 && Number(blockNumber) < startEra12) {
-            setEra(11);
-            setNextEraIn(startEra12 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra12 && Number(blockNumber) < startEra13) {
-            setEra(12);
-            setNextEraIn(startEra13 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra13 && Number(blockNumber) < startEra14) {
-            setEra(13);
-            setNextEraIn(startEra14 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra14 && Number(blockNumber) < startEra15) {
-            setEra(14);
-            setNextEraIn(startEra15 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra15 && Number(blockNumber) < startEra16) {
-            setEra(15);
-            setNextEraIn(startEra16 - Number(blockNumber));
-        }
-        if (Number(blockNumber) >= startEra17) {
-            setEra(17);
-        }
     }
 
     function toggleMenu() {
@@ -471,7 +392,8 @@ export default function MainProvider({ children }) {
                 setItemsCalculator,
                 logout,
                 nextEra,
-                impactToken
+                impactToken,
+                epoch
             }}
         >
             {children}

@@ -716,9 +716,10 @@ export function Profile() {
                                                     {userData?.userType === 1 && (
                                                         <>
                                                             <ProducerCertificate
-                                                                certificateType='long'
+                                                                certificateType='new-long'
                                                                 userData={userData}
                                                                 blockchainData={blockchainData}
+                                                                imageProfile={imageProfile}
                                                             />
 
                                                             <ProducerCertificate

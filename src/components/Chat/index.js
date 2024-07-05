@@ -81,13 +81,23 @@ export function Chat({openChat}){
                         </div>
                     ) : (
                         <div className='flex flex-col overflow-y-auto overflow-x-hidden gap-1'>
-                            {loading && (
+                            {loading ? (
                                 <ActivityIndicator size={50}/>
+                            ) : (
+                                <>
+                                    {chats.length === 0 ? (
+                                        <p className='text-white text-center mt-10'>Você não tem nenhum chat ativo no momento</p>
+                                    ) : (
+                                        <>
+                                            {chats.map(item => (
+                                                <ChatItem data={item} key={item.chatId} socket={socket}/>
+                                            ))}
+                                        </>
+                                    )}
+                                </>
                             )}
 
-                            {chats.map(item => (
-                                <ChatItem data={item} key={item.chatId} socket={socket}/>
-                            ))}
+                            
                         </div>
                     )}
                     </>

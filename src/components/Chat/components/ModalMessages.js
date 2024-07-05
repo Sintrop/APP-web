@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
-import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { MdSend } from "react-icons/md";
+import { IoMdCloseCircleOutline } from 'react-icons/io';
+import { MdSend, MdGroups } from "react-icons/md";
 import { api } from "../../../services/api";
 import { ActivityIndicator } from "../../ActivityIndicator";
 import { MessageItem } from "./MessageItem";
 import CryptoJS from "crypto-js";
 import { useMainContext } from "../../../hooks/useMainContext";
 
-export function ModalMessages({chat, imageProfile, participant, socket}) {
-    const {userData} = useMainContext();
+export function ModalMessages({ chat, imageProfile, participant, socket, typeChat }) {
+    const { userData } = useMainContext();
     const [sending, setSending] = useState(false);
     const [inputMessage, setInputMessage] = useState('');
     const [messagesList, setMessagesList] = useState([]);
@@ -54,11 +54,11 @@ export function ModalMessages({chat, imageProfile, participant, socket}) {
 
     async function sendMessage() {
         let hashPhotos = [];
-        if(sending){
+        if (sending) {
             return;
         }
-        
-        if(!imageToSend && !inputMessage.trim()){
+
+        if (!imageToSend && !inputMessage.trim()) {
             return;
         }
 
@@ -97,14 +97,36 @@ export function ModalMessages({chat, imageProfile, participant, socket}) {
 
                 <div className='flex items-center w-full justify-between border-b border-green-700 pb-2'>
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gray-400 rounded-full">
-                            <img
-                                src={imageProfile}
-                                className="w-8 h-8 object-cover rounded-full"
-                            />
-                        </div>
+                        {typeChat === 'private' ? (
+                            <div className="w-10 h-10 bg-gray-400 rounded-full">
+                                {imageProfile ? (
+                                    <img
+                                        src={imageProfile}
+                                        className="w-10 h-10 object-cover rounded-full"
+                                    />
+                                ) : (
+                                    <img
+                                        src={require('../../../assets/perfil_sem_foto.png')}
+                                        className="w-10 h-10 object-cover rounded-full"
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            <div className="w-10 h-10 bg-green-500 rounded-full items-center justify-center flex">
+                                {chat?.chat?.imageUrl ? (
+                                    <img 
+                                        src={chat?.chat?.imageUrl}
+                                        className="w-10 h-10 object-cover rounded-full"
+                                    />
+                                ) : (
+                                    <MdGroups size={23} color='white' />
+                                )}
+                            </div>
+                        )}
 
-                        <h3 className="text-white font-bold text-sm">{participant?.name}</h3>
+                        <h3 className="text-white font-bold text-sm">
+                            {chat?.chat?.type === 'private' ? participant?.name : chat?.chat?.title}
+                        </h3>
                     </div>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline size={25} color='white' />
@@ -116,11 +138,12 @@ export function ModalMessages({chat, imageProfile, participant, socket}) {
                         <MessageItem
                             key={item.id}
                             data={item}
+                            typeChat={typeChat}
                         />
                     ))}
 
                     {loading && firstLoad && (
-                        <ActivityIndicator size={50}/>
+                        <ActivityIndicator size={50} />
                     )}
                 </div>
 
