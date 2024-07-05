@@ -15,7 +15,9 @@ module.exports = {
         'presale': "url('/src/assets/bg-presale.jpg')",
         'certificate': "url('/src/assets/bg-certificate.png')",
         'activity': "url('/src/assets/activity.png')",
-        'florest' : "url('/src/assets/bg-lazy.png')"
+        'florest' : "url('/src/assets/bg-lazy.png')",
+        'espaco': "url('/src/assets/espaco.jpg')",
+        'espaco2': "url('/src/assets/espaco2.jpg')",
       }
     },
   },

@@ -5,7 +5,7 @@ import { getImage } from "../../../services/getImage";
 import CryptoJS from 'crypto-js';
 import format from "date-fns/format";
 
-export function MessageItem({ data }) {
+export function MessageItem({ data, typeChat }) {
     const { userData } = useMainContext();
     const [isMessageUser, setIsMessageUser] = useState(false);
     const [textMessage, setTextMessage] = useState('');
@@ -30,9 +30,13 @@ export function MessageItem({ data }) {
         }
     }, []);
 
-    async function getImages(hash) {
-        const response = await getImage(hash);
-        setImage(response);
+    async function getImages(url) {
+        if(String(url).includes('https://')){
+            setImage(url)
+        }else{
+            const response = await getImage(url);
+            setImage(response);
+        }
     }
 
     async function visualizedMsg() {
@@ -56,6 +60,9 @@ export function MessageItem({ data }) {
     return (
         <div className={`flex flex-col mb-2 ${isMessageUser ? 'items-end' : 'items-start'}`}>
             <div className={`${isMessageUser ? 'bg-[#00FF84]' : 'bg-[#02c0a1]'} p-2 rounded-md min-w-[120px] max-w-[200px]`}>
+                {!isMessageUser && (
+                    <p className="font-bold text-white">{data?.name}</p>
+                )}
                 {data.type === 'image' && (
                     <div className="w-[150px] h-[150px] rounded-md bg-gray-400">
                         {image && (

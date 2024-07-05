@@ -19,11 +19,10 @@ export function Community() {
     const [usersRanking, setUsersRanking] = useState([]);
     const [loading, setLoading] = useState(false);
     const [visibleBtns, setVisibleBtns] = useState(true);
-    const [mapCommunity, setMapCommunity] = useState({});
+    const [mapCommunity, setMapCommunity] = useState({latitude: -11.680854, longitude: -51.9245419});
 
     useEffect(() => {
         getUsers();
-        setMapCommunity({latitude: -11.680854, longitude: -51.9245419})
     }, []);
 
     useEffect(() => {
@@ -58,7 +57,6 @@ export function Community() {
         }
 
         setMarkers(newArray);
-        console.log(newArray)
     }
 
     async function getUsersRanking() {
@@ -112,34 +110,41 @@ export function Community() {
 
             <div className="flex flex-col overflow-scroll" id="div-main-scroll">
                 <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
-                    <div className="flex w-full h-[440px] bg-black/70">
-                        <ReactMapGL
-                            style={{ width: '100%', height: '100%' }}
-                            mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
-                            mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
-                            latitude={mapCommunity?.latitude}
-                            longitude={mapCommunity?.longitude}
-                            onDrag={(e) => {
-                                setMapCommunity({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
-                            }}
-                            minZoom={1}
-                            projection='globe'
-                        >
-                            
-                            {userType === '1' && (
-                                <>
-                                    {markers.map(item => {
-                                        const coord = JSON.parse(item?.geoLocation)
-                                        if(coord?.latitude){
-                                            return(
-                                                <Marker latitude={coord?.latitude} longitude={coord?.longitude} color="red" key={item.id} />
-                                            )
-                                        }
-                                    })}
-                                </>
-                            )}
-                            
-                        </ReactMapGL>
+                    <div className="flex w-full h-[440px] bg-espaco bg-center bg-cover bg-no-repeat">
+                        {mapCommunity && (
+                            <ReactMapGL
+                                style={{ width: '100%', height: '100%' }}
+                                mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                                mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                                latitude={mapCommunity?.latitude}
+                                longitude={mapCommunity?.longitude}
+                                onDrag={(e) => {
+                                    setMapCommunity({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                                }}
+                                minZoom={1}
+                                projection='globe'
+                                fog={{}}
+                            >
+                                
+                                {userType === '1' && (
+                                    <>
+                                        {markers.length > 0 && (
+                                            <>
+                                                {markers.map(item => {
+                                                    const coord = JSON.parse(item?.geoLocation)
+                                                    if(coord?.latitude){
+                                                        return(
+                                                            <Marker latitude={coord?.latitude} longitude={coord?.longitude} color="red" key={item.id} />
+                                                        )
+                                                    }
+                                                })}
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                                
+                            </ReactMapGL>
+                        )}
                     </div>
 
                     <div className={`absolute flex flex-col w-[210px] gap-2 lg:top-36 top-28 duration-300 ${visibleBtns ? 'left-3' : 'left-[-250px]'}`}>
