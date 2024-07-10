@@ -2515,6 +2515,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
+                        if(additionalData?.invoiceData){
+                            attValuesInvoice();
+                        }
                     }
 
                 })
@@ -2540,6 +2543,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
+                        if(additionalData?.invoiceData){
+                            attValuesInvoice();
+                        }
                     }
 
                 })
@@ -2562,7 +2568,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             transactionHash: hash,
             hash,
             reason: additionalData?.reason,
-            itens: additionalData?.itens
+            itens: additionalData?.itens,
+            invoiceData: additionalData?.invoiceData,
+            typePayment: additionalData?.typePayment,
         }
 
         try {
@@ -2583,7 +2591,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 additionalData: JSON.stringify(addData),
             });
 
-            if(additionalData?.itens.length > 0){
+            if(additionalData?.itens?.length > 0){
                 await api.post('/calculator/items/contribution', {
                     userId: userData?.id,
                     items: JSON.stringify(additionalData?.itens)
@@ -2593,6 +2601,27 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             console.log(err);
         } finally {
             setLoadingTransaction(false);
+        }
+    }
+
+    async function attValuesInvoice(){
+        const response = await api.get(`/invoice/${additionalData?.invoiceData?.id}`);
+        const ammountReceived = response.data.invoice?.ammountReceived;
+        const newAmmount = ammountReceived + Number(additionalData?.value);
+        
+        if(additionalData?.typePayment === 'partial'){
+            try{
+                await api.put('/invoice', {
+                    invoiceId: response.data.invoice?.id,
+                    ammountReceived: Number(newAmmount) 
+                })
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+        if(additionalData?.typePayment === 'total'){
+
         }
     }
     //------------ BURN TOKENS ---------------
