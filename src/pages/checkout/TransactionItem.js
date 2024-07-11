@@ -104,11 +104,11 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
             setLoading(true);
             const addressPdf = await pdfMake.createPdf(generateAddressPdf(addressData, walletAddress, userData));
-            
+
             addressPdf.getBuffer(async (res) => {
                 const hash = await save(res);
                 setLoading(false);
-                
+
                 setModalTransaction(true);
                 setLoadingTransaction(true);
                 addProducer(walletAddress, userData.name, userData.imgProfileUrl, hash, addressData.areaProperty)
@@ -172,8 +172,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         })
                     });
             })
-           
-            
+
+
         }
 
         if (userData.userType === 2) {
@@ -577,7 +577,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const propertyPath = JSON.parse(userData?.propertyGeolocation);
 
         let arrayPathProperty = [];
-        for(var i = 0; i < propertyPath.length; i++){
+        for (var i = 0; i < propertyPath.length; i++) {
             const rowTable = [
                 `Ponto ${i + 1}`,
                 `Latitude: ${propertyPath[i]?.latitude}, Longitude: ${propertyPath[i]?.longitude}`
@@ -858,9 +858,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const propertyData = JSON.stringify(producer);
 
         const zones = JSON.parse(producerDataApi?.zones);
-        
-        let pointsSortedZones = []; 
-        for(var i = 0; i < zones.length; i++){
+
+        let pointsSortedZones = [];
+        for (var i = 0; i < zones.length; i++) {
             const pointsToSort = zones[i]?.pointsToSort;
 
             const sortAnaliseBiomass1 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
@@ -1603,7 +1603,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         ];
         bodyBio.push(rowBio);
 
-        
+
 
         //For para calcular os resultados dos insumos
         for (var i = 0; i < resultCategories.length; i++) {
@@ -1666,7 +1666,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let totalSoilBio = 0;
         let bodySoilBioPhoto = [];
         let bodySoilBio = [];
-        
+
 
         //For para calcular os resultados das zonas
         for (var i = 0; i < resultZones.length; i++) {
@@ -1878,7 +1878,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bodyAnaliseSoloZones.push(analiseSoloZone);
 
             //Imagem das zonas
-            for(var p = 0; p < photosZone.length; p++){
+            for (var p = 0; p < photosZone.length; p++) {
                 const dataImage = {
                     text: `${photosZone[i].photo}`,
                     link: `https://${window.location.host}/view-image/${photosZone[i].photo}`,
@@ -1893,13 +1893,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             //Cáculo da biodiversidade no solo de cada zona
             for (var s = 0; s < bioSoil.length; s++) {
                 totalSoilBio += Number(bioSoil[s].value);
-    
+
                 let rowSoilBioPhoto = {
                     text: `${bioSoil[s].photo}`,
                     link: `https://${window.location.host}/view-image/${bioSoil[s].photo}`,
                     style: 'link'
                 }
-    
+
                 bodySoilBioPhoto.push(rowSoilBioPhoto);
             }
         }
@@ -1925,12 +1925,12 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         //Verifica e calcula as nascentes
         let totalWaterSprings = 0;
         let bodySprings = [];
-        if(springs.length > 0){
-            for(var sp = 0; sp < springs.length; sp++){
-                if(Number(springs[sp].value) > 20){
+        if (springs.length > 0) {
+            for (var sp = 0; sp < springs.length; sp++) {
+                if (Number(springs[sp].value) > 20) {
                     totalWaterSprings += 1000;
                 }
-                if(Number(springs[sp].value) <= 20){
+                if (Number(springs[sp].value) <= 20) {
                     totalWaterSprings += 100;
                 }
                 const dataImage = {
@@ -2021,14 +2021,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const resultZones = JSON.parse(response?.data?.inspection?.zones);
 
         let springs = [];
-        if(response?.data?.inspection?.springs){
+        if (response?.data?.inspection?.springs) {
             const jsonSprings = JSON.parse(response?.data?.inspection?.springs);
             springs = jsonSprings;
         }
 
         //Função que calcula os indices e retorna os dados para o pdf
         const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, springs);
-    
+
         await api.put('/update-result', {
             id: String(additionalData?.inspectionId),
             result: JSON.stringify(responseCalculo)
@@ -2059,7 +2059,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
-        
+
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
@@ -2515,6 +2515,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
+                        if (additionalData?.invoiceData) {
+                            attValuesInvoice();
+                        }
                     }
 
                 })
@@ -2540,6 +2543,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         api.put('/transactions-open/finish', { id: transaction.id });
                         registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
+                        if (additionalData?.invoiceData) {
+                            attValuesInvoice();
+                        }
                     }
 
                 })
@@ -2562,7 +2568,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             transactionHash: hash,
             hash,
             reason: additionalData?.reason,
-            itens: additionalData?.itens
+            itens: additionalData?.itens,
+            invoiceData: additionalData?.invoiceData,
+            typePayment: additionalData?.typePayment,
         }
 
         try {
@@ -2583,7 +2591,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 additionalData: JSON.stringify(addData),
             });
 
-            if(additionalData?.itens.length > 0){
+            if (additionalData?.itens?.length > 0) {
                 await api.post('/calculator/items/contribution', {
                     userId: userData?.id,
                     items: JSON.stringify(additionalData?.itens)
@@ -2593,6 +2601,41 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             console.log(err);
         } finally {
             setLoadingTransaction(false);
+        }
+    }
+
+    async function attValuesInvoice() {
+        if (additionalData?.typePayment === 'partial') {
+            const response = await api.get(`/invoice/${additionalData?.invoiceData?.id}`);
+            const ammountReceived = response.data.invoice?.ammountReceived;
+            const newAmmount = ammountReceived + Number(additionalData?.value);
+
+            try {
+                await api.put('/invoice', {
+                    invoiceId: response.data.invoice?.id,
+                    ammountReceived: Number(newAmmount)
+                })
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        if (additionalData?.typePayment === 'total') {
+            const response = await api.get('/impact-per-token');
+            const impact = response.data.impact;
+
+            try {
+                await api.put('/invoice', {
+                    invoiceId: additionalData?.invoiceData?.id,
+                    ammountReceived: Number(additionalData?.value),
+                    impactTokenCarbon: impact?.carbon,
+                    impactTokenWater: impact?.water,
+                    impactTokenSoil: impact?.soil,
+                    impactTokenBio: impact?.bio,
+                })
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
     //------------ BURN TOKENS ---------------
