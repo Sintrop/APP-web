@@ -426,8 +426,8 @@ export function ImpactCalculator() {
                 <>
                     <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                         <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
-                            <div className="flex items-center justify-between">
-                                <p className="font-bold text-white">Calculadora de impacto</p>
+                            <div className="flex flex-col gap-2">
+                                <h2 className="font-bold text-white">Calculadora de impacto</h2>
 
                                 <button
                                     className="w-[200px] bg-blue-500 rounded-md font-semibold text-white h-10 mt-3"
