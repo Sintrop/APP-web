@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ItemReceipt } from './ItemReceipts';
+import { ItemReceipt } from './components/ItemReceipts';
 import { api } from '../../services/api';
 import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { Item } from '../ImpactCalculator/components/Item';
 import { Helmet } from "react-helmet";
+import Chart from 'react-apexcharts';
 
 //services
 import { getImage } from '../../services/getImage';
 import { ContributeCertificate } from '../../components/Certificates/ContributeCertificate';
 import { ProofReduce } from '../Home/components/PublicationItem/ProofReduce';
+import { ProofItem } from './components/ProofItem';
 
 export default function AccountInvestor() {
+    const width = window.screen.width;
     const { t } = useTranslation();
     const { walletSelected } = useParams();
     const [investorData, setInvestorData] = useState([]);
@@ -26,6 +29,9 @@ export default function AccountInvestor() {
     const [loading, setLoading] = useState(false);
     const [itemsToReduce, setItemsToReduce] = useState([]);
     const [proofsReduce, setProofsReduce] = useState([]);
+    const [invoicesThisYear, setInvoicesThisYear] = useState([]);
+    const [seriesGraphic, setSeriesGraphic] = useState(null);
+    const [configData, setConfigData] = useState(null);
 
     useEffect(() => {
         getSupporter();
@@ -58,6 +64,7 @@ export default function AccountInvestor() {
         const response = await api.get(`/user/${walletSelected}`);
         setUserData(response.data.user);
         getProofs(response.data.user.id);
+        getInvoices(response.data.user.id);
         if (response.data.user.imgProfileUrl) {
             getImageProfile(response.data.user.imgProfileUrl);
         }
@@ -91,9 +98,181 @@ export default function AccountInvestor() {
         setReceipts(receiptsArray.reverse())
     }
 
-    async function getProofs(userId){
+    async function getProofs(userId) {
         const response = await api.get(`/publications/proof-reduce/${userId}`);
         setProofsReduce(response.data.publications);
+    }
+
+    async function getInvoices(userId) {
+        const atualYear = new Date().getFullYear();
+        const response = await api.get(`/invoices/${userId}/${atualYear}`);
+        createGraphic(response.data.invoices)
+        setInvoicesThisYear(response.data.invoices);
+        formaterItemsToReduce(response.data?.itemsToReduce);
+    }
+
+    function formaterItemsToReduce(items) {
+        if (items) {
+            const array = JSON.parse(items);
+            let newArray = [];
+            for (var i = 0; i < array.length; i++) {
+                newArray.push({ value: array[i].id, label: `${array[i].name} ( ${array[i].unit} )` })
+            }
+            //setItemsToReduce(newArray);
+            //setItemSelect(array[0].id);
+        }
+    }
+
+    function createGraphic(invoices) {
+        const janInvoice = invoices.filter(item => item.month === 1);
+        const fevInvoice = invoices.filter(item => item.month === 2);
+        const marInvoice = invoices.filter(item => item.month === 3);
+        const abrInvoice = invoices.filter(item => item.month === 4);
+        const maiInvoice = invoices.filter(item => item.month === 5);
+        const junInvoice = invoices.filter(item => item.month === 6);
+        const julInvoice = invoices.filter(item => item.month === 7);
+        const agoInvoice = invoices.filter(item => item.month === 8);
+        const setInvoice = invoices.filter(item => item.month === 9);
+        const outInvoice = invoices.filter(item => item.month === 10);
+        const novInvoice = invoices.filter(item => item.month === 11);
+        const dezInvoice = invoices.filter(item => item.month === 12);
+
+        const valuesItem = [];
+
+        if (janInvoice.length > 0) {
+            valuesItem.push(janInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (fevInvoice.length > 0) {
+            valuesItem.push(fevInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (marInvoice.length > 0) {
+            valuesItem.push(marInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (abrInvoice.length > 0) {
+            valuesItem.push(abrInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (maiInvoice.length > 0) {
+            valuesItem.push(maiInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (junInvoice.length > 0) {
+            valuesItem.push(junInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (julInvoice.length > 0) {
+            valuesItem.push(julInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (agoInvoice.length > 0) {
+            valuesItem.push(agoInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (setInvoice.length > 0) {
+            valuesItem.push(setInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (outInvoice.length > 0) {
+            valuesItem.push(outInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (novInvoice.length > 0) {
+            valuesItem.push(novInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        if (dezInvoice.length > 0) {
+            valuesItem.push(dezInvoice[0].ammountReceived);
+        } else {
+            valuesItem.push(0);
+        }
+
+        setConfigData({
+            chart: {
+                height: 300,
+                width: '100%',
+                type: 'line',
+                dropShadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.2
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#77B6EA', '#77B6EA'],
+            dataLabels: {
+                enabled: true,
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#062c01'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            markers: {
+                size: 1
+            },
+            xaxis: {
+                categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                labels: {
+                    style: {
+                        colors: '#fff'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#fff'
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            }
+        });
+
+        setSeriesGraphic([{
+            name: "Créditos de regeneração",
+            data: valuesItem
+        }]);
     }
 
     return (
@@ -120,104 +299,126 @@ export default function AccountInvestor() {
                 </div>
             ) : (
                 <>
-                    <div className='flex flex-col items-center lg:w-[1000px] lg:flex-row mt-5 w-full gap-5 lg:gap-5 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3'>
+                    <div className='flex flex-col items-center lg:w-[1000px] mt-5 w-full gap-1 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3'>
                         <img
                             src={imageProfile ? imageProfile : require('../../assets/token.png')}
                             className='h-[150px] w-[150px] lg:h-[200px] lg:w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
                         />
+                        <h1 className='font-bold text-center lg:text-2xl text-white'>{userData?.name}</h1>
+                        <h1 className='text-center lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h1>
 
-                        <div className='flex flex-col items-center lg:items-start'>
-                            <h1 className='font-bold text-center lg:text-left lg:text-2xl text-white'>{userData?.name}</h1>
-                            <h1 className='text-center lg:text-left lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h1>
-                            <div className='flex flex-col items-center lg:items-start px-5 py-3 bg-green-950 rounded-md mt-3'>
-                                <p className='text-white text-sm'>Contribuiu com</p>
-                                <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(tokens)} Créditos de Regeneração</p>
+                        <div className='w-full h-[1px] bg-green-500 my-5' />
+                        <div className='flex flex-col w-full'>
+                            <p className='text-white'>Contribuiu com</p>
+                            <div className='flex gap-3 p-3 bg-green-950 rounded-md mt-1 w-full'>
+                                <img
+                                    src={require('../../assets/token.png')}
+                                    className='w-14 h-14 object-contain'
+                                />
+                                <div className='flex flex-col'>
+                                    <p className='font-bold text-white text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(tokens)}</p>
+                                    <p className='text-sm text-white'>Créditos de Regeneração</p>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                        <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Impacto das contribuições</h3>
-
-                        <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
-                            <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
-                                <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.carbon)} kg</p>
-                                <p className='text-white text-xs lg:text-base'>Carbono</p>
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Impacto das contribuições</h3>
+                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md'>
+                        <div className='flex items-center justify-center flex-wrap'>
+                            <div className='flex flex-col w-[50%]'>
+                                <div className='flex flex-col p-5 w-full h-[120px] border-r border-green-700/20'>
+                                    <div className='flex flex-col items-start justify-center h-full'>
+                                        <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.carbon)} kg</p>
+                                        <p className='text-white text-xs lg:text-base'>Carbono</p>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col p-5 w-full h-[120px] border-t border-r border-green-700/20'>
+                                    <div className='flex flex-col items-start justify-center h-full'>
+                                        <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.water)} m³</p>
+                                        <p className='text-white text-xs lg:text-base'>Água</p>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
-                                <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.soil)} m²</p>
-                                <p className='text-white text-xs lg:text-base'>Solo</p>
-                            </div>
-
-                            <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
-                                <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.water)} m³</p>
-                                <p className='text-white text-xs lg:text-base'>Água</p>
-                            </div>
-
-                            <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
-                                <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.bio)} uv</p>
-                                <p className='text-white text-xs lg:text-base'>Biodver.</p>
+                            <div className='flex flex-col w-[50%] borde'>
+                                <div className='flex flex-col p-5 w-full h-[120px] border-green-700/20'>
+                                    <div className='flex flex-col items-start justify-center h-full'>
+                                        <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.soil)} m²</p>
+                                        <p className='text-white text-xs lg:text-base'>Solo</p>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col p-5 w-full h-[120px] border-t border-green-700/20'>
+                                    <div className='flex flex-col items-start justify-center h-full'>
+                                        <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.bio)} uv</p>
+                                        <p className='text-white text-xs lg:text-base'>Biodver.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                        <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Compromisso de redução</h3>
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Evolução das contribuições</h3>
+                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md overflow-x-auto'>
+                        {configData && (
+                            <Chart
+                                series={seriesGraphic}
+                                options={configData}
+                                type='line'
+                                height={300}
+                                width={width >= 1024 ? 1000 : width}
+                            />
+                        )}
+                    </div>
 
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Consumo por itens</h3>
+                    <div className='flex flex-col lg:w-[1000px] w-full gap-5'>
                         {itemsToReduce.length === 0 && (
                             <p className="text-white text-center my-4">Este usuário não tem nenhum item na sua lista</p>
                         )}
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap justify-center gap-3">
                             {itemsToReduce.map(item => (
                                 <Item
                                     key={item?.id}
                                     data={item}
-                                    type='demonstration'
+                                    type='consumption-graph'
                                     hiddenButton
                                     userId={userData?.id}
+                                    invoices={invoicesThisYear}
                                 />
                             ))}
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                        <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Provas de redução</h3>
+                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>Provas de redução</h3>
+                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
                         {proofsReduce.length === 0 && (
                             <p className="text-white text-center my-4">Este usuário não publicou nenhuma prova de redução</p>
                         )}
 
-                        <div className='flex flex-col items-center gap-5'>
+                        <div className='flex items-center gap-5 overflow-x-auto'>
                             {proofsReduce.map(item => (
-                                <div
+                                <ProofItem
                                     key={item.id}
-                                    className='max-w-[500px]'
-                                >
-                                    <ProofReduce data={item}/>
-                                </div>
+                                    data={item}
+                                />
                             ))}
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                        <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Certificado de contribuição</h3>
-                        <ContributeCertificate wallet={walletSelected} />
-                    </div>
-
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3 mb-5'>
-                        <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Recibos de contribuição</h3>
-                        <div className="flex lg:w-[1000px] justify-center flex-wrap gap-10">
-                            {receipts.length !== 0 && (
-                                <>
-                                    {receipts.map((item, index) => (
-                                        <ItemReceipt
-                                            data={item}
-                                            index={index + 1}
-                                        />
-                                    ))}
-                                </>
-                            )}
-                        </div>
+                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>Recibos de contribuição</h3>
+                    <div className='flex flex-col lg:w-[1000px] w-full gap-3 mb-10'>
+                        {receipts.length > 0 && (
+                            <>
+                                {receipts.map((item, index) => (
+                                    <ItemReceipt
+                                        key={item.hash}
+                                        data={item}
+                                        index={index + 1}
+                                    />
+                                ))}
+                            </>
+                        )}
                     </div>
                 </>
             )}
