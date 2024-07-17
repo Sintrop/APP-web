@@ -422,8 +422,6 @@ export default function AccountInvestor() {
                     </div>
                 </>
             )}
-
-
         </div>
     )
 }

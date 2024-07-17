@@ -38,6 +38,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
     }
 
     function createGraphic(invoices) {
+        const colors = ['red', 'yellow', '#1eb76f', 'blue', 'purple', 'orange']
         const idItem = data?.id;
 
         const janInvoice = invoices.filter(item => item.month === 1);
@@ -252,7 +253,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
                     show: false
                 }
             },
-            colors: ['#77B6EA', '#77B6EA'],
+            colors: [colors[parseInt(Math.random() * 6)]],
             dataLabels: {
                 enabled: true,
             },

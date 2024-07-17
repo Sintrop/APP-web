@@ -42,13 +42,13 @@ export function ItemReceipt({ data, index }) {
             <div className="flex items-center justify-between p-2">
                 <div className="flex flex-col">
                     <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data.hash}`}>
-                        <p className="text-blue-400 text-sm lg:text-base mb-2 max-w-[120px] overflow-hidden text-ellipsis decoration-1 underline decoration-blue-400">{data.hash}</p>
+                        <p className="text-blue-400 text-sm lg:text-base mb-2 max-w-[80px] lg:max-w-[70%] overflow-hidden text-ellipsis decoration-1 underline decoration-blue-400">{data.hash}</p>
                     </a>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <p className="text-gray-400 text-xs">{date}</p>
-                    <div className="flex items-center gap-1">
+                    <p className="text-gray-400 text-xs text-center">{date}</p>
+                    <div className="flex items-center gap-1 w-[120px]">
                         <img 
                             src={require('../../../assets/token.png')}
                             className="w-6 h-6 object-contain"
