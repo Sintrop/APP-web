@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {BsFillChatDotsFill} from 'react-icons/bs';
-import {FaChevronUp, FaChevronDown} from 'react-icons/fa';
+import {FaChevronUp, FaChevronDown, FaPlus} from 'react-icons/fa';
 import { useMainContext } from '../../hooks/useMainContext';
 import { api } from '../../services/api';
 import { ActivityIndicator } from '../ActivityIndicator';
 import io from 'socket.io-client';
 import { ChatItem } from './components/ChatItem';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ModalNewChat } from './components/ModalNewChat';
+import { toast, ToastContainer } from 'react-toastify';
 
 export function Chat({openChat}){
     const {walletConnected, userData} = useMainContext();
@@ -85,6 +88,23 @@ export function Chat({openChat}){
                                 <ActivityIndicator size={50}/>
                             ) : (
                                 <>
+                                    <Dialog.Root open={modalNewChat} onOpenChange={(open) => setModalNewChat(open)}>
+                                        <Dialog.Trigger className='my-2 flex items-center gap-2 px-3'>
+                                            <div className='w-10 h-10 flex items-center justify-center rounded-full bg-green-500'>
+                                                <FaPlus size={20} color='white'/>
+                                            </div>
+                                            <p className='font-bold text-white text-sm'>Iniciar conversa</p>
+                                        </Dialog.Trigger>
+
+                                        <ModalNewChat 
+                                            chats={chats} 
+                                            chatCreated={() => {
+                                                getChats();
+                                                setModalNewChat(false);
+                                                toast.success('Chat criado com sucesso!')
+                                            }}
+                                        />
+                                    </Dialog.Root>
                                     {chats.length === 0 ? (
                                         <p className='text-white text-center mt-10'>Você não tem nenhum chat ativo no momento</p>
                                     ) : (
@@ -103,6 +123,8 @@ export function Chat({openChat}){
                     </>
                 )}
             </div>
+
+            <ToastContainer/>
         </div>
     )
 }

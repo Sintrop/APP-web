@@ -9,7 +9,7 @@ import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdOutlineFeedback } from "react-icons/md";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
@@ -320,6 +320,12 @@ export function Home() {
                     </div>
                 )}
             </div>
+
+            {/* <button
+                className="flex items-center gap-2 justify-end px-2 h-10 w-[120px] bg-red-500 absolute bottom-20 left-[-60px] hover:left-0 duration-500 rounded-r-md"
+            >
+                <MdOutlineFeedback color='white' size={20}/>
+            </button> */}
 
             {modalLogout && (
                 <ModalLogout
