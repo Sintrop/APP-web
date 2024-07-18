@@ -302,7 +302,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
     if (type === 'consumption-graph') {
         return (
-            <div className="flex flex-col border border-white rounded-md px-2 pt-1 bg-[#0a4303]">
+            <div className="flex flex-col rounded-md px-2 pt-1 bg-[#0a4303]">
                 <p className="font-bold text-white">{data?.name} ( {data?.unit} )</p>
                 {configData && (
                     <Chart
