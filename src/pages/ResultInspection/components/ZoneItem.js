@@ -59,7 +59,7 @@ export function ZoneItem({ data, index }) {
         await getImagesZone();
         await getImagesAnaliseSoil();
         await getImagesTreesS1();
-        if (bioSoil.length > 0) {
+        if (bioSoil) {
             await getImagesBioSoil();
         }
     }
@@ -86,13 +86,19 @@ export function ZoneItem({ data, index }) {
         let newArray = [];
         for (var i = 0; i < analiseSolo.length; i++) {
             const response = await getImage(analiseSolo[i].photo)
-            const response2 = await getImage(analiseSolo[i]?.addPhoto1)
-            const response3 = await getImage(analiseSolo[i]?.addPhoto2)
+            let addPhoto1 = '';
+            let addPhoto2 = '';
+            if(analiseSolo[i]?.addPhoto1){
+                const response2 = await getImage(analiseSolo[i]?.addPhoto1)
+                addPhoto1 = response2;
+                const response3 = await getImage(analiseSolo[i]?.addPhoto2)
+                addPhoto2 = response3;
+            }
             newArray.push({
                 ...analiseSolo[i],
                 photo: response,
-                addPhoto1: response2,
-                addPhoto2: response3,
+                addPhoto1,
+                addPhoto2,
             })
         }
 
@@ -173,14 +179,18 @@ export function ZoneItem({ data, index }) {
                         />
                     ))}
 
-                    {bioSoil.map((analise, index) => (
-                        <Marker
-                            key={analise?.coord?.lat}
-                            latitude={analise?.coord?.lat}
-                            longitude={analise?.coord?.lng}
-                            color="#911c0f"
-                        />
-                    ))}
+                    {bioSoil && (
+                        <>
+                            {bioSoil.map((analise, index) => (
+                                <Marker
+                                    key={analise?.coord?.lat}
+                                    latitude={analise?.coord?.lat}
+                                    longitude={analise?.coord?.lng}
+                                    color="#911c0f"
+                                />
+                            ))}
+                        </>
+                    )}
                 </ReactMapGL>
             )}
             <div className="flex items-center gap-1 mt-1">
@@ -204,7 +214,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} />
+                    <ActivityIndicator size={50} hiddenIcon/>
                     <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                 </div>
             ) : (
@@ -264,7 +274,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} />
+                    <ActivityIndicator size={50} hiddenIcon/>
                     <p className="text-white mt-1">Carregando dados, aguarde...</p>
                 </div>
             ) : (
@@ -329,7 +339,7 @@ export function ZoneItem({ data, index }) {
 
                     {loadingImagesBioSoil ? (
                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                            <ActivityIndicator size={50} />
+                            <ActivityIndicator size={50} hiddenIcon/>
                             <p className="text-white mt-1">Carregando dados, aguarde...</p>
                         </div>
                     ) : (
@@ -406,7 +416,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} />
+                    <ActivityIndicator size={50} hiddenIcon/>
                     <p className="text-white mt-1">Carregando fotos, aguarde...</p>
                 </div>
             ) : (
