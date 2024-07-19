@@ -310,7 +310,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
                         options={configData}
                         type='line'
                         height={280}
-                        width={width >= 1024 ? 472 : width - 50}
+                        width={width >= 1024 ? 478 : width - 50}
 
                     />
                 )}
