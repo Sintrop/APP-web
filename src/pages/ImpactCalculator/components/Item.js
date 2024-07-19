@@ -22,7 +22,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
         if (invoices) {
             createGraphic(invoices);
         }
-    }, []);
+    }, [invoices]);
 
     async function getContributionDetails() {
         const response = await api.get(`/contributions/${userId}/${data?.id}`);
