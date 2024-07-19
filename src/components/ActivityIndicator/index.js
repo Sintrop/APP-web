@@ -2,7 +2,7 @@ import React from "react";
 
 export function ActivityIndicator({size, hiddenIcon}){
     return(
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center relative">
             <img
                 src={require('../../assets/activity.png')}
                 className={`w-[${size}px] h-[${size}px] object-contain animate-spin`}

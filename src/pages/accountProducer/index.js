@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './accountProducer.css';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { FaChevronRight } from 'react-icons/fa';
@@ -14,6 +13,7 @@ import { ActivityIndicator } from '../../components/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
 import { Helmet } from "react-helmet";
 import {Inspection} from '../ResultInspection/components/Inspection';
+import { InspectionItem } from './components/InspectionItem';
 
 export default function AccountProducer() {
     const navigate = useNavigate();
@@ -175,18 +175,11 @@ export default function AccountProducer() {
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 rounded-md p-1 lg:p-0 mb-10'>
                 <h3 className='font-bold text-white text-center lg:text-lg'>Inspeções recebidas</h3>
 
-                {inspections.map(item => (
-                    <button
-                        key={item.id}
-                        className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
-                        onClick={() => navigate(`/result-inspection/${item.id}`)}
-                    >
-                        <div className="flex flex-col gap-1">
-                            <p className="font-bold text-white text-sm">Inspeção #{item.id}</p>
-                        </div>
-
-                        <FaChevronRight color='white' size={20} />
-                    </button>
+                {inspections.map((item, index) => (
+                    <InspectionItem
+                        inspectionId={item?.id}
+                        index={index}
+                    />
                 ))}
             </div>
         </div>
