@@ -1,3 +1,4 @@
+/* eslint import/no-webpack-loader-syntax: off */
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { api } from "../../services/api";
@@ -8,7 +9,7 @@ import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { UserRankingItem } from "../Ranking/components/UserRankingItem";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
-import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import ReactMapGL, { Layer, Marker, Source } from '!react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export function Community() {
@@ -110,7 +111,7 @@ export function Community() {
 
             <div className="flex flex-col overflow-scroll" id="div-main-scroll">
                 <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
-                    <div className="flex w-full h-[440px] bg-espaco bg-center bg-cover bg-no-repeat">
+                    <div className="flex w-full h-[440px] bg-espaco2 bg-center bg-cover bg-no-repeat">
                         {mapCommunity && (
                             <ReactMapGL
                                 style={{ width: '100%', height: '100%' }}

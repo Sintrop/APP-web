@@ -18,6 +18,7 @@ import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Polyline } from "../../components/Mapbox/Polyline";
 import { RegenerationZoneProfile } from "../Profile/components/RegenerationZoneProfile";
+import { Info } from "../../components/Info";
 
 const containerMapStyle = {
     width: '100%',
@@ -41,7 +42,8 @@ export function UserDetails() {
     const [publications, setPublications] = useState([]);
     const [loadingPubli, setLoadingPubli] = useState(false);
     const [itemsToReduce, setItemsToReduce] = useState([]);
-    const [mapProperty, setMapProperty] = useState()
+    const [mapProperty, setMapProperty] = useState();
+    const [invoicesThisYear, setInvoicesThisYear] = useState([]);
 
     useEffect(() => {
         getUserDetails();
@@ -122,7 +124,14 @@ export function UserDetails() {
             getProofPhoto(response.data.validator.proofPhoto);
         }
 
+        getInvoices(user?.id);
         setLoading(false);
+    }
+
+    async function getInvoices(userId){
+        const atualYear = new Date().getFullYear();
+        const response = await api.get(`/invoices/${userId}/${atualYear}`);
+        setInvoicesThisYear(response.data.invoices);
     }
 
     async function getInspections() {
@@ -510,18 +519,21 @@ export function UserDetails() {
                                                 <ContributeCertificate wallet={wallet} user={userData} />
                                             </div>
 
-                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                            <div className="w-full flex flex-col rounded-md p-3">
                                                 <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
+                                                <Info text1='Esses são os itens que o usuário declara consumir na calculadora de impacto.'/>
                                                 {itemsToReduce.length === 0 && (
                                                     <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
                                                 )}
-                                                <div className="flex flex-wrap gap-3">
+                                                <div className="flex flex-wrap gap-3 mt-2">
                                                     {itemsToReduce.map(item => (
                                                         <Item
                                                             key={item?.id}
                                                             data={item}
-                                                            type='demonstration'
+                                                            type='consumption-graph'
                                                             userId={userData?.id}
+                                                            hiddenButton
+                                                            invoices={invoicesThisYear}
                                                         />
                                                     ))}
                                                 </div>

@@ -306,7 +306,7 @@ export function ResearcherActions() {
                                     </div>
                                 )}
                                 {items.map(item => (
-                                    <Item data={item} hiddenButton />
+                                    <Item data={item} hiddenButton type='list-items-calculator' />
                                 ))}
                             </>
                         )}
