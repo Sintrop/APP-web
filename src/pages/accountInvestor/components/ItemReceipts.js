@@ -8,7 +8,6 @@ export function ItemReceipt({ data, index }) {
     const { t } = useTranslation();
     const [date, setDate] = useState('');
     const [impactReceipt, setImpactReceipt] = useState({});
-    const [idApi, setIdApi] = useState('---');
     const [moreInfo, setMoreInfo] = useState(false);
 
     useEffect(() => {
@@ -27,18 +26,18 @@ export function ItemReceipt({ data, index }) {
         const response = await api.get(`/tokens-burned/by-hash/${data.hash}`);
         const impact = response.data.tokensBurned[0];
 
-        setIdApi(impact.id)
-
-        setImpactReceipt({
-            carbon: impact.tokens * impact.carbon,
-            water: impact.tokens * impact.water,
-            bio: impact.tokens * impact.bio,
-            soil: impact.tokens * impact.soil,
-        })
+        if(impact){
+            setImpactReceipt({
+                carbon: impact.tokens * impact.carbon,
+                water: impact.tokens * impact.water,
+                bio: impact.tokens * impact.bio,
+                soil: impact.tokens * impact.soil,
+            }) 
+        }
     }
 
     return (
-        <div className="flex flex-col w-full bg-[#0a4303] rounded-md">
+        <div className="flex flex-col w-full bg-[#0E5804] rounded-md">
             <div className="flex items-center justify-between p-2">
                 <div className="flex flex-col">
                     <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data.hash}`}>
@@ -70,44 +69,51 @@ export function ItemReceipt({ data, index }) {
             </div>
 
             {moreInfo && (
-                <div className="flex flex-col p-3 w-full ">
-                    <div>
-                        <p className="font-bold text-center text-white lg:text-xl lg:mt-3">Recibo de contribuição</p>
-                        <p className="text-white text-center text-xs lg:text-base">{idApi}</p>
-                        <p className="text-white text-center text-xs lg:text-lg">{date}</p>
-                        <p className="text-white text-center text-xs lg:text-md lg:mb-3">sintrop.com</p>
-                    </div>
-
-                    <p className="max-w-[100%] overflow-clip text-gray-400">***********************************************************************************************************************************************************</p>
-
-                    <div>
+                <div className="flex flex-col p-3 w-full bg-[#0a4303]">
+                    <div className="mt-5">
                         <p className="font-bold text-sm lg:text-base text-white">{t('Transaction Hash')}</p>
                         <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data.hash}`}>
                             <p className="text-blue-400 text-sm lg:text-base mb-2 max-w-[95%] overflow-hidden text-ellipsis decoration-1 underline decoration-blue-400">{data.hash}</p>
                         </a>
 
-                        <p className="font-bold text-white text-sm lg:text-base">{t('From Address')}</p>
+                        <div className="w-full h-[1px] bg-green-500/20"/>
+
+                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('From Address')}</p>
                         <p className="text-white mb-2 text-sm lg:text-base max-w-[95%] overflow-hidden text-ellipsis">{data.to}</p>
 
-                        <p className="font-bold text-white text-sm lg:text-base">{t('Block Number')}</p>
+                        <div className="w-full h-[1px] bg-green-500/20"/>
+
+                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('Block Number')}</p>
                         <p className="text-white mb-2 text-sm lg:text-base">{data.blockNumber}</p>
+
+                        <div className="w-full h-[1px] bg-green-500/20"/>
                     </div>
 
-                    <p className="max-w-[100%] overflow-clip text-gray-400">********************************************************************************************************************************************************</p>
-
-                    <div className="flex items-center w-full justify-between mb-2">
+                    <div className="flex items-center w-full justify-between my-5">
                         <p className="font-bold text-white text-sm lg:text-base">Total contribuido</p>
-                        <p className="text-white text-sm lg:text-base">{Intl.NumberFormat('pt-BR',{maximumFractionDigits: 0}).format(Number(data.value) / 10 ** 18)} RC</p>
+                        <p className="text-green-500 font-bold text-sm lg:text-base">{Intl.NumberFormat('pt-BR',{maximumFractionDigits: 0}).format(Number(data.value) / 10 ** 18)} RC</p>
                     </div>
 
-                    <p className="max-w-[100%] overflow-clip text-gray-400">*****************************************************************************************************************************************************</p>
+                    <div className="w-full h-[1px] bg-green-500/20"/>
 
-                    <p className="font-bold text-center text-sm lg:text-base text-white">Relatório de impacto</p>
-                    <div className="flex flex-col lg:p-3">
-                        <p className="font-bold text-white text-sm lg:text-base">{t('Carbono')} = {Number(impactReceipt?.carbon).toFixed(2)} kg</p>
-                        <p className="font-bold text-white text-sm lg:text-base">Solo = {Number(impactReceipt?.soil).toFixed(2)} m²</p>
-                        <p className="font-bold text-white text-sm lg:text-base">{t('Biodiversidade')} = {Number(impactReceipt?.bio).toFixed(2)} uv</p>
-                        <p className="font-bold text-white text-sm lg:text-base">{t('Água')} = {Number(impactReceipt?.water).toFixed(2)} m³</p>
+                    <p className="font-bold text-sm lg:text-base text-white mt-3">Relatório de impacto</p>
+                    <div className="flex items-center gap-3 flex-wrap justify-center lg:justify-start">
+                        <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
+                            <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.carbon)} kg</p>
+                            <p className="text-white text-sm lg:text-base">{t('Carbono')}</p>
+                        </div>
+                        <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
+                            <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.soil)} m²</p>
+                            <p className="text-white text-sm lg:text-base">{t('Solo')}</p>
+                        </div>
+                        <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
+                            <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.water)} m³</p>
+                            <p className="text-white text-sm lg:text-base">{t('Água')}</p>
+                        </div>
+                        <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
+                            <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.bio)} uv</p>
+                            <p className="text-white text-sm lg:text-base">{t('Biodiversidade')}</p>
+                        </div>
                     </div>
                 </div>
             )}
