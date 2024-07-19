@@ -55,7 +55,7 @@ export function ResearcheItem({ data }) {
 
             <div className="flex items-center gap-5 border-t border-green-950 w-full mt-4 pt-3">
                 <a
-                    href={`https://ipfs.io/ipfs/${data?.file}`}
+                    href={`https://app.sintrop.com/view-pdf/${data?.file}`}
                     target="_blank"
                 >
                     <button
