@@ -299,15 +299,19 @@ export default function AccountInvestor() {
                 </div>
             ) : (
                 <>
-                    <div className='flex flex-col items-center lg:w-[1000px] mt-5 w-full gap-1 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3'>
-                        <img
-                            src={imageProfile ? imageProfile : require('../../assets/token.png')}
-                            className='h-[150px] w-[150px] lg:h-[200px] lg:w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
-                        />
-                        <h1 className='font-bold text-center lg:text-2xl text-white'>{userData?.name}</h1>
-                        <h1 className='text-center lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</h1>
+                    <div className='flex flex-col items-center lg:w-[1000px] mt-5 w-full gap-1 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3 lg:items-start'>
+                        <div className='flex flex-col items-center gap-2 lg:flex-row'>
+                            <img
+                                src={imageProfile ? imageProfile : require('../../assets/token.png')}
+                                className='h-[150px] w-[150px] lg:h-[200px] lg:w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
+                            />
 
-                        <div className='w-full h-[1px] bg-green-500 my-5' />
+                            <div className='flex flex-col items-center lg:items-start'>
+                                <h1 className='font-bold text-center lg:text-2xl text-white'>{userData?.name}</h1>
+                                <p className='text-center lg:text-lg text-white max-w-[78%] text-ellipsis overflow-hidden lg:max-w-full'>{walletSelected}</p>
+                            </div>
+                        </div>
+
                         <div className='flex flex-col w-full'>
                             <p className='text-white'>Contribuiu com</p>
                             <div className='flex gap-3 p-3 bg-green-950 rounded-md mt-1 w-full'>
@@ -376,7 +380,7 @@ export default function AccountInvestor() {
                         {itemsToReduce.length === 0 && (
                             <p className="text-white text-center my-4">Este usuário não tem nenhum item na sua lista</p>
                         )}
-                        <div className="flex flex-wrap justify-center gap-3">
+                        <div className="flex flex-wrap justify-center gap-3 lg:justify-normal">
                             {itemsToReduce.map(item => (
                                 <Item
                                     key={item?.id}
