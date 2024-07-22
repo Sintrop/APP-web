@@ -2512,7 +2512,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        attTransactions();
+                        setTimeout(() => {
+                            attTransactions();
+                        }, 2000);
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
@@ -2538,7 +2540,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        attTransactions();
+                        setTimeout(() => {
+                            attTransactions();
+                        }, 2000);
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
@@ -2642,64 +2646,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     hash: ''
                 })
             })
-    }
-
-    async function reduceImpact(id) {
-        const inspection = await GetInspection(id);
-
-        if (Number(inspection?.validationsCount) !== 0) {
-            setLoadingTransaction(false);
-            return;
-        }
-
-        const isas = await GetIsa(id);
-
-        const carbon = isas.filter(item => item.categoryId === '1');
-        const bio = isas.filter(item => item.categoryId === '2');
-        const water = isas.filter(item => item.categoryId === '3');
-        const soil = isas.filter(item => item.categoryId === '4');
-
-        const response = await api.get('/network-impact');
-        const impact = response.data.impact;
-        const networkImpact = impact.filter(item => item.id === '1');
-        const sintropImpact = impact.filter(item => item.id === '2');
-
-        const newCarbonNetwork = networkImpact[0].carbon + Math.abs(carbon[0].indicator);
-        const newBioNetwork = networkImpact[0].bio - Math.abs(bio[0].indicator);
-        const newWaterNetwork = networkImpact[0].agua - Math.abs(water[0].indicator);
-        const newSoilNetwork = networkImpact[0].solo - Math.abs(soil[0].indicator);
-
-        try {
-            await api.put('/network-impact', {
-                carbon: newCarbonNetwork,
-                agua: newWaterNetwork,
-                bio: newBioNetwork,
-                solo: newSoilNetwork,
-                id: '1'
-            });
-        } catch (err) {
-
-        }
-
-        const newCarbonSintrop = sintropImpact[0].carbon + Math.abs(carbon[0].indicator);
-        const newBioSintrop = sintropImpact[0].bio - Math.abs(bio[0].indicator);
-        const newWaterSintrop = sintropImpact[0].agua - Math.abs(water[0].indicator);
-        const newSoilSintrop = sintropImpact[0].solo - Math.abs(soil[0].indicator);
-
-        try {
-            await api.put('/network-impact', {
-                carbon: newCarbonSintrop,
-                agua: newWaterSintrop,
-                bio: newBioSintrop,
-                solo: newSoilSintrop,
-                id: '2'
-            });
-        } catch (err) {
-
-        }
-
-
-        setLoadingTransaction(false);
     }
 
     async function invalidateUser() {
@@ -3162,7 +3108,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         setLoading(false);
                         if (logTransaction.type === 'success') {
                             attTransactions();
-
                         }
                     }
                 }}>
