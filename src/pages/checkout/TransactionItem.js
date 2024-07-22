@@ -2512,14 +2512,12 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
-                        registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
                     }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -2540,14 +2538,12 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
-                        registerTokensApi(additionalData?.value, res.hashTransaction)
                         attTransactions();
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
                     }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -2558,49 +2554,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         hash: ''
                     })
                 })
-        }
-    }
-
-    async function registerTokensApi(tokens, hash) {
-        const addData = {
-            userData,
-            tokens: Number(tokens),
-            transactionHash: hash,
-            hash,
-            reason: additionalData?.reason,
-            itens: additionalData?.itens,
-            invoiceData: additionalData?.invoiceData,
-            typePayment: additionalData?.typePayment,
-        }
-
-        try {
-            await api.post('/tokens-burned', {
-                wallet: walletAddress.toUpperCase(),
-                tokens: Number(tokens),
-                transactionHash: hash,
-                carbon: Number(impactToken?.carbon),
-                water: Number(impactToken?.water),
-                bio: Number(impactToken?.bio),
-                soil: Number(impactToken?.soil)
-            });
-
-            await api.post('/publication/new', {
-                userId: userData?.id,
-                type: 'contribute-tokens',
-                origin: 'platform',
-                additionalData: JSON.stringify(addData),
-            });
-
-            if (additionalData?.itens?.length > 0) {
-                await api.post('/calculator/items/contribution', {
-                    userId: userData?.id,
-                    items: JSON.stringify(additionalData?.itens)
-                })
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingTransaction(false);
         }
     }
 
