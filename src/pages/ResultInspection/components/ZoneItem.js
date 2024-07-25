@@ -21,29 +21,33 @@ export function ZoneItem({ data, index }) {
     const analiseSolo = data?.analiseSolo;
     const bioSoil = data?.bioSoil;
     const photosZone = data?.photosZone;
+    const analiseBio = data?.analiseBio;
 
-    const [color, setColor] = useState('red');
-    const [modalCoords, setModalCoords] = useState(false);
     const [imagesZones, setImagesZones] = useState([]);
     const [imagesAnaliseSoil, setImagesAnaliseSoil] = useState([]);
     const [imagesBioSoil, setImagesBioSoil] = useState([]);
+    const [imagesBioZone, setImagesBioZone] = useState([]);
     const [imagesTreesS1, setImagesTressS1] = useState([]);
     const [loadingImagesZones, setLoadingImageZones] = useState(true);
     const [loadingImagesAnalise, setLoadingImageAnalise] = useState(true);
     const [loadingImagesBioSoil, setLoadingImageBioSoil] = useState(true);
+    const [loadingImagesBioZone, setLoadingImageBioZone] = useState(true);
     const [loadingImagesTreesS1, setLoadingImagesTreesS1] = useState(true);
     const [viewImage, setViewImage] = useState(false);
     const [imageSelected, setImageSelected] = useState('');
     const [collectDetails, setCollectDetails] = useState(false);
     const [collectSelected, setCollectSelected] = useState(null);
-    const [defaultLocationTrees, setDefaultLocationTrees] = useState(null);
     const [mapZone, setMapZone] = useState(null);
+    const [mapAnaliseBio, setMapAnaliseBio] = useState(null);
     const [pathZone, setPathZone] = useState([]);
 
     useEffect(() => {
         getImages();
         fixCoordinatesZone(data?.path);
-        setMapZone({ latitude: data?.path[0].lat, longitude: data?.path[0].lng })
+        setMapZone({ latitude: data?.path[0].lat, longitude: data?.path[0].lng });
+        if (analiseBio) {
+            setMapAnaliseBio({ latitude: analiseBio[0].coord?.lat, longitude: analiseBio[0].coord?.lng })
+        }
     }, []);
 
     function fixCoordinatesZone(coords) {
@@ -59,6 +63,9 @@ export function ZoneItem({ data, index }) {
         await getImagesZone();
         await getImagesAnaliseSoil();
         await getImagesTreesS1();
+        if(analiseBio){
+            await getImagesBioZone();
+        }
         if (bioSoil) {
             await getImagesBioSoil();
         }
@@ -88,7 +95,7 @@ export function ZoneItem({ data, index }) {
             const response = await getImage(analiseSolo[i].photo)
             let addPhoto1 = '';
             let addPhoto2 = '';
-            if(analiseSolo[i]?.addPhoto1){
+            if (analiseSolo[i]?.addPhoto1) {
                 const response2 = await getImage(analiseSolo[i]?.addPhoto1)
                 addPhoto1 = response2;
                 const response3 = await getImage(analiseSolo[i]?.addPhoto2)
@@ -139,9 +146,26 @@ export function ZoneItem({ data, index }) {
         setLoadingImagesTreesS1(false);
     }
 
+    async function getImagesBioZone() {
+        setLoadingImageBioZone(true);
+
+        let newArray = [];
+        for (var i = 0; i < analiseBio.length; i++) {
+            const response = await getImage(analiseBio[i].photo)
+
+            newArray.push({
+                ...analiseBio[i],
+                photo: response,
+            })
+        }
+
+        setImagesBioZone(newArray);
+        setLoadingImageBioZone(false);
+    }
+
     return (
         <div className="flex flex-col bg-green-950 p-2 rounded-md">
-            <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(Number(data?.areaZone))} m²</p>
+            <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Number(data?.areaZone))} m²</p>
             {mapZone && (
                 <ReactMapGL
                     style={{ width: '100%', height: 300 }}
@@ -214,7 +238,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} hiddenIcon/>
+                    <ActivityIndicator size={50} hiddenIcon />
                     <p className="text-white mt-1">Carregando imagens, aguarde...</p>
                 </div>
             ) : (
@@ -274,7 +298,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} hiddenIcon/>
+                    <ActivityIndicator size={50} hiddenIcon />
                     <p className="text-white mt-1">Carregando dados, aguarde...</p>
                 </div>
             ) : (
@@ -297,6 +321,73 @@ export function ZoneItem({ data, index }) {
                         </button>
                     ))}
                 </div>
+            )}
+
+            {mapAnaliseBio && (
+                <>
+                    <p className="text-white mt-5 font-bold text-center">Estação da biodiversidade</p>
+
+                    <ReactMapGL
+                        style={{ width: '100%', height: 200 }}
+                        mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+                        mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
+                        latitude={mapAnaliseBio?.latitude}
+                        longitude={mapAnaliseBio?.longitude}
+                        onDrag={(e) => {
+                            setMapAnaliseBio({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
+                        }}
+                        minZoom={14}
+                        maxZoom={20}
+                    >
+                        <Polyline
+                            lineColor='red'
+                            lineWidth={4}
+                            coordinates={pathZone}
+                        />
+
+                        {analiseBio.map((analise, index) => (
+                            <Marker
+                                key={analise?.coord?.lat}
+                                latitude={analise?.coord?.lat}
+                                longitude={analise?.coord?.lng}
+                                color="yellow"
+                            />
+                        ))}
+                    </ReactMapGL>
+
+                    <div className="flex items-center gap-1 mt-1 mb-4">
+                        <FaMapMarker color='yellow' size={20} />
+                        <p className="text-white text-xs">Localização das coletas</p>
+                    </div>
+
+                    {loadingImagesBioZone ? (
+                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                            <ActivityIndicator size={50} hiddenIcon />
+                            <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                        </div>
+                    ) : (
+                        <div className="flex gap-3 overflow-auto">
+                            {imagesBioZone.map(item => (
+                                <button
+                                    key={item.photo}
+                                    className="w-[250px] h-[300px]"
+                                    onClick={() => {
+                                        //setCollectDetails(true);
+                                        //setCollectSelected(item)
+                                        setImageSelected(item.photo);
+                                        setViewImage(true);
+                                    }}
+                                >
+                                    <ImageItem
+                                        src={item}
+                                        type='biodiversity-zone'
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                </>
             )}
 
             {bioSoil?.length > 0 && (
@@ -339,7 +430,7 @@ export function ZoneItem({ data, index }) {
 
                     {loadingImagesBioSoil ? (
                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                            <ActivityIndicator size={50} hiddenIcon/>
+                            <ActivityIndicator size={50} hiddenIcon />
                             <p className="text-white mt-1">Carregando dados, aguarde...</p>
                         </div>
                     ) : (
@@ -416,7 +507,7 @@ export function ZoneItem({ data, index }) {
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                    <ActivityIndicator size={50} hiddenIcon/>
+                    <ActivityIndicator size={50} hiddenIcon />
                     <p className="text-white mt-1">Carregando fotos, aguarde...</p>
                 </div>
             ) : (

@@ -3,7 +3,6 @@ import { api } from "../../../services/api";
 import { getImage } from "../../../services/getImage";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { InsumoItem } from "./InsumoItem";
-import { PolylineItemZone } from "./PolylineItemZone";
 import { ZoneItem } from "./ZoneItem";
 import { ImageItem } from "./ImageItem";
 import { useNavigate } from "react-router";
@@ -11,6 +10,7 @@ import { FaDotCircle, FaMapMarker } from "react-icons/fa";
 import format from "date-fns/format";
 import { ViewImage } from "../../../components/ViewImage";
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
+import { compareAsc } from "date-fns";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export function Inspection({ id }) {
@@ -40,6 +40,7 @@ export function Inspection({ id }) {
     const [oldMetodologie, setOldMetodologie] = useState(false);
     const [embedUrl, setEmbedUrl] = useState(null);
     const [mapZones, setMapZones] = useState(null);
+    const [methodVersion, setMethodVersion] = useState(1.0);
 
     useEffect(() => {
         getInspectionData();
@@ -51,9 +52,18 @@ export function Inspection({ id }) {
     }, []);
 
     async function getInspectionData() {
+        let version = 1.0
         setLoading(true);
 
         const responseApi = await api.get(`/web3/inspection/${String(id)}`);
+
+        if (compareAsc(new Date(responseApi?.data?.inspection?.inspectedAtTimestamp * 1000), new Date('2024-07-24 00:00:00')) === 1) {
+            version = 1.2;
+        } else {
+            version = 1.0;
+        }
+        setMethodVersion(version);
+
         setInspectionData(responseApi.data?.inspection);
         setProducerData(responseApi.data?.userData);
         setInspectorData(responseApi.data?.inspectorData);
@@ -74,7 +84,10 @@ export function Inspection({ id }) {
         if (responseApi?.data?.inspectionApiData?.propertyPhotos) {
             await getImagesProperty(JSON.parse(responseApi?.data?.inspectionApiData?.propertyPhotos));
         }
-        await getImagesBiodiversity(JSON.parse(responseApi.data?.inspectionApiData?.biodversityIndice));
+
+        if (version < 1.2) {
+            await getImagesBiodiversity(JSON.parse(responseApi.data?.inspectionApiData?.biodversityIndice));
+        }
     }
 
     async function getImages(producer, inspector, proofPhoto) {
@@ -507,91 +520,93 @@ export function Inspection({ id }) {
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                        <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
+                    {methodVersion < 1.2 && (
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                            <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
 
-                        {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
-                        {!oldMetodologie ? (
-                            <>
-                                <p className="text-white">Fauna</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversityFauna.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
+                            {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
+                            {!oldMetodologie ? (
+                                <>
+                                    <p className="text-white">Fauna</p>
+                                    {loadingBiodiversityImages ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversityFauna.map(item => (
+                                                <button
+                                                    key={item}
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
+                                                    <ImageItem
+                                                        src={item}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
 
-                                <p className="text-white mt-3">Flora</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversityFlora.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-white mt-3">Imagens</p>
-                                {loadingBiodiversityImages ? (
-                                    <div className="flex flex-col items-center justify-center w-full h-[315px]">
-                                        <ActivityIndicator size={50} />
-                                        <p className="text-white mt-1">Carregando imagens, aguarde...</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-3 overflow-auto">
-                                        {biodiversity.map(item => (
-                                            <button
-                                                key={item}
-                                                className="w-[250px] h-[300px]"
-                                                onClick={() => {
-                                                    setImageSelected(item);
-                                                    setViewImage(true);
-                                                }}
-                                            >
-                                                <ImageItem
-                                                    src={item}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
+                                    <p className="text-white mt-3">Flora</p>
+                                    {loadingBiodiversityImages ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversityFlora.map(item => (
+                                                <button
+                                                    key={item}
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
+                                                    <ImageItem
+                                                        src={item}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-white mt-3">Imagens</p>
+                                    {loadingBiodiversityImages ? (
+                                        <div className="flex flex-col items-center justify-center w-full h-[315px]">
+                                            <ActivityIndicator size={50} />
+                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-3 overflow-auto">
+                                            {biodiversity.map(item => (
+                                                <button
+                                                    key={item}
+                                                    className="w-[250px] h-[300px]"
+                                                    onClick={() => {
+                                                        setImageSelected(item);
+                                                        setViewImage(true);
+                                                    }}
+                                                >
+                                                    <ImageItem
+                                                        src={item}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
 
                     {zones.length > 0 && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">

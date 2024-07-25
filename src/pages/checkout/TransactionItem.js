@@ -2018,9 +2018,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
-        pdf.open()
-        setLoading(false);
-        return
+        
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
