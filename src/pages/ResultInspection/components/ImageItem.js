@@ -11,7 +11,6 @@ export function ImageItem({src, type}) {
 
                 <div className="w-full h-[70px] absolute bottom-0 bg-[rgba(0,0,0,0.7)] flex flex-col items-center justify-center rounded-t-lg">
                     <p className="text-sm text-white text-center">Lat: {src?.coord?.lat}, Lng: {src?.coord?.lng}</p>
-                    <p className="text-sm text-white text-center">Tipo: {src?.type}</p>
                     <p className="text-sm text-white text-center">Espécie: {src?.especieSelected?.name}</p>
                 </div>
             </div>

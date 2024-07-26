@@ -63,7 +63,7 @@ export function ZoneItem({ data, index }) {
         await getImagesZone();
         await getImagesAnaliseSoil();
         await getImagesTreesS1();
-        if(analiseBio){
+        if (analiseBio) {
             await getImagesBioZone();
         }
         if (bioSoil) {
@@ -366,25 +366,57 @@ export function ZoneItem({ data, index }) {
                             <p className="text-white mt-1">Carregando dados, aguarde...</p>
                         </div>
                     ) : (
-                        <div className="flex gap-3 overflow-auto">
-                            {imagesBioZone.map(item => (
-                                <button
-                                    key={item.photo}
-                                    className="w-[250px] h-[300px]"
-                                    onClick={() => {
-                                        //setCollectDetails(true);
-                                        //setCollectSelected(item)
-                                        setImageSelected(item.photo);
-                                        setViewImage(true);
-                                    }}
-                                >
-                                    <ImageItem
-                                        src={item}
-                                        type='biodiversity-zone'
-                                    />
-                                </button>
-                            ))}
-                        </div>
+                        <>
+                            <p className="text-white font-bold">Fauna</p>
+                            <div className="flex gap-3 overflow-auto">
+                                {imagesBioZone.map(item => {
+                                    if (item?.type === 'fauna') {
+                                        return (
+                                            <button
+                                                key={item.photo}
+                                                className="w-[250px] h-[300px]"
+                                                onClick={() => {
+                                                    //setCollectDetails(true);
+                                                    //setCollectSelected(item)
+                                                    setImageSelected(item.photo);
+                                                    setViewImage(true);
+                                                }}
+                                            >
+                                                <ImageItem
+                                                    src={item}
+                                                    type='biodiversity-zone'
+                                                />
+                                            </button>
+                                        )
+                                    }
+                                })}
+                            </div>
+                            
+                            <p className="text-white font-bold mt-3">Flora</p>
+                            <div className="flex gap-3 overflow-auto">
+                                {imagesBioZone.map(item => {
+                                    if (item?.type === 'flora') {
+                                        return (
+                                            <button
+                                                key={item.photo}
+                                                className="w-[250px] h-[300px]"
+                                                onClick={() => {
+                                                    //setCollectDetails(true);
+                                                    //setCollectSelected(item)
+                                                    setImageSelected(item.photo);
+                                                    setViewImage(true);
+                                                }}
+                                            >
+                                                <ImageItem
+                                                    src={item}
+                                                    type='biodiversity-zone'
+                                                />
+                                            </button>
+                                        )
+                                    }
+                                })}
+                            </div>
+                        </>
                     )}
 
                 </>
