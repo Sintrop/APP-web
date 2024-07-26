@@ -11,7 +11,9 @@ import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { CategorieItem } from "./components/CategorieItem";
 import { Item } from '../../../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
-import { FaChevronRight } from "react-icons/fa";
+import { FaCalculator, FaChevronRight, FaFileAlt, FaUsers } from "react-icons/fa";
+import {BsGraphUp} from 'react-icons/bs';
+import {VscSymbolMethod} from 'react-icons/vsc';
 import { useNavigate } from "react-router";
 import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 import { Invite } from "../../../../services/invitationService";
@@ -216,37 +218,42 @@ export function ResearcherActions() {
 
                 <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                     <button
-                        className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                        className={`font-bold py-1 border-b-2 flex items-center gap-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('users')}
                     >
+                        <FaUsers size={20} className={`${tabSelected === 'users' ? 'text-green-600' : 'text-white'}`}/>
                         Perquisadores
                     </button>
 
                     <button
-                        className={`font-bold py-1 border-b-2 ${tabSelected === 'researches' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                        className={`font-bold py-1 border-b-2 flex items-center gap-2 ${tabSelected === 'researches' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('researches')}
                     >
+                        <FaFileAlt size={20} className={`${tabSelected === 'researches' ? 'text-green-600' : 'text-white'}`}/>
                         Pesquisas
                     </button>
 
                     <button
-                        className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                        className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('isa')}
                     >
+                        <BsGraphUp size={20} className={`${tabSelected === 'isa' ? 'text-green-600' : 'text-white'}`}/>
                         Índice de regeneração
                     </button>
 
                     <button
-                        className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'calculator-items' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                        className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 ${tabSelected === 'calculator-items' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('calculator-items')}
                     >
+                        <FaCalculator size={20} className={`${tabSelected === 'calculator-items' ? 'text-green-600' : 'text-white'}`}/>
                         Itens calculadora
                     </button>
 
                     <button
-                        className={`font-bold py-1 min-w-fit border-b-2 ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                        className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('methods')}
                     >
+                        <VscSymbolMethod size={20} className={`${tabSelected === 'methods' ? 'text-green-600' : 'text-white'}`}/>
                         Métodos de avaliação
                     </button>
                 </div>
