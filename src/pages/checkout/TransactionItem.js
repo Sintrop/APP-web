@@ -873,6 +873,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const sortAnaliseBioSoil4 = parseInt(Math.random() * Number(pointsToSort.length) - 1);
             const sortAnaliseTrees = parseInt(Math.random() * Number(pointsToSort.length) - 1);
             const sortAnaliseAudio = parseInt(Math.random() * Number(pointsToSort.length) - 1);
+            const sortAnaliseBio = parseInt(Math.random() * Number(pointsToSort.length) - 1);
 
             let data = {
                 title: zones[i].title,
@@ -886,6 +887,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 analiseBioSoil4: pointsToSort[sortAnaliseBioSoil4],
                 analiseTree: pointsToSort[sortAnaliseTrees],
                 analiseAudio: pointsToSort[sortAnaliseAudio],
+                analiseBio: pointsToSort[sortAnaliseBio],
             }
 
             pointsSortedZones.push(data);
@@ -916,9 +918,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
     //----------- FINISH INSPECTION ---------------------
 
-    function generatePdf(infoData, resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, pdfData, isas, proofPhoto) {
+    function generatePdf(infoData, resultIndices, resultCategories, resultZones, inspection, indices, pdfData, isas, proofPhoto) {
         const {
-            bioPictures,
             bodyInsumos,
             bodyResultInsumos,
             bodyDegradacao,
@@ -947,7 +948,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             totalSoilBio,
             rowPhotosZone,
             totalWaterSprings,
-            bodySprings
+            bodySprings,
+            rowAnaliseBio,
+            totalBioZones
         } = pdfData;
 
         let isaCarbon = '';
@@ -1355,32 +1358,34 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 {
                     table: {
                         body: [
-                            [{ text: 'Tipo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Cálculo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Total [uv]', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            [{ text: 'Tipo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Biodiversidade registrada', style: 'tableHeader', fillColor: '#C5E0B3' }],
                             ...bodyBio
                         ]
                     }
                 },
                 {
-                    text: `Fotos Registradas:`,
+                    text: `Biodiversidade registrada nas zonas`,
                     style: 'label'
                 },
                 {
-                    ul: bioPictures
+                    table: {
+                        body: [
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Tipo', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Espécie', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ...rowAnaliseBio
+                        ]
+                    }
                 },
                 {
-                    text: `Biodiversidade no solo`,
+                    text: `Biodiversidade do solo registrado nas zonas`,
                     style: 'label'
                 },
                 {
-                    ul: bodySoilBioPhoto
-                },
-                {
-                    text: `-Cálculo da biodiversidade:`,
-                    style: 'titleExplic'
-                },
-                {
-                    text: `Biodiversidade total = Biodiversidade registrada ^ 2`,
-                    style: 'explicacaoCalc'
+                    table: {
+                        body: [
+                            [{ text: 'Zona', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Coordenada', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Foto', style: 'tableHeader', fillColor: '#C5E0B3' }, { text: 'Registro', style: 'tableHeader', fillColor: '#C5E0B3' }],
+                            ...bodySoilBioPhoto
+                        ]
+                    }
                 },
                 {
                     text: `Nascentes dentro da propriedade:`,
@@ -1405,14 +1410,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             ['Insumos', `${degenerationCarbon.toFixed(2).replace('.', ',')}`, `${degenerationWater.toFixed(2).replace('.', ',')}`, `${degenerationSoil.toFixed(2).replace('.', ',')}`, `${degenerationBio.toFixed(0)}`],
                             ['Árvores', `${((totalCarbonEstocadoZones * -1) * 1000).toFixed(2).replace('.', ',')}`, `${totalAguaEstocadaZones.toFixed(2).replace('.', ',')}`, `0`, `0`],
                             ['Análise de Solo', `${saldoCarbonAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`, `${saldoSoilAnaliseSoloZones.toFixed(2).replace('.', ',')}`, `0`],
-                            ['Biodiversidade', '0', '0', '0', `${((Number(bioPictures.length) + totalSoilBio) ** 2).toFixed(0)}`],
+                            ['Biodiversidade', '0', '0', '0', `${(totalSoilBio + totalBioZones).toFixed(0)}`],
                             ['Nascentes', '0', `${Number(totalWaterSprings).toFixed(2)}`, '0', `0`],
                             [
                                 { text: 'Total', style: 'tableHeader' },
                                 { text: `${(degenerationCarbon + saldoCarbonAnaliseSoloZones + ((totalCarbonEstocadoZones * -1) * 1000)).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
                                 { text: `${(degenerationWater + totalAguaEstocadaZones + totalWaterSprings).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
                                 { text: `${(degenerationSoil + saldoSoilAnaliseSoloZones).toFixed(2).replace('.', ',')}`, style: 'tableHeader' },
-                                { text: `${(degenerationBio + ((Number(bioPictures.length) + totalSoilBio) ** 2)).toFixed(0)}`, style: 'tableHeader' },
+                                { text: `${(degenerationBio + totalSoilBio + totalBioZones).toFixed(0)}`, style: 'tableHeader' },
                             ]
                         ]
                     },
@@ -1519,7 +1524,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
     }
 
-    async function calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, springs) {
+    async function calculateIndices(indices, resultCategories, resultZones, springs) {
         const indiceAnaliseSolo = indices.filter(item => item.id === '14');
         const indiceMultiplicadorRaiz = indices.filter(item => item.id === '27');
         const indicePercentAguaEstocada = indices.filter(item => item.id === '28');
@@ -1584,27 +1589,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let bioPictures = [];
         let bodyBio = [];
 
-        //Cria a lista de link das fotos da biodiversidade
-        for (var i = 0; i < resultBiodiversity.length; i++) {
-            let dataBio = {
-                text: `${resultBiodiversity[i].photo}`,
-                link: `https://${window.location.host}/view-image/${resultBiodiversity[i].photo}`,
-                style: 'link'
-            }
-
-            bioPictures.push(dataBio);
-        }
-
-        let rowBio = [
-            'Fotos',
-            `${resultBiodiversity.length}`,
-            ``,
-            ``
-        ];
-        bodyBio.push(rowBio);
-
-
-
         //For para calcular os resultados dos insumos
         for (var i = 0; i < resultCategories.length; i++) {
             const category = JSON.parse(resultCategories[i].categoryDetails);
@@ -1662,6 +1646,10 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let bodyEstimatedTrees = [];
         let rowPhotosZone = [];
 
+        //variaveis do registro de biodiversidade nas zonas
+        let rowAnaliseBio = [];
+        let totalBioZones = 0;
+
         //Variáveis da biodivesidade no solo
         let totalSoilBio = 0;
         let bodySoilBioPhoto = [];
@@ -1671,9 +1659,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         //For para calcular os resultados das zonas
         for (var i = 0; i < resultZones.length; i++) {
             let volumeTotalSampling1 = 0;
-            let volumeTotalSampling2 = 0;
             let volumeAmostraAereaSampling1 = 0;
-            let volumeAmostraAereaSampling2 = 0;
 
             const zone = resultZones[i];
             const titleZone = resultZones[i].title;
@@ -1681,41 +1667,26 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const areaZone = Number(zone.areaZone);
             const photosZone = resultZones[i].photosZone;
             const bioSoil = resultZones[i].bioSoil;
+            const analiseBio = resultZones[i].analiseBio;
 
             const treesS1 = zone.arvores?.sampling1?.trees;
-            const treesS2 = zone.arvores?.sampling2?.trees;
 
             //Faz a estimativa de árvores da zona e monta o array da tabela do pdf
             let estimatedTreeZone = 0;
             let rowTreesZone = [];
 
-            if (zone.arvores?.sampling2) {
-                const estimatedTree = (areaZone * ((treesS1.length + treesS2.length) / (Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area))));
-                estimatedTreeZone += Number(estimatedTree).toFixed(0);
+            const estimatedTree = (areaZone * (treesS1.length / Number(zone.arvores?.sampling1.area)));
+            estimatedTreeZone += Number(estimatedTree).toFixed(0);
 
-                const rowTree = [
-                    titleZone,
-                    `${areaZone.toFixed(2).replace('.', ',')}`,
-                    `${treesS1.length + treesS2.length}`,
-                    `${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)}`,
-                    `${areaZone.toFixed(2).replace('.', ',')} x (${treesS1.length + treesS2.length} / ${Number(zone.arvores?.sampling1.area) + Number(zone.arvores?.sampling2.area)})`,
-                    `${estimatedTree.toFixed(0)}`
-                ];
-                rowTreesZone = rowTree;
-            } else {
-                const estimatedTree = (areaZone * (treesS1.length / Number(zone.arvores?.sampling1.area)));
-                estimatedTreeZone += Number(estimatedTree).toFixed(0);
-
-                const rowTree = [
-                    titleZone,
-                    `${areaZone.toFixed(2).replace('.', ',')}`,
-                    `${treesS1.length}`,
-                    `${Number(zone.arvores?.sampling1.area)}`,
-                    `${areaZone.toFixed(2).replace('.', ',')} x (${treesS1.length} / ${Number(zone.arvores?.sampling1.area)})`,
-                    `${estimatedTree.toFixed(0)}`
-                ];
-                rowTreesZone = rowTree;
-            }
+            const rowTree = [
+                titleZone,
+                `${areaZone.toFixed(2).replace('.', ',')}`,
+                `${treesS1.length}`,
+                `${Number(zone.arvores?.sampling1.area)}`,
+                `${areaZone.toFixed(2).replace('.', ',')} x (${treesS1.length} / ${Number(zone.arvores?.sampling1.area)})`,
+                `${estimatedTree.toFixed(0)}`
+            ];
+            rowTreesZone = rowTree;
 
             bodyEstimatedTrees.push(rowTreesZone);
             estimatedTreesTotal += Number(estimatedTreeZone);
@@ -1750,50 +1721,13 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const totalSampling1 = Number(volumeAmostraAereaSampling1) * Number(indiceMultiplicadorRaiz[0].carbonValue);
             volumeTotalSampling1 = Number(totalSampling1);
 
-            if (zone.arvores?.sampling2) {
-                for (var s2 = 0; s2 < treesS2.length; s2++) {
-                    const height = Number((treesS2[s2].height));
-                    const diameter = Number((treesS2[s2].ray));
-                    const ray = (diameter / 2) / 100;
-
-                    const volumeTree = 3.14159 * ((Number(ray) ** 2) * Number(height));
-                    volumeAmostraAereaSampling2 += Number(volumeTree)
-
-                    let row = [];
-                    let imgTree = {
-                        text: `Foto`,
-                        link: `https://${window.location.host}/view-image/${treesS2[s2].photo}`,
-                        style: 'link'
-                    }
-                    row.push(titleZone);
-                    row.push(`Lat: ${treesS2[s2]?.lat}, Lng: ${treesS2[s2]?.lng}`);
-                    row.push(`${treesS2[s2].ray}`);
-                    row.push(`${treesS2[s2].height}`);
-                    row.push(imgTree);
-                    row.push(`${(volumeTree * Number(indiceMultiplicadorRaiz[0].carbonValue)).toFixed(4).replace('.', ',')}`);
-                    row.push(`2 - ${zone?.arvores?.sampling2?.area}`);
-
-                    bodySampling1.push(row);
-                }
-                const totalSampling2 = Number(volumeAmostraAereaSampling2) * Number(indiceMultiplicadorRaiz[0].carbonValue);
-                volumeTotalZonas += areaZone * (totalSampling2 / Number(zone.arvores?.sampling2?.area));
-                volumeTotalSampling2 += totalSampling2;
-            }
-
             let volumeZona = 0;
             let volumeTotalAmostragem = 0
             let areaTotalAmostragem = 0;
 
-            if (zone.arvores?.sampling2) {
-                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area) + (Number(volumeTotalSampling2) / Number(zone.arvores?.sampling2 ? zone.arvores?.sampling2?.area : 0))));
-                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area) + Number(zone.arvores?.sampling2?.area);
-                volumeTotalAmostragem += Number(volumeTotalSampling1) + Number(volumeTotalSampling2);
-            } else {
-                volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area)));
-                areaTotalAmostragem += Number(zone.arvores?.sampling1?.area);
-                volumeTotalAmostragem += Number(volumeTotalSampling1);
-            }
-
+            volumeZona = areaZone * ((Number(volumeTotalSampling1) / Number(zone.arvores?.sampling1?.area)));
+            areaTotalAmostragem += Number(zone.arvores?.sampling1?.area);
+            volumeTotalAmostragem += Number(volumeTotalSampling1);
             volumeTotalZonas += volumeZona;
 
             let aguaEstocada = volumeZona * Number(indicePercentAguaEstocada[0].aguaValue);
@@ -1880,8 +1814,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             //Imagem das zonas
             for (var p = 0; p < photosZone.length; p++) {
                 const dataImage = {
-                    text: `${photosZone[i].photo}`,
-                    link: `https://${window.location.host}/view-image/${photosZone[i].photo}`,
+                    text: `${photosZone[p].photo}`,
+                    link: `https://${window.location.host}/view-image/${photosZone[p].photo}`,
                     style: 'link'
                 }
                 let row = []
@@ -1894,30 +1828,54 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             for (var s = 0; s < bioSoil.length; s++) {
                 totalSoilBio += Number(bioSoil[s].value);
 
-                let rowSoilBioPhoto = {
-                    text: `${bioSoil[s].photo}`,
-                    link: `https://${window.location.host}/view-image/${bioSoil[s].photo}`,
+                const dataImage = {
+                    text: `Foto`,
+                    link: `https://app.sintrop.com/view-image/${bioSoil[s].photo}`,
                     style: 'link'
                 }
+                let row = []
+                row.push(titleZone);
+                row.push(`Lat: ${bioSoil[s]?.coord?.lat}, Lng: ${bioSoil[s]?.coord?.lng}`)
+                row.push(dataImage);
+                row.push(bioSoil[s]?.value)
 
-                bodySoilBioPhoto.push(rowSoilBioPhoto);
+                bodySoilBioPhoto.push(row);
+            }
+
+            //Calculo e montagem da tabela do registro de biodiversidade da zona
+            for (var p = 0; p < analiseBio.length; p++) {
+                totalBioZones += 1;
+
+                const dataImage = {
+                    text: `Foto`,
+                    link: `https://app.sintrop.com/view-image/${analiseBio[p].photo}`,
+                    style: 'link'
+                }
+                let row = []
+                row.push(titleZone);
+                row.push(dataImage);
+                row.push(analiseBio[p]?.type)
+                row.push(analiseBio[p]?.especieSelected?.name)
+                rowAnaliseBio.push(row);
             }
         }
 
         let rowSoilBio = [
             'Solo',
             `${totalSoilBio}`,
-            ``,
-            ``
+        ];
+
+        let rowBioZones = [
+            'Zonas',
+            `${totalBioZones}`,
         ];
         bodyBio.push(rowSoilBio);
-        const totalBioRegistered = Number(totalSoilBio) + Number(resultBiodiversity.length)
+        bodyBio.push(rowBioZones);
+        const totalBioRegistered = Number(totalSoilBio) + totalBioZones;
 
         let rowBioTotal = [
             'Total',
-            `${totalBioRegistered}`,
-            `${totalBioRegistered} ^ 2`,
-            `${Number(totalBioRegistered ** 2).toFixed(0)} uv`
+            `${Number(totalBioRegistered).toFixed(0)} uv`
         ]
 
         bodyBio.push(rowBioTotal);
@@ -1949,7 +1907,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         let totalCarbon = degenerationCarbon + ((totalCarbonEstocadoZones * -1) * 1000) + saldoCarbonAnaliseSoloZones;
         let totalWater = degenerationWater + totalAguaEstocadaZones + totalWaterSprings;
-        let totalBio = degenerationBio + ((Number(resultBiodiversity.length) + totalSoilBio) ** 2);
+        let totalBio = degenerationBio + totalSoilBio + totalBioZones;
         let totalSoil = degenerationSoil + saldoSoilAnaliseSoloZones;
 
         const resultIndices = {
@@ -1989,7 +1947,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             totalSoilBio,
             rowPhotosZone,
             totalWaterSprings,
-            bodySprings
+            bodySprings,
+            rowAnaliseBio,
+            totalBioZones
         }
 
         return {
@@ -2016,8 +1976,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const indices = responseIndices.data.subCategories;
 
         const resultCategories = JSON.parse(response?.data?.inspection?.resultCategories);
-        const inspection = response?.data?.inspection
-        const resultBiodiversity = JSON.parse(response?.data?.inspection?.biodversityIndice);
+        const inspection = response?.data?.inspection;
         const resultZones = JSON.parse(response?.data?.inspection?.zones);
 
         let springs = [];
@@ -2027,7 +1986,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         //Função que calcula os indices e retorna os dados para o pdf
-        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, resultBiodiversity, springs);
+        const responseCalculo = await calculateIndices(indices, resultCategories, resultZones, springs);
 
         await api.put('/update-result', {
             id: String(additionalData?.inspectionId),
@@ -2058,8 +2017,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             bio: await calculateBio(responseCalculo.resultIndices),
         }
 
-        const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultBiodiversity, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
-
+        const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
+        
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
