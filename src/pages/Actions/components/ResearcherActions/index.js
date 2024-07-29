@@ -222,7 +222,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('users')}
                     >
                         <FaUsers size={20} className={`${tabSelected === 'users' ? 'text-green-600' : 'text-white'}`}/>
-                        Perquisadores
+                        Pesquisadores
                     </button>
 
                     <button
@@ -288,11 +288,11 @@ export function ResearcherActions() {
                         )}
 
                         {tabSelected === 'isa' && (
-                            <>
+                            <div className="flex flex-wrap gap-4">
                                 {categories.map(item => (
                                     <CategorieItem data={item} />
                                 ))}
-                            </>
+                            </div>
                         )}
 
                         {tabSelected === 'calculator-items' && (

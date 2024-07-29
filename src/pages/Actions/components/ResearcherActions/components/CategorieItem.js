@@ -2,7 +2,7 @@ import React, {} from "react";
 
 export function CategorieItem({data}){
     return(
-        <div className="w-full flex flex-col p-2 rounded-md bg-[#0a4303]">
+        <div className="w-full flex flex-col p-2 rounded-md bg-[#0a4303] lg:w-[49%]">
             <p className="font-bold text-white">{data?.name}</p>
             <p className="text-white">{data?.description}</p>
 
