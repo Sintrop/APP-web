@@ -131,6 +131,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                     hash: res?.hashTransaction
                                 }),
                             });
+                            addParticipantToChat('clyd2qok90009vjiwk0ji98z0', userData);
                         } catch (err) {
                             console.log(err);
                         } finally {
@@ -199,6 +200,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 hash: res?.hashTransaction
                             }),
                         });
+                        addParticipantToChat('clyd7x3cp0000mc0qp71s333r', userData);
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -265,6 +267,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 hash: res?.hashTransaction
                             }),
                         });
+                        addParticipantToChat('cly8o374u0012mc0lby5jv4fh', userData)
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -331,6 +334,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 hash: res?.hashTransaction
                             }),
                         });
+                        addParticipantToChat('cly7s6h8w0000mc0lq3tjihdv', userData)
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -396,6 +400,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 hash: res?.hashTransaction
                             }),
                         });
+                        addParticipantToChat('clyd7zbqw0006mc0qdzfs7oxx', userData);
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -462,6 +467,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 hash: res?.hashTransaction
                             }),
                         });
+                        addParticipantToChat('clyd7y07j0003mc0q2e2s45r2', userData);
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -914,6 +920,29 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         } finally {
             setLoadingTransaction(false);
         }
+    }
+
+    async function addParticipantToChat(chatId, user){
+        try{
+            await api.post('/chat/participant/add', {
+                chatId: 'clyd2p38t0004vjiwohbv0dzv',
+                userId: user?.id,
+                participantData: JSON.stringify(user),
+            })
+        }catch(err){
+            console.log(err);
+        }
+
+        try{
+            await api.post('/chat/participant/add', {
+                chatId,
+                userId: user?.id,
+                participantData: JSON.stringify(user),
+            })
+        }catch(err){
+            console.log(err);
+        }
+
     }
 
     //----------- FINISH INSPECTION ---------------------
@@ -2018,7 +2047,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
 
         const pdf = await pdfMake.createPdf(generatePdf(infoData, responseCalculo.resultIndices, resultCategories, resultZones, inspection, indices, responseCalculo.pdfData, isas, response.data.inspection.proofPhoto));
-        
+
         pdf.getBuffer(async (res) => {
             const hash = await save(res);
             pdfDevHash = hash;
