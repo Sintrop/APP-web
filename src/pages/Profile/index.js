@@ -53,10 +53,12 @@ export function Profile() {
     const [logTransaction, setLogTransaction] = useState({});
     const [inviteData, setInviteData] = useState(null);
     const [zones, setZones] = useState([]);
+    const [invoicesThisYear, setInvoicesThisYear] = useState([]);
 
     useEffect(() => {
         if (userData) {
             getImageProfile(userData?.imgProfileUrl);
+            getInvoices(userData?.id);
         }
 
         if (userData?.itemsToReduce) {
@@ -87,16 +89,6 @@ export function Profile() {
             getProofPhoto(blockchainData?.proofPhoto);
         }
     }, [blockchainData]);
-
-
-    function fixCoordinatesProperty(coords) {
-        let array = [];
-        for (var i = 0; i < coords.length; i++) {
-            array.push(coords[i]);
-        }
-        array.push(coords[0]);
-        setPathProperty(array);
-    }
 
     async function getProofPhoto(hash) {
         const response = await getImage(hash);
@@ -331,6 +323,12 @@ export function Profile() {
                     })
                 });
         }
+    }
+
+    async function getInvoices(userId){
+        const atualYear = new Date().getFullYear();
+        const response = await api.get(`/invoices/${userId}/${atualYear}`);
+        setInvoicesThisYear(response.data.invoices);
     }
 
     return (
@@ -652,41 +650,7 @@ export function Profile() {
                                                                     </>
                                                                 )}
                                                             </div>
-
                                                         </div>
-
-                                                        {/* {userData?.userType === 1 && (
-                                                            <>
-                                                                <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
-                                                                    <p className="text-xs text-center text-gray-400 mb-1">Mapa da propriedade</p>
-        
-                                                                    <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
-                                                                        {initialRegion ? (
-                                                                            <LoadScript
-                                                                                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY}
-                                                                                libraries={['drawing']}
-                                                                            >
-                                                                                <GoogleMap
-                                                                                    mapContainerStyle={containerMapStyle}
-                                                                                    center={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                                                                    zoom={15}
-                                                                                    mapTypeId="hybrid"
-                                                                                >
-        
-                                                                                    <Marker
-                                                                                        position={{ lat: initialRegion?.latitude, lng: initialRegion?.longitude }}
-                                                                                    />
-        
-                                                                                </GoogleMap>
-        
-                                                                            </LoadScript>
-                                                                        ) : (
-                                                                            <ActivityIndicator size={60} />
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            </>
-                                                        )} */}
                                                     </div>
                                                 </>
                                             )}
@@ -745,8 +709,9 @@ export function Profile() {
                                                                 <Item
                                                                     key={item?.id}
                                                                     data={item}
-                                                                    type='demonstration'
+                                                                    type='consumption-graph'
                                                                     userId={userData?.id}
+                                                                    invoices={invoicesThisYear}
                                                                 />
                                                             ))}
                                                         </div>
