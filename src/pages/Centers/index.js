@@ -9,7 +9,7 @@ export function Centers() {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-gradient-to-t from-[#1873B9] to-[#0B1E25] to-11% flex flex-col h-[100vh]">
+        <div className="bg-[#062c01] flex flex-col h-[100vh]">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sintrop App</title>

@@ -19,6 +19,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Polyline } from "../../components/Mapbox/Polyline";
 import { RegenerationZoneProfile } from "../Profile/components/RegenerationZoneProfile";
 import { Info } from "../../components/Info";
+import { ShortPubli } from "../Profile/components/ShortPubli";
 
 const containerMapStyle = {
     width: '100%',
@@ -542,9 +543,18 @@ export function UserDetails() {
                                     )}
 
                                     {tabSelected === 'publis' && (
-                                        <div className="mt-5 gap-5 flex flex-col items-center w-full">
+                                        // <div className="mt-5 gap-5 flex flex-col items-center w-full">
+                                        //     {publications.map(item => (
+                                        //         <PublicationItem
+                                        //             data={item}
+                                        //         />
+                                        //     ))}
+                                        // </div>
+
+                                        <div className="mt-5 gap-4 flex flex-wrap justify-center w-full lg:justify-start">
                                             {publications.map(item => (
-                                                <PublicationItem
+                                                <ShortPubli
+                                                    key={item.id}
                                                     data={item}
                                                 />
                                             ))}
