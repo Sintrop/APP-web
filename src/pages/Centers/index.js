@@ -88,6 +88,19 @@ export function Centers() {
                             Acessar centro
                         </button>
                     </div>
+
+                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                        <p className="text-green-500 font-bold text-lg">Centro colaborativo</p>
+                        <p className="text-white">Colabore com o sistema realizando algumas tarefas</p>
+
+
+                        <button
+                            className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
+                            onClick={() => navigate('/colaborative-center')}
+                        >
+                            Acessar centro
+                        </button>
+                    </div>
                 </div>
             </div>
 

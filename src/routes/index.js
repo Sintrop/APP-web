@@ -39,6 +39,7 @@ import { ActivistCenter } from "../pages/Centers/ActivistCenter";
 import { Researche } from "../pages/Researche";
 import { ContentDetails } from "../pages/Education/ContentDetails";
 import { Player } from "../pages/Education/Player";
+import { ColaborativeCenter } from "../pages/Centers/ColaborativeCenter";
 
 export default function Router(){
     return(
@@ -75,6 +76,7 @@ export default function Router(){
                 <Route exact path="/education" element={<Education/>}/>
                 <Route exact path="/content/:id" element={<ContentDetails/>}/>
                 <Route exact path="/content/player/:fileServer" element={<Player/>}/>
+                <Route exact path="/colaborative-center" element={<ColaborativeCenter/>}/>
                 
                 <Route exact path="/only-owner" element={<OnlyOwner/>}/>
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
