@@ -30,6 +30,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { RegenerationZoneProfile } from "./components/RegenerationZoneProfile.js";
 import QRCode from "react-qr-code";
+import { ShortPubli } from "./components/ShortPubli/index.js";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -54,6 +55,8 @@ export function Profile() {
     const [inviteData, setInviteData] = useState(null);
     const [zones, setZones] = useState([]);
     const [invoicesThisYear, setInvoicesThisYear] = useState([]);
+    const [publications, setPublications] = useState([]);
+    const [loadingPubli, setLoadingPubli] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -89,6 +92,17 @@ export function Profile() {
             getProofPhoto(blockchainData?.proofPhoto);
         }
     }, [blockchainData]);
+
+    useEffect(() => {
+        if (tabSelected === 'publis') getPublications();
+    }, [tabSelected]);
+
+    async function getPublications() {
+        setLoadingPubli(true);
+        const response = await api.get(`/publications/${userData.id}`);
+        setPublications(response.data.publications);
+        setLoadingPubli(false);
+    }
 
     async function getProofPhoto(hash) {
         const response = await getImage(hash);
@@ -325,7 +339,7 @@ export function Profile() {
         }
     }
 
-    async function getInvoices(userId){
+    async function getInvoices(userId) {
         const atualYear = new Date().getFullYear();
         const response = await api.get(`/invoices/${userId}/${atualYear}`);
         setInvoicesThisYear(response.data.invoices);
@@ -765,6 +779,25 @@ export function Profile() {
                                                             {zones.map(item => (
                                                                 <RegenerationZoneProfile
                                                                     key={item?.title}
+                                                                    data={item}
+                                                                />
+                                                            ))}
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {tabSelected === 'publis' && (
+                                                <div className="mt-5 gap-4 flex flex-wrap justify-center w-full lg:justify-start">
+                                                    {loadingPubli ? (
+                                                        <div className="flex w-full justify-center mt-5">
+                                                            <ActivityIndicator size={50}/>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {publications.map(item => (
+                                                                <ShortPubli
+                                                                    key={item.id}
                                                                     data={item}
                                                                 />
                                                             ))}
