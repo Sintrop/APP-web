@@ -125,22 +125,22 @@ export function FeedbackItem({ data, userData }) {
                                 <Marker type='high' />
                             )}
                             {data.team === 1 && (
-                                <Marker type='frontend' active />
+                                <Marker type='frontend' />
                             )}
                             {data.team === 2 && (
-                                <Marker type='contracts' active />
+                                <Marker type='contracts' />
                             )}
                             {data.team === 3 && (
-                                <Marker type='mobile' active />
+                                <Marker type='mobile' />
                             )}
                             {data.team === 4 && (
-                                <Marker type='design' active />
+                                <Marker type='design' />
                             )}
                             {data.team === 5 && (
-                                <Marker type='ux' active />
+                                <Marker type='ux' />
                             )}
                             {data.team === 6 && (
-                                <Marker type='api' active />
+                                <Marker type='api' />
                             )}
                             <Marker type='task' />
                         </>
@@ -180,28 +180,28 @@ export function FeedbackItem({ data, userData }) {
 
                                     <div className='flex items-center gap-2'>
                                         {status === 0 && (
-                                            <div className='px-4 py-1 bg-yellow-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-white'>Em Análise</p>
+                                            <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
+                                                <p className='font-bold text-yellow-500'>Em Análise</p>
                                             </div>
                                         )}
                                         {status === 1 && (
-                                            <div className='px-4 py-1 bg-gray-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-white'>Futuramente</p>
+                                            <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
+                                                <p className='font-bold text-gray-500'>Futuramente</p>
                                             </div>
                                         )}
                                         {status === 2 && (
-                                            <div className='px-4 py-1 bg-blue-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-white'>Em Desenvolvimento</p>
+                                            <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
+                                                <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
                                             </div>
                                         )}
                                         {status === 3 && (
-                                            <div className='px-4 py-1 bg-red-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-white'>Recusada</p>
+                                            <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
+                                                <p className='font-bold text-red-500'>Recusada</p>
                                             </div>
                                         )}
                                         {status === 4 && (
-                                            <div className='px-4 py-1 bg-green-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-white'>Concluida</p>
+                                            <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
+                                                <p className='font-bold text-green-500'>Concluida</p>
                                             </div>
                                         )}
                                     </div>
