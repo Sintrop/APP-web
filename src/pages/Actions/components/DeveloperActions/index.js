@@ -9,6 +9,7 @@ import { Invite } from "../../../../services/invitationService";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
+import { ModalCreateTask } from "./ModalCreateTask";
 
 export function DeveloperActions() {
     const { userData, walletConnected } = useMainContext();
@@ -16,12 +17,13 @@ export function DeveloperActions() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [historyFeedbacks, setHistoryFeedbacks] = useState([]);
     const [modalDevReport, setModalDevReport] = useState(false);
-    const [tabSelected, setTabSelected] = useState('users');
+    const [tabSelected, setTabSelected] = useState('open');
     const [users, setUsers] = useState([]);
     const [wallet, setWallet] = useState('');
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [createTask, setCreateTask] = useState(false);
 
     useEffect(() => {
         if (tabSelected === 'open' || tabSelected === 'history') getFeedbacks();
@@ -144,15 +146,19 @@ export function DeveloperActions() {
 
             <h3 className="font-bold text-white text-lg">Centro de desenvolvimento</h3>
 
-            <p className="text-gray-400 mt-1">Feedbacks/tasks</p>
-            <div className="flex items-center gap-8 mb-2">
-                <button
-                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                    onClick={() => setTabSelected('users')}
-                >
-                    Desenvolvedores
-                </button>
+            <div className="flex items-center justify-between w-full">
+                <p className="text-gray-400 mt-1">Feedbacks/tasks</p>
 
+                {userData?.userType === 4 && (
+                    <button
+                        className="px-3 h-10 rounded-md bg-blue-500 text-white font-bold"
+                        onClick={() => setCreateTask(true)}
+                    >   
+                        Criar task
+                    </button>
+                )}
+            </div>
+            <div className="flex items-center gap-8 mb-2">
                 <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'open' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('open')}
@@ -166,7 +172,13 @@ export function DeveloperActions() {
                 >
                     Histórico
                 </button>
-
+                
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('users')}
+                >
+                    Desenvolvedores
+                </button>
             </div>
             {loading && (
                 <ActivityIndicator size={50} />
@@ -226,6 +238,16 @@ export function DeveloperActions() {
                 <LoadingTransaction
                     loading={loadingTransaction}
                     logTransaction={logTransaction}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root open={createTask} onOpenChange={(open) => setCreateTask(open)}>
+                <ModalCreateTask
+                    close={() => setCreateTask(false)}
+                    success={() => {
+                        toast.success('Task criada com sucesso!');
+                        getFeedbacks();
+                    }}
                 />
             </Dialog.Root>
 
