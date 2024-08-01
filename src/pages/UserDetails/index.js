@@ -19,6 +19,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Polyline } from "../../components/Mapbox/Polyline";
 import { RegenerationZoneProfile } from "../Profile/components/RegenerationZoneProfile";
 import { Info } from "../../components/Info";
+import { ShortPubli } from "../Profile/components/ShortPubli";
+import { InspectionItem } from "../accountProducer/components/InspectionItem";
 
 const containerMapStyle = {
     width: '100%',
@@ -49,14 +51,18 @@ export function UserDetails() {
         getUserDetails();
     }, []);
 
+    // useEffect(() => {
+    //     if (userData) {
+    //         if (userData?.userType === 1 || userData?.userType === 2) {
+    //             getInspections();
+    //         }
+    //     }
+    // }, [userData]);
+
     useEffect(() => {
-        if (userData) {
-            if (userData?.userType === 1 || userData?.userType === 2) {
-                getInspections();
-            }
-            getPublications()
-        }
-    }, [userData]);
+        if (tabSelected === 'publis') getPublications();
+        if (tabSelected === 'inspections') getInspections();
+    }, [tabSelected])
 
     async function getPublications() {
         setLoadingPubli(true);
@@ -128,7 +134,7 @@ export function UserDetails() {
         setLoading(false);
     }
 
-    async function getInvoices(userId){
+    async function getInvoices(userId) {
         const atualYear = new Date().getFullYear();
         const response = await api.get(`/invoices/${userId}/${atualYear}`);
         setInvoicesThisYear(response.data.invoices);
@@ -478,7 +484,22 @@ export function UserDetails() {
                                     {tabSelected === 'inspections' && (
                                         <>
                                             <div className="flex flex-col mt-5 gap-4">
-                                                {inspections.map(item => (
+                                                {loadingInspections ? (
+                                                    <div className="flex w-full justify-center mt-5">
+                                                        <ActivityIndicator size={50} />
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        {inspections.map((item, index) => (
+                                                            <InspectionItem
+                                                                index={index}
+                                                                inspectionId={item.id}
+                                                                key={item?.id}
+                                                            />
+                                                        ))}
+                                                    </>
+                                                )}
+                                                {/* {inspections.map(item => (
                                                     <button
                                                         key={item.id}
                                                         className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
@@ -490,7 +511,7 @@ export function UserDetails() {
 
                                                         <FaChevronRight color='white' size={20} />
                                                     </button>
-                                                ))}
+                                                ))} */}
                                             </div>
                                         </>
                                     )}
@@ -521,7 +542,7 @@ export function UserDetails() {
 
                                             <div className="w-full flex flex-col rounded-md p-3">
                                                 <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
-                                                <Info text1='Esses são os itens que o usuário declara consumir na calculadora de impacto.'/>
+                                                <Info text1='Esses são os itens que o usuário declara consumir na calculadora de impacto.' />
                                                 {itemsToReduce.length === 0 && (
                                                     <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
                                                 )}
@@ -542,12 +563,21 @@ export function UserDetails() {
                                     )}
 
                                     {tabSelected === 'publis' && (
-                                        <div className="mt-5 gap-5 flex flex-col items-center w-full">
-                                            {publications.map(item => (
-                                                <PublicationItem
-                                                    data={item}
-                                                />
-                                            ))}
+                                        <div className="mt-5 gap-4 flex flex-wrap justify-center w-full lg:justify-start">
+                                            {loadingPubli ? (
+                                                <div className="flex w-full justify-center mt-5">
+                                                    <ActivityIndicator size={50} />
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {publications.map(item => (
+                                                        <ShortPubli
+                                                            key={item.id}
+                                                            data={item}
+                                                        />
+                                                    ))}
+                                                </>
+                                            )}
                                         </div>
                                     )}
 

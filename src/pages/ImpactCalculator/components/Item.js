@@ -451,46 +451,42 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
     if (type === 'list-items-calculator') {
         return (
-            <div className="flex flex-col w-full items-center justify-between p-2 rounded-md bg-[#0a4303] lg:flex-row">
-                <div className="flex flex-col w-full lg:w-fit">
-                    <p className="font-bold text-white">{data?.name} <span className="text-sm text-green-600">(Utilizado {data?.utilization}x)</span></p>
+            <div className="flex flex-col w-full p-2 rounded-md bg-[#0a4303]">
 
-                    <div className="flex items-center gap-1 mt-3 border rounded-md p-1 w-full lg:w-fit">
-                        <div className="flex flex-col items-center w-20">
-                            <p className="font-semibold text-white">{data?.carbon} kg</p>
-                            <p className="text-sm text-white">Carbono</p>
-                        </div>
-                        <div className="flex flex-col items-center w-20">
-                            <p className="font-semibold text-white">{data?.soil} m²</p>
-                            <p className="text-sm text-white">Solo</p>
-                        </div>
-                        <div className="flex flex-col items-center w-20">
-                            <p className="font-semibold text-white">{data?.water} m³</p>
-                            <p className="text-sm text-white">Água</p>
-                        </div>
-                        <div className="flex flex-col items-center w-20">
-                            <p className="font-semibold text-white">{data?.bio} uv</p>
-                            <p className="text-sm text-white">Biodvers.</p>
-                        </div>
+                <p className="font-bold text-white">{data?.name}</p>
+
+                <div className="flex items-center justify-between gap-1 mt-1 rounded-md p-1 w-full">
+                    <div className="flex items-center justify-between w-[20%]">
+                        <p className="text-sm text-white">Carbono</p>
+                        <p className="font-semibold text-green-500">{data?.carbon} kg</p>
                     </div>
 
-                    {data?.source && (
-                        <p className="text-white text-xs">Fonte: <a target="_blank" href={data?.source} className="text-blue-400 underline">{data?.source}</a></p>
-                    )}
+                    <div className="w-[1px] h-5 bg-white"/>
+
+                    <div className="flex items-center justify-between w-[20%]">
+                        <p className="text-sm text-white">Solo</p>
+                        <p className="font-semibold text-green-500">{data?.soil} m²</p>
+                    </div>
+
+                    <div className="w-[1px] h-5 bg-white"/>
+
+                    <div className="flex items-center justify-between w-[20%]">
+                        <p className="text-sm text-white">Água</p>
+                        <p className="font-semibold text-green-500">{data?.water} m³</p>
+                    </div>
+
+                    <div className="w-[1px] h-5 bg-white"/>
+
+                    <div className="flex items-center justify-between w-[20%]">
+                        <p className="text-sm text-white">Biodvers.</p>
+                        <p className="font-semibold text-green-500">{data?.bio} uv</p>
+                    </div>
                 </div>
 
-                {!hiddenButton && (
-                    <div className="flex flex-col items-center mt-3 lg:mt-0">
-                        <button
-                            className="px-3 py-2 rounded-md text-white font-semibold bg-blue-600 text-sm"
-                            onClick={() => addItem(data)}
-                        >
-                            Reduzir esse item
-                        </button>
-
-                        <ToastContainer />
-                    </div>
+                {data?.source && (
+                    <p className="text-white text-xs">Fonte: <a target="_blank" href={data?.source} className="text-blue-400 underline">{data?.source}</a></p>
                 )}
+
             </div>
         );
     }

@@ -30,8 +30,8 @@ export function Marker({type, active}){
     if(type === 'frontend'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-blue-500 ${active && 'bg-blue-500'} gap-1`}>
-                <MdMonitor className='text-blue-500' size={20}/>
-                <p className='text-blue-500 font-bold text-sm'>Front-End</p>
+                <MdMonitor color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Front-End</p>
             </div>
         )
     }
@@ -39,8 +39,8 @@ export function Marker({type, active}){
     if(type === 'contracts'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-violet-600 ${active && 'bg-violet-600'} gap-1`}>
-                <SiHiveBlockchain className='text-violet-600' size={20}/>
-                <p className='text-violet-600 font-bold text-sm'>Smart Contracts</p>
+                <SiHiveBlockchain color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Smart Contracts</p>
             </div>
         )
     }
@@ -48,8 +48,8 @@ export function Marker({type, active}){
     if(type === 'mobile'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-lime-400 ${active && 'bg-lime-400'} gap-1`}>
-                <VscDeviceMobile className='text-lime-400' size={20}/>
-                <p className='text-lime-400 font-bold text-sm'>Mobile</p>
+                <VscDeviceMobile color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Mobile</p>
             </div>
         )
     }
@@ -57,8 +57,8 @@ export function Marker({type, active}){
     if(type === 'design'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-purple-800 ${active && 'bg-purple-800'} gap-1`}>
-                <MdDesignServices className='text-purple-800' size={20}/>
-                <p className='text-purple-800 font-bold text-sm'>Design</p>
+                <MdDesignServices color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Design</p>
             </div>
         )
     }
@@ -66,8 +66,8 @@ export function Marker({type, active}){
     if(type === 'ux'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-purple-800 ${active && 'bg-purple-800'} gap-1`}>
-                <TbUserCheck className='text-purple-800' size={20}/>
-                <p className='text-purple-800 font-bold text-sm'>User Experience</p>
+                <TbUserCheck color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>User Experience</p>
             </div>
         )
     }
@@ -75,35 +75,35 @@ export function Marker({type, active}){
     if(type === 'api'){
         return(
             <div className={`flex px-2 h-9 items-center justify-center rounded-md border-2 border-green-800 ${active && 'bg-green-800'} gap-1`}>
-                <GrNode className='text-green-800' size={20}/>
-                <p className='text-green-800 font-bold text-sm'>API</p>
+                <GrNode color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>API</p>
             </div>
         )
     }
 
     if(type === 'low'){
         return(
-            <div className='flex px-2 h-9 items-center justify-center rounded-md border-2 border-green-500 gap-1'>
-                <RiEmotionHappyLine className='text-green-500' size={20}/>
-                <p className='text-green-500 font-bold text-sm'>Low Priority</p>
+            <div className='flex px-2 h-9 items-center justify-center rounded-md bg-green-500 gap-1'>
+                <RiEmotionHappyLine color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Low Priority</p>
             </div>
         )
     }
 
     if(type === 'average'){
         return(
-            <div className='flex px-2 h-9 items-center justify-center rounded-md border-2 border-yellow-400 gap-1'>
-                <TbMoodNervous className='text-yellow-400' size={20}/>
-                <p className='text-yellow-400 font-bold text-sm'>Average Priority</p>
+            <div className='flex px-2 h-9 items-center justify-center rounded-md bg-yellow-400 gap-1'>
+                <TbMoodNervous color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>Average Priority</p>
             </div>
         )
     }
 
     if(type === 'high'){
         return(
-            <div className='flex px-2 h-9 items-center justify-center rounded-md border-2 border-red-500 gap-1'>
-                <ImAngry className='text-red-500' size={20}/>
-                <p className='text-red-500 font-bold text-sm'>High Priority</p>
+            <div className='flex px-2 h-9 items-center justify-center rounded-md bg-red-500 gap-1'>
+                <ImAngry color='white' size={20}/>
+                <p className='text-white font-bold text-sm'>High Priority</p>
             </div>
         )
     }
