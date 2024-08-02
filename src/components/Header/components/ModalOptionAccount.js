@@ -7,7 +7,7 @@ export function ModalOptionAccount({close, mobile, disconnect, switchAccount}){
     const navigate = useNavigate();
     return(
         <div onClick={close} className={`flex w-screen h-screen top-0 right-0 absolute z-50`}>
-            <div className={`w-40 h-62 gap-1 bg-white flex flex-col rounded-lg ml-[-20px] top-24 right-[400px] mt-3 ${mobile ? 'fixed' : 'absolute'}`}>
+            <div className={`w-40 h-62 gap-1 bg-white flex flex-col rounded-lg ml-[-20px] top-24 mt-3 ${mobile ? 'fixed' : 'absolute'} 2xl:right-[400px] xl:right-[115px] lg:right-[80px] md:right-[20px]`}>
                 <button 
                     className="flex w-[100%] h-10 items-center hover:bg-gray-300 hover:cursor-pointer rounded-lg px-2 gap-2"
                     onClick={() => navigate('/profile')}
