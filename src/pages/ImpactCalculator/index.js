@@ -584,7 +584,7 @@ export function ImpactCalculator() {
                                     </h3>
 
                                     <button
-                                        className={`w-full h-10 rounded-md font-semibold text-white ${openInvoice ? 'bg-gray-500' : 'bg-green-500'}`}
+                                        className={`w-full h-10 rounded-md font-semibold text-white bg-green-500`}
                                         onClick={() => {
                                             if (openInvoice) {
                                                 setTypePayment('partial');
@@ -594,7 +594,7 @@ export function ImpactCalculator() {
                                             setModalPayment(true);
                                         }}
                                     >
-                                        {openInvoice ? 'Antecipar' : 'Compensar fatura'}
+                                        Compensar fatura
                                     </button>
                                 </div>
                             </div>
