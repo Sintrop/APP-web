@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from 'react-toastify';
-import { IoMdCloseCircleOutline } from 'react-icons/io';
-import { FaWallet, FaKey } from "react-icons/fa";
+import { IoMdClose } from 'react-icons/io';
+import { FaWallet, FaKey, FaChevronLeft } from "react-icons/fa";
 import { ActivityIndicator } from '../ActivityIndicator';
-import {useMainContext} from '../../hooks/useMainContext';
+import { useMainContext } from '../../hooks/useMainContext';
 import { ModalSignOut } from '../ModalSignOut';
+import { UserAccountItem } from './components/UserAccountItem';
 
 export function ModalConnectAccount({ close }) {
-    const {loginWithWalletAndPassword, Sync} = useMainContext();
+    const { loginWithWalletAndPassword, Sync, accountsConnected } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [viewForm, setViewForm] = useState(false);
     const [wallet, setWallet] = useState('');
     const [password, setPassword] = useState('');
     const [modalSignOut, setModalSignOut] = useState(false);
+    const [accountSelected, setAccountSelected] = useState(null);
 
-    async function handleLogin(){
-        if(loading){
+    async function handleLogin() {
+        if (loading) {
             return;
         }
-        if(!wallet.trim()){
+        if (!wallet.trim()) {
             toast.error('Digite sua wallet!')
             return;
         }
-        if(!password.trim()){
+        if (!password.trim()) {
             toast.error('Digite sua senha!')
             return;
         }
@@ -32,8 +34,8 @@ export function ModalConnectAccount({ close }) {
 
         const response = await loginWithWalletAndPassword(wallet, password);
         setLoading(false);
-        
-        if(response){
+
+        if (response) {
             toast.success('Você se conectou com sucesso!');
             setTimeout(() => close(), 2000);
             setWallet('');
@@ -42,23 +44,23 @@ export function ModalConnectAccount({ close }) {
 
     }
 
-    async function handleSyncWallet(){
-        if(loading){
+    async function handleSyncWallet() {
+        if (loading) {
             return;
         }
-        
+
         if (!window.ethereum) {
             toast.error('Você não tem um provedor ethereum em seu navegador!');
             return;
         }
         setLoading(true);
-        
+
         const response = await Sync();
-        
-        if(response?.status === 'connected'){
+
+        if (response?.status === 'connected') {
             toast.success('Você se conectou com sucesso!');
             close();
-        }else{
+        } else {
             close();
         }
 
@@ -68,14 +70,14 @@ export function ModalConnectAccount({ close }) {
     return (
         <Dialog.Portal className='flex justify-center items-center inset-0 '>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0 ' />
-            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-10'>
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-10'>
 
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]' />
                     <Dialog.Title className='font-bold text-white'>Conectar</Dialog.Title>
-                    <Dialog.Close>
-                        <IoMdCloseCircleOutline size={25} color='white' />
-                    </Dialog.Close>
+                    <button onClick={close}>
+                        <IoMdClose size={25} color='white' />
+                    </button>
                 </div>
 
                 <div>
@@ -106,7 +108,7 @@ export function ModalConnectAccount({ close }) {
                                 onClick={handleLogin}
                             >
                                 {loading ? (
-                                    <ActivityIndicator size={25}/>
+                                    <ActivityIndicator size={25} />
                                 ) : (
                                     'Conectar'
                                 )}
@@ -116,9 +118,114 @@ export function ModalConnectAccount({ close }) {
                         </>
                     ) : (
                         <>
-                            <h3 className='text-white text-center text-lg'>Como você deseja se conectar?</h3>
+                            {accountsConnected.length === 0 ? (
+                                <>
+                                    <button
+                                        className='flex items-center gap-2 p-2 rounded-md bg-blue-400 mt-2 w-full justify-center text-white'
+                                        onClick={() => setViewForm(true)}
+                                    >
+                                        <FaKey color='white' size={20} />
 
-                            <button
+                                        Entrar com wallet e senha
+                                    </button>
+
+                                    <button
+                                        className='flex items-center gap-2 p-2 rounded-md bg-orange-500 mt-5 w-full justify-center text-white'
+                                        onClick={handleSyncWallet}
+                                    >
+                                        {loading ? (
+                                            <ActivityIndicator size={25} />
+                                        ) : (
+                                            <>
+                                                <FaWallet color='white' size={25} />
+
+                                                Sincronizar wallet
+                                            </>
+                                        )}
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {accountSelected ? (
+                                        <>
+                                            <div className='flex items-center gap-2 w-full'>
+                                                <button
+                                                    className='p-2'
+                                                    onClick={() => setAccountSelected(null)}
+                                                >
+                                                    <FaChevronLeft size={20} color='white' />
+                                                </button>
+
+                                                <div className='flex flex-col items-start'>
+                                                    <p className="font-bold text-white text-sm">{accountSelected?.name}</p>
+                                                    <p className="text-white text-xs">{String(accountSelected?.wallet).toLowerCase()}</p>
+                                                </div>
+                                            </div>
+
+                                            <p className='text-white text-center mt-10 text-sm'>Agora insira sua senha</p>
+                                            <p className='mt-3 text-xs text-gray-400'>Senha:</p>
+                                            <input
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                type='password'
+                                                className='w-full h-10 rounded-md bg-green-950 text-white px-2'
+                                                placeholder='Digite sua senha'
+                                            />
+
+                                            <button
+                                                className='flex h-10 items-center gap-2 p-2 rounded-md bg-blue-400 mt-5 w-full justify-center text-white'
+                                                onClick={handleLogin}
+                                            >
+                                                {loading ? (
+                                                    <ActivityIndicator size={25} />
+                                                ) : (
+                                                    'Conectar'
+                                                )}
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className='text-gray-300 text-sm text-center'>Contas salvas</p>
+                                            <div className='flex flex-col gap-2 max-h-[200px] overflow-y-auto'>
+                                                {accountsConnected.map(item => (
+                                                    <UserAccountItem
+                                                        key={item.id}
+                                                        data={item}
+                                                        selectAccount={(data) => {
+                                                            setAccountSelected(data);
+                                                            setWallet(data?.wallet);
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            <button
+                                                className='flex items-center gap-2 p-2 rounded-md bg-blue-400 mt-5 w-full justify-center text-white'
+                                                onClick={() => setViewForm(true)}
+                                            >
+                                                Entrar com outra conta
+                                            </button>
+
+                                            <button
+                                                className='flex items-center gap-2 p-2 rounded-md bg-orange-500 mt-5 w-full justify-center text-white'
+                                                onClick={handleSyncWallet}
+                                            >
+                                                {loading ? (
+                                                    <ActivityIndicator size={25} />
+                                                ) : (
+                                                    <>
+                                                        <FaWallet color='white' size={25} />
+
+                                                        Sincronizar wallet
+                                                    </>
+                                                )}
+                                            </button>
+                                        </>
+                                    )}
+                                </>
+                            )}
+
+                            {/* <button
                                 className='flex items-center gap-2 p-2 rounded-md bg-orange-500 mt-5 w-full justify-center text-white'
                                 onClick={handleSyncWallet}
                             >
@@ -131,16 +238,7 @@ export function ModalConnectAccount({ close }) {
                                         Sincronizar wallet
                                     </>
                                 )}
-                            </button>
-
-                            <button
-                                className='flex items-center gap-2 p-2 rounded-md bg-blue-400 mt-2 w-full justify-center text-white'
-                                onClick={() => setViewForm(true)}
-                            >
-                                <FaKey color='white' size={25} />
-
-                                Entrar com wallet e senha
-                            </button>
+                            </button> */}
                         </>
                     )}
                 </div>

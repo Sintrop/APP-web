@@ -8,7 +8,7 @@ import { ModalConnectAccount } from "../ModalConnectAccount/index.js";
 import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
 import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
-import { MdLogout } from "react-icons/md";
+import { ModalOptionAccount } from "./components/ModalOptionAccount.js";
 
 export function Header({ routeActive }) {
     const { walletConnected, userData } = useMainContext();
@@ -16,6 +16,7 @@ export function Header({ routeActive }) {
     const [modalConnect, setModalConnect] = useState(false);
     const [imageProfile, setImageProfile] = useState(null);
     const [showLogout, setShowLogout] = useState(false);
+    const [optionsAccount, setOptionsAccount] = useState(false);
 
     useEffect(() => {
         if (userData?.name) {
@@ -130,7 +131,7 @@ export function Header({ routeActive }) {
                                 if (walletConnected === '') {
                                     setModalConnect(true);
                                 } else {
-                                    navigate('/profile')
+                                    setOptionsAccount(true);
                                 }
                             }}
                         >
@@ -163,15 +164,15 @@ export function Header({ routeActive }) {
                             )}
                         </button>
 
-                        {walletConnected !== '' && (
+                        {/* {walletConnected !== '' && (
                             <button
                                 className="flex flex-col items-center w-[75px] text-white text-sm text-center ml-4"
-                                onClick={() => {setShowLogout(true)}}
+                                onClick={() => { setShowLogout(true) }}
                             >
-                                <MdLogout color='white' size={18}/>
+                                <MdLogout color='white' size={18} />
                                 Desconectar
                             </button>
-                        )}
+                        )} */}
                     </div>
                 </div>
 
@@ -183,6 +184,20 @@ export function Header({ routeActive }) {
                     />
                 )}
             </div>
+
+            {optionsAccount && (
+                <ModalOptionAccount
+                    close={() => setOptionsAccount(false)}
+                    disconnect={() => {
+                        setOptionsAccount(false);
+                        setShowLogout(true);
+                    }}
+                    switchAccount={() => {
+                        setOptionsAccount(false);
+                        setModalConnect(true);
+                    }}
+                />
+            )}
         </>
     )
 }
