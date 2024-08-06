@@ -31,6 +31,7 @@ import { Helmet } from "react-helmet";
 import { RegenerationZoneProfile } from "./components/RegenerationZoneProfile.js";
 import QRCode from "react-qr-code";
 import { ShortPubli } from "./components/ShortPubli/index.js";
+import { Chat } from "../../components/Chat/index.js";
 
 export function Profile() {
     const navigate = useNavigate();
@@ -980,6 +981,7 @@ export function Profile() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {

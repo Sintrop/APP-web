@@ -23,6 +23,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
 import { Helmet } from "react-helmet";
+import { Chat } from "../../components/Chat/index.js";
 
 export function Actions() {
     const { walletConnected, userData, connectionType } = useMainContext();
@@ -457,6 +458,7 @@ export function Actions() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {

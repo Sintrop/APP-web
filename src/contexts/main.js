@@ -30,10 +30,6 @@ export default function MainProvider({ children }) {
     const [balanceUser, setBalanceUser] = useState(0);
     const [userData, setUserData] = useState(null);
     const [era, setEra] = useState(1);
-    const [nextEraIn, setNextEraIn] = useState(0);
-    const [impactPerToken, setImpactPerToken] = useState({});
-    const [getAtualBlock, setGetAtualBlock] = useState(false);
-    const [attNotifications, setAttNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [viewMode, setViewMode] = useState(true);
     const [transactionOpen, setTransactionOpen] = useState(false);
@@ -45,11 +41,13 @@ export default function MainProvider({ children }) {
     const [nextEra, setNextEra] = useState(0);
     const [epoch, setEpoch] = useState(1)
     const [impactToken, setImpactToken] = useState({});
+    const [accountsConnected, setAccountsConnected] = useState([]);
 
     useEffect(() => {
         getEraInfo();
         getImpact();
         checkUserConnected();
+        checkAccountsConnected();
     }, []);
 
     useEffect(() => {
@@ -78,6 +76,13 @@ export default function MainProvider({ children }) {
         }
     }
 
+    async function checkAccountsConnected(){
+        const response = await localStorage.getItem('accounts_connected');
+        if(response){
+            setAccountsConnected(JSON.parse(response));
+        }
+    }
+
     async function getEraInfo() {
         const response = await api.get('/web3/era-info');
         setNextEra(response.data.nextEraIn);
@@ -88,39 +93,6 @@ export default function MainProvider({ children }) {
     async function getImpact() {
         const response = await api.get('/impact-per-token');
         setImpactToken(response.data.impact);
-    }
-
-    async function checkTransactionQueue() {
-        const response = await api.get(`/transactions-open/${walletConnected}`);
-        const transactions = response.data.transactions;
-
-        if (transactions.length > 0) {
-            setTransactionOpen(true);
-            setTranscationsOpened(transactions);
-        } else {
-            setTransactionOpen(false);
-        }
-    }
-
-    async function checkMode() {
-        if (window.ethereum) {
-            setViewMode(false);
-            await window.ethereum.request({
-                method: 'eth_accounts'
-            })
-                .then((accounts) => {
-                    if (accounts.length == 0) {
-
-                    } else {
-
-                    }
-                })
-                .catch(() => {
-                    console.log('error')
-                })
-        } else {
-            setViewMode(true)
-        }
     }
 
     async function Sync() {
@@ -246,6 +218,7 @@ export default function MainProvider({ children }) {
         const resUser = response.data.user
         setUserData(resUser);
         setAccountStatus(resUser?.accountStatus);
+        saveOnAccountsConnected(resUser);
 
         if (resUser?.accountStatus === 'blockchain') {
             getUserBlockchainData(wallet, resUser?.userType);
@@ -253,6 +226,24 @@ export default function MainProvider({ children }) {
 
         const image = await getImage(resUser.imgProfileUrl);
         setImageProfile(image);
+    }
+
+    async function saveOnAccountsConnected(user){
+        const filter = accountsConnected.filter(item => String(item?.wallet).toUpperCase() === String(user?.wallet).toUpperCase());
+        if(filter.length === 0){
+            let accounts = [];
+            accounts = accountsConnected;
+
+            accounts.push({
+                id: user?.id,
+                name: user?.name,
+                wallet: user?.wallet,
+                userType: user?.userType,
+                imgProfile: user?.imgProfileUrl,
+            });
+
+            await localStorage.setItem('accounts_connected', JSON.stringify(accounts));
+        }
     }
 
     async function getUserBlockchainData(wallet, userType) {
@@ -369,11 +360,9 @@ export default function MainProvider({ children }) {
                 balanceUser,
                 userData,
                 getUserDataApi,
-                impactPerToken,
                 modalFeedback,
                 chooseModalFeedBack,
                 era,
-                nextEraIn,
                 notifications,
                 getNotifications,
                 viewMode,
@@ -393,7 +382,8 @@ export default function MainProvider({ children }) {
                 logout,
                 nextEra,
                 impactToken,
-                epoch
+                epoch,
+                accountsConnected
             }}
         >
             {children}

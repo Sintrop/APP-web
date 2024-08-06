@@ -12,12 +12,13 @@ import { CategorieItem } from "./components/CategorieItem";
 import { Item } from '../../../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
 import { FaCalculator, FaChevronRight, FaDatabase, FaFileAlt, FaUsers } from "react-icons/fa";
-import {BsGraphUp} from 'react-icons/bs';
-import {VscSymbolMethod} from 'react-icons/vsc';
+import { BsGraphUp } from 'react-icons/bs';
+import { VscSymbolMethod } from 'react-icons/vsc';
 import { useNavigate } from "react-router";
 import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 import { Invite } from "../../../../services/invitationService";
 import { Flora } from "./components/Databases/Flora";
+import { BiFile } from "react-icons/bi";
 
 export function ResearcherActions() {
     const navigate = useNavigate();
@@ -222,7 +223,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('users')}
                     >
-                        <FaUsers size={17} className={`${tabSelected === 'users' ? 'text-green-600' : 'text-white'}`}/>
+                        <FaUsers size={17} className={`${tabSelected === 'users' ? 'text-green-600' : 'text-white'}`} />
                         Pesquisadores
                     </button>
 
@@ -230,7 +231,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'researches' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('researches')}
                     >
-                        <FaFileAlt size={17} className={`${tabSelected === 'researches' ? 'text-green-600' : 'text-white'}`}/>
+                        <FaFileAlt size={17} className={`${tabSelected === 'researches' ? 'text-green-600' : 'text-white'}`} />
                         Pesquisas
                     </button>
 
@@ -238,7 +239,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'isa' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('isa')}
                     >
-                        <BsGraphUp size={17} className={`${tabSelected === 'isa' ? 'text-green-600' : 'text-white'}`}/>
+                        <BsGraphUp size={17} className={`${tabSelected === 'isa' ? 'text-green-600' : 'text-white'}`} />
                         Índice de regeneração
                     </button>
 
@@ -246,7 +247,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'calculator-items' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('calculator-items')}
                     >
-                        <FaCalculator size={17} className={`${tabSelected === 'calculator-items' ? 'text-green-600' : 'text-white'}`}/>
+                        <FaCalculator size={17} className={`${tabSelected === 'calculator-items' ? 'text-green-600' : 'text-white'}`} />
                         Itens calculadora
                     </button>
 
@@ -254,7 +255,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'methods' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('methods')}
                     >
-                        <VscSymbolMethod size={17} className={`${tabSelected === 'methods' ? 'text-green-600' : 'text-white'}`}/>
+                        <VscSymbolMethod size={17} className={`${tabSelected === 'methods' ? 'text-green-600' : 'text-white'}`} />
                         Métodos de avaliação
                     </button>
 
@@ -262,7 +263,7 @@ export function ResearcherActions() {
                         className={`font-bold py-1 min-w-fit border-b-2 flex items-center gap-2 text-sm ${tabSelected === 'db' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('db')}
                     >
-                        <FaDatabase size={17} className={`${tabSelected === 'db' ? 'text-green-600' : 'text-white'}`}/>
+                        <FaDatabase size={17} className={`${tabSelected === 'db' ? 'text-green-600' : 'text-white'}`} />
                         Base de dados
                     </button>
                 </div>
@@ -279,15 +280,25 @@ export function ResearcherActions() {
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                         <p className="font-semibold text-white">Deseja publicar uma nova pesquisa?</p>
 
-                                        <button
-                                            className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
-                                            onClick={() => {
-                                                setPublishType('normal');
-                                                setModalPublish(true);
-                                            }}
-                                        >
-                                            Publicar
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <a
+                                                target="_blank"
+                                                href="https://docs.google.com/document/d/1ptMsGgZmV6uAo_e9bYLrpD_HpjTQJdK6AD-Bstr_XEo/edit?usp=sharing"
+                                                className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
+                                            >
+                                                <BiFile color='white' size={20} />
+                                                Ver modelo
+                                            </a>
+                                            <button
+                                                className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
+                                                onClick={() => {
+                                                    setPublishType('normal');
+                                                    setModalPublish(true);
+                                                }}
+                                            >
+                                                Publicar
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                                 {researches.map(item => (
@@ -310,15 +321,25 @@ export function ResearcherActions() {
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                         <p className="font-semibold text-white">Deseja sugerir um novo item?</p>
 
-                                        <button
-                                            className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
-                                            onClick={() => {
-                                                setPublishType('calculator');
-                                                setModalPublish(true);
-                                            }}
-                                        >
-                                            Sugerir
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <a
+                                                target="_blank"
+                                                href="https://docs.google.com/document/d/1ptMsGgZmV6uAo_e9bYLrpD_HpjTQJdK6AD-Bstr_XEo/edit?usp=sharing"
+                                                className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
+                                            >
+                                                <BiFile color='white' size={20} />
+                                                Ver modelo
+                                            </a>
+                                            <button
+                                                className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
+                                                onClick={() => {
+                                                    setPublishType('calculator');
+                                                    setModalPublish(true);
+                                                }}
+                                            >
+                                                Sugerir
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                                 {items.map(item => (
@@ -333,15 +354,25 @@ export function ResearcherActions() {
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
                                         <p className="font-semibold text-white">Deseja sugerir um novo método?</p>
 
-                                        <button
-                                            className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
-                                            onClick={() => {
-                                                setPublishType('method');
-                                                setModalPublish(true);
-                                            }}
-                                        >
-                                            Sugerir
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <a
+                                                target="_blank"
+                                                href="https://docs.google.com/document/d/1ptMsGgZmV6uAo_e9bYLrpD_HpjTQJdK6AD-Bstr_XEo/edit?usp=sharing"
+                                                className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
+                                            >
+                                                <BiFile color='white' size={20} />
+                                                Ver modelo
+                                            </a>
+                                            <button
+                                                className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
+                                                onClick={() => {
+                                                    setPublishType('method');
+                                                    setModalPublish(true);
+                                                }}
+                                            >
+                                                Sugerir
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
 
@@ -371,7 +402,7 @@ export function ResearcherActions() {
 
                         {tabSelected === 'db' && (
                             <div>
-                                <Flora/>
+                                <Flora />
                             </div>
                         )}
                     </div>

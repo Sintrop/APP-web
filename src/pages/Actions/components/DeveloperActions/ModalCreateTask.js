@@ -76,11 +76,11 @@ export function ModalCreateTask({close, success}){
                     />
 
                     <p className="font-bold text-white mt-3">Descrição:</p>
-                    <textarea
+                    <input
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder='Digite aqui'
-                        className='bg-[#0a4303] rounded-md border-2 px-2 w-full text-white '
+                        className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
                     />
 
                     <p className="font-bold text-white mt-2">Anexe uma imagem(Opcional):</p>

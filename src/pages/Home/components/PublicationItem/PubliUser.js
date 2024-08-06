@@ -22,8 +22,12 @@ export function PubliUser({ data }) {
         setLoadingImages(true);
 
         for (var i = 0; i < imagesPubli.length; i++) {
-            const response = await getImage(imagesPubli[i]);
-            newArray.push(response);
+            if(String(imagesPubli[i]).includes('https://')){
+                newArray.push(imagesPubli[i])
+            }else{
+                const response = await getImage(imagesPubli[i]);
+                newArray.push(response);
+            }
         }
 
         setImages(newArray);

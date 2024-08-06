@@ -11,6 +11,7 @@ import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
 import ReactMapGL, { Layer, Marker, Source } from '!react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Chat } from "../../components/Chat";
 
 export function Community() {
     const navigate = useNavigate();
@@ -291,6 +292,7 @@ export function Community() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
         </div>
     )

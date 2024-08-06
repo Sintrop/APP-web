@@ -21,6 +21,7 @@ import { RegenerationZoneProfile } from "../Profile/components/RegenerationZoneP
 import { Info } from "../../components/Info";
 import { ShortPubli } from "../Profile/components/ShortPubli";
 import { InspectionItem } from "../accountProducer/components/InspectionItem";
+import { Chat } from "../../components/Chat";
 
 const containerMapStyle = {
     width: '100%',
@@ -607,6 +608,7 @@ export function UserDetails() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
         </div>
     )

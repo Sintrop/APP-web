@@ -2,17 +2,24 @@ import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
 import { QRCode } from "react-qrcode-logo";
 import { SiGooglesheets } from "react-icons/si";
+import axios from "axios";
 
 export function ShortPubli({ data }) {
     const [images, setImages] = useState('');
-    const [additionalData, setAdditionalData] = useState({})
+    const [additionalData, setAdditionalData] = useState({});
+    const [tokensWithdraw, setTokensWithdraw] = useState(0);
 
     useEffect(() => {
-        if (data?.type === 'publi-user') {
+        if (data?.type === 'publi-user' || data?.type === 'proof-reduce') {
             verifyImages();
         }
         if (data?.additionalData) {
-            setAdditionalData(JSON.parse(data?.additionalData));
+            const addData = JSON.parse(data?.additionalData);
+            setAdditionalData(addData);
+
+            if (data?.type === 'withdraw-tokens') {
+                getTokensWithdraw(addData.transactionHash, String(addData?.userData.wallet).toLowerCase())
+            }
         }
     }, []);
 
@@ -27,6 +34,18 @@ export function ShortPubli({ data }) {
         }
 
         setImages(newArray);
+    }
+
+    async function getTokensWithdraw(hash, wallet) {
+        const response = await axios.get(`https://api-sepolia.etherscan.io/api?module=account&action=tokentx&contractaddress=${process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS}&address=${wallet}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`)
+        const transactions = response.data.result;
+
+        for (var i = 0; i < transactions.length; i++) {
+            if (transactions[i].hash === hash) {
+                const tokens = String((Number(transactions[i].value) / 10 ** 18).toFixed(0))
+                setTokensWithdraw(tokens)
+            }
+        }
     }
 
 
@@ -72,7 +91,17 @@ export function ShortPubli({ data }) {
 
             {data.type === 'withdraw-tokens' && (
                 <div className="flex flex-col justify-center items-center p-3 h-full">
-                    <p className="font-bold text-white text-xl text-center">Visualização indisponível, clique para acessar a publicação</p>
+                    {tokensWithdraw === 0 ? (
+                        <p className="font-bold text-white text-xl text-center">Avançou de ERA na pool de distribuição de tokens</p>
+                    ) : (
+                        <>
+                            <p className="font-bold text-white text-xl text-center">Sacou {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Number(tokensWithdraw))} Créditos de Regeneração</p>
+                            <img
+                                src={require('../../../../assets/token.png')}
+                                className="w-28 h-28 object-contain"
+                            />
+                        </>
+                    )}
                 </div>
             )}
 
@@ -142,8 +171,26 @@ export function ShortPubli({ data }) {
             )}
 
             {data.type === 'proof-reduce' && (
-                <div className="flex flex-col justify-center items-center p-3 h-full">
-                    <p className="font-bold text-white text-xl text-center">Visualização indisponível, clique para acessar a publicação</p>
+                <div className="border-[8px] border-green-500 flex w-full h-full relative">
+                    {images.length === 0 ? (
+                        <p className="text-white m-3 text-4xl">{data?.description}</p>
+                    ) : (
+                        <img
+                            src={images[0]}
+                            className="w-full h-full object-cover"
+                        />
+                    )}
+
+                    <div className="w-full bg-green-500 p-2 absolute bottom-0 h-14 rounded-t-xl flex items-center">
+                        <div className="flex flex-col">
+                            <p className="font-bold text-white text-xs">
+                                #ReduzirÉObrigaçãoRegenerarÉASolução
+                            </p>
+                            <p className="font-regular text-white text-xs">
+                                Prova de redução do item {additionalData?.nameItem} da calculadora de impacto.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -173,6 +220,11 @@ export function ShortPubli({ data }) {
                 </div>
             )}
 
+            {data.type === 'new-content' && (
+                <div className="flex flex-col justify-center items-center p-3 h-full">
+                    <p className="font-bold text-white text-xl text-center">Visualização indisponível, clique para acessar a publicação</p>
+                </div>
+            )}
         </a>
     )
 }
