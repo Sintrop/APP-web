@@ -85,7 +85,8 @@ export function ModalMessages({ chat, imageProfile, participant, socket, typeCha
                 userId: userData.id,
                 userData: JSON.stringify(userData),
                 participantData: JSON.stringify(participant),
-                photos: JSON.stringify(hashPhotos)
+                photos: JSON.stringify(hashPhotos),
+                name: userData?.name
             })
         } catch (err) {
             console.log(err)

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
+import { Chat } from "../../components/Chat";
 
 export function RegenerationCredit() {
     const navigate = useNavigate();
@@ -90,6 +91,7 @@ export function RegenerationCredit() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
         </div>
     )
