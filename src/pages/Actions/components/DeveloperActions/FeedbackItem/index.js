@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { get } from '../../../../config/infura';
-import { api } from '../../../../services/api';
-import { FaRegComment } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { api } from '../../../../../services/api';
 import { useTranslation } from 'react-i18next';
-import { CommentItem } from './CommentItem';
+import { CommentItem } from './components/CommentItem';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ModalViewComments } from './ModalViewComments';
-import { ModalConfirmAssign } from './ModalConfirmAssign';
-import Loader from '../../../../components/Loader';
-import { Marker } from './Marker';
-import { getImage } from '../../../../services/getImage';
+import { ModalViewComments } from './components/ModalViewComments';
+import { ModalConfirmAssign } from './components/ModalConfirmAssign';
+import { Marker } from './components/Marker';
+import { getImage } from '../../../../../services/getImage';
 import { format } from 'date-fns';
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
-import { ModalFinishTask } from './ModalFinishTask';
+import { ActivityIndicator } from '../../../../../components/ActivityIndicator';
+import { ModalFinishTask } from './components/ModalFinishTask';
 import { toast } from 'react-toastify';
 
 export function FeedbackItem({ data, userData }) {
     const { t } = useTranslation();
-    const { walletAddress } = useParams();
     const [loadingPostComment, setLoadingPostComment] = useState(false);
     const [img, setImg] = useState('');
     const [modalFinish, setModalFinish] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../../../../services/api";
 import { ActivityIndicator } from '../../../../components/ActivityIndicator';
-import { FeedbackItem } from "./feedbackItem";
+import { FeedbackItem } from "./FeedbackItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { SendReportDev } from '../../../checkout/SendReportDev';
 import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";

@@ -3,9 +3,9 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { useParams } from 'react-router';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { api } from '../../../../services/api';
+import { api } from '../../../../../../services/api';
 import { useTranslation } from 'react-i18next';
-import Loading from '../../../../components/Loading';
+import Loading from '../../../../../../components/Loading';
 
 export function ModalConfirmAssign({data, close}){
     const {walletAddress} = useParams();
