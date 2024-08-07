@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {api} from '../../../../services/api';
+import { api } from '../../../../../../services/api';
 import {format} from 'date-fns';
-import Loader from '../../../../components/Loader';
-import { getImage } from '../../../../services/getImage';
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { getImage } from '../../../../../../services/getImage';
+import { ActivityIndicator } from '../../../../../../components/ActivityIndicator';
 
 export function CommentItem({data}){
     const [userData, setUserData] = useState(null);

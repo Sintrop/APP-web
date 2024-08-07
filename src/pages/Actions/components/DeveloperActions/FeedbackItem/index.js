@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { get } from '../../../../config/infura';
-import { api } from '../../../../services/api';
-import { FaRegComment } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { api } from '../../../../../services/api';
 import { useTranslation } from 'react-i18next';
-import { CommentItem } from './CommentItem';
+import { CommentItem } from './components/CommentItem';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ModalViewComments } from './ModalViewComments';
-import { ModalConfirmAssign } from './ModalConfirmAssign';
-import Loader from '../../../../components/Loader';
-import { Marker } from './Marker';
-import { getImage } from '../../../../services/getImage';
+import { ModalViewComments } from './components/ModalViewComments';
+import { ModalConfirmAssign } from './components/ModalConfirmAssign';
+import { Marker } from './components/Marker';
+import { getImage } from '../../../../../services/getImage';
 import { format } from 'date-fns';
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
-import { ModalFinishTask } from './ModalFinishTask';
+import { ActivityIndicator } from '../../../../../components/ActivityIndicator';
+import { ModalFinishTask } from './components/ModalFinishTask';
 import { toast } from 'react-toastify';
+import { ModalEditFeedback } from './components/ModalEditFeedback';
+import { ModalConfirmDiscard } from './components/ModalConfirmDiscard';
 
-export function FeedbackItem({ data, userData }) {
+export function FeedbackItem({ data, userData, discardTask }) {
     const { t } = useTranslation();
-    const { walletAddress } = useParams();
     const [loadingPostComment, setLoadingPostComment] = useState(false);
     const [img, setImg] = useState('');
     const [modalFinish, setModalFinish] = useState(false);
@@ -34,8 +31,20 @@ export function FeedbackItem({ data, userData }) {
     const [imageProfile, setImageProfile] = useState('');
     const [viewAllComments, setViewAllComments] = useState(false);
     const [additionalData, setAdditionalData] = useState(null);
+    const [modalEdit, setModalEdit] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [priority, setPriority] = useState(1);
+    const [team, setTeam] = useState(1);
+    const [pts, setPts] = useState(1);
+    const [modalDiscard, setModalDiscard] = useState(false);
 
     useEffect(() => {
+        setTitle(data?.title);
+        setDescription(data?.description);
+        setTeam(data?.team);
+        setPriority(data?.priority);
+        setPts(data?.pts);
         setStatus(Number(data.status));
         setComments(data.CommentsFeedback);
         if (data.responsible) {
@@ -44,7 +53,7 @@ export function FeedbackItem({ data, userData }) {
         if (data?.photoHash) {
             getImageFeedback();
         }
-        if(data?.additionalData){
+        if (data?.additionalData) {
             setAdditionalData(JSON.parse(data?.additionalData));
         }
     }, []);
@@ -107,39 +116,49 @@ export function FeedbackItem({ data, userData }) {
     return (
         <div key={data.id} className='flex flex-col w-full bg-[#0a4303] rounded-md p-5 mb-5'>
             <div className='flex items-center justify-between'>
-                <p className='font-bold text-blue-500 text-lg'>#{data.id} - {data.title}</p>
+                <div className='flex flex-col items-start mb-1'>
+                    <p className='font-bold text-blue-500 text-lg'>#{data.id} - {title}</p>
+                    {String(userData?.wallet).toUpperCase() === String(data?.wallet).toUpperCase() && (
+                        <button
+                            className='text-white underline text-sm'
+                            onClick={() => setModalEdit(true)}
+                        >
+                            Editar task
+                        </button>
+                    )}
+                </div>
 
                 <div className='flex items-center gap-2'>
-                    <p className='text-white'>+{data?.pts} pts</p>
+                    <p className='text-white'>+{pts} pts</p>
                     {data.type === 'feedback' ? (
                         <Marker type='feedback' />
                     ) : (
                         <>
-                            {data.priority === 1 && (
+                            {priority === 1 && (
                                 <Marker type='low' />
                             )}
-                            {data.priority === 2 && (
+                            {priority === 2 && (
                                 <Marker type='average' />
                             )}
-                            {data.priority === 3 && (
+                            {priority === 3 && (
                                 <Marker type='high' />
                             )}
-                            {data.team === 1 && (
+                            {team === 1 && (
                                 <Marker type='frontend' />
                             )}
-                            {data.team === 2 && (
+                            {team === 2 && (
                                 <Marker type='contracts' />
                             )}
-                            {data.team === 3 && (
+                            {team === 3 && (
                                 <Marker type='mobile' />
                             )}
-                            {data.team === 4 && (
+                            {team === 4 && (
                                 <Marker type='design' />
                             )}
-                            {data.team === 5 && (
+                            {team === 5 && (
                                 <Marker type='ux' />
                             )}
-                            {data.team === 6 && (
+                            {team === 6 && (
                                 <Marker type='api' />
                             )}
                             <Marker type='task' />
@@ -147,7 +166,7 @@ export function FeedbackItem({ data, userData }) {
                     )}
                 </div>
             </div>
-            <p className='text-justify text-white'>{data.description}</p>
+            <p className='text-justify text-white'>{description}</p>
             {img && (
                 <img
                     src={img}
@@ -160,81 +179,97 @@ export function FeedbackItem({ data, userData }) {
             )}
 
             <div className='flex items-center gap-3 border-t pt-2'>
-                {responsible ? (
+                {status === 3 ? (
                     <>
-                        {loadingResponsible ? (
-                            <>
-                                <ActivityIndicator size={50} />
-                            </>
-                        ) : (
-                            <div className='flex items-center justify-between w-full'>
-                                <div className='flex flex-col items-start'>
-                                    <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
-                                    <div className='flex gap-2 items-center mb-2'>
-                                        <img
-                                            className='w-[40px] h-[40px] rounded-full border-2 object-cover'
-                                            src={imageProfile}
-                                        />
-                                        <p className='text-white font-bold text-sm'>{responsibleData?.name}</p>
-                                    </div>
-
-                                    <div className='flex items-center gap-2'>
-                                        {status === 0 && (
-                                            <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-yellow-500'>Em Análise</p>
-                                            </div>
-                                        )}
-                                        {status === 1 && (
-                                            <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-gray-500'>Futuramente</p>
-                                            </div>
-                                        )}
-                                        {status === 2 && (
-                                            <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
-                                            </div>
-                                        )}
-                                        {status === 3 && (
-                                            <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-red-500'>Recusada</p>
-                                            </div>
-                                        )}
-                                        {status === 4 && (
-                                            <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-green-500'>Concluida</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {String(userData?.wallet).toUpperCase() === responsible && (
-                                    <>
-                                        {status !== 4 && (
-                                            <button
-                                                className='font-bold text-white px-3 rounded-md h-10 bg-green-700'
-                                                onClick={() => setModalFinish(true)}
-                                            >
-                                                Finalizar task
-                                            </button>
-                                        )}
-                                    </>
-                                )}
+                        {status === 3 && (
+                            <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
+                                <p className='font-bold text-red-500'>Descartada</p>
                             </div>
                         )}
-
                     </>
                 ) : (
                     <>
-                        {userData?.userType === 4 ? (
-                            <button
-                                className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
-                                onClick={() => setModalAssign(true)}
-                            >
-                                Atribuir para mim
-                            </button>
+                        {responsible ? (
+                            <>
+                                {loadingResponsible ? (
+                                    <>
+                                        <ActivityIndicator size={50} />
+                                    </>
+                                ) : (
+                                    <div className='flex items-center justify-between w-full'>
+                                        <div className='flex flex-col items-start'>
+                                            <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
+                                            <div className='flex gap-2 items-center mb-2'>
+                                                <img
+                                                    className='w-[40px] h-[40px] rounded-full border-2 object-cover'
+                                                    src={imageProfile}
+                                                />
+                                                <p className='text-white font-bold text-sm'>{responsibleData?.name}</p>
+                                            </div>
+
+                                            <div className='flex items-center gap-2'>
+                                                {status === 0 && (
+                                                    <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-yellow-500'>Em Análise</p>
+                                                    </div>
+                                                )}
+                                                {status === 1 && (
+                                                    <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-gray-500'>Futuramente</p>
+                                                    </div>
+                                                )}
+                                                {status === 2 && (
+                                                    <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
+                                                    </div>
+                                                )}
+                                                {status === 4 && (
+                                                    <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-green-500'>Concluida</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {String(userData?.wallet).toUpperCase() === responsible && (
+                                            <>
+                                                {status !== 4 && (
+                                                    <button
+                                                        className='font-bold text-white px-3 rounded-md h-10 bg-green-700'
+                                                        onClick={() => setModalFinish(true)}
+                                                    >
+                                                        Finalizar task
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                            </>
                         ) : (
                             <>
+                                {userData?.userType === 4 ? (
+                                    <div className='flex items-center gap-5'>
+                                        <button
+                                            className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
+                                            onClick={() => setModalAssign(true)}
+                                        >
+                                            Atribuir para mim
+                                        </button>
 
+                                        <button
+                                            className='text-white underline text-sm'
+                                            onClick={() => setModalDiscard(true)}
+                                        >
+                                            Descartar
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+
+                                    </>
+                                )}
                             </>
                         )}
                     </>
@@ -325,9 +360,25 @@ export function FeedbackItem({ data, userData }) {
                         id: data.id,
                         wallet: userData?.wallet
                     }}
-                    close={(data) => {
-                        setModalAssign(false);
+                    close={() => setModalAssign(false)}
+                    success={(data) => {
                         setResponsible(data.responsible);
+                        setStatus(2);
+                    }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalDiscard}
+                onOpenChange={(open) => setModalDiscard(open)}
+            >
+                <ModalConfirmDiscard
+                    close={() => setModalDiscard(false)}
+                    data={data}
+                    success={() => {
+                        toast.success('Task descartada!');
+                        setStatus(3);
+                        discardTask(data?.id)
                     }}
                 />
             </Dialog.Root>
@@ -343,6 +394,24 @@ export function FeedbackItem({ data, userData }) {
                         toast.success('Task finalizada com sucesso!')
                         setStatus(4);
                     }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalEdit}
+                onOpenChange={(open) => setModalEdit(open)}
+            >
+                <ModalEditFeedback
+                    close={() => setModalEdit(false)}
+                    success={(feedback) => {
+                        toast.success('Alterações salvas!');
+                        setTitle(feedback?.title);
+                        setDescription(feedback?.description);
+                        setTeam(feedback?.team);
+                        setPriority(feedback?.priority);
+                        setPts(feedback?.pts);
+                    }}
+                    data={data}
                 />
             </Dialog.Root>
         </div>

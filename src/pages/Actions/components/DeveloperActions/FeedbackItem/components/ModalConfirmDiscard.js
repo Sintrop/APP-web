@@ -1,30 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useParams } from 'react-router';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
-import { api } from '../../../../services/api';
-import { useTranslation } from 'react-i18next';
-import Loading from '../../../../components/Loading';
+import { api } from '../../../../../../services/api';
+import Loading from '../../../../../../components/Loading';
 
-export function ModalConfirmAssign({data, close}){
-    const {walletAddress} = useParams();
-    const {t} = useTranslation();
+export function ModalConfirmDiscard({data, close, success}){
     const [loading, setLoading] = useState(false);
-    const [comments, setComments] = useState([]);
-    const [comment, setComment] = useState('');
 
     async function handleAssign(){
         try{
             setLoading(true);
-            const updatedFeedback = await api.put('/feedback/assign', {
+            const updatedFeedback = await api.put('/feedback/status', {
                 id: data.id,
-                wallet: data.wallet,
+                status: 3,
             })
-            close(updatedFeedback.data.feedbackUpdated);
+            success(updatedFeedback.data.feedbackUpdated);
+            close();
         }catch(err){
             console.log(err)
-            toast.error(`${t('Algo deu errado, tente novamente!')}`)
+            toast.error('Algo deu errado, tente novamente!')
         }finally{
             setLoading(false)
         }
@@ -36,33 +31,29 @@ export function ModalConfirmAssign({data, close}){
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[300px] h-[250px] bg-black rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between mb-5'>
                     <div className='w-[25px]'/>
-                    <Dialog.Title className='font-bold text-white'>{t('To assign task')}</Dialog.Title>
+                    <Dialog.Title className='font-bold text-white'>Descartar</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Close>
                 </div>
                 
-                <p className='text-white text-center'>{t('Are you sure you want to be the task owner')}?</p>
+                <p className='text-white text-center'>Deseja descartar a task?</p>
 
                 <div className='flex items-center justify-between w-full'>
                     <Dialog.Close
                         className='p-3 text-white font-bold'
                     >
-                        {t('Cancel')}
+                        Cancelar
                     </Dialog.Close>
 
                     <button
-                        className='px-3 py-2 text-white font-bold rounded-md bg-[#ff9900]'
+                        className='px-3 py-2 text-white font-bold rounded-md bg-blue-500'
                         onClick={handleAssign}
                     >   
-                        {t('Assign')}
+                        Descartar
                     </button>
                 </div>
             </Dialog.Content>
-
-            <ToastContainer
-                position='top-center'
-            />
 
             {loading && (
                 <Loading/>
