@@ -2500,14 +2500,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
-                        registerTokensApi(additionalData?.value, res.hashTransaction)
-                        attTransactions();
+                        setTimeout(() => {
+                            attTransactions();
+                        }, 2000);
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
                     }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -2528,14 +2528,14 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     });
 
                     if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
-                        registerTokensApi(additionalData?.value, res.hashTransaction)
-                        attTransactions();
+                        setTimeout(() => {
+                            attTransactions();
+                        }, 2000);
                         if (additionalData?.invoiceData) {
                             attValuesInvoice();
                         }
                     }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -2546,49 +2546,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         hash: ''
                     })
                 })
-        }
-    }
-
-    async function registerTokensApi(tokens, hash) {
-        const addData = {
-            userData,
-            tokens: Number(tokens),
-            transactionHash: hash,
-            hash,
-            reason: additionalData?.reason,
-            itens: additionalData?.itens,
-            invoiceData: additionalData?.invoiceData,
-            typePayment: additionalData?.typePayment,
-        }
-
-        try {
-            await api.post('/tokens-burned', {
-                wallet: walletAddress.toUpperCase(),
-                tokens: Number(tokens),
-                transactionHash: hash,
-                carbon: Number(impactToken?.carbon),
-                water: Number(impactToken?.water),
-                bio: Number(impactToken?.bio),
-                soil: Number(impactToken?.soil)
-            });
-
-            await api.post('/publication/new', {
-                userId: userData?.id,
-                type: 'contribute-tokens',
-                origin: 'platform',
-                additionalData: JSON.stringify(addData),
-            });
-
-            if (additionalData?.itens?.length > 0) {
-                await api.post('/calculator/items/contribution', {
-                    userId: userData?.id,
-                    items: JSON.stringify(additionalData?.itens)
-                })
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingTransaction(false);
         }
     }
 
@@ -2677,64 +2634,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                     hash: ''
                 })
             })
-    }
-
-    async function reduceImpact(id) {
-        const inspection = await GetInspection(id);
-
-        if (Number(inspection?.validationsCount) !== 0) {
-            setLoadingTransaction(false);
-            return;
-        }
-
-        const isas = await GetIsa(id);
-
-        const carbon = isas.filter(item => item.categoryId === '1');
-        const bio = isas.filter(item => item.categoryId === '2');
-        const water = isas.filter(item => item.categoryId === '3');
-        const soil = isas.filter(item => item.categoryId === '4');
-
-        const response = await api.get('/network-impact');
-        const impact = response.data.impact;
-        const networkImpact = impact.filter(item => item.id === '1');
-        const sintropImpact = impact.filter(item => item.id === '2');
-
-        const newCarbonNetwork = networkImpact[0].carbon + Math.abs(carbon[0].indicator);
-        const newBioNetwork = networkImpact[0].bio - Math.abs(bio[0].indicator);
-        const newWaterNetwork = networkImpact[0].agua - Math.abs(water[0].indicator);
-        const newSoilNetwork = networkImpact[0].solo - Math.abs(soil[0].indicator);
-
-        try {
-            await api.put('/network-impact', {
-                carbon: newCarbonNetwork,
-                agua: newWaterNetwork,
-                bio: newBioNetwork,
-                solo: newSoilNetwork,
-                id: '1'
-            });
-        } catch (err) {
-
-        }
-
-        const newCarbonSintrop = sintropImpact[0].carbon + Math.abs(carbon[0].indicator);
-        const newBioSintrop = sintropImpact[0].bio - Math.abs(bio[0].indicator);
-        const newWaterSintrop = sintropImpact[0].agua - Math.abs(water[0].indicator);
-        const newSoilSintrop = sintropImpact[0].solo - Math.abs(soil[0].indicator);
-
-        try {
-            await api.put('/network-impact', {
-                carbon: newCarbonSintrop,
-                agua: newWaterSintrop,
-                bio: newBioSintrop,
-                solo: newSoilSintrop,
-                id: '2'
-            });
-        } catch (err) {
-
-        }
-
-
-        setLoadingTransaction(false);
     }
 
     async function invalidateUser() {
@@ -3197,7 +3096,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         setLoading(false);
                         if (logTransaction.type === 'success') {
                             attTransactions();
-
                         }
                     }
                 }}>
