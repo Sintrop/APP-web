@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import { ActivityIndicator } from '../../../../../components/ActivityIndicator';
 import { ModalFinishTask } from './components/ModalFinishTask';
 import { toast } from 'react-toastify';
+import { ModalEditFeedback } from './components/ModalEditFeedback';
 
 export function FeedbackItem({ data, userData }) {
     const { t } = useTranslation();
@@ -29,8 +30,19 @@ export function FeedbackItem({ data, userData }) {
     const [imageProfile, setImageProfile] = useState('');
     const [viewAllComments, setViewAllComments] = useState(false);
     const [additionalData, setAdditionalData] = useState(null);
+    const [modalEdit, setModalEdit] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [priority, setPriority] = useState(1);
+    const [team, setTeam] = useState(1);
+    const [pts, setPts] = useState(1);
 
     useEffect(() => {
+        setTitle(data?.title);
+        setDescription(data?.description);
+        setTeam(data?.team);
+        setPriority(data?.priority);
+        setPts(data?.pts);
         setStatus(Number(data.status));
         setComments(data.CommentsFeedback);
         if (data.responsible) {
@@ -39,7 +51,7 @@ export function FeedbackItem({ data, userData }) {
         if (data?.photoHash) {
             getImageFeedback();
         }
-        if(data?.additionalData){
+        if (data?.additionalData) {
             setAdditionalData(JSON.parse(data?.additionalData));
         }
     }, []);
@@ -102,39 +114,49 @@ export function FeedbackItem({ data, userData }) {
     return (
         <div key={data.id} className='flex flex-col w-full bg-[#0a4303] rounded-md p-5 mb-5'>
             <div className='flex items-center justify-between'>
-                <p className='font-bold text-blue-500 text-lg'>#{data.id} - {data.title}</p>
+                <div className='flex flex-col items-start mb-1'>
+                    <p className='font-bold text-blue-500 text-lg'>#{data.id} - {title}</p>
+                    {String(userData?.wallet).toUpperCase() === String(data?.wallet).toUpperCase() && (
+                        <button
+                            className='text-white underline text-sm'
+                            onClick={() => setModalEdit(true)}
+                        >
+                            Editar task
+                        </button>
+                    )}
+                </div>
 
                 <div className='flex items-center gap-2'>
-                    <p className='text-white'>+{data?.pts} pts</p>
+                    <p className='text-white'>+{pts} pts</p>
                     {data.type === 'feedback' ? (
                         <Marker type='feedback' />
                     ) : (
                         <>
-                            {data.priority === 1 && (
+                            {priority === 1 && (
                                 <Marker type='low' />
                             )}
-                            {data.priority === 2 && (
+                            {priority === 2 && (
                                 <Marker type='average' />
                             )}
-                            {data.priority === 3 && (
+                            {priority === 3 && (
                                 <Marker type='high' />
                             )}
-                            {data.team === 1 && (
+                            {team === 1 && (
                                 <Marker type='frontend' />
                             )}
-                            {data.team === 2 && (
+                            {team === 2 && (
                                 <Marker type='contracts' />
                             )}
-                            {data.team === 3 && (
+                            {team === 3 && (
                                 <Marker type='mobile' />
                             )}
-                            {data.team === 4 && (
+                            {team === 4 && (
                                 <Marker type='design' />
                             )}
-                            {data.team === 5 && (
+                            {team === 5 && (
                                 <Marker type='ux' />
                             )}
-                            {data.team === 6 && (
+                            {team === 6 && (
                                 <Marker type='api' />
                             )}
                             <Marker type='task' />
@@ -142,7 +164,7 @@ export function FeedbackItem({ data, userData }) {
                     )}
                 </div>
             </div>
-            <p className='text-justify text-white'>{data.description}</p>
+            <p className='text-justify text-white'>{description}</p>
             {img && (
                 <img
                     src={img}
@@ -338,6 +360,24 @@ export function FeedbackItem({ data, userData }) {
                         toast.success('Task finalizada com sucesso!')
                         setStatus(4);
                     }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalEdit}
+                onOpenChange={(open) => setModalEdit(open)}
+            >
+                <ModalEditFeedback
+                    close={() => setModalEdit(false)}
+                    success={(feedback) => {
+                        toast.success('Alterações salvas!');
+                        setTitle(feedback?.title);
+                        setDescription(feedback?.description);
+                        setTeam(feedback?.team);
+                        setPriority(feedback?.priority);
+                        setPts(feedback?.pts);
+                    }}
+                    data={data}
                 />
             </Dialog.Root>
         </div>
