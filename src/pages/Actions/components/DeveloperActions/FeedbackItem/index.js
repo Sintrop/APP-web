@@ -360,9 +360,10 @@ export function FeedbackItem({ data, userData, discardTask }) {
                         id: data.id,
                         wallet: userData?.wallet
                     }}
-                    close={(data) => {
-                        setModalAssign(false);
+                    close={() => setModalAssign(false)}
+                    success={(data) => {
                         setResponsible(data.responsible);
+                        setStatus(2);
                     }}
                 />
             </Dialog.Root>

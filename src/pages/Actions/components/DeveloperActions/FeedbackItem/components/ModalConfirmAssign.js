@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useParams } from 'react-router';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { api } from '../../../../../../services/api';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../../../../../components/Loading';
 
-export function ModalConfirmAssign({data, close}){
-    const {walletAddress} = useParams();
+export function ModalConfirmAssign({data, close, success}){
     const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
-    const [comments, setComments] = useState([]);
-    const [comment, setComment] = useState('');
 
     async function handleAssign(){
         try{
@@ -21,7 +17,8 @@ export function ModalConfirmAssign({data, close}){
                 id: data.id,
                 wallet: data.wallet,
             })
-            close(updatedFeedback.data.feedbackUpdated);
+            close();
+            success(updatedFeedback.data.feedbackUpdated);
         }catch(err){
             console.log(err)
             toast.error(`${t('Algo deu errado, tente novamente!')}`)
