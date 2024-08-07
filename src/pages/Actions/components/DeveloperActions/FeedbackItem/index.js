@@ -12,8 +12,9 @@ import { ActivityIndicator } from '../../../../../components/ActivityIndicator';
 import { ModalFinishTask } from './components/ModalFinishTask';
 import { toast } from 'react-toastify';
 import { ModalEditFeedback } from './components/ModalEditFeedback';
+import { ModalConfirmDiscard } from './components/ModalConfirmDiscard';
 
-export function FeedbackItem({ data, userData }) {
+export function FeedbackItem({ data, userData, discardTask }) {
     const { t } = useTranslation();
     const [loadingPostComment, setLoadingPostComment] = useState(false);
     const [img, setImg] = useState('');
@@ -36,6 +37,7 @@ export function FeedbackItem({ data, userData }) {
     const [priority, setPriority] = useState(1);
     const [team, setTeam] = useState(1);
     const [pts, setPts] = useState(1);
+    const [modalDiscard, setModalDiscard] = useState(false);
 
     useEffect(() => {
         setTitle(data?.title);
@@ -177,81 +179,97 @@ export function FeedbackItem({ data, userData }) {
             )}
 
             <div className='flex items-center gap-3 border-t pt-2'>
-                {responsible ? (
+                {status === 3 ? (
                     <>
-                        {loadingResponsible ? (
-                            <>
-                                <ActivityIndicator size={50} />
-                            </>
-                        ) : (
-                            <div className='flex items-center justify-between w-full'>
-                                <div className='flex flex-col items-start'>
-                                    <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
-                                    <div className='flex gap-2 items-center mb-2'>
-                                        <img
-                                            className='w-[40px] h-[40px] rounded-full border-2 object-cover'
-                                            src={imageProfile}
-                                        />
-                                        <p className='text-white font-bold text-sm'>{responsibleData?.name}</p>
-                                    </div>
-
-                                    <div className='flex items-center gap-2'>
-                                        {status === 0 && (
-                                            <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-yellow-500'>Em Análise</p>
-                                            </div>
-                                        )}
-                                        {status === 1 && (
-                                            <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-gray-500'>Futuramente</p>
-                                            </div>
-                                        )}
-                                        {status === 2 && (
-                                            <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
-                                            </div>
-                                        )}
-                                        {status === 3 && (
-                                            <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-red-500'>Recusada</p>
-                                            </div>
-                                        )}
-                                        {status === 4 && (
-                                            <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
-                                                <p className='font-bold text-green-500'>Concluida</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {String(userData?.wallet).toUpperCase() === responsible && (
-                                    <>
-                                        {status !== 4 && (
-                                            <button
-                                                className='font-bold text-white px-3 rounded-md h-10 bg-green-700'
-                                                onClick={() => setModalFinish(true)}
-                                            >
-                                                Finalizar task
-                                            </button>
-                                        )}
-                                    </>
-                                )}
+                        {status === 3 && (
+                            <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
+                                <p className='font-bold text-red-500'>Descartada</p>
                             </div>
                         )}
-
                     </>
                 ) : (
                     <>
-                        {userData?.userType === 4 ? (
-                            <button
-                                className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
-                                onClick={() => setModalAssign(true)}
-                            >
-                                Atribuir para mim
-                            </button>
+                        {responsible ? (
+                            <>
+                                {loadingResponsible ? (
+                                    <>
+                                        <ActivityIndicator size={50} />
+                                    </>
+                                ) : (
+                                    <div className='flex items-center justify-between w-full'>
+                                        <div className='flex flex-col items-start'>
+                                            <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
+                                            <div className='flex gap-2 items-center mb-2'>
+                                                <img
+                                                    className='w-[40px] h-[40px] rounded-full border-2 object-cover'
+                                                    src={imageProfile}
+                                                />
+                                                <p className='text-white font-bold text-sm'>{responsibleData?.name}</p>
+                                            </div>
+
+                                            <div className='flex items-center gap-2'>
+                                                {status === 0 && (
+                                                    <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-yellow-500'>Em Análise</p>
+                                                    </div>
+                                                )}
+                                                {status === 1 && (
+                                                    <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-gray-500'>Futuramente</p>
+                                                    </div>
+                                                )}
+                                                {status === 2 && (
+                                                    <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
+                                                    </div>
+                                                )}
+                                                {status === 4 && (
+                                                    <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
+                                                        <p className='font-bold text-green-500'>Concluida</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {String(userData?.wallet).toUpperCase() === responsible && (
+                                            <>
+                                                {status !== 4 && (
+                                                    <button
+                                                        className='font-bold text-white px-3 rounded-md h-10 bg-green-700'
+                                                        onClick={() => setModalFinish(true)}
+                                                    >
+                                                        Finalizar task
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                            </>
                         ) : (
                             <>
+                                {userData?.userType === 4 ? (
+                                    <div className='flex items-center gap-5'>
+                                        <button
+                                            className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
+                                            onClick={() => setModalAssign(true)}
+                                        >
+                                            Atribuir para mim
+                                        </button>
 
+                                        <button
+                                            className='text-white underline text-sm'
+                                            onClick={() => setModalDiscard(true)}
+                                        >
+                                            Descartar
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+
+                                    </>
+                                )}
                             </>
                         )}
                     </>
@@ -345,6 +363,21 @@ export function FeedbackItem({ data, userData }) {
                     close={(data) => {
                         setModalAssign(false);
                         setResponsible(data.responsible);
+                    }}
+                />
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={modalDiscard}
+                onOpenChange={(open) => setModalDiscard(open)}
+            >
+                <ModalConfirmDiscard
+                    close={() => setModalDiscard(false)}
+                    data={data}
+                    success={() => {
+                        toast.success('Task descartada!');
+                        setStatus(3);
+                        discardTask(data?.id)
                     }}
                 />
             </Dialog.Root>

@@ -109,6 +109,11 @@ export function DeveloperActions() {
 
     }
 
+    function discardTask(id){
+        const filter = feedbacks.filter(item => item.id !== id);
+        setFeedbacks(filter);
+    }
+
     return (
         <div className="flex flex-col lg:w-[1024px]">
 
@@ -158,7 +163,9 @@ export function DeveloperActions() {
                 )}
             </div>
             {loading && (
-                <ActivityIndicator size={50} />
+                <div className="flex justify-center mb-5">
+                    <ActivityIndicator size={50} />
+                </div>
             )}
 
             {tabSelected === 'open' && (
@@ -168,6 +175,7 @@ export function DeveloperActions() {
                             key={item.id}
                             data={item}
                             userData={userData}
+                            discardTask={(id) => discardTask(id)}
                         />
                     ))}
                 </>
