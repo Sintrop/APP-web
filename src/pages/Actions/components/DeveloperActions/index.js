@@ -10,6 +10,8 @@ import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
 import { ModalCreateTask } from "./ModalCreateTask";
+import {Feedback} from '../../../../components/Feedback';
+import {Chat} from '../../../../components/Chat';
 
 export function DeveloperActions() {
     const { userData, walletConnected } = useMainContext();
@@ -316,6 +318,11 @@ export function DeveloperActions() {
             </Dialog.Root>
 
             <ToastContainer />
+
+            <div className="hidden lg:flex">
+                <Feedback />
+                <Chat/>
+            </div>
         </div>
     )
 }
