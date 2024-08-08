@@ -96,7 +96,7 @@ export function Community() {
     }
 
     return (
-        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh] overflow-hidden`} >
+        <div className={`bg-[#062c01] flex flex-col h-[100vh] overflow-hidden`} >
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Comunidade - Sintrop</title>
