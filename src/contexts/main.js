@@ -62,9 +62,8 @@ export default function MainProvider({ children }) {
 
         if (response) {
             const data = JSON.parse(response);
-            const expireToken = addDays(data?.createdAt, 1)
-
-            if (compareAsc(data?.createdAt, expireToken) === 1) {
+            const expireToken = addDays(new Date(data?.createdAt), 1);
+            if (compareAsc(new Date(), expireToken) === 1) {
                 localStorage.removeItem('user_connected');
                 return;
             }

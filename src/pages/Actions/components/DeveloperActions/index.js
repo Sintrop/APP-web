@@ -10,6 +10,8 @@ import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
 import { ModalCreateTask } from "./ModalCreateTask";
+import {Feedback} from '../../../../components/Feedback';
+import {Chat} from '../../../../components/Chat';
 
 export function DeveloperActions() {
     const { userData, walletConnected } = useMainContext();
@@ -24,11 +26,24 @@ export function DeveloperActions() {
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
     const [createTask, setCreateTask] = useState(false);
+    const [filterSelected, setFilterSelected] = useState(0);
+    const [filterFeedbacks, setFilterFeedbacks] = useState([]);
 
     useEffect(() => {
         if (tabSelected === 'open' || tabSelected === 'history') getFeedbacks();
         if (tabSelected === 'users') getUsers();
     }, [tabSelected]);
+
+    useEffect(() => {
+        if (feedbacks.length > 0) {
+            if (filterSelected === 0) {
+                setFilterFeedbacks([]);
+            } else {
+                const filter = feedbacks.filter(item => Number(item.team) === Number(filterSelected));
+                setFilterFeedbacks(filter);
+            }
+        }
+    }, [filterSelected]);
 
     async function getFeedbacks() {
         setLoading(true);
@@ -109,7 +124,7 @@ export function DeveloperActions() {
 
     }
 
-    function discardTask(id){
+    function discardTask(id) {
         const filter = feedbacks.filter(item => item.id !== id);
         setFeedbacks(filter);
     }
@@ -170,14 +185,43 @@ export function DeveloperActions() {
 
             {tabSelected === 'open' && (
                 <>
-                    {feedbacks.map(item => (
-                        <FeedbackItem
-                            key={item.id}
-                            data={item}
-                            userData={userData}
-                            discardTask={(id) => discardTask(id)}
-                        />
-                    ))}
+                    <select
+                        value={filterSelected}
+                        onChange={(e) => setFilterSelected(e.target.value)}
+                        className="w-[200px] h-10 bg-[#0a4303] text-white rounded-md px-3 mb-3"
+                    >
+                        <option value={0}>Todos</option>
+                        <option value={1}>Front-End</option>
+                        <option value={2}>Contratos inteligentes</option>
+                        <option value={3}>Mobile</option>
+                        <option value={4}>Design</option>
+                        <option value={5}>UX</option>
+                        <option value={6}>API</option>
+                    </select>
+
+                    {filterFeedbacks.length > 0 ? (
+                        <>
+                            {filterFeedbacks.map(item => (
+                                <FeedbackItem
+                                    key={item.id}
+                                    data={item}
+                                    userData={userData}
+                                    discardTask={(id) => discardTask(id)}
+                                />
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {feedbacks.map(item => (
+                                <FeedbackItem
+                                    key={item.id}
+                                    data={item}
+                                    userData={userData}
+                                    discardTask={(id) => discardTask(id)}
+                                />
+                            ))}
+                        </>
+                    )}
                 </>
             )}
 
@@ -274,6 +318,11 @@ export function DeveloperActions() {
             </Dialog.Root>
 
             <ToastContainer />
+
+            <div className="hidden lg:flex">
+                <Feedback />
+                <Chat/>
+            </div>
         </div>
     )
 }
