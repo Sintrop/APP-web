@@ -26,7 +26,7 @@ export function Centers() {
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3">
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro de inspeções</p>
                         <p className="text-white">Histórico e lista de inspeções disponíveis</p>
 
@@ -38,7 +38,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro de pesquisas</p>
                         <p className="text-white">Pesquisas e metodologias de avaliação</p>
 
@@ -51,7 +51,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro de desenvolvimento</p>
                         <p className="text-white">Tasks e feedbacks do desenvolvimento do sistema</p>
 
@@ -64,7 +64,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro de validação</p>
                         <p className="text-white">Denúncias de usuários e inspeções</p>
 
@@ -77,7 +77,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro comercial</p>
                         <p className="text-white">Convites para usuários participarem do sistema</p>
 
@@ -90,7 +90,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">Centro colaborativo</p>
                         <p className="text-white">Colabore com o sistema realizando algumas tarefas</p>
 

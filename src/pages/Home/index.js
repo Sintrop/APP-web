@@ -96,7 +96,7 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3">
-                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#11652E] rounded-md relative">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#03364B] rounded-md relative">
                                 {walletConnected === '' ? (
                                     <>
                                         <img
@@ -201,7 +201,7 @@ export function Home() {
                                 )}
                             </div>
 
-                            <div className="hidden lg:flex flex-col items-center w-[200px] p-3 bg-[#11652E] rounded-md">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] p-3 bg-[#03364B] rounded-md">
                                 <p className="text-gray-400 text-xs text-left">Atalhos</p>
 
                                 <div className="flex flex-wrap justify-center gap-5 mt-3">
@@ -303,7 +303,7 @@ export function Home() {
                         </div>
 
                         <div className="hidden lg:flex flex-col gap-3">
-                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#11652E] rounded-md">
+                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#03364B] rounded-md">
                                 <p className="font-bold text-white text-xs text-center mb-3">Baixe nosso aplicativo</p>
                                 <QRCode
                                     value='https://www.sintrop.com/app'
@@ -313,7 +313,7 @@ export function Home() {
                                     logoPaddingStyle="square"
                                     logoWidth={30}
                                     removeQrCodeBehindLogo
-                                    eyeColor='#11652E'
+                                    eyeColor='#03364B'
                                 />
                             </div>
                         </div>
