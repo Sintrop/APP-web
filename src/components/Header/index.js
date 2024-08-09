@@ -9,8 +9,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
 import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
 import { ModalOptionAccount } from "./components/ModalOptionAccount.js";
+import { useTranslation } from "react-i18next";
 
 export function Header({ routeActive }) {
+    const {t} = useTranslation();
     const { walletConnected, userData } = useMainContext();
     const navigate = useNavigate();
     const [modalConnect, setModalConnect] = useState(false);
@@ -50,7 +52,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Início</p>
+                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('inicio')}</p>
 
                             {routeActive === 'home' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -66,7 +68,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Centros</p>
+                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('centros')}</p>
 
                             {routeActive === 'centers' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -100,7 +102,7 @@ export function Header({ routeActive }) {
                                 <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={18} />
                             </div>
 
-                            <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Comunidade</p>
+                            <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('comunidade')}</p>
 
                             {routeActive === 'community' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -118,7 +120,7 @@ export function Header({ routeActive }) {
                                 <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={18} />
                             </div>
 
-                            <p className={`${routeActive === 'actions' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Ações</p>
+                            <p className={`${routeActive === 'actions' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('acoes')}</p>
 
                             {routeActive === 'actions' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -157,7 +159,7 @@ export function Header({ routeActive }) {
                                     </>
                                 )}
                             </div>
-                            <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? 'Conectar' : 'Perfil'}</p>
+                            <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? t('conectar') : t('perfil')}</p>
 
                             {routeActive === 'profile' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
