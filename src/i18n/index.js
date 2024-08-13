@@ -13,7 +13,7 @@ const resources = {
 
 const config = {
     resources: resources,
-    lng: 'es',
+    lng: 'en-US',
     interpolation:{
         escapeValue: false
     }
