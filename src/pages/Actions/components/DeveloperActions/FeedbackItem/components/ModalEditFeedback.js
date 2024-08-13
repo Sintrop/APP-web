@@ -6,8 +6,10 @@ import { api } from '../../../../../../services/api';
 import { ActivityIndicator } from '../../../../../../components/ActivityIndicator';
 import { useMainContext } from '../../../../../../hooks/useMainContext';
 import { saveImageFirebase } from '../../../../../../services/saveImageFirebase';
+import { useTranslation } from 'react-i18next';
 
 export function ModalEditFeedback({close, success, data}){
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
@@ -27,7 +29,7 @@ export function ModalEditFeedback({close, success, data}){
 
     async function handleUpdate() {
         if(userData?.accountStatus !== 'blockchain'){
-            toast.error('Você precisa estar cadastrado na blockchain!');
+            toast.error(t('necessitaCadastroBlock'));
             return;
         }
 
@@ -65,42 +67,42 @@ export function ModalEditFeedback({close, success, data}){
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[500px] bg-green-950 rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]'/>
-                    <Dialog.Title className='font-bold text-white'>Editar task</Dialog.Title>
+                    <Dialog.Title className='font-bold text-white'>{t('editarTask')}</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Close>
                 </div>
                 
                 <div className="flex flex-col w-full overflow-y-auto pb-3">
-                    <p className="font-bold text-white">Título da task:</p>
+                    <p className="font-bold text-white">{t('tituloDaTask')}:</p>
                     <input
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder='Digite aqui'
+                        placeholder={t('digiteAqui')}
                         className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
                         maxLength={50}
                     />
 
-                    <p className="font-bold text-white mt-3">Descrição:</p>
+                    <p className="font-bold text-white mt-3">{t('descricao')}:</p>
                     <input
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder='Digite aqui'
+                        placeholder={t('digiteAqui')}
                         className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
                     />
 
-                    <p className="font-bold text-white mt-3">Prioridade:</p>
+                    <p className="font-bold text-white mt-3">{t('prioridade')}:</p>
                     <select
                         value={priority}
                         onChange={(e) => setPriority(e.target.value)}
                         className='w-full py-2 bg-[#0a4303] px-3 rounded-md text-white'
                     >
-                        <option value={1}>Baixa</option>
-                        <option value={2}>Média</option>
-                        <option value={3}>Alta</option>
+                        <option value={1}>{t('baixa')}</option>
+                        <option value={2}>{t('media')}</option>
+                        <option value={3}>{t('alta')}</option>
                     </select>
 
-                    <p className="font-bold text-white mt-3">Time:</p>
+                    <p className="font-bold text-white mt-3">{t('time')}:</p>
                     <select
                         value={team}
                         onChange={(e) => setTeam(e.target.value)}
@@ -114,7 +116,7 @@ export function ModalEditFeedback({close, success, data}){
                         <option value={6}>API</option>
                     </select>
 
-                    <p className="font-bold text-white mt-3">Pontos da task:</p>
+                    <p className="font-bold text-white mt-3">{t('pontosTask')}:</p>
                     <select
                         value={pts}
                         onChange={(e) => setPts(e.target.value)}
@@ -139,7 +141,7 @@ export function ModalEditFeedback({close, success, data}){
                         {loading ? (
                             <ActivityIndicator size={25}/>
                         ) : (
-                            'Salvar alterações'
+                            t('salvarAlteracoes')
                         )}
                     </button>
                 </div>

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import { Polyline } from '../../../../components/Mapbox/Polyline';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useTranslation } from 'react-i18next';
 
 export function NewUserPubli({ userData }) {
-    const [centerProperty, setCenterProperty] = useState([]);
+    const { t } = useTranslation();
     const [pathPolyline, setPathPolyline] = useState([]);
     const [mapProperty, setMapProperty] = useState(null);
 
@@ -21,26 +22,26 @@ export function NewUserPubli({ userData }) {
             array.push([path[i].longitude, path[i].latitude]);
         }
         array.push([path[0].longitude, path[0].latitude]);
-        setMapProperty({latitude: path[0].latitude, longitude: path[0].longitude})
+        setMapProperty({ latitude: path[0].latitude, longitude: path[0].longitude })
         setPathPolyline(array)
     }
 
     return (
         <div>
             <p className='text-white'>
-                O(a) usuário(a) <span className='font-bold text-green-600'>{userData?.name} </span>
+                {t('oUsuario')} <span className='font-bold text-green-600'>{userData?.name} </span>
                 se cadastrou como
                 <span className='font-bold text-green-600'>
-                    {userData?.userType === 1 && ' Produtor(a) '}
-                    {userData?.userType === 2 && ' Inspetor(a) '}
-                    {userData?.userType === 3 && ' Pesquisador(a) '}
-                    {userData?.userType === 4 && ' Desenvolvedor(a) '}
-                    {userData?.userType === 5 && ' Produtor(a) '}
-                    {userData?.userType === 6 && ' Ativista '}
-                    {userData?.userType === 7 && ' Apoiador(a) '}
-                    {userData?.userType === 8 && ' Validador(a) '}
+                    {userData?.userType === 1 && ` ${t('textProdutor')} `}
+                    {userData?.userType === 2 && ` ${t('textInspetor')} `}
+                    {userData?.userType === 3 && ` ${t('textPesquisador')} `}
+                    {userData?.userType === 4 && ` ${t('textDesenvolvedor')} `}
+                    {userData?.userType === 5 && ` ${t('textContribuidor')} `}
+                    {userData?.userType === 6 && ` ${t('textAtivista')} `}
+                    {userData?.userType === 7 && ` ${t('textApoiador')} `}
+                    {userData?.userType === 8 && ` ${t('textValidador')} `}
                 </span>
-                na versão 6 do Sistema Descentralizado de Regeneração da Natureza
+                {t('textVersao6')}
             </p>
 
             {userData?.userType === 1 && (

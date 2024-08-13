@@ -22,6 +22,7 @@ import { Info } from "../../components/Info";
 import { ShortPubli } from "../Profile/components/ShortPubli";
 import { InspectionItem } from "../accountProducer/components/InspectionItem";
 import { Chat } from "../../components/Chat";
+import { useTranslation } from "react-i18next";
 
 const containerMapStyle = {
     width: '100%',
@@ -29,6 +30,7 @@ const containerMapStyle = {
 };
 
 export function UserDetails() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { wallet } = useParams();
     const [loading, setLoading] = useState(false);
@@ -206,7 +208,7 @@ export function UserDetails() {
                                 <>
                                     {blockchainData?.userType === 9 && (
                                         <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
-                                            <p className="font-bold text-white text-xl">Usuário invalidado</p>
+                                            <p className="font-bold text-white text-xl">{t('usuarioInvalidado')}</p>
                                         </div>
                                     )}
                                     <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
@@ -246,14 +248,14 @@ export function UserDetails() {
 
                                             <p className="font-bold text-white mt-3 text-sm lg:text-base">{userData?.name}</p>
                                             <p className="text-gray-300 text-sm">
-                                                {userData?.userType === 1 && 'Produtor(a)'}
-                                                {userData?.userType === 2 && 'Inspetor(a)'}
-                                                {userData?.userType === 3 && 'Pesquisador(a)'}
-                                                {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                                                {userData?.userType === 5 && 'Contribuidor(a)'}
-                                                {userData?.userType === 6 && 'Ativista'}
-                                                {userData?.userType === 7 && 'Apoiador(a)'}
-                                                {userData?.userType === 8 && 'Validador(a)'}
+                                                {userData?.userType === 1 && t('textProdutor')}
+                                                {userData?.userType === 2 && t('textInspetor')}
+                                                {userData?.userType === 3 && t('textPesquisador')}
+                                                {userData?.userType === 4 && t('textDesenvolvedor')}
+                                                {userData?.userType === 5 && t('textContribuidor')}
+                                                {userData?.userType === 6 && t('textAtivista')}
+                                                {userData?.userType === 7 && t('textApoiador')}
+                                                {userData?.userType === 8 && t('textValidador')}
                                             </p>
 
                                             {userData?.bio && (
@@ -272,7 +274,7 @@ export function UserDetails() {
                                                         target="_blank"
                                                     >
                                                         <FaUserCheck color='white' size={20} />
-                                                        Página do produtor
+                                                        {t('paginaProdutor')}
                                                     </a>
                                                 )}
 
@@ -282,7 +284,7 @@ export function UserDetails() {
                                                     target="_blank"
                                                 >
                                                     <FaHandHoldingUsd color='white' size={20} />
-                                                    Página do apoiador
+                                                    {t('paginaApoiador')}
                                                 </a>
                                             </div>
                                         </div>
@@ -294,7 +296,7 @@ export function UserDetails() {
                                             onClick={() => setTabSelected('certificates')}
                                         >
                                             <FaQrcode size={18} color={tabSelected === 'certificates' ? 'green' : 'white'} />
-                                            Certificados
+                                            {t('certificados')}
                                         </button>
 
                                         <button
@@ -302,7 +304,7 @@ export function UserDetails() {
                                             onClick={() => setTabSelected('data')}
                                         >
                                             <FaUser size={18} color={tabSelected === 'data' ? 'green' : 'white'} />
-                                            Dados
+                                            {t('dados')}
                                         </button>
 
                                         <button
@@ -310,7 +312,7 @@ export function UserDetails() {
                                             onClick={() => setTabSelected('publis')}
                                         >
                                             <FaListAlt size={18} color={tabSelected === 'publis' ? 'green' : 'white'} />
-                                            Publicações
+                                            {t('publicacoes')}
                                         </button>
 
                                         {userData?.userType === 1 && (
@@ -320,7 +322,7 @@ export function UserDetails() {
                                                     onClick={() => setTabSelected('inspections')}
                                                 >
                                                     <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                    Inspeções
+                                                    {t('isps')}
                                                 </button>
 
                                                 <button
@@ -328,7 +330,7 @@ export function UserDetails() {
                                                     onClick={() => setTabSelected('zones')}
                                                 >
                                                     <FaMapMarkedAlt size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
-                                                    Zonas de regeneração
+                                                    {t('zonasDeRegeneracao')}
                                                 </button>
                                             </>
                                         )}
@@ -339,7 +341,7 @@ export function UserDetails() {
                                                 onClick={() => setTabSelected('inspections')}
                                             >
                                                 <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                Inspeções
+                                                {t('isps')}
                                             </button>
                                         )}
                                     </div>
@@ -348,27 +350,27 @@ export function UserDetails() {
                                         <>
                                             {userData?.userType === 1 && (
                                                 <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                                                    <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Estatísticas do(a) produtor(a)</h3>
+                                                    <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                                                     <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
                                                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                             <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.totalInspections} </p>
-                                                            <p className='text-white text-xs lg:text-base'>Inspeções recebidas</p>
+                                                            <p className='text-white text-xs lg:text-base'>{t('ispsRecebidas')}</p>
                                                         </div>
 
                                                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                             <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.isa?.isaScore}</p>
-                                                            <p className='text-white text-xs lg:text-base'>Pontuação</p>
+                                                            <p className='text-white text-xs lg:text-base'>{t('pts')}</p>
                                                         </div>
 
                                                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                             <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(blockchainData?.producer?.isa?.isaScore / blockchainData?.producer?.totalInspections)}</p>
-                                                            <p className='text-white text-xs lg:text-base'>Média</p>
+                                                            <p className='text-white text-xs lg:text-base'>{t('media')}</p>
                                                         </div>
 
                                                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                             <p className='font-bold text-white text-xl lg:text-3xl'>0</p>
-                                                            <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
+                                                            <p className='text-red-500 text-xs lg:text-base'>{t('denunciasRecebidas')}</p>
                                                         </div>
                                                     </div>
 
@@ -387,61 +389,61 @@ export function UserDetails() {
                                                                 />
                                                             )}
                                                         </div>
-                                                        <p className="text-xs text-center text-gray-400 mb-1">Foto de prova</p>
+                                                        <p className="text-xs text-center text-gray-400 mb-1">{t('fotoProva')}</p>
                                                     </div>
 
                                                     <div className="flex flex-col gap-2">
-                                                        <p className="text-white font-bold text-xs lg:text-sm">Entrou na comunidade em: <span className="font-normal">{format(new Date(userData?.createdAt), 'dd/MM/yyyy')}</span></p>
+                                                        <p className="text-white font-bold text-xs lg:text-sm">{t('entrouComunidade')}: <span className="font-normal">{format(new Date(userData?.createdAt), 'dd/MM/yyyy')}</span></p>
 
                                                         {userData?.userType === 1 && (
                                                             <>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Área da propriedade:
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('areaPropriedade')}:
                                                                     <span className="font-normal"> {Intl.NumberFormat('pt-BR').format(Number(blockchainData?.producer?.certifiedArea).toFixed(0))} m²</span>
                                                                 </p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.producer?.totalInspections}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Score de regeneração: <span className="font-normal">{blockchainData?.producer?.isa?.isaScore} pts</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.producer?.proofPhoto}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('totalIsps')}: <span className="font-normal">{blockchainData?.producer?.totalInspections}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('ptsRegen')}: <span className="font-normal">{blockchainData?.producer?.isa?.isaScore} pts</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.producer?.proofPhoto}</span></p>
                                                                 <p className="text-white font-bold text-xs lg:text-sm">User type: <span className="font-normal">{blockchainData?.producer?.userType}</span></p>
                                                             </>
                                                         )}
 
                                                         {userData?.userType === 2 && (
                                                             <>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Desistências: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.inspector?.pool?.currentEra}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.inspector?.proofPhoto}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('totalIsps')}: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('desistencias')}: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.inspector?.pool?.currentEra}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.inspector?.proofPhoto}</span></p>
                                                                 <p className="text-white font-bold text-xs lg:text-sm">User type: <span className="font-normal">{blockchainData?.inspector?.userType}</span></p>
                                                             </>
                                                         )}
 
                                                         {userData?.userType === 3 && (
                                                             <>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Pesquisas publicadas: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.researcher?.pool?.currentEra}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.researcher?.proofPhoto}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('pesquisasPublicadas')}: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.researcher?.pool?.currentEra}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.researcher?.proofPhoto}</span></p>
                                                                 <p className="text-white font-bold text-xs lg:text-sm">User type: <span className="font-normal">{blockchainData?.researcher?.userType}</span></p>
                                                             </>
                                                         )}
 
                                                         {userData?.userType === 4 && (
                                                             <>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Nível: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.developer?.pool?.currentEra}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.developer?.proofPhoto}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('nivel')}: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.developer?.pool?.currentEra}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.developer?.proofPhoto}</span></p>
                                                                 <p className="text-white font-bold text-xs lg:text-sm">User type: <span className="font-normal">{blockchainData?.developer?.userType}</span></p>
                                                             </>
                                                         )}
 
                                                         {userData?.userType === 6 && (
                                                             <>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.activist?.pool?.currentEra}</span></p>
-                                                                <p className="text-white font-bold text-xs lg:text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.activist?.proofPhoto}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.activist?.pool?.currentEra}</span></p>
+                                                                <p className="text-white font-bold text-xs lg:text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.activist?.proofPhoto}</span></p>
                                                                 <p className="text-white font-bold text-xs lg:text-sm">User type: <span className="font-normal">{blockchainData?.activist?.userType}</span></p>
                                                             </>
                                                         )}
@@ -452,7 +454,7 @@ export function UserDetails() {
                                                 {userData?.userType === 1 && (
                                                     <>
                                                         <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
-                                                            <p className="text-xs text-center text-gray-400 mb-1">Mapa da propriedade</p>
+                                                            <p className="text-xs text-center text-gray-400 mb-1">{t('mapaPropriedade')}</p>
 
                                                             <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                                                                 <ReactMapGL
@@ -537,15 +539,15 @@ export function UserDetails() {
                                             )}
 
                                             <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
-                                                <h3 className="font-bold text-white">Certificado de contribuição</h3>
+                                                <h3 className="font-bold text-white">{t('certificadoContribuicao')}</h3>
                                                 <ContributeCertificate wallet={wallet} user={userData} />
                                             </div>
 
                                             <div className="w-full flex flex-col rounded-md p-3">
-                                                <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
+                                                <h3 className="font-bold text-white mb-1">{t('compromissoReducao')}</h3>
                                                 <Info text1='Esses são os itens que o usuário declara consumir na calculadora de impacto.' />
                                                 {itemsToReduce.length === 0 && (
-                                                    <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
+                                                    <p className="text-white text-center mt-4 mb-8">{t('nenhumItemNaListaDeReducao')}</p>
                                                 )}
                                                 <div className="flex flex-wrap gap-3 mt-2">
                                                     {itemsToReduce.map(item => (
@@ -585,7 +587,7 @@ export function UserDetails() {
                                     {tabSelected === 'zones' && (
                                         <div className="mt-5 gap-5 flex flex-col items-center w-full">
                                             {zones.length === 0 ? (
-                                                <p className="text-white text-center">Esse produtor não tem nenhuma zona de regeneração cadastrada!</p>
+                                                <p className="text-white text-center">{t('nenhumaZonaCadastrada')}</p>
                                             ) : (
                                                 <>
                                                     {zones.map(item => (
@@ -608,7 +610,7 @@ export function UserDetails() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat/>
+                <Chat />
             </div>
         </div>
     )

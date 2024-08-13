@@ -5,8 +5,10 @@ import { TopBar } from '../../components/TopBar';
 import { Feedback } from '../../components/Feedback';
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat";
+import { useTranslation } from "react-i18next";
 
 export function Centers() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
 
     return (
@@ -27,79 +29,79 @@ export function Centers() {
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3">
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro de inspeções</p>
-                        <p className="text-white">Histórico e lista de inspeções disponíveis</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroInspecao')}</p>
+                        <p className="text-white">{t('descCentroIsp')}</p>
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/inspections-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
 
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro de pesquisas</p>
-                        <p className="text-white">Pesquisas e metodologias de avaliação</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroPesquisa')}</p>
+                        <p className="text-white">{t('descCentroPesquisa')}</p>
 
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/researches-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
 
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro de desenvolvimento</p>
-                        <p className="text-white">Tasks e feedbacks do desenvolvimento do sistema</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroDev')}</p>
+                        <p className="text-white">{t('descCentroDev')}</p>
 
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/development-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
 
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro de validação</p>
-                        <p className="text-white">Denúncias de usuários e inspeções</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroValidacao')}</p>
+                        <p className="text-white">{t('descCentroValidacao')}</p>
 
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/validation-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
 
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro comercial</p>
-                        <p className="text-white">Convites para usuários participarem do sistema</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroComercial')}</p>
+                        <p className="text-white">{t('descCentroComercial')}</p>
 
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/activist-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
 
                     <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
-                        <p className="text-green-500 font-bold text-lg">Centro colaborativo</p>
-                        <p className="text-white">Colabore com o sistema realizando algumas tarefas</p>
+                        <p className="text-green-500 font-bold text-lg">{t('centroColab')}</p>
+                        <p className="text-white">{t('descCentroColab')}</p>
 
 
                         <button
                             className="font-bold text-white p-2 w-full bg-blue-600 rounded-md"
                             onClick={() => navigate('/colaborative-center')}
                         >
-                            Acessar centro
+                            {t('acessarCentro')}
                         </button>
                     </div>
                 </div>

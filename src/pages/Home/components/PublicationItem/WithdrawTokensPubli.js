@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export function WithdrawTokensPubli({data, changeVisible}){
+    const {t} = useTranslation();
     const additionalData = JSON.parse(data?.additionalData);
     const userData = additionalData?.userData;
     const [tokensWithdraw, setTokensWithdraw] = useState(0);
@@ -28,7 +30,9 @@ export function WithdrawTokensPubli({data, changeVisible}){
     if(tokensWithdraw === 0){
         return(
             <div className="flex flex-col text-white">
-                <p>Avançou de Era na pool de distribuição de tokens</p>
+                <p>
+                    {t('avancouEraPool')}
+                </p>
             </div>
         )
     }
@@ -41,11 +45,11 @@ export function WithdrawTokensPubli({data, changeVisible}){
             />
 
             <p className="text-white mx-3">
-                Sacou <span className="font-bold text-green-700">{Intl.NumberFormat('pt-BR').format(tokensWithdraw)}</span> créditos de regeneração pelos serviços prestados na ERA anterior
+                {t('sacou')} <span className="font-bold text-green-700">{Intl.NumberFormat('pt-BR').format(tokensWithdraw)}</span> {t('textWithdraw')}
             </p>
 
             <div className="w-full h-7 flex bg-green-500 items-center justify-center rounded-b-md">
-                <p className="text-white font-bold">Recompensa por serviços ambientais</p>
+                <p className="text-white font-bold">{t('recompensaServicos')}</p>
             </div>
         </div>
     )

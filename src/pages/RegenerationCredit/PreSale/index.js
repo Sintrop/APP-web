@@ -12,8 +12,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalReserve } from "./components/ModalReserve";
 import { useCountdown } from '../../../hooks/useCountdown';
 import { TopBar } from "../../../components/TopBar";
+import { useTranslation } from "react-i18next";
 
 export function PreSale() {
+    const {t} = useTranslation();
     const { walletConnected } = useMainContext();
     const [balanceVisible, setBalanceVisible] = useState(false);
     const [icoData, setIcoData] = useState({});
@@ -94,9 +96,9 @@ export function PreSale() {
                         <div className="flex flex-col bg-[#0a4303] p-2 rounded-md lg:w-[900px] lg:h-[500px]">
                             <div className="flex flex-col items-center bg-presale bg-center bg-cover bg-no-repeat p-3 rounded-md w-full h-full lg:flex-row">
                                 <div className="flex flex-col justify-center w-full mt-5 lg:mt-0 lg:w-[50%]">
-                                    <h3 className="font-bold text-center lg:text-left lg:text-4xl text-white">PRÉ-VENDA</h3>
-                                    <h3 className="font-bold text-center lg:text-left lg:text-3xl text-white">Crédito de Regeneração</h3>
-                                    <p className="text-center text-sm text-white mt-5">Essa oferta encerra em (25/06/2024)</p>
+                                    <h3 className="font-bold text-center lg:text-left lg:text-4xl text-white">{t('pre-venda')}</h3>
+                                    <h3 className="font-bold text-center lg:text-left lg:text-3xl text-white">{t('cr')}</h3>
+                                    <p className="text-center text-sm text-white mt-5">{t('essaOfertaEncerra')} (25/06/2024)</p>
                                     <div className="flex items-center justify-center gap-2">
                                         <div className="flex flex-col p-2 rounded-md bg-green-200/50 w-16 items-center">
                                             <p className="font-bold text-white text-xl">0</p>
@@ -118,23 +120,23 @@ export function PreSale() {
 
                                     <div className="flex flex-col border border-green-500 bg-[rgba(0,0,0,0.6)] rounded-md p-2 gap-1 mt-3">
                                         <div className="flex items-center w-full justify-between">
-                                            <h3 className="text-gray-200 text-xs lg:text-sm">Tokens ofertados</h3>
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">{t('tokensOfertados')}</h3>
                                             <p className="font-bold text-green-500 text-sm lg:text-base">39.000.000</p>
                                         </div>
                                         <div className="flex items-center w-full justify-between">
-                                            <h3 className="text-gray-200 text-xs lg:text-sm">% da oferta privada</h3>
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">{t('%ofertaPrivada')}</h3>
                                             <p className="font-bold text-green-500 text-sm lg:text-base">9,12 %</p>
                                         </div>
                                         <div className="flex items-center w-full justify-between">
-                                            <h3 className="text-gray-200 text-xs lg:text-sm">Valor unitário</h3>
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">{t('valorUnitario')}</h3>
                                             <p className="font-bold text-green-500 text-sm lg:text-base">R$ 0,0282</p>
                                         </div>
                                         <div className="flex items-center w-full justify-between">
-                                            <h3 className="text-gray-200 text-xs lg:text-sm">Alvo de capitalização</h3>
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">{t('alvoCapitalizacao')}</h3>
                                             <p className="font-bold text-green-500 text-sm lg:text-base">R$ 1.100.000,00</p>
                                         </div>
                                         <div className="flex items-center w-full justify-between">
-                                            <h3 className="text-gray-200 text-xs lg:text-sm">Capitalização de mercado</h3>
+                                            <h3 className="text-gray-200 text-xs lg:text-sm">{t('capitalizacaoMercado')}</h3>
                                             <p className="font-bold text-green-500 text-sm lg:text-base">R$ 12.057.692,31</p>
                                         </div>
                                     </div>
@@ -147,7 +149,7 @@ export function PreSale() {
                                                 src={require('../../../assets/token.png')}
                                                 className="w-5 h-5 object-contain"
                                             />
-                                            Lista de espera
+                                            {t('listaEspera')}
                                         </Dialog.Trigger>
 
                                         <ModalReserve
@@ -155,7 +157,7 @@ export function PreSale() {
                                                 bookings.push(data);
                                                 setTimeout(() => {
                                                     setModalReserve(false);
-                                                    alert('Você acabou de entrar na lista de espera. Em breve nossa equipe entrará em contato com você.')
+                                                    alert('voceEntrouListaEspera')
                                                 }, 2000);
                                             }}
                                         />
@@ -173,8 +175,8 @@ export function PreSale() {
                         </div>
 
                         <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
-                            <p className="text-xs text-white">Convidamos pessoas que se importam com a regeneração do Planeta para ter acesso a uma oportunidade de investimento em um criptoativo verde, com a ambição de ajudar o Planeta e trazer ganhos econômicos ao mesmo tempo. </p>
-                            <p className="text-xs text-white mt-2">O problema que almejamos é resolver é a falta de incentivo econômico para a regeneração de ecossistemas. O crédito de carbono é um sistema que não oferece a solução que a humanidade necessita para enfrentar os gigantes desafios que tem pela frente, com o advento do aquecimento global e esgotamento dos recursos naturais. Nossa solução é o Crédito de Regeneração, criptoativo descentralizado de recompensa por serviços ambientais. Uma solução baseada na Natureza, totalmente inovadora, com uma metodologia de certificação descentralizada inédita e com a utilização da tecnologia da blockchain, trazendo transparência sobre os dados e confiança em contratos inteligentes.</p>
+                            <p className="text-xs text-white">{t('preVendaDesc1')} </p>
+                            <p className="text-xs text-white mt-2">{t('preVendaDesc2')}</p>
                         </div>
 
                         <div className="flex flex-col bg-[#0a4303] p-3 rounded-md lg:w-[900px] mt-3">
@@ -186,7 +188,7 @@ export function PreSale() {
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
                                     <HiOutlinePresentationChartLine size={25} color='white' />
-                                    <p className="font-bold text-white text-sm">Apresentação</p>
+                                    <p className="font-bold text-white text-sm">{t('apresentacao')}</p>
                                 </a>
 
                                 <a
@@ -195,7 +197,7 @@ export function PreSale() {
                                     className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                 >
                                     <MdVideoCall size={25} color='white' />
-                                    <p className="font-bold text-white text-sm">Agendar reunião</p>
+                                    <p className="font-bold text-white text-sm">{t('agendarReuniao')}</p>
                                 </a>
 
                                 <a
@@ -262,7 +264,7 @@ export function PreSale() {
                             </iframe>
                         </div>
 
-                        <p className="text-gray-400 text-sm mt-5">Reservas feitas</p>
+                        <p className="text-gray-400 text-sm mt-5">{t('reservasFeitas')}</p>
                         {bookings.map(item => (
                             <div className="flex flex-col lg:flex-row items-center lg:justify-between w-full p-2 rounded-md mb-3 bg-[#0a4303]">
                                 <p className="text-white text-xs lg:text-sm">{item?.reservedBy}</p>

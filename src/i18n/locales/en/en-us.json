@@ -1,9 +1,10 @@
 {
-    "translation":{
-        "Welcome": "Welcome",
-        "Our mission is to make agriculture sustainable in the world through technology.": "Our mission is to make agriculture sustainable in the world through technology.",
-        "Click the button above to sync your Metamask wallet": "Click the button above to sync your Metamask wallet",
-        "Synchronize": "Synchronize",
-        "We want to make the world a sustainable place where living beings and nature can live in harmony. Our project consists of a decentralized certification of rural producers, with a sustainability token reward system, using blockchain technology and the Ethereum platform.":"We want to make the world a sustainable place where living beings and nature can live in harmony. Our project consists of a decentralized certification of rural producers, with a sustainability token reward system, using blockchain technology and the Ethereum platform."
-    }
+  "translation": {
+    "sintrop": "Sintrop",
+    "inicio": "Home",
+    "centros": "Centers",
+    "comunidade": "Community",
+    "acoes": "Actions",
+    "perfil": "Profile"
+  }
 }

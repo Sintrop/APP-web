@@ -19,8 +19,10 @@ import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
 import { Invite } from "../../../../services/invitationService";
 import { Flora } from "./components/Databases/Flora";
 import { BiFile } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
 
 export function ResearcherActions() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const { userData, walletConnected, connectionType } = useMainContext();
     const [tabSelected, setTabSelected] = useState('users');
@@ -89,7 +91,7 @@ export function ResearcherActions() {
         if (connectionType === 'provider') {
             publishBlockchain(title, thesis, response);
         } else {
-            toast.error('Conecte-se em um navegador com provedor Ethereum!')
+            toast.error(t('necessitaProvedor'))
         }
     }
 
@@ -151,7 +153,7 @@ export function ResearcherActions() {
         if (window.ethereum) {
             inviteUser();
         } else {
-            toast.error('Você precisa estar em um navegador com provedor Ethereum!')
+            toast.error(t('necessitaProvedor'))
         }
     }
 
@@ -198,21 +200,21 @@ export function ResearcherActions() {
             <div className="flex flex-col w-full lg:w-[1024px] mt-3">
                 {userData?.userType === 3 && (
                     <>
-                        <p className="font-bold text-white text-lg">Convidar pesquisador</p>
+                        <p className="font-bold text-white text-lg">{t('convidarPesquisador')}</p>
                         <div className="flex flex-col p-3 rounded-md bg-[#0a4303] mb-5">
-                            <p className="text-white">Para convidar outro pesquisador, basta inserir a wallet dele abaixo</p>
+                            <p className="text-white">{t('instruParaConvidar')}</p>
                             <p className="mt-2 font-bold text-blue-500">Wallet</p>
                             <input
                                 value={wallet}
                                 onChange={(e) => setWallet(e.target.value)}
                                 className="px-3 py-2 rounded-md text-white bg-green-950 max-w-[400px]"
-                                placeholder="Digite aqui"
+                                placeholder={t('digiteAqui')}
                             />
                             <button
                                 className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-3"
                                 onClick={handleInvite}
                             >
-                                Convidar
+                                {t('convidar')}
                             </button>
                         </div>
                     </>
@@ -224,7 +226,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('users')}
                     >
                         <FaUsers size={17} className={`${tabSelected === 'users' ? 'text-green-600' : 'text-white'}`} />
-                        Pesquisadores
+                        {t('pesquisadores')}
                     </button>
 
                     <button
@@ -232,7 +234,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('researches')}
                     >
                         <FaFileAlt size={17} className={`${tabSelected === 'researches' ? 'text-green-600' : 'text-white'}`} />
-                        Pesquisas
+                        {t('pesquisas')}
                     </button>
 
                     <button
@@ -240,7 +242,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('isa')}
                     >
                         <BsGraphUp size={17} className={`${tabSelected === 'isa' ? 'text-green-600' : 'text-white'}`} />
-                        Índice de regeneração
+                        {t('indiceRegen')}
                     </button>
 
                     <button
@@ -248,7 +250,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('calculator-items')}
                     >
                         <FaCalculator size={17} className={`${tabSelected === 'calculator-items' ? 'text-green-600' : 'text-white'}`} />
-                        Itens calculadora
+                        {t('itensCalculadora')}
                     </button>
 
                     <button
@@ -256,7 +258,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('methods')}
                     >
                         <VscSymbolMethod size={17} className={`${tabSelected === 'methods' ? 'text-green-600' : 'text-white'}`} />
-                        Métodos de avaliação
+                        {t('metodosAvaliacao')}
                     </button>
 
                     <button
@@ -264,7 +266,7 @@ export function ResearcherActions() {
                         onClick={() => setTabSelected('db')}
                     >
                         <FaDatabase size={17} className={`${tabSelected === 'db' ? 'text-green-600' : 'text-white'}`} />
-                        Base de dados
+                        {t('baseDados')}
                     </button>
                 </div>
 
@@ -278,7 +280,7 @@ export function ResearcherActions() {
                             <>
                                 {userData?.userType === 3 && (
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
-                                        <p className="font-semibold text-white">Deseja publicar uma nova pesquisa?</p>
+                                        <p className="font-semibold text-white">{t('desejaPublicarPesquisa')}</p>
 
                                         <div className="flex items-center gap-2">
                                             <a
@@ -287,7 +289,7 @@ export function ResearcherActions() {
                                                 className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
                                             >
                                                 <BiFile color='white' size={20} />
-                                                Ver modelo
+                                                {t('verModelo')}
                                             </a>
                                             <button
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
@@ -296,7 +298,7 @@ export function ResearcherActions() {
                                                     setModalPublish(true);
                                                 }}
                                             >
-                                                Publicar
+                                                {t('publicar')}
                                             </button>
                                         </div>
                                     </div>
@@ -319,7 +321,7 @@ export function ResearcherActions() {
                             <>
                                 {userData?.userType === 3 && (
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
-                                        <p className="font-semibold text-white">Deseja sugerir um novo item?</p>
+                                        <p className="font-semibold text-white">{t('desejaSugerirItem')}</p>
 
                                         <div className="flex items-center gap-2">
                                             <a
@@ -328,7 +330,7 @@ export function ResearcherActions() {
                                                 className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
                                             >
                                                 <BiFile color='white' size={20} />
-                                                Ver modelo
+                                                {t('verModelo')}
                                             </a>
                                             <button
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
@@ -337,7 +339,7 @@ export function ResearcherActions() {
                                                     setModalPublish(true);
                                                 }}
                                             >
-                                                Sugerir
+                                                {t('sugerir')}
                                             </button>
                                         </div>
                                     </div>
@@ -352,7 +354,7 @@ export function ResearcherActions() {
                             <>
                                 {userData?.userType === 3 && (
                                     <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
-                                        <p className="font-semibold text-white">Deseja sugerir um novo método?</p>
+                                        <p className="font-semibold text-white">{t('desejaSugerirMetodo')}</p>
 
                                         <div className="flex items-center gap-2">
                                             <a
@@ -361,7 +363,7 @@ export function ResearcherActions() {
                                                 className="bg-green-500 px-3 py-1 rounded-md text-white font-semibold flex items-center gap-2"
                                             >
                                                 <BiFile color='white' size={20} />
-                                                Ver modelo
+                                                {t('verModelo')}
                                             </a>
                                             <button
                                                 className="bg-blue-500 px-3 py-1 rounded-md text-white font-semibold"
@@ -370,7 +372,7 @@ export function ResearcherActions() {
                                                     setModalPublish(true);
                                                 }}
                                             >
-                                                Sugerir
+                                                {t('sugerir')}
                                             </button>
                                         </div>
                                     </div>
@@ -378,7 +380,7 @@ export function ResearcherActions() {
 
                                 <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between" onClick={() => navigate('/methods/sintrop')}>
                                     <div className="flex flex-col gap-1">
-                                        <p className="font-bold text-white text-lg mb-1">Método Sintrop</p>
+                                        <p className="font-bold text-white text-lg mb-1">{t('metodoSintrop')}</p>
                                         <img
                                             src={require('../../../../assets/logo-branco.png')}
                                             className="w-32 h-9 object-contain"

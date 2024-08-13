@@ -6,8 +6,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
+import { useTranslation } from "react-i18next";
 
 export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, invoices }) {
+    const {t} = useTranslation();
     const { walletConnected } = useMainContext();
     const [modalAddItem, setModalAddItem] = useState(false);
     const [proofReduce, setProofReduce] = useState(false);
@@ -379,22 +381,22 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col items-center w-20">
                                 <p className="font-semibold text-white">{data?.carbon} kg</p>
-                                <p className="text-sm text-white">Carbono</p>
+                                <p className="text-sm text-white">{t('carbono')}</p>
                             </div>
                             <div className="flex flex-col items-center w-20">
                                 <p className="font-semibold text-white">{data?.soil} m²</p>
-                                <p className="text-sm text-white">Solo</p>
+                                <p className="text-sm text-white">{t('solo')}</p>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col items-center w-20">
                                 <p className="font-semibold text-white">{data?.water} m³</p>
-                                <p className="text-sm text-white">Água</p>
+                                <p className="text-sm text-white">{t('agua')}</p>
                             </div>
                             <div className="flex flex-col items-center w-20">
                                 <p className="font-semibold text-white">{data?.bio} uv</p>
-                                <p className="text-sm text-white">Biodvers.</p>
+                                <p className="text-sm text-white">{t('bio')}</p>
                             </div>
                         </div>
                     </div>
@@ -457,28 +459,28 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
                 <div className="flex items-center justify-between gap-1 mt-1 rounded-md p-1 w-full">
                     <div className="flex items-center justify-between w-[20%]">
-                        <p className="text-sm text-white">Carbono</p>
+                        <p className="text-sm text-white">{t('carbono')}</p>
                         <p className="font-semibold text-green-500">{data?.carbon} kg</p>
                     </div>
 
                     <div className="w-[1px] h-5 bg-white"/>
 
                     <div className="flex items-center justify-between w-[20%]">
-                        <p className="text-sm text-white">Solo</p>
+                        <p className="text-sm text-white">{t('solo')}</p>
                         <p className="font-semibold text-green-500">{data?.soil} m²</p>
                     </div>
 
                     <div className="w-[1px] h-5 bg-white"/>
 
                     <div className="flex items-center justify-between w-[20%]">
-                        <p className="text-sm text-white">Água</p>
+                        <p className="text-sm text-white">{t('agua')}</p>
                         <p className="font-semibold text-green-500">{data?.water} m³</p>
                     </div>
 
                     <div className="w-[1px] h-5 bg-white"/>
 
                     <div className="flex items-center justify-between w-[20%]">
-                        <p className="text-sm text-white">Biodvers.</p>
+                        <p className="text-sm text-white">{t('bio')}</p>
                         <p className="font-semibold text-green-500">{data?.bio} uv</p>
                     </div>
                 </div>

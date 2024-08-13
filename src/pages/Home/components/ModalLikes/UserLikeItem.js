@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
+import { useTranslation } from "react-i18next";
 
 export function UserLikeItem({ data }) {
+    const { t } = useTranslation();
     const userData = JSON.parse(data?.userData);
     const [imageProfile, setImageProfile] = useState(null);
 
@@ -9,7 +11,7 @@ export function UserLikeItem({ data }) {
         getImageProfile();
     }, []);
 
-    async function getImageProfile(){
+    async function getImageProfile() {
         const response = await getImage(userData?.imgProfileUrl);
         setImageProfile(response);
     }
@@ -27,14 +29,14 @@ export function UserLikeItem({ data }) {
             <div className="flex flex-col">
                 <p className="font-semibold text-white">{userData?.name}</p>
                 <p className="text-gray-300 text-xs">
-                    {userData?.userType === 1 && 'Produtor(a)'}
-                    {userData?.userType === 2 && 'Inspetor(a)'}
-                    {userData?.userType === 3 && 'Pesquisador(a)'}
-                    {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                    {userData?.userType === 5 && 'Ativista'}
-                    {userData?.userType === 6 && 'Validador(a)'}
-                    {userData?.userType === 7 && 'Apoiador(a)'}
-                    {userData?.userType === 8 && 'Validador(a)'}
+                    {userData?.userType === 1 && t('textProdutor')}
+                    {userData?.userType === 2 && t('textInspetor')}
+                    {userData?.userType === 3 && t('textPesquisador')}
+                    {userData?.userType === 4 && t('textDesenvolvedor')}
+                    {userData?.userType === 5 && t('textContribuidor')}
+                    {userData?.userType === 6 && t('textAtivista')}
+                    {userData?.userType === 7 && t('textApoiador')}
+                    {userData?.userType === 8 && t('textValidador')}
                 </p>
             </div>
         </div>

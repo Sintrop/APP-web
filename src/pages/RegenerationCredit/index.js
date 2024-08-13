@@ -5,8 +5,10 @@ import { TopBar } from "../../components/TopBar";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat";
+import { useTranslation } from "react-i18next";
 
 export function RegenerationCredit() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
 
     return (
@@ -35,7 +37,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Contribuir</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('contribuir')}</p>
                     </button>
 
                     <button 
@@ -47,7 +49,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Mercado</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('mercado')}</p>
                     </button>
 
                     <button 
@@ -59,7 +61,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Pagamento por serviços ambientais</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('pagamentoAmbiental')}</p>
                     </button>
 
                     <button 
@@ -71,7 +73,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Impacto e estatísticas</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('impactoEstatistica')}</p>
                     </button>
 
 
@@ -84,7 +86,7 @@ export function RegenerationCredit() {
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Meus tokens</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('meusTokens')}</p>
                     </button>
                 </div>
             </div>

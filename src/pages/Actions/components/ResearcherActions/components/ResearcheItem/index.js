@@ -8,8 +8,10 @@ import { format } from "date-fns";
 import { useMainContext } from "../../../../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../../../../components/ActivityIndicator";
 import { CommentResearche } from "./CommentResearche";
+import { useTranslation } from "react-i18next";
 
 export function ResearcheItem({ data }) {
+    const {t} = useTranslation();
     const { userData } = useMainContext();
     const navigate = useNavigate();
     const [imageProfile, setImageProfile] = useState(null);
@@ -39,7 +41,7 @@ export function ResearcheItem({ data }) {
 
     async function sendComment() {
         if (!input.trim()) {
-            toast.warning('Digite um comentário!');
+            toast.warning(t('digiteComentario'));
             return
         }
         if (creatingComment) {
@@ -54,12 +56,12 @@ export function ResearcheItem({ data }) {
                 walletAuthor: userData?.wallet,
             });
 
-            toast.success('Comentário enviado com sucesso!');
+            toast.success(t('comentarioFeito'));
             setInput('');
             comments.unshift(response.data.comment)
         } catch (err) {
             console.log(err);
-            toast.error('Erro ao comentar!')
+            toast.error(t('algoDeuErrado'))
         } finally {
             setCreatingComment(false);
         }
@@ -96,7 +98,7 @@ export function ResearcheItem({ data }) {
                 </div>
             </div>
 
-            <p className="font-bold text-white mx-5">Pesquisa #{data?.id}</p>
+            <p className="font-bold text-white mx-5">{t('pesquisa')} #{data?.id}</p>
 
             <div className="flex flex-col px-5 border-t border-white/50 mt-4 pt-4">
                 <h1 className="font-bold text-white text-lg">{data?.title}</h1>
@@ -112,7 +114,7 @@ export function ResearcheItem({ data }) {
                         className="flex flex-col items-center gap-1 font-bold text-white text-sm"
                     >
                         <FaFileAlt size={20} color='white' />
-                        Ver Relatório
+                        {t('verRelatorio')}
                     </button>
                 </a>
 
@@ -124,20 +126,20 @@ export function ResearcheItem({ data }) {
                     }}
                 >
                     <FaShare color='white' size={20} />
-                    <p className="text-white font-bold text-sm">Compartilhar</p>
+                    <p className="text-white font-bold text-sm">{t('compartilhar')}</p>
                 </button>
             </div>
 
             <div className="flex flex-col px-5">
                 <div className="flex items-center justify-between mt-5">
-                    <p className="text-white text-sm">Comentários ({comments.length})</p>
+                    <p className="text-white text-sm">{t('comentarios')} ({comments.length})</p>
 
                     {comments.length > 3 && (
                         <button
                             onClick={() => setViewAllComments(!viewAllComments)}
                             className="text-sm text-white underline"
                         >
-                            {viewAllComments ? 'Ocultar todos os comentários' : 'Ver todos os comentários'}
+                            {viewAllComments ? t('ocultarComentarios') : t('verTodosComentarios')}
                         </button>
                     )}
                 </div>
@@ -148,7 +150,7 @@ export function ResearcheItem({ data }) {
                             <div className="flex w-full gap-5 mt-3">
                                 <input
                                     className="w-[90%] h-10 bg-green-800 rounded-md px-2 text-white"
-                                    placeholder="Digite seu comentário aqui"
+                                    placeholder={t('digiteAqui')}
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                 />
@@ -160,7 +162,7 @@ export function ResearcheItem({ data }) {
                                     {creatingComment ? (
                                         <ActivityIndicator size={25} />
                                     ) : (
-                                        'Comentar'
+                                        t('comentar')
                                     )}
                                 </button>
                             </div>

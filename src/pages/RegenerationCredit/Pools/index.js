@@ -17,8 +17,10 @@ import { WithdrawTokens as WithdrawProducer } from "../../../services/producerSe
 import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";
+import { useTranslation } from "react-i18next";
 
 export function Pools({ }) {
+    const {t} = useTranslation();
     const { userData, connectionType, walletConnected } = useMainContext();
     const { poolType } = useParams();
     const [loading, setLoading] = useState(false);
@@ -196,7 +198,7 @@ export function Pools({ }) {
             setCreatedTransaction(true);
         } catch (err) {
             if (err.response?.data?.message === 'open transaction of the same type') {
-                alert('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+                alert(t('transacaoDoMesmoTipoAberto'))
             }
         } finally {
             setLoading(false)
@@ -429,11 +431,11 @@ export function Pools({ }) {
                     ) : (
                         <div className="flex flex-col mt-3">
                             <h3 className="font-bold text-xl text-white mb-1">
-                                {poolType === 'producers' && 'Pool dos produtores'}
-                                {poolType === 'developers' && 'Pool dos desenvolvedores'}
-                                {poolType === 'inspectors' && 'Pool dos inspetores'}
-                                {poolType === 'researchers' && 'Pool dos pesquisadores'}
-                                {poolType === 'validators' && 'Pool dos validadores'}
+                                {poolType === 'producers' && t('poolProdutores')}
+                                {poolType === 'developers' && t('poolDesenvolvedores')}
+                                {poolType === 'inspectors' && t('poolInspetores')}
+                                {poolType === 'researchers' && t('poolPesquisadores')}
+                                {poolType === 'validators' && t('poolValidadores')}
                             </h3>
 
                             {poolType === 'producers' && (
@@ -467,7 +469,7 @@ export function Pools({ }) {
                                 />
                             )}
 
-                            <div className="p-3 rounded-md bg-[#0a4303] flex flex-col w-full lg:min-w-[800px] w-full mt-2 lg:flex-row">
+                            <div className="p-3 rounded-md bg-[#0a4303] flex flex-col w-full lg:min-w-[800px] mt-2 lg:flex-row">
                                 <div className="w-full lg:w-[50%] flex flex-col">
                                     <Chart
                                         options={options}
@@ -479,22 +481,22 @@ export function Pools({ }) {
 
                                 <div className="w-full lg:w-[50%] flex flex-col gap-3">
                                     <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
-                                        <p className="text-white text-sm">Saldo disponível</p>
+                                        <p className="text-white text-sm">{t('saldoDisponivel')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.balanceContract))}</p>
                                     </div>
 
                                     <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
-                                        <p className="text-white text-sm">Tokens por ERA</p>
+                                        <p className="text-white text-sm">{t('tokenPorEra')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.tokensPerEra))}</p>
                                     </div>
 
                                     <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
-                                        <p className="text-white text-sm">ERA atual do contrato</p>
+                                        <p className="text-white text-sm">{t('eraContrato')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.currentEraContract))}</p>
                                     </div>
 
                                     <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
-                                        <p className="text-white text-sm">Época atual</p>
+                                        <p className="text-white text-sm">{t('epocaAtual')}</p>
                                         <p className="text-white font-bold">{poolData?.epoch}</p>
                                     </div>
                                 </div>
@@ -503,19 +505,19 @@ export function Pools({ }) {
                             {visibleWithdraw && (
                                 <div className="flex items-center justify-between w-full bg-[#0a4303] rounded-md p-3 mt-3">
                                     <div className="flex flex-col gap-1">
-                                        <p className="text-sm text-white">Próximo saque em</p>
-                                        <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? 'Você pode sacar' : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} blocos`}</p>
+                                        <p className="text-sm text-white">{t('proximoSaque')}</p>
+                                        <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>
                                     </div>
 
                                     {nextApprove < 0 && (
                                         <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500" onClick={handleWithdraw}>
-                                            Sacar tokens
+                                            {t('sacarTokens')}
                                         </button>
                                     )}
                                 </div>
                             )}
 
-                            <p className="text-sm text-gray-500 mt-5">Usuários aprovados</p>
+                            <p className="text-sm text-gray-500 mt-5">{t('usuariosAprovados')}</p>
                             <div className={`flex gap-3 flex-wrap max-w-[1024px] mt-3 ${users.length < 4 ? 'justify-center lg:justify-start': 'justify-center'}`}>
                                 {users.map(item => (
                                     <UserRankingItem data={item} />

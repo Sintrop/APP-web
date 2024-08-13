@@ -12,8 +12,10 @@ import { Helmet } from "react-helmet";
 import ReactMapGL, { Layer, Marker, Source } from '!react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Chat } from "../../components/Chat";
+import { useTranslation } from "react-i18next";
 
 export function Community() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [markers, setMarkers] = useState([]);
     const [userType, setUserType] = useState('1');
@@ -21,7 +23,7 @@ export function Community() {
     const [usersRanking, setUsersRanking] = useState([]);
     const [loading, setLoading] = useState(false);
     const [visibleBtns, setVisibleBtns] = useState(true);
-    const [mapCommunity, setMapCommunity] = useState({latitude: -11.680854, longitude: -51.9245419});
+    const [mapCommunity, setMapCommunity] = useState({ latitude: -11.680854, longitude: -51.9245419 });
 
     useEffect(() => {
         getUsers();
@@ -127,15 +129,15 @@ export function Community() {
                                 projection='globe'
                                 fog={{}}
                             >
-                                
+
                                 {userType === '1' && (
                                     <>
                                         {markers.length > 0 && (
                                             <>
                                                 {markers.map(item => {
                                                     const coord = JSON.parse(item?.geoLocation)
-                                                    if(coord?.latitude){
-                                                        return(
+                                                    if (coord?.latitude) {
+                                                        return (
                                                             <Marker latitude={coord?.latitude} longitude={coord?.longitude} color="red" key={item.id} />
                                                         )
                                                     }
@@ -144,7 +146,7 @@ export function Community() {
                                         )}
                                     </>
                                 )}
-                                
+
                             </ReactMapGL>
                         )}
                     </div>
@@ -160,7 +162,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Produtores</p>
+                                <p className="font-bold text-white">{t('produtores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -176,7 +178,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Inspetores</p>
+                                <p className="font-bold text-white">{t('inspetores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -192,7 +194,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Pesquisadores</p>
+                                <p className="font-bold text-white">{t('pesquisadores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -208,7 +210,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Desenvolvedores</p>
+                                <p className="font-bold text-white">{t('desenvolvedores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -224,7 +226,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Ativistas</p>
+                                <p className="font-bold text-white">{t('ativistas')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -240,7 +242,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Validadores</p>
+                                <p className="font-bold text-white">{t('validadores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -256,7 +258,7 @@ export function Community() {
                                     className="w-8 h-8 object-contain"
                                 />
 
-                                <p className="font-bold text-white">Apoiadores</p>
+                                <p className="font-bold text-white">{t('apoiadores')}</p>
                             </div>
 
                             <FaChevronRight size={20} color='white' />
@@ -266,14 +268,14 @@ export function Community() {
 
                 <div className="flex flex-col pb-20 lg:pb-5 px-3">
                     <h1 className="font-bold text-white text-xl mt-3 text-center mb-1">
-                        {userType === '1' && 'Produtores'}
-                        {userType === '2' && 'Inspetores'}
-                        {userType === '3' && 'Pesquisadores'}
-                        {userType === '4' && 'Desenvolvedores'}
-                        {userType === '5' && 'Contribuidores'}
-                        {userType === '6' && 'Ativista'}
-                        {userType === '7' && 'Apoiadores'}
-                        {userType === '8' && 'Validadores'}
+                        {userType === '1' && t('produtores')}
+                        {userType === '2' && t('inspetores')}
+                        {userType === '3' && t('pesquisadores')}
+                        {userType === '4' && t('desenvolvedores')}
+                        {userType === '5' && t('colaboradores')}
+                        {userType === '6' && t('ativistas')}
+                        {userType === '7' && t('apoiadores')}
+                        {userType === '8' && t('validadores')}
                     </h1>
 
                     {loading && (
@@ -283,6 +285,7 @@ export function Community() {
                     <div className="flex gap-3 justify-center flex-wrap">
                         {usersRanking.map(item => (
                             <UserRankingItem
+                                key={item.id}
                                 data={item}
                             />
                         ))}
@@ -292,7 +295,7 @@ export function Community() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat/>
+                <Chat />
             </div>
         </div>
     )

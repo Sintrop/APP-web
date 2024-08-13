@@ -81,7 +81,7 @@ export function TaskItem({ data, userData }) {
 
     async function handleComment() {
         if (userData?.accountStatus !== 'blockchain') {
-            toast.error('Você precisa estar cadastrado na blockchain!')
+            toast.error(t('necessitaCadastroBlock'))
             return;
         }
 
@@ -96,7 +96,7 @@ export function TaskItem({ data, userData }) {
             comments.unshift(createComment.data.createComment);
             setComment('');
         } catch (err) {
-            alert('erro')
+            toast.error(t('algoDeuErrado'))
         } finally {
             setLoadingPostComment(false)
         }
@@ -175,7 +175,7 @@ export function TaskItem({ data, userData }) {
                                 <>
                                     <div className='flex items-center justify-between w-full px-5'>
                                         <div className='flex flex-col'>
-                                            <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
+                                            <p className='text-blue-500 font-bold text-sm'>{t('responsavelTask')}</p>
                                             <div className='flex gap-2 items-center mb-2'>
                                                 <img
                                                     className='w-[40px] h-[40px] rounded-full border-2 object-cover'

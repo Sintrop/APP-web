@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
-import { Blocks } from 'react-loader-spinner';
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function PubliUser({ data }) {
+    const {t} = useTranslation()
     const imagesPubli = JSON.parse(data?.images);
     const [seeMore, setSeeMore] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
@@ -103,7 +104,9 @@ export function PubliUser({ data }) {
 
             {links.length > 0 && (
                 <div className="flex flex-col mt-3">
-                    <p className="text-xs text-gray-300">Links nessa publicação</p>
+                    <p className="text-xs text-gray-300">
+                        {t('linkNessaPubli')}
+                    </p>
                     <div className="flex gap-3 overflow-x-auto">
                         {links.map(item => (
                             <a

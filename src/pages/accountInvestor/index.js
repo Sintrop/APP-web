@@ -313,7 +313,7 @@ export default function AccountInvestor() {
                         </div>
 
                         <div className='flex flex-col w-full'>
-                            <p className='text-white'>Contribuiu com</p>
+                            <p className='text-white'>{t('contribuiuCom')}</p>
                             <div className='flex gap-3 p-3 bg-green-950 rounded-md mt-1 w-full'>
                                 <img
                                     src={require('../../assets/token.png')}
@@ -321,27 +321,27 @@ export default function AccountInvestor() {
                                 />
                                 <div className='flex flex-col'>
                                     <p className='font-bold text-white text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(tokens)}</p>
-                                    <p className='text-sm text-white'>Créditos de Regeneração</p>
+                                    <p className='text-sm text-white'>{t('creditosRegen')}</p>
                                 </div>
 
                             </div>
                         </div>
                     </div>
 
-                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Impacto das contribuições</h3>
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>{t('impactoContribuicoes')}</h3>
                     <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md'>
                         <div className='flex items-center justify-center flex-wrap'>
                             <div className='flex flex-col w-[50%]'>
                                 <div className='flex flex-col p-5 w-full h-[120px] border-r border-green-700/20'>
                                     <div className='flex flex-col items-start justify-center h-full'>
                                         <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.carbon)} kg</p>
-                                        <p className='text-white text-xs lg:text-base'>Carbono</p>
+                                        <p className='text-white text-xs lg:text-base'>{t('carbono')}</p>
                                     </div>
                                 </div>
                                 <div className='flex flex-col p-5 w-full h-[120px] border-t border-r border-green-700/20'>
                                     <div className='flex flex-col items-start justify-center h-full'>
                                         <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.water)} m³</p>
-                                        <p className='text-white text-xs lg:text-base'>Água</p>
+                                        <p className='text-white text-xs lg:text-base'>{t('agua')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -349,20 +349,20 @@ export default function AccountInvestor() {
                                 <div className='flex flex-col p-5 w-full h-[120px] border-green-700/20'>
                                     <div className='flex flex-col items-start justify-center h-full'>
                                         <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.soil)} m²</p>
-                                        <p className='text-white text-xs lg:text-base'>Solo</p>
+                                        <p className='text-white text-xs lg:text-base'>{t('solo')}</p>
                                     </div>
                                 </div>
                                 <div className='flex flex-col p-5 w-full h-[120px] border-t border-green-700/20'>
                                     <div className='flex flex-col items-start justify-center h-full'>
                                         <p className='font-bold text-green-500 text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactInvestor?.bio)} uv</p>
-                                        <p className='text-white text-xs lg:text-base'>Biodver.</p>
+                                        <p className='text-white text-xs lg:text-base'>{t('bio')}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Evolução das contribuições</h3>
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>{t('evolucaoContribuicoes')}</h3>
                     <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md overflow-x-auto'>
                         {configData && (
                             <Chart
@@ -375,10 +375,10 @@ export default function AccountInvestor() {
                         )}
                     </div>
 
-                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>Consumo por itens</h3>
+                    <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>{t('consumoPorItens')}</h3>
                     <div className='flex flex-col lg:w-[1000px] w-full gap-5'>
                         {itemsToReduce.length === 0 && (
-                            <p className="text-white text-center my-4">Este usuário não tem nenhum item na sua lista</p>
+                            <p className="text-white text-center my-4">{t('esseUsuarioNaoTemItens')}</p>
                         )}
                         <div className="flex flex-wrap justify-center gap-3 lg:justify-normal">
                             {itemsToReduce.map(item => (
@@ -394,10 +394,10 @@ export default function AccountInvestor() {
                         </div>
                     </div>
 
-                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>Provas de redução</h3>
+                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>{t('provasReducao')}</h3>
                     <div className='flex flex-col lg:w-[1000px] w-full gap-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
                         {proofsReduce.length === 0 && (
-                            <p className="text-white text-center my-4">Este usuário não publicou nenhuma prova de redução</p>
+                            <p className="text-white text-center my-4">{t('nenhumaProvaReducao')}</p>
                         )}
 
                         <div className='flex items-center gap-5 overflow-x-auto'>
@@ -410,7 +410,7 @@ export default function AccountInvestor() {
                         </div>
                     </div>
 
-                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>Recibos de contribuição</h3>
+                    <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>{t('recibosContribuicao')}</h3>
                     <div className='flex flex-col lg:w-[1000px] w-full gap-3 mb-10'>
                         {receipts.length > 0 && (
                             <>

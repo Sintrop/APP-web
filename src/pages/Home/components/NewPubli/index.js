@@ -6,8 +6,10 @@ import {ActivityIndicator} from '../../../../components/ActivityIndicator';
 import { CropImage } from "../../../../components/CropImage";
 import { MdFactCheck, MdOutlinePhoto } from "react-icons/md";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
 export function NewPubli({attPublis}){
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('');
@@ -21,7 +23,7 @@ export function NewPubli({attPublis}){
             return;
         }
         if(!input.trim()){
-            toast.error('Digite algo para publicar')
+            toast.error(t('digiteAlgoParaPublicar'))
             return;
         }
 
@@ -73,7 +75,7 @@ export function NewPubli({attPublis}){
                 <div className="bg-green-800 p-2 rounded-md w-full max-h-[250px] flex">
                     <textarea
                         className="bg-transparent w-full h-full text-white resize-none focus:outline-none"
-                        placeholder="Começar publicação"
+                        placeholder={t('comecarPublicacao')}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />
@@ -118,7 +120,7 @@ export function NewPubli({attPublis}){
                     {loading ? (
                         <ActivityIndicator size={25}/>
                     ) : 
-                        'Publicar'
+                        t('publicar')
                     }
                 </button>
             </div>

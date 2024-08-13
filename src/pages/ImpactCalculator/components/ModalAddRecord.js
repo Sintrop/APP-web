@@ -6,8 +6,10 @@ import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import { format } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from "../../../hooks/useMainContext";
+import { useTranslation } from "react-i18next";
 
 export function ModalAddRecord({close, registered}){
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [items, setItems] = useState([]);
     const [filterItems, setFilterItems] = useState([]);
@@ -48,7 +50,7 @@ export function ModalAddRecord({close, registered}){
     async function handleRecord() {
         if (!itemSelected) return;
         if (!quant.trim()) {
-            toast.error('Digite uma quantidade!')
+            toast.error(t('digiteQuantidade'))
             return
         }
 
@@ -68,7 +70,7 @@ export function ModalAddRecord({close, registered}){
             close();
         } catch (err) {
             console.log(err);
-            toast.error('Erro ao registrar!')
+            toast.error(t('algoDeuErrado'))
         } finally {
             setLoadingRecord(false);
         }
@@ -80,7 +82,7 @@ export function ModalAddRecord({close, registered}){
             <div className='absolute flex flex-col p-3 lg:w-[450px] h-[420px] bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-50'>
                 <div className="flex items-center justify-between">
                     <div className="w-[25px]"/>
-                    <p className="font-bold text-white">Registrar consumo</p>
+                    <p className="font-bold text-white">{t('registrarConsumo')}</p>
                     <button onClick={close}>
                         <MdClose size={25} color='white'/>
                     </button>
@@ -89,30 +91,30 @@ export function ModalAddRecord({close, registered}){
                 <div className="flex flex-col">
                     {itemSelected ? (
                         <>
-                            <p className="text-white text-sm mt-5">Item selecionado</p>
+                            <p className="text-white text-sm mt-5">{t('itemSelecionado')}</p>
                             <button
                                 className="flex flex-col w-full bg-green-950 rounded-md h-11 px-3 text-white"
                                 onClick={() => setItemSelected(null)}
                             >
                                 {itemSelected?.name}
-                                <p className="text-xs text-gray-400">Clique para selecionar outro</p>
+                                <p className="text-xs text-gray-400">{t('cliqueSelecioneOutro')}</p>
                             </button>
 
-                            <p className="text-white text-sm mt-5">Quantidade ({itemSelected?.unit})</p>
+                            <p className="text-white text-sm mt-5">{t('quantidade')} ({itemSelected?.unit})</p>
                             <input
                                 value={quant}
                                 onChange={(e) => setQuant(e.target.value)}
                                 className="w-full h-10 rounded-md bg-green-950 text-white px-2"
-                                placeholder="Digite aqui"
+                                placeholder={t('digiteAqui')}
                                 type="number"
                             />
 
-                            <p className="text-white text-sm mt-5">Data</p>
+                            <p className="text-white text-sm mt-5">{t('data')}</p>
                             <input
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
                                 className="w-full h-10 rounded-md bg-green-950 text-white px-2"
-                                placeholder="Digite aqui"
+                                placeholder={t('digiteAqui')}
                                 type="date"
                                 max={maxDate}
                                 min={minDate}
@@ -125,7 +127,7 @@ export function ModalAddRecord({close, registered}){
                                 {loadingRecord ? (
                                     <ActivityIndicator size={25}/>
                                 ) : (
-                                    'Registrar consumo'
+                                    t('registrarConsumo')
                                 )}
                             </button>
                         </>
@@ -142,7 +144,7 @@ export function ModalAddRecord({close, registered}){
 
                                         <input
                                             className="w-full text-white bg-transparent"
-                                            placeholder="Pesquisar"
+                                            placeholder={t('pesquisar')}
                                             onChange={(e) => {
                                                 const text = e.target.value;
                                                 if (text === '') {

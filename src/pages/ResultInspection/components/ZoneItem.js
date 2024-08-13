@@ -8,6 +8,7 @@ import { ModalCollectDetails } from "./ModalCollectDetails";
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Polyline } from "../../../components/Mapbox/Polyline";
+import { useTranslation } from "react-i18next";
 
 const containerMapStyle = {
     width: '100%',
@@ -15,6 +16,7 @@ const containerMapStyle = {
 };
 
 export function ZoneItem({ data, index }) {
+    const {t} = useTranslation();
     const treesS1 = Number(data?.arvores?.sampling1?.trees?.length);
     const areaSampling1 = Number(data?.arvores?.sampling1?.area);
     const areaZone = Number(data?.areaZone);
@@ -219,27 +221,27 @@ export function ZoneItem({ data, index }) {
             )}
             <div className="flex items-center gap-1 mt-1">
                 <div className="w-5 h-1 rounded-md bg-red-500" />
-                <p className="text-white text-xs">Zona</p>
+                <p className="text-white text-xs">{t('zona')}</p>
             </div>
             <div className="flex items-center gap-1 mt-1">
                 <FaMapMarker color='#ff4af9' size={20} />
-                <p className="text-white text-xs">Coletas de biomassa</p>
+                <p className="text-white text-xs">{t('coletasBiomassa')}</p>
             </div>
             <div className="flex items-center gap-1 mt-1">
                 <FaMapMarker color='#911c0f' size={20} />
-                <p className="text-white text-xs">Coletas de biomassa no solo</p>
+                <p className="text-white text-xs">{t('coletasBioSolo')}</p>
             </div>
             <div className="flex items-center gap-1 mt-1">
                 <FaMapMarker color='green' size={20} />
-                <p className="text-white text-xs">Plantas registradas</p>
+                <p className="text-white text-xs">{t('plantasRegistradas')}</p>
             </div>
 
-            <p className="text-white mt-5">Fotos da zona</p>
+            <p className="text-white mt-5">{t('fotosZona')}</p>
 
             {loadingImagesZones ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
                     <ActivityIndicator size={50} hiddenIcon />
-                    <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                    <p className="text-white mt-1">{t('carregandoImgs')}</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
@@ -261,7 +263,7 @@ export function ZoneItem({ data, index }) {
                 </div>
             )}
 
-            <p className="text-white mt-5 text-center font-bold">Análise de biomassa do solo</p>
+            <p className="text-white mt-5 text-center font-bold">{t('analiseBiomassaSolo')}</p>
             {mapZone && (
                 <ReactMapGL
                     style={{ width: '100%', height: 200 }}
@@ -293,13 +295,13 @@ export function ZoneItem({ data, index }) {
             )}
             <div className="flex items-center gap-1 mt-1 mb-4">
                 <FaMapMarker color='#ff4af9' size={20} />
-                <p className="text-white text-xs">Localização das coletas</p>
+                <p className="text-white text-xs">{t('localizacaoColetas')}</p>
             </div>
 
             {loadingImagesAnalise ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
                     <ActivityIndicator size={50} hiddenIcon />
-                    <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                    <p className="text-white mt-1">{t('carregandoDados')}</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">
@@ -325,7 +327,7 @@ export function ZoneItem({ data, index }) {
 
             {mapAnaliseBio && (
                 <>
-                    <p className="text-white mt-5 font-bold text-center">Estação da biodiversidade</p>
+                    <p className="text-white mt-5 font-bold text-center">{t('estacaoBio')}</p>
 
                     <ReactMapGL
                         style={{ width: '100%', height: 200 }}
@@ -357,13 +359,13 @@ export function ZoneItem({ data, index }) {
 
                     <div className="flex items-center gap-1 mt-1 mb-4">
                         <FaMapMarker color='yellow' size={20} />
-                        <p className="text-white text-xs">Localização das coletas</p>
+                        <p className="text-white text-xs">{t('localizacaoColetas')}</p>
                     </div>
 
                     {loadingImagesBioZone ? (
                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                             <ActivityIndicator size={50} hiddenIcon />
-                            <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                            <p className="text-white mt-1">{t('carregandoDados')}</p>
                         </div>
                     ) : (
                         <>
@@ -392,7 +394,7 @@ export function ZoneItem({ data, index }) {
                                 })}
                             </div>
                             
-                            <p className="text-white font-bold mt-3">Flora</p>
+                            <p className="text-white font-bold mt-3">{t('flora')}</p>
                             <div className="flex gap-3 overflow-auto">
                                 {imagesBioZone.map(item => {
                                     if (item?.type === 'flora') {
@@ -424,7 +426,7 @@ export function ZoneItem({ data, index }) {
 
             {bioSoil?.length > 0 && (
                 <>
-                    <p className="text-white mt-5 font-bold text-center">Análise de biodiversidade no solo</p>
+                    <p className="text-white mt-5 font-bold text-center">{t('analiseBioSolo')}</p>
                     {mapZone && (
                         <ReactMapGL
                             style={{ width: '100%', height: 200 }}
@@ -457,13 +459,13 @@ export function ZoneItem({ data, index }) {
 
                     <div className="flex items-center gap-1 mt-1 mb-4">
                         <FaMapMarker color='#911c0f' size={20} />
-                        <p className="text-white text-xs">Localização das coletas</p>
+                        <p className="text-white text-xs">{t('localizacaoColetas')}</p>
                     </div>
 
                     {loadingImagesBioSoil ? (
                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                             <ActivityIndicator size={50} hiddenIcon />
-                            <p className="text-white mt-1">Carregando dados, aguarde...</p>
+                            <p className="text-white mt-1">{t('carregandoDados')}</p>
                         </div>
                     ) : (
                         <div className="flex gap-3 overflow-auto">
@@ -490,18 +492,18 @@ export function ZoneItem({ data, index }) {
                 </>
             )}
 
-            <p className="text-white mt-3">Análise de árvores</p>
-            <p className="text-white font-bold">Amostragem 1 - {Intl.NumberFormat('pt-BR').format(Number(areaSampling1).toFixed(2))} m²</p>
+            <p className="text-white mt-3">{t('analiseArvores')}</p>
+            <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(areaSampling1).toFixed(2))} m²</p>
 
             <div className="flex flex-col p-2 rounded-md bg-[#0a4303]">
-                <p className="text-white font-bold mt-1">Análise de plantas da amostragem</p>
-                <p className="text-white">Árvores registradas: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(treesS1).toFixed(0))}</span></p>
+                <p className="text-white font-bold mt-1">{t('analisePlantasamostragem')}</p>
+                <p className="text-white">{t('arvoresRegistradas')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(treesS1).toFixed(0))}</span></p>
 
-                <p className="text-white font-bold mt-1">Estimativa de plantas para a zona - {Intl.NumberFormat('pt-BR').format(Number(data?.areaZone).toFixed(2))} m²</p>
-                <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number((treesS1 / areaSampling1) * areaZone).toFixed(0))}</span></p>
+                <p className="text-white font-bold mt-1">{t('estimativaPlantasZona')} - {Intl.NumberFormat('pt-BR').format(Number(data?.areaZone).toFixed(2))} m²</p>
+                <p className="text-white">{t('totalEstimado')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number((treesS1 / areaSampling1) * areaZone).toFixed(0))}</span></p>
             </div>
 
-            <p className="text-white mt-2">Plantas registradas</p>
+            <p className="text-white mt-2">{t('plantasRegistradas')}</p>
             {mapZone && (
                 <ReactMapGL
                     style={{ width: '100%', height: 200 }}
@@ -534,13 +536,13 @@ export function ZoneItem({ data, index }) {
 
             <div className="flex items-center gap-1 mt-1 mb-4">
                 <FaMapMarker color='green' size={20} />
-                <p className="text-white text-xs">Localização da planta</p>
+                <p className="text-white text-xs">{t('loacalizacaoPlanta')}</p>
             </div>
 
             {loadingImagesTreesS1 ? (
                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
                     <ActivityIndicator size={50} hiddenIcon />
-                    <p className="text-white mt-1">Carregando fotos, aguarde...</p>
+                    <p className="text-white mt-1">{t('carregandoImgs')}</p>
                 </div>
             ) : (
                 <div className="flex gap-3 overflow-auto">

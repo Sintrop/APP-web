@@ -6,8 +6,10 @@ import { api } from '../../../../services/api';
 import { ActivityIndicator } from '../../../../components/ActivityIndicator';
 import { useMainContext } from '../../../../hooks/useMainContext';
 import { saveImageFirebase } from '../../../../services/saveImageFirebase';
+import { useTranslation } from 'react-i18next';
 
 export function ModalCreateTask({close, success}){
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
@@ -16,7 +18,7 @@ export function ModalCreateTask({close, success}){
 
     async function handleSend() {
         if(userData?.accountStatus !== 'blockchain'){
-            toast.error('Você precisa estar cadastrado na blockchain!');
+            toast.error(t('necessitaCadastroBlock'));
             return;
         }
 
@@ -53,31 +55,31 @@ export function ModalCreateTask({close, success}){
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[500px] bg-green-950 rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]'/>
-                    <Dialog.Title className='font-bold text-white'>Criar task</Dialog.Title>
+                    <Dialog.Title className='font-bold text-white'>{t('criarTask')}</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Close>
                 </div>
                 
                 <div className="flex flex-col w-full">
-                    <p className="font-bold text-white">Título da task:</p>
+                    <p className="font-bold text-white">{t('tituloTask')}:</p>
                     <input
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder='Digite aqui'
+                        placeholder={t('digiteAqui')}
                         className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
                         maxLength={50}
                     />
 
-                    <p className="font-bold text-white mt-3">Descrição:</p>
+                    <p className="font-bold text-white mt-3">{t('descricao')}:</p>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder='Digite aqui'
+                        placeholder={t('digiteAqui')}
                         className='bg-[#0a4303] rounded-md border-2 px-2 w-full text-white '
                     />
 
-                    <p className="font-bold text-white mt-2">Anexe uma imagem(Opcional):</p>
+                    <p className="font-bold text-white mt-2">{t('anexeImgOpc')}:</p>
                     <div className='flex flex-col items-center gap-3 mt-3'>
                         <input 
                             type='file' 
@@ -108,7 +110,7 @@ export function ModalCreateTask({close, success}){
                         {loading ? (
                             <ActivityIndicator size={25}/>
                         ) : (
-                            'Enviar'
+                            t('criarTask')
                         )}
                     </button>
                 </div>

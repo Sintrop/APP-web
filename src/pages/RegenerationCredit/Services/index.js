@@ -2,8 +2,10 @@ import React from "react";
 import { Header } from "../../../components/Header";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../../components/TopBar";
+import { useTranslation } from "react-i18next";
 
 export function Services({}){
+    const {t} = useTranslation();
     const navigate = useNavigate();
 
     return(
@@ -22,7 +24,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Regeneração de ecossistemas</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('regeneracaoEcossitemas')}</p>
                     </button>
 
                     <button 
@@ -34,7 +36,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Desenvolvimento</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('desenvolvimento')}</p>
                     </button>
 
                     <button 
@@ -46,7 +48,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Pesquisa</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('pesquisa')}</p>
                     </button>
 
                     <button 
@@ -58,7 +60,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Inspeção</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('inspecao')}</p>
                     </button>
 
                     <button 
@@ -70,7 +72,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Validação</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('validacao')}</p>
                     </button>
 
                     <button 
@@ -82,7 +84,7 @@ export function Services({}){
                             className="h-20 w-20 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">Ativismo</p>
+                        <p className="font-bold text-white text-xl mt-2">{t('ativismo')}</p>
                     </button>
                 </div>
             </div>

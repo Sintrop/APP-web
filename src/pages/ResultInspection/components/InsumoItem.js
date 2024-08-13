@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function InsumoItem({ data }) {
+    const {t} = useTranslation();
     const categoryDetails = JSON.parse(data?.categoryDetails);
     if(data?.value === '0' || data?.value === '00'){
         return(
@@ -15,11 +17,11 @@ export function InsumoItem({ data }) {
                     <div className="flex flex-col">
                         <p className="font-bold text-white">{data?.title}</p>
                         <p className="text-white">
-                            {categoryDetails?.insumoCategory === 'insumo-mineral' && 'Insumo mineral'}
-                            {categoryDetails?.insumoCategory === 'insumo-biologico' && 'Insumo biológico'}
-                            {categoryDetails?.insumoCategory === 'insumo-quimico' && 'Insumo químico'}
-                            {categoryDetails?.insumoCategory === 'recurso-externo' && 'Recurso externo'}
-                            {categoryDetails?.insumoCategory === 'embalagens' && 'Embalagens'}
+                            {categoryDetails?.insumoCategory === 'insumo-mineral' && t('insumoMineral')}
+                            {categoryDetails?.insumoCategory === 'insumo-biologico' && t('insumoBiologico')}
+                            {categoryDetails?.insumoCategory === 'insumo-quimico' && t('insumoQuimico')}
+                            {categoryDetails?.insumoCategory === 'recurso-externo' && t('recursoExterno')}
+                            {categoryDetails?.insumoCategory === 'embalagens' && t('embalagens')}
                         </p>
                     </div>
                 </div>
@@ -31,35 +33,35 @@ export function InsumoItem({ data }) {
             </div>
 
             <div className="flex flex-col items-center mt-3">
-                <p className="text-gray-300 text-xs">Impacto causado</p>
+                <p className="text-gray-300 text-xs">{t('impactoCausado')}</p>
 
                 <div className="flex items-center gap-10 mt-1">
                     <div className="flex flex-col items-center">
                         <p className="font-bold text-white">
                             {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(Number(data?.value) * Math.abs(categoryDetails?.carbonValue))} kg
                         </p>
-                        <p className="text-sm text-gray-200">Carbono</p>
+                        <p className="text-sm text-gray-200">{t('carbono')}</p>
                     </div>
 
                     <div className="flex flex-col items-center">
                         <p className="font-bold text-white">
                             - {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(Number(data?.value) * Math.abs(categoryDetails?.soloValue))} m²
                         </p>
-                        <p className="text-sm text-gray-200">Solo</p>
+                        <p className="text-sm text-gray-200">{t('solo')}</p>
                     </div>
 
                     <div className="flex flex-col items-center">
                         <p className="font-bold text-white">
                             - {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(Number(data?.value) * Math.abs(categoryDetails?.aguaValue))} m³
                         </p>
-                        <p className="text-sm text-gray-200">Água</p>
+                        <p className="text-sm text-gray-200">{t('agua')}</p>
                     </div>
 
                     <div className="flex flex-col items-center">
                         <p className="font-bold text-white">
                             - {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(Number(data?.value) * Math.abs(categoryDetails?.bioValue))} uv
                         </p>
-                        <p className="text-sm text-gray-200">Bio.</p>
+                        <p className="text-sm text-gray-200">{t('bio')}</p>
                     </div>
                 </div>
             </div>

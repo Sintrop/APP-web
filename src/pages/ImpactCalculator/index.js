@@ -11,11 +11,13 @@ import { RecordItem } from "./components/RecordItem";
 import { ModalAddRecord } from "./components/ModalAddRecord";
 import { ModalPaymentInvoice } from "./components/ModalPaymentInvoice";
 import Chart from 'react-apexcharts';
+import { useTranslation } from "react-i18next";
 
 const atualMonth = new Date().getMonth();
 const atualYear = new Date().getFullYear();
 
 export function ImpactCalculator() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const { userData, walletConnected, } = useMainContext();
     const [items, setItems] = useState([]);
@@ -427,27 +429,27 @@ export function ImpactCalculator() {
                     <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                         <div className="flex flex-col w-full lg:w-[1024px] mt-3 px-2 lg:px-0">
                             <div className="flex flex-col gap-2">
-                                <h2 className="font-bold text-white">Calculadora de impacto</h2>
+                                <h2 className="font-bold text-white">{t('calculadoraDeImpacto')}</h2>
 
                                 <button
                                     className="w-[200px] bg-blue-500 rounded-md font-semibold text-white h-10 mt-3"
                                     onClick={() => setModalRecord(true)}
                                 >
-                                    Registrar consumo
+                                    {t('registrarConsumo')}
                                 </button>
                             </div>
 
                             <div className="flex flex-col border border-green rounded-md w-full h-[390px] mt-1">
                                 {invoicesThisYear.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center h-full">
-                                        <p className="text-white">Nenhuma informação para ser exibida</p>
+                                        <p className="text-white">{t('nenhumaInfoDisponivel')}</p>
                                     </div>
                                 ) : (
                                     <>
                                         {loadingStatistics ? (
                                             <div className="flex flex-col items-center justify-center h-full">
                                                 <ActivityIndicator size={50}/>
-                                                <p className="font-bold text-white">Montando gráfico</p>
+                                                <p className="font-bold text-white">{t('montandoGrafico')}</p>
                                             </div>
                                         ) : (
                                             <>
@@ -470,7 +472,7 @@ export function ImpactCalculator() {
                                                     ))}
                                                 </select>
 
-                                                <p className="text-center text-xs text-gray-400">Evolução mensal</p>
+                                                <p className="text-center text-xs text-gray-400">{t('evolucaoMensal')}</p>
                                             </>
                                         )}
                                     </>
@@ -483,27 +485,27 @@ export function ImpactCalculator() {
                                     value={monthSelected}
                                     onChange={(e) => setMonthSelected(e.target.value)}
                                 >
-                                    <option value='1'>Janeiro</option>
-                                    <option value='2'>Fevereiro</option>
-                                    <option value='3'>Março</option>
-                                    <option value='4'>Abril</option>
-                                    <option value='5'>Maio</option>
-                                    <option value='6'>Junho</option>
-                                    <option value='7'>Julho</option>
-                                    <option value='8'>Agosto</option>
-                                    <option value='9'>Setembro</option>
-                                    <option value='10'>Outubro</option>
-                                    <option value='11'>Novembro</option>
-                                    <option value='12'>Dezembro</option>
+                                    <option value='1'>{t('janeiro')}</option>
+                                    <option value='2'>{t('fevereiro')}</option>
+                                    <option value='3'>{t('marco')}</option>
+                                    <option value='4'>{t('abril')}</option>
+                                    <option value='5'>{t('maio')}</option>
+                                    <option value='6'>{t('junho')}</option>
+                                    <option value='7'>{t('julho')}</option>
+                                    <option value='8'>{t('agosto')}</option>
+                                    <option value='9'>{t('setembro')}</option>
+                                    <option value='10'>{t('outubro')}</option>
+                                    <option value='11'>{t('novembro')}</option>
+                                    <option value='12'>{t('dezembro')}</option>
                                 </select>
 
-                                <p className="text-white">Histórico</p>
+                                <p className="text-white">{t('historico')}</p>
                             </div>
 
                             <div className="mt-5">
                                 {records.length === 0 ? (
                                     <>
-                                        <p className="text-white my-10 text-center">Nenhum registro encontrado</p>
+                                        <p className="text-white my-10 text-center">{t('nenhumRegistro')}</p>
                                     </>
                                 ) : (
                                     <>
@@ -525,30 +527,30 @@ export function ImpactCalculator() {
                                             className='w-7 h-7 object-contain'
                                         />
 
-                                        <p className='font-bold text-white'>Impacto da fatura</p>
+                                        <p className='font-bold text-white'>{t('impactoFatura')}</p>
                                     </div>
 
                                     <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                         <div className='flex flex-col items-center gap-5'>
                                             <div className='flex flex-col items-center'>
-                                                <h3 className='text-white text-sm'>Carbono</h3>
+                                                <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                                 <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impact?.carbon)} kg</p>
                                             </div>
 
                                             <div className='flex flex-col items-center'>
-                                                <h3 className='text-white text-sm'>Água</h3>
+                                                <h3 className='text-white text-sm'>{t('agua')}</h3>
                                                 <p className='font-bold text-white'>- {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impact?.water)} m³</p>
                                             </div>
                                         </div>
 
                                         <div className='flex flex-col items-center gap-5'>
                                             <div className='flex flex-col items-center'>
-                                                <h3 className='text-white text-sm'>Solo</h3>
+                                                <h3 className='text-white text-sm'>{t('solo')}</h3>
                                                 <p className='font-bold text-white'>- {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impact?.soil)} m²</p>
                                             </div>
 
                                             <div className='flex flex-col items-center'>
-                                                <h3 className='text-white text-sm'>Biodver.</h3>
+                                                <h3 className='text-white text-sm'>{t('bio')}</h3>
                                                 <p className='font-bold text-white'>- {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impact?.bio)} uv</p>
                                             </div>
                                         </div>
@@ -557,28 +559,28 @@ export function ImpactCalculator() {
 
                                 <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
                                     <div className='flex items-center justify-between'>
-                                        <p className='font-bold text-white'>Resumo da fatura</p>
+                                        <p className='font-bold text-white'>{t('resumoFatura')}</p>
 
                                         {openInvoice ? (
-                                            <p className="text-green-500">Em aberto</p>
+                                            <p className="text-green-500">{t('emAberto')}</p>
                                         ) : (
-                                            <p className="text-red-500">Fatura fechada</p>
+                                            <p className="text-red-500">{t('faturaFechada')}</p>
                                         )}
                                     </div>
 
                                     <div className="flex items-center justify-between mt-2">
-                                        <p className="text-white">Total da fatura</p>
+                                        <p className="text-white">{t('totalFatura')}</p>
 
                                         <p className="text-white font-bold">{records.length > 0 ? `${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(totalPaymentRC)} RC` : '0 RC'}</p>
                                     </div>
 
                                     <div className="flex items-center justify-between">
-                                        <p className="text-white">Já compensado</p>
+                                        <p className="text-white">{t('jaCompensado')}</p>
 
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(invoiceData?.ammountReceived)} RC</p>
                                     </div>
 
-                                    <p className="text-white mt-2">Resta compensar</p>
+                                    <p className="text-white mt-2">{t('restaCompensar')}</p>
                                     <h3 className="font-bold text-white text-3xl">
                                         {records.length > 0 ? `${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(totalPaymentRC - invoiceData?.ammountReceived)} RC` : '0 RC'}
                                     </h3>
@@ -594,7 +596,7 @@ export function ImpactCalculator() {
                                             setModalPayment(true);
                                         }}
                                     >
-                                        Compensar fatura
+                                        {t('compensarFatura')}
                                     </button>
                                 </div>
                             </div>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function PublishResearche({ data }) {
+    const {t} = useTranslation();
     const additionalData = JSON.parse(data?.additionalData);
     const [seeMore, setSeeMore] = useState(false);
 
@@ -31,7 +33,7 @@ export function PublishResearche({ data }) {
                     className="px-4 py-1 rounded-md bg-blue-500 font-bold text-white text-sm"
                     target="_blank"
                 >
-                    Ver pesquisa
+                    {t('verPesquisa')}
                 </a>
             </div>
         </div>

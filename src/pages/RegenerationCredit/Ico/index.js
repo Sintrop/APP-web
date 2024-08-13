@@ -9,8 +9,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalBuyRc } from "./components/ModalBuyRc";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 import { TopBar } from "../../../components/TopBar";
+import { useTranslation } from "react-i18next";
 
 export function Ico() {
+    const {t} = useTranslation();
     const [icoData, setIcoData] = useState({});
     const [loading, setLoading] = useState(false);
     const [totalSupply, setTotalSupply] = useState(0);
@@ -75,7 +77,7 @@ export function Ico() {
                     <ActivityIndicator size={60} />
                 ) : (
                     <div className="flex flex-col max-w-[1024px] mt-3">
-                        <h3 className="font-bold text-xl text-white">ICO - Initial Coin Offer</h3>
+                        <h3 className="font-bold text-xl text-white">{t('icoTitle')}</h3>
                         <div className="flex bg-[#0a4303] p-3 rounded-md w-[800px]">
                             <div className="flex flex-col items-center w-[50%]">
                                 <Chart
@@ -98,7 +100,7 @@ export function Ico() {
                                             src={require('../../../assets/token.png')}
                                             className="w-5 h-5 object-contain"
                                         />
-                                        Comprar RC
+                                        {t('comprarRC')}
                                     </Dialog.Trigger>
 
                                     <ModalBuyRc

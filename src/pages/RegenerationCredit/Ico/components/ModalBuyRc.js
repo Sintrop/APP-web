@@ -7,8 +7,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { BuyRCT } from "../../../../services/sacTokenService";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function ModalBuyRc({diferenca, close}){
+    const {t} = useTranslation();
     const {userData, walletConnected, connectionType} = useMainContext();
     const [balanceETH, setBalanceETH] = useState(0);
     const [credits, setCredits] = useState(0);
@@ -75,7 +77,7 @@ export function ModalBuyRc({diferenca, close}){
             close(true)
         } catch (err) {
             if (err.response?.data?.message === 'open transaction of the same type') {
-                toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+                toast.error(t('transacaoDoMesmoTipoAberto'))
             }
         } finally {
             setLoadingBuy(false);
@@ -126,7 +128,7 @@ export function ModalBuyRc({diferenca, close}){
             <Dialog.Content className='absolute flex flex-col items-center bg-[#0a4303] h-[400px] rounded-md m-auto inset-0 md:w-[400px] p-5'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-8"/>
-                    <Dialog.Title className="font-bold text-white">Comprar RC</Dialog.Title>
+                    <Dialog.Title className="font-bold text-white">{t('comprarRC')}</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline color='white' size={25}/>
                     </Dialog.Close>
@@ -134,12 +136,12 @@ export function ModalBuyRc({diferenca, close}){
 
                 {walletConnected === '' ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-white text-center">Você não está conectado</p>
+                        <p className="text-white text-center">{t('voceNaoConectado')}</p>
                     </div>
                 ) : (
                     <div className="w-full flex flex-col gap-1 mt-5">
                         <div className="flex flex-col p-2 rounded-md bg-green-950">
-                            <p className="font-bold text-white text-sm">Seu saldo em ETH</p>
+                            <p className="font-bold text-white text-sm">{t('seuSaldoETH')}</p>
                             <div className="flex items-center gap-2">
                                 <div className="p-1 bg-white rounded-full">
                                     <img
@@ -148,11 +150,11 @@ export function ModalBuyRc({diferenca, close}){
                                     />
                                 </div>
 
-                                <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(balanceETH).toFixed(5))} ETH</p>
+                                <p className="font-bold text-white">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 5}).format(Number(balanceETH))} ETH</p>
                             </div>
                         </div>
 
-                        <label className="font-bold text-sm text-blue-500 mt-2">Quanto deseja comprar?</label>
+                        <label className="font-bold text-sm text-blue-500 mt-2">{t('quantoDesejaComprar')}</label>
                         <input
                             type='number'
                             value={input}
@@ -162,11 +164,11 @@ export function ModalBuyRc({diferenca, close}){
                         />
 
                         {maxAmmount && (
-                            <p className="text-center text-red-500">Saldo insuficiente!</p>
+                            <p className="text-center text-red-500">{t('saldoInsuficiente')}</p>
                         )}
 
                         <div className="flex flex-col p-2 rounded-md bg-green-950 mt-2">
-                            <p className="font-bold text-white text-sm">Você vai receber em Créditos de Regeneração (CR)</p>
+                            <p className="font-bold text-white text-sm">{t('voceVaiReceberRC')}</p>
                             <div className="flex items-center gap-2">
                                 <div className="p-1 bg-white rounded-full">
                                     <img
@@ -175,7 +177,7 @@ export function ModalBuyRc({diferenca, close}){
                                     />
                                 </div> 
 
-                                <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(credits).toFixed(5))} CR</p>
+                                <p className="font-bold text-white">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 5}).format(Number(credits))} CR</p>
                             </div>
                         </div>
 
@@ -186,7 +188,7 @@ export function ModalBuyRc({diferenca, close}){
                             {loadingBuy ? (
                                 <ActivityIndicator size={25}/>
                             ) : 
-                                'Comprar'
+                                t('comprar')
                             }
                         </button>
                     </div>
@@ -199,7 +201,7 @@ export function ModalBuyRc({diferenca, close}){
                     setLoadingBuy(false);
 
                     if (logTransaction.type === 'success') {
-                        toast.success('Compra efetuada com sucesso! Veja seu saldo no menu "Meus tokens"');
+                        toast.success(t('compraTokensSucesso'));
                     }
                 }
             }}>

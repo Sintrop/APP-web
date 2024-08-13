@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
 import { Blocks } from 'react-loader-spinner';
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function ProofReduce({ data }) {
+    const {t} = useTranslation();
     const additionalData = JSON.parse(data?.additionalData);
     const imagesPubli = JSON.parse(data?.images);
     const [seeMore, setSeeMore] = useState(false);
@@ -83,10 +85,10 @@ export function ProofReduce({ data }) {
                     <div className="w-full bg-green-500 p-2 absolute bottom-0 h-14 lg:h-20 rounded-t-xl flex items-center">
                         <div className="flex flex-col">
                             <p className="font-bold text-white text-xs lg:text-base">
-                                #ReduzirÉObrigaçãoRegenerarÉASolução
+                                {t('#provaDeReducao')}
                             </p>
                             <p className="font-regular text-white text-xs lg:text-base">
-                                Prova de redução do item {additionalData?.nameItem} da calculadora de impacto.
+                                {t('provaDeReducao')} {additionalData?.nameItem} {t('daCalculadora')}.
                             </p>
                         </div>
                     </div>

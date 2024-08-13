@@ -6,8 +6,10 @@ import { UserCommentItem } from "./UserCommentItem";
 import { IoMdSend } from "react-icons/io";
 import { toast, ToastContainer } from "react-toastify";
 import { useMainContext } from "../../../../hooks/useMainContext";
+import { useTranslation } from "react-i18next";
 
 export function ModalComments({close, dataPubli}){
+    const {t} = useTranslation();
     const {walletConnected, userData} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [comments, setComments] = useState([]);
@@ -75,7 +77,7 @@ export function ModalComments({close, dataPubli}){
                         >
                             <FaChevronLeft size={17} color='white'/>
                         </button>
-                        <p className="font-semibold text-white">Comentários</p>
+                        <p className="font-semibold text-white">{t('comentarios')}</p>
                     </div>
 
                     <div className="flex flex-col w-full overflow-y-auto mt-3 gap-4">
@@ -93,7 +95,7 @@ export function ModalComments({close, dataPubli}){
                                     ))}
                                     </>
                                 ) : (
-                                    <p className="text-white font-regular text-center mt-10">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                                    <p className="text-white font-regular text-center mt-10">{t('nenhumComentarioComente')}</p>
                                 )}
                             </>
                         )}
@@ -103,7 +105,7 @@ export function ModalComments({close, dataPubli}){
                 <div className="flex items-center gap-3">
                     <input
                         className="w-[90%] px-2 py-2 rounded-md bg-green-950 text-white"
-                        placeholder="Digite aqui"
+                        placeholder={t('digiteAqui')}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />

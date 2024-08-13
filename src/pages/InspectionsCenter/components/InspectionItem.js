@@ -3,8 +3,10 @@ import { api } from "../../../services/api";
 import { getImage } from "../../../services/getImage";
 import format from "date-fns/format";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export function InspectionItem({ data, type }) {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const [producerData, setProducerData] = useState({});
     const [inspectorData, setInspectorData] = useState({});
@@ -75,7 +77,7 @@ export function InspectionItem({ data, type }) {
                         </div>
 
                         <div className="lg:ml-8">
-                            <p className="font-bold text-white">Endereço</p>
+                            <p className="font-bold text-white">{t('endereco')}</p>
                             <p className="text-white">{addressProducer?.street}, {addressProducer?.city}/{addressProducer?.state}</p>
                         </div>
                     </div>
@@ -83,21 +85,21 @@ export function InspectionItem({ data, type }) {
                     <div className="flex flex-col w-full lg:w-fit">
                         {data.status === 2 && (
                             <div className="flex flex-col lg:items-end">
-                                <p className="font-bold text-white">Inspecionada em</p>
+                                <p className="font-bold text-white">{t('inspecionadoEm')}</p>
                                 <p className="text-white">{format(new Date((data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy')}</p>
                             </div>    
                         )}
 
                         {data.status === 4 && (
                             <div className="flex flex-col p-1 bg-red-600 lg:items-end rounded">
-                                <p className="font-bold text-white">Invalidada</p>
-                                <p className="text-white">No bloco: {data?.invalidatedAt}</p>
+                                <p className="font-bold text-white">{t('invalidada')}</p>
+                                <p className="text-white">{t('noBloco')}: {data?.invalidatedAt}</p>
                             </div>    
                         )}
 
                         {data.status === 3 && (
                             <div className="flex flex-col p-1 bg-orange-500 lg:items-end rounded">
-                                <p className="font-bold text-white">Expirada</p>
+                                <p className="font-bold text-white">{t('expirada')}</p>
                             </div>    
                         )}
                     </div>
@@ -106,7 +108,7 @@ export function InspectionItem({ data, type }) {
                 <div className="flex flex-col lg:items-center justify-between mt-2 lg:flex-row">
                     <div className="flex flex-col items-center gap-3 lg:flex-row">
                         <div className="flex flex-col w-full lg:w-fit">
-                            <p className="text-xs text-gray-400">Produtor:</p>
+                            <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
                                 onClick={() => navigate(`/user-details/${data.createdBy}`)}
@@ -124,7 +126,7 @@ export function InspectionItem({ data, type }) {
                         </div>
 
                         <div className="flex flex-col w-full lg:w-fit">
-                            <p className="text-xs text-gray-400">Inspetor:</p>
+                            <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
                                 onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
@@ -145,7 +147,7 @@ export function InspectionItem({ data, type }) {
                     {data.status === 2 && (
                         <div className="flex flex-col items-center justify-center p-1 bg-green-950 border-2 border-white rounded-md mt-3 lg:mt-0">
                             <p className="font-bold text-white">{data?.isaScore}</p>
-                            <p className="text-white text-xs">Pontos de regeneração</p>
+                            <p className="text-white text-xs">{t('ptsRegen')}</p>
                         </div>
                     )}
                 </div>
@@ -156,7 +158,7 @@ export function InspectionItem({ data, type }) {
                             className="p-1 rounded-md font-bold text-white text-sm bg-blue-500"
                             onClick={() => navigate(`/result-inspection/${data.id}`)}
                         >
-                            Ver resultado
+                            {t('verResultado')}
                         </button>
                     </div>
                 )}
@@ -175,7 +177,7 @@ export function InspectionItem({ data, type }) {
                         </div>
 
                         <div className="ml-8">
-                            <p className="font-bold text-white">Endereço</p>
+                            <p className="font-bold text-white">{t('endereco')}</p>
                             <p className="text-white">{addressProducer?.street}, {addressProducer?.city}/{addressProducer?.state}</p>
                         </div>
                     </div>
@@ -183,15 +185,15 @@ export function InspectionItem({ data, type }) {
                     <div>
                         {data.status === 0 && (
                             <div className="flex flex-col items-end">
-                                <p className="font-bold text-white">Solicitada</p>
-                                <p className="text-white">No bloco: {data.createdAt}</p>
+                                <p className="font-bold text-white">{t('solicitada')}</p>
+                                <p className="text-white">{t('noBloco')}: {data.createdAt}</p>
                             </div>    
                         )}
 
                         {data.status === 1 && (
                             <div className="flex flex-col items-end">
-                                <p className="font-bold text-white">Aceita</p>
-                                <p className="text-white">No bloco: {data.acceptedAt}</p>
+                                <p className="font-bold text-white">{t('aceita')}</p>
+                                <p className="text-white">{t('noBloco')}: {data.acceptedAt}</p>
                             </div>   
                         )}
                     </div>
@@ -200,7 +202,7 @@ export function InspectionItem({ data, type }) {
                 <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col">
-                            <p className="text-xs text-gray-400">Produtor:</p>
+                            <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
                                 onClick={() => navigate(`/user-details/${data.createdBy}`)}
@@ -219,7 +221,7 @@ export function InspectionItem({ data, type }) {
                         
                         {data.status === 1 && (
                             <div className="flex flex-col">
-                                <p className="text-xs text-gray-400">Inspetor:</p>
+                                <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                                 <button 
                                     className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
                                     onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
