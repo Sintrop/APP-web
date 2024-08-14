@@ -10,10 +10,11 @@ import { getImage } from "../../services/getImage";
 import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
 import { ModalOptionAccount } from "./components/ModalOptionAccount.js";
 import { useTranslation } from "react-i18next";
+import { ModalChooseLanguage } from "./components/ModalChooseLanguage.js";
 
 export function Header({ routeActive }) {
-    const {t} = useTranslation();
-    const { walletConnected, userData } = useMainContext();
+    const { t, i18n } = useTranslation();
+    const { walletConnected, userData, modalChooseLang, toggleModalChooseLang } = useMainContext();
     const navigate = useNavigate();
     const [modalConnect, setModalConnect] = useState(false);
     const [imageProfile, setImageProfile] = useState(null);
@@ -166,15 +167,29 @@ export function Header({ routeActive }) {
                             )}
                         </button>
 
-                        {/* {walletConnected !== '' && (
-                            <button
-                                className="flex flex-col items-center w-[75px] text-white text-sm text-center ml-4"
-                                onClick={() => { setShowLogout(true) }}
-                            >
-                                <MdLogout color='white' size={18} />
-                                Desconectar
-                            </button>
-                        )} */}
+                        <button
+                            className="w-7 h-5 bg-red-500 ml-5"
+                            onClick={toggleModalChooseLang}
+                        >
+                            {i18n.language === 'pt-BR' && (
+                                <img
+                                    src={require('../../assets/icon-br.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                            {i18n.language === 'en-US' && (
+                                <img
+                                    src={require('../../assets/icon-brit.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                            {i18n.language === 'es' && (
+                                <img
+                                    src={require('../../assets/icon-spa.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                        </button>
                     </div>
                 </div>
 
@@ -198,6 +213,12 @@ export function Header({ routeActive }) {
                         setOptionsAccount(false);
                         setModalConnect(true);
                     }}
+                />
+            )}
+
+            {modalChooseLang && (
+                <ModalChooseLanguage
+                    close={toggleModalChooseLang}
                 />
             )}
         </>

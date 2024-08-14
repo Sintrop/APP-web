@@ -9,9 +9,11 @@ import { MessageItem } from "./MessageItem";
 import CryptoJS from "crypto-js";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { FaChevronLeft } from "react-icons/fa";
-import {UserChatItem} from '../components/ModalNewChat/UserChatItem';
+import { UserChatItem } from '../components/ModalNewChat/UserChatItem';
+import { firestore } from "../../../services/firebase";
+import { collection, doc, query, onSnapshot, setDoc, Timestamp, orderBy } from "firebase/firestore";
 
-export function ModalMessages({ chat, imageProfile, participant, socket, typeChat }) {
+export function ModalMessages({ chat, imageProfile, participant, typeChat, messages }) {
     const { userData } = useMainContext();
     const [sending, setSending] = useState(false);
     const [inputMessage, setInputMessage] = useState('');
@@ -24,40 +26,14 @@ export function ModalMessages({ chat, imageProfile, participant, socket, typeCha
     const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        if (!socket) return;
-        socket.on('new_message', data => {
-            reicevedMessage(data);
-        })
-
-    }, [socket]);
-
-    useEffect(() => {
-        getMessages();
-        if(typeChat !== 'private'){
+        if (typeChat !== 'private') {
             getParticipants();
         }
     }, []);
 
-    function reicevedMessage(message_data) {
-        if (chat.chatId !== message_data.chatId) {
-            return;
-        }
-        let array = [];
-        array = messagesList;
-        array.unshift(message_data);
-        setMessagesList(array);
-        getMessages();
-    }
-
-    async function getMessages() {
-        setLoading(true);
-        const response = await api.get(`/chats/messages/${chat.chatId}`);
-        const messages = response.data.messages
-        setMessagesList(messages);
-
-        setFirstLoad(false);
-        setLoading(false);
-    }
+    const messagesThreadsRef = collection(firestore, "MESSAGE_THREADS");
+    const chatRef = doc(messagesThreadsRef, chat?.chatId)
+    const messagesRef = collection(chatRef, 'MESSAGES');
 
     async function sendMessage() {
         let hashPhotos = [];
@@ -76,26 +52,30 @@ export function ModalMessages({ chat, imageProfile, participant, socket, typeCha
         // }
 
         const encrypt = CryptoJS.AES.encrypt(inputMessage, process.env.REACT_APP_DECRYPT_MESSAGE_KEY);
+        const messageData = {
+            chatId: chat?.chatId,
+            message: encrypt.toString(),
+            type: imageToSend ? 'image' : 'text',
+            userId: userData.id,
+            user: {
+                id: userData.id,
+                name: userData.name,
+                wallet: userData?.wallet,
+            },
+            photos: JSON.stringify(hashPhotos),
+            participantData: JSON.stringify(participant),
+            createdAt: Timestamp.fromDate(new Date()),
+        }
 
         try {
-            await api.post('/chat/message', {
-                chatId: chat.chatId,
-                message: encrypt.toString(),
-                type: imageToSend ? 'image' : 'text',
-                userId: userData.id,
-                userData: JSON.stringify(userData),
-                participantData: JSON.stringify(participant),
-                photos: JSON.stringify(hashPhotos),
-                name: userData?.name
-            })
-        } catch (err) {
-            console.log(err)
+            await setDoc(doc(messagesRef), messageData);
+        }catch(err){
+
+        }finally{
+            setInputMessage('');
+            setImageToSend(null);
+            setSending(false);
         }
-        await socket.emit('message', { message: encrypt.toString(), chatId: chat.chatId, userId: userData.id });
-        setInputMessage('');
-        getMessages();
-        setImageToSend(null);
-        setSending(false);
     }
 
     async function getParticipants() {
@@ -219,7 +199,7 @@ export function ModalMessages({ chat, imageProfile, participant, socket, typeCha
                         </div>
 
                         <div className="flex flex-col-reverse w-full h-full overflow-y-auto overflow-x-hidden">
-                            {messagesList.map(item => (
+                            {messages.map(item => (
                                 <MessageItem
                                     key={item.id}
                                     data={item}

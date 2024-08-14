@@ -26,33 +26,10 @@ export function Chat({openChat}){
     }, [openChat])
 
     useEffect(() => {
-        if (!socket) return;
-        socket.on('new_message', data => {
-            reicevedMessage(data);
-        })
-
-    }, [socket]);
-
-    useEffect(() => {
         if(userData){
             getChats();
-            connectSocketIo(userData)
         };
     }, [userData]);
-
-    async function connectSocketIo(user) {
-        const connectSocket = await io.connect('https://chat-api-production-2f61.up.railway.app/');
-        connectSocket.emit('set_user', user);
-        setSocket(connectSocket);
-    }
-
-    function reicevedMessage(message_data) {
-        for (var i = 0; i < chats.length; i++) {
-            if (message_data.chatId === chats[i].chatId) {
-                getChats();
-            }
-        }
-    }
 
     async function getChats() {
         setLoading(true);
