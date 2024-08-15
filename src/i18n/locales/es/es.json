@@ -423,6 +423,8 @@
        "localizacaoPlanta": "Localização da plantas",
        "eraAtual": "Era atual",
        "dadosFinalizacaoTask": "Dados incluidos",
-       "textFinalizouTask": "Finalizou a task"
+       "textFinalizouTask": "Finalizou a task",
+       "feed": "Feed",
+       "servicos": "Serviços"
     }
 }

@@ -426,6 +426,8 @@
     "horas": "hours",
     "minutos": "minutes",
     "dadosFinalizacaoTask": "Data included",
-    "textFinalizouTask": "Completed the task"
+    "textFinalizouTask": "Completed the task",
+    "feed": "Feed",
+    "servicos": "Services"
   }
 }

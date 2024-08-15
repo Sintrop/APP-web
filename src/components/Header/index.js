@@ -53,7 +53,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('inicio')}</p>
+                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('feed')}</p>
 
                             {routeActive === 'home' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -69,7 +69,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('centros')}</p>
+                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('servicos')}</p>
 
                             {routeActive === 'centers' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
