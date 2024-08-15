@@ -8,7 +8,7 @@ import { useMainContext } from '../../../../../../hooks/useMainContext';
 import { saveImageFirebase } from '../../../../../../services/saveImageFirebase';
 import { useTranslation } from 'react-i18next';
 
-export function ModalFinishTask({ close, success, taskId }) {
+export function ModalFinishTask({ close, success, taskId, taskData }) {
     const {t} = useTranslation();
     const { userData } = useMainContext();
     const [loading, setLoading] = useState(false);
@@ -42,6 +42,7 @@ export function ModalFinishTask({ close, success, taskId }) {
                     description,
                 }) 
             });
+            await createPubli()
             success();
             close();
         } catch (err) {
@@ -49,6 +50,22 @@ export function ModalFinishTask({ close, success, taskId }) {
         } finally {
             setLoading(false);
         }
+    }
+
+    async function createPubli(){
+        await api.post('/publication/new', {
+            userId: userData?.id,
+            type: 'finish-task',
+            origin: 'platform',
+            additionalData: JSON.stringify({
+                userData,
+                taskId,
+                title: taskData?.title,
+                descriptionTask: taskData?.description,
+                descriptionFinish: description,
+                urlPR
+            }),
+        });
     }
 
     return (

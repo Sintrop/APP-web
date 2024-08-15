@@ -390,6 +390,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                 <ModalFinishTask
                     close={() => setModalFinish(false)}
                     taskId={data?.id}
+                    taskData={data}
                     success={() => {
                         toast.success('Task finalizada com sucesso!')
                         setStatus(4);
