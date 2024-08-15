@@ -421,6 +421,8 @@
        "arvoresRegistradas": "Árvores registradas",
        "estimativaPlantasZona": "Estimativa de plantas para a zona",
        "localizacaoPlanta": "Localização da plantas",
-       "eraAtual": "Era atual"
+       "eraAtual": "Era atual",
+       "dadosFinalizacaoTask": "Dados incluidos",
+       "textFinalizouTask": "Finalizou a task"
     }
 }

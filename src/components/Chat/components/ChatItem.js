@@ -10,7 +10,7 @@ import { MdGroups } from "react-icons/md";
 import { collection, doc, query, onSnapshot, setDoc, Timestamp, orderBy } from "firebase/firestore";
 import { firestore } from "../../../services/firebase";
 
-export function ChatItem({ data, socket }) {
+export function ChatItem({ data, attChats }) {
     const { userData } = useMainContext();
     const participant = JSON.parse(data?.participantData);
     const [imageProfile, setImageProfile] = useState(null);
@@ -58,7 +58,10 @@ export function ChatItem({ data, socket }) {
     }
 
     return (
-        <Dialog.Root open={modalMessages} onOpenChange={(open) => setModalMessages(open)}>
+        <Dialog.Root open={modalMessages} onOpenChange={(open) => {
+            setModalMessages(open)
+            attChats();
+        }}>
             <Dialog.Trigger className="flex justify-between px-3 py-2">
                 <div className="flex flex-2 gap-2">
                     {data?.chat?.type === 'private' ? (

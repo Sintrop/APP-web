@@ -69,6 +69,13 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
 
         try {
             await setDoc(doc(messagesRef), messageData);
+            api.put('/send-message', {
+                chatId: chat?.chatId,
+                message: encrypt.toString(),
+                ownerName: userData?.name,
+                ownerId: userData?.id,
+                participantData: JSON.stringify(participant),
+            });
         }catch(err){
 
         }finally{

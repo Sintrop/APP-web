@@ -23,6 +23,7 @@ export function Chat({openChat}){
         if(openChat){
             setOpen(true)
         }
+        getChats();
     }, [openChat])
 
     useEffect(() => {
@@ -32,7 +33,7 @@ export function Chat({openChat}){
     }, [userData]);
 
     async function getChats() {
-        setLoading(true);
+        //setLoading(true);
         const response = await api.get(`/chats/${userData?.id}`);
         setChats(response.data.chats);
         setLoading(false);
@@ -87,7 +88,7 @@ export function Chat({openChat}){
                                     ) : (
                                         <>
                                             {chats.map(item => (
-                                                <ChatItem data={item} key={item.chatId} socket={socket}/>
+                                                <ChatItem data={item} key={item.chatId} socket={socket} attChats={getChats}/>
                                             ))}
                                         </>
                                     )}

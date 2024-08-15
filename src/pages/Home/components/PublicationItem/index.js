@@ -28,6 +28,7 @@ import { ProofReduce } from "./ProofReduce";
 import { InviteWalletPubli } from "./InviteWalletPubli";
 import { NewZonePubli } from "./NewZonePubli";
 import { useTranslation } from "react-i18next";
+import { FinishTaskPubli } from "./FinishTaskPubli";
 
 export function PublicationItem({ data }) {
     const { t } = useTranslation();
@@ -217,6 +218,10 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'new-zone' && (
                     <NewZonePubli data={data} />
+                )}
+
+                {data?.type === 'finish-task' && (
+                    <FinishTaskPubli data={data}/>
                 )}
             </div>
 
