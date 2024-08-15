@@ -8,8 +8,10 @@ import { api } from "../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import {ActivityIndicator} from '../../../components/ActivityIndicator';
 import {useMainContext} from '../../../hooks/useMainContext';
+import { useTranslation } from "react-i18next";
 
 export function ModalProofReduce({close, nameItem}){
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
@@ -34,7 +36,7 @@ export function ModalProofReduce({close, nameItem}){
         .catch(err => {
             console.log(err);
             setLoading(false);
-            toast.error('Algo deu errado, tente novamente!')
+            toast.error(t('algoDeuErrado'))
         })
     }
 
@@ -51,12 +53,12 @@ export function ModalProofReduce({close, nameItem}){
         }
 
         if(!description.trim()){
-            toast.error('Digite uma descrição!');
+            toast.error(t('digiteDescricao'));
             return;
         }
 
         if(!image){
-            toast.error('Anexe uma imagem!');
+            toast.error(t('anexeImagem'));
             return
         }
 
@@ -98,7 +100,7 @@ export function ModalProofReduce({close, nameItem}){
             <div className='absolute flex flex-col p-3 lg:w-[450px] h-[420px] bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-50'>
                 <div className="flex items-center justify-between">
                     <div className="w-[25px]"/>
-                    <p className="font-bold text-white">Provar redução</p>
+                    <p className="font-bold text-white">{t('provarReducao')}</p>
                     <button onClick={close}>
                         <MdClose size={25} color='white'/>
                     </button>
@@ -106,10 +108,10 @@ export function ModalProofReduce({close, nameItem}){
 
                 <div className="flex flex-col">
                     <Info
-                        text1='Para provar a redução, você deve anexar uma foto e contar um pouco do que você fez para isso, essa prova vira uma publicação no feed comprovando sua luta para a regeneração!'
+                        text1={t('descProvarReducao')}
                     />
 
-                    <label className="font-bold text-white mt-3 text-sm">Anexar imagem</label>
+                    <label className="font-bold text-white mt-3 text-sm">{t('anexarImagem')}</label>
                     <input 
                         type='file' 
                         onChange={(e) => {
@@ -144,12 +146,12 @@ export function ModalProofReduce({close, nameItem}){
                         )}
                     </div>
 
-                    <label className="font-bold text-white mt-3 text-sm">Conte um pouco da sua mudança</label>
+                    <label className="font-bold text-white mt-3 text-sm">{t('conteSuaMudanca')}</label>
                     <input
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className="w-full p-2 bg-green-950 rounded-md text-white"
-                        placeholder="Digite aqui"
+                        placeholder={t('digiteAqui')}
                     />
 
                     {image && (
@@ -160,7 +162,7 @@ export function ModalProofReduce({close, nameItem}){
                             {loadingPubli ? (
                                 <ActivityIndicator size={20}/>
                             ) : (
-                                'Publicar'
+                                t('publicar')
                             )}
                         </button>
                     )}

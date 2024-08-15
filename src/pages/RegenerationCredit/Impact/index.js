@@ -4,8 +4,10 @@ import { ActivityIndicator } from '../../../components/ActivityIndicator';
 import { api } from '../../../services/api';
 import Chart from 'react-apexcharts';
 import { TopBar } from '../../../components/TopBar';
+import { useTranslation } from 'react-i18next';
 
 export function Impact() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const [impactGeral, setImpactGeral] = useState({});
     const [impactToken, setImpactToken] = useState({});
@@ -171,30 +173,30 @@ export function Impact() {
                                         className='w-7 h-7 object-contain'
                                     />
 
-                                    <p className='font-bold text-white'>Impacto por token</p>
+                                    <p className='font-bold text-white'>{t('impactoPorToken')}</p>
                                 </div>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(impactToken?.carbon * 1000)} g</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <h3 className='text-white text-sm'>{t('agua')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.water * 1000)} L</p>
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <h3 className='text-white text-sm'>{t('solo')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.soil * 10000)} cm²</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <h3 className='text-white text-sm'>{t('bio')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(impactToken?.bio)} uv</p>
                                         </div>
                                     </div>
@@ -208,30 +210,30 @@ export function Impact() {
                                         className='w-7 h-7 object-contain'
                                     />
 
-                                    <p className='font-bold text-white'>Projeção do impacto por token</p>
+                                    <p className='font-bold text-white'>{t('projecaoImpactoToken')}</p>
                                 </div>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(estimatedImpact?.carbon * 1000)} g</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <h3 className='text-white text-sm'>{t('agua')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.water * 1000)} L</p>
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <h3 className='text-white text-sm'>{t('solo')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.soil * 10000)} cm²</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <h3 className='text-white text-sm'>{t('bio')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 4 }).format(estimatedImpact?.bio)} uv</p>
                                         </div>
                                     </div>
@@ -241,7 +243,7 @@ export function Impact() {
 
                         <div className='mt-4 flex items-center flex-wrap gap-3'>
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
-                                <p className='font-bold text-white'>Carbono (t CO²)</p>
+                                <p className='font-bold text-white'>{t('carbono')} (t CO²)</p>
                                 <Chart
                                     options={configChat.options}
                                     series={graphicCarbon}
@@ -252,7 +254,7 @@ export function Impact() {
                             </div>
 
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
-                                <p className='font-bold text-white'>Solo (ha)</p>
+                                <p className='font-bold text-white'>{t('solo')} (ha)</p>
                                 <Chart
                                     options={configChat.options}
                                     series={graphicSoil}
@@ -263,7 +265,7 @@ export function Impact() {
                             </div>
 
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
-                                <p className='font-bold text-white'>Água (m³)</p>
+                                <p className='font-bold text-white'>{t('agua')} (m³)</p>
                                 <Chart
                                     options={configChat.options}
                                     series={graphicWater}
@@ -274,7 +276,7 @@ export function Impact() {
                             </div>
 
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
-                                <p className='font-bold text-white'>Biodiversidade (uv)</p>
+                                <p className='font-bold text-white'>{t('bio')} (uv)</p>
                                 <Chart
                                     options={configChat.options}
                                     series={graphicBio}
@@ -287,29 +289,29 @@ export function Impact() {
 
                         <div className='mt-4 flex items-center flex-wrap gap-3'>
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
-                                <p className='font-bold text-white'>Impacto à confirmar</p>
+                                <p className='font-bold text-white'>{t('impactoConfirmar')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactToConfirm?.carbon / 1000)} t</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <h3 className='text-white text-sm'>{t('agua')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactToConfirm?.agua)} m³</p>
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <h3 className='text-white text-sm'>{t('solo')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactToConfirm?.solo / 10000)} ha</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <h3 className='text-white text-sm'>{t('bio')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactToConfirm?.bio)} uv</p>
                                         </div>
                                     </div>
@@ -317,29 +319,29 @@ export function Impact() {
                             </div>
 
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
-                                <p className='font-bold text-white'>Impacto disponível</p>
+                                <p className='font-bold text-white'>{t('impactoDisponivel')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactGeral?.carbon / 1000)} t</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <h3 className='text-white text-sm'>{t('agua')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(impactGeral?.agua)} m³</p>
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <h3 className='text-white text-sm'>{t('solo')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactGeral?.solo / 10000)} ha</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <h3 className='text-white text-sm'>{t('bio')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(impactGeral?.bio)} uv</p>
                                         </div>
                                     </div>
@@ -347,29 +349,29 @@ export function Impact() {
                             </div>
 
                             <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
-                                <p className='font-bold text-white'>Impacto compensado</p>
+                                <p className='font-bold text-white'>{t('impactoCompensado')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Carbono</h3>
+                                            <h3 className='text-white text-sm'>{t('carbono')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactBurned?.carbon / 1000)} t</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Água</h3>
+                                            <h3 className='text-white text-sm'>{t('agua')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(impactBurned?.agua)} m³</p>
                                         </div>
                                     </div>
 
                                     <div className='flex flex-col items-center gap-5'>
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Solo</h3>
+                                            <h3 className='text-white text-sm'>{t('solo')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(impactBurned?.solo / 10000)} ha</p>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
-                                            <h3 className='text-white text-sm'>Biodver.</h3>
+                                            <h3 className='text-white text-sm'>{t('bio')}</h3>
                                             <p className='font-bold text-white'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(impactBurned?.bio)} uv</p>
                                         </div>
                                     </div>

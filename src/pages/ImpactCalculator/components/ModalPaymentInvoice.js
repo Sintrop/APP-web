@@ -10,8 +10,10 @@ import { BurnTokens as BurnRCSupporter } from "../../../services/supporterServic
 import { BurnTokens } from "../../../services/sacTokenService";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../components/LoadingTransaction";
+import { useTranslation } from "react-i18next";
 
 export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, transactionCreated, impactToken }) {
+    const {t} = useTranslation();
     const { userData, walletConnected } = useMainContext();
     const [balanceData, setBalanceData] = useState(null);
     const [maxAmmount, setMaxAmmount] = useState(false);
@@ -81,7 +83,7 @@ export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, tr
             close();
         } catch (err) {
             if (err.response?.data?.message === 'open transaction of the same type') {
-                alert('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+                alert(t('transacaoDoMesmoTipoAberto'))
             }
         } finally {
             setLoading(false);
@@ -228,55 +230,55 @@ export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, tr
                 </div>
 
                 <div className="flex flex-col pb-3 border-b border-green-500">
-                    <p className="text-white">Seu saldo</p>
+                    <p className="text-white">{t('seuSaldo')}</p>
                     <div className="flex items-center gap-2">
                         <img
                             src={require('../../../assets/token.png')}
                             className="w-10 h-10 object-contain"
                         />
                         <p className="font-bold text-white text-lg">
-                            {balanceData ? `${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(balanceData?.balance)} RC` : 'Buscando dados'}
+                            {balanceData ? `${Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(balanceData?.balance)} RC` : t('buscandoDados')}
                         </p>
                     </div>
                 </div>
 
-                <p className="font-bold text-white mt-4">Compense seu impacto</p>
+                <p className="font-bold text-white mt-4">{t('compenseSeuImpacto')}</p>
 
-                <p className="text-white mt-3">Valor da fatura</p>
+                <p className="text-white mt-3">{t('valorFatura')}</p>
                 <div className="w-full h-10 rounded-md px-2 bg-green-950 flex items-center">
                     <p className="font-bold text-white">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(invoiceValue)} RC</p>
                 </div>
 
                 {type === 'partial' && (
                     <>
-                        <p className="text-white mt-3">Quanto deseja compensar?</p>
+                        <p className="text-white mt-3">{t('quantoCompensar')}</p>
                         <input
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             className="w-full h-10 px-2 bg-green-950 text-white rounded-md"
-                            placeholder="Digite aqui"
+                            placeholder={t('digiteAqui')}
                         />
 
                         {maxAmmount && (
-                            <p className="text-center text-red-500 mt-2">Saldo insuficiente!</p>
+                            <p className="text-center text-red-500 mt-2">{t('saldoInsuficiente')}</p>
                         )}
 
                         {greaterThenInvoice && (
-                            <p className="text-center text-red-500 mt-2">Você não pode compensar um valor maior que o da fatura</p>
+                            <p className="text-center text-red-500 mt-2">{t('voceNaoPodeCompensarUmValorMaisAlto')}</p>
                         )}
                     </>
                 )}
 
                 {type === 'total' && (
                     <>
-                        <p className="text-white mt-3">Você deseja fazer o pagamento</p>
+                        <p className="text-white mt-3">{t('voceDesejaFazerPagamento')}</p>
                         <select
                             value={selectType}
                             onChange={(e) => setSelectType(e.target.value)}
                             className="text-white w-full h-10 px-2 rounded-md bg-green-950 mb-2"
                         >
-                            <option value='total'>Total</option>
-                            <option value='partial'>Parcial</option>
+                            <option value='total'>{t('total')}</option>
+                            <option value='partial'>{t('parcial')}</option>
                         </select>
                         
                         {selectType === 'partial' && (
@@ -284,16 +286,16 @@ export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, tr
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 className="w-full h-10 px-2 bg-green-950 text-white rounded-md"
-                                placeholder="Digite aqui"
+                                placeholder={t('digiteAqui')}
                             />
                         )}
 
                         {maxAmmount && (
-                            <p className="text-center text-red-500 mt-2">Saldo insuficiente!</p>
+                            <p className="text-center text-red-500 mt-2">{t('saldoInsuficiente')}</p>
                         )}
 
                         {greaterThenInvoice && (
-                            <p className="text-center text-red-500 mt-2">Você não pode compensar um valor maior que o da fatura</p>
+                            <p className="text-center text-red-500 mt-2">{t('voceNaoPodeCompensarUmValorMaisAlto')}</p>
                         )}
                     </>
                 )}
@@ -305,7 +307,7 @@ export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, tr
                     {loading ? (
                         <ActivityIndicator size={25}/>
                     ) : (
-                        'Compensar'
+                        t('compensar')
                     )}
                 </button>
             </div>
@@ -315,7 +317,7 @@ export function ModalPaymentInvoice({ close, type, invoiceData, invoiceValue, tr
                     setModalTransaction(open)
                     setLoading(false);
                     if (logTransaction.type === 'success') {
-                        toast.success('Compensação feita com sucesso!');
+                        toast.success(t('compensacaoFeita'));
                     }
                 }
             }}>

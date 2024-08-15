@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { FaEyeSlash, FaRegEye, FaChevronRight, FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export function TxItem({ data }) {
+    const {t} = useTranslation();
     const {userData} = useMainContext();
     const [revenue, setRevenue] = useState(false);
 
@@ -26,7 +28,7 @@ export function TxItem({ data }) {
                 </div>
                 
                 <div className="flex flex-col">
-                    <p className="text-sm text-gray-300">{revenue ? 'Você recebeu de' : 'Você enviou para'}</p>
+                    <p className="text-sm text-gray-300">{revenue ? t('recebeuDe') : t('eviouPara')}</p>
                     <p className="text-white text-xs lg:text-base">{revenue ? data?.from : data?.to}</p>
                     <p className="text-xs text-white">Hash: <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data?.hash}`} className="text-blue-400 underline">{data.hash}</a></p>
                 </div>

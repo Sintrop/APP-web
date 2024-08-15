@@ -6,8 +6,10 @@ import { InspectionItem } from "./components/InspectionItem";
 import { TopBar } from "../../components/TopBar";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Feedback } from "../../components/Feedback";
+import { useTranslation } from "react-i18next";
 
 export function InspectionsCenter() {
+    const {t} = useTranslation();
     const [tabSelected, setTabSelected] = useState('history');
     const [loading, setLoading] = useState(false);
     const [inspections, setInspections] = useState([]);
@@ -42,21 +44,21 @@ export function InspectionsCenter() {
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex flex-col lg:w-[1024px] mt-3 px-2 lg:px-0">
-                    <p className="font-bold text-white text-xl">Centro de inspeções</p> 
+                    <p className="font-bold text-white text-xl">{t('centroInspecao')}</p> 
 
                     <div className="flex items-center gap-8 mt-2 overflow-x-auto">
                         <button 
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'history' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('history')}
                         >
-                            Histórico de inspeções
+                            {t('historicoIsp')}
                         </button>
 
                         <button 
                             className={`font-bold py-1 border-b-2 ${tabSelected === 'manage' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setTabSelected('manage')}
                         >
-                            Gerenciar inspeções
+                            {t('gerenciarIsp')}
                         </button>
                     </div> 
 

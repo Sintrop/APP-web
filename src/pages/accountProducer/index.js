@@ -116,40 +116,40 @@ export default function AccountProducer() {
                         className='font-semibold text-white px-3 py-1 rounded-md bg-blue-500 mt-2'
                         onClick={() => navigate(`/user-details/${walletSelected}`)}
                     >
-                        Ver perfil
+                        {t('verPerfil')}
                     </button>
                 </div>
             </div>
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Estatísticas do(a) produtor(a)</h3>
+                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                 {producerData ? (
                     <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                             <p className='font-bold text-white text-xl lg:text-3xl'>{producerData?.totalInspections} </p>
-                            <p className='text-white text-xs lg:text-base'>Inspeções recebidas</p>
+                            <p className='text-white text-xs lg:text-base'>{t('ispsRecebidas')}</p>
                         </div>
 
                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                             <p className='font-bold text-white text-xl lg:text-3xl'>{producerData?.isa?.isaScore}</p>
-                            <p className='text-white text-xs lg:text-base'>Pontuação</p>
+                            <p className='text-white text-xs lg:text-base'>{t('pts')}</p>
                         </div>
 
                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                             <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(producerData?.isa?.isaScore / producerData?.totalInspections)}</p>
-                            <p className='text-white text-xs lg:text-base'>Média</p>
+                            <p className='text-white text-xs lg:text-base'>{t('media')}</p>
                         </div>
 
                         <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                             <p className='font-bold text-white text-xl lg:text-3xl'>0</p>
-                            <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
+                            <p className='text-red-500 text-xs lg:text-base'>{t('denunciasRecebidas')}</p>
                         </div>
                     </div>
                 ) : (
                     <div className='h-20'>
                         <ActivityIndicator size={50} />
-                        <p className='font-bold text-white text-center'>Buscando dados...</p>
+                        <p className='font-bold text-white text-center'>{t('buscandoDados')}</p>
                     </div>
                 )}
 
@@ -157,7 +157,7 @@ export default function AccountProducer() {
             </div>
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Mapa da propriedade</h3>
+                <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('mapaPropriedade')}</h3>
                 {initialRegion && (
                     <ReactMapGL
                         style={{ width: '100%', height: 300 }}
@@ -180,12 +180,12 @@ export default function AccountProducer() {
             </div>
 
             <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 rounded-md p-1 lg:p-0 mb-10'>
-                <h3 className='font-bold text-white text-center lg:text-lg'>Inspeções recebidas</h3>
+                <h3 className='font-bold text-white text-center lg:text-lg'>{t('ispsRecebidas')}</h3>
 
                 {!producerData && (
                     <div className='h-20'>
                         <ActivityIndicator size={50} />
-                        <p className='font-bold text-white text-center'>Buscando dados...</p>
+                        <p className='font-bold text-white text-center'>{t('buscandoDados')}</p>
                     </div>
                 )}
                 

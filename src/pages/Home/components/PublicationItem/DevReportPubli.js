@@ -1,12 +1,14 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 export function DevReportPubli({additionalData}){
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     return(
         <div>
-            <p className="text-white">Enviou o relatório de contribuição e subiu de nível</p>
+            <p className="text-white">{t('enviouRelatorioSubiuDeNivel')}</p>
 
             <div className="items-center flex flex-col mt-3">
                 <a
@@ -14,7 +16,7 @@ export function DevReportPubli({additionalData}){
                     className="px-4 py-1 rounded-md bg-blue-500 font-bold text-white text-sm"
                     target="_blank"
                 >
-                    Ver relatório
+                    {t('verRalatorio')}
                 </a>
             </div>
         </div>

@@ -5,8 +5,10 @@ import { api } from "../../../../services/api";
 import CryptoJS from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function ModalReserve({ reserved }) {
+    const {t} = useTranslation();
     const [input, setInput] = useState('');
     const [credits, setCredits] = useState(0);
     const [loadingBuy, setLoadingBuy] = useState(false);
@@ -31,7 +33,7 @@ export function ModalReserve({ reserved }) {
         }
 
         if (!email.trim() || !tel.trim() || !wallet.trim() || !name.trim() || !cpf.trim() || !rg.trim() || !profession.trim() || !maritalStatus.trim() || credits === '0') {
-            toast.error('Preencha todos os campos!');
+            toast.error(t('preenchaCampos'));
             return;
         }
 
@@ -63,7 +65,7 @@ export function ModalReserve({ reserved }) {
             toast.success('Reserva feita com sucesso!');
             reserved(response.data.booking);
         } catch (err) {
-            toast.error('Algo deu errado, tente novamente!')
+            toast.error(t('algoDeuErrado'))
         } finally {
             setLoadingBuy(false);
         }
@@ -75,7 +77,7 @@ export function ModalReserve({ reserved }) {
             <Dialog.Content className='absolute flex flex-col items-center bg-[#0a4303] h-[400px] rounded-md m-auto inset-0 md:w-[400px] p-5'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-8" />
-                    <Dialog.Title className="font-bold text-white">Formulário</Dialog.Title>
+                    <Dialog.Title className="font-bold text-white">{t('formulario')}</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline color='white' size={25} />
                     </Dialog.Close>

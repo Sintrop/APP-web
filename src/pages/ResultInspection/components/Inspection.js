@@ -12,8 +12,10 @@ import { ViewImage } from "../../../components/ViewImage";
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import { compareAsc } from "date-fns";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useTranslation } from "react-i18next";
 
 export function Inspection({ id }) {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [inspectionData, setInspectionData] = useState({});
@@ -185,13 +187,13 @@ export function Inspection({ id }) {
                 <>
                     {inspectionData?.status === 4 && (
                         <div className="flex items-center justify-center w-full h-20 bg-red-600 rounded-md">
-                            <p className="font-bold text-white text-xl">Inspeção invalidada</p>
+                            <p className="font-bold text-white text-xl">{t('ispInvalidada')}</p>
                         </div>
                     )}
-                    <h1 className="font-bold text-white mb-1">Resultado da inspeção #{id}</h1>
+                    <h1 className="font-bold text-white mb-1">{t('resultadoIsp')} #{id}</h1>
                     <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
                         <div className="flex flex-col lg:w-[49%]">
-                            <p className="text-gray-400 text-xs">Produtor(a)</p>
+                            <p className="text-gray-400 text-xs">{t('produtor')}</p>
                             <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${producerData?.wallet}`)}>
                                 <div className="h-14 w-14 rounded-full bg-gray-400">
                                     <img
@@ -208,7 +210,7 @@ export function Inspection({ id }) {
                         </div>
 
                         <div className="flex flex-col lg:w-[49%]">
-                            <p className="text-gray-400 text-xs">Inspetor(a)</p>
+                            <p className="text-gray-400 text-xs">{t('inspetor')}</p>
                             <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${inspectorData?.wallet}`)}>
                                 <div className="h-14 w-14 rounded-full bg-gray-400">
                                     <img
@@ -225,7 +227,7 @@ export function Inspection({ id }) {
                         </div>
 
                         <div className="flex flex-col">
-                            <p className="text-gray-400 text-xs">Foto de prova</p>
+                            <p className="text-gray-400 text-xs">{t('fotoProva')}</p>
                             <img
                                 src={proofPhoto}
                                 className="h-[300px] w-[200px] rounded-md object-cover"
@@ -240,7 +242,7 @@ export function Inspection({ id }) {
                                 <FaDotCircle size={20} color='green' />
 
                                 <p className="text-white">
-                                    Criada em: {inspectionData?.createdAtTimestamp && format(new Date(Number(inspectionData?.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    {t('criadaEm')}: {inspectionData?.createdAtTimestamp && format(new Date(Number(inspectionData?.createdAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
                                 </p>
                             </div>
 
@@ -248,7 +250,7 @@ export function Inspection({ id }) {
                                 <FaDotCircle size={20} color='green' />
 
                                 <p className="text-white">
-                                    Aceita em: {inspectionData?.acceptedAtTimestamp && format(new Date(Number(inspectionData?.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    {t('aceitaEm')}: {inspectionData?.acceptedAtTimestamp && format(new Date(Number(inspectionData?.acceptedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
                                 </p>
                             </div>
 
@@ -256,7 +258,7 @@ export function Inspection({ id }) {
                                 <FaDotCircle size={20} color='green' />
 
                                 <p className="text-white">
-                                    Realizada em: {inspectionData?.inspectedAtTimestamp && format(new Date(Number(inspectionData?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
+                                    {t('realizadaEm')}: {inspectionData?.inspectedAtTimestamp && format(new Date(Number(inspectionData?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy - kk:mm')}
                                 </p>
                             </div>
 
@@ -270,7 +272,7 @@ export function Inspection({ id }) {
                                 target="_blank"
                                 href={`https://app.sintrop.com/view-pdf/${inspectionData?.report}`}
                             >
-                                Ver relatório
+                                {t('verRelatorio')}
                             </a>
                         </div>
 
@@ -283,20 +285,20 @@ export function Inspection({ id }) {
                                             className="h-5 w-5 object-contain"
                                         />
 
-                                        <p className="font-bold text-white text-sm">Carbono</p>
+                                        <p className="font-bold text-white text-sm">{t('carbono')}</p>
                                     </div>
 
                                     <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number((isaData?.carbon?.indicator) / 1000).toFixed(1))} t</p>
                                 </div>
 
                                 <p className="text-xs text-white text-center">
-                                    {isaData?.carbon?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.carbon?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.carbon?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                    {isaData?.carbon?.isaIndex === 0 && t('regenerativo3')}
+                                    {isaData?.carbon?.isaIndex === 1 && t('regenerativo2')}
+                                    {isaData?.carbon?.isaIndex === 2 && t('regenerativo1')}
                                     {isaData?.carbon?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.carbon?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.carbon?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.carbon?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    {isaData?.carbon?.isaIndex === 4 && t('naoRegenerativo1')}
+                                    {isaData?.carbon?.isaIndex === 5 && t('naoRegenerativo2')}
+                                    {isaData?.carbon?.isaIndex === 6 && t('naoRegenerativo3')}
                                 </p>
                             </div>
 
@@ -308,20 +310,20 @@ export function Inspection({ id }) {
                                             className="h-5 w-5 object-contain"
                                         />
 
-                                        <p className="font-bold text-white text-sm">Solo</p>
+                                        <p className="font-bold text-white text-sm">{t('solo')}</p>
                                     </div>
 
                                     <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.soil?.indicator).toFixed(0))} m²</p>
                                 </div>
 
                                 <p className="text-xs text-white text-center">
-                                    {isaData?.soil?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.soil?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.soil?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                    {isaData?.soil?.isaIndex === 0 && t('regenerativo3')}
+                                    {isaData?.soil?.isaIndex === 1 && t('regenerativo2')}
+                                    {isaData?.soil?.isaIndex === 2 && t('regenerativo1')}
                                     {isaData?.soil?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.soil?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.soil?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.soil?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    {isaData?.soil?.isaIndex === 4 && t('naoRegenerativo1')}
+                                    {isaData?.soil?.isaIndex === 5 && t('naoRegenerativo2')}
+                                    {isaData?.soil?.isaIndex === 6 && t('naoRegenerativo3')}
                                 </p>
                             </div>
 
@@ -333,20 +335,20 @@ export function Inspection({ id }) {
                                             className="h-5 w-5 object-contain"
                                         />
 
-                                        <p className="font-bold text-white text-sm">Água</p>
+                                        <p className="font-bold text-white text-sm">{t('agua')}</p>
                                     </div>
 
                                     <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.water?.indicator).toFixed(0))} m³</p>
                                 </div>
 
                                 <p className="text-xs text-white text-center">
-                                    {isaData?.water?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.water?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.water?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                    {isaData?.water?.isaIndex === 0 && t('regenerativo3')}
+                                    {isaData?.water?.isaIndex === 1 && t('regenerativo2')}
+                                    {isaData?.water?.isaIndex === 2 && t('regenerativo1')}
                                     {isaData?.water?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.water?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.water?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.water?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    {isaData?.water?.isaIndex === 4 && t('naoRegenerativo1')}
+                                    {isaData?.water?.isaIndex === 5 && t('naoRegenerativo2')}
+                                    {isaData?.water?.isaIndex === 6 && t('naoRegenerativo3')}
                                 </p>
                             </div>
 
@@ -358,20 +360,20 @@ export function Inspection({ id }) {
                                             className="h-5 w-5 object-contain"
                                         />
 
-                                        <p className="font-bold text-white text-sm">Biodiversidade</p>
+                                        <p className="font-bold text-white text-sm">{t('bio')}</p>
                                     </div>
 
                                     <p className="font-bold text-white">{Intl.NumberFormat('pt-BR').format(Number(isaData?.bio?.indicator).toFixed(0))} uv</p>
                                 </div>
 
                                 <p className="text-xs text-white text-center">
-                                    {isaData?.bio?.isaIndex === 0 && 'Regenerativo 3 = +25 pts'}
-                                    {isaData?.bio?.isaIndex === 1 && 'Regenerativo 2 = +10 pts'}
-                                    {isaData?.bio?.isaIndex === 2 && 'Regenerativo 1 = +1 pts'}
+                                    {isaData?.bio?.isaIndex === 0 && t('regenerativo3')}
+                                    {isaData?.bio?.isaIndex === 1 && t('regenerativo2')}
+                                    {isaData?.bio?.isaIndex === 2 && t('regenerativo1')}
                                     {isaData?.bio?.isaIndex === 3 && 'Neutro = 0 pts'}
-                                    {isaData?.bio?.isaIndex === 4 && 'Não Regenerativo 1 = -1 pts'}
-                                    {isaData?.bio?.isaIndex === 5 && 'Não Regenerativo 2 = -10 pts'}
-                                    {isaData?.bio?.isaIndex === 6 && 'Não Regenerativo 3 = -25 pts'}
+                                    {isaData?.bio?.isaIndex === 4 && t('naoRegenerativo1')}
+                                    {isaData?.bio?.isaIndex === 5 && t('naoRegenerativo2')}
+                                    {isaData?.bio?.isaIndex === 6 && t('naoRegenerativo3')}
                                 </p>
                             </div>
                         </div>
@@ -422,29 +424,29 @@ export function Inspection({ id }) {
 
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='#ff4af9' size={20} />
-                            <p className="text-white text-xs">Análises de biomassa</p>
+                            <p className="text-white text-xs">{t('analiseBiomassa')}</p>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                             <FaMapMarker color='green' size={20} />
-                            <p className="text-white text-xs">Plantas registradas</p>
+                            <p className="text-white text-xs">{t('plantasRegistradas')}</p>
                         </div>
                     </div>
 
                     {inspectionDataApi?.propertyPhotos && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <p className="text-white font-bold text-lg">Imagens da propriedade</p>
+                            <p className="text-white font-bold text-lg">{t('imgsPropriedade')}</p>
                             {inspectionDataApi?.propertyPhotos && (
                                 <>
                                     {loadingImagesProperty ? (
                                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                             <ActivityIndicator size={50} />
-                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                            <p className="text-white mt-1">{t('carregandoImgs')}</p>
                                         </div>
                                     ) : (
                                         <div className="flex gap-3 overflow-auto mt-3">
                                             {imagesProperty.length === 0 ? (
                                                 <>
-                                                    <p className="text-white my-5">Nenhuma imagem registrada</p>
+                                                    <p className="text-white my-5">{t('nenhumaImg')}</p>
                                                 </>
                                             ) : (
                                                 <>
@@ -470,17 +472,17 @@ export function Inspection({ id }) {
                                 </>
                             )}
 
-                            <p className="text-white mt-3">Imagens aéreas</p>
+                            <p className="text-white mt-3">{t('imgsAereas')}</p>
                             {loadingImagesProperty ? (
                                 <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                     <ActivityIndicator size={50} />
-                                    <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                    <p className="text-white mt-1">{t('carregandoImgs')}</p>
                                 </div>
                             ) : (
                                 <div className="flex gap-3 overflow-auto mt-1">
                                     {imagesPropertyAerial.length === 0 ? (
                                         <>
-                                            <p className="text-white my-5">Nenhuma imagem registrada</p>
+                                            <p className="text-white my-5">{t('nenhumaImg')}</p>
                                         </>
                                     ) : (
                                         <>
@@ -522,16 +524,16 @@ export function Inspection({ id }) {
 
                     {methodVersion < 1.2 && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <p className="text-white font-bold text-lg">Biodiversidade registrada</p>
+                            <p className="text-white font-bold text-lg">{t('bioRegistrada')}</p>
 
                             {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
                             {!oldMetodologie ? (
                                 <>
-                                    <p className="text-white">Fauna</p>
+                                    <p className="text-white">{t('fauna')}</p>
                                     {loadingBiodiversityImages ? (
                                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                             <ActivityIndicator size={50} />
-                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                            <p className="text-white mt-1">{t('carregandoImgs')}</p>
                                         </div>
                                     ) : (
                                         <div className="flex gap-3 overflow-auto">
@@ -552,11 +554,11 @@ export function Inspection({ id }) {
                                         </div>
                                     )}
 
-                                    <p className="text-white mt-3">Flora</p>
+                                    <p className="text-white mt-3">{t('flora')}</p>
                                     {loadingBiodiversityImages ? (
                                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                             <ActivityIndicator size={50} />
-                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                            <p className="text-white mt-1">{t('carregandoImgs')}</p>
                                         </div>
                                     ) : (
                                         <div className="flex gap-3 overflow-auto">
@@ -579,11 +581,11 @@ export function Inspection({ id }) {
                                 </>
                             ) : (
                                 <>
-                                    <p className="text-white mt-3">Imagens</p>
+                                    <p className="text-white mt-3">{t('imgs')}</p>
                                     {loadingBiodiversityImages ? (
                                         <div className="flex flex-col items-center justify-center w-full h-[315px]">
                                             <ActivityIndicator size={50} />
-                                            <p className="text-white mt-1">Carregando imagens, aguarde...</p>
+                                            <p className="text-white mt-1">{t('carregandoImgs')}</p>
                                         </div>
                                     ) : (
                                         <div className="flex gap-3 overflow-auto">
@@ -610,20 +612,20 @@ export function Inspection({ id }) {
 
                     {zones.length > 0 && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
-                            <p className="text-white font-bold text-lg">Zonas de regeneração</p>
+                            <p className="text-white font-bold text-lg">{t('zonasDeRegeneracao')}</p>
                             {zones.map((item, index) => (
                                 <ZoneItem data={item} index={index} />
                             ))}
 
-                            <p className="text-white font-bold text-lg">Resultado das zonas</p>
+                            <p className="text-white font-bold text-lg">{t('resultadoZonas')}</p>
 
                             <div className="flex gap-2 flex-wrap items-center flex-col lg:flex-row">
                                 <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
                                     <div className="flex flex-col gap-1 h-[110px]">
-                                        <p className="text-white font-bold">Árvores</p>
-                                        <p className="text-white">Total estimado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
-                                        <p className="text-white">CO² estocado: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
-                                        <p className="text-white">Água estocada: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
+                                        <p className="text-white font-bold">{t('arvores')}</p>
+                                        <p className="text-white">{t('totalEstimado')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.estimatedTreesTotal))}</span></p>
+                                        <p className="text-white">{t('co2estocado')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalCarbonEstocadoZones).toFixed(1))}</span> t</p>
+                                        <p className="text-white">{t('aguaEstocada')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(result?.totalAguaEstocadaZones).toFixed(2))}</span> m³</p>
                                     </div>
 
                                     <img
@@ -634,8 +636,8 @@ export function Inspection({ id }) {
 
                                 <div className="flex items-center justify-between p-2 rounded-md border w-full lg:w-[49%]">
                                     <div className="flex flex-col gap-1 h-[110px]">
-                                        <p className="text-white font-bold">Biomassa</p>
-                                        <p className="text-white">Biomassa no solo: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(Math.abs(result?.saldoCarbonAnaliseSoloZones))}</span> kg</p>
+                                        <p className="text-white font-bold">{t('biomassa')}</p>
+                                        <p className="text-white">{t('biomassaSolo')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(Math.abs(result?.saldoCarbonAnaliseSoloZones))}</span> kg</p>
 
                                     </div>
 
@@ -653,7 +655,7 @@ export function Inspection({ id }) {
                     {insumos.length > 0 && (
                         <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
                             <div className="mt-2 flex flex-col">
-                                <p className="text-white font-bold text-lg">Insumos registrados</p>
+                                <p className="text-white font-bold text-lg">{t('insumosRegistrados')}</p>
 
                                 <div className="flex flex-col mt-2">
                                     {insumos.map(item => (

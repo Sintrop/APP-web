@@ -12,8 +12,10 @@ import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 import { TopBar } from "../../../components/TopBar";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export function Contribute() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const { walletConnected, connectionType, userData, itemsCalculator, tokensToContribute } = useMainContext();
     const [loading, setLoading] = useState(false);
@@ -227,11 +229,11 @@ export function Contribute() {
                 <div className="flex flex-col w-full lg:max-w-[1024px] px-2 lg:px-0">
                     <div className="flex flex-col bg-[#0a4303] p-3 rounded-md mt-3 gap-8 lg:flex-row">
                         <div className="flex flex-col w-full lg:w-[300px]">
-                            <p className="text-gray-300 text-sm">Veja o impacto da sua contribuição</p>
+                            <p className="text-gray-300 text-sm">{t('vejaImpactoContribuido')}</p>
 
                             <div className="w-full border-b border-green-600 my-3" />
 
-                            <p className="text-white text-sm mb-1">Com quantos CR deseja contribuir?</p>
+                            <p className="text-white text-sm mb-1">{t('quantoDesejaContribuir')}</p>
                             <input
                                 type="number"
                                 value={input}
@@ -241,35 +243,35 @@ export function Contribute() {
                             />
 
                             {maxAmmount && (
-                                <p className="text-red-500 mt-1 text-sm">Saldo insuficiente!</p>
+                                <p className="text-red-500 mt-1 text-sm">{t('saldoInsuficiente')}</p>
                             )}
 
                             {walletConnected === '' ? (
-                                <p className="text-white mt-3 text-xs">Você não está conectado</p>
+                                <p className="text-white mt-3 text-xs">{t('voceNaoConectado')}</p>
                             ) : (
                                 <div className="flex flex-col mt-3">
-                                    <p className="text-white text-xs">Seu saldo</p>
+                                    <p className="text-white text-xs">{t('seuSaldo')}</p>
                                     <div className="flex items-center gap-2 bg-green-950 p-2 rounded-md">
                                         <img
                                             src={require('../../../assets/token.png')}
                                             className="w-8 h-8 object-contain"
                                         />
 
-                                        <p className="font-bold text-white text-sm">{Intl.NumberFormat('pt-BR').format(Number(balanceData?.balance).toFixed(5))}</p>
+                                        <p className="font-bold text-white text-sm">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 5}).format(Number(balanceData?.balance))}</p>
                                     </div>
                                 </div>
                             )}
                         </div>
 
                         <div className="flex flex-col w-[300px]">
-                            <p className="text-gray-300 text-sm">Com essa contribuição, você vai impactar com:</p>
+                            <p className="text-gray-300 text-sm">{t('impactoSuaContribuicao')}:</p>
 
                             <div className="w-full border-b border-green-600 my-3" />
 
-                            <p className="text-white text-sm mb-1">Carbono: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.carbon).toFixed(2))} kg</span></p>
-                            <p className="text-white text-sm mb-1">Solo: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.soil).toFixed(2))} m²</span></p>
-                            <p className="text-white text-sm mb-1">Água: <span className="font-bold">{Intl.NumberFormat('pt-BR').format((Number(impactInvestor?.water) * 1000).toFixed(2))} L</span></p>
-                            <p className="text-white text-sm mb-1">Biodver.: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.bio).toFixed(2))} uv</span></p>
+                            <p className="text-white text-sm mb-1">{t('carbono')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.carbon).toFixed(2))} kg</span></p>
+                            <p className="text-white text-sm mb-1">{t('solo')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.soil).toFixed(2))} m²</span></p>
+                            <p className="text-white text-sm mb-1">{t('agua')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format((Number(impactInvestor?.water) * 1000).toFixed(2))} L</span></p>
+                            <p className="text-white text-sm mb-1">{t('bio')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impactInvestor?.bio).toFixed(2))} uv</span></p>
                         </div>
                     </div>
 
@@ -290,7 +292,7 @@ export function Contribute() {
                                         src={require('../../../assets/icon-contribuir.png')}
                                         className="w-8 h-8 object-contain"
                                     />
-                                    <p className="font-bold text-white">Contribuir</p>
+                                    <p className="font-bold text-white">{t('contribuir')}</p>
                                 </div>
 
                                 <FaChevronRight size={20} color='white' />
@@ -304,7 +306,7 @@ export function Contribute() {
                     >
                         <div className="flex items-center gap-3">
                             <FaCalculator color='white' size={30} />
-                            <p className="font-bold text-white">Calculadora de impacto</p>
+                            <p className="font-bold text-white">{t('calculadoraDeImpacto')}</p>
                         </div>
 
                         <FaChevronRight size={20} color='white' />

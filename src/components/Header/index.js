@@ -9,9 +9,12 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
 import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
 import { ModalOptionAccount } from "./components/ModalOptionAccount.js";
+import { useTranslation } from "react-i18next";
+import { ModalChooseLanguage } from "./components/ModalChooseLanguage.js";
 
 export function Header({ routeActive }) {
-    const { walletConnected, userData } = useMainContext();
+    const { t, i18n } = useTranslation();
+    const { walletConnected, userData, modalChooseLang, toggleModalChooseLang } = useMainContext();
     const navigate = useNavigate();
     const [modalConnect, setModalConnect] = useState(false);
     const [imageProfile, setImageProfile] = useState(null);
@@ -50,7 +53,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Início</p>
+                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('feed')}</p>
 
                             {routeActive === 'home' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -66,7 +69,7 @@ export function Header({ routeActive }) {
                             <div className="lg:hidden">
                                 <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18} />
                             </div>
-                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Centros</p>
+                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('servicos')}</p>
 
                             {routeActive === 'centers' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -100,7 +103,7 @@ export function Header({ routeActive }) {
                                 <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={18} />
                             </div>
 
-                            <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Comunidade</p>
+                            <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('comunidade')}</p>
 
                             {routeActive === 'community' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -118,7 +121,7 @@ export function Header({ routeActive }) {
                                 <BsFillGearFill color={routeActive === 'actions' ? 'white' : '#ccc'} size={18} />
                             </div>
 
-                            <p className={`${routeActive === 'actions' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>Ações</p>
+                            <p className={`${routeActive === 'actions' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('acoes')}</p>
 
                             {routeActive === 'actions' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
@@ -157,22 +160,36 @@ export function Header({ routeActive }) {
                                     </>
                                 )}
                             </div>
-                            <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? 'Conectar' : 'Perfil'}</p>
+                            <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? t('conectar') : t('perfil')}</p>
 
                             {routeActive === 'profile' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
                             )}
                         </button>
 
-                        {/* {walletConnected !== '' && (
-                            <button
-                                className="flex flex-col items-center w-[75px] text-white text-sm text-center ml-4"
-                                onClick={() => { setShowLogout(true) }}
-                            >
-                                <MdLogout color='white' size={18} />
-                                Desconectar
-                            </button>
-                        )} */}
+                        <button
+                            className="w-7 h-5 bg-red-500 ml-5"
+                            onClick={toggleModalChooseLang}
+                        >
+                            {i18n.language === 'pt-BR' && (
+                                <img
+                                    src={require('../../assets/icon-br.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                            {i18n.language === 'en-US' && (
+                                <img
+                                    src={require('../../assets/icon-brit.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                            {i18n.language === 'es' && (
+                                <img
+                                    src={require('../../assets/icon-spa.png')}
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                        </button>
                     </div>
                 </div>
 
@@ -196,6 +213,12 @@ export function Header({ routeActive }) {
                         setOptionsAccount(false);
                         setModalConnect(true);
                     }}
+                />
+            )}
+
+            {modalChooseLang && (
+                <ModalChooseLanguage
+                    close={toggleModalChooseLang}
                 />
             )}
         </>

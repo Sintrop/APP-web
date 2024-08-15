@@ -61,7 +61,7 @@ export function MessageItem({ data, typeChat }) {
         <div className={`flex flex-col mb-2 ${isMessageUser ? 'items-end' : 'items-start'}`}>
             <div className={`${isMessageUser ? 'bg-[#00FF84]' : 'bg-[#02c0a1]'} p-2 rounded-md min-w-[120px] max-w-[200px]`}>
                 {!isMessageUser && (
-                    <p className="font-bold text-white">{data?.name}</p>
+                    <p className="font-bold text-white">{data?.user.name}</p>
                 )}
                 {data.type === 'image' && (
                     <div className="w-[150px] h-[150px] rounded-md bg-gray-400">
@@ -76,7 +76,7 @@ export function MessageItem({ data, typeChat }) {
                 <p>{textMessage}</p>
                 {data.createdAt && (
                     <p className={`${isMessageUser ? 'text-right' : 'text-left'} text-xs text-gray-800 mt-1`}>
-                        {format(new Date(), 'dd/MM/yyyy') === format(new Date(data.createdAt), 'dd/MM/yyyy') ? format(new Date(data.createdAt), 'kk:mm') : format(new Date(data.createdAt), 'dd/MM/yyyy')}
+                        {format(new Date(), 'dd/MM/yyyy') === format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy') ? format(new Date(data.createdAt.toDate()), 'kk:mm') : format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy')}
                     </p>
                 )}
             </div>

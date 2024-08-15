@@ -21,8 +21,10 @@ import { TopBar } from "../../components/TopBar";
 import { ModalSignOut } from "../../components/ModalSignOut";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
 export function Home() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const { walletConnected, userData, imageProfile, blockchainData } = useMainContext();
     const [loading, setLoading] = useState(false);
@@ -104,13 +106,13 @@ export function Home() {
                                             className="w-14 h-14 object-contain rounded-full border-2 border-white"
                                         />
 
-                                        <p className="font-bold text-white text-center text-sm mt-2">Você está no modo anônimo</p>
+                                        <p className="font-bold text-white text-center text-sm mt-2">{t('voceEstaAnonimo')}</p>
 
                                         <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
                                             <Dialog.Trigger
                                                 className="w-full p-2 bg-blue-500 rounded-md text-white font-bold mt-10"
                                             >
-                                                Conectar wallet
+                                                {t('conectarWallet')}
                                             </Dialog.Trigger>
 
                                             <ModalConnectAccount close={() => setModalConnect(false)} />
@@ -120,7 +122,7 @@ export function Home() {
                                             className="text-white text-center mt-3 text-sm"
                                             onClick={() => setSignOut(true)}
                                         >
-                                            Cadastre-se
+                                            {t('cadastre-se')}
                                         </button>
                                     </>
                                 ) : (
@@ -134,26 +136,26 @@ export function Home() {
 
                                         <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
                                         <p className="text-gray-300 text-center text-xs">
-                                            {userData?.userType === 1 && 'Produtor(a)'}
-                                            {userData?.userType === 2 && 'Inspetor(a)'}
-                                            {userData?.userType === 3 && 'Pesquisador(a)'}
-                                            {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                                            {userData?.userType === 5 && 'Contribuidor(a)'}
-                                            {userData?.userType === 6 && 'Ativista'}
-                                            {userData?.userType === 7 && 'Apoiador(a)'}
-                                            {userData?.userType === 8 && 'Validador(a)'}
+                                            {userData?.userType === 1 && t('textProdutor')}
+                                            {userData?.userType === 2 && t('textInspetor')}
+                                            {userData?.userType === 3 && t('textPesquisador')}
+                                            {userData?.userType === 4 && t('textDesenvolvedor')}
+                                            {userData?.userType === 5 && t('textContribuidor')}
+                                            {userData?.userType === 6 && t('textAtivista')}
+                                            {userData?.userType === 7 && t('textApoiador')}
+                                            {userData?.userType === 8 && t('textValidador')}
                                         </p>
                                         <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
                                         {userData?.userType === 0 ? (
                                             <div className="flex flex-col mt-5">
-                                                <p className="text-center text-white">Wallet não cadastrada</p>
+                                                <p className="text-center text-white">{t('walletNCadastro')}</p>
 
                                                 <button
                                                     className="mt-2 text-white py-2 px-5 bg-blue-500 rounded-md font-semibold text-sm"
                                                     onClick={() => setSignOut(true)}
                                                 >
-                                                    Cadastre-se
+                                                    {t('cadastre-se')}
                                                 </button>
                                             </div>
                                         ) : (
@@ -172,18 +174,18 @@ export function Home() {
                                                             )}
                                                         </div>
                                                         <p className="text-xs text-gray-200">
-                                                            {userData?.userType === 1 && 'Pontuação de regeneração'}
-                                                            {userData?.userType === 2 && 'Inspeções realizadas'}
-                                                            {userData?.userType === 3 && 'Pesquisas publicadas'}
-                                                            {userData?.userType === 4 && 'Seu nível'}
-                                                            {userData?.userType === 7 && 'Tokens contribuidos'}
+                                                            {userData?.userType === 1 && t('ptsRegeneracao')}
+                                                            {userData?.userType === 2 && t('ispRealizadas')}
+                                                            {userData?.userType === 3 && t('pesqPublicadas')}
+                                                            {userData?.userType === 4 && t('seuNivel')}
+                                                            {userData?.userType === 7 && t('tokenContribuidos')}
                                                         </p>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <p className="text-yellow-500 font-semibold text-center mt-3">Cadastro na blockchain pendente</p>
+                                                        <p className="text-yellow-500 font-semibold text-center mt-3">{t('cadastroPendente')}</p>
                                                         <button className="underline text-white" onClick={() => navigate('/profile')}>
-                                                            Saiba mais aqui
+                                                            {t('saibaMais')}
                                                         </button>
                                                     </>
                                                 )}
@@ -202,7 +204,7 @@ export function Home() {
                             </div>
 
                             <div className="hidden lg:flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
-                                <p className="text-gray-400 text-xs text-left">Atalhos</p>
+                                <p className="text-gray-400 text-xs text-left">{t('atalhos')}</p>
 
                                 <div className="flex flex-wrap justify-center gap-5 mt-3">
                                     <button
@@ -212,7 +214,7 @@ export function Home() {
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <FaCalculator color='white' size={25} />
                                         </div>
-                                        <p className="text-white text-xs text-center">Calculadora de impacto</p>
+                                        <p className="text-white text-xs text-center">{t('calculadoraDeImpacto')}</p>
                                     </button>
 
                                     <a
@@ -223,7 +225,7 @@ export function Home() {
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <IoMdHelp color='white' size={30} />
                                         </div>
-                                        <p className="text-white text-xs text-center">Ajuda</p>
+                                        <p className="text-white text-xs text-center">{t('ajuda')}</p>
                                     </a>
 
                                     <button
@@ -233,18 +235,7 @@ export function Home() {
                                         <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
                                             <ImBooks color='white' size={30} />
                                         </div>
-                                        <p className="text-white text-xs text-center">Educação</p>
-                                    </button>
-
-
-                                    <button
-                                        className="flex flex-col items-center w-16"
-                                        onClick={() => alert('Disponível em breve!')}
-                                    >
-                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
-                                            <p className="text-[9px] text-white">Consultoria</p>
-                                        </div>
-                                        <p className="text-white text-xs text-center">Consultoria</p>
+                                        <p className="text-white text-xs text-center">{t('educacao')}</p>
                                     </button>
                                 </div>
                             </div>
@@ -295,7 +286,7 @@ export function Home() {
                                         <ActivityIndicator size={40} />
                                     ) : (
                                         <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
-                                            Ver mais
+                                            {t('verMais')}
                                         </button>
                                     )}
                                 </>
@@ -304,7 +295,7 @@ export function Home() {
 
                         <div className="hidden lg:flex flex-col gap-3">
                             <div className="flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
-                                <p className="font-bold text-white text-xs text-center mb-3">Baixe nosso aplicativo</p>
+                                <p className="font-bold text-white text-xs text-center mb-3">{t('baixeNossoApp')}</p>
                                 <QRCode
                                     value='https://www.sintrop.com/app'
                                     size={100}

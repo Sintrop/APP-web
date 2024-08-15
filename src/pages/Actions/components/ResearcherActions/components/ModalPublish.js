@@ -2,25 +2,27 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator";
 import {FaChevronLeft} from 'react-icons/fa';
+import { useTranslation } from "react-i18next";
 
 export function ModalPublish({close, loadingPublish, publish, publishType}) {
+    const {t} = useTranslation();
     const [title, setTitle] = useState('');
     const [thesis, setThesis] = useState('');
     const [pdf, setPdf] = useState(null);
 
     function handlePublish(){
         if(!title.trim()){
-            toast.error('Digite um título!');
+            toast.error(t('digiteTitulo'));
             return;
         }
 
         if(!thesis.trim()){
-            toast.error('DIgite uma tese!');
+            toast.error(t('digiteTese'));
             return;
         }
 
         if(!pdf){
-            toast.error('Anexe um PDF!');
+            toast.error(t('AnexePDF'));
             return;
         }
 
@@ -46,30 +48,30 @@ export function ModalPublish({close, loadingPublish, publish, publishType}) {
                         <FaChevronLeft size={20} color='white'/>
                     </button>
                     <p className="font-bold text-white text-center">
-                        {publishType === 'normal' && 'Publicar pesquisa'}
-                        {publishType === 'calculator' && 'Sugerir item calculadora'}
-                        {publishType === 'method' && 'Sugerir nova metodologia'}
+                        {publishType === 'normal' && t('publicarPesquisa')}
+                        {publishType === 'calculator' && t('sugerirItemCalc')}
+                        {publishType === 'method' && t('sugerirMetodo')}
                     </p>
                     <div className="w-10"/>
                 </div>
                 <div className="p-2 rounded-md flex flex-col bg-[#0a4303] w-full">
-                    <label className="text-white font-bold">Título</label>
+                    <label className="text-white font-bold">{t('titulo')}</label>
                     <input
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Digite aqui"
+                        placeholder={t('digiteAqui')}
                         className="w-full rounded-md px-3 text-white bg-green-950 h-10"
                     />
 
-                    <label className="text-white font-bold mt-3">Tese</label>
+                    <label className="text-white font-bold mt-3">{t('tese')}</label>
                     <input
                         value={thesis}
                         onChange={(e) => setThesis(e.target.value)}
-                        placeholder="Digite aqui"
+                        placeholder={t('digiteAqui')}
                         className="w-full rounded-md px-3 text-white bg-green-950 h-10"
                     />
 
-                    <label className="text-white font-bold mt-3">Arquivo PDF</label>
+                    <label className="text-white font-bold mt-3">{t('arquivoPDF')}</label>
                     <input
                         className='text-sm text-white'
                         type='file'
@@ -93,7 +95,7 @@ export function ModalPublish({close, loadingPublish, publish, publishType}) {
                         {loadingPublish ? (
                             <ActivityIndicator size={25} />
                         ) : (
-                            'Publicar pesquisa'
+                            t('publicarPesquisa')
                         )}
                     </button>
                 </div>

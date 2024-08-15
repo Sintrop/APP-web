@@ -71,48 +71,48 @@ export function ItemReceipt({ data, index }) {
             {moreInfo && (
                 <div className="flex flex-col p-3 w-full bg-[#0a4303]">
                     <div className="mt-5">
-                        <p className="font-bold text-sm lg:text-base text-white">{t('Transaction Hash')}</p>
+                        <p className="font-bold text-sm lg:text-base text-white">{t('hashTransacao')}</p>
                         <a target="_blank" href={`https://sepolia.etherscan.io/tx/${data.hash}`}>
                             <p className="text-blue-400 text-sm lg:text-base mb-2 max-w-[95%] overflow-hidden text-ellipsis decoration-1 underline decoration-blue-400">{data.hash}</p>
                         </a>
 
                         <div className="w-full h-[1px] bg-green-500/20"/>
 
-                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('From Address')}</p>
+                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('doEndereco')}</p>
                         <p className="text-white mb-2 text-sm lg:text-base max-w-[95%] overflow-hidden text-ellipsis">{data.to}</p>
 
                         <div className="w-full h-[1px] bg-green-500/20"/>
 
-                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('Block Number')}</p>
+                        <p className="font-bold text-white text-sm lg:text-base mt-2">{t('numeroBloco')}</p>
                         <p className="text-white mb-2 text-sm lg:text-base">{data.blockNumber}</p>
 
                         <div className="w-full h-[1px] bg-green-500/20"/>
                     </div>
 
                     <div className="flex items-center w-full justify-between my-5">
-                        <p className="font-bold text-white text-sm lg:text-base">Total contribuido</p>
+                        <p className="font-bold text-white text-sm lg:text-base">{t('totalContribuido')}</p>
                         <p className="text-green-500 font-bold text-sm lg:text-base">{Intl.NumberFormat('pt-BR',{maximumFractionDigits: 0}).format(Number(data.value) / 10 ** 18)} RC</p>
                     </div>
 
                     <div className="w-full h-[1px] bg-green-500/20"/>
 
-                    <p className="font-bold text-sm lg:text-base text-white mt-3">Relatório de impacto</p>
+                    <p className="font-bold text-sm lg:text-base text-white mt-3">{t('relatorioImpacto')}</p>
                     <div className="flex items-center gap-3 flex-wrap justify-center lg:justify-start">
                         <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
                             <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.carbon)} kg</p>
-                            <p className="text-white text-sm lg:text-base">{t('Carbono')}</p>
+                            <p className="text-white text-sm lg:text-base">{t('carbono')}</p>
                         </div>
                         <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
                             <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.soil)} m²</p>
-                            <p className="text-white text-sm lg:text-base">{t('Solo')}</p>
+                            <p className="text-white text-sm lg:text-base">{t('solo')}</p>
                         </div>
                         <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
                             <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.water)} m³</p>
-                            <p className="text-white text-sm lg:text-base">{t('Água')}</p>
+                            <p className="text-white text-sm lg:text-base">{t('agua')}</p>
                         </div>
                         <div className="flex flex-col items-center px-5 py-3 rounded-sm bg-green-950 w-[135px]">
                             <p className="font-bold text-green-500">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(impactReceipt?.bio)} uv</p>
-                            <p className="text-white text-sm lg:text-base">{t('Biodiversidade')}</p>
+                            <p className="text-white text-sm lg:text-base">{t('bio')}</p>
                         </div>
                     </div>
                 </div>

@@ -12,8 +12,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { ModalCreateTask } from "./ModalCreateTask";
 import {Feedback} from '../../../../components/Feedback';
 import {Chat} from '../../../../components/Chat';
+import { useTranslation } from "react-i18next";
 
 export function DeveloperActions() {
+    const {t} = useTranslation()
     const { userData, walletConnected } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [feedbacks, setFeedbacks] = useState([]);
@@ -76,13 +78,13 @@ export function DeveloperActions() {
 
     function handleInvite() {
         if (!wallet.trim()) {
-            toast.error('Digite uma wallet!');
+            toast.error(t('digiteWallet'));
             return
         }
         if (window.ethereum) {
             inviteUser();
         } else {
-            toast.error('Você precisa estar em um navegador com provedor Ethereum!')
+            toast.error(t('necessitaProvedor'))
         }
     }
 
@@ -132,7 +134,7 @@ export function DeveloperActions() {
     return (
         <div className="flex flex-col lg:w-[1024px]">
 
-            <h3 className="font-bold text-white text-lg">Centro de desenvolvimento</h3>
+            <h3 className="font-bold text-white text-lg">{t('centroDev')}</h3>
 
             <div className="flex items-center justify-between w-full">
                 <p className="text-gray-400 mt-1">Feedbacks/tasks</p>
@@ -142,7 +144,7 @@ export function DeveloperActions() {
                         className="px-3 h-10 rounded-md bg-blue-500 text-white font-bold"
                         onClick={() => setCreateTask(true)}
                     >
-                        Criar task
+                        {t('criarTask')}
                     </button>
                 )}
             </div>
@@ -151,21 +153,21 @@ export function DeveloperActions() {
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'open' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('open')}
                 >
-                    Abertas
+                    {t('abertas')}
                 </button>
 
                 <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'history' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('history')}
                 >
-                    Histórico
+                    {t('historico')}
                 </button>
 
                 <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('users')}
                 >
-                    Desenvolvedores
+                    {t('desenvolvedores')}
                 </button>
 
                 {userData?.userType === 4 && (
@@ -173,7 +175,7 @@ export function DeveloperActions() {
                         className={`font-bold py-1 border-b-2 ${tabSelected === 'actions' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                         onClick={() => setTabSelected('actions')}
                     >
-                        Ações
+                        {t('acoes')}
                     </button>
                 )}
             </div>
@@ -251,32 +253,32 @@ export function DeveloperActions() {
                 <>
                     {userData?.userType === 4 && (
                         <>
-                            <p className="font-bold text-white text-lg">Convidar desenvolvedor</p>
+                            <p className="font-bold text-white text-lg">{t('convidarDev')}</p>
                             <div className="flex flex-col p-3 rounded-md bg-[#0a4303] mb-5">
-                                <p className="text-white">Para convidar outro desenvolvedor, basta inserir a wallet dele abaixo</p>
+                                <p className="text-white">{t('descConviteDev')}</p>
                                 <p className="mt-2 font-bold text-blue-500">Wallet</p>
                                 <input
                                     value={wallet}
                                     onChange={(e) => setWallet(e.target.value)}
                                     className="px-3 py-2 rounded-md text-white bg-green-950 max-w-[400px]"
-                                    placeholder="Digite aqui"
+                                    placeholder={t('digiteAqui')}
                                 />
                                 <button
                                     className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-3"
                                     onClick={handleInvite}
                                 >
-                                    Convidar
+                                    {t('convidar')}
                                 </button>
                             </div>
 
-                            <p className="font-bold text-white text-lg">Relatório de desenvolvimento</p>
+                            <p className="font-bold text-white text-lg">{t('relatorioDev')}</p>
                             <div className="flex flex-col p-2 bg-[#0a4303] rounded-md mt-1 mb-5">
-                                <p className="text-gray-400">Envie sua prova de contribuição para o desenvolvimento do sistema</p>
+                                <p className="text-gray-400">{t('descRelatorioDev')}</p>
                                 <button
                                     className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-1"
                                     onClick={() => setModalDevReport(true)}
                                 >
-                                    Enviar relatório
+                                    {t('enviarRelatorio ')}
                                 </button>
                             </div>
                         </>
@@ -297,7 +299,7 @@ export function DeveloperActions() {
                     setModalTransaction(open)
                     setLoading(false);
                     if (logTransaction.type === 'success') {
-                        toast.success('Apoiador convidado com sucesso!')
+                        toast.success(t('apoiadorConvidado'))
                     }
                 }
             }}>
@@ -311,7 +313,7 @@ export function DeveloperActions() {
                 <ModalCreateTask
                     close={() => setCreateTask(false)}
                     success={() => {
-                        toast.success('Task criada com sucesso!');
+                        toast.success(t('taskCriada'));
                         getFeedbacks();
                     }}
                 />

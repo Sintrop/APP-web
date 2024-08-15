@@ -3,8 +3,10 @@ import { api } from "../../../../services/api";
 import { QRCode } from "react-qrcode-logo";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
 import { ItemsCalculator } from "./ItemsCalculator";
+import { useTranslation } from "react-i18next";
 
 export function ContributeTokensPubli({ data }) {
+    const {t} = useTranslation();
     const additionalData = JSON.parse(data?.additionalData);
     const userData = additionalData?.userData;
 
@@ -46,7 +48,7 @@ export function ContributeTokensPubli({ data }) {
             <div className="flex flex-col bg-green-950">
                 <div className="h-9 flex items-center justify-center border-b border-green-700 w-full">
                     <p className="text-white">
-                        Contribuiu com <span className="font-bold text-green-700">{Intl.NumberFormat('pt-BR').format(Number(additionalData?.tokens))}</span> Créditos de Regeneração
+                        {t('contribuiuCom')} <span className="font-bold text-green-700">{Intl.NumberFormat('pt-BR').format(Number(additionalData?.tokens))}</span> {t('creditosRegen')}
                     </p>
 
                     <img
@@ -56,25 +58,25 @@ export function ContributeTokensPubli({ data }) {
                 </div>
 
                 <div className="h-9 flex items-center px-3 border-b border-green-700 w-full">
-                    <p className="text-gray-400 text-sm">Financiando o impacto de:</p>
+                    <p className="text-gray-400 text-sm">{t('financiandoOImpacto')}:</p>
                 </div>
 
                 <div className="flex justify-between p-3">
                     <div className="flex flex-col gap-1">
                         <p className="text-white text-sm">
-                            Carbono: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.carbon).toFixed(2))} kg</span>
+                            {t('carbono')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.carbon).toFixed(2))} kg</span>
                         </p>
 
                         <p className="text-white text-sm">
-                            Solo: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.soil).toFixed(2))} m²</span>
+                            {t('solo')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.soil).toFixed(2))} m²</span>
                         </p>
 
                         <p className="text-white text-sm">
-                            Água: <span className="font-bold">{Intl.NumberFormat('pt-BR').format((Number(impact?.water) * 1000).toFixed(2))} L</span>
+                            {t('agua')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format((Number(impact?.water) * 1000).toFixed(2))} L</span>
                         </p>
 
                         <p className="text-white text-sm">
-                            Biodiversidade: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.bio).toFixed(2))} uv</span>
+                            {t('bio')}: <span className="font-bold">{Intl.NumberFormat('pt-BR').format(Number(impact?.bio).toFixed(2))} uv</span>
                         </p>
 
                         <a
@@ -82,7 +84,7 @@ export function ContributeTokensPubli({ data }) {
                             href={`https://${window.location.host}/supporter/${String(userData?.wallet).toLowerCase()}`}
                             target="_blank"
                         >
-                            Ver contribuções
+                            {t('verContribuicoes')}
                         </a>
                     </div>
 

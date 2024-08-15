@@ -4,8 +4,10 @@ import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { api } from '../../../../../../services/api';
 import Loading from '../../../../../../components/Loading';
+import { useTranslation } from 'react-i18next';
 
 export function ModalConfirmDiscard({data, close, success}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
 
     async function handleAssign(){
@@ -31,26 +33,26 @@ export function ModalConfirmDiscard({data, close, success}){
             <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[300px] h-[250px] bg-black rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between mb-5'>
                     <div className='w-[25px]'/>
-                    <Dialog.Title className='font-bold text-white'>Descartar</Dialog.Title>
+                    <Dialog.Title className='font-bold text-white'>{t('descartar')}</Dialog.Title>
                     <Dialog.Close>
                         <IoMdCloseCircleOutline size={25} color='white'/>
                     </Dialog.Close>
                 </div>
                 
-                <p className='text-white text-center'>Deseja descartar a task?</p>
+                <p className='text-white text-center'>{t('desejaDescartarTask')}</p>
 
                 <div className='flex items-center justify-between w-full'>
                     <Dialog.Close
                         className='p-3 text-white font-bold'
                     >
-                        Cancelar
+                        {t('cancelar')}
                     </Dialog.Close>
 
                     <button
                         className='px-3 py-2 text-white font-bold rounded-md bg-blue-500'
                         onClick={handleAssign}
                     >   
-                        Descartar
+                        {t('descartar')}
                     </button>
                 </div>
             </Dialog.Content>

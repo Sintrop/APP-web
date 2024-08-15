@@ -10,8 +10,10 @@ import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
 import { ModalCreateTask } from "./ModalCreateTask";
+import { useTranslation } from "react-i18next";
 
 export function ColaboratorActions() {
+    const {t} = useTranslation();
     const { userData, walletConnected } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [tasks, setTasks] = useState([]);
@@ -101,7 +103,7 @@ export function ColaboratorActions() {
 
     return (
         <div className="flex flex-col lg:w-[1024px]">
-            <h3 className="font-bold text-white text-lg">Centro colaborativo</h3>
+            <h3 className="font-bold text-white text-lg">{t('centroColab')}</h3>
 
             <div className="flex items-center justify-between w-full">
                 <p className="text-gray-400 mt-1">Tasks</p>
@@ -110,7 +112,7 @@ export function ColaboratorActions() {
                     className="text-white font-bold h-10 px-4 rounded-md bg-blue-500"
                     onClick={() => setCreateTask(true)}
                 >
-                    Criar task
+                    {t('criarTask')}
                 </button>
             </div>
             <div className="flex items-center gap-8 mb-2">
@@ -118,14 +120,14 @@ export function ColaboratorActions() {
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'open' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('open')}
                 >
-                    Abertas
+                    {t('abertas')}
                 </button>
 
                 <button
                     className={`font-bold py-1 border-b-2 ${tabSelected === 'history' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                     onClick={() => setTabSelected('history')}
                 >
-                    Histórico
+                    {t('historico')}
                 </button>
 
             </div>
@@ -176,7 +178,7 @@ export function ColaboratorActions() {
                 <ModalCreateTask
                     close={() => setCreateTask(false)}
                     success={() => {
-                        toast.success('Task criada com sucesso!');
+                        toast.success(t('taskCriada'));
                         getTasks();
                     }}
                 />

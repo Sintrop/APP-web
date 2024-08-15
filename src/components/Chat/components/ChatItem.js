@@ -7,8 +7,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalMessages } from "./ModalMessages";
 import CryptoJS from "crypto-js";
 import { MdGroups } from "react-icons/md";
+import { collection, doc, query, onSnapshot, setDoc, Timestamp, orderBy } from "firebase/firestore";
+import { firestore } from "../../../services/firebase";
 
-export function ChatItem({ data, socket }) {
+export function ChatItem({ data, attChats }) {
     const { userData } = useMainContext();
     const participant = JSON.parse(data?.participantData);
     const [imageProfile, setImageProfile] = useState(null);
@@ -19,31 +21,35 @@ export function ChatItem({ data, socket }) {
 
     useEffect(() => {
         getImageProfile();
-        getMessages()
+    }, []);
+
+    const messagesThreadsRef = collection(firestore, "MESSAGE_THREADS");
+    const chatRef = doc(messagesThreadsRef, data?.chatId);
+    const messagesRef = collection(chatRef, 'MESSAGES');
+    const q = query(messagesRef, orderBy('createdAt', 'desc'));
+
+    useEffect(() => {
+        const subscribe = onSnapshot(q, (snapshot) => {
+            const messages = snapshot.docs.map(doc => {
+                const firebaseData = doc.data();
+                const messageData = {
+                    id: doc.id,
+                    ...firebaseData
+                }
+
+                return messageData;
+            });
+
+            decryptMessage(messages[0].message);
+            setMessages(messages);
+        });
+
+        return () => subscribe;
     }, []);
 
     async function getImageProfile() {
         const response = await getImage(participant?.imgProfileUrl);
         setImageProfile(response);
-    }
-
-    async function getMessages() {
-        const response = await api.get(`/chats/messages/${data.chatId}`);
-        const msgs = response.data.messages;
-        setMessages(msgs);
-        checkNotVisualized(msgs);
-        decryptMessage(msgs[0]?.message)
-    }
-
-    function checkNotVisualized(msgs) {
-        let count = 0;
-        for (var i = 0; i < msgs.length; i++) {
-            if (!msgs[i].visualized && msgs[i].userId !== userData.id) {
-                count += 1;
-            }
-        }
-
-        setCountNotVisualized(count);
     }
 
     function decryptMessage(msg) {
@@ -52,7 +58,10 @@ export function ChatItem({ data, socket }) {
     }
 
     return (
-        <Dialog.Root open={modalMessages} onOpenChange={(open) => setModalMessages(open)}>
+        <Dialog.Root open={modalMessages} onOpenChange={(open) => {
+            setModalMessages(open)
+            attChats();
+        }}>
             <Dialog.Trigger className="flex justify-between px-3 py-2">
                 <div className="flex flex-2 gap-2">
                     {data?.chat?.type === 'private' ? (
@@ -92,7 +101,7 @@ export function ChatItem({ data, socket }) {
                             </div>
                         ) : (
                             <p className="text-white text-xs max-w-[200px] text-ellipsis overflow-hidden truncate">
-                                {messages[0]?.userId === userData.id && 'Você: '}
+                                {messages[0]?.user?.id === userData.id && 'Você: '}
                                 {textMessage}
                             </p>
                         )}
@@ -102,7 +111,7 @@ export function ChatItem({ data, socket }) {
                 <div className="relative right-3 top-0 flex flex-col items-end justify-between">
                     {messages[0] && (
                         <p className="text-xs text-white">
-                            {format(new Date(), 'dd/MM/yyyy') === format(new Date(messages[0].createdAt), 'dd/MM/yyyy') ? format(new Date(messages[0].createdAt), 'kk:mm') : format(new Date(messages[0].createdAt), 'dd/MM/yyyy')}
+                            {format(new Date(), 'dd/MM/yyyy') === format(new Date(messages[0].createdAt.toDate()), 'dd/MM/yyyy') ? format(new Date(messages[0].createdAt.toDate()), 'kk:mm') : format(new Date(messages[0].createdAt.toDate()), 'dd/MM/yyyy')}
                         </p>
                     )}
 
@@ -118,7 +127,7 @@ export function ChatItem({ data, socket }) {
                 chat={data}
                 imageProfile={imageProfile}
                 participant={participant}
-                socket={socket}
+                messages={messages}
                 typeChat={data?.chat?.type}
             />
         </Dialog.Root>

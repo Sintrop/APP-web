@@ -3,8 +3,10 @@ import {FaChevronLeft} from 'react-icons/fa';
 import { api } from "../../../../services/api";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { UserLikeItem } from "./UserLikeItem";
+import { useTranslation } from "react-i18next";
 
 export function ModalLikes({close, publiId}){
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [likes, setLikes] = useState([]);
 
@@ -29,7 +31,9 @@ export function ModalLikes({close, publiId}){
                     >
                         <FaChevronLeft size={17} color='white'/>
                     </button>
-                    <p className="font-semibold text-white">Curtidas</p>
+                    <p className="font-semibold text-white">
+                        {t('curtidas')}
+                    </p>
                 </div>
 
                 <div className="flex flex-col w-full overflow-y-auto mt-3 gap-4">

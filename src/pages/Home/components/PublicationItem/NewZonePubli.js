@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import { Polyline } from '../../../../components/Mapbox/Polyline';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useTranslation } from 'react-i18next';
 
 export function NewZonePubli({ data }) {
+    const {t} = useTranslation();
     const addData = JSON.parse(data?.additionalData);
     const [pathPolyline, setPathPolyline] = useState([]);
     const [mapProperty, setMapProperty] = useState(null);
@@ -26,7 +28,7 @@ export function NewZonePubli({ data }) {
     return (
         <div>
             <p className='text-white'>
-                Cadastrou uma nova zona de regeneração
+                {t('cadastrouNovaIsp')}
             </p>
 
             {pathPolyline.length > 0 && (
@@ -51,11 +53,11 @@ export function NewZonePubli({ data }) {
             
             <div className='flex items-center gap-2 mt-1'>
                 <div className="w-5 h-1 rounded-md bg-yellow-300" />
-                <p className='text-xs text-gray-300'>Zona</p>
+                <p className='text-xs text-gray-300'>{t('zona')}</p>
             </div>
 
-            <p className='text-white text-sm'>Nome: <span className='font-bold'> {addData?.titleZone}</span></p>
-            <p className='text-white text-sm'>Área: <span className='font-bold'> {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(addData?.areaZone)} m²</span></p>
+            <p className='text-white text-sm'>{t('nome')}: <span className='font-bold'> {addData?.titleZone}</span></p>
+            <p className='text-white text-sm'>{t('area')}: <span className='font-bold'> {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(addData?.areaZone)} m²</span></p>
         </div>
     )
 }

@@ -27,8 +27,11 @@ import { PublishResearche } from "./PublishResearche";
 import { ProofReduce } from "./ProofReduce";
 import { InviteWalletPubli } from "./InviteWalletPubli";
 import { NewZonePubli } from "./NewZonePubli";
+import { useTranslation } from "react-i18next";
+import { FinishTaskPubli } from "./FinishTaskPubli";
 
 export function PublicationItem({ data }) {
+    const { t } = useTranslation();
     const { walletConnected, userData: user } = useMainContext();
     const navigate = useNavigate();
     const additionalData = JSON.parse(data.additionalData);
@@ -139,17 +142,17 @@ export function PublicationItem({ data }) {
                             className="text-white font-bold text-sm hover:underline hover:cursor-pointer"
                             onClick={() => navigate(`/user-details/${String(userData?.wallet).toLowerCase()}`)}
                         >
-                            {userData?.userType === 8 ? 'Validador(a)' : userData?.name}
+                            {userData?.userType === 8 ? t('textValidador') : userData?.name}
                         </p>
                         <p className="text-gray-300 text-xs">
-                            {userData?.userType === 1 && 'Produtor(a)'}
-                            {userData?.userType === 2 && 'Inspetor(a)'}
-                            {userData?.userType === 3 && 'Pesquisador(a)'}
-                            {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                            {userData?.userType === 5 && ''}
-                            {userData?.userType === 6 && 'Ativista'}
-                            {userData?.userType === 7 && 'Apoiador(a)'}
-                            {userData?.userType === 8 && 'Validador(a)'}
+                            {userData?.userType === 1 && t('textProdutor')}
+                            {userData?.userType === 2 && t('textInspetor')}
+                            {userData?.userType === 3 && t('textPesquisador')}
+                            {userData?.userType === 4 && t('textDesenvolvedor')}
+                            {userData?.userType === 5 && t('textContribuidor')}
+                            {userData?.userType === 6 && t('textAtivista')}
+                            {userData?.userType === 7 && t('textApoiador')}
+                            {userData?.userType === 8 && t('textValidador')}
                         </p>
                         <p className="text-gray-300 text-xs">{format(new Date(data.createdAt), 'dd/MM/yyyy - kk:mm')}</p>
                     </div>
@@ -167,7 +170,9 @@ export function PublicationItem({ data }) {
 
                 {data.type === 'request-inspection' && (
                     <div className="">
-                        <p className="text-white">Requisitou uma nova inspeção</p>
+                        <p className="text-white">
+                            {t('requisitouNovaIsp')}
+                        </p>
                     </div>
                 )}
 
@@ -214,6 +219,10 @@ export function PublicationItem({ data }) {
                 {data.type === 'new-zone' && (
                     <NewZonePubli data={data} />
                 )}
+
+                {data?.type === 'finish-task' && (
+                    <FinishTaskPubli data={data}/>
+                )}
             </div>
 
             {additionalData?.hash && (
@@ -226,37 +235,37 @@ export function PublicationItem({ data }) {
                     <p
                         className="underline text-blue-300"
                     >
-                        Hash da transação
+                        {t('hashTransacao')}
                     </p>
                 </a>
             )}
 
             {likes > 0 && (
                 <button className="w-fit" onClick={() => setModalLikes(true)}>
-                    <p className="text-white ">{likes} Curtida{likes > 1 && 's'}</p>
+                    <p className="text-white ">{likes} {t('curtida')}{likes > 1 && 's'}</p>
                 </button>
             )}
 
             <div className="flex items-center border-t border-green-950 pt-2 gap-5">
                 <button className="flex flex-col items-center" onClick={handleLike}>
                     {liked ? <FaHeart color='red' size={20} /> : <FaRegHeart color='white' size={20} />}
-                    <p className="text-white font-bold text-sm">Curtir</p>
+                    <p className="text-white font-bold text-sm">{t('curtir')}</p>
                 </button>
 
                 <button className="flex flex-col items-center" onClick={() => setModalComments(true)}>
                     <BsChat color='white' size={20} />
-                    <p className="text-white font-bold text-sm">Comentar</p>
+                    <p className="text-white font-bold text-sm">{t('comentar')}</p>
                 </button>
 
                 <button
                     className="flex flex-col items-center"
                     onClick={() => {
                         navigator.clipboard.writeText(`https://app.sintrop.com/publication/${data?.id}`);
-                        toast.success('Link copiado para área de transferência.')
+                        toast.success(t('linkCopiado'))
                     }}
                 >
                     <FaShare color='white' size={20} />
-                    <p className="text-white font-bold text-sm">Compartilhar</p>
+                    <p className="text-white font-bold text-sm">{t('compartilhar')}</p>
                 </button>
             </div>
 
@@ -268,7 +277,7 @@ export function PublicationItem({ data }) {
                     </div>
 
                     {comments.length > 1 && (
-                        <p className="text-gray-400 text-sm cursor-pointer" onClick={() => setModalComments(true)}>Ver todos os comentários</p>
+                        <p className="text-gray-400 text-sm cursor-pointer" onClick={() => setModalComments(true)}>{t('verTodosComentarios')}</p>
                     )}
                 </>
             )}

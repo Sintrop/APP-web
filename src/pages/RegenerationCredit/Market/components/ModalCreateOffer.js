@@ -4,8 +4,10 @@ import { useMainContext } from "../../../../hooks/useMainContext";
 import { MdClose } from "react-icons/md";
 import { Info } from "../../../../components/Info";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function ModalCreateOffer({ close, offerCreated }) {
+    const {t} = useTranslation();
     const { userData } = useMainContext();
     const [tokens, setTokens] = useState('');
     const [balanceData, setBalanceData] = useState({});
@@ -57,7 +59,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
             offerCreated();
             close();
         } catch (err) {
-            alert('Algo deu errado, tente novamente!');
+            alert(t('algoDeuErrado'));
         } finally {
             setLoading(false);
         }
@@ -69,7 +71,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
             <div className='absolute flex flex-col p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
                 <div className="flex items-center w-full justify-between mb-5">
                     <div className="w-[25px]" />
-                    <p className="font-bold text-white">Criar oferta</p>
+                    <p className="font-bold text-white">{t('criarOferta')}</p>
                     <button onClick={close}>
                         <MdClose size={25} color='white' />
                     </button>
@@ -80,7 +82,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
                 />
 
                 <div className="flex flex-col mt-3">
-                    <p className="text-white font-semibold">Seu saldo</p>
+                    <p className="text-white font-semibold">{t('seuSaldo')}</p>
                     <div className="flex items-center gap-2 bg-green-950 p-2 rounded-md">
                         <img
                             src={require('../../../../assets/token.png')}
@@ -90,17 +92,17 @@ export function ModalCreateOffer({ close, offerCreated }) {
                         <p className="font-bold text-white text-sm">{Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0}).format(balanceData?.balance)} RC</p>
                     </div>
                 </div>
-                <p className="text-white font-semibold mt-3">Quantos tokens deseja vender?</p>
+                <p className="text-white font-semibold mt-3">{t('quantosTokensVender')}</p>
                 <input
                     value={tokens}
                     onChange={(e) => setTokens(e.target.value)}
-                    placeholder="Digite aqui"
+                    placeholder={t('digiteAqui')}
                     className="p-2 rounded-md bg-green-950 text-white"
                     type="number"
                 />
 
                 {maxAmmout && (
-                    <p className="mt-1 text-center text-red-500 text-sm">Saldo insuficiente!</p>
+                    <p className="mt-1 text-center text-red-500 text-sm">{t('saldoInsuficiente')}</p>
                 )}
 
                 <div className="mt-5 flex items-center justify-center gap-3">
@@ -111,7 +113,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
                         {loading ? (
                             <ActivityIndicator size={20}/>
                         ) : (
-                            'Criar oferta'
+                            t('criarOferta')
                         )}
                     </button>
                 </div>

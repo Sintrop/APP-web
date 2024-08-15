@@ -3,15 +3,17 @@ import {initReactI18next} from 'react-i18next';
 import {useMainContext} from '../hooks/useMainContext';
 import PTBR from './locales/pt/pt-br.json';
 import ENUS from './locales/en/en-us.json';
+import ES from './locales/es/es.json';
 
 const resources = {
     'pt-BR': PTBR,
-    'en-us': ENUS
+    'en-US': ENUS,
+    'es': ES
 }
 
 const config = {
     resources: resources,
-    lng: 'pt-BR',
+    lng: 'en-US',
     interpolation:{
         escapeValue: false
     }

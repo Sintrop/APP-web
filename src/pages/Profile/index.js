@@ -32,8 +32,10 @@ import { RegenerationZoneProfile } from "./components/RegenerationZoneProfile.js
 import QRCode from "react-qr-code";
 import { ShortPubli } from "./components/ShortPubli/index.js";
 import { Chat } from "../../components/Chat/index.js";
+import { useTranslation } from "react-i18next";
 
 export function Profile() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { userData, walletConnected, blockchainData, getUserDataApi } = useMainContext();
     const [imageProfile, setImageProfile] = useState(null);
@@ -373,30 +375,30 @@ export function Profile() {
                                 <>
                                     {userData?.id === 'anonimous' && (
                                         <div className="flex flex-col">
-                                            <p className="font-semibold text-white">Você não está cadastrado no sistema!</p>
+                                            <p className="font-semibold text-white">{t('voceNaoCadastroSistema')}</p>
 
                                             <button
                                                 className="w-fit py-1 px-5 bg-blue-500 rounded-md text-white font-bold mt-1"
                                                 onClick={() => setModalSignOut(true)}
                                             >
-                                                Cadastre-se
+                                                {t('cadastre-se')}
                                             </button>
 
                                             {inviteData && (
                                                 <div className="flex flex-col mt-3 w-fit p-3 rounded-md border border-white">
-                                                    <p className="text-white">Você recebeu um convite nessa wallet para se cadastrar como:</p>
+                                                    <p className="text-white">{t('voceRecebeuConviteComo')}:</p>
                                                     <p className="font-bold text-green-600 text-2xl">
-                                                        {inviteData?.userType === 1 && 'Produtor(a)'}
-                                                        {inviteData?.userType === 2 && 'Inspetor(a)'}
-                                                        {inviteData?.userType === 3 && 'Pesquisador(a)'}
-                                                        {inviteData?.userType === 4 && 'Desenvolvedor(a)'}
-                                                        {inviteData?.userType === 5 && 'Contribuidor(a)'}
-                                                        {inviteData?.userType === 6 && 'Ativista'}
-                                                        {inviteData?.userType === 7 && 'Apoiador(a)'}
-                                                        {inviteData?.userType === 8 && 'Validador(a)'}
+                                                        {inviteData?.userType === 1 && t('textProdutor')}
+                                                        {inviteData?.userType === 2 && t('textInspetor')}
+                                                        {inviteData?.userType === 3 && t('textPesquisador')}
+                                                        {inviteData?.userType === 4 && t('textDesenvolvedor')}
+                                                        {inviteData?.userType === 5 && t('textContribuidor')}
+                                                        {inviteData?.userType === 6 && t('textAtivista')}
+                                                        {inviteData?.userType === 7 && t('textApoiador')}
+                                                        {inviteData?.userType === 8 && t('textValidador')}
                                                     </p>
 
-                                                    <p className="text-white mt-3">Você foi convidado por:</p>
+                                                    <p className="text-white mt-3">{t('voceFoiConvidadoPor')}:</p>
                                                     <p className="font-bold text-green-600">{inviteData?.inviter}</p>
                                                 </div>
                                             )}
@@ -404,7 +406,7 @@ export function Profile() {
                                             <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
                                                 <div className="flex items-center gap-2">
                                                     <MdHelpOutline color='white' size={25} />
-                                                    <p className="font-semibold text-white">Ajuda</p>
+                                                    <p className="font-semibold text-white">{t('ajuda')}</p>
                                                 </div>
 
                                                 <div className="flex items-center flex-wrap gap-2 mt-1">
@@ -414,7 +416,7 @@ export function Profile() {
                                                         className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                                     >
                                                         <SiReadthedocs size={25} color='white' />
-                                                        <p className="font-bold text-white text-sm">Documentação</p>
+                                                        <p className="font-bold text-white text-sm">{t('documentacao')}</p>
                                                     </a>
 
                                                     <a
@@ -432,7 +434,7 @@ export function Profile() {
 
                                     {accountStatus === 'blockchain' ? (
                                         <div>
-                                            <p className="font-bold text-white">Seu perfil</p>
+                                            <p className="font-bold text-white">{t('seuPerfil')}</p>
                                             <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
                                                 <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
                                                     {userData?.bannerUrl && (
@@ -470,14 +472,14 @@ export function Profile() {
 
                                                     <p className="font-bold text-white mt-3">{userData?.name}</p>
                                                     <p className="text-gray-300 text-sm">
-                                                        {userData?.userType === 1 && 'Produtor(a)'}
-                                                        {userData?.userType === 2 && 'Inspetor(a)'}
-                                                        {userData?.userType === 3 && 'Pesquisador(a)'}
-                                                        {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                                                        {userData?.userType === 5 && 'Contribuidor(a)'}
-                                                        {userData?.userType === 6 && 'Ativista'}
-                                                        {userData?.userType === 7 && 'Apoiador(a)'}
-                                                        {userData?.userType === 8 && 'Validador(a)'}
+                                                        {userData?.userType === 1 && t('textProdutor')}
+                                                        {userData?.userType === 2 && t('textInspetor')}
+                                                        {userData?.userType === 3 && t('textPesquisador')}
+                                                        {userData?.userType === 4 && t('textDesenvolvedor')}
+                                                        {userData?.userType === 5 && t('textContribuidor')}
+                                                        {userData?.userType === 6 && t('textAtivista')}
+                                                        {userData?.userType === 7 && t('textApoiador')}
+                                                        {userData?.userType === 8 && t('textValidador')}
                                                     </p>
 
                                                     {userData?.bio && (
@@ -493,7 +495,7 @@ export function Profile() {
                                                             onClick={() => setEditProfile(true)}
                                                         >
                                                             <MdEdit size={20} color='white' />
-                                                            Editar perfil
+                                                            {t('editarPerfil')}
                                                         </button>
 
                                                         <button
@@ -501,7 +503,7 @@ export function Profile() {
                                                             onClick={() => setModalLogout(true)}
                                                         >
                                                             <MdLogout size={20} color='#ff0000' />
-                                                            Desconectar
+                                                            {t('desconectar')}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -513,7 +515,7 @@ export function Profile() {
                                                     onClick={() => setTabSelected('certificates')}
                                                 >
                                                     <FaQrcode size={18} color={tabSelected === 'certificates' ? 'green' : 'white'} />
-                                                    Certificados
+                                                    {t('certificados')}
                                                 </button>
 
                                                 <button
@@ -521,7 +523,7 @@ export function Profile() {
                                                     onClick={() => setTabSelected('data')}
                                                 >
                                                     <FaUser size={18} color={tabSelected === 'data' ? 'green' : 'white'} />
-                                                    Dados
+                                                    {t('dados')}
                                                 </button>
 
                                                 <button
@@ -529,7 +531,7 @@ export function Profile() {
                                                     onClick={() => setTabSelected('publis')}
                                                 >
                                                     <FaListAlt size={18} color={tabSelected === 'publis' ? 'green' : 'white'} />
-                                                    Publicações
+                                                    {t('publicacoes')}
                                                 </button>
 
                                                 {userData?.userType === 1 && (
@@ -539,7 +541,7 @@ export function Profile() {
                                                             onClick={() => setTabSelected('inspections')}
                                                         >
                                                             <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                            Inspeções
+                                                            {t('isps')}
                                                         </button>
 
                                                         <button
@@ -547,7 +549,7 @@ export function Profile() {
                                                             onClick={() => setTabSelected('zones')}
                                                         >
                                                             <FaMapMarkedAlt size={18} color={tabSelected === 'zones' ? 'green' : 'white'} />
-                                                            Zonas de regeneração
+                                                            {t('zonasDeRegeneracao')}
                                                         </button>
                                                     </>
                                                 )}
@@ -558,7 +560,7 @@ export function Profile() {
                                                         onClick={() => setTabSelected('inspections')}
                                                     >
                                                         <FaList size={18} color={tabSelected === 'inspections' ? 'green' : 'white'} />
-                                                        Inspeções
+                                                        {t('isps')}
                                                     </button>
                                                 )}
                                             </div>
@@ -567,27 +569,27 @@ export function Profile() {
                                                 <>
                                                     {userData?.userType === 1 && (
                                                         <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
-                                                            <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>Estatísticas do(a) produtor(a)</h3>
+                                                            <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                                                             <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
                                                                 <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                                     <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.totalInspections} </p>
-                                                                    <p className='text-white text-xs lg:text-base'>Inspeções recebidas</p>
+                                                                    <p className='text-white text-xs lg:text-base'>{t('ispsRecebidas')}</p>
                                                                 </div>
 
                                                                 <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                                     <p className='font-bold text-white text-xl lg:text-3xl'>{blockchainData?.producer?.isa?.isaScore}</p>
-                                                                    <p className='text-white text-xs lg:text-base'>Pontuação</p>
+                                                                    <p className='text-white text-xs lg:text-base'>{t('pts')}</p>
                                                                 </div>
 
                                                                 <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                                     <p className='font-bold text-white text-xl lg:text-3xl'>{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(blockchainData?.producer?.isa?.isaScore / blockchainData?.producer?.totalInspections)}</p>
-                                                                    <p className='text-white text-xs lg:text-base'>Média</p>
+                                                                    <p className='text-white text-xs lg:text-base'>{t('media')}</p>
                                                                 </div>
 
                                                                 <div className='flex flex-col items-center gap-1 min-w-[100px] lg:min-w-[150px]'>
                                                                     <p className='font-bold text-white text-xl lg:text-3xl'>0</p>
-                                                                    <p className='text-red-500 text-xs lg:text-base'>Denúncias recebidas</p>
+                                                                    <p className='text-red-500 text-xs lg:text-base'>{t('denunciasRecebidas')}</p>
                                                                 </div>
                                                             </div>
 
@@ -606,61 +608,61 @@ export function Profile() {
                                                                         />
                                                                     )}
                                                                 </div>
-                                                                <p className="text-xs text-center text-gray-400 mb-1">Foto de prova</p>
+                                                                <p className="text-xs text-center text-gray-400 mb-1">{t('fotoProva')}</p>
                                                             </div>
 
                                                             <div className="flex flex-col gap-2">
-                                                                <p className="text-white font-bold text-sm">Entrou na comunidade em: <span className="font-normal">{format(new Date(userData?.createdAt), 'dd/MM/yyyy')}</span></p>
+                                                                <p className="text-white font-bold text-sm">{t('entrouComunidade')}: <span className="font-normal">{format(new Date(userData?.createdAt), 'dd/MM/yyyy')}</span></p>
 
                                                                 {userData?.userType === 1 && (
                                                                     <>
-                                                                        <p className="text-white font-bold text-sm">Área da propriedade:
+                                                                        <p className="text-white font-bold text-sm">{t('areaPropriedade')}:
                                                                             <span className="font-normal"> {Intl.NumberFormat('pt-BR').format(Number(blockchainData?.producer?.certifiedArea).toFixed(0))} m²</span>
                                                                         </p>
-                                                                        <p className="text-white font-bold text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.producer?.totalInspections}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Score de regeneração: <span className="font-normal">{blockchainData?.producer?.isa?.isaScore} pts</span></p>
-                                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.producer?.proofPhoto}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('totalIsps')}: <span className="font-normal">{blockchainData?.producer?.totalInspections}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('ptsRegen')}: <span className="font-normal">{blockchainData?.producer?.isa?.isaScore} pts</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.producer?.pool?.currentEra}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.producer?.proofPhoto}</span></p>
                                                                         <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.producer?.userType}</span></p>
                                                                     </>
                                                                 )}
 
                                                                 {userData?.userType === 2 && (
                                                                     <>
-                                                                        <p className="text-white font-bold text-sm">Total de inspeções: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Desistências: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.inspector?.pool?.currentEra}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.inspector?.proofPhoto}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('totalIsps')}: <span className="font-normal">{blockchainData?.inspector?.totalInspections}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('desistencias')}: <span className="font-normal">{blockchainData?.inspector?.giveUps}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.inspector?.pool?.currentEra}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.inspector?.proofPhoto}</span></p>
                                                                         <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.inspector?.userType}</span></p>
                                                                     </>
                                                                 )}
 
                                                                 {userData?.userType === 3 && (
                                                                     <>
-                                                                        <p className="text-white font-bold text-sm">Pesquisas publicadas: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.researcher?.pool?.currentEra}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.researcher?.proofPhoto}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('pesquisasPublicadas')}: <span className="font-normal">{blockchainData?.researcher?.publishedWorks}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.researcher?.pool?.currentEra}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.researcher?.proofPhoto}</span></p>
                                                                         <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.researcher?.userType}</span></p>
                                                                     </>
                                                                 )}
 
                                                                 {userData?.userType === 4 && (
                                                                     <>
-                                                                        <p className="text-white font-bold text-sm">Nível: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.developer?.pool?.currentEra}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.developer?.proofPhoto}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('nivel')}: <span className="font-normal">{blockchainData?.developer?.pool?.level}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.developer?.pool?.currentEra}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.developer?.proofPhoto}</span></p>
                                                                         <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.developer?.userType}</span></p>
                                                                     </>
                                                                 )}
 
                                                                 {userData?.userType === 6 && (
                                                                     <>
-                                                                        <p className="text-white font-bold text-sm">Convidado por: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
-                                                                        <p className="text-white font-bold text-sm">ERA atual na pool: <span className="font-normal">{blockchainData?.activist?.pool?.currentEra}</span></p>
-                                                                        <p className="text-white font-bold text-sm">Hash da foto de prova: <span className="font-normal">{blockchainData?.activist?.proofPhoto}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('convidadoPor')}: <span className="font-normal">{blockchainData?.invite?.inviter}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('eraAtualNaPool')}: <span className="font-normal">{blockchainData?.activist?.pool?.currentEra}</span></p>
+                                                                        <p className="text-white font-bold text-sm">{t('hashFotoProva')}: <span className="font-normal">{blockchainData?.activist?.proofPhoto}</span></p>
                                                                         <p className="text-white font-bold text-sm">User type: <span className="font-normal">{blockchainData?.activist?.userType}</span></p>
                                                                     </>
                                                                 )}
@@ -680,7 +682,7 @@ export function Profile() {
                                                                 onClick={() => navigate(`/result-inspection/${item.id}`)}
                                                             >
                                                                 <div className="flex flex-col gap-1">
-                                                                    <p className="font-bold text-white text-sm">Inspeção #{item.id}</p>
+                                                                    <p className="font-bold text-white text-sm">{t('isp')} #{item.id}</p>
                                                                 </div>
 
                                                                 <FaChevronRight color='white' size={20} />
@@ -710,14 +712,14 @@ export function Profile() {
                                                     )}
 
                                                     <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
-                                                        <h3 className="font-bold text-white">Certificado de contribuição</h3>
+                                                        <h3 className="font-bold text-white">{t('certificadoContribuicao')}</h3>
                                                         <ContributeCertificate wallet={walletConnected} user={userData} />
                                                     </div>
 
                                                     <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
-                                                        <h3 className="font-bold text-white mb-1">Compromisso de redução</h3>
+                                                        <h3 className="font-bold text-white mb-1">{t('compromissoReducao')}</h3>
                                                         {itemsToReduce.length === 0 && (
-                                                            <p className="text-white text-center mt-4 mb-8">Este usuário não tem nenhum item na sua lista</p>
+                                                            <p className="text-white text-center mt-4 mb-8">{t('nenhumItemNaListaDeReducao')}</p>
                                                         )}
                                                         <div className="flex flex-wrap gap-3">
                                                             {itemsToReduce.map(item => (
@@ -738,13 +740,13 @@ export function Profile() {
                                                 <div className="mt-5 gap-5 flex flex-col items-center w-full">
                                                     {zones.length === 0 ? (
                                                         <>
-                                                            <p className="text-white text-center">Você não tem nenhuma zona de regeneração cadastrada!</p>
+                                                            <p className="text-white text-center">{t('nenhumaZonaCadastrada')}</p>
 
                                                             <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-2">
-                                                                <p className="font-semibold text-white">Para criar uma zona você deve baixar nosso aplicativo mobile</p>
+                                                                <p className="font-semibold text-white">{t('paraCadastrarZona')}</p>
                                                                 <div className="flex items-center gap-2 mt-3">
                                                                     <FaMobile color='white' size={25} />
-                                                                    <p className="font-semibold text-white">Baixe nosso aplicativo</p>
+                                                                    <p className="font-semibold text-white">{t('baixeNossoApp')}</p>
                                                                 </div>
 
                                                                 <div className="flex mt-5 items-center gap-8">
@@ -760,17 +762,17 @@ export function Profile() {
                                                                             eyeColor='#0a4303'
                                                                         />
 
-                                                                        <p className="text-sm text-gray-300">Leia o QRCode</p>
+                                                                        <p className="text-sm text-gray-300">{t('leiaQRCode')}</p>
                                                                     </div>
 
-                                                                    <p className="text-sm text-gray-300">Ou</p>
+                                                                    <p className="text-sm text-gray-300">{t('ou')}</p>
 
                                                                     <a
                                                                         className="py-1 px-5 rounded-md text-white font-semibold bg-blue-500"
                                                                         href="https://www.sintrop.com/app"
                                                                         target="_blank"
                                                                     >
-                                                                        Clique aqui para acessar
+                                                                        {t('cliqueAquiParaAcessar')}
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -792,7 +794,7 @@ export function Profile() {
                                                 <div className="mt-5 gap-4 flex flex-wrap justify-center w-full lg:justify-start">
                                                     {loadingPubli ? (
                                                         <div className="flex w-full justify-center mt-5">
-                                                            <ActivityIndicator size={50}/>
+                                                            <ActivityIndicator size={50} />
                                                         </div>
                                                     ) : (
                                                         <>
@@ -811,7 +813,7 @@ export function Profile() {
                                         <>
                                             {userData?.id !== 'anonimous' && (
                                                 <div className="flex flex-col items-center">
-                                                    <p className="font-bold text-white">Cadastro na Blockchain pendente</p>
+                                                    <p className="font-bold text-white">{t('cadastroPendente')}</p>
                                                     <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-5">
                                                         {imageProfile ? (
                                                             <img
@@ -838,32 +840,32 @@ export function Profile() {
                                                     </div>
                                                     <p className="font-bold text-white mt-1">{userData?.name}</p>
                                                     <p className="text-gray-300 text-sm">
-                                                        {userData?.userType === 1 && 'Produtor(a)'}
-                                                        {userData?.userType === 2 && 'Inspetor(a)'}
-                                                        {userData?.userType === 3 && 'Pesquisador(a)'}
-                                                        {userData?.userType === 4 && 'Desenvolvedor(a)'}
-                                                        {userData?.userType === 5 && 'Contribuidor(a)'}
-                                                        {userData?.userType === 6 && 'Ativista'}
-                                                        {userData?.userType === 7 && 'Apoiador(a)'}
-                                                        {userData?.userType === 8 && 'Validador(a)'}
+                                                        {userData?.userType === 1 && t('textProdutor')}
+                                                        {userData?.userType === 2 && t('textInspetor')}
+                                                        {userData?.userType === 3 && t('textPesquisador')}
+                                                        {userData?.userType === 4 && t('textDesenvolvedor')}
+                                                        {userData?.userType === 5 && t('textContribuidor')}
+                                                        {userData?.userType === 6 && t('textAtivista')}
+                                                        {userData?.userType === 7 && t('textApoiador')}
+                                                        {userData?.userType === 8 && t('textValidador')}
                                                     </p>
 
                                                     <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-3 lg:w-[720px]">
-                                                        <p className="text-gray-200 text-sm text-center">Status do convite</p>
+                                                        <p className="text-gray-200 text-sm text-center">{t('statusConvite')}</p>
                                                         <p className="font-bold text-green-600 text-4xl text-center">
-                                                            {accountStatus === 'pending' ? 'Aguardando convite' : 'Convite recebido'}
+                                                            {accountStatus === 'pending' ? t('aguardandoConvite') : t('conviteRecebido')}
                                                         </p>
 
                                                         {accountStatus === 'pending' && (
                                                             <div className="flex mt-5 items-center justify-center gap-2">
                                                                 <MdInfo size={20} color='#ddd' />
                                                                 <p className="text-[#ddd] text-sm">
-                                                                    {userData?.userType === 1 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                                    {userData?.userType === 2 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                                    {userData?.userType === 3 && 'Para entrar no sistema você precisa ser convidado por um pesquisador.'}
-                                                                    {userData?.userType === 4 && 'Para entrar no sistema você precisa ser convidado por um desenvolvedor.'}
-                                                                    {userData?.userType === 6 && 'Para entrar no sistema você precisa ser convidado por um ativista.'}
-                                                                    {userData?.userType === 8 && 'Para entrar no sistema você precisa ser convidado por um validador.'}
+                                                                    {userData?.userType === 1 && t('paraEntrarAtivista')}
+                                                                    {userData?.userType === 2 && t('paraEntrarAtivista')}
+                                                                    {userData?.userType === 3 && t('paraEntrarPesquisador')}
+                                                                    {userData?.userType === 4 && t('paraEntrarDesenvolvedor')}
+                                                                    {userData?.userType === 6 && t('paraEntrarAtivista')}
+                                                                    {userData?.userType === 8 && t('paraEntrarValidador')}
                                                                 </p>
                                                             </div>
                                                         )}
@@ -871,15 +873,15 @@ export function Profile() {
 
                                                     {accountStatus === 'guest' && (
                                                         <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-10 lg:w-[720px]">
-                                                            <p className="text-gray-200 text-sm text-center">Vagas disponíveis</p>
+                                                            <p className="text-gray-200 text-sm text-center">{t('vagasDisponiveis')}</p>
                                                             <p className="font-bold text-green-600 text-4xl text-center">
-                                                                {vacancyAvaliable ? 'Vaga disponível' : 'Não há vaga no momento'}
+                                                                {vacancyAvaliable ? t('vagaDisponivel') : t('naoHaVaga')}
                                                             </p>
                                                             <p className="text-white text-center">
                                                                 {vacancyAvaliable ?
-                                                                    `Há ${amountVacancy} vaga(s) disponível`
+                                                                    `Há ${amountVacancy} ${t('vagasDisponivel')}`
                                                                     :
-                                                                    `Precisa de mais ${amountVacancy} produtor(es) para liberar uma vaga`
+                                                                    `${t('precisaDeMais')} ${amountVacancy} ${t('produtoresParaVagas')}`
                                                                 }
                                                             </p>
 
@@ -890,11 +892,11 @@ export function Profile() {
                                                                         if (window.ethereum) {
                                                                             registerBlockchain();
                                                                         } else {
-                                                                            toast.error('Conecte-se em um navegador com provedor Ethereum!')
+                                                                            toast.error(t('necessitaProvedor'))
                                                                         }
                                                                     }}
                                                                 >
-                                                                    Efetivar cadastro
+                                                                    {t('efetivarCadastro')}
                                                                 </button>
                                                             )}
 
@@ -902,7 +904,7 @@ export function Profile() {
                                                                 <div className="flex mt-5 items-center justify-center gap-2">
                                                                     <MdInfo size={20} color='#ddd' />
                                                                     <p className="text-[#ddd] text-sm max-w-[90%]">
-                                                                        Nosso sistema, possui uma lógica de proporção, para o cadastro dos usuários, que tem como base a quantidade de produtores no sistema! Isso significa que, para você efetivar seu cadastro, esteja disponível uma vaga para você
+                                                                        {t('infoVagas')}
                                                                     </p>
                                                                 </div>
                                                             )}
@@ -915,12 +917,12 @@ export function Profile() {
                                 </>
                             ) : (
                                 <div className="mt-3 flex flex-col w-full">
-                                    <p className="font-semibold text-white">Você não está conectado, escolha uma das opções abaixo</p>
+                                    <p className="font-semibold text-white">{t('voceNaoConectado')}</p>
                                     <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
                                         <Dialog.Trigger
                                             className="w-fit py-2 px-5 bg-blue-500 rounded-md text-white font-bold mt-1"
                                         >
-                                            Conectar wallet
+                                            {t('conectar')}
                                         </Dialog.Trigger>
 
                                         <ModalConnectAccount close={() => setModalConnect(false)} />
@@ -929,7 +931,7 @@ export function Profile() {
                                     <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
                                         <div className="flex items-center gap-2">
                                             <MdHelpOutline color='white' size={25} />
-                                            <p className="font-semibold text-white">Ajuda</p>
+                                            <p className="font-semibold text-white">{t('ajuda')}</p>
                                         </div>
 
                                         <div className="flex items-center flex-wrap gap-2 mt-1">
@@ -939,7 +941,7 @@ export function Profile() {
                                                 className="p-2 rounded-md bg-green-950 flex items-center gap-2"
                                             >
                                                 <SiReadthedocs size={25} color='white' />
-                                                <p className="font-bold text-white text-sm">Documentação</p>
+                                                <p className="font-bold text-white text-sm">{t('documentacao')}</p>
                                             </a>
 
                                             <a
@@ -981,7 +983,7 @@ export function Profile() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat/>
+                <Chat />
             </div>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {

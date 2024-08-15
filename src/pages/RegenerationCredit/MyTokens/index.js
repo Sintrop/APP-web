@@ -7,8 +7,10 @@ import { api } from "../../../services/api";
 import axios from 'axios'
 import { TxItem } from "./components/TxItem";
 import { TopBar } from "../../../components/TopBar";
+import { useTranslation } from "react-i18next";
 
 export function MyTokens() {
+    const {t} = useTranslation();
     const {walletConnected} = useMainContext();
     const [balanceVisible, setBalanceVisible] = useState(false);
     const [balanceData, setBalanceData] = useState(254256.451);
@@ -52,12 +54,12 @@ export function MyTokens() {
                     <>
                     {walletConnected === '' ? (
                         <div>
-                            <h3 className="text-center mt-3 text-white">Você não está conectado!</h3>
+                            <h3 className="text-center mt-3 text-white">{t('voceNaoConectado')}</h3>
                         </div>
                     ) : (
                         <div className="flex gap-1 flex-col lg:w-[800px] w-full mt-3 items-start px-2 lg:px-0">
                             <div className="flex flex-col bg-card bg-no-repeat bg-cover w-full lg:w-[365px] h-[200px] rounded-md p-3">
-                                <p className="text-xs text-gray-300">Meu patrimônio em</p>
+                                <p className="text-xs text-gray-300">{t('meuPatrimonioEm')}</p>
 
                                 <div className="flex items-center gap-2 mt-5">
                                     <img
@@ -86,14 +88,14 @@ export function MyTokens() {
                                 </div>
                             </div>
 
-                            <p className="text-gray-400 mt-3 text-sm">Suas movimentações</p>
+                            <p className="text-gray-400 mt-3 text-sm">{t('suasMovimentacoes')}</p>
                             {loadingTransactions && (
                                 <div className="flex justify-center w-full">
                                     <ActivityIndicator size={60}/>
                                 </div>
                             )}
                             {transactions.length === 0 && (
-                                <p className="text-center text-sm mt-5 text-white">Você não possui nenhuma movimentação</p>
+                                <p className="text-center text-sm mt-5 text-white">{t('naoPossuiMovimentacoes')}</p>
                             )}
                             {transactions.map(item => (
                                 <TxItem data={item} key={item.hash}/>

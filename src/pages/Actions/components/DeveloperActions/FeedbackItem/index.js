@@ -123,7 +123,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                             className='text-white underline text-sm'
                             onClick={() => setModalEdit(true)}
                         >
-                            Editar task
+                            {t('editarTask')}
                         </button>
                     )}
                 </div>
@@ -183,7 +183,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                     <>
                         {status === 3 && (
                             <div className='px-4 py-1 border-2 border-red-500 flex items-center justify-center rounded-md'>
-                                <p className='font-bold text-red-500'>Descartada</p>
+                                <p className='font-bold text-red-500'>{t('descartada')}</p>
                             </div>
                         )}
                     </>
@@ -198,7 +198,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                                 ) : (
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex flex-col items-start'>
-                                            <p className='text-blue-500 font-bold text-sm'>{t('Responsible for the task')}</p>
+                                            <p className='text-blue-500 font-bold text-sm'>{t('responsavelTask')}</p>
                                             <div className='flex gap-2 items-center mb-2'>
                                                 <img
                                                     className='w-[40px] h-[40px] rounded-full border-2 object-cover'
@@ -210,22 +210,22 @@ export function FeedbackItem({ data, userData, discardTask }) {
                                             <div className='flex items-center gap-2'>
                                                 {status === 0 && (
                                                     <div className='px-4 py-1 border-2 border-yellow-500 flex items-center justify-center rounded-md'>
-                                                        <p className='font-bold text-yellow-500'>Em Análise</p>
+                                                        <p className='font-bold text-yellow-500'>{t('emAnalise')}</p>
                                                     </div>
                                                 )}
                                                 {status === 1 && (
                                                     <div className='px-4 py-1 border-2 border-gray-500 flex items-center justify-center rounded-md'>
-                                                        <p className='font-bold text-gray-500'>Futuramente</p>
+                                                        <p className='font-bold text-gray-500'>{t('futuramente')}</p>
                                                     </div>
                                                 )}
                                                 {status === 2 && (
                                                     <div className='px-4 py-1 border-2 border-blue-500 flex items-center justify-center rounded-md'>
-                                                        <p className='font-bold text-blue-500'>Em Desenvolvimento</p>
+                                                        <p className='font-bold text-blue-500'>{t('emDesenvolvimento')}</p>
                                                     </div>
                                                 )}
                                                 {status === 4 && (
                                                     <div className='px-4 py-1 border-2 border-green-500 flex items-center justify-center rounded-md'>
-                                                        <p className='font-bold text-green-500'>Concluida</p>
+                                                        <p className='font-bold text-green-500'>{t('concluida')}</p>
                                                     </div>
                                                 )}
                                             </div>
@@ -238,7 +238,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                                                         className='font-bold text-white px-3 rounded-md h-10 bg-green-700'
                                                         onClick={() => setModalFinish(true)}
                                                     >
-                                                        Finalizar task
+                                                        {t('finalizarTask')}
                                                     </button>
                                                 )}
                                             </>
@@ -255,14 +255,14 @@ export function FeedbackItem({ data, userData, discardTask }) {
                                             className='px-3 py-2 bg-blue-500 rounded-md text-white font-bold text-sm'
                                             onClick={() => setModalAssign(true)}
                                         >
-                                            Atribuir para mim
+                                            {t('atribuir')}
                                         </button>
 
                                         <button
                                             className='text-white underline text-sm'
                                             onClick={() => setModalDiscard(true)}
                                         >
-                                            Descartar
+                                            {t('descartar')}
                                         </button>
                                     </div>
                                 ) : (
@@ -278,7 +278,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
 
             {additionalData && (
                 <div className='flex flex-col mt-3'>
-                    <p className='text-gray-300 text-sm'>Dados:</p>
+                    <p className='text-gray-300 text-sm'>{t('dados')}:</p>
                     <a
                         href={additionalData?.urlPR}
                         target='_blank'
@@ -291,14 +291,14 @@ export function FeedbackItem({ data, userData, discardTask }) {
             )}
 
             <div className="flex items-center justify-between mt-3">
-                <p className="text-white text-sm">Comentários ({comments.length})</p>
+                <p className="text-white text-sm">{t('comentarios')} ({comments.length})</p>
 
                 {comments.length > 3 && (
                     <button
                         onClick={() => setViewAllComments(!viewAllComments)}
                         className="text-sm text-white underline"
                     >
-                        {viewAllComments ? 'Ocultar todos os comentários' : 'Ver todos os comentários'}
+                        {viewAllComments ? t('ocultarComentarios') : t('verTodosComentarios')}
                     </button>
                 )}
             </div>
@@ -306,7 +306,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
             <div className="flex w-full gap-5 mt-3">
                 <input
                     className="w-[90%] h-10 bg-green-800 rounded-md px-2 text-white"
-                    placeholder="Digite seu comentário aqui"
+                    placeholder={t('digiteAqui')}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                 />
@@ -318,7 +318,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                     {loadingPostComment ? (
                         <ActivityIndicator size={25} />
                     ) : (
-                        'Comentar'
+                        t('comentar')
                     )}
                 </button>
             </div>
@@ -390,6 +390,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
                 <ModalFinishTask
                     close={() => setModalFinish(false)}
                     taskId={data?.id}
+                    taskData={data}
                     success={() => {
                         toast.success('Task finalizada com sucesso!')
                         setStatus(4);

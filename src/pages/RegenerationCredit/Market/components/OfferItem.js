@@ -6,8 +6,10 @@ import { ModalConfimation } from "../../../../components/ModalConfirmation";
 import CryptoJS from "crypto-js";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export function OfferItem({ data, attOffers, buy }) {
+    const {t} = useTranslation();
     const {userData: user, walletConnected} = useMainContext();
     const [userData, setUserData] = useState(null);
     const [imageProfile, setImageProfile] = useState(null);
@@ -33,10 +35,10 @@ export function OfferItem({ data, attOffers, buy }) {
 
     function handleBuy(){
         setModalConfirmationData({
-            title: 'Comprar RC',
-            description: 'Toda a negociação será feita via mensagem, ao continuar, será enviada uma mensagem para o vendedor e você será redirecionado para o chat',
-            titleButtonDiscord: 'Cancelar',
-            titleButtonAccept: 'Comprar',
+            title: t('comprarRC'),
+            description: t('negociacaoViaChat'),
+            titleButtonDiscord: t('cancelar'),
+            titleButtonAccept: t('comprar'),
             action: 'buy-offer'
         });
         setModalConfirmation(true);
@@ -115,10 +117,10 @@ export function OfferItem({ data, attOffers, buy }) {
 
     function handleDelete(){
         setModalConfirmationData({
-            title: 'Atenção',
-            description: 'Deseja mesmo excluir essa oferta?',
-            titleButtonDiscord: 'Cancelar',
-            titleButtonAccept: 'Excluir',
+            title: t('atencao'),
+            description: t('desejaExcluirOferta'),
+            titleButtonDiscord: t('cancelar'),
+            titleButtonAccept: t('excluir'),
             action: 'delete-offer'
         });
         setModalConfirmation(true);
@@ -129,9 +131,9 @@ export function OfferItem({ data, attOffers, buy }) {
             setLoading(true);
             await api.delete(`/offer/${data?.id}/${user?.id}`);
             attOffers();
-            toast.success('Oferta excluida!')
+            toast.success(t('ofertaExcluida'))
         }catch(err){
-            toast.error('Erro ao excluir a oferta, tente novamente!')
+            toast.error(t('algoDeuErrado'))
         }finally{
             setLoading(false);
         }
@@ -160,7 +162,7 @@ export function OfferItem({ data, attOffers, buy }) {
 
                 <p className="font-bold text-white">{userData?.name}</p>
 
-                <p className="text-sm mt-5 text-gray-400">Está vendendo</p>
+                <p className="text-sm mt-5 text-gray-400">{t('estaVendendo')}</p>
                 <div className="flex items-center gap-2">
                     <img
                         src={require('../../../../assets/token.png')}
@@ -190,7 +192,7 @@ export function OfferItem({ data, attOffers, buy }) {
                     <ActivityIndicator size={20}/>
                 ) : (
                     <>
-                        {user?.id === data?.ownerOffer ? 'Excluir oferta' : 'Comprar'}
+                        {user?.id === data?.ownerOffer ? t('excluirOferta') : t('comprar')}
                     </>
                 )}
             </button>
