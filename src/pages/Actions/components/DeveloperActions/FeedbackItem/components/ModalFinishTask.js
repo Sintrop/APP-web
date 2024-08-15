@@ -59,9 +59,7 @@ export function ModalFinishTask({ close, success, taskId, taskData }) {
             origin: 'platform',
             additionalData: JSON.stringify({
                 userData,
-                taskId,
-                title: taskData?.title,
-                descriptionTask: taskData?.description,
+                taskData,
                 descriptionFinish: description,
                 urlPR
             }),
