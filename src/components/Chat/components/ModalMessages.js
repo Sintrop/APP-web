@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { MdSend, MdGroups } from "react-icons/md";
+import { GrGallery } from "react-icons/gr";
 import { api } from "../../../services/api";
 import { ActivityIndicator } from "../../ActivityIndicator";
 import { MessageItem } from "./MessageItem";
@@ -12,6 +13,7 @@ import { FaChevronLeft } from "react-icons/fa";
 import { UserChatItem } from '../components/ModalNewChat/UserChatItem';
 import { firestore } from "../../../services/firebase";
 import { collection, doc, query, onSnapshot, setDoc, Timestamp, orderBy } from "firebase/firestore";
+import { CropImage } from "../../CropImage";
 
 export function ModalMessages({ chat, imageProfile, participant, typeChat, messages }) {
     const { userData } = useMainContext();
@@ -24,6 +26,9 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
     const [imageToSend, setImageToSend] = useState(null);
     const [detailsChat, setDetailsChat] = useState(false);
     const [participants, setParticipants] = useState([]);
+    const [cropImage, setCropImage] = useState(false);
+    const [file, setFile] = useState(null);
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
         if (typeChat !== 'private') {
@@ -92,10 +97,20 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
         setLoading(false);
     }
 
+    function onFormSubmit(event){
+        event.preventDefault();
+        sendMessage();
+    }
+
+    function openFolderSelect(){
+        const intpuFile = document.querySelector('#input-image-chat');
+        intpuFile.click();
+    }
+
     return (
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0' />
-            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#03364B] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
                 {detailsChat ? (
                     <div className="h-full flex flex-col">
                         <div className='flex items-center w-full justify-between border-b border-green-700 pb-2'>
@@ -206,11 +221,13 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                         </div>
 
                         <div className="flex flex-col-reverse w-full h-full overflow-y-auto overflow-x-hidden">
-                            {messages.map(item => (
+                            {messages.map((item, index) => (
                                 <MessageItem
                                     key={item.id}
                                     data={item}
                                     typeChat={typeChat}
+                                    messagesList={messages}
+                                    index={index}
                                 />
                             ))}
 
@@ -219,7 +236,10 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                             )}
                         </div>
 
-                        <div className="flex items-center w-full p-1">
+                        <form 
+                            className="flex items-center w-full p-1"
+                            onSubmit={onFormSubmit}
+                        >
                             <input
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
@@ -227,20 +247,49 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                                 className="w-[90%] h-10 bg-white rounded-full px-3 text-black"
                             />
 
-                            <div className="flex items-center justify-center w-[15%]">
+                            <div className="flex gap-3 ml-4 items-center justify-center w-[15%]">
+                                <input
+                                    type='file'
+                                    onChange={(e) => {
+                                        setFile(e.target.files[0])
+                                        setCropImage(true);
+                                    }}
+                                    accept="image/png, image/jpeg, image/jpg"
+                                    id='input-image-chat'
+                                    className="hidden"
+                                />
+                                <button
+                                    className=""
+                                    onClick={openFolderSelect}
+                                >
+                                    <GrGallery color='white' size={20}/>
+                                </button>
+
                                 <button
                                     className="h-10 w-10 rounded-full flex items-center justify-center bg-green-600"
-                                    onClick={sendMessage}
+                                    type="submit"
                                 >
                                     <MdSend color='white' size={20} />
                                 </button>
                             </div>
-                        </div>
+                        </form>
 
                     </>
                 )}
 
             </Dialog.Content>
+
+            {cropImage && (
+                <CropImage
+                    close={() => setCropImage(false)}
+                    file={file}
+                    returnType='url'
+                    returnUri={(uri, hash) => {
+                        setImage(uri);
+                        setCropImage(false);
+                    }}
+                />
+            )}
 
             <ToastContainer />
         </Dialog.Portal>
