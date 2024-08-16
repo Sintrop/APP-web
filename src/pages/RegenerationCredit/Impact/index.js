@@ -154,7 +154,7 @@ export function Impact() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar />
             <Header />
 
@@ -166,7 +166,7 @@ export function Impact() {
                 ) : (
                     <div className="flex flex-col w-full lg:max-w-[1024px] mt-3 mb-5 px-2 lg:px-0">
                         <div className='flex flex-col gap-4 lg:flex-row'>
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-full lg:w-[320px]'>
                                 <div className='flex items-center gap-2'>
                                     <img
                                         src={require('../../../assets/token.png')}
@@ -203,7 +203,7 @@ export function Impact() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-full lg:w-[320px]'>
                                 <div className='flex items-center gap-2'>
                                     <img
                                         src={require('../../../assets/token.png')}
@@ -242,7 +242,7 @@ export function Impact() {
                         </div>
 
                         <div className='mt-4 flex items-center flex-wrap gap-3'>
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B]'>
                                 <p className='font-bold text-white'>{t('carbono')} (t CO²)</p>
                                 <Chart
                                     options={configChat.options}
@@ -253,7 +253,7 @@ export function Impact() {
                                 />
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B]'>
                                 <p className='font-bold text-white'>{t('solo')} (ha)</p>
                                 <Chart
                                     options={configChat.options}
@@ -264,7 +264,7 @@ export function Impact() {
                                 />
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B]'>
                                 <p className='font-bold text-white'>{t('agua')} (m³)</p>
                                 <Chart
                                     options={configChat.options}
@@ -275,7 +275,7 @@ export function Impact() {
                                 />
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B]'>
                                 <p className='font-bold text-white'>{t('bio')} (uv)</p>
                                 <Chart
                                     options={configChat.options}
@@ -288,7 +288,7 @@ export function Impact() {
                         </div>
 
                         <div className='mt-4 flex items-center flex-wrap gap-3'>
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-[320px]'>
                                 <p className='font-bold text-white'>{t('impactoConfirmar')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
@@ -318,7 +318,7 @@ export function Impact() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-[320px]'>
                                 <p className='font-bold text-white'>{t('impactoDisponivel')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>
@@ -348,7 +348,7 @@ export function Impact() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-[320px]'>
+                            <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-[320px]'>
                                 <p className='font-bold text-white'>{t('impactoCompensado')}</p>
 
                                 <div className='flex items-center gap-20 w-full mt-3 justify-center'>

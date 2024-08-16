@@ -114,7 +114,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
     }
 
     return (
-        <div key={data.id} className='flex flex-col w-full bg-[#0a4303] rounded-md p-5 mb-5'>
+        <div key={data.id} className='flex flex-col w-full bg-[#03364B] rounded-md p-5 mb-5'>
             <div className='flex items-center justify-between'>
                 <div className='flex flex-col items-start mb-1'>
                     <p className='font-bold text-blue-500 text-lg'>#{data.id} - {title}</p>
@@ -305,7 +305,7 @@ export function FeedbackItem({ data, userData, discardTask }) {
 
             <div className="flex w-full gap-5 mt-3">
                 <input
-                    className="w-[90%] h-10 bg-green-800 rounded-md px-2 text-white"
+                    className="w-[90%] h-10 bg-[#012939] rounded-md px-2 text-white"
                     placeholder={t('digiteAqui')}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}

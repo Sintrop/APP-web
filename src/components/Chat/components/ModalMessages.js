@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
-import { IoMdCloseCircleOutline } from 'react-icons/io';
+import { IoMdCloseCircleOutline, IoMdCloseCircle } from 'react-icons/io';
 import { MdSend, MdGroups } from "react-icons/md";
 import { GrGallery } from "react-icons/gr";
 import { api } from "../../../services/api";
@@ -41,7 +41,7 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
     const messagesRef = collection(chatRef, 'MESSAGES');
 
     async function sendMessage() {
-        let hashPhotos = [];
+        let images = [];
         if (sending) {
             return;
         }
@@ -51,10 +51,9 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
         }
 
         setSending(true);
-        // if(imageToSend){
-        //     const hash = await addPhotoIPFS(imageToSend);
-        //     hashPhotos.push(hash);
-        // }
+        if (image) {
+            images.push(image);
+        }
 
         const encrypt = CryptoJS.AES.encrypt(inputMessage, process.env.REACT_APP_DECRYPT_MESSAGE_KEY);
         const messageData = {
@@ -67,7 +66,7 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                 name: userData.name,
                 wallet: userData?.wallet,
             },
-            photos: JSON.stringify(hashPhotos),
+            photos: JSON.stringify(images),
             participantData: JSON.stringify(participant),
             createdAt: Timestamp.fromDate(new Date()),
         }
@@ -81,10 +80,11 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                 ownerId: userData?.id,
                 participantData: JSON.stringify(participant),
             });
-        }catch(err){
+        } catch (err) {
 
-        }finally{
+        } finally {
             setInputMessage('');
+            setImage(null);
             setImageToSend(null);
             setSending(false);
         }
@@ -97,12 +97,12 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
         setLoading(false);
     }
 
-    function onFormSubmit(event){
+    function onFormSubmit(event) {
         event.preventDefault();
         sendMessage();
     }
 
-    function openFolderSelect(){
+    function openFolderSelect() {
         const intpuFile = document.querySelector('#input-image-chat');
         intpuFile.click();
     }
@@ -236,7 +236,26 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                             )}
                         </div>
 
-                        <form 
+                        {image && (
+                            <div className="w-[150px] h-[150px] bg-white p-1 flex rounded-md ml-5 relative">
+                                <img
+                                    src={image}
+                                    className="w-full h-full object-cover"
+                                />
+
+                                <button
+                                    className="absolute top-2 right-2"
+                                    onClick={() => {
+                                        setImage(null);
+                                        setImageToSend(null);
+                                    }}
+                                >
+                                    <IoMdCloseCircle size={15} color='white' />
+                                </button>
+                            </div>
+                        )}
+
+                        <form
                             className="flex items-center w-full p-1"
                             onSubmit={onFormSubmit}
                         >
@@ -248,21 +267,11 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                             />
 
                             <div className="flex gap-3 ml-4 items-center justify-center w-[15%]">
-                                <input
-                                    type='file'
-                                    onChange={(e) => {
-                                        setFile(e.target.files[0])
-                                        setCropImage(true);
-                                    }}
-                                    accept="image/png, image/jpeg, image/jpg"
-                                    id='input-image-chat'
-                                    className="hidden"
-                                />
                                 <button
-                                    className=""
+                                    type="button"
                                     onClick={openFolderSelect}
                                 >
-                                    <GrGallery color='white' size={20}/>
+                                    <GrGallery color='white' size={20} />
                                 </button>
 
                                 <button
@@ -279,6 +288,17 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
 
             </Dialog.Content>
 
+            <input
+                type='file'
+                onChange={(e) => {
+                    setFile(e.target.files[0])
+                    setCropImage(true);
+                }}
+                accept="image/png, image/jpeg, image/jpg"
+                id='input-image-chat'
+                className="hidden"
+            />
+
             {cropImage && (
                 <CropImage
                     close={() => setCropImage(false)}
@@ -287,6 +307,7 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                     returnUri={(uri, hash) => {
                         setImage(uri);
                         setCropImage(false);
+                        setImageToSend(true);
                     }}
                 />
             )}

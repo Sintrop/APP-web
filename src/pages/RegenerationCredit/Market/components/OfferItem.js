@@ -140,7 +140,7 @@ export function OfferItem({ data, attOffers, buy }) {
     }
 
     return (
-        <div className="flex flex-col w-[300px] h-[300px] rounded-md bg-[#0a4303] border-4 border-white overflow-hidden">
+        <div className="flex flex-col w-[280px] h-[300px] rounded-md bg-[#03364B] border-4 border-white overflow-hidden">
             <div className="flex w-full h-[100px] bg-florest bg-cover bg-center bg-no-repeat">
                 {userData?.bannerUrl && (
                     <img
@@ -176,7 +176,7 @@ export function OfferItem({ data, attOffers, buy }) {
             </div>
 
             <button
-                className={`font-bold h-10 rounded-md mx-2 mt-2 ${user?.id === data?.ownerOffer ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'}`}
+                className={`font-bold h-10 rounded-md mx-2 mt-2 ${user?.id === data?.ownerOffer ? 'bg-red-500 text-white' : 'bg-[#3E9EF5] text-white'}`}
                 onClick={() => {
                     if(walletConnected === ''){
                         return;

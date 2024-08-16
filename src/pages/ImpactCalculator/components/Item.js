@@ -304,7 +304,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
     if (type === 'consumption-graph') {
         return (
-            <div className="flex flex-col rounded-md px-2 pt-1 bg-[#0a4303]">
+            <div className="flex flex-col rounded-md px-2 pt-1 bg-[#03364B]">
                 <p className="font-bold text-white">{data?.name} ( {data?.unit} )</p>
                 {configData && (
                     <Chart
@@ -365,7 +365,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
     if (type === 'list-items-to-reduce') {
         return (
-            <div className="flex flex-col items-center p-2 rounded-md bg-[#0a4303] w-fit">
+            <div className="flex flex-col items-center p-2 rounded-md bg-[#03364B] w-fit">
                 <div className="flex flex-col w-full lg:w-fit">
                     <div className="flex items-center justify-between">
                         <p className="font-bold text-white text-lg">{data?.name}</p>
@@ -453,7 +453,7 @@ export function Item({ data, addItem, hiddenButton, type, deleteItem, userId, in
 
     if (type === 'list-items-calculator') {
         return (
-            <div className="flex flex-col w-full p-2 rounded-md bg-[#0a4303]">
+            <div className="flex flex-col w-full p-2 rounded-md bg-[#03364B]">
 
                 <p className="font-bold text-white">{data?.name}</p>
 

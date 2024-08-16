@@ -68,7 +68,7 @@ export function InspectionItem({ data, type }) {
 
     if (type === 'history') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-2">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-2">
                 <div className="flex flex-col lg:items-center justify-between lg:flex-row">
                     <div className="flex flex-col lg:items-center lg:flex-row">
                         <div>
@@ -168,7 +168,7 @@ export function InspectionItem({ data, type }) {
 
     if (type === 'manage') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-2">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-2">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         <div>

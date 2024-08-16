@@ -19,7 +19,7 @@ export function RecordItem({data}){
     }, []);
 
     return(
-        <div className="flex flex-col w-full px-3 bg-[#0a4303] mb-3 rounded-sm">
+        <div className="flex flex-col w-full px-3 bg-[#03364B] mb-3 rounded-sm">
             <button 
                 className="flex items-center justify-between w-full h-12" 
                 onClick={() => setMoreDetails(true)}

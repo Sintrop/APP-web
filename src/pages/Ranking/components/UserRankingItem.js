@@ -50,7 +50,7 @@ export function UserRankingItem({ data }) {
     }
 
     return (
-        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col items-center h-auto w-[240px]">
+        <div className="bg-[#03364B] p-2 rounded-md flex flex-col items-center h-auto w-[240px]">
             <div className="h-20 w-20 rounded-full border border-white bg-gray-400">
                 {data?.userType === 8 ? (
                     <img

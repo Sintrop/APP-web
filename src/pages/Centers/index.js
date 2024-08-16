@@ -12,7 +12,7 @@ export function Centers() {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-[#062c01] flex flex-col h-[100vh]">
+        <div className="bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sintrop App</title>
@@ -28,7 +28,7 @@ export function Centers() {
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3">
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroInspecao')}</p>
                         <p className="text-white">{t('descCentroIsp')}</p>
 
@@ -40,7 +40,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroPesquisa')}</p>
                         <p className="text-white">{t('descCentroPesquisa')}</p>
 
@@ -53,7 +53,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroDev')}</p>
                         <p className="text-white">{t('descCentroDev')}</p>
 
@@ -66,7 +66,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroValidacao')}</p>
                         <p className="text-white">{t('descCentroValidacao')}</p>
 
@@ -79,7 +79,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroComercial')}</p>
                         <p className="text-white">{t('descCentroComercial')}</p>
 
@@ -92,7 +92,7 @@ export function Centers() {
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between bg-[#11652E] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
+                    <div className="flex flex-col justify-between bg-[#03364B] p-3 rounded-md w-full lg:w-[330px] h-[180px]">
                         <p className="text-green-500 font-bold text-lg">{t('centroColab')}</p>
                         <p className="text-white">{t('descCentroColab')}</p>
 

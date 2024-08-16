@@ -365,7 +365,7 @@ export function ImpactCalculator() {
             grid: {
                 borderColor: '#e7e7e7',
                 row: {
-                    colors: ['#062c01'], // takes an array which will be repeated on columns
+                    colors: ['#03364B'], // takes an array which will be repeated on columns
                     opacity: 0.5
                 },
             },
@@ -416,7 +416,7 @@ export function ImpactCalculator() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar />
             <Header />
 
@@ -460,7 +460,7 @@ export function ImpactCalculator() {
                                                 <select
                                                     value={itemSelect}
                                                     onChange={(e) => setItemSelect(e.target.value)}
-                                                    className="w-[230px] h-10 rounded-md px-2 text-white bg-[#0a4303] ml-3"
+                                                    className="w-[230px] h-10 rounded-md px-2 text-white bg-[#03364B] ml-3"
                                                 >
                                                     {itemsToReduce.map(item => (
                                                         <option
@@ -481,7 +481,7 @@ export function ImpactCalculator() {
 
                             <div className="flex items-center justify-between w-full mt-3">
                                 <select
-                                    className="w-[150px] bg-[#0a4303] rounded-md text-white h-10 px-3"
+                                    className="w-[150px] bg-[#03364B] rounded-md text-white h-10 px-3"
                                     value={monthSelected}
                                     onChange={(e) => setMonthSelected(e.target.value)}
                                 >
@@ -520,7 +520,7 @@ export function ImpactCalculator() {
                             </div>
 
                             <div className="flex flex-wrap gap-3 mt-5">
-                                <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
+                                <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-full lg:w-[320px]'>
                                     <div className='flex items-center gap-2'>
                                         <img
                                             src={require('../../assets/token.png')}
@@ -557,7 +557,7 @@ export function ImpactCalculator() {
                                     </div>
                                 </div>
 
-                                <div className='flex flex-col p-3 rounded-md bg-[#0a4303] w-full lg:w-[320px]'>
+                                <div className='flex flex-col p-3 rounded-md bg-[#03364B] w-full lg:w-[320px]'>
                                     <div className='flex items-center justify-between'>
                                         <p className='font-bold text-white'>{t('resumoFatura')}</p>
 

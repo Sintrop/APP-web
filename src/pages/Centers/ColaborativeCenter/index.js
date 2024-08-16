@@ -6,7 +6,7 @@ import { ColaboratorActions } from "../../Actions/components/ColaboratorActions"
 
 export function ColaborativeCenter(){
     return(
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar/>
             <Header/>
 

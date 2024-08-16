@@ -7,7 +7,7 @@ import { ActivityIndicator } from "../ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../services/api";
 import { save } from "../../config/infura";
-import axios from "axios";
+import * as Dialog from '@radix-ui/react-dialog';
 
 export function CropImage({ close, file, returnType, returnUri }) {
     const [base64, setBase64] = useState('');
@@ -94,9 +94,9 @@ export function CropImage({ close, file, returnType, returnUri }) {
     }
 
     return (
-        <div className='flex justify-center items-center inset-0'>
-            <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
+        <Dialog.Portal className='flex justify-center items-center inset-0'>
+            <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0' />
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[500px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
 
@@ -137,9 +137,9 @@ export function CropImage({ close, file, returnType, returnUri }) {
                         )}
                     </button>
                 </div>
-            </div>
+            </Dialog.Content>
 
             <ToastContainer/>
-        </div>
+        </Dialog.Portal>
     )
 }

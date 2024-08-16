@@ -5,7 +5,7 @@ import { ResearcherActions } from "../Actions/components/ResearcherActions";
 
 export function ResearchesCenter() {
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar />
             <Header />
 

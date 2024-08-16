@@ -41,7 +41,7 @@ export function Chat({openChat}){
 
     return(
         <div className='absolute right-5 bottom-0'>
-            <div className={`flex flex-col rounded-t-md w-[320px] bg-[#0a4303] ${open ? 'h-[500px]' : 'h-[50px]'} duration-200`}>
+            <div className={`flex flex-col rounded-t-md w-[320px] bg-[#03364B] ${open ? 'h-[500px]' : 'h-[50px]'} duration-200`}>
                 <div className='flex h-[50px] border-b border-green-700 px-3 items-center justify-between'>
                     <div className='flex items-center gap-2'>
                         <BsFillChatDotsFill color='white' size={25} />
