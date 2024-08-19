@@ -17,7 +17,7 @@ export function TxItem({ data }) {
     }, []);
 
     return (
-        <div className="flex flex-col justify-between gap-2 p-2 rounded-md bg-[#0a4303] w-full mb-2 lg:flex-row">
+        <div className="flex flex-col justify-between gap-2 p-2 rounded-md bg-[#03364B] w-full mb-2 lg:flex-row">
             <div className="flex gap-2">
                 <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center">
                     {revenue ? (

@@ -103,7 +103,7 @@ export function TaskItem({ data, userData }) {
     }
 
     return (
-        <div key={data.id} className='flex flex-col w-full bg-[#0a4303] rounded-md p-5 mb-5'>
+        <div key={data.id} className='flex flex-col w-full bg-[#03364B] rounded-md p-5 mb-5'>
             <div className='flex items-center justify-between border-b pb-2 px-5'>
                 <div className='flex flex-col'>
                     <p className='font-bold text-blue-500 text-lg'>#{data.id} - {data.title}</p>
@@ -277,7 +277,7 @@ export function TaskItem({ data, userData }) {
 
             <div className="flex w-full gap-5 mt-3">
                 <input
-                    className="w-[90%] h-10 bg-green-800 rounded-md px-2 text-white"
+                    className="w-[90%] h-10 bg-[#012939] rounded-md px-2 text-white"
                     placeholder="Digite seu comentário aqui"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}

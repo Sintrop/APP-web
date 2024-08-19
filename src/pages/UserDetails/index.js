@@ -211,7 +211,7 @@ export function UserDetails() {
                                             <p className="font-bold text-white text-xl">{t('usuarioInvalidado')}</p>
                                         </div>
                                     )}
-                                    <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
+                                    <div className="w-full flex flex-col bg-[#03364B] p-3 rounded">
                                         <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
                                             {userData?.bannerUrl && (
                                                 <img
@@ -220,7 +220,7 @@ export function UserDetails() {
                                                 />
                                             )}
                                         </div>
-                                        <div className="flex flex-col bg-green-950 p-3 rounded">
+                                        <div className="flex flex-col bg-[#012939] p-3 rounded">
                                             <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-[-90px]">
                                                 {imageProfile ? (
                                                     <img
@@ -262,14 +262,14 @@ export function UserDetails() {
                                                 <p className="text-sm text-white">{userData?.bio}</p>
                                             )}
 
-                                            <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
+                                            <div className="p-1 bg-[#03364B] border-2 border-green-500 rounded-md w-fit mt-1">
                                                 <p className="text-white text-xs lg:text-base">Wallet: {wallet}</p>
                                             </div>
 
                                             <div className="flex gap-3 mt-2 ">
                                                 {userData?.userType === 1 && (
                                                     <a
-                                                        className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#0a4303]"
+                                                        className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#03364B]"
                                                         href={`https://app.sintrop.com/producer/${String(userData?.wallet).toLowerCase()}`}
                                                         target="_blank"
                                                     >
@@ -279,7 +279,7 @@ export function UserDetails() {
                                                 )}
 
                                                 <a
-                                                    className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#0a4303]"
+                                                    className="flex items-center gap-2 text-white font-semibold text-sm py-1 px-3 border rounded-md w-fit bg-[#03364B]"
                                                     href={`https://app.sintrop.com/supporter/${String(userData?.wallet).toLowerCase()}`}
                                                     target="_blank"
                                                 >
@@ -349,7 +349,7 @@ export function UserDetails() {
                                     {tabSelected === 'data' && (
                                         <>
                                             {userData?.userType === 1 && (
-                                                <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                                                <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#03364B] rounded-md p-3'>
                                                     <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                                                     <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
@@ -379,7 +379,7 @@ export function UserDetails() {
                                             )}
 
                                             <div className="flex items-center flex-col gap-4 mt-2 w-full">
-                                                <div className="p-2 rounded-md flex flex-col items-center bg-[#0a4303] gap-2 w-full lg:flex-row lg:items-start">
+                                                <div className="p-2 rounded-md flex flex-col items-center bg-[#03364B] gap-2 w-full lg:flex-row lg:items-start">
                                                     <div className="flex flex-col">
                                                         <div className="w-[200px] h-[200px] rounded-md bg-gray-400">
                                                             {proofPhoto && (
@@ -453,7 +453,7 @@ export function UserDetails() {
 
                                                 {userData?.userType === 1 && (
                                                     <>
-                                                        <div className="p-2 rounded-md bg-[#0a4303] gap-2 w-full flex flex-col">
+                                                        <div className="p-2 rounded-md bg-[#03364B] gap-2 w-full flex flex-col">
                                                             <p className="text-xs text-center text-gray-400 mb-1">{t('mapaPropriedade')}</p>
 
                                                             <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
@@ -505,7 +505,7 @@ export function UserDetails() {
                                                 {/* {inspections.map(item => (
                                                     <button
                                                         key={item.id}
-                                                        className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
+                                                        className="w-full p-3 rounded-md flex items-center justify-between bg-[#03364B]"
                                                         onClick={() => navigate(`/result-inspection/${item.id}`)}
                                                     >
                                                         <div className="flex flex-col gap-1">
@@ -538,7 +538,7 @@ export function UserDetails() {
                                                 </>
                                             )}
 
-                                            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                                                 <h3 className="font-bold text-white">{t('certificadoContribuicao')}</h3>
                                                 <ContributeCertificate wallet={wallet} user={userData} />
                                             </div>
