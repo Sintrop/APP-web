@@ -428,6 +428,14 @@
     "dadosFinalizacaoTask": "Data included",
     "textFinalizouTask": "Completed the task",
     "feed": "Feed",
-    "servicos": "Services"
+    "servicos": "Services",
+    "digiteSuaWalletSenha": "Enter your wallet and password",
+    "senha": "Password",
+    "entrarWalletSenha": "Login with wallet and password",
+    "sincronizarWallet": "Sync wallet",
+    "voltar": "To go back",
+    "agoraSuaSenha": "Now enter your password",
+    "contasSalvas": "Saved accounts",
+    "entrarOutraConta": "Log in with another account"
   }
 }

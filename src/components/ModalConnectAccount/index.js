@@ -7,8 +7,10 @@ import { ActivityIndicator } from '../ActivityIndicator';
 import { useMainContext } from '../../hooks/useMainContext';
 import { ModalSignOut } from '../ModalSignOut';
 import { UserAccountItem } from './components/UserAccountItem';
+import { useTranslation } from 'react-i18next';
 
 export function ModalConnectAccount({ close }) {
+    const {t} = useTranslation();
     const { loginWithWalletAndPassword, Sync, accountsConnected } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [viewForm, setViewForm] = useState(false);
@@ -22,11 +24,11 @@ export function ModalConnectAccount({ close }) {
             return;
         }
         if (!wallet.trim()) {
-            toast.error('Digite sua wallet!')
+            toast.error(t('digiteWallet'))
             return;
         }
         if (!password.trim()) {
-            toast.error('Digite sua senha!')
+            toast.error(t('digiteSuaSenha'))
             return;
         }
 
@@ -36,7 +38,7 @@ export function ModalConnectAccount({ close }) {
         setLoading(false);
 
         if (response) {
-            toast.success('Você se conectou com sucesso!');
+            toast.success(t('conectadoSucesso'));
             setTimeout(() => close(), 2000);
             setWallet('');
             setPassword('');
@@ -50,7 +52,7 @@ export function ModalConnectAccount({ close }) {
         }
 
         if (!window.ethereum) {
-            toast.error('Você não tem um provedor ethereum em seu navegador!');
+            toast.error(t('necessitaProvedor'));
             return;
         }
         setLoading(true);
@@ -58,7 +60,7 @@ export function ModalConnectAccount({ close }) {
         const response = await Sync();
 
         if (response?.status === 'connected') {
-            toast.success('Você se conectou com sucesso!');
+            toast.success(t('conectadoSucesso'));
             close();
         } else {
             close();
@@ -70,11 +72,11 @@ export function ModalConnectAccount({ close }) {
     return (
         <Dialog.Portal className='flex justify-center items-center inset-0 '>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0 ' />
-            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-10'>
+            <Dialog.Content className='absolute flex flex-col justify-between p-3 lg:w-[500px] lg:h-[400px] bg-[#03364D] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-10'>
 
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]' />
-                    <Dialog.Title className='font-bold text-white'>Conectar</Dialog.Title>
+                    <Dialog.Title className='font-bold text-white'>{t('conectar')}</Dialog.Title>
                     <button onClick={close}>
                         <IoMdClose size={25} color='white' />
                     </button>
@@ -83,23 +85,23 @@ export function ModalConnectAccount({ close }) {
                 <div>
                     {viewForm ? (
                         <>
-                            <h3 className='text-white text-center text-lg'>Digite sua wallet e sua senha</h3>
+                            <h3 className='text-white text-center text-lg'>{t('digiteSuaWalletSenha')}</h3>
                             <p className='mt-5 text-xs text-gray-400'>Wallet:</p>
                             <input
                                 value={wallet}
                                 onChange={(e) => setWallet(e.target.value)}
                                 type='text'
-                                className='w-full h-10 rounded-md bg-green-950 text-white px-2'
-                                placeholder='Digite sua wallet'
+                                className='w-full h-10 rounded-md bg-[#012939] text-white px-2'
+                                placeholder={t('digiteAqui')}
                             />
 
-                            <p className='mt-3 text-xs text-gray-400'>Senha:</p>
+                            <p className='mt-3 text-xs text-gray-400'>{t('senha')}:</p>
                             <input
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 type='password'
-                                className='w-full h-10 rounded-md bg-green-950 text-white px-2'
-                                placeholder='Digite sua senha'
+                                className='w-full h-10 rounded-md bg-[#012939] text-white px-2'
+                                placeholder={t('digiteAqui')}
                             />
 
 
@@ -110,11 +112,11 @@ export function ModalConnectAccount({ close }) {
                                 {loading ? (
                                     <ActivityIndicator size={25} />
                                 ) : (
-                                    'Conectar'
+                                    t('conectar')
                                 )}
                             </button>
 
-                            <p className='text-sm text-center text-gray-400 mt-8 cursor-pointer' onClick={() => setViewForm(false)}>Voltar</p>
+                            <p className='text-sm text-center text-gray-400 mt-8 cursor-pointer' onClick={() => setViewForm(false)}>{t('voltar')}</p>
                         </>
                     ) : (
                         <>
@@ -126,7 +128,7 @@ export function ModalConnectAccount({ close }) {
                                     >
                                         <FaKey color='white' size={20} />
 
-                                        Entrar com wallet e senha
+                                        {t('entrarWalletSenha')}
                                     </button>
 
                                     <button
@@ -139,7 +141,7 @@ export function ModalConnectAccount({ close }) {
                                             <>
                                                 <FaWallet color='white' size={25} />
 
-                                                Sincronizar wallet
+                                                {t('sincronizarWallet')}
                                             </>
                                         )}
                                     </button>
@@ -162,14 +164,14 @@ export function ModalConnectAccount({ close }) {
                                                 </div>
                                             </div>
 
-                                            <p className='text-white text-center mt-10 text-sm'>Agora insira sua senha</p>
-                                            <p className='mt-3 text-xs text-gray-400'>Senha:</p>
+                                            <p className='text-white text-center mt-10 text-sm'>{t('agoraSuaSenha')}</p>
+                                            <p className='mt-3 text-xs text-gray-400'>{t('senha')}:</p>
                                             <input
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 type='password'
-                                                className='w-full h-10 rounded-md bg-green-950 text-white px-2'
-                                                placeholder='Digite sua senha'
+                                                className='w-full h-10 rounded-md bg-[#012939] text-white px-2'
+                                                placeholder={t('digiteAqui')}
                                             />
 
                                             <button
@@ -179,13 +181,13 @@ export function ModalConnectAccount({ close }) {
                                                 {loading ? (
                                                     <ActivityIndicator size={25} />
                                                 ) : (
-                                                    'Conectar'
+                                                    t('conectar')
                                                 )}
                                             </button>
                                         </>
                                     ) : (
                                         <>
-                                            <p className='text-gray-300 text-sm text-center'>Contas salvas</p>
+                                            <p className='text-gray-300 text-sm text-center'>{t('contasSalvas')}</p>
                                             <div className='flex flex-col gap-2 max-h-[200px] overflow-y-auto'>
                                                 {accountsConnected.map(item => (
                                                     <UserAccountItem
@@ -203,7 +205,7 @@ export function ModalConnectAccount({ close }) {
                                                 className='flex items-center gap-2 p-2 rounded-md bg-blue-400 mt-5 w-full justify-center text-white'
                                                 onClick={() => setViewForm(true)}
                                             >
-                                                Entrar com outra conta
+                                                {t('entrarOutraConta')}
                                             </button>
 
                                             <button
@@ -216,7 +218,7 @@ export function ModalConnectAccount({ close }) {
                                                     <>
                                                         <FaWallet color='white' size={25} />
 
-                                                        Sincronizar wallet
+                                                        {t('sincronizarWallet')}
                                                     </>
                                                 )}
                                             </button>
