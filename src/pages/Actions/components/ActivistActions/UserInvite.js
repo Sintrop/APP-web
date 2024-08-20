@@ -7,7 +7,7 @@ export function UserInvite({data, inviteUser, loadingInvite}){
     const {userData} = useMainContext();
 
     return(
-        <div className="p-2 rounded-md bg-[#0a4303] flex flex-col">
+        <div className="p-2 rounded-md bg-[#03364B] flex flex-col">
             <p className="font-bold text-white">
                 {data?.name} 
                 <span className="text-gray-300 text-sm font-normal">

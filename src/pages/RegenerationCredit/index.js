@@ -12,7 +12,7 @@ export function RegenerationCredit() {
     const navigate = useNavigate();
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Crédito de Regeneração - Sintrop</title>
@@ -27,66 +27,66 @@ export function RegenerationCredit() {
             <Header routeActive='regeneration-credit' />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
-                <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3 justify-center">
+                <div className="flex gap-5 flex-wrap max-w-[1024px] mt-3">
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-blue-500"
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
                         onClick={() => navigate('/impact-calculator')}
                     >
                         <img
                             src={require('../../assets/icon-contribuir.png')}
-                            className="h-20 w-20 object-contain"
+                            className="h-16 w-16 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">{t('contribuir')}</p>
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('contribuir')}</p>
                     </button>
 
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-green-500"
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
                         onClick={() => navigate('/market')}
                     >
                         <img
                             src={require('../../assets/market-icon.png')}
-                            className="h-20 w-20 object-contain"
+                            className="h-16 w-16 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">{t('mercado')}</p>
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('mercado')}</p>
                     </button>
 
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-yellow-600"
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
                         onClick={() => navigate('/services')}
                     >
                         <img
                             src={require('../../assets/recompensas.png')}
-                            className="h-20 w-20 object-contain"
+                            className="h-16 w-16 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">{t('pagamentoAmbiental')}</p>
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('pagamentoAmbiental')}</p>
                     </button>
 
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
                         onClick={() => navigate('/impact')}
                     >
                         <img
                             src={require('../../assets/network.png')}
-                            className="h-20 w-20 object-contain"
+                            className="h-16 w-16 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">{t('impactoEstatistica')}</p>
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('impactoEstatistica')}</p>
                     </button>
 
 
                     <button 
-                        className="rounded-md w-[300px] h-[300px] flex flex-col items-center justify-center bg-[#0a4303]"
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
                         onClick={() => navigate('/my-tokens')}
                     >
                         <img
                             src={require('../../assets/token.png')}
-                            className="h-20 w-20 object-contain"
+                            className="h-16 w-16 object-contain"
                         />
 
-                        <p className="font-bold text-white text-xl mt-2">{t('meusTokens')}</p>
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('meusTokens')}</p>
                     </button>
                 </div>
             </div>

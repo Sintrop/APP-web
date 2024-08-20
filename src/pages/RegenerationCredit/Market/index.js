@@ -33,13 +33,13 @@ export function Market() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar />
             <Header />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0">
-                    <p className="font-bold text-white text-lg mt-3">{t('comprar')}</p>
+                    {/* <p className="font-bold text-white text-lg mt-3">{t('comprar')}</p>
                     <div className="flex flex-wrap justify-center gap-3 w-full">
                         <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[49%] border-green-600 border">
                             <h3 className="font-bold text-green-600 text-lg">{t('preVendaReal')}</h3>
@@ -64,7 +64,7 @@ export function Market() {
                                 {t('comprar')}
                             </button>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center justify-between gap-1 w-full mt-5">
                         <p className="font-bold text-white text-lg">{t('ofertas')}</p>
@@ -108,7 +108,8 @@ export function Market() {
                             />
                         ))}
                     </div>
-                    <p className="font-bold text-white text-lg mt-3">{t('vender')}</p>
+
+                    {/* <p className="font-bold text-white text-lg mt-3">{t('vender')}</p>
                     <a
                         className="flex items-center justify-between gap-2 px-2 py-3 border-2 border-white rounded-md w-full"
                         href="https://app.uniswap.org/"
@@ -133,7 +134,7 @@ export function Market() {
                         />
 
                         <FaChevronRight size={20} color='white' />
-                    </a>
+                    </a> */}
                 </div>
             </div>
 

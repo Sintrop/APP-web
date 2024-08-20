@@ -73,7 +73,7 @@ export function ResearcheItem({ data }) {
     }
 
     return (
-        <div className="flex flex-col p-5 rounded-md bg-[#0a4303] w-full">
+        <div className="flex flex-col p-5 rounded-md bg-[#03364B] w-full">
             <div className="flex gap-2 mb-3 px-5">
                 <div className="h-20 w-20 rounded-full bg-gray-400">
                     {imageProfile && (

@@ -36,7 +36,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
 
     if (certificateType === 'long') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                 <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-white">Certificado longo</h3>
                     <button
@@ -92,7 +92,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                                     logoPaddingStyle="square"
                                     logoWidth={30}
                                     removeQrCodeBehindLogo
-                                    eyeColor='#0a4303'
+                                    eyeColor='#03364B'
                                 />
 
                                 <p className="font-bold text-center text-xs">Produtor regenerativo</p>
@@ -109,7 +109,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
 
     if (certificateType === 'short') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                 <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-white">Certificado curto</h3>
                     <button
@@ -141,7 +141,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                         </div>
                     </div>
 
-                    <div className="w-full flex flex-col p-2 bg-[#0a4303] rounded-md items-center justify-center">
+                    <div className="w-full flex flex-col p-2 bg-[#03364B] rounded-md items-center justify-center">
                         <p className="font-bold text-white text-xs mb-1">Produtor regenerativo</p>
                         <QRCode
                             value={`https://${window.location.host}/producer/${blockchainData?.producer?.producerWallet}`}
@@ -152,7 +152,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                             logoPaddingStyle="square"
                             logoWidth={30}
                             removeQrCodeBehindLogo
-                            eyeColor='#0a4303'
+                            eyeColor='#03364B'
                         />
                         <p className="text-[10px] text-center text-white mt-2">{blockchainData?.producer?.producerWallet}</p>
                     </div>
@@ -164,7 +164,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
 
     if (certificateType === 'new-long') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                 <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-white">Certificado longo</h3>
                     <button
@@ -190,7 +190,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                         </div>
                     </div>
 
-                    <div className="flex justify-center items-center py-3 gap-4 bg-[#0a4303]">
+                    <div className="flex justify-center items-center py-3 gap-4 bg-[#03364B]">
                         <div className=" flex flex-col items-center justify-center">
                             <p className="text-white text-center text-sm font-bold">Produtor regenerativo</p>
                             <QRCode
@@ -202,7 +202,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                                 logoPaddingStyle="square"
                                 logoWidth={30}
                                 removeQrCodeBehindLogo
-                                eyeColor='#0a4303'
+                                eyeColor='#03364B'
                             />
                             <div className="flex items-center justify-center gap-1 mt-2">
                                 <ImLab size={15} color='#ff9900' />

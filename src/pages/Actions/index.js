@@ -222,7 +222,7 @@ export function Actions() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sintrop App</title>
@@ -251,7 +251,7 @@ export function Actions() {
                                 <ModalConnectAccount close={() => setModalConnect(false)} />
                             </Dialog.Root>
 
-                            <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
+                            <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-5">
                                 <div className="flex items-center gap-2">
                                     <MdHelpOutline color='white' size={25} />
                                     <p className="font-semibold text-white">{t('ajuda')}</p>
@@ -261,7 +261,7 @@ export function Actions() {
                                     <a
                                         href='https://docs.sintrop.com'
                                         target="_blank"
-                                        className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                        className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                     >
                                         <SiReadthedocs size={25} color='white' />
                                         <p className="font-bold text-white text-sm">{t('documentacao')}</p>
@@ -270,7 +270,7 @@ export function Actions() {
                                     <a
                                         href='https://www.sintrop.com/app'
                                         target="_blank"
-                                        className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                        className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                     >
                                         <FaMobile size={25} color='white' />
                                         <p className="font-bold text-white text-sm">App mobile</p>
@@ -281,7 +281,7 @@ export function Actions() {
                     ) : (
                         <div className="w-full flex flex-col">
                             <p className="font-bold text-white text-lg">{t('contribuicao')}</p>
-                            <div className="flex flex-col bg-[#0a4303] p-3 rounded-md mt-1 gap-8 lg:flex-row">
+                            <div className="flex flex-col bg-[#03364B] p-3 rounded-md mt-1 gap-8 lg:flex-row">
                                 <div className="flex flex-col w-full lg:w-[300px]">
                                     <p className="text-gray-300 text-sm">{t('vejaImpactoContribuicao')}</p>
 
@@ -292,7 +292,7 @@ export function Actions() {
                                         type="number"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        className="px-2 py-2 bg-green-950 rounded-md font-bold text-white"
+                                        className="px-2 py-2 bg-[#012939] rounded-md font-bold text-white"
                                         placeholder={t('digiteAqui')}
                                     />
 
@@ -305,7 +305,7 @@ export function Actions() {
                                     ) : (
                                         <div className="flex flex-col mt-3">
                                             <p className="text-white text-xs">{t('seuSaldo')}</p>
-                                            <div className="flex items-center gap-2 bg-green-950 p-2 rounded-md">
+                                            <div className="flex items-center gap-2 bg-[#012939] p-2 rounded-md">
                                                 <img
                                                     src={require('../../assets/token.png')}
                                                     className="w-8 h-8 object-contain"
@@ -358,7 +358,7 @@ export function Actions() {
                                 <div className="flex flex-col w-full">
                                     <p className="font-semibold text-white">{t('demaisAcoesNoApp')}</p>
 
-                                    <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-2">
+                                    <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-2">
                                         <div className="flex items-center gap-2">
                                             <FaMobile color='white' size={25} />
                                             <p className="font-semibold text-white">{t('baixeNossoApp')}</p>
@@ -374,7 +374,7 @@ export function Actions() {
                                                     logoPaddingStyle="square"
                                                     logoWidth={30}
                                                     removeQrCodeBehindLogo
-                                                    eyeColor='#0a4303'
+                                                    eyeColor='#03364B'
                                                 />
 
                                                 <p className="text-sm text-gray-300">{t('leiaQRCode')}</p>
@@ -398,7 +398,7 @@ export function Actions() {
                                 <div className="flex flex-col w-full">
                                     <p className="font-semibold text-white">{t('demaisAcoesNoApp')}</p>
 
-                                    <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-2">
+                                    <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-2">
                                         <div className="flex items-center gap-2">
                                             <FaMobile color='white' size={25} />
                                             <p className="font-semibold text-white">{t('baixeNossoApp')}</p>
@@ -414,7 +414,7 @@ export function Actions() {
                                                     logoPaddingStyle="square"
                                                     logoWidth={30}
                                                     removeQrCodeBehindLogo
-                                                    eyeColor='#0a4303'
+                                                    eyeColor='#03364B'
                                                 />
 
                                                 <p className="text-sm text-gray-300">{t('leiaQRCode')}</p>
@@ -434,7 +434,7 @@ export function Actions() {
                                 </div>
                             )}
 
-                            {userData?.userType === 3 && (
+                            {/* {userData?.userType === 3 && (
                                 <ResearcherActions />
                             )}
 
@@ -452,7 +452,7 @@ export function Actions() {
 
                             {userData?.userType === 7 && (
                                 <SupporterActions />
-                            )}
+                            )} */}
                         </div>
                     )}
                 </div>

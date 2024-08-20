@@ -10,7 +10,7 @@ export function InspectionValidation({data, validatorsCount}){
     const [modalValidation, setModalValidation] = useState(false);
 
     return(
-        <div className="flex flex-col w-full p-3 rounded-md bg-[#0a4303]">
+        <div className="flex flex-col w-full p-3 rounded-md bg-[#03364B]">
             <div className="flex items-center justify-between w-full">
                 <div className="flex flex-col">
                     <p className="font-semibold text-white">Inspeção #{data?.id}</p>
@@ -28,7 +28,7 @@ export function InspectionValidation({data, validatorsCount}){
                     )}
                 </div>
 
-                <div className="p-3 rounded-md bg-green-950">
+                <div className="p-3 rounded-md bg-[#012939]">
                     <p className="font-semibold text-white">Votos: {data?.validationsCount}/{validatorsCount}</p>
                 </div>
             </div>

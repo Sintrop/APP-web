@@ -201,7 +201,7 @@ export function ResearcherActions() {
                 {userData?.userType === 3 && (
                     <>
                         <p className="font-bold text-white text-lg">{t('convidarPesquisador')}</p>
-                        <div className="flex flex-col p-3 rounded-md bg-[#0a4303] mb-5">
+                        <div className="flex flex-col p-3 rounded-md bg-[#03364B] mb-5">
                             <p className="text-white">{t('instruParaConvidar')}</p>
                             <p className="mt-2 font-bold text-blue-500">Wallet</p>
                             <input
@@ -279,7 +279,7 @@ export function ResearcherActions() {
                         {tabSelected === 'researches' && (
                             <>
                                 {userData?.userType === 3 && (
-                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
+                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#03364B] mb-1">
                                         <p className="font-semibold text-white">{t('desejaPublicarPesquisa')}</p>
 
                                         <div className="flex items-center gap-2">
@@ -320,7 +320,7 @@ export function ResearcherActions() {
                         {tabSelected === 'calculator-items' && (
                             <>
                                 {userData?.userType === 3 && (
-                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
+                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#03364B] mb-1">
                                         <p className="font-semibold text-white">{t('desejaSugerirItem')}</p>
 
                                         <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export function ResearcherActions() {
                         {tabSelected === 'methods' && (
                             <>
                                 {userData?.userType === 3 && (
-                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#0a4303] mb-1">
+                                    <div className="w-full flex justify-between items-center p-2 rounded-md bg-[#03364B] mb-1">
                                         <p className="font-semibold text-white">{t('desejaSugerirMetodo')}</p>
 
                                         <div className="flex items-center gap-2">
@@ -378,7 +378,7 @@ export function ResearcherActions() {
                                     </div>
                                 )}
 
-                                <button className="w-full p-3 rounded-md bg-[#0a4303] flex items-center justify-between" onClick={() => navigate('/methods/sintrop')}>
+                                <button className="w-full p-3 rounded-md bg-[#03364B] flex items-center justify-between" onClick={() => navigate('/methods/sintrop')}>
                                     <div className="flex flex-col gap-1">
                                         <p className="font-bold text-white text-lg mb-1">{t('metodoSintrop')}</p>
                                         <img

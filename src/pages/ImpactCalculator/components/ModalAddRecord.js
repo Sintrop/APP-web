@@ -79,7 +79,7 @@ export function ModalAddRecord({close, registered}){
     return(
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[420px] bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-50'>
+            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[420px] bg-[#03364B] rounded-md m-auto inset-0 border-2 z-50'>
                 <div className="flex items-center justify-between">
                     <div className="w-[25px]"/>
                     <p className="font-bold text-white">{t('registrarConsumo')}</p>
@@ -93,7 +93,7 @@ export function ModalAddRecord({close, registered}){
                         <>
                             <p className="text-white text-sm mt-5">{t('itemSelecionado')}</p>
                             <button
-                                className="flex flex-col w-full bg-green-950 rounded-md h-11 px-3 text-white"
+                                className="flex flex-col w-full bg-[#012939] rounded-md h-11 px-3 text-white"
                                 onClick={() => setItemSelected(null)}
                             >
                                 {itemSelected?.name}
@@ -104,7 +104,7 @@ export function ModalAddRecord({close, registered}){
                             <input
                                 value={quant}
                                 onChange={(e) => setQuant(e.target.value)}
-                                className="w-full h-10 rounded-md bg-green-950 text-white px-2"
+                                className="w-full h-10 rounded-md bg-[#012939] text-white px-2"
                                 placeholder={t('digiteAqui')}
                                 type="number"
                             />
@@ -113,11 +113,10 @@ export function ModalAddRecord({close, registered}){
                             <input
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full h-10 rounded-md bg-green-950 text-white px-2"
+                                className="w-full h-10 rounded-md bg-[#012939] text-white px-2"
                                 placeholder={t('digiteAqui')}
                                 type="date"
                                 max={maxDate}
-                                min={minDate}
                             />
 
                             <button
@@ -139,7 +138,7 @@ export function ModalAddRecord({close, registered}){
                                 </div>
                             ) : (
                                 <>
-                                    <div className="bg-green-950 rounded-md w-full flex items-center gap-2 h-10 px-3">
+                                    <div className="bg-[#012939] rounded-md w-full flex items-center gap-2 h-10 px-3">
                                         <IoMdSearch size={20} color='white'/>
 
                                         <input

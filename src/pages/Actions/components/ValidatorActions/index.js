@@ -116,7 +116,7 @@ export function ValidatorActions(){
                         <select
                             value={userType}
                             onChange={(e) => setUserType(Number(e.target.value))}
-                            className="w-[200px] p-2 rounded-md bg-[#0a4303] text-white"
+                            className="w-[200px] p-2 rounded-md bg-[#03364B] text-white"
                         >
                             <option value={1}>Produtores</option>
                             <option value={2}>Inspetores</option>

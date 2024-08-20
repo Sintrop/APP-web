@@ -52,7 +52,7 @@ export function ModalCreateTask({close, success}){
     return(
         <Dialog.Portal className='flex justify-center items-center inset-0'>
             <Dialog.Overlay className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[500px] bg-green-950 rounded-md m-auto inset-0 border-2'>
+            <Dialog.Content className='absolute flex flex-col items-center justify-between p-3 lg:w-[500px] h-[500px] bg-[#03364B] rounded-md m-auto inset-0 border-2'>
                 <div className='flex items-center w-full justify-between'>
                     <div className='w-[25px]'/>
                     <Dialog.Title className='font-bold text-white'>{t('criarTask')}</Dialog.Title>
@@ -67,7 +67,7 @@ export function ModalCreateTask({close, success}){
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder={t('digiteAqui')}
-                        className='bg-[#0a4303] rounded-md border-2 px-2 py-2 w-full text-white'
+                        className='bg-[#012939] rounded-md border-2 px-2 py-2 w-full text-white'
                         maxLength={50}
                     />
 
@@ -76,7 +76,7 @@ export function ModalCreateTask({close, success}){
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder={t('digiteAqui')}
-                        className='bg-[#0a4303] rounded-md border-2 px-2 w-full text-white '
+                        className='bg-[#012939] rounded-md border-2 px-2 w-full text-white '
                     />
 
                     <p className="font-bold text-white mt-2">{t('anexeImgOpc')}:</p>

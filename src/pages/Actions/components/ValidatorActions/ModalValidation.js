@@ -161,7 +161,7 @@ export function ModalValidation({ close, data }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[500px] lg:h-[280px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
+            <div className='absolute flex flex-col p-3 lg:w-[500px] lg:h-[280px] bg-[#03364B] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2'>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={close}
@@ -188,7 +188,7 @@ export function ModalValidation({ close, data }) {
                         placeholder="Digite aqui"
                         onChange={(e) => setInput(e.target.value)}
                         value={input}
-                        className="text-white p-2 rounded-md bg-green-950 w-full"
+                        className="text-white p-2 rounded-md bg-[#012939] w-full"
                     />
 
                     <button className="font-semibold text-white w-full py-2 rounded-md bg-blue-600 mt-5" onClick={handleVote}>

@@ -69,10 +69,10 @@ export function NewPubli({attPublis}){
     }
 
     return(
-        <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full lg:max-h-[300px]">
+        <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full lg:max-h-[300px]">
             <div className="flex gap-2 h-full">
 
-                <div className="bg-green-800 p-2 rounded-md w-full max-h-[250px] flex">
+                <div className="p-2 rounded-md w-full max-h-[250px] flex border border-[#229B13]">
                     <textarea
                         className="bg-transparent w-full h-full text-white resize-none focus:outline-none"
                         placeholder={t('comecarPublicacao')}

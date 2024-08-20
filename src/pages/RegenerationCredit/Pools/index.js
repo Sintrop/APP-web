@@ -418,7 +418,7 @@ export function Pools({ }) {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <TopBar/>
             <Header />
 
@@ -469,7 +469,7 @@ export function Pools({ }) {
                                 />
                             )}
 
-                            <div className="p-3 rounded-md bg-[#0a4303] flex flex-col w-full lg:min-w-[800px] mt-2 lg:flex-row">
+                            <div className="p-3 rounded-md bg-[#03364B] flex flex-col w-full lg:min-w-[800px] mt-2 lg:flex-row">
                                 <div className="w-full lg:w-[50%] flex flex-col">
                                     <Chart
                                         options={options}
@@ -480,22 +480,22 @@ export function Pools({ }) {
                                 </div>
 
                                 <div className="w-full lg:w-[50%] flex flex-col gap-3">
-                                    <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
+                                    <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">{t('saldoDisponivel')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.balanceContract))}</p>
                                     </div>
 
-                                    <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
+                                    <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">{t('tokenPorEra')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.tokensPerEra))}</p>
                                     </div>
 
-                                    <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
+                                    <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">{t('eraContrato')}</p>
                                         <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.currentEraContract))}</p>
                                     </div>
 
-                                    <div className="bg-green-950 flex flex-col p-2 rounded-md w-full border-2 border-white">
+                                    <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">{t('epocaAtual')}</p>
                                         <p className="text-white font-bold">{poolData?.epoch}</p>
                                     </div>
@@ -503,7 +503,7 @@ export function Pools({ }) {
                             </div>
 
                             {visibleWithdraw && (
-                                <div className="flex items-center justify-between w-full bg-[#0a4303] rounded-md p-3 mt-3">
+                                <div className="flex items-center justify-between w-full bg-[#03364B] rounded-md p-3 mt-3">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-white">{t('proximoSaque')}</p>
                                         <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>

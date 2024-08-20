@@ -349,7 +349,7 @@ export function Profile() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sintrop App</title>
@@ -403,7 +403,7 @@ export function Profile() {
                                                 </div>
                                             )}
 
-                                            <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
+                                            <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-5">
                                                 <div className="flex items-center gap-2">
                                                     <MdHelpOutline color='white' size={25} />
                                                     <p className="font-semibold text-white">{t('ajuda')}</p>
@@ -413,7 +413,7 @@ export function Profile() {
                                                     <a
                                                         href='https://docs.sintrop.com'
                                                         target="_blank"
-                                                        className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                                        className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                                     >
                                                         <SiReadthedocs size={25} color='white' />
                                                         <p className="font-bold text-white text-sm">{t('documentacao')}</p>
@@ -422,7 +422,7 @@ export function Profile() {
                                                     <a
                                                         href='https://www.sintrop.com/app'
                                                         target="_blank"
-                                                        className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                                        className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                                     >
                                                         <FaMobile size={25} color='white' />
                                                         <p className="font-bold text-white text-sm">App mobile</p>
@@ -435,7 +435,7 @@ export function Profile() {
                                     {accountStatus === 'blockchain' ? (
                                         <div>
                                             <p className="font-bold text-white">{t('seuPerfil')}</p>
-                                            <div className="w-full flex flex-col bg-[#0a4303] p-3 rounded">
+                                            <div className="w-full flex flex-col bg-[#03364B] p-3 rounded">
                                                 <div className="bg-florest w-full h-[230px] bg-center bg-cover bg-no-repeat rounded-t-md">
                                                     {userData?.bannerUrl && (
                                                         <img
@@ -444,7 +444,7 @@ export function Profile() {
                                                         />
                                                     )}
                                                 </div>
-                                                <div className="flex flex-col bg-green-950 p-3 rounded">
+                                                <div className="flex flex-col bg-[#012939] p-3 rounded">
                                                     <div className="w-28 h-28 rounded-full bg-gray-400 border-4 border-white mt-[-90px]">
                                                         {imageProfile ? (
                                                             <img
@@ -485,7 +485,7 @@ export function Profile() {
                                                     {userData?.bio && (
                                                         <p className="text-sm text-white">{userData?.bio}</p>
                                                     )}
-                                                    <div className="p-1 bg-[#0a4303] border-2 border-green-500 rounded-md w-fit mt-1">
+                                                    <div className="p-1 bg-[#03364B] border-2 border-green-500 rounded-md w-fit mt-1">
                                                         <p className="text-white text-xs lg:text-base">Wallet: {walletConnected}</p>
                                                     </div>
 
@@ -568,7 +568,7 @@ export function Profile() {
                                             {tabSelected === 'data' && (
                                                 <>
                                                     {userData?.userType === 1 && (
-                                                        <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                                                        <div className='flex flex-col w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#03364B] rounded-md p-3'>
                                                             <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                                                             <div className='flex items-center justify-center flex-wrap gap-5 mt-5'>
@@ -598,7 +598,7 @@ export function Profile() {
                                                     )}
 
                                                     <div className="flex items-center flex-col gap-4 mt-2">
-                                                        <div className="p-2 rounded-md flex flex-col bg-[#0a4303] gap-2 w-full lg:flex-row">
+                                                        <div className="p-2 rounded-md flex flex-col bg-[#03364B] gap-2 w-full lg:flex-row">
                                                             <div className="flex flex-col">
                                                                 <div className="w-[200px] h-[200px] rounded-md bg-gray-400">
                                                                     {proofPhoto && (
@@ -678,7 +678,7 @@ export function Profile() {
                                                         {inspections.map(item => (
                                                             <button
                                                                 key={item.id}
-                                                                className="w-full p-3 rounded-md flex items-center justify-between bg-[#0a4303]"
+                                                                className="w-full p-3 rounded-md flex items-center justify-between bg-[#03364B]"
                                                                 onClick={() => navigate(`/result-inspection/${item.id}`)}
                                                             >
                                                                 <div className="flex flex-col gap-1">
@@ -711,12 +711,12 @@ export function Profile() {
                                                         </>
                                                     )}
 
-                                                    <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                    <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                                                         <h3 className="font-bold text-white">{t('certificadoContribuicao')}</h3>
                                                         <ContributeCertificate wallet={walletConnected} user={userData} />
                                                     </div>
 
-                                                    <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-3">
+                                                    <div className="w-full flex flex-col bg-[#03364B] rounded-md p-3">
                                                         <h3 className="font-bold text-white mb-1">{t('compromissoReducao')}</h3>
                                                         {itemsToReduce.length === 0 && (
                                                             <p className="text-white text-center mt-4 mb-8">{t('nenhumItemNaListaDeReducao')}</p>
@@ -742,7 +742,7 @@ export function Profile() {
                                                         <>
                                                             <p className="text-white text-center">{t('nenhumaZonaCadastrada')}</p>
 
-                                                            <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-2">
+                                                            <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-2">
                                                                 <p className="font-semibold text-white">{t('paraCadastrarZona')}</p>
                                                                 <div className="flex items-center gap-2 mt-3">
                                                                     <FaMobile color='white' size={25} />
@@ -759,7 +759,7 @@ export function Profile() {
                                                                             logoPaddingStyle="square"
                                                                             logoWidth={30}
                                                                             removeQrCodeBehindLogo
-                                                                            eyeColor='#0a4303'
+                                                                            eyeColor='#03364B'
                                                                         />
 
                                                                         <p className="text-sm text-gray-300">{t('leiaQRCode')}</p>
@@ -850,7 +850,7 @@ export function Profile() {
                                                         {userData?.userType === 8 && t('textValidador')}
                                                     </p>
 
-                                                    <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-3 lg:w-[720px]">
+                                                    <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#03364B] mt-3 lg:w-[720px]">
                                                         <p className="text-gray-200 text-sm text-center">{t('statusConvite')}</p>
                                                         <p className="font-bold text-green-600 text-4xl text-center">
                                                             {accountStatus === 'pending' ? t('aguardandoConvite') : t('conviteRecebido')}
@@ -872,7 +872,7 @@ export function Profile() {
                                                     </div>
 
                                                     {accountStatus === 'guest' && (
-                                                        <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#0a4303] mt-10 lg:w-[720px]">
+                                                        <div className="flex flex-col w-[320px] p-2 rounded-md bg-[#03364B] mt-10 lg:w-[720px]">
                                                             <p className="text-gray-200 text-sm text-center">{t('vagasDisponiveis')}</p>
                                                             <p className="font-bold text-green-600 text-4xl text-center">
                                                                 {vacancyAvaliable ? t('vagaDisponivel') : t('naoHaVaga')}
@@ -928,7 +928,7 @@ export function Profile() {
                                         <ModalConnectAccount close={() => setModalConnect(false)} />
                                     </Dialog.Root>
 
-                                    <div className="p-2 rounded-md bg-[#0a4303] flex flex-col w-full mt-5">
+                                    <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-5">
                                         <div className="flex items-center gap-2">
                                             <MdHelpOutline color='white' size={25} />
                                             <p className="font-semibold text-white">{t('ajuda')}</p>
@@ -938,7 +938,7 @@ export function Profile() {
                                             <a
                                                 href='https://docs.sintrop.com'
                                                 target="_blank"
-                                                className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                                className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                             >
                                                 <SiReadthedocs size={25} color='white' />
                                                 <p className="font-bold text-white text-sm">{t('documentacao')}</p>
@@ -947,7 +947,7 @@ export function Profile() {
                                             <a
                                                 href='https://www.sintrop.com/app'
                                                 target="_blank"
-                                                className="p-2 rounded-md bg-green-950 flex items-center gap-2"
+                                                className="p-2 rounded-md bg-[#012939] flex items-center gap-2"
                                             >
                                                 <FaMobile size={25} color='white' />
                                                 <p className="font-bold text-white text-sm">App mobile</p>

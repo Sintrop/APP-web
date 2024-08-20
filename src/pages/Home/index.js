@@ -24,7 +24,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
 export function Home() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { walletConnected, userData, imageProfile, blockchainData } = useMainContext();
     const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export function Home() {
     }
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sintrop App</title>
@@ -84,8 +84,8 @@ export function Home() {
                     name="description"
                     content="Sistema Descentralizado de Regeneração da Natureza"
                 />
-                <meta name="og:title" property="og:title" content="Sintrop App"/>
-                <meta name="og:description" property="og:description" content="Sistema Descentralizado de Regeneração da Natureza"/>
+                <meta name="og:title" property="og:title" content="Sintrop App" />
+                <meta name="og:description" property="og:description" content="Sistema Descentralizado de Regeneração da Natureza" />
             </Helmet>
             <TopBar />
             <Header routeActive='home' />
@@ -98,7 +98,7 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3">
-                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#0a4303] rounded-md relative">
+                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#03364B] rounded-md relative">
                                 {walletConnected === '' ? (
                                     <>
                                         <img
@@ -203,41 +203,37 @@ export function Home() {
                                 )}
                             </div>
 
-                            <div className="hidden lg:flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
-                                <p className="text-gray-400 text-xs text-left">{t('atalhos')}</p>
+                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-[200px]">
+                                <button
+                                    className="flex flex-col items-center w-16"
+                                    onClick={() => navigate('/impact-calculator')}
+                                >
+                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                        <FaCalculator color='white' size={25} />
+                                    </div>
+                                    <p className="text-white text-xs text-center">{t('calculadoraDeImpacto')}</p>
+                                </button>
 
-                                <div className="flex flex-wrap justify-center gap-5 mt-3">
-                                    <button
-                                        className="flex flex-col items-center w-16"
-                                        onClick={() => navigate('/impact-calculator')}
-                                    >
-                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
-                                            <FaCalculator color='white' size={25} />
-                                        </div>
-                                        <p className="text-white text-xs text-center">{t('calculadoraDeImpacto')}</p>
-                                    </button>
+                                <a
+                                    className="flex flex-col items-center w-16"
+                                    href="https://docs.sintrop.com"
+                                    target="_blank"
+                                >
+                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                        <IoMdHelp color='white' size={30} />
+                                    </div>
+                                    <p className="text-white text-xs text-center">{t('ajuda')}</p>
+                                </a>
 
-                                    <a
-                                        className="flex flex-col items-center w-16"
-                                        href="https://docs.sintrop.com"
-                                        target="_blank"
-                                    >
-                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
-                                            <IoMdHelp color='white' size={30} />
-                                        </div>
-                                        <p className="text-white text-xs text-center">{t('ajuda')}</p>
-                                    </a>
-
-                                    <button
-                                        className="flex flex-col items-center w-16"
-                                        onClick={() => navigate('/education')}
-                                    >
-                                        <div className="border-2 border-white w-14 h-14 rounded-full bg-green-950 flex flex-col items-center justify-center">
-                                            <ImBooks color='white' size={30} />
-                                        </div>
-                                        <p className="text-white text-xs text-center">{t('educacao')}</p>
-                                    </button>
-                                </div>
+                                <button
+                                    className="flex flex-col items-center w-16"
+                                    onClick={() => navigate('/education')}
+                                >
+                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                        <ImBooks color='white' size={30} />
+                                    </div>
+                                    <p className="text-white text-xs text-center">{t('educacao')}</p>
+                                </button>
                             </div>
                         </div>
 
@@ -294,7 +290,7 @@ export function Home() {
                         </div>
 
                         <div className="hidden lg:flex flex-col gap-3">
-                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#0a4303] rounded-md">
+                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#03364B] rounded-md">
                                 <p className="font-bold text-white text-xs text-center mb-3">{t('baixeNossoApp')}</p>
                                 <QRCode
                                     value='https://www.sintrop.com/app'
@@ -304,7 +300,7 @@ export function Home() {
                                     logoPaddingStyle="square"
                                     logoWidth={30}
                                     removeQrCodeBehindLogo
-                                    eyeColor='#0a4303'
+                                    eyeColor='#03364B'
                                 />
                             </div>
                         </div>

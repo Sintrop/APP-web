@@ -93,7 +93,7 @@ export function UserValidation({ data, validatorsCount }) {
     }
 
     return (
-        <div className="flex flex-col p-2 rounded-md bg-[#0a4303]">
+        <div className="flex flex-col p-2 rounded-md bg-[#03364B]">
             <div className="flex gap-2">
                 <div className="h-12 w-12 rounded-full bg-gray-500">
                     {imageProfile && (
@@ -110,7 +110,7 @@ export function UserValidation({ data, validatorsCount }) {
                 </div>
             </div>
 
-            <div className="flex flex-col w-full p-2 rounded-md bg-green-950 mt-2">
+            <div className="flex flex-col w-full p-2 rounded-md bg-[#012939] mt-2">
                 <div className="flex items-center justify-between w-full">
                     <p className="font-semibold text-white">Votos {validations.length}/{validatorsCount}</p>
 

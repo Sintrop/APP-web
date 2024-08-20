@@ -68,7 +68,7 @@ export function InspectionItem({ data, type }) {
 
     if (type === 'history') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-2">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-2">
                 <div className="flex flex-col lg:items-center justify-between lg:flex-row">
                     <div className="flex flex-col lg:items-center lg:flex-row">
                         <div>
@@ -110,7 +110,7 @@ export function InspectionItem({ data, type }) {
                         <div className="flex flex-col w-full lg:w-fit">
                             <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
-                                className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
+                                className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
                                 onClick={() => navigate(`/user-details/${data.createdBy}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
@@ -128,7 +128,7 @@ export function InspectionItem({ data, type }) {
                         <div className="flex flex-col w-full lg:w-fit">
                             <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                             <button 
-                                className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
+                                className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
                                 onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
@@ -145,7 +145,7 @@ export function InspectionItem({ data, type }) {
                     </div>
                     
                     {data.status === 2 && (
-                        <div className="flex flex-col items-center justify-center p-1 bg-green-950 border-2 border-white rounded-md mt-3 lg:mt-0">
+                        <div className="flex flex-col items-center justify-center p-1 bg-[#012939] border-2 border-white rounded-md mt-3 lg:mt-0">
                             <p className="font-bold text-white">{data?.isaScore}</p>
                             <p className="text-white text-xs">{t('ptsRegen')}</p>
                         </div>
@@ -168,7 +168,7 @@ export function InspectionItem({ data, type }) {
 
     if (type === 'manage') {
         return (
-            <div className="w-full flex flex-col bg-[#0a4303] rounded-md p-2">
+            <div className="w-full flex flex-col bg-[#03364B] rounded-md p-2">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         <div>
@@ -204,7 +204,7 @@ export function InspectionItem({ data, type }) {
                         <div className="flex flex-col">
                             <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
-                                className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
+                                className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
                                 onClick={() => navigate(`/user-details/${data.createdBy}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
@@ -223,7 +223,7 @@ export function InspectionItem({ data, type }) {
                             <div className="flex flex-col">
                                 <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                                 <button 
-                                    className="p-2 gap-3 flex items-center bg-green-950 rounded-md"
+                                    className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
                                     onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
                                 >   
                                     <div className="w-8 h-8 rounded-full bg-gray-500">
