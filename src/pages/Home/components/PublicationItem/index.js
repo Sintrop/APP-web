@@ -29,6 +29,7 @@ import { InviteWalletPubli } from "./InviteWalletPubli";
 import { NewZonePubli } from "./NewZonePubli";
 import { useTranslation } from "react-i18next";
 import { FinishTaskPubli } from "./FinishTaskPubli";
+import { RecordItemPubli } from "./RecordItemPubli";
 
 export function PublicationItem({ data }) {
     const { t } = useTranslation();
@@ -221,7 +222,11 @@ export function PublicationItem({ data }) {
                 )}
 
                 {data?.type === 'finish-task' && (
-                    <FinishTaskPubli data={data}/>
+                    <FinishTaskPubli data={data} />
+                )}
+
+                {data?.type === 'record-item-calculator' && (
+                    <RecordItemPubli data={data} />
                 )}
             </div>
 
