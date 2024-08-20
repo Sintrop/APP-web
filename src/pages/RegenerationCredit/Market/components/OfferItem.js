@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
 import { api } from "../../../../services/api";
-import {useMainContext} from '../../../../hooks/useMainContext';
+import { useMainContext } from '../../../../hooks/useMainContext';
 import { ModalConfimation } from "../../../../components/ModalConfirmation";
 import CryptoJS from "crypto-js";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
@@ -9,8 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 export function OfferItem({ data, attOffers, buy }) {
-    const {t} = useTranslation();
-    const {userData: user, walletConnected} = useMainContext();
+    const { t } = useTranslation();
+    const { userData: user, walletConnected, impactToken } = useMainContext();
     const [userData, setUserData] = useState(null);
     const [imageProfile, setImageProfile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export function OfferItem({ data, attOffers, buy }) {
         setImageProfile(response);
     }
 
-    function handleBuy(){
+    function handleBuy() {
         setModalConfirmationData({
             title: t('comprarRC'),
             description: t('negociacaoViaChat'),
@@ -44,8 +44,8 @@ export function OfferItem({ data, attOffers, buy }) {
         setModalConfirmation(true);
     }
 
-    async function buyOffer(){
-        if(loading){
+    async function buyOffer() {
+        if (loading) {
             return;
         }
 
@@ -55,15 +55,15 @@ export function OfferItem({ data, attOffers, buy }) {
 
         let chatId = '';
         let participantData = {}
-        for(var i = 0; i < chats.length; i++){
+        for (var i = 0; i < chats.length; i++) {
             const participant = JSON.parse(chats[i].participantData);
-            if(participant?.id === data?.ownerOffer){
+            if (participant?.id === data?.ownerOffer) {
                 chatId = chats[i].chatId
                 participantData = participant;
             }
         }
-        
-        if(chatId !== ''){
+
+        if (chatId !== '') {
             let hashPhotos = [];
             const encrypt = CryptoJS.AES.encrypt(`Olá, tenho interesse na sua oferta de venda de ${Intl.NumberFormat('pt-BR').format(data?.tokens)} RC`, '84uriuUGjged76382Gdsj28ydsajjdb');
             try {
@@ -83,7 +83,7 @@ export function OfferItem({ data, attOffers, buy }) {
                 toast.error('Algo deu errado, tente novamente!');
             }
             //await socket.emit('message', { message: encrypt.toString(), chatId, userId: user.id });
-        }else{
+        } else {
             try {
                 const response = await api.post('/chat/create', {
                     userId: user.id,
@@ -91,10 +91,10 @@ export function OfferItem({ data, attOffers, buy }) {
                     participantId: userData.id,
                     participantData: JSON.stringify(userData),
                 });
-    
+
                 let hashPhotos = [];
                 const encrypt = CryptoJS.AES.encrypt(`Olá, tenho interesse na sua oferta de venda de ${Intl.NumberFormat('pt-BR').format(data?.tokens)} RC`, '84uriuUGjged76382Gdsj28ydsajjdb');
-                
+
                 await api.post('/chat/message', {
                     chatId: response.data.chat.id,
                     message: encrypt.toString(),
@@ -115,7 +115,7 @@ export function OfferItem({ data, attOffers, buy }) {
         setLoading(false);
     }
 
-    function handleDelete(){
+    function handleDelete() {
         setModalConfirmationData({
             title: t('atencao'),
             description: t('desejaExcluirOferta'),
@@ -126,76 +126,118 @@ export function OfferItem({ data, attOffers, buy }) {
         setModalConfirmation(true);
     }
 
-    async function deleteOffer(){
-        try{
+    async function deleteOffer() {
+        try {
             setLoading(true);
             await api.delete(`/offer/${data?.id}/${user?.id}`);
             attOffers();
             toast.success(t('ofertaExcluida'))
-        }catch(err){
+        } catch (err) {
             toast.error(t('algoDeuErrado'))
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
 
     return (
-        <div className="flex flex-col w-[280px] h-[300px] rounded-md bg-[#03364B] border-4 border-white overflow-hidden">
-            <div className="flex w-full h-[100px] bg-florest bg-cover bg-center bg-no-repeat">
-                {userData?.bannerUrl && (
-                    <img
-                        src={userData?.bannerUrl}
-                        className="w-full h-full object-cover"
-                    />
-                )}
-            </div>
-
-            <div className="flex flex-col mt-[-50px] pl-3">
-                <div className="w-20 h-20 rounded-full bg-gray-400 border-4 border-white">
-                    {imageProfile && (
+        <div className="flex flex-col w-[333px] rounded-md bg-[#03364B] border-4 border-white overflow-hidden pb-3 justify-between">
+            <div className="flex flex-col">
+                <div className="flex w-full h-[100px] bg-florest bg-cover bg-center bg-no-repeat">
+                    {userData?.bannerUrl && (
                         <img
-                            src={imageProfile}
-                            className="w-full h-full object-cover rounded-full"
+                            src={userData?.bannerUrl}
+                            className="w-full h-full object-cover"
                         />
                     )}
                 </div>
 
-                <p className="font-bold text-white">{userData?.name}</p>
+                <div className="flex flex-col mt-[-50px] pl-3">
+                    <div className="w-20 h-20 rounded-full bg-gray-400 border-4 border-white">
+                        {imageProfile && (
+                            <img
+                                src={imageProfile}
+                                className="w-full h-full object-cover rounded-full"
+                            />
+                        )}
+                    </div>
 
-                <p className="text-sm mt-5 text-gray-400">{t('estaVendendo')}</p>
-                <div className="flex items-center gap-2">
-                    <img
-                        src={require('../../../../assets/token.png')}
-                        className="w-10 h-10 object-contain"
-                    />
+                    <a
+                        className="font-bold text-white hover:underline"
+                        href={`https://app.sintrop.com/user-details/${String(userData?.wallet).toUpperCase()}`}
+                    >
+                        {userData?.name}
+                    </a>
 
-                    <p className="font-bold text-white text-lg">
-                        {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(data?.tokens)} RC
-                    </p>
+                    <p className="text-sm mt-5 text-gray-400">{t('estaVendendo')}</p>
+                    <div className="flex items-center gap-2">
+                        <img
+                            src={require('../../../../assets/token.png')}
+                            className="w-10 h-10 object-contain"
+                        />
+
+                        <p className="font-bold text-white text-lg">
+                            {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(data?.tokens)} RC
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <button
-                className={`font-bold h-10 rounded-md mx-2 mt-2 ${user?.id === data?.ownerOffer ? 'bg-red-500 text-white' : 'bg-[#3E9EF5] text-white'}`}
-                onClick={() => {
-                    if(walletConnected === ''){
-                        return;
-                    }
-                    if(user?.id === data?.ownerOffer){
-                        handleDelete();
-                    }else{
-                        handleBuy();
-                    }
-                }}
-            >
-                {loading ? (
-                    <ActivityIndicator size={20}/>
-                ) : (
-                    <>
-                        {user?.id === data?.ownerOffer ? t('excluirOferta') : t('comprar')}
-                    </>
-                )}
-            </button>
+            <div className="flex flex-col justify-end">
+                <div className="flex flex-col gap-1 px-3 mt-3">
+                    <p
+                        className="text-xs text-gray-300"
+                    >
+                        {t('impactoDisponivel')}
+                    </p>
+
+                    <div className="flex items-center">
+                        <div className='flex flex-col items-center w-[50%]'>
+                            <p className="font-bold text-white text-xs">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactToken.carbon * data?.tokens)} kg</p>
+                            <p className="text-xs text-gray-100">{t('carbono')}</p>
+                        </div>
+
+                        <div className='flex flex-col items-center w-[50%]'>
+                            <p className="font-bold text-white text-xs">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactToken.soil * data?.tokens)} m²</p>
+                            <p className="text-xs text-gray-100">{t('solo')}</p>
+                        </div>
+                        
+                        <div className='flex flex-col items-center w-[50%]'>
+                            <p className="font-bold text-white text-xs">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactToken.water * data?.tokens)} m³</p>
+                            <p className="text-xs text-gray-100">{t('agua')}</p>
+                        </div>
+
+                        <div className='flex flex-col items-center w-[50%]'>
+                            <p className="font-bold text-white text-xs">{Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(impactToken.bio * data?.tokens)} uv</p>
+                            <p className="text-xs text-gray-100">{t('bio')}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center mt-3">
+                    </div>
+                </div>
+
+                <button
+                    className={`font-bold h-10 rounded-md mx-2 mt-2 ${user?.id === data?.ownerOffer ? 'bg-red-500 text-white' : 'bg-[#3E9EF5] text-white'}`}
+                    onClick={() => {
+                        if (walletConnected === '') {
+                            return;
+                        }
+                        if (user?.id === data?.ownerOffer) {
+                            handleDelete();
+                        } else {
+                            handleBuy();
+                        }
+                    }}
+                >
+                    {loading ? (
+                        <ActivityIndicator size={20} />
+                    ) : (
+                        <>
+                            {user?.id === data?.ownerOffer ? t('excluirOferta') : t('comprar')}
+                        </>
+                    )}
+                </button>
+            </div>
 
             {modalConfirmation && (
                 <ModalConfimation
@@ -203,17 +245,17 @@ export function OfferItem({ data, attOffers, buy }) {
                     close={() => setModalConfirmation(false)}
                     accept={(action) => {
                         setModalConfirmation(false);
-                        if(action === 'delete-offer'){
+                        if (action === 'delete-offer') {
                             deleteOffer();
                         }
-                        if(action === 'buy-offer'){
+                        if (action === 'buy-offer') {
                             buyOffer();
                         }
                     }}
                 />
             )}
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     )
 }
