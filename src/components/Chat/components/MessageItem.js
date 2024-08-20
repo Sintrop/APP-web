@@ -94,7 +94,7 @@ export function MessageItem({ data, typeChat, index, messagesList }) {
                 <p>{textMessage}</p>
                 {data.createdAt && (
                     <p className={`${isMessageUser ? 'text-right' : 'text-left'} text-xs text-gray-800 mt-1`}>
-                        {format(new Date(), 'dd/MM/yyyy') === format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy') ? format(new Date(data.createdAt.toDate()), 'kk:mm') : format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy')}
+                        {format(new Date(), 'dd/MM/yyyy') === format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy') ? format(new Date(data.createdAt.toDate()), 'kk:mm') : format(new Date(data.createdAt.toDate()), 'dd/MM/yyyy - kk:mm')}
                     </p>
                 )}
             </div>
