@@ -5,6 +5,7 @@ import { TopBar } from '../../components/TopBar';
 import { Inspection } from "./components/Inspection";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
+import { Chat } from '../../components/Chat';
 
 export function ResultInspection() {
     const { id } = useParams();
@@ -33,6 +34,7 @@ export function ResultInspection() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
         </div>
     )
