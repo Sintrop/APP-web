@@ -10,7 +10,7 @@ export function ResultInspection() {
     const { id } = useParams();
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Resultado da inspeção #{id} - Sintrop</title>

@@ -191,10 +191,10 @@ export function Inspection({ id }) {
                         </div>
                     )}
                     <h1 className="font-bold text-white mb-1">{t('resultadoIsp')} #{id}</h1>
-                    <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#0a4303] w-full">
+                    <div className="flex flex-wrap justify-center p-3 gap-3 rounded-md bg-[#03364D] w-full">
                         <div className="flex flex-col lg:w-[49%]">
                             <p className="text-gray-400 text-xs">{t('produtor')}</p>
-                            <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${producerData?.wallet}`)}>
+                            <button className="rounded-md flex gap-3 p-2 bg-[#012939] w-full" onClick={() => navigate(`/user-details/${producerData?.wallet}`)}>
                                 <div className="h-14 w-14 rounded-full bg-gray-400">
                                     <img
                                         src={imageProfile}
@@ -211,7 +211,7 @@ export function Inspection({ id }) {
 
                         <div className="flex flex-col lg:w-[49%]">
                             <p className="text-gray-400 text-xs">{t('inspetor')}</p>
-                            <button className="rounded-md flex gap-3 p-2 bg-green-950 w-full" onClick={() => navigate(`/user-details/${inspectorData?.wallet}`)}>
+                            <button className="rounded-md flex gap-3 p-2 bg-[#012939] w-full" onClick={() => navigate(`/user-details/${inspectorData?.wallet}`)}>
                                 <div className="h-14 w-14 rounded-full bg-gray-400">
                                     <img
                                         src={inspectorImageProfile}
@@ -236,7 +236,7 @@ export function Inspection({ id }) {
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center p-3 gap-3 rounded-md bg-[#0a4303] w-full mt-3">
+                    <div className="flex flex-wrap items-center p-3 gap-3 rounded-md bg-[#03364D] w-full mt-3">
                         <div className="flex flex-col w-full lg:w-[49%] items-start gap-4">
                             <div className="flex items-center gap-3">
                                 <FaDotCircle size={20} color='green' />
@@ -262,7 +262,7 @@ export function Inspection({ id }) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-col items-center justify-center p-2 bg-green-950 border-2 border-white rounded-md">
+                            <div className="flex flex-col items-center justify-center p-2 bg-[#012939] border-2 border-white rounded-md">
                                 <p className="font-bold text-white">{inspectionData?.isaScore}</p>
                                 <p className="text-white text-xs">Pontos de regeneração</p>
                             </div>
@@ -277,7 +277,7 @@ export function Inspection({ id }) {
                         </div>
 
                         <div className="flex flex-col w-full lg:w-[49%] gap-1">
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md">
+                            <div className="flex flex-col bg-[#012939] p-2 rounded-md">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <img
@@ -302,7 +302,7 @@ export function Inspection({ id }) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                            <div className="flex flex-col bg-[#012939] p-2 rounded-md mt-2">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <img
@@ -327,7 +327,7 @@ export function Inspection({ id }) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                            <div className="flex flex-col bg-[#012939] p-2 rounded-md mt-2">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <img
@@ -352,7 +352,7 @@ export function Inspection({ id }) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-col bg-green-950 p-2 rounded-md mt-2">
+                            <div className="flex flex-col bg-[#012939] p-2 rounded-md mt-2">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <img
@@ -379,7 +379,7 @@ export function Inspection({ id }) {
                         </div>
                     </div>
 
-                    <div className="flex flex-col bg-[#0a4303] mt-3 p-2 rounded-md">
+                    <div className="flex flex-col bg-[#03364D] mt-3 p-2 rounded-md">
                         <div className="flex items-center justify-center bg-gray-400 rounded-md w-full h-[300px]">
                             {mapZones && (
                                 <>
@@ -433,7 +433,7 @@ export function Inspection({ id }) {
                     </div>
 
                     {inspectionDataApi?.propertyPhotos && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#03364D] w-full mt-3">
                             <p className="text-white font-bold text-lg">{t('imgsPropriedade')}</p>
                             {inspectionDataApi?.propertyPhotos && (
                                 <>
@@ -523,7 +523,7 @@ export function Inspection({ id }) {
                     )}
 
                     {methodVersion < 1.2 && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#03364D] w-full mt-3">
                             <p className="text-white font-bold text-lg">{t('bioRegistrada')}</p>
 
                             {/* Depois das inspeções id 35 tivemos alteração na estrtura da biodiversidade */}
@@ -611,7 +611,7 @@ export function Inspection({ id }) {
                     )}
 
                     {zones.length > 0 && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#03364D] w-full mt-3">
                             <p className="text-white font-bold text-lg">{t('zonasDeRegeneracao')}</p>
                             {zones.map((item, index) => (
                                 <ZoneItem data={item} index={index} />
@@ -653,7 +653,7 @@ export function Inspection({ id }) {
                     )}
 
                     {insumos.length > 0 && (
-                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#0a4303] w-full mt-3">
+                        <div className="flex flex-col gap-1 p-2 rounded-md bg-[#03364D] w-full mt-3">
                             <div className="mt-2 flex flex-col">
                                 <p className="text-white font-bold text-lg">{t('insumosRegistrados')}</p>
 

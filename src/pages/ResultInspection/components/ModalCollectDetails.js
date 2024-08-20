@@ -15,7 +15,7 @@ export function ModalCollectDetails({ close, data }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0'>
-                <div className='absolute flex flex-col p-3 lg:w-[540px] h-[500px] bg-green-950 rounded-md m-auto inset-0 border-2'>
+                <div className='absolute flex flex-col p-3 lg:w-[540px] h-[500px] bg-[#03364D] rounded-md m-auto inset-0 border-2'>
                     <div className="flex items-center justify-between w-full">
                         <div className="w-[25px]" />
 
