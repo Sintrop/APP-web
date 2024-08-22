@@ -68,7 +68,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[400px] lg:h-[400px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
+            <div className='absolute flex flex-col p-3 lg:w-[400px] lg:h-[400px] bg-[#03364D] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
                 <div className="flex items-center w-full justify-between mb-5">
                     <div className="w-[25px]" />
                     <p className="font-bold text-white">{t('criarOferta')}</p>
@@ -83,7 +83,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
 
                 <div className="flex flex-col mt-3">
                     <p className="text-white font-semibold">{t('seuSaldo')}</p>
-                    <div className="flex items-center gap-2 bg-green-950 p-2 rounded-md">
+                    <div className="flex items-center gap-2 bg-[#012939] p-2 rounded-md">
                         <img
                             src={require('../../../../assets/token.png')}
                             className="w-8 h-8 object-contain"
@@ -97,7 +97,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
                     value={tokens}
                     onChange={(e) => setTokens(e.target.value)}
                     placeholder={t('digiteAqui')}
-                    className="p-2 rounded-md bg-green-950 text-white"
+                    className="p-2 rounded-md bg-[#012939] text-white"
                     type="number"
                 />
 
@@ -111,7 +111,7 @@ export function ModalCreateOffer({ close, offerCreated }) {
                         className="text-white font-semibold text-center h-10 w-full bg-blue-500 rounded-md px-10"
                     >
                         {loading ? (
-                            <ActivityIndicator size={20}/>
+                            <ActivityIndicator size={25}/>
                         ) : (
                             t('criarOferta')
                         )}

@@ -425,6 +425,17 @@
        "dadosFinalizacaoTask": "Dados incluidos",
        "textFinalizouTask": "Finalizou a task",
        "feed": "Feed",
-       "servicos": "Serviços"
+       "servicos": "Serviços",
+       "digiteSuaWalletSenha": "Digite sua wallet e sua senha",
+       "senha": "Senha",
+       "entrarWalletSenha": "Entrar com wallet e senha",
+       "sincronizarWallet": "Sincronizar wallet",
+       "voltar": "Voltar",
+       "agoraSuaSenha": "Agora insira sua senha",
+       "contasSalvas": "Contas salvas",
+       "entrarOutraConta": "Entrar com outra conta",
+       "produtor": "Produtor(a)",
+       "inspetor": "Inspetor(a)",
+       "excluirOferta": "Excluir oferta"
     }
 }

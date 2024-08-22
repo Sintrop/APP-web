@@ -5,12 +5,13 @@ import { TopBar } from '../../components/TopBar';
 import { Inspection } from "./components/Inspection";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
+import { Chat } from '../../components/Chat';
 
 export function ResultInspection() {
     const { id } = useParams();
 
     return (
-        <div className={`bg-[#062c01] flex flex-col h-[100vh]`}>
+        <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Resultado da inspeção #{id} - Sintrop</title>
@@ -33,6 +34,7 @@ export function ResultInspection() {
 
             <div className="hidden lg:flex">
                 <Feedback />
+                <Chat/>
             </div>
         </div>
     )

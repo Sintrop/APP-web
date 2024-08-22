@@ -11,7 +11,7 @@ export function InsumoItem({ data }) {
     }
     
     return (
-        <div className="flex flex-col p-2 rounded-md bg-green-800 mb-3">
+        <div className="flex flex-col p-2 rounded-md bg-[#012939] mb-3">
             <div className="flex items-center justify-between w-full">
                 <div className="flex">
                     <div className="flex flex-col">

@@ -28,7 +28,7 @@ export function NewZonePubli({ data }) {
     return (
         <div>
             <p className='text-white'>
-                {t('cadastrouNovaIsp')}
+                {t('cadastrouNovaZona')}
             </p>
 
             {pathPolyline.length > 0 && (

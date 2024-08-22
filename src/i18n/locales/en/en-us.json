@@ -94,7 +94,7 @@
     "centroDev": "Development",
     "centroValidacao": "Validation",
     "centroColab": "Collaborative",
-    "centroComercial": "Shopping center",
+    "centroComercial": "Invitation",
     "acessarCentro": "Access center",
     "descCentroIsp": "History and list of available inspections",
     "descCentroPesquisa": "Research and evaluation methodologies",
@@ -428,6 +428,17 @@
     "dadosFinalizacaoTask": "Data included",
     "textFinalizouTask": "Completed the task",
     "feed": "Feed",
-    "servicos": "Services"
+    "servicos": "Services",
+    "digiteSuaWalletSenha": "Enter your wallet and password",
+    "senha": "Password",
+    "entrarWalletSenha": "Login with wallet and password",
+    "sincronizarWallet": "Sync wallet",
+    "voltar": "To go back",
+    "agoraSuaSenha": "Now enter your password",
+    "contasSalvas": "Saved accounts",
+    "entrarOutraConta": "Log in with another account",
+    "produtor": "Producer",
+    "inspetor": "Inspector",
+    "excluirOferta": "Delete offer"
   }
 }

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {BsFillChatDotsFill} from 'react-icons/bs';
-import {FaChevronUp, FaChevronDown, FaPlus} from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { BsFillChatDotsFill } from 'react-icons/bs';
+import { FaChevronUp, FaChevronDown, FaPlus } from 'react-icons/fa';
 import { useMainContext } from '../../hooks/useMainContext';
 import { api } from '../../services/api';
 import { ActivityIndicator } from '../ActivityIndicator';
@@ -9,9 +9,11 @@ import { ChatItem } from './components/ChatItem';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalNewChat } from './components/ModalNewChat';
 import { toast, ToastContainer } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
-export function Chat({openChat}){
-    const {walletConnected, userData} = useMainContext();
+export function Chat({ openChat }) {
+    const { t } = useTranslation();
+    const { walletConnected, userData } = useMainContext();
     const [open, setOpen] = useState(false);
     const [chats, setChats] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,14 +22,16 @@ export function Chat({openChat}){
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        if(openChat){
-            setOpen(true)
+        if (userData) {
+            if (openChat) {
+                setOpen(true)
+            }
+            getChats();
         }
-        getChats();
     }, [openChat])
 
     useEffect(() => {
-        if(userData){
+        if (userData) {
             getChats();
         };
     }, [userData]);
@@ -39,7 +43,7 @@ export function Chat({openChat}){
         setLoading(false);
     }
 
-    return(
+    return (
         <div className='absolute right-5 bottom-0'>
             <div className={`flex flex-col rounded-t-md w-[320px] bg-[#03364B] ${open ? 'h-[500px]' : 'h-[50px]'} duration-200`}>
                 <div className='flex h-[50px] border-b border-green-700 px-3 items-center justify-between'>
@@ -50,59 +54,67 @@ export function Chat({openChat}){
                     </div>
 
                     <button onClick={() => setOpen(!open)}>
-                        {open ? <FaChevronDown color='white' size={20}/> : <FaChevronUp color='white' size={20}/>}
+                        {open ? <FaChevronDown color='white' size={20} /> : <FaChevronUp color='white' size={20} />}
                     </button>
                 </div>
 
                 {open && (
                     <>
-                    {walletConnected === '' ? (
-                        <div className='w-full h-full flex flex-col items-center justify-center'>
-                            <p className='text-white font-bold'>Você não está conectado!</p>
-                        </div>
-                    ) : (
-                        <div className='flex flex-col overflow-y-auto overflow-x-hidden gap-1'>
-                            {loading ? (
-                                <ActivityIndicator size={50}/>
-                            ) : (
-                                <>
-                                    <Dialog.Root open={modalNewChat} onOpenChange={(open) => setModalNewChat(open)}>
-                                        <Dialog.Trigger className='my-2 flex items-center gap-2 px-3'>
-                                            <div className='w-10 h-10 flex items-center justify-center rounded-full bg-green-500'>
-                                                <FaPlus size={20} color='white'/>
-                                            </div>
-                                            <p className='font-bold text-white text-sm'>Iniciar conversa</p>
-                                        </Dialog.Trigger>
+                        {walletConnected === '' ? (
+                            <div className='w-full h-full flex flex-col items-center justify-center'>
+                                <p className='text-white font-bold'>Você não está conectado!</p>
+                            </div>
+                        ) : (
+                            <div className='flex flex-col overflow-y-auto overflow-x-hidden gap-1'>
+                                {loading ? (
+                                    <ActivityIndicator size={50} />
+                                ) : (
+                                    <>
+                                        <Dialog.Root open={modalNewChat} onOpenChange={(open) => setModalNewChat(open)}>
+                                            {userData?.accountStatus === 'blockchain' && (
+                                                <Dialog.Trigger className='my-2 flex items-center gap-2 px-3'>
+                                                    <div className='w-10 h-10 flex items-center justify-center rounded-full bg-green-500'>
+                                                        <FaPlus size={20} color='white' />
+                                                    </div>
+                                                    <p className='font-bold text-white text-sm'>Iniciar conversa</p>
+                                                </Dialog.Trigger>
+                                            )}
 
-                                        <ModalNewChat 
-                                            chats={chats} 
-                                            chatCreated={() => {
-                                                getChats();
-                                                setModalNewChat(false);
-                                                toast.success('Chat criado com sucesso!')
-                                            }}
-                                        />
-                                    </Dialog.Root>
-                                    {chats.length === 0 ? (
-                                        <p className='text-white text-center mt-10'>Você não tem nenhum chat ativo no momento</p>
-                                    ) : (
-                                        <>
-                                            {chats.map(item => (
-                                                <ChatItem data={item} key={item.chatId} socket={socket} attChats={getChats}/>
-                                            ))}
-                                        </>
-                                    )}
-                                </>
-                            )}
+                                            <ModalNewChat
+                                                chats={chats}
+                                                chatCreated={() => {
+                                                    getChats();
+                                                    setModalNewChat(false);
+                                                    toast.success('Chat criado com sucesso!')
+                                                }}
+                                            />
+                                        </Dialog.Root>
+                                        {userData?.accountStatus === 'blockchain' ? (
+                                            <>
+                                                {chats?.length === 0 ? (
+                                                    <p className='text-white text-center mt-10'>Você não tem nenhum chat ativo no momento</p>
+                                                ) : (
+                                                    <>
+                                                        {chats.map(item => (
+                                                            <ChatItem data={item} key={item.chatId} socket={socket} attChats={getChats} />
+                                                        ))}
+                                                    </>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <p className='text-white text-center mt-5 mx-5'>{t('voceNaoCadastroBlock')}</p>
+                                        )}
+                                    </>
+                                )}
 
-                            
-                        </div>
-                    )}
+
+                            </div>
+                        )}
                     </>
                 )}
             </div>
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     )
 }

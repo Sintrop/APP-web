@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Marker } from '../../../Actions/components/DeveloperActions/FeedbackItem/components/Marker';
+import { MdInfo } from 'react-icons/md';
 
 export function FinishTaskPubli({ data }) {
     const { t } = useTranslation();
@@ -9,8 +10,16 @@ export function FinishTaskPubli({ data }) {
 
     return (
         <div className=''>
-            <p className='text-white'>{t('textFinalizouTask')}</p>
+            <div className='flex gap-5 p-2 rounded-md bg-[#1C840F] w-full h-[40px]'>
+                <div className='flex items-center gap-1'>
+                    <MdInfo color='white' size={20}/>
+                    <p className='text-white'>{t('textFinalizouTask')}</p>
+                </div>
 
+                <div className='w-[1px] h-full bg-white'/>
+
+                <p className='font-bold text-white text-ellipsis truncate'>#{additionalData?.taskData?.id} - {additionalData?.taskData?.title}</p>
+            </div>
             <div className='flex gap-3 my-2 items-center'>
                 {additionalData?.taskData?.type === 'feedback' ? (
                     <Marker type='feedback' />
@@ -49,8 +58,6 @@ export function FinishTaskPubli({ data }) {
 
                 <p className='font-bold text-white'>+{additionalData?.taskData?.pts} pts</p>
             </div>
-
-            <p className='font-bold text-white'>#{additionalData?.taskData?.id} - {additionalData?.taskData?.title}</p>
             <p className='text-white'>{additionalData?.taskData?.description}</p>
 
             <p className='text-gray-300 text-xs mt-2'>{t('dadosFinalizacaoTask')}:</p>

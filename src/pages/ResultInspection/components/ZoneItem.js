@@ -166,7 +166,7 @@ export function ZoneItem({ data, index }) {
     }
 
     return (
-        <div className="flex flex-col bg-green-950 p-2 rounded-md">
+        <div className="flex flex-col bg-[#012939] p-2 rounded-md">
             <p className="text-white font-bold">{data?.title} - {Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Number(data?.areaZone))} m²</p>
             {mapZone && (
                 <ReactMapGL
@@ -495,7 +495,7 @@ export function ZoneItem({ data, index }) {
             <p className="text-white mt-3">{t('analiseArvores')}</p>
             <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(areaSampling1).toFixed(2))} m²</p>
 
-            <div className="flex flex-col p-2 rounded-md bg-[#0a4303]">
+            <div className="flex flex-col p-2 rounded-md bg-[#03364D]">
                 <p className="text-white font-bold mt-1">{t('analisePlantasamostragem')}</p>
                 <p className="text-white">{t('arvoresRegistradas')}: <span className="font-bold text-[#3E9EF5]">{Intl.NumberFormat('pt-BR').format(Number(treesS1).toFixed(0))}</span></p>
 
