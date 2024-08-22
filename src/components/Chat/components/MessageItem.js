@@ -4,6 +4,8 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { getImage } from "../../../services/getImage";
 import CryptoJS from 'crypto-js';
 import format from "date-fns/format";
+import * as Dialog from '@radix-ui/react-dialog';
+import { ViewImageMessage } from "./ViewImageMessage";
 
 export function MessageItem({ data, typeChat, index, messagesList }) {
     const { userData } = useMainContext();
@@ -32,22 +34,22 @@ export function MessageItem({ data, typeChat, index, messagesList }) {
         }
     }, []);
 
-    function checkLastMessage(){
+    function checkLastMessage() {
         const thisMessage = messagesList[index];
         const lastMessage = messagesList[index + 1];
-        if(thisMessage && lastMessage){
-            if(thisMessage?.user?.id === lastMessage?.user?.id){
+        if (thisMessage && lastMessage) {
+            if (thisMessage?.user?.id === lastMessage?.user?.id) {
                 setLastMsgIsFromSameUser(true);
-            }else{
+            } else {
                 setLastMsgIsFromSameUser(false);
             }
         }
     }
 
     async function getImages(url) {
-        if(String(url).includes('https://')){
+        if (String(url).includes('https://')) {
             setImage(url)
-        }else{
+        } else {
             const response = await getImage(url);
             setImage(response);
         }
@@ -82,14 +84,23 @@ export function MessageItem({ data, typeChat, index, messagesList }) {
                     </>
                 )}
                 {data.type === 'image' && (
-                    <div className="w-[150px] h-[150px] rounded-md bg-gray-400">
-                        {image && (
-                            <img
-                                src={image}
-                                className="w-[150px] h-[150px] rounded-md object-cover"
-                            />
-                        )}
-                    </div>
+                    <Dialog.Root
+                        open={viewImage}
+                        onOpenChange={(open) => setViewImage(open)}
+                    >
+                        <Dialog.Trigger className="w-[150px] h-[150px] rounded-md bg-gray-400">
+                            {image && (
+                                <img
+                                    src={image}
+                                    className="w-[150px] h-[150px] rounded-md object-cover"
+                                />
+                            )}
+                        </Dialog.Trigger>
+
+                        <ViewImageMessage
+                            uri={image}
+                        />
+                    </Dialog.Root>
                 )}
                 <p>{textMessage}</p>
                 {data.createdAt && (

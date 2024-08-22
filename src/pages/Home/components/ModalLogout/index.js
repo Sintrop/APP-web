@@ -9,7 +9,7 @@ export function ModalLogout({close}){
     return(
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col items-center justify-center p-3 lg:w-[300px] lg:h-[200px] bg-[#0a4303] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 border-2 z-50'>
+            <div className='absolute flex flex-col items-center justify-center p-3 lg:w-[300px] lg:h-[200px] bg-[#03364D] rounded-md mx-2 my-2 lg:my-auto lg:mx-auto inset-0 z-50'>
                 <p className="text-center text-white font-semibold">{t('desejaDesconectar')}</p>
 
                 <div className="mt-5 flex flex-col gap-3">
