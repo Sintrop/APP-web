@@ -433,6 +433,9 @@
        "voltar": "Voltar",
        "agoraSuaSenha": "Agora insira sua senha",
        "contasSalvas": "Contas salvas",
-       "entrarOutraConta": "Entrar com outra conta"
+       "entrarOutraConta": "Entrar com outra conta",
+       "produtor": "Produtor(a)",
+       "inspetor": "Inspetor(a)",
+       "excluirOferta": "Excluir oferta"
     }
 }

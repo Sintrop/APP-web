@@ -94,7 +94,7 @@
     "centroDev": "Development",
     "centroValidacao": "Validation",
     "centroColab": "Collaborative",
-    "centroComercial": "Shopping center",
+    "centroComercial": "Invitation",
     "acessarCentro": "Access center",
     "descCentroIsp": "History and list of available inspections",
     "descCentroPesquisa": "Research and evaluation methodologies",
@@ -436,6 +436,9 @@
     "voltar": "To go back",
     "agoraSuaSenha": "Now enter your password",
     "contasSalvas": "Saved accounts",
-    "entrarOutraConta": "Log in with another account"
+    "entrarOutraConta": "Log in with another account",
+    "produtor": "Producer",
+    "inspetor": "Inspector",
+    "excluirOferta": "Delete offer"
   }
 }

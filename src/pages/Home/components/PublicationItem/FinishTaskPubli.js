@@ -18,7 +18,7 @@ export function FinishTaskPubli({ data }) {
 
                 <div className='w-[1px] h-full bg-white'/>
 
-                <p className='font-bold text-white'>#{additionalData?.taskData?.id} - {additionalData?.taskData?.title}</p>
+                <p className='font-bold text-white text-ellipsis truncate'>#{additionalData?.taskData?.id} - {additionalData?.taskData?.title}</p>
             </div>
             <div className='flex gap-3 my-2 items-center'>
                 {additionalData?.taskData?.type === 'feedback' ? (
