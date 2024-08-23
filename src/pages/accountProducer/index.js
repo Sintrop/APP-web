@@ -85,7 +85,7 @@ export default function AccountProducer() {
     }
 
     return (
-        <div className="w-full flex flex-col items-center bg-green-950 h-[100vh] pt-5 overflow-y-auto overflow-x-hidden px-2">
+        <div className="w-full flex flex-col items-center bg-gradient-to-b from-[#043832] to-[#1F5D38] h-[100vh] pt-5 overflow-y-auto overflow-x-hidden px-2">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Produtor - Sintrop</title>
@@ -101,7 +101,7 @@ export default function AccountProducer() {
                 className='w-[140px] lg:w-[170px] object-contain'
             />
 
-            <div className='flex flex-col items-center lg:w-[1000px] lg:flex-row w-full gap-5 mt-5 lg:gap-5 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3'>
+            <div className='flex flex-col items-center lg:w-[1000px] lg:flex-row w-full gap-5 mt-5 lg:gap-5 lg:px-30 lg:mt-10 bg-[#03364D] rounded-md p-3'>
                 <img
                     src={imageProfile ? imageProfile : require('../../assets/token.png')}
                     className='h-[150px] w-[150px] lg:h-[200px] lg:w-[200px] object-cover border-4  rounded-full mt-5 lg:mt-0'
@@ -121,7 +121,7 @@ export default function AccountProducer() {
                 </div>
             </div>
 
-            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#03364D] rounded-md p-3'>
                 <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('statsProdutor')}</h3>
 
                 {producerData ? (
@@ -156,7 +156,7 @@ export default function AccountProducer() {
                 <ProducerGraphics inspections={inspections} />
             </div>
 
-            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+            <div className='flex flex-col lg:w-[1000px] w-full gap-5 mt-5 lg:gap-5 lg:px-30 bg-[#03364D] rounded-md p-3'>
                 <h3 className='font-bold text-white text-center lg:text-left lg:text-lg'>{t('mapaPropriedade')}</h3>
                 {initialRegion && (
                     <ReactMapGL
@@ -191,6 +191,7 @@ export default function AccountProducer() {
                 
                 {inspections.map((item, index) => (
                     <InspectionItem
+                        key={item.id}
                         inspectionId={item?.id}
                         index={index}
                     />

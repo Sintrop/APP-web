@@ -421,6 +421,7 @@
        "arvoresRegistradas": "Arboles registradas",
        "estimativaPlantasZona": "Estimativa de plantas para la zona",
        "localizacaoPlanta": "Localización da plantas",
-       "eraAtual": "Era actual"
+       "eraAtual": "Era actual",
+       "addItemCalcPubli": "Consumo añadido a la calculadora de impacto"
     }
 }
