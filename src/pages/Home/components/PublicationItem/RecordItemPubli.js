@@ -27,28 +27,28 @@ export function RecordItemPubli({ data }) {
                     <div className="flex items-center p-2 rounded-md bg-[#1c840f] w-[25%] justify-between">
                         <p className="text-xs text-white">{t('carbono')}</p>
                         <p className="font-bold text-white text-xs">
-                            {Intl.NumberFormat('pt-BR').format(additionalData?.quant * additionalData?.calculatorItem?.carbon)} kg
+                            {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(additionalData?.quant * additionalData?.calculatorItem?.carbon)} kg
                         </p>
                     </div>
 
                     <div className="flex items-center p-2 rounded-md bg-[#1c840f] w-[25%] justify-between">
                         <p className="text-xs text-white">{t('solo')}</p>
                         <p className="font-bold text-white text-xs">
-                            {Intl.NumberFormat('pt-BR').format(additionalData?.quant * additionalData?.calculatorItem?.soil)} m²
+                            {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(additionalData?.quant * additionalData?.calculatorItem?.soil)} m²
                         </p>
                     </div>
 
                     <div className="flex items-center p-2 rounded-md bg-[#1c840f] w-[25%] justify-between">
                         <p className="text-xs text-white">{t('agua')}</p>
                         <p className="font-bold text-white text-xs">
-                            {Intl.NumberFormat('pt-BR').format(additionalData?.quant * additionalData?.calculatorItem?.water)} m³
+                            {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(additionalData?.quant * additionalData?.calculatorItem?.water)} m³
                         </p>
                     </div>
 
                     <div className="flex items-center p-2 rounded-md bg-[#1c840f] w-[25%] justify-between">
                         <p className="text-xs text-white">{t('bio')}</p>
                         <p className="font-bold text-white text-xs">
-                           {Intl.NumberFormat('pt-BR').format(additionalData?.quant * additionalData?.calculatorItem?.bio)} uv
+                           {Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(additionalData?.quant * additionalData?.calculatorItem?.bio)} uv
                         </p>
                     </div>
                 </div>
