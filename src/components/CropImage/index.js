@@ -16,7 +16,7 @@ export function CropImage({ close, file, returnType, returnUri }) {
 
     useEffect(() => {
         prepareImage();
-    }, []);
+    }, [file]);
 
     async function prepareImage(){
         const reader = new FileReader();

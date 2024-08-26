@@ -5,6 +5,7 @@ import { CropImage } from "../../../components/CropImage";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../../services/api";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import * as Dialog from '@radix-ui/react-dialog';
 
 export function ModalEditProfile({close, imageProfile}){
     const {userData, getUserDataApi} = useMainContext();
@@ -150,11 +151,15 @@ export function ModalEditProfile({close, imageProfile}){
                         setFile(e.target.files[0])
                         setEditImage(true)
                     }}
+                    accept="image/png, image/jpeg, image/jpg"
                     id='input-file'
                 />
             </div>
 
-            {editImage && (
+            <Dialog.Root
+                open={editImage}
+                onOpenChange={(open) => setEditImage(open)}
+            >
                 <CropImage
                     close={() => setEditImage(false)}
                     file={file}
@@ -163,7 +168,8 @@ export function ModalEditProfile({close, imageProfile}){
                         updateImage(uri, hash)
                     }}
                 />
-            )}
+            </Dialog.Root>
+            
 
             <ToastContainer/>
         </div>

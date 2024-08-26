@@ -276,7 +276,7 @@ export default function AccountInvestor() {
     }
 
     return (
-        <div className="w-full flex flex-col  items-center bg-green-950 pt-5 px-2 overflow-x-hidden">
+        <div className="w-full flex flex-col  items-center bg-gradient-to-b from-[#043832] to-[#1F5D38] pt-5 px-2 overflow-x-hidden">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Apoiador - Sintrop</title>
@@ -299,7 +299,7 @@ export default function AccountInvestor() {
                 </div>
             ) : (
                 <>
-                    <div className='flex flex-col items-center lg:w-[1000px] mt-5 w-full gap-1 lg:px-30 lg:mt-10 bg-[#0a4303] rounded-md p-3 lg:items-start'>
+                    <div className='flex flex-col items-center lg:w-[1000px] mt-5 w-full gap-1 lg:px-30 lg:mt-10 bg-[#03364B] rounded-md p-3 lg:items-start'>
                         <div className='flex flex-col items-center gap-2 lg:flex-row'>
                             <img
                                 src={imageProfile ? imageProfile : require('../../assets/token.png')}
@@ -314,7 +314,7 @@ export default function AccountInvestor() {
 
                         <div className='flex flex-col w-full'>
                             <p className='text-white'>{t('contribuiuCom')}</p>
-                            <div className='flex gap-3 p-3 bg-green-950 rounded-md mt-1 w-full'>
+                            <div className='flex gap-3 p-3 bg-[#012939] rounded-md mt-1 w-full'>
                                 <img
                                     src={require('../../assets/token.png')}
                                     className='w-14 h-14 object-contain'
@@ -329,7 +329,7 @@ export default function AccountInvestor() {
                     </div>
 
                     <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>{t('impactoContribuicoes')}</h3>
-                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md'>
+                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#03364B] rounded-md'>
                         <div className='flex items-center justify-center flex-wrap'>
                             <div className='flex flex-col w-[50%]'>
                                 <div className='flex flex-col p-5 w-full h-[120px] border-r border-green-700/20'>
@@ -363,7 +363,7 @@ export default function AccountInvestor() {
                     </div>
 
                     <h3 className='text-white text-center lg:text-left lg:text-lg mt-10'>{t('evolucaoContribuicoes')}</h3>
-                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#0a4303] rounded-md overflow-x-auto'>
+                    <div className='flex flex-col lg:w-[1000px] w-full bg-[#03364B] rounded-md overflow-x-auto'>
                         {configData && (
                             <Chart
                                 series={seriesGraphic}
@@ -395,7 +395,7 @@ export default function AccountInvestor() {
                     </div>
 
                     <h3 className=' text-white text-center lg:text-left lg:text-lg mt-10'>{t('provasReducao')}</h3>
-                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 lg:gap-5 lg:px-30 bg-[#0a4303] rounded-md p-3'>
+                    <div className='flex flex-col lg:w-[1000px] w-full gap-5 lg:gap-5 lg:px-30 bg-[#03364B] rounded-md p-3'>
                         {proofsReduce.length === 0 && (
                             <p className="text-white text-center my-4">{t('nenhumaProvaReducao')}</p>
                         )}

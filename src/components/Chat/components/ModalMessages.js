@@ -293,6 +293,7 @@ export function ModalMessages({ chat, imageProfile, participant, typeChat, messa
                 onChange={(e) => {
                     setFile(e.target.files[0])
                     setCropImage(true);
+                    console.log(e.target.files[0])
                 }}
                 accept="image/png, image/jpeg, image/jpg"
                 id='input-image-chat'

@@ -225,6 +225,18 @@ export function ShortPubli({ data }) {
                     <p className="font-bold text-white text-xl text-center">Visualização indisponível, clique para acessar a publicação</p>
                 </div>
             )}
+
+            {data.type === 'finish-task' && (
+                <div className="flex flex-col justify-center items-center p-3 h-full">
+                    <p className="font-bold text-white text-xl text-center">Finalizou a task #{additionalData?.taskData?.id}</p>
+                </div>
+            )}
+
+            {data.type === 'record-item-calculator' && (
+                <div className="flex flex-col justify-center items-center p-3 h-full">
+                    <p className="font-bold text-white text-xl text-center">Adicionou consumo na calculadora de impacto</p>
+                </div>
+            )}
         </a>
     )
 }

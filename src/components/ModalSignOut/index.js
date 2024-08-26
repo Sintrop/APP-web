@@ -13,8 +13,10 @@ import { WebcamCapture } from "./components/WebCam";
 import { storage } from "../../services/firebase";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { save } from "../../config/infura";
+import { useTranslation } from "react-i18next";
 
 export function ModalSignOut({ close, success }) {
+    const {t} = useTranslation();
     const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
@@ -325,11 +327,11 @@ export function ModalSignOut({ close, success }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[400px] h-[400px] justify-between bg-[#0a4303] rounded-md m-auto inset-0 border-2 z-20'>
+            <div className='absolute flex flex-col p-3 lg:w-[400px] h-[400px] justify-between bg-[#03364D] rounded-md m-auto inset-0 z-20'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-[25px]" />
 
-                    <p className="font-semibold text-white">Cadastro</p>
+                    <p className="font-semibold text-white">{t('cadastro')}</p>
 
                     <button onClick={close}>
                         <MdClose size={25} color='white' />
@@ -339,21 +341,25 @@ export function ModalSignOut({ close, success }) {
                 <div className="flex flex-col">
                     {step === 1 && (
                         <>
-                            <p className="font-semibold text-white text-center">Vamos lá, primeiro você precisa ter uma carteira criada no metamask</p>
-                            <a
-                                target="_blank"
-                                href="https://docs.sintrop.com/suporte/guia-de-utilizacao-do-metamask/tutorial-em-video-do-metamask"
-                                className="text-center text-blue-500 underline"
-                            >
-                                Veja aqui como criar
-                            </a>
+                            {walletConnected === '' && (
+                                <>
+                                    <p className="font-semibold text-white text-center">{t('vamosLaPrimeiroCarteiraMetamask')}</p>
+                                    <a
+                                        target="_blank"
+                                        href="https://docs.sintrop.com/suporte/guia-de-utilizacao-do-metamask/tutorial-em-video-do-metamask"
+                                        className="text-center text-blue-500 underline"
+                                    >
+                                        {t('vejaAquiComoCriar')}
+                                    </a>
+                                </>
+                            )}
 
                             {!window.ethereum && (
                                 <div className="flex flex-col w-full mt-3">
                                     <label className="font-semibold text-sm text-blue-500">Wallet:</label>
                                     <input
-                                        placeholder="Digite aqui sua wallet"
-                                        className="rounded-md p-2 bg-green-950 text-white"
+                                        placeholder={t('digiteAqui')}
+                                        className="rounded-md p-2 bg-[#012939] text-white"
                                         value={wallet}
                                         onChange={(e) => setWallet(e.target.value)}
                                     />
@@ -374,14 +380,14 @@ export function ModalSignOut({ close, success }) {
                                                 <ActivityIndicator
                                                     size={25}
                                                 />
-                                            ) : 'Sincronize sua wallet'}
+                                            ) : t('sincronizeSuaWallet')}
                                         </button>
                                     ) : (
                                         <button
                                             className="font-bold text-white px-5 py-2 underline mt-1"
                                             onClick={logout}
                                         >
-                                            Desconectar wallet
+                                            {t('desconectarWallet')}
                                         </button>
                                     )}
                                 </>
@@ -390,13 +396,13 @@ export function ModalSignOut({ close, success }) {
                             {checkingWallet ? (
                                 <div className="flex items-center justify-center gap-2 mt-3">
                                     
-                                    <p className="font-bold text-white">Verificando wallet...</p>
+                                    <p className="font-bold text-white">{t('verificandoWallet')}</p>
                                 </div>
                             ) : (
                                 <>
                                     {wallet !== '' && (
                                         <div className="flex flex-col mt-3 items-center">
-                                            <p className={`font-semibold ${walletAvaliable ? 'text-green-600' : 'text-yellow-500'}`}>{walletAvaliable ? 'Wallet disponível' : 'Wallet já cadastrada no sistema!'}</p>
+                                            <p className={`font-semibold ${walletAvaliable ? 'text-green-600' : 'text-yellow-500'}`}>{walletAvaliable ? t('walletDisponivel') : t('walletJaCadastrada')}</p>
                                         </div>
                                     )}
                                 </>
@@ -406,7 +412,7 @@ export function ModalSignOut({ close, success }) {
 
                     {step === 2 && (
                         <>
-                            <p className="font-semibold text-white text-center">Agora escolha o tipo de usuário que deseja se cadastrar</p>
+                            <p className="font-semibold text-white text-center">{t('escolhaTipoUsuario')}</p>
 
                             <div className="flex flex-wrap justify-center my-3 gap-5">
                                 <button
@@ -417,7 +423,7 @@ export function ModalSignOut({ close, success }) {
                                         src={require('../../assets/icon-apoiador.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    Apoiador
+                                    {t('textApoiador')}
                                 </button>
 
                                 <button
@@ -428,7 +434,7 @@ export function ModalSignOut({ close, success }) {
                                         src={require('../../assets/icon-pesquisadores.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    Pesquisador
+                                    {t('textPesquisador')}
                                 </button>
 
                                 <button
@@ -439,7 +445,7 @@ export function ModalSignOut({ close, success }) {
                                         src={require('../../assets/icon-inspetor.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    Inspetor
+                                    {t('textInspetor')}
                                 </button>
 
                                 <button
@@ -450,19 +456,19 @@ export function ModalSignOut({ close, success }) {
                                         src={require('../../assets/icon-ativista.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    Ativista
+                                    {t('textAtivista')}
                                 </button>
                             </div>
 
                             <Info
-                                text1='Para se cadastrar como outros usuários, baixe nosso aplicativo móvel!'
+                                text1={t('paraOutrosUsuariosNossoApp')}
                             />
                         </>
                     )}
 
                     {step === 3 && (
                         <>
-                            <p className="font-semibold text-white text-center">Precisamos de uma foto sua, essa será seua foto de prova no sistema</p>
+                            <p className="font-semibold text-white text-center">{t('precisamosDeUmaFoto')}</p>
 
                             {proofPhoto64 ? (
                                 <div className="flex flex-col items-center mt-5">
@@ -474,7 +480,7 @@ export function ModalSignOut({ close, success }) {
                                     <button
                                         className="text-white underline"
                                         onClick={() => setProofPhoto64(null)}
-                                    >Tirar outra</button>
+                                    >{t('tirarOutra')}</button>
                                 </div>
                             ) : (
                                 <WebcamCapture
@@ -489,26 +495,26 @@ export function ModalSignOut({ close, success }) {
 
                     {step === 4 && (
                         <>
-                            <p className="font-semibold text-white text-center">Agora precisamos de alguns dados seus</p>
-                            <p className="text-sm text-white text-center">Preencha corretamente, não será possível alterar depois</p>
+                            <p className="font-semibold text-white text-center">{t('agoraSeusDados')}</p>
+                            <p className="text-sm text-white text-center">{t('preenchaCorretamente')}</p>
 
                             <div className="flex flex-col mt-3">
-                                <label className="text-sm font-semibold text-blue-400">Seu nome</label>
+                                <label className="text-sm font-semibold text-blue-400">{t('nome')}</label>
                                 <input
-                                    placeholder="Digite aqui"
-                                    className="rounded-md p-2 bg-green-950 text-white"
+                                    placeholder={t('digiteAqui')}
+                                    className="rounded-md p-2 bg-[#012939] text-white"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
 
-                                <p className="text-sm text-gray-300 text-center mt-2">Crie uma senha para acessar nosso app. Essa senha é exclusiva para acessar nosso app mobile</p>
+                                <p className="text-sm text-gray-300 text-center mt-2">{t('senhaAcessoNossoApp')}</p>
 
                                 <div className="flex items-center gap-2">
                                     <div className="flex flex-col w-[49%]">
-                                        <label className="text-sm font-semibold text-blue-400">Crie uma senha</label>
+                                        <label className="text-sm font-semibold text-blue-400">{t('crieUmaSenha')}</label>
                                         <input
-                                            placeholder="Digite aqui"
-                                            className="rounded-md p-2 bg-green-950 text-white"
+                                            placeholder={t('digiteAqui')}
+                                            className="rounded-md p-2 bg-[#012939] text-white"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             type="password"
@@ -516,10 +522,10 @@ export function ModalSignOut({ close, success }) {
                                     </div>
 
                                     <div className="flex flex-col w-[49%]">
-                                        <label className="text-sm font-semibold text-blue-400">Confirme a senha</label>
+                                        <label className="text-sm font-semibold text-blue-400">{t('confirmeSenha')}</label>
                                         <input
-                                            placeholder="Digite aqui"
-                                            className="rounded-md p-2 bg-green-950 text-white"
+                                            placeholder={t('digiteAqui')}
+                                            className="rounded-md p-2 bg-[#012939] text-white"
                                             value={confirmPass}
                                             onChange={(e) => setConfirmPass(e.target.value)}
                                             type="password"
@@ -528,7 +534,7 @@ export function ModalSignOut({ close, success }) {
                                 </div>
 
                                 {passNotMatch && (
-                                    <p className="text-red-400 text-center text-sm">As senhas não estão iguais</p>
+                                    <p className="text-red-400 text-center text-sm">{t('senhasNaoIguais')}</p>
                                 )}
                             </div>
                         </>
@@ -536,7 +542,7 @@ export function ModalSignOut({ close, success }) {
 
                     {step === 5 && (
                         <>
-                            <p className="font-semibold text-white text-center">Tudo certo, vamos finalizar seu cadastro</p>
+                            <p className="font-semibold text-white text-center">{t('tudoOkFinalizarCadastro')}</p>
 
                             <button
                                 className='px-2 py-1 rounded-md font-semibold text-white bg-blue-500 mt-5'
@@ -544,7 +550,7 @@ export function ModalSignOut({ close, success }) {
                             >
                                 {loading ? (
                                     <ActivityIndicator size={20} />
-                                ) : 'Finalizar cadastro'}
+                                ) : t('finalizarCadastro')}
                             </button>
                         </>
                     )}
@@ -556,7 +562,7 @@ export function ModalSignOut({ close, success }) {
                             onClick={previousStep}
                             className="text-white font-bold px-5"
                         >
-                            Anterior
+                            {t('anterior')}
                         </button>
                     )}
 
@@ -565,7 +571,7 @@ export function ModalSignOut({ close, success }) {
                             onClick={nextStep}
                             className="text-white font-semibold px-5 py-1 rounded-md bg-blue-500"
                         >
-                            Próximo
+                            {t('proximo')}
                         </button>
                     )}
                 </div>
@@ -585,7 +591,7 @@ export function ModalSignOut({ close, success }) {
                     setModalTransaction(open)
                     setLoading(false);
                     if (logTransaction.type === 'success') {
-                        toast.success('Cadastro realizado com sucesso!');
+                        toast.success(t('cadastroSucesso'));
                         loginWithWalletAndPassword(wallet, password);
                         setTimeout(() => {
                             close();
