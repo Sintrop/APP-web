@@ -7,8 +7,10 @@ import { api } from '../../services/api';
 import { AddContribution } from '../../services/developersService';
 import { useMainContext } from '../../hooks/useMainContext';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export function SendReportDev({ close, walletAddress, userData }) {
+    const {t} = useTranslation();
     const {connectionType} = useMainContext();
     const [loading, setLoading] = useState(false);
     const [pathPDF, setPathPDF] = useState('');
@@ -24,9 +26,14 @@ export function SendReportDev({ close, walletAddress, userData }) {
     }
 
     async function handleSend() {
-        if(connectionType === 'notprovider'){
-            toast.error('Você só pode realizar essa ação em um navegador com provedor ethereum!')
+        if(!window.ethereum){
+            toast.error(t('necessitaProvedor'))
             return
+        }
+
+        if(connectionType === 'notprovider'){
+            toast.error('vocePrecisaSincronizar')
+            return;
         }
         
         if(pathPDF === '') return;

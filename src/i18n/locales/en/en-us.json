@@ -463,6 +463,7 @@
     "finalizarCadastro": "Finalize Registration",
     "anterior": "Previous",
     "proximo": "Next",
-    "cadastroSucesso": "Registration completed successfully!"
+    "cadastroSucesso": "Registration completed successfully!",
+    "vocePrecisaSincronizar": "You need to synchronize your wallet, this action cannot be done with a wallet and password!"
   }
 }

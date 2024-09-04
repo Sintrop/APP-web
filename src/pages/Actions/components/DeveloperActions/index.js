@@ -279,7 +279,7 @@ export function DeveloperActions() {
                                     className="font-bold text-white px-3 py-1 rounded-md bg-blue-500 w-fit mt-1"
                                     onClick={() => setModalDevReport(true)}
                                 >
-                                    {t('enviarRelatorio ')}
+                                    {t('enviarRelatorio')}
                                 </button>
                             </div>
                         </>
