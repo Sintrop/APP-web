@@ -11,13 +11,13 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
     function downloadCertificateLong() {
         toast.success('Baixando certificado...')
         const fileNameLong = `Certificate_${blockchainData?.producer?.producerWallet}`;
-        var certificateLong = document.querySelector("#certificate");
+        var certificateLong = document.querySelector("#new-long");
         htmlToImage.toJpeg(certificateLong)
             .then((dataUrl) => {
                 saveAs(dataUrl, fileNameLong);
             })
             .catch((error) => {
-
+                console.log(error)
             })
     }
 
@@ -48,7 +48,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                     </button>
                 </div>
 
-                <div className="flex flex-col rounded-md p-2 w-[460px] bg-certificate" id='certificate'>
+                <div className="flex flex-col rounded-md p-2 w-[460px] bg-certificate" id='certificate-long'>
                     <div className="flex flex-col bg-white rounded-md p-2">
                         <div className="flex items-center">
                             <div className="lg:w-[60%] flex flex-col gap-1">
@@ -176,7 +176,7 @@ export function ProducerCertificate({ userData, certificateType, blockchainData,
                     </button>
                 </div>
 
-                <div className="flex flex-col rounded-md w-[460px] bg-green-950 relative border-2 overflow-hidden" id='new-long'>
+                <div className="flex flex-col rounded-md w-[460px] bg-[#012939] relative border-2 overflow-hidden" id='new-long'>
                     <div className="flex justify-center items-center py-5 gap-2">
                         <img
                             src={imageProfile}
