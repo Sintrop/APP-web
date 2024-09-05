@@ -460,6 +460,7 @@
        "finalizarCadastro": "Finalizar Cadastro",
        "anterior": "Anterior",
        "proximo": "Próximo",
-       "cadastroSucesso": "Cadastro realizado com sucesso!"
+       "cadastroSucesso": "Cadastro realizado com sucesso!",
+       "vocePrecisaSincronizar": "Você precisa sincronizar sua wallet, essa ação não pode ser feita com wallet e senha!"
     }
 }

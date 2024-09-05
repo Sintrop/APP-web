@@ -422,6 +422,7 @@
        "estimativaPlantasZona": "Estimativa de plantas para la zona",
        "localizacaoPlanta": "Localización da plantas",
        "eraAtual": "Era actual",
-       "addItemCalcPubli": "Consumo añadido a la calculadora de impacto"
+       "addItemCalcPubli": "Consumo añadido a la calculadora de impacto",
+       "vocePrecisaSincronizar": "Necesitas sincronizar tu billetera, esta acción no se puede realizar con una billetera y contraseña!"
     }
 }
