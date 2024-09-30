@@ -2,7 +2,6 @@ import Web3 from "web3";
 import UserContractJson from '../data/contracts/abis/UserContract.json';
 import ResearcherContractJson from '../data/contracts/abis/ResearcherContract.json';
 import ValidatorContractJson from '../data/contracts/abis/ValidatorContract.json';
-import AdvisorContractJson from '../data/contracts/abis/AdvisorContract.json';
 import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
 import RcTokenContractJson from '../data/contracts/abis/RcToken.json';
 const web3 = new Web3(window.ethereum);
@@ -20,7 +19,6 @@ const validatorContractAddress = process.env.REACT_APP_VALIDATOR_CONTRACT_ADDRES
 const UserContract = new web3.eth.Contract(UserContractJson, userContractAddress);
 const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
 const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
-const AdvisorContract = new web3.eth.Contract(AdvisorContractJson, advisorContractAddress);
 const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
 const RcTokenContract = new web3.eth.Contract(RcTokenContractJson, rcTokenContractAddress);
 
@@ -48,17 +46,6 @@ export const NewAllowedResearcher = async (walletResearcher, walletAdm) => {
 
 export const NewAllowedValidator = async (walletContributor, walletAdm) => {
     await ValidatorContract.methods.newAllowedUser(walletContributor).send({from: walletAdm})
-    .on('transactionHash', hash => {
-        if(hash){
-            return hash
-        }else{
-            return false
-        }
-    })
-}
-
-export const NewAllowedAdvisor = async (walletAdvisor, walletAdm) => {
-    await AdvisorContract.methods.newAllowedUser(walletAdvisor).send({from: walletAdm})
     .on('transactionHash', hash => {
         if(hash){
             return hash

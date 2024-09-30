@@ -6,8 +6,7 @@ import './onlyOwner.css';
 import {
     NewAllowedUser,
     NewAllowedResearcher, 
-    NewAllowedValidator, 
-    NewAllowedAdvisor, 
+    NewAllowedValidator,
     NewAllowedDeveloper,
     AddLevel,
     UndoLevel,
@@ -62,11 +61,6 @@ export default function OnlyOwner(){
         if(type == 'contributor'){
             setLoading(true);
             await NewAllowedValidator(wallet, walletConnected);
-            setLoading(false);
-        }
-        if(type == 'advisor'){
-            setLoading(true);
-            await NewAllowedAdvisor(wallet, walletConnected);
             setLoading(false);
         }
         if(type == 'developer'){

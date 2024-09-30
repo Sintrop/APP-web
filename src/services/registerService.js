@@ -4,7 +4,6 @@ import ActivistContractJson from "../data/contracts/abis/ActivistContract.json";
 import ValidatorContractJson from "../data/contracts/abis/ValidatorContract.json";
 import ResearcherContractJson from "../data/contracts/abis/ResearcherContract.json";
 import DeveloperContractJson from "../data/contracts/abis/DeveloperContract.json";
-import AdvisorContractJson from "../data/contracts/abis/AdvisorContract.json";
 import SupporterContractJson from "../data/contracts/abis/SupporterContract.json";
 import InspectorContractJson from '../data/contracts/abis/InspectorContract.json';
 const web3 = new Web3(window.ethereum);
@@ -23,7 +22,6 @@ const validatorContractAddress = process.env.REACT_APP_VALIDATOR_CONTRACT_ADDRES
 const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
 const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
 const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
-const AdvisorContract = new web3.eth.Contract(AdvisorContractJson, advisorContractAddress);
 const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
 const ActivistContract = new web3.eth.Contract(ActivistContractJson, activistContractAddress);
 const SupporterContract = new web3.eth.Contract(SupporterContractJson, supporterContractAddress);
@@ -195,37 +193,6 @@ export const addResearcher = async (wallet, name, proofPhoto) => {
             hashTransaction = hash
             type = 'success'
             message = "Researcher registered!"  
-        }
-    })
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            type = 'error'
-            message = 'Not allowed user!'
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    });
-        
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
-}
-
-export const addAdvisor = async (wallet, name, proofPhoto) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await AdvisorContract.methods.addAdvisor(name, proofPhoto)
-    .send({ from: wallet})
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Advisor registered!"  
         }
     })
     .on("error", (error, receipt) => {
