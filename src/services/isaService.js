@@ -1,12 +1,5 @@
-import Web3 from "web3";
-import CategoryContractJson from '../data/contracts/abis/CategoryContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const categoryContractAddress = process.env.REACT_APP_CATEGORY_CONTRACT_ADDRESS;
-
-//initializing contract
-const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
+import { CategoryContract } from "./web3/Contracts";
+import { categoryContractAddress } from "./web3/Contracts";
 
 export const GetCategories = async () => {
     let categories = [];

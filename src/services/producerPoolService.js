@@ -1,14 +1,5 @@
-import Web3 from "web3";
-import ProducerPoolContractJson from '../data/contracts/abis/ProducerPool.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const producerPoolContractAddress = process.env.REACT_APP_PRODUCER_POOL_CONTRACT_ADDRESS;
-//const poolableContractAddress = PoolableContractJson.networks
-
-//initializing contract
-const ProducerPoolContract = new web3.eth.Contract(ProducerPoolContractJson, producerPoolContractAddress);
-//const PoolableContract = new web3.eth.Contract(PoolableContractJson.abi, poolableContractAddress);
+import { ProducerPoolContract } from "./web3/Contracts";
+import { producerPoolContractAddress } from "./web3/Contracts";
 
 export const GetTokensPerEra = async () => {
     let tokens = 0;
@@ -55,11 +46,8 @@ export const CheckNextAprove = async (era) => {
     return eras;
 }
 
-// export const GetInfoEra = async () => {
-//     let eras = 0;
-//     await PoolableContract.methods.eraLevels().call({from: poolableContractAddress})
-//     .then((res) => {
-//         eras = res;
-//     })
-//     return eras;
-// }
+export const GetCurrentEpoch = async () => {
+    const response = await ProducerPoolContract.methods.currentEpoch().call();
+    
+    return Number(String(response).replace('n', ''));
+}

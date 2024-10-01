@@ -1,12 +1,6 @@
-import Web3 from "web3";
-import RcTokenContractJson from '../data/contracts/abis/RcToken.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const RcTokenContractAddress = process.env.REACT_APP_RCTOKEN_CONTRACT_ADDRESS;
-
-//initializing contract
-const RcTokenContract = new web3.eth.Contract(RcTokenContractJson, RcTokenContractAddress);
+import { RcTokenContract } from "./web3/Contracts";
+import { RcTokenContractAddress } from "./web3/Contracts";
+import { web3 } from "./web3/Contracts";
 
 export const GetCertificateTokens = async (wallet) => {
     let tokens = 0

@@ -154,7 +154,6 @@ export function ModalSignOut({ close, success }) {
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData: response.data.user,
                                 hash: res.hashTransaction
                             }),
                         });

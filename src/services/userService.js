@@ -1,12 +1,5 @@
-import Web3 from 'web3';
-import UserContractJson from '../data/contracts/abis/UserContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const userContractAddress = process.env.REACT_APP_USER_CONTRACT_ADDRESS;
-
-//initializing contract
-const UserContract = new web3.eth.Contract(UserContractJson, userContractAddress)
+import { UserContract } from "./web3/Contracts";
+import { userContractAddress } from "./web3/Contracts";
 
 export const AddDelation = async (informed, reported, title, testemony, proofPhoto) => {
     let type = '';

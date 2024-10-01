@@ -1,19 +1,11 @@
-import Web3 from 'web3';
-import DevelopersPoolJson from '../data/contracts/abis/DeveloperPool.json';
-import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const developerContractAddress = process.env.REACT_APP_DEVELOPER_CONTRACT_ADDRESS;
-const developersPoolAddress = process.env.REACT_APP_DEVELOPER_POOL_CONTRACT_ADDRESS;
-
-//initializing contract
-const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolJson, developersPoolAddress);
-const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
+import { DevelopersPoolContract } from "./web3/Contracts";
+import { DeveloperContract } from "./web3/Contracts";
+import { developerContractAddress } from "./web3/Contracts";
+import { developersPoolContractAddress } from "./web3/Contracts";
 
 export const GetBalancePool = async () => {
     let tokens = 0;
-    await DevelopersPoolContract.methods.balance().call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.balance().call({from: developersPoolContractAddress})
     .then((res) => {
         tokens = res;
     })
@@ -22,7 +14,7 @@ export const GetBalancePool = async () => {
 
 export const GetEraContract = async () => {
     let era = 0;
-    await DevelopersPoolContract.methods.currentContractEra().call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.currentContractEra().call({from: developersPoolContractAddress})
     .then((res) => {
         era = res;
     })
@@ -31,7 +23,7 @@ export const GetEraContract = async () => {
 
 export const GetEra = async (era) => {
     let eraInfo = [];
-    await DevelopersPoolContract.methods.getEra(era).call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.getEra(era).call({from: developersPoolContractAddress})
     .then((res) => {
         eraInfo = res;
     })
@@ -41,7 +33,7 @@ export const GetEra = async (era) => {
 
 export const CheckNextAprove = async (era) => {
     let eras = 0;
-    await DevelopersPoolContract.methods.nextApproveIn(era).call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.nextApproveIn(era).call({from: developersPoolContractAddress})
     .then((res) => {
         eras = res;
     })
@@ -50,7 +42,7 @@ export const CheckNextAprove = async (era) => {
 
 export const GetBalanceDeveloper = async (wallet) => {
     let balance = 0;
-    await DevelopersPoolContract.methods.balanceOf(wallet).call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.balanceOf(wallet).call({from: developersPoolContractAddress})
     .then((res) => {
         balance = res;
     })
@@ -70,7 +62,7 @@ export const GetDevelopers = async () => {
 
 export const TokensPerEra = async () => {
     let tokens = 0;
-    await DevelopersPoolContract.methods.TOKENS_PER_ERA().call({from: developersPoolAddress})
+    await DevelopersPoolContract.methods.TOKENS_PER_ERA().call({from: developersPoolContractAddress})
     .then((res) => {
         tokens = res;
     })

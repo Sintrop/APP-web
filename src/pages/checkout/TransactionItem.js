@@ -1,17 +1,13 @@
 import React, { sueEffect, useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import Loading from '../../components/Loading';
-import Web3 from 'web3';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useNavigate } from 'react-router';
 import { format } from 'date-fns';
 import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useMainContext } from '../../hooks/useMainContext';
-import axios from 'axios';
-import emailjs from '@emailjs/browser';
 import { ConfirmDescart } from './ConfirmDescart';
 import { SendReportDev } from './SendReportDev';
 import { ToastContainer, toast } from 'react-toastify';
@@ -23,14 +19,13 @@ import { ModalPublishResearche } from './ModalPublishResearche';
 
 //Services Web3
 import { addProducer, addInspector, addDeveloper } from '../../services/registerService';
-import { AcceptInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
 import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
 import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/supporterService';
 import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
 import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
 import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
 import { WithdrawTokens as WithdrawInspector } from '../../services/inspectorService';
-import { GetInspection, GetIsa, InvalidateInspection } from '../../services/sintropService';
+import { GetInspection, GetIsa, InvalidateInspection, AcceptInspection, RealizeInspection, RequestInspection } from '../../services/sintropService';
 import { addActivist } from '../../services/activistService';
 import { addValidation } from '../../services/validatorService';
 import { Invite } from '../../services/invitationService';

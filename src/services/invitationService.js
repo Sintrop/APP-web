@@ -1,12 +1,4 @@
-import Web3 from "web3";
-import InvitationContractJson from  '../data/contracts/abis/InvitationContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const InvitationContractAddress = process.env.REACT_APP_INVITATION_CONTRACT_ADDRESS;
-
-//Initializing contract
-const InvitationContract = new web3.eth.Contract(InvitationContractJson, InvitationContractAddress);
+import { InvitationContract } from "./web3/Contracts";
 
 export const Invite = async (walletAddress, walletInvite, userType) => {
     let type = '';

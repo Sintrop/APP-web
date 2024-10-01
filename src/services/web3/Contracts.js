@@ -17,6 +17,7 @@ import InspectorContractJson from '../../data/contracts/abis/InspectorContract.j
 import DeveloperContractJson from '../../data/contracts/abis/DeveloperContract.json';
 import ValidatorPoolContractJson from '../../data/contracts/abis/ValidatorPool.json';
 import CategoryContractJson from '../../data/contracts/abis/CategoryContract.json';
+import InvitationContractJson from '../../data/contracts/abis/InvitationContract.json';
 
 export const validatorContractAddress = '0x7096412447E5e661d2906029858da85970e78B6d';
 export const userContractAddress = '0x54303FB8298592D416381dc780A4D037c0E6f88A';
@@ -35,8 +36,9 @@ export const inspectorContractAddress = '0xE20aBb37B81C1FD54222Ce01eac4612ad5ecD
 export const developerContractAddress = '0x4867A7EDfE41d909dcE80389F746d3a9d71844C0';
 export const validatorPoolContractAddress = '0x3F8dE1A9d80c6A1dd1a35a439CB7FCC7Aa39Bf9A';
 export const categoryContractAddress = '0x6C4F71C6f31F5D6afE97b30485149B7a9F7EAe8f';
+export const invitationContractAddress = '0x9A67E9EBbF7E8747c46b03faEa0757a2A4583FcF'
 
-const provider = `https://holesky.infura.io/v3/e46d8ac23f55416a9c93c0efa005450a`;
+const provider = window.ethereum ? window.ethereum : `https://holesky.infura.io/v3/e46d8ac23f55416a9c93c0efa005450a`;
 export const web3 = new Web3(provider);
 
 export const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
@@ -56,3 +58,4 @@ export const InspectorContract = new web3.eth.Contract(InspectorContractJson, in
 export const DeveloperContract = new web3.eth.Contract(DeveloperContractJson, developerContractAddress);
 export const ValidatorPoolContract = new web3.eth.Contract(ValidatorPoolContractJson, validatorPoolContractAddress);
 export const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
+export const InvitationContract = new web3.eth.Contract(InvitationContractJson, invitationContractAddress);

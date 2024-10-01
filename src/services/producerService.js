@@ -1,12 +1,5 @@
-import Web3 from "web3";
-import ProducerContractJson from '../data/contracts/abis/ProducerContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const producerContractAddress = process.env.REACT_APP_PRODUCER_CONTRACT_ADDRESS;
-
-//initializing contract
-const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
+import { ProducerContract } from "./web3/Contracts";
+import { producerContractAddress } from "./web3/Contracts";
 
 export const GetProducer = async (wallet) => {
     let dataProducer = []
@@ -53,18 +46,3 @@ export const GetProducers = async () => {
     const producers = await ProducerContract.methods.getProducers().call()
     return producers;
 }
-
-class ProducerService {
-    constructor(wallet) {
-        this.web3 = web3;
-        this.wallet = wallet;
-        this.producerContractAddress = producerContractAddress;
-    }
-
-    async getProducerRanking(){
-        const producers = await ProducerContract.methods.getProducers().call()
-        return producers;
-    }
-}
-
-export default ProducerService; 

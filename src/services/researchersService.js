@@ -1,28 +1,5 @@
-import Web3 from "web3";
-import ResearcherContractJson from  '../data/contracts/abis/ResearcherContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract addres
-const researcherContractAddress = process.env.REACT_APP_RESEARCHER_CONTRACT_ADDRESS;
-
-//initializing contract
-const ResearcherContract = new web3.eth.Contract(ResearcherContractJson, researcherContractAddress);
-
-class ResearchersService {
-    constructor(wallet) {
-        this.web3 = web3;
-        this.wallet = wallet;
-        this.researchersContractAddress = researcherContractAddress;
-    }
-
-    async getResearcherRanking(){
-        const researchers = await ResearcherContract.methods.getResearchers().call()
-        return researchers; 
-    }
-
-    
-}
-export default ResearchersService; 
+import { ResearcherContract } from "./web3/Contracts";
+import { researcherContractAddress } from "./web3/Contracts"; 
 
 export const GetResearcher = async (walletAdd) => {
     const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()

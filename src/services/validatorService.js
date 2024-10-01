@@ -1,13 +1,4 @@
-import Web3 from "web3";
-import ValidatorContractJson from  '../data/contracts/abis/ValidatorContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const validatorContractAddress = process.env.REACT_APP_VALIDATOR_CONTRACT_ADDRESS;
-
-//initializing contract
-const ValidatorContract = new web3.eth.Contract(ValidatorContractJson, validatorContractAddress);
-
+import { ValidatorContract } from "./web3/Contracts";
 
 export const GetValidator = async(walletAdd) => {
     const validator = await ValidatorContract.methods.getValidator(walletAdd).call()

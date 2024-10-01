@@ -1,12 +1,5 @@
-import Web3 from 'web3';
-import SintropContractJson from '../data/contracts/abis/Sintrop.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const sintropContractAddress = process.env.REACT_APP_SINTROP_CONTRACT_ADDRESS
-
-//initializing contract
-const SintropContract = new web3.eth.Contract(SintropContractJson, sintropContractAddress);
+import { SintropContract } from "./web3/Contracts";
+import { sintropContractAddress } from "./web3/Contracts";
 
 export const InvalidateInspection = async (walletAddress, inspectionID, justification) => {
     let type = '';
@@ -46,4 +39,70 @@ export const GetIsa = async (inspectionId) => {
         isas = res;
     })
     return isas;
+}
+
+export const RequestInspection = async (walletAddress) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
+    await SintropContract.methods.requestInspection().send({from: walletAddress})
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Inspection requested successfully!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        
+    })
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+} 
+
+export const AcceptInspection = async (inspectionID, walletAddress) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = '';
+    await SintropContract.methods.acceptInspection(inspectionID).send({from: walletAddress})
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Inspection successfully accepted!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        console.log(receipt);
+    })
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+}
+
+export const RealizeInspection = async (inspectionID, isas, walletAddress, report) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = '';
+    await SintropContract.methods.realizeInspection(inspectionID, report, isas).send({from: walletAddress})
+    .on('transactionHash', (hash) => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Inspection performed successfully!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        
+    })
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
 }

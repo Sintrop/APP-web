@@ -10,6 +10,7 @@ import { api } from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
 import {addDays, compareAsc} from "date-fns";
+import { getEraInfo } from "../services/eraInfo";
 
 export const MainContext = createContext({});
 
@@ -44,7 +45,7 @@ export default function MainProvider({ children }) {
     const [accountsConnected, setAccountsConnected] = useState([]);
 
     useEffect(() => {
-        getEraInfo();
+        handleGetEraInfo();
         getImpact();
         checkUserConnected();
         checkAccountsConnected();
@@ -83,11 +84,11 @@ export default function MainProvider({ children }) {
         }
     }
 
-    async function getEraInfo() {
-        const response = await api.get('/web3/era-info');
-        setNextEra(response.data.nextEraIn);
-        setEra(response.data.eraAtual);
-        setEpoch(response.data.epoch)
+    async function handleGetEraInfo() {
+        const response = await getEraInfo();
+        setNextEra(response.nextEraIn);
+        setEra(response.eraAtual);
+        setEpoch(response.epoch);
     }
 
     async function getImpact() {

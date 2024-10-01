@@ -1,12 +1,4 @@
-import Web3 from "web3";
-import SupporterContractJson from  '../data/contracts/abis/SupporterContract.json';
-const web3 = new Web3(window.ethereum);
-
-//contract address
-const supporterContractAddress = process.env.REACT_APP_SUPPORTER_CONTRACT_ADDRESS
-
-//initializing contract
-const SupporterContract = new web3.eth.Contract(SupporterContractJson, supporterContractAddress);
+import { SupporterContract } from "./web3/Contracts";
 
 export const GetSupporters = async () => {
     const supporters = await SupporterContract.methods.getSupporters().call();
