@@ -18,8 +18,7 @@ import { ModalPublishResearche } from './ModalPublishResearche';
 
 
 //Services Web3
-import { addProducer, addInspector, addDeveloper } from '../../services/registerService';
-import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
+import { BuyRCT, BurnTokens } from '../../services/sacTokenService';
 import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/supporterService';
 import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
 import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
@@ -30,6 +29,9 @@ import { addActivist } from '../../services/activistService';
 import { addValidation } from '../../services/validatorService';
 import { Invite } from '../../services/invitationService';
 import { addValidator } from '../../services/validatorService';
+import { addProducer } from '../../services/producerService';
+import { addInspector } from '../../services/inspectorService';
+import { addDeveloper } from '../../services/developersService';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -122,7 +124,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 type: 'new-user',
                                 origin: 'platform',
                                 additionalData: JSON.stringify({
-                                    userData,
                                     hash: res?.hashTransaction
                                 }),
                             });
@@ -175,7 +176,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInspector(walletAddress, userData?.name, userData.imgProfileUrl, 'geolocation')
+            addInspector(walletAddress, userData?.name, userData.imgProfileUrl)
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,
@@ -191,7 +192,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -258,7 +258,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -325,7 +324,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -391,7 +389,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -458,7 +455,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -525,7 +521,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -2047,11 +2042,11 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const hash = await save(res);
             pdfDevHash = hash;
 
-            createIsas(data1, 'phoenix', hash, producerData);
+            createIsas(data1, 'phoenix', hash, producerData, inspectionData?.proofPhoto);
         })
     }
 
-    async function createIsas(data, methodType, hashPdf, producerData) {
+    async function createIsas(data, methodType, hashPdf, producerData, proofPhoto) {
         setLoading(true)
 
         const carbonResult = calculateCarboon(data?.resultIndices);
@@ -2105,17 +2100,18 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         console.log(arrayIsas)
 
-        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData, hashPdf)
+        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData, hashPdf, proofPhoto)
     }
 
-    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData, hashPdf) {
+    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData, hashPdf, proofPhoto) {
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(
             String(additionalData?.inspectionId),
             isas,
             walletAddress,
-            hashPdf
+            hashPdf,
+            proofPhoto
         )
             .then(async (res) => {
                 setLogTransaction({

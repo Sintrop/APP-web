@@ -85,7 +85,7 @@ export const AcceptInspection = async (inspectionID, walletAddress) => {
     }
 }
 
-export const RealizeInspection = async (inspectionID, isas, walletAddress, report) => {
+export const RealizeInspection = async (inspectionID, isas, walletAddress, report, proofPhoto) => {
     let type = '';
     let message = '';
     let hashTransaction = '';

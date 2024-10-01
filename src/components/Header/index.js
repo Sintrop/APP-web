@@ -38,8 +38,8 @@ export function Header({ routeActive }) {
                 <div className="flex items-center justify-between overflow-x-auto lg:min-w-[1024px]">
                     <button onClick={() => navigate('/')}>
                         <img
-                            src={require('../../assets/logo-branco.png')}
-                            className="w-[120px] h-[80px] object-contain"
+                            src={require('../../assets/logo-cr.png')}
+                            className="w-[250px] h-[80px] object-contain"
                         />
                     </button>
                     <div className="flex items-center">

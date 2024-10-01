@@ -54,3 +54,34 @@ export const WithdrawTokens = async (wallet) => {
         hashTransaction
     }
 }
+
+export const addDeveloper = async (wallet, name, proofPhoto) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
+    await DeveloperContract.methods.addDeveloper(name, proofPhoto)
+    .send({ from: wallet})
+    .on('transactionHash', hash => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Developer registered!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        if(error.stack.includes("Not allowed user")){
+            type = 'error'
+            message = 'Not allowed user!'
+        }
+        if (error.stack.includes("User already exists")){
+            type = 'error'
+            message = 'User already exists'
+        }
+    });
+        
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+}

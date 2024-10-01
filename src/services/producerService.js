@@ -1,6 +1,37 @@
 import { ProducerContract } from "./web3/Contracts";
 import { producerContractAddress } from "./web3/Contracts";
 
+export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaProperty) => {
+    let type = '';
+    let message = '';
+    let hashTransaction = ''; 
+    await ProducerContract.methods.addProducer(Number(areaProperty).toFixed(0), name, proofPhoto, geoLocation)
+    .send({ from: wallet })
+    .on('transactionHash', hash => {
+        if(hash){
+            hashTransaction = hash
+            type = 'success'
+            message = "Producer registered!"
+        }
+    })
+    .on("error", (error, receipt) => {
+        if(error.stack.includes("Not allowed user")){
+            type = 'error'
+            message = 'Not allowed user!'
+        }
+        if (error.stack.includes("User already exists")){
+            type = 'error'
+            message = 'User already exists'
+        }
+    });
+        
+    return {
+        type, 
+        message,
+        hashTransaction
+    }
+}
+
 export const GetProducer = async (wallet) => {
     let dataProducer = []
     await ProducerContract.methods.getProducer(wallet).call({from: producerContractAddress})
