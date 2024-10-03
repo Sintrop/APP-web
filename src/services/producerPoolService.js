@@ -51,3 +51,8 @@ export const GetCurrentEpoch = async () => {
     
     return Number(String(response).replace('n', ''));
 }
+
+export const NextEraIn = async (eraAtual) => {
+    const response = await ProducerPoolContract.methods.nextEraIn(eraAtual).call();
+    return Number(String(response).replace('n', ''));
+}

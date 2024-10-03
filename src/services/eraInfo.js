@@ -1,5 +1,5 @@
 import { api } from "./api";
-import { GetCurrentContractEra, GetCurrentEpoch } from "./producerPoolService";
+import { GetCurrentContractEra, GetCurrentEpoch, NextEraIn } from "./producerPoolService";
 
 export async function getEraInfo(){
     const hasProvider = window.ethereum ? true : false;
@@ -25,6 +25,7 @@ async function getApi(){
 async function getBlockchain(){
     const eraAtual = await GetCurrentContractEra();
     const epoch = await GetCurrentEpoch();
+    const nextEraIn = await NextEraIn(eraAtual);
 
-    return {eraAtual, epoch, nextEraIn: 0}
+    return {eraAtual, epoch, nextEraIn}
 }

@@ -775,7 +775,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         type: 'accept-inspection',
                         origin: 'platform',
                         additionalData: JSON.stringify({
-                            userData,
                             inspectionId: additionalData?.inspectionId,
                             hash: res?.hashTransaction
                         }),
@@ -834,9 +833,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const producer = {
             name: producerData?.name,
             totalInspections: producerData?.totalInspections,
-            recentInspection: producerData?.recentInspection,
+            pendingInspection: producerData?.pendingInspection,
             propertyAddress: JSON.parse(producerDataApi?.address),
-            propertyArea: producerData?.certifiedArea,
+            propertyArea: producerData?.areaInformation?.totalArea,
             propertyGeolocation: producerDataApi?.propertyGeolocation,
             proofPhoto: producerDataApi?.imgProfileUrl,
             producerWallet: producerData?.producerWallet,

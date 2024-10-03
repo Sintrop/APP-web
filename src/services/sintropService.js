@@ -64,10 +64,12 @@ export const RequestInspection = async (walletAddress) => {
 } 
 
 export const AcceptInspection = async (inspectionID, walletAddress) => {
+    console.log(inspectionID)
+    console.log(walletAddress)
     let type = '';
     let message = '';
     let hashTransaction = '';
-    await SintropContract.methods.acceptInspection(inspectionID).send({from: walletAddress})
+    await SintropContract.methods.acceptInspection(Number(inspectionID)).send({from: walletAddress})
     .on('transactionHash', (hash) => {
         if(hash){
             hashTransaction = hash
@@ -76,7 +78,7 @@ export const AcceptInspection = async (inspectionID, walletAddress) => {
         }
     })
     .on("error", (error, receipt) => {
-        console.log(receipt);
+        console.log(error);
     })
     return {
         type, 
