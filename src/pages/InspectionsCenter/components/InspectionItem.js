@@ -27,7 +27,7 @@ export function InspectionItem({ data, type }) {
     }, []);
 
     async function getProducer() {
-        const response = await api.get(`/user/${String(data?.createdBy).toUpperCase()}`);
+        const response = await api.get(`/user/${String(data?.producer).toUpperCase()}`);
         const resUser = response.data.user;
         setProducerData(resUser);
         getImageProfileProducer(resUser.imgProfileUrl)
@@ -38,7 +38,7 @@ export function InspectionItem({ data, type }) {
     }
 
     async function getInspector() {
-        const response = await api.get(`/user/${String(data?.acceptedBy).toUpperCase()}`);
+        const response = await api.get(`/user/${String(data?.inspector).toUpperCase()}`);
         setInspectorData(response.data.user);
         getImageProfileInspector(response.data.user.imgProfileUrl)
     }
@@ -86,7 +86,7 @@ export function InspectionItem({ data, type }) {
                         {data.status === 2 && (
                             <div className="flex flex-col lg:items-end">
                                 <p className="font-bold text-white">{t('inspecionadoEm')}</p>
-                                <p className="text-white">{format(new Date((data?.inspectedAtTimestamp) * 1000), 'dd/MM/yyyy')}</p>
+                                <p className="text-white">{data?.inspectedAt}</p>
                             </div>    
                         )}
 
@@ -111,7 +111,7 @@ export function InspectionItem({ data, type }) {
                             <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
-                                onClick={() => navigate(`/user-details/${data.createdBy}`)}
+                                onClick={() => navigate(`/user-details/${data.producer}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
                                     {imageProfileProducer && (
@@ -129,7 +129,7 @@ export function InspectionItem({ data, type }) {
                             <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
-                                onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
+                                onClick={() => navigate(`/user-details/${data.inspector}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
                                     {imageProfileInspector && (
@@ -205,7 +205,7 @@ export function InspectionItem({ data, type }) {
                             <p className="text-xs text-gray-400">{t('produtor')}:</p>
                             <button 
                                 className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
-                                onClick={() => navigate(`/user-details/${data.createdBy}`)}
+                                onClick={() => navigate(`/user-details/${data.producer}`)}
                             >   
                                 <div className="w-8 h-8 rounded-full bg-gray-500">
                                     {imageProfileProducer && (
@@ -224,7 +224,7 @@ export function InspectionItem({ data, type }) {
                                 <p className="text-xs text-gray-400">{t('inspetor')}:</p>
                                 <button 
                                     className="p-2 gap-3 flex items-center bg-[#012939] rounded-md"
-                                    onClick={() => navigate(`/user-details/${data.acceptedBy}`)}
+                                    onClick={() => navigate(`/user-details/${data.inspector}`)}
                                 >   
                                     <div className="w-8 h-8 rounded-full bg-gray-500">
                                         {imageProfileInspector && (
