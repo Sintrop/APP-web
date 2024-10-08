@@ -189,6 +189,7 @@ export function ActivistActions({ }) {
                             onChange={(e) => setUserType(e.target.value)}
                             className="p-2 rounded-md bg-green-950 text-white"
                         >
+                            <option value={1}>Produtor(a)</option>
                             <option value={2}>Inspetor(a)</option>
                             <option value={6}>Ativista</option>
                         </select>

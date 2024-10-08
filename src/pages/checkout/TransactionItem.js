@@ -12,9 +12,8 @@ import { ConfirmDescart } from './ConfirmDescart';
 import { SendReportDev } from './SendReportDev';
 import { ToastContainer, toast } from 'react-toastify';
 import { ChangePassword } from './ChangePassword';
-import "react-toastify/dist/ReactToastify.css";
-import { FiRefreshCcw } from "react-icons/fi";
 import { ModalPublishResearche } from './ModalPublishResearche';
+import "react-toastify/dist/ReactToastify.css";
 
 
 //Services Web3
@@ -51,7 +50,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     useEffect(() => {
         if (transaction?.additionalData) {
             setAdditionalData(JSON.parse(transaction?.additionalData))
-            console.log(JSON.parse(transaction?.additionalData))
         }
     }, []);
 

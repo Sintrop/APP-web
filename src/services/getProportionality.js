@@ -21,10 +21,10 @@ export async function getProportionallity(typeUser) {
     }
 
     const limitTotalInspectors = producers * 3;
-    const limitTotalDevelopers = producers / 5;
-    const limitTotalResearchers = producers / 5;
-    const limitTotalActivists = producers / 10;
-    const limitTotalValidators = producers / 10;
+    const limitTotalDevelopers = producers;
+    const limitTotalResearchers = producers / 2;
+    const limitTotalActivists = producers / 2;
+    const limitTotalValidators = producers / 2;
 
     if (typeUser === 2) {
         const calculo = limitTotalInspectors - inspectors;
