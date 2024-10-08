@@ -12,7 +12,7 @@ export function UserRankingItem({ data }) {
     }, []);
 
     async function getImageProfile() {
-        if (data.userType === 7) {
+        if (data.supporterWallet) {
             const resUser = await api.get(`/user/${data?.supporterWallet}`);
             const response = await getImage(resUser.data.user.imgProfileUrl);
             setImageProfile(response);
@@ -23,28 +23,28 @@ export function UserRankingItem({ data }) {
     }
 
     function clickUser() {
-        if (data?.userType === 1) {
+        if (data?.producerWallet) {
             navigate(`/user-details/${data?.producerWallet}`);
         }
-        if (data?.userType === 2) {
+        if (data?.inspectorWallet) {
             navigate(`/user-details/${data?.inspectorWallet}`);
         }
-        if (data?.userType === 3) {
+        if (data?.researcherWallet) {
             navigate(`/user-details/${data?.researcherWallet}`);
         }
-        if (data?.userType === 4) {
+        if (data?.developerWallet) {
             navigate(`/user-details/${data?.developerWallet}`);
         }
-        if (data?.userType === 5) {
+        if (data?.contributorWallet) {
             navigate(`/user-details/${data?.contributorWallet}`);
         }
-        if (data?.userType === 6) {
+        if (data?.activistWallet) {
             navigate(`/user-details/${data?.activistWallet}`);
         }
-        if (data?.userType === 7) {
+        if (data?.supporterWallet) {
             navigate(`/user-details/${data?.supporterWallet}`);
         }
-        if (data?.userType === 8) {
+        if (data?.validatorWallet) {
             navigate(`/user-details/${data?.validatorWallet}`);
         }
     }
@@ -52,14 +52,14 @@ export function UserRankingItem({ data }) {
     return (
         <div className="bg-[#03364B] p-2 rounded-md flex flex-col items-center h-auto w-[240px]">
             <div className="h-20 w-20 rounded-full border border-white bg-gray-400">
-                {data?.userType === 8 ? (
+                {data?.validatorWallet ? (
                     <img
                         src={require('../../../assets/icon-validator.png')}
                         className="h-20 w-20 rounded-full object-cover"
                     />
                 ) : (
                     <>
-                        {data?.userType === 7 ? (
+                        {data?.supporterWallet ? (
                             <>
                                 {imageProfile !== '' ? (
                                     <img
@@ -87,22 +87,22 @@ export function UserRankingItem({ data }) {
                 className="font-bold text-white text-center hover:underline hover:cursor-pointer overflow-hidden text-ellipsis truncate w-[230px]"
                 onClick={clickUser}
             >
-                {data?.userType === 8 ? 'Validador(a)' : data?.name}
+                {data?.validatorWallet ? 'Validador(a)' : data?.name}
             </p>
 
             <p className="text-xs text-gray-400 text-ellipsis overflow-hidden truncate w-[230px]">
-                {data?.userType === 1 && data?.producerWallet}
-                {data?.userType === 2 && data?.inspectorWallet}
-                {data?.userType === 3 && data?.researcherWallet}
-                {data?.userType === 4 && data?.developerWallet}
-                {data?.userType === 5 && data?.contributorWallet}
-                {data?.userType === 6 && data?.activistWallet}
-                {data?.userType === 7 && data?.supporterWallet}
-                {data?.userType === 8 && data?.validatorWallet}
+                {data?.producerWallet && data?.producerWallet}
+                {data?.inspectorWallet && data?.inspectorWallet}
+                {data?.researcherWallet && data?.researcherWallet}
+                {data?.developerWallet && data?.developerWallet}
+                {data?.contributorWallet && data?.contributorWallet}
+                {data?.activistWallet && data?.activistWallet}
+                {data?.supporterWallet && data?.supporterWallet}
+                {data?.validatorWallet && data?.validatorWallet}
             </p>
 
             <div className="flex flex-col mt-5 w-full gap-1">
-                {data?.userType === 1 && (
+                {data?.producerWallet && (
                     <>
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Pontos de regeneração</p>
@@ -121,7 +121,7 @@ export function UserRankingItem({ data }) {
                     </>
                 )}
 
-                {data?.userType === 2 && (
+                {data?.inspectorWallet && (
                     <>
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Inspeções realizadas</p>
@@ -135,7 +135,7 @@ export function UserRankingItem({ data }) {
                     </>
                 )}
 
-                {data?.userType === 3 && (
+                {data?.researcherWallet && (
                     <>
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Pesquisas publicadas</p>
@@ -144,7 +144,7 @@ export function UserRankingItem({ data }) {
                     </>
                 )}
 
-                {data?.userType === 4 && (
+                {data?.developerWallet && (
                     <>
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Nível</p>
@@ -158,7 +158,7 @@ export function UserRankingItem({ data }) {
                     </>
                 )}
 
-                {data?.userType === 7 && (
+                {data?.supporterWallet && (
                     <>
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold text-white text-sm">Tokens compensados</p>
