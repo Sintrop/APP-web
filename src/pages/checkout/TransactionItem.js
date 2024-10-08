@@ -2111,7 +2111,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const hash = await save(res);
             pdfDevHash = hash;
 
-            createIsas(data1, 'phoenix', hash, producerData, inspectionData?.proofPhoto);
+            createIsas(data1, 'phoenix', hash, producerData, response.data.inspection.proofPhoto);
         })
     }
 
@@ -2163,8 +2163,8 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const arrayIsas = [
             { categoryId: carbon.categoryId, isaId: carbon.isaIndex, indicator: Number(carbon.indicator) },
             { categoryId: bio.categoryId, isaId: bio.isaIndex, indicator: Number(bio.indicator) },
+            { categoryId: water.categoryId, isaId: water.isaIndex, indicator: Number(water.indicator) },
             { categoryId: solo.categoryId, isaId: solo.isaIndex, indicator: Number(solo.indicator) },
-            { categoryId: water.categoryId, isaId: water.isaIndex, indicator: Number(water.indicator) }
         ];
 
         console.log(arrayIsas)
@@ -2176,7 +2176,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(
-            String(additionalData?.inspectionId),
+            Number(additionalData?.inspectionId),
             isas,
             walletAddress,
             hashPdf,
