@@ -68,7 +68,7 @@ export const BuyRCT = async (wallet, value) => {
     let hashTransaction = '';
 
     await web3.eth.sendTransaction({
-        to: process.env.REACT_APP_RCTOKENICO_CONTRACT_ADDRESS,
+        to: '0x1e1cc60a91380c81ecabfbd497c72a7f134f39af',
         from: wallet,
         value: Number(value) * 10**18
     })
