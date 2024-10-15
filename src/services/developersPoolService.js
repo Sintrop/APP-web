@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import DevelopersPoolJson from '../data/contracts/abis/DeveloperPool.json';
 import DeveloperContractJson from '../data/contracts/abis/DeveloperContract.json';
 const web3 = new Web3(window.ethereum);
+const { web3Request } = require('./web3/requestService');
 
 //contract address
 const developerContractAddress = process.env.REACT_APP_DEVELOPER_CONTRACT_ADDRESS;
@@ -78,24 +79,7 @@ export const TokensPerEra = async () => {
 }
 
 export const WithdrawTokens = async (wallet) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await DeveloperContract.methods.withdraw().send({from: wallet})
-    .on('transactionHash', (hash) => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Token withdrawal successful!"
-        }
-    })
-    .on("error", (error, receipt) => {
-        
-    })
+    const response = await web3RequestWrite(DeveloperContract, 'withdraw', [], wallet)
 
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+    return response;
 }
