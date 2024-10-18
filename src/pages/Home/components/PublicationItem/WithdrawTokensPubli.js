@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 export function WithdrawTokensPubli({data, changeVisible}){
     const {t} = useTranslation();
     const additionalData = JSON.parse(data?.additionalData);
-    const userData = additionalData?.userData;
+    const userData = data.user;
     const [tokensWithdraw, setTokensWithdraw] = useState(0);
 
     useEffect(() => {
