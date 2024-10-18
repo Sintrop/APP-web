@@ -99,7 +99,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
             setLoading(true);
             const addressPdf = await pdfMake.createPdf(generateAddressPdf(addressData, walletAddress, userData));
-
             addressPdf.getBuffer(async (res) => {
                 const hash = await save(res);
                 setLoading(false);
@@ -2513,6 +2512,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
     //----------- FINISH INSPECTION ---------------------^^^^^^^^
 
+    // ---------------- REQUEST INSPECTION -------------- Disponível no Sintrop Pay
     async function requestInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2624,7 +2624,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             })
     }
 
-    //------------ BURN TOKENS ---------------
+    //------------ BURN TOKENS --------------- Disponível no Sintrop Pay
     async function burnTokens() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2764,9 +2764,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             }
         }
     }
-    //------------ BURN TOKENS ---------------
+    //------------ BURN TOKENS --------------- Disponível no Sintrop Pay
 
-    //------------ Invalidate inspection ---------------
+    //------------ Invalidate inspection --------------- Disponível no Sintrop Pay
     async function invalidateInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2994,7 +2994,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             })
     }
 
-    //----------------Sacar tokens -------------------------
+    //----------------Sacar tokens ------------------------- Disponível no Sintrop Pay
     async function withdraw() {
         if (userData?.userType === 4) {
             setModalTransaction(true);
@@ -3096,7 +3096,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                 })
         }
 
-        if (userData?.userType === 2) {
+        if (userData?.userType === 2) { 
             setModalTransaction(true);
             setLoadingTransaction(true);
             WithdrawInspector(walletAddress)
@@ -3198,7 +3198,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         }
     }
 
-    //-------------- invite user -------------------
+    //-------------- invite user ------------------- Disponível no Sintrop Pay
     async function inviteUser() {
         setModalTransaction(true);
         setLoadingTransaction(true);
