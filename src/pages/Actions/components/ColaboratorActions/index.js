@@ -3,9 +3,6 @@ import { api } from "../../../../services/api";
 import { ActivityIndicator } from '../../../../components/ActivityIndicator';
 import { TaskItem } from "./taskItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
-import { SendReportDev } from '../../../checkout/SendReportDev';
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
-import { Invite } from "../../../../services/invitationService";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
@@ -49,57 +46,6 @@ export function ColaboratorActions() {
 
         setLoading(false);
     }
-
-
-    // function handleInvite() {
-    //     if (!wallet.trim()) {
-    //         toast.error('Digite uma wallet!');
-    //         return
-    //     }
-    //     if (window.ethereum) {
-    //         inviteUser();
-    //     } else {
-    //         toast.error('Você precisa estar em um navegador com provedor Ethereum!')
-    //     }
-    // }
-
-    // async function inviteUser() {
-    //     setModalTransaction(true);
-    //     setLoadingTransaction(true);
-    //     Invite(walletConnected, String(wallet).toLowerCase(), 4)
-    //         .then(async (res) => {
-    //             setLogTransaction({
-    //                 type: res.type,
-    //                 message: res.message,
-    //                 hash: res.hashTransaction
-    //             });
-
-    //             if (res.type === 'success') {
-    //                 await api.post('/publication/new', {
-    //                     userId: userData?.id,
-    //                     type: 'invite-wallet',
-    //                     origin: 'platform',
-    //                     additionalData: JSON.stringify({
-    //                         hash: res.hashTransaction,
-    //                         walletInvited: wallet,
-    //                         userType: 4,
-    //                         userData
-    //                     }),
-    //                 });
-    //             }
-    //             setLoadingTransaction(false);
-    //         })
-    //         .catch(err => {
-    //             setLoadingTransaction(false);
-    //             const message = String(err.message);
-    //             setLogTransaction({
-    //                 type: 'error',
-    //                 message: 'Something went wrong with the transaction, please try again!',
-    //                 hash: ''
-    //             })
-    //         })
-
-    // }
 
     return (
         <div className="flex flex-col lg:w-[1024px]">

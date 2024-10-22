@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
-import { api } from "../../services/api";
+import { Header } from "../../../components/Header";
+import { api } from "../../../services/api";
 import { useParams } from "react-router";
-import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../components/ActivityIndicator';
 import { UserRankingItem } from "./components/UserRankingItem";
-import { TopBar } from "../../components/TopBar";
+import { TopBar } from "../../../components/TopBar";
 
 export function Ranking() {
     const { userType } = useParams();
@@ -74,6 +74,7 @@ export function Ranking() {
                     {users.map(item => (
                         <UserRankingItem
                             data={item}
+                            key={item.id}
                         />
                     ))}
                 </div>

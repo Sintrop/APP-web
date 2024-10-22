@@ -20,7 +20,7 @@ import { UserDetails } from "../pages/UserDetails";
 import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
-import { Ranking } from "../pages/Ranking";
+import { Ranking } from "../pages/Community/Ranking/Ranking";
 import { Market } from "../pages/RegenerationCredit/Market";
 import { Pools } from "../pages/RegenerationCredit/Pools";
 import { Services } from "../pages/RegenerationCredit/Services";

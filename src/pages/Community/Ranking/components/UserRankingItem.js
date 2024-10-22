@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getImage } from '../../../services/getImage';
-import { api } from "../../../services/api";
+import { getImage } from '../../../../services/getImage';
+import { api } from "../../../../services/api";
 import { useNavigate } from "react-router";
 
 export function UserRankingItem({ data }) {
@@ -54,7 +54,7 @@ export function UserRankingItem({ data }) {
             <div className="h-20 w-20 rounded-full border border-white bg-gray-400">
                 {data?.validatorWallet ? (
                     <img
-                        src={require('../../../assets/icon-validator.png')}
+                        src={require('../../../../assets/icon-validator.png')}
                         className="h-20 w-20 rounded-full object-cover"
                     />
                 ) : (
@@ -68,7 +68,7 @@ export function UserRankingItem({ data }) {
                                     />
                                 ) : (
                                     <img
-                                        src={require('../../../assets/token.png')}
+                                        src={require('../../../../assets/token.png')}
                                         className="h-20 w-20 rounded-full object-cover"
                                     />
                                 )}

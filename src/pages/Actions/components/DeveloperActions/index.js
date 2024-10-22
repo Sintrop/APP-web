@@ -4,7 +4,7 @@ import { ActivityIndicator } from '../../../../components/ActivityIndicator';
 import { FeedbackItem } from "./FeedbackItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { SendReportDev } from '../../../checkout/SendReportDev';
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
 import { Invite } from "../../../../services/invitationService";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';

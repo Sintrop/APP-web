@@ -5,7 +5,7 @@ import { api } from "../../../services/api";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import Chart from "react-apexcharts";
-import { UserRankingItem } from "../../Ranking/components/UserRankingItem";
+import { UserRankingItem } from "../../Community/Ranking/components/UserRankingItem";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../components/LoadingTransaction";

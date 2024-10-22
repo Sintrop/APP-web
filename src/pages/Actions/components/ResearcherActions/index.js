@@ -15,7 +15,7 @@ import { FaCalculator, FaChevronRight, FaDatabase, FaFileAlt, FaUsers } from "re
 import { BsGraphUp } from 'react-icons/bs';
 import { VscSymbolMethod } from 'react-icons/vsc';
 import { useNavigate } from "react-router";
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
 import { Invite } from "../../../../services/invitationService";
 import { Flora } from "./components/Databases/Flora";
 import { BiFile } from "react-icons/bi";

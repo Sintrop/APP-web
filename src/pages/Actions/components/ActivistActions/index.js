@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
 
 export function ActivistActions({ }) {
     const { userData, walletConnected, connectionType } = useMainContext();
