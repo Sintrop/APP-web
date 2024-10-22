@@ -20,7 +20,7 @@ export function InviteWalletPubli({ data }) {
                     {additionalData?.userType === 7 && ` ${t('textApoiador')} `}
                     {additionalData?.userType === 8 && ` ${t('textValidador')} `}
                 </span>
-                {t('textComissao')}
+                {additionalData?.userType === 7 && t('textComissao')}
             </p>
         </div>
     )

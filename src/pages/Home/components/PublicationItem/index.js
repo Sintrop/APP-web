@@ -57,7 +57,7 @@ export function PublicationItem({ data }) {
     }, [walletConnected]);
 
     async function getImageProfile() {
-        const imageUrl = await getImage(userData?.imgProfileUrl);
+        const imageUrl = await getImage(data?.user?.imgProfileUrl);
         setImageProfile(imageUrl);
     }
 
