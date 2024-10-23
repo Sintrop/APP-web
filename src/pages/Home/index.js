@@ -18,7 +18,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
-import { ModalSignOut } from "../../components/ModalSignOut";
+import { ModalSignUp } from "../../components/ModalSignUp";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
@@ -324,7 +324,7 @@ export function Home() {
             )}
 
             {signOut && (
-                <ModalSignOut
+                <ModalSignUp
                     close={() => setSignOut(false)}
                     success={() => navigate('/profile')}
                 />

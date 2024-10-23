@@ -2,99 +2,39 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 import { api } from "../../services/api";
-import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
-import { UserRankingItem } from "./Ranking/components/UserRankingItem";
-import { Feedback } from "../../components/Feedback"; 
+import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
-import ReactMapGL, { Layer, Marker, Source } from '!react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Chat } from "../../components/Chat";
 import { useTranslation } from "react-i18next";
+import { getProportionallity } from "../../services/getProportionality";
 
 export function Community() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [markers, setMarkers] = useState([]);
-    const [userType, setUserType] = useState('1');
-    const [users, setUsers] = useState([]);
-    const [usersRanking, setUsersRanking] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [visibleBtns, setVisibleBtns] = useState(true);
-    const [mapCommunity, setMapCommunity] = useState({ latitude: -11.680854, longitude: -51.9245419 });
+    const [usersCount, setUsersCount] = useState({});
+    const [vacancies, setVacancies] = useState({});
 
     useEffect(() => {
-        getUsers();
+        getCountUsers();
+        getVacancies();
     }, []);
 
-    useEffect(() => {
-        const div = document.querySelector('#div-main-scroll')
-        div.addEventListener('scroll', (e) => {
-            if (e.srcElement.scrollTop > 30) {
-                setVisibleBtns(false);
-            } else {
-                setVisibleBtns(true);
-            }
-        })
-    }, []);
-
-    useEffect(() => {
-        getUsersRanking();
-    }, [userType]);
-
-    async function getUsers() {
-        let newArray = [];
-
-        const response = await api.get('/users');
-        const users = response.data.users;
-
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].userType === 1) {
-                if (users[i].geoLocation) {
-                    if (users[i].accountStatus === 'blockchain') {
-                        newArray.push(users[i])
-                    }
-                }
-            }
-        }
-
-        setMarkers(newArray);
+    async function getVacancies() {
+        const response = await getProportionallity();
+        setVacancies(response);
     }
 
-    async function getUsersRanking() {
-        setLoading(true);
-        setUsersRanking([])
-        if (userType === '1') {
-            const response = await api.get('/web3/producers');
-            setUsersRanking(response.data.producers);
-        }
-        if (userType === '2') {
-            const response = await api.get('/web3/inspectors');
-            setUsersRanking(response.data.inspectors);
-        }
-        if (userType === '3') {
-            const response = await api.get('/web3/researchers');
-            setUsersRanking(response.data.researchers);
-        }
-        if (userType === '4') {
-            const response = await api.get('/web3/developers');
-            setUsersRanking(response.data.developers);
-        }
-        if (userType === '6') {
-            const response = await api.get('/web3/activists');
-            setUsersRanking(response.data.activists);
-        }
-        if (userType === '7') {
-            const response = await api.get('/web3/investors');
-            setUsersRanking(response.data.investors);
-        }
-        if (userType === '8') {
-            const response = await api.get('/web3/validators');
-            setUsersRanking(response.data.validators);
-        }
-        setLoading(false);
+    async function getCountUsers() {
+        const response = await api.get('/users_count');
+        setUsersCount(response.data);
+    }
+
+    function navigateToRanking(userType) {
+        navigate(`/ranking/${userType}`)
     }
 
     return (
@@ -112,183 +52,241 @@ export function Community() {
             <TopBar />
             <Header routeActive='community' />
 
-            <div className="flex flex-col overflow-scroll" id="div-main-scroll">
-                <div className="flex flex-col items-center w-full pt-10 lg:pt-28" >
-                    <div className="flex w-full h-[440px] bg-espaco2 bg-center bg-cover bg-no-repeat">
-                        {mapCommunity && (
-                            <ReactMapGL
-                                style={{ width: '100%', height: '100%' }}
-                                mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
-                                mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESSTOKEN}
-                                latitude={mapCommunity?.latitude}
-                                longitude={mapCommunity?.longitude}
-                                onDrag={(e) => {
-                                    setMapCommunity({ latitude: e.viewState.latitude, longitude: e.viewState.longitude })
-                                }}
-                                minZoom={1}
-                                projection='globe'
-                                fog={{}}
-                            >
+            <div className="flex flex-col items-center overflow-scroll">
+                <div className="flex flex-col w-full max-w-[1024px] pt-10 lg:pt-32 pb-20" >
+                    <h3 className="font-bold text-white text-lg">{t('comunidade')}</h3>
 
-                                {userType === '1' && (
-                                    <>
-                                        {markers.length > 0 && (
-                                            <>
-                                                {markers.map(item => {
-                                                    const coord = JSON.parse(item?.geoLocation)
-                                                    if (coord?.latitude) {
-                                                        return (
-                                                            <Marker latitude={coord?.latitude} longitude={coord?.longitude} color="red" key={item.id} />
-                                                        )
-                                                    }
-                                                })}
-                                            </>
-                                        )}
-                                    </>
-                                )}
-
-                            </ReactMapGL>
-                        )}
-                    </div>
-
-                    <div className={`absolute flex flex-col w-[210px] gap-2 lg:top-36 top-28 duration-300 ${visibleBtns ? 'left-3' : 'left-[-250px]'}`}>
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('1')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-produtor.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('produtores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('2')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-inspetor.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('inspetores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('3')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-pesquisadores.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('pesquisadores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('4')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/centro-dev.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('desenvolvedores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('6')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-ativista.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('ativistas')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('8')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-validator.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('validadores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-
-                        <button
-                            className="w-full h-12 p-2 rounded-md bg-green-800 shadow-md flex items-center justify-between"
-                            onClick={() => setUserType('7')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={require('../../assets/icon-apoiador.png')}
-                                    className="w-8 h-8 object-contain"
-                                />
-
-                                <p className="font-bold text-white">{t('apoiadores')}</p>
-                            </div>
-
-                            <FaChevronRight size={20} color='white' />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="flex flex-col pb-20 lg:pb-5 px-3">
-                    <h1 className="font-bold text-white text-xl mt-3 text-center mb-1">
-                        {userType === '1' && t('produtores')}
-                        {userType === '2' && t('inspetores')}
-                        {userType === '3' && t('pesquisadores')}
-                        {userType === '4' && t('desenvolvedores')}
-                        {userType === '5' && t('colaboradores')}
-                        {userType === '6' && t('ativistas')}
-                        {userType === '7' && t('apoiadores')}
-                        {userType === '8' && t('validadores')}
-                    </h1>
-
-                    {loading && (
-                        <ActivityIndicator size={50} />
-                    )}
-
-                    <div className="flex gap-3 justify-center flex-wrap">
-                        {usersRanking.map(item => (
-                            <UserRankingItem
-                                key={item.id}
-                                data={item}
+                    <div className="flex gap-5 mt-10 w-full flex-wrap">
+                        <div className="flex items-center h-[150px] w-full lg:w-[49%] bg-green-secondary p-3 rounded-md justify-between px-8">
+                            <div
+                                className="w-24 h-24 bg-red-500"
                             />
-                        ))}
+
+                            <p className="font-bold text-white max-w-[120px] text-lg text-center">Total de cadastros na comunidade</p>
+
+                            <div className="w-24 h-20 rounded-md bg-container-primary flex items-center justify-center">
+                                <p className="font-bold text-green-primary text-5xl">{usersCount?.totalCount}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
+                            <div className="flex flex-col justify-between h-full">
+                                <div className="flex items-center gap-4">
+                                    <img
+                                        src={require('../../assets/icon-produtor.png')}
+                                        className="w-12 h-12 object-contain"
+                                    />
+                                    <p className="font-bold text-white text-lg">{t('produtores')}</p>
+                                </div>
+
+                                <button
+                                    className="px-10 h-10 rounded-md bg-blue-primary text-white"
+                                    onClick={() => navigateToRanking('1')}
+                                >
+                                    {t('verProdutores')}
+                                </button>
+                            </div>
+                            <div className="w-24 h-20 rounded-md bg-green-secondary flex items-center justify-center">
+                                <p className="font-bold text-green-primary text-5xl">{usersCount?.producersCount}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-2 mt-5 w-full flex-wrap">
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/icon-inspetor.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('inspetores')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.inspectorsCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">
+                                    {vacancies.amountVacancyInspector}
+                                </p>
+                            </div>
+
+                            <button
+                                className={`text-white w-[80%] h-10 bg-green-btn rounded-md mt-5 ${!vacancies.avaliableVacancyInspector && 'opacity-40'}`}
+                                disabled={!vacancies.avaliableVacancyInspector}
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('2')}
+                            >
+                                {t('verInspetores')}
+                            </button>
+                        </div>
+
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/icon-pesquisadores.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('pesquisadores')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.researchersCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">
+                                    {vacancies.amountVacancyResearcher}
+                                </p>
+                            </div>
+
+                            <button
+                                className={`text-white w-[80%] h-10 bg-green-btn rounded-md mt-5 ${!vacancies.avaliableVacancyResearcher && 'opacity-40'}`}
+                                disabled={!vacancies.avaliableVacancyResearcher}
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('3')}
+                            >
+                                {t('verPesquisadores')}
+                            </button>
+                        </div>
+
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/centro-dev.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('desenvolvedores')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.developersCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">
+                                    {vacancies.amountVacancyDeveloper}
+                                </p>
+                            </div>
+
+                            <button
+                                className={`text-white w-[80%] h-10 bg-green-btn rounded-md mt-5 ${!vacancies.avaliableVacancyDeveloper && 'opacity-40'}`}
+                                disabled={!vacancies.avaliableVacancyDeveloper}
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('4')}
+                            >
+                                {t('verDesenvolvedores')}
+                            </button>
+                        </div>
+
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/icon-contribuir.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('contribuidores')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.contributorsCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">
+                                    {vacancies.amountVacancyContributor}
+                                </p>
+                            </div>
+
+                            <button
+                                className={`text-white w-[80%] h-10 bg-green-btn rounded-md mt-5 ${!vacancies.avaliableVacancyContributor && 'opacity-40'}`}
+                                disabled={!vacancies.avaliableVacancyContributor}
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('5')}
+                            >
+                                {t('verContribuidores')}
+                            </button>
+                        </div>
+
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/icon-ativista.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('ativistas')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.activistsCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">
+                                    {vacancies.amountVacancyActivist}
+                                </p>
+                            </div>
+
+                            <button
+                                className={`text-white w-[80%] h-10 bg-green-btn rounded-md mt-5 ${!vacancies.avaliableVacancyActivist && 'opacity-40'}`}
+                                disabled={!vacancies.avaliableVacancyActivist}
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('6')}
+                            >
+                                {t('verAtivistas')}
+                            </button>
+                        </div>
+
+                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
+                            <img
+                                src={require('../../assets/icon-apoiador.png')}
+                                className="w-20 h-20 object-contain"
+                            />
+                            <p className="font-bold text-white text-lg uppercase">{t('apoiadores')}</p>
+
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
+                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
+                                <p className="font-bold text-green-primary">{usersCount?.supportersCount}</p>
+                            </div>
+                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
+                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
+                                <p className="font-bold text-green-primary">10</p>
+                            </div>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-green-btn rounded-md mt-5"
+                            >
+                                {t('candidatarse')}
+                            </button>
+
+                            <button
+                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
+                                onClick={() => navigateToRanking('7')}
+                            >
+                                {t('verApoiadores')}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

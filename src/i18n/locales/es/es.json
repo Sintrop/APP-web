@@ -423,6 +423,10 @@
        "localizacaoPlanta": "Localización da plantas",
        "eraAtual": "Era actual",
        "addItemCalcPubli": "Consumo añadido a la calculadora de impacto",
-       "vocePrecisaSincronizar": "Necesitas sincronizar tu billetera, esta acción no se puede realizar con una billetera y contraseña!"
+       "vocePrecisaSincronizar": "Necesitas sincronizar tu billetera, esta acción no se puede realizar con una billetera y contraseña!",
+       "escolhaTipoUsuario": "Ahora elige el tipo de usuario que deseas postular",
+       "paraOutrosUsuariosNossoApp": "Para postularse como otros usuarios, descargue nuestra aplicación móvil.",
+       "finalizarCadastro": "Enviar solicitud",
+       "cadidaturaSucesso": "Solicitud enviada exitosamente"
     }
 }

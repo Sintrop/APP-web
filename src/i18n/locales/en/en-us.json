@@ -449,8 +449,8 @@
     "verificandoWallet": "Checking wallet...",
     "walletDisponivel": "Wallet available",
     "walletJaCadastrada": "Wallet already registered in the system!",
-    "escolhaTipoUsuario": "Now choose the type of user you want to register",
-    "paraOutrosUsuariosNossoApp": "To register like other users, download our mobile app!",
+    "escolhaTipoUsuario": "Now choose the type of user you want to apply for",
+    "paraOutrosUsuariosNossoApp": "To apply like other users, download our mobile app!",
     "precisamosDeUmaFoto": "We need a photo of you, this will be your proof photo in the system",
     "tirarOutra": "Take another",
     "agoraSeusDados": "Now we need some data from you",
@@ -459,11 +459,12 @@
     "crieUmaSenha": "Create a password",
     "confirmeSenha": "Confirm password",
     "senhasNaoIguais": "Passwords are not the same",
-    "tudoOkFinalizarCadastro": "Alright, let's finish your registration",
-    "finalizarCadastro": "Finalize Registration",
+    "tudoOkFinalizarCadastro": "Alright, let's finish your application",
+    "finalizarCadastro": "Submit application",
     "anterior": "Previous",
     "proximo": "Next",
     "cadastroSucesso": "Registration completed successfully!",
-    "vocePrecisaSincronizar": "You need to synchronize your wallet, this action cannot be done with a wallet and password!"
+    "vocePrecisaSincronizar": "You need to synchronize your wallet, this action cannot be done with a wallet and password!",
+    "cadidaturaSucesso": "Application sent successfully"
   }
 }

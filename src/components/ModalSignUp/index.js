@@ -15,7 +15,7 @@ import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { save } from "../../config/infura";
 import { useTranslation } from "react-i18next";
 
-export function ModalSignOut({ close, success }) {
+export function ModalSignUp({ close, success }) {
     const {t} = useTranslation();
     const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
@@ -307,7 +307,7 @@ export function ModalSignOut({ close, success }) {
                 password,
             });
             //Cadastro realizado
-            toast.success('Cadastro realizado com sucesso!');
+            toast.success(t('cadidaturaSucesso'));
             getUserDataApi();
             setTimeout(() => close(), 1000);
             success();
@@ -330,7 +330,7 @@ export function ModalSignOut({ close, success }) {
                 <div className="flex items-center justify-between w-full">
                     <div className="w-[25px]" />
 
-                    <p className="font-semibold text-white">{t('cadastro')}</p>
+                    <p className="font-semibold text-white">{t('candidatura')}</p>
 
                     <button onClick={close}>
                         <MdClose size={25} color='white' />

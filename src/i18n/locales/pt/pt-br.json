@@ -446,8 +446,8 @@
        "verificandoWallet": "Verificando wallet...",
        "walletDisponivel": "Wallet disponível",
        "walletJaCadastrada": "Wallet já cadastrada no sistema!",
-       "escolhaTipoUsuario": "Agora escolha o tipo de usuário que deseja se cadastrar",
-       "paraOutrosUsuariosNossoApp": "Para se cadastrar como outros usuários, baixe nosso aplicativo móvel!",
+       "escolhaTipoUsuario": "Agora escolha o tipo de usuário que deseja se candidatar",
+       "paraOutrosUsuariosNossoApp": "Para se candidatar como outros usuários, baixe nosso aplicativo móvel!",
        "precisamosDeUmaFoto": "Precisamos de uma foto sua, essa será seua foto de prova no sistema",
        "tirarOutra": "Tirar outra",
        "agoraSeusDados": "Agora precisamos de alguns dados seus",
@@ -456,11 +456,12 @@
        "crieUmaSenha": "Crie uma senha",
        "confirmeSenha": "Confirme a senha",
        "senhasNaoIguais": "As senhas não estão iguais",
-       "tudoOkFinalizarCadastro": "Tudo certo, vamos finalizar seu cadastro",
-       "finalizarCadastro": "Finalizar Cadastro",
+       "tudoOkFinalizarCadastro": "Tudo certo, vamos finalizar sua candidatura",
+       "finalizarCadastro": "Enviar candidatura",
        "anterior": "Anterior",
        "proximo": "Próximo",
        "cadastroSucesso": "Cadastro realizado com sucesso!",
+       "cadidaturaSucesso": "Candidatura enviada com sucesso!",
        "vocePrecisaSincronizar": "Você precisa sincronizar sua wallet, essa ação não pode ser feita com wallet e senha!"
     }
 }

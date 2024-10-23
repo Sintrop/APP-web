@@ -19,7 +19,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { Feedback } from "../../components/Feedback";
 import { ProducerGraphics } from "../../components/ProducerGraphics";
-import { ModalSignOut } from "../../components/ModalSignOut";
+import { ModalSignUp } from "../../components/ModalSignUp";
 import { api } from "../../services/api";
 import { getProportionallity } from "../../services/getProportionality";
 import { addResearcher } from "../../services/researchersService";
