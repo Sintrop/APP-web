@@ -1,5 +1,5 @@
-import { UserContract } from "./web3/Contracts";
-import { userContractAddress } from "./web3/Contracts";
+import { UserContract } from "./Contracts";
+import { userContractAddress } from "./Contracts";
 
 export const AddDelation = async (informed, reported, title, testemony, proofPhoto) => {
     let type = '';

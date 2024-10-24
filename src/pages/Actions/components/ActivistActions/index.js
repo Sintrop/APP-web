@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { api } from "../../../../services/api";
 import { UserInvite } from "./UserInvite";
-import { Invite } from '../../../../services/invitationService';
+import { Invite } from '../../../../services/web3/invitationService';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';

@@ -1,4 +1,4 @@
-import { SupporterContract } from "./web3/Contracts";
+import { SupporterContract } from "./Contracts";
 
 export const GetSupporters = async () => {
     const supporters = await SupporterContract.methods.getSupporters().call();

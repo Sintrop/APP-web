@@ -7,7 +7,7 @@ import { useMainContext } from "../../../../hooks/useMainContext";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { Invite } from "../../../../services/invitationService";
+import { Invite } from "../../../../services/web3/invitationService";
 
 export function SupporterActions() {
     const { userData, connectionType, walletConnected } = useMainContext();

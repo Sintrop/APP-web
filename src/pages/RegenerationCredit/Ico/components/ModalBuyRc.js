@@ -5,7 +5,7 @@ import { useMainContext } from "../../../../hooks/useMainContext";
 import { api } from "../../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { BuyRCT } from "../../../../services/sacTokenService";
+import { BuyRCT } from "../../../../services/web3/rcTokenService";
 import { ActivityIndicator } from "../../../../components/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 

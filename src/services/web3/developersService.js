@@ -1,4 +1,4 @@
-import { DeveloperContract } from "./web3/Contracts";
+import { DeveloperContract } from "./Contracts";
 
 export const GetDeveloper = async (walletAdd) => {
     const developers = await DeveloperContract.methods.getDeveloper(walletAdd).call()

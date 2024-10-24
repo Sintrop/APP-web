@@ -1,4 +1,4 @@
-import { InspectorContract } from "./web3/Contracts";
+import { InspectorContract } from "./Contracts";
 
 export const addInspector = async (wallet, name, proofPhoto) => {
     let type = '';

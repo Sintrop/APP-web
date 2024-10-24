@@ -1,4 +1,4 @@
-import { InvitationContract } from "./web3/Contracts";
+import { InvitationContract } from "./Contracts";
 
 export const Invite = async (walletAddress, walletInvite, userType) => {
     let type = '';

@@ -3,8 +3,6 @@ import Web3 from 'web3';
 import { CheckUser } from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
-import { GetBalanceDeveloper } from '../services/developersPoolService';
-import { GetBalanceProducer } from '../services/producerPoolService';
 import CryptoJS from "crypto-js";
 import { api } from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
@@ -28,7 +26,6 @@ export default function MainProvider({ children }) {
     const [modalChooseLang, setModalChooseLang] = useState(false);
     const [modalTutorial, setModalTutorial] = useState(false);
     const [modalFeedback, setModalFeedback] = useState(false);
-    const [balanceUser, setBalanceUser] = useState(0);
     const [userData, setUserData] = useState(null);
     const [era, setEra] = useState(1);
     const [notifications, setNotifications] = useState([]);
@@ -178,19 +175,6 @@ export default function MainProvider({ children }) {
         localStorage.setItem('user_connected', JSON.stringify(data));
     }
 
-    async function getBalanceUser(typeUser, wallet) {
-        if (typeUser === '1') {
-            const balanceUser = await GetBalanceProducer(wallet)
-            console.log(balanceUser)
-            setBalanceUser(Number(balanceUser))
-        }
-
-        if (typeUser === '4') {
-            const balanceUser = await GetBalanceDeveloper(wallet)
-            setBalanceUser(Number(balanceUser))
-        }
-    }
-
     function chooseModalRegister() {
         setModalRegister(!modalRegister);
     }
@@ -207,7 +191,6 @@ export default function MainProvider({ children }) {
         const response = await CheckUser(String(wallet));
         setUser(response);
         setWalletConnected(wallet);
-        getBalanceUser(response, wallet);
         if (response !== '0') {
             getUserDataApi(wallet)
         }
@@ -358,7 +341,6 @@ export default function MainProvider({ children }) {
                 setWalletSelected,
                 modalTutorial,
                 chooseModalTutorial,
-                balanceUser,
                 userData,
                 getUserDataApi,
                 modalFeedback,

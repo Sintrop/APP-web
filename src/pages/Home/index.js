@@ -100,7 +100,7 @@ export function Home() {
                                 showLogout={() => setModalLogout(true)}
                             />
 
-                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-[200px]">
+                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
                                 <button
                                     className="flex flex-col items-center w-16"
                                     onClick={() => navigate('/impact-calculator')}

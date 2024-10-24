@@ -20,7 +20,7 @@ import { ModalPublishResearche } from './ModalPublishResearche';
 import { TransactionItem } from './TransactionItem';
 
 //Services Web3
-import { GetTokensBalance } from '../../services/sacTokenService';
+import { GetTokensBalance } from '../../services/web3/rcTokenService';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 

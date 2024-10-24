@@ -1,5 +1,5 @@
 import { api } from "./api";
-import { GetCurrentContractEra, GetCurrentEpoch, NextEraIn } from "./producerPoolService";
+import { GetCurrentContractEra, GetCurrentEpoch, NextEraIn } from "./web3/producerPoolService";
 
 export async function getEraInfo(){
     const hasProvider = window.ethereum ? true : false;

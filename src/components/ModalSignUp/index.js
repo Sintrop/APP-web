@@ -3,7 +3,7 @@ import { MdClose } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../LoadingTransaction";
-import { addSupporter } from "../../services/supporterService";
+import { addSupporter } from "../../services/web3/supporterService";
 import { api } from "../../services/api";
 import { ModalTransactionCreated } from "../ModalTransactionCreated";
 import { ActivityIndicator } from "../ActivityIndicator";

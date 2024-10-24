@@ -1,5 +1,5 @@
-import { SintropContract } from "./web3/Contracts";
-import { sintropContractAddress } from "./web3/Contracts";
+import { SintropContract } from "./Contracts";
+import { sintropContractAddress } from "./Contracts";
 
 export const InvalidateInspection = async (walletAddress, inspectionID, justification) => {
     let type = '';

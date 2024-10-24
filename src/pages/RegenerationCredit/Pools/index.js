@@ -11,10 +11,10 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../components/LoadingTransaction";
 import { ToastContainer, toast } from "react-toastify";
 
-import { WithdrawTokens as WithdrawDeveloper } from "../../../services/developersService";
-import { WithdrawTokens as WithdrawResearcher } from "../../../services/researchersService";
+import { WithdrawTokens as WithdrawDeveloper } from "../../../services/web3/developersService";
+import { WithdrawTokens as WithdrawResearcher } from "../../../services/web3/researchersService";
 import { WithdrawTokens as WithdrawProducer } from "../../../services/web3/producerService";
-import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
+import { WithdrawTokens as WithdrawInspector } from "../../../services/web3/inspectorService";
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";
 import { useTranslation } from "react-i18next";

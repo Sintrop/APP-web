@@ -1,5 +1,5 @@
-import { ResearcherContract } from "./web3/Contracts";
-import { researcherContractAddress } from "./web3/Contracts"; 
+import { ResearcherContract } from "./Contracts";
+import { researcherContractAddress } from "./Contracts"; 
 
 export const GetResearcher = async (walletAdd) => {
     const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()

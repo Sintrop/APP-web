@@ -1,5 +1,5 @@
-import { ProducerPoolContract } from "./web3/Contracts";
-import { producerPoolContractAddress } from "./web3/Contracts";
+import { ProducerPoolContract } from "./Contracts";
+import { producerPoolContractAddress } from "./Contracts";
 
 export const GetTokensPerEra = async () => {
     let tokens = 0;

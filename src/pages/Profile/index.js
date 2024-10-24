@@ -19,8 +19,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Feedback } from "../../components/Feedback";
 import { ProducerGraphics } from "../../components/ProducerGraphics";
 import { api } from "../../services/api";
-import { addResearcher } from "../../services/researchersService";
-import { addInspector } from "../../services/registerService";
+import { addResearcher } from "../../services/web3/researchersService";
+import { addInspector } from "../../services/web3/inspectorService";
 import { addActivist } from "../../services/web3/activistService";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { toast, ToastContainer } from "react-toastify";
@@ -93,7 +93,7 @@ export function Profile() {
         if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInspector(walletConnected, userData?.name, userData?.imgProfileUrl, 'geolocation')
+            addInspector(walletConnected, userData?.name, userData?.imgProfileUrl)
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,

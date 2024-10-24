@@ -1,6 +1,6 @@
-import { RcTokenContract } from "./web3/Contracts";
-import { RcTokenContractAddress } from "./web3/Contracts";
-import { web3 } from "./web3/Contracts";
+import { RcTokenContract } from "./Contracts";
+import { RcTokenContractAddress } from "./Contracts";
+import { web3 } from "./Contracts";
 
 export const GetCertificateTokens = async (wallet) => {
     let tokens = 0

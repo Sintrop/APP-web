@@ -4,7 +4,7 @@ import Loading from '../../components/Loading';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { api } from '../../services/api';
-import { AddContribution } from '../../services/developersService';
+import { AddContribution } from '../../services/web3/developersService';
 import { useMainContext } from '../../hooks/useMainContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import Loading from '../../components/Loading';
 import {LoadingTransaction} from '../../components/LoadingTransaction';
-import {PublishResearch} from '../../services/researchersService';
+import {PublishResearch} from '../../services/web3/researchersService';
 import {save} from '../../config/infura';
 import { useTranslation } from 'react-i18next';
 import {MdOutlineFileDownload} from 'react-icons/md';

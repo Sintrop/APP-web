@@ -1,7 +1,7 @@
-import { DevelopersPoolContract } from "./web3/Contracts";
-import { DeveloperContract } from "./web3/Contracts";
-import { developerContractAddress } from "./web3/Contracts";
-import { developersPoolContractAddress } from "./web3/Contracts";
+import { DevelopersPoolContract } from "./Contracts";
+import { DeveloperContract } from "./Contracts";
+import { developerContractAddress } from "./Contracts";
+import { developersPoolContractAddress } from "./Contracts";
 
 export const GetBalancePool = async () => {
     let tokens = 0;

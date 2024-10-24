@@ -123,7 +123,7 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                                 <>
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
-                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'pending'}/>
+                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'}/>
                                     <CheckItem title='efetivarCadastro' type='efetive-register'/>
                                 </>
                             )}
