@@ -1,4 +1,4 @@
-import { ValidatorContract } from "./web3/Contracts";
+import { ValidatorContract } from "./Contracts";
 
 export const GetValidator = async(walletAdd) => {
     const validator = await ValidatorContract.methods.getValidator(walletAdd).call()

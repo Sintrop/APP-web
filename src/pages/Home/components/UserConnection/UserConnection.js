@@ -7,12 +7,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
 import { api } from "../../../../services/api";
+import { ModalLogout } from "../ModalLogout";
 
-export function UserConnection({ handleShowSignUp }) {
+export function UserConnection({ handleShowSignUp, showLogout }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userData, imageProfile, blockchainData, walletConnected } = useMainContext();
-    const [modalLogout, setModalLogout] = useState(false);
     const [modalConnect, setModalConnect] = useState(false);
     const [accountStatus, setAccountStatus] = useState('pending');
     const [inviteData, setInviteData] = useState({});
@@ -43,7 +43,7 @@ export function UserConnection({ handleShowSignUp }) {
     }
 
     return (
-        <div className="hidden lg:flex flex-col items-center w-[200px] p-2 bg-[#03364B] rounded-md relative">
+        <div className="hidden lg:flex flex-col items-center w-full p-2 bg-[#03364B] rounded-md relative">
             {walletConnected === '' ? (
                 <>
                     <img
@@ -55,7 +55,7 @@ export function UserConnection({ handleShowSignUp }) {
 
                     <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
                         <Dialog.Trigger
-                            className="w-full p-2 bg-blue-500 rounded-md text-white font-bold mt-10"
+                            className="w-full p-2 bg-blue-500 rounded-md text-white font-bold mt-10 max-w-[300px]"
                         >
                             {t('conectarWallet')}
                         </Dialog.Trigger>
@@ -91,7 +91,6 @@ export function UserConnection({ handleShowSignUp }) {
                             <CheckItem
                                 title='candidaturaEnviada'
                                 type='application'
-                                check={userData?.id !== 'anonimous'}
                                 handleShowSignUp={handleShowSignUp}
                             />
                             <CheckItem title='conviteRecebido' />
@@ -124,8 +123,8 @@ export function UserConnection({ handleShowSignUp }) {
                                 <>
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
-                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus !== 'pending'}/>
-                                    <CheckItem title='efetivarCadastro' />
+                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'pending'}/>
+                                    <CheckItem title='efetivarCadastro' type='efetive-register'/>
                                 </>
                             )}
                         </div>
@@ -134,7 +133,7 @@ export function UserConnection({ handleShowSignUp }) {
                     <button
                         className="absolute top-2 right-2"
                         title="Desconectar"
-                        onClick={() => setModalLogout(true)}
+                        onClick={showLogout}
                     >
                         <MdLogout color='white' size={18} />
                     </button>

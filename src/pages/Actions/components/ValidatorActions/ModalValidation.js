@@ -7,7 +7,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { api } from "../../../../services/api";
 import { InvalidateInspection } from "../../../../services/sintropService";
-import { addValidation } from "../../../../services/validatorService";
+import { addValidation } from "../../../../services/web3/validatorService";
 
 export function ModalValidation({ close, data }) {
     const {walletConnected, userData, connectionType} = useMainContext();

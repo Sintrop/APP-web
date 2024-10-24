@@ -20,15 +20,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { BuyRCT, BurnTokens } from '../../services/sacTokenService';
 import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/supporterService';
 import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
-import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
+import { GetProducer, WithdrawTokens as WithdrawProducer, addProducer } from '../../services/web3/producerService';
 import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
 import { WithdrawTokens as WithdrawInspector } from '../../services/inspectorService';
 import { GetInspection, GetIsa, InvalidateInspection, AcceptInspection, RealizeInspection, RequestInspection } from '../../services/sintropService';
-import { addActivist } from '../../services/activistService';
-import { addValidation } from '../../services/validatorService';
+import { addActivist } from '../../services/web3/activistService';
 import { Invite } from '../../services/invitationService';
-import { addValidator } from '../../services/validatorService';
-import { addProducer } from '../../services/producerService';
+import { addValidator,addValidation } from '../../services/web3/validatorService';
 import { addInspector } from '../../services/inspectorService';
 import { addDeveloper } from '../../services/developersService';
 

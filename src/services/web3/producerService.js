@@ -1,5 +1,5 @@
-import { ProducerContract } from "./web3/Contracts";
-import { producerContractAddress } from "./web3/Contracts";
+import { ProducerContract } from "./Contracts";
+import { producerContractAddress } from "./Contracts";
 
 export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaProperty) => {
     let type = '';

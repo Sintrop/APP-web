@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { WithdrawTokens as WithdrawDeveloper } from "../../../services/developersService";
 import { WithdrawTokens as WithdrawResearcher } from "../../../services/researchersService";
-import { WithdrawTokens as WithdrawProducer } from "../../../services/producerService";
+import { WithdrawTokens as WithdrawProducer } from "../../../services/web3/producerService";
 import { WithdrawTokens as WithdrawInspector } from "../../../services/inspectorService";
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";

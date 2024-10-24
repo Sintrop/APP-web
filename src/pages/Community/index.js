@@ -11,12 +11,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Chat } from "../../components/Chat";
 import { useTranslation } from "react-i18next";
 import { getProportionallity } from "../../services/getProportionality";
+import { ModalSignUp } from "../../components/ModalSignUp";
 
 export function Community() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [usersCount, setUsersCount] = useState({});
     const [vacancies, setVacancies] = useState({});
+    const [showSignUp, setShowSignUp] = useState(false);
 
     useEffect(() => {
         getCountUsers();
@@ -70,6 +72,10 @@ export function Community() {
                         </div>
 
                         <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
+                            <p className="text-white">Descrição aqui</p>
+                        </div>
+
+                        <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
                             <div className="flex flex-col justify-between h-full">
                                 <div className="flex items-center gap-4">
                                     <img
@@ -88,6 +94,28 @@ export function Community() {
                             </div>
                             <div className="w-24 h-20 rounded-md bg-green-secondary flex items-center justify-center">
                                 <p className="font-bold text-green-primary text-5xl">{usersCount?.producersCount}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
+                            <div className="flex flex-col justify-between h-full">
+                                <div className="flex items-center gap-4">
+                                    <img
+                                        src={require('../../assets/icon-apoiador.png')}
+                                        className="w-12 h-12 object-contain"
+                                    />
+                                    <p className="font-bold text-white text-lg">{t('apoiadores')}</p>
+                                </div>
+
+                                <button
+                                    className="px-10 h-10 rounded-md bg-blue-primary text-white"
+                                    onClick={() => navigateToRanking('7')}
+                                >
+                                    {t('verApoiadores')}
+                                </button>
+                            </div>
+                            <div className="w-24 h-20 rounded-md bg-green-secondary flex items-center justify-center">
+                                <p className="font-bold text-green-primary text-5xl">{usersCount?.supportersCount}</p>
                             </div>
                         </div>
                     </div>
@@ -257,40 +285,16 @@ export function Community() {
                                 {t('verAtivistas')}
                             </button>
                         </div>
-
-                        <div className="w-full lg:w-[250px] p-3 py-7 rounded-md bg-container-primary flex flex-col items-center gap-3">
-                            <img
-                                src={require('../../assets/icon-apoiador.png')}
-                                className="w-20 h-20 object-contain"
-                            />
-                            <p className="font-bold text-white text-lg uppercase">{t('apoiadores')}</p>
-
-                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
-                                <p className="font-semibold text-white">{t('textCadastrados')}</p>
-                                <p className="font-bold text-green-primary">{usersCount?.supportersCount}</p>
-                            </div>
-                            <div className="flex items-center justify-between w-full p-2 bg-green-secondary rounded-md">
-                                <p className="font-semibold text-white">{t('textVagasDisponiveis')}</p>
-                                <p className="font-bold text-green-primary">10</p>
-                            </div>
-
-                            <button
-                                className="text-white w-[80%] h-10 bg-green-btn rounded-md mt-5"
-                            >
-                                {t('candidatarse')}
-                            </button>
-
-                            <button
-                                className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
-                                onClick={() => navigateToRanking('7')}
-                            >
-                                {t('verApoiadores')}
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
 
+            {showSignUp && (
+                <ModalSignUp
+                    close={() => setShowSignUp(false)}
+                    success={() => {}}
+                />
+            )}
             <div className="hidden lg:flex">
                 <Feedback />
                 <Chat />

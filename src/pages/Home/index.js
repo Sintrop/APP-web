@@ -3,12 +3,9 @@ import { Header } from "../../components/Header";
 import { api } from "../../services/api";
 import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';
-import * as Dialog from '@radix-ui/react-dialog';
-import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
-import { MdLogout, MdOutlineFeedback } from "react-icons/md";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { Chat } from "../../components/Chat";
@@ -26,7 +23,7 @@ import { UserConnection } from "./components/UserConnection/UserConnection.js";
 export function Home() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { walletConnected, userData, imageProfile, blockchainData } = useMainContext();
+    const { userData, getUserDataApi } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [publications, setPublications] = useState([]);
     const [page, setPage] = useState(0);
@@ -97,9 +94,10 @@ export function Home() {
                     </div>
                 ) : (
                     <div className="flex gap-3 mt-3">
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 w-[250px]">
                             <UserConnection 
                                 handleShowSignUp={() => setSignUp(true)}
+                                showLogout={() => setModalLogout(true)}
                             />
 
                             <div className="flex flex-wrap justify-center gap-5 mt-3 w-[200px]">
@@ -225,7 +223,10 @@ export function Home() {
             {signUp && (
                 <ModalSignUp
                     close={() => setSignUp(false)}
-                    success={() => navigate('/profile')}
+                    success={() => {
+                        getUserDataApi(userData.wallet);
+                        setSignUp(false)
+                    }}
                 />
             )}
             <ToastContainer />
