@@ -544,11 +544,11 @@ export function ModalSignUp({ close, success }) {
                             <p className="font-semibold text-white text-center">{t('tudoOkFinalizarCadastro')}</p>
 
                             <button
-                                className='px-2 py-1 rounded-md font-semibold text-white bg-blue-500 mt-5'
+                                className='px-2 h-10 rounded-md font-semibold text-white bg-blue-500 mt-5'
                                 onClick={handleRegister}
                             >
                                 {loading ? (
-                                    <ActivityIndicator size={20} />
+                                    <ActivityIndicator size={25} />
                                 ) : t('finalizarCadastro')}
                             </button>
                         </>
