@@ -89,203 +89,6 @@ export function Profile() {
         setProofPhoto(response);
     }
 
-    async function registerBlockchain() {
-        if (userData.userType === 2) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            addInspector(walletConnected, userData?.name, userData?.imgProfileUrl)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    })
-                    try {
-                        setLoading(true);
-                        await api.put('/user/account-status', { userWallet: walletConnected, status: 'blockchain' });
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'new-user',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                hash: res?.hashTransaction
-                            }),
-                        });
-                    } catch (err) {
-                        console.log(err);
-                    } finally {
-                        setLoading(false)
-                        setLoadingTransaction(false);
-                    }
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Not allowed user")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Not allowed user',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("This activist already exist")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'This activist already exist',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("User already exists")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'User already exists',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                });
-        }
-
-        if (userData.userType === 3) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            addResearcher(walletConnected, userData?.name, userData.imgProfileUrl)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    })
-                    try {
-                        setLoading(true);
-                        await api.put('/user/account-status', { userWallet: walletConnected, status: 'blockchain' });
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'new-user',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                hash: res?.hashTransaction
-                            }),
-                        });
-                    } catch (err) {
-                        console.log(err);
-                    } finally {
-                        setLoading(false)
-                        setLoadingTransaction(false);
-                    }
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Not allowed user")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Not allowed user',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("This activist already exist")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'This activist already exist',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("User already exists")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'User already exists',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                });
-        }
-
-        if (userData.userType === 6) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            addActivist(walletConnected, userData?.name, userData?.imgProfileUrl)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    })
-                    try {
-                        setLoading(true);
-                        await api.put('/user/account-status', { userWallet: walletConnected, status: 'blockchain' });
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'new-user',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                hash: res?.hashTransaction
-                            }),
-                        });
-                    } catch (err) {
-                        console.log(err);
-                    } finally {
-                        setLoading(false)
-                        setLoadingTransaction(false);
-                    }
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Not allowed user")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Not allowed user',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("This supporter already exist")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'This supporter already exist',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    if (message.includes("User already exists")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'User already exists',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                });
-        }
-    }
-
     async function getInvoices(userId) {
         const atualYear = new Date().getFullYear();
         const response = await api.get(`/invoices/${userId}/${atualYear}`);
@@ -693,13 +496,15 @@ export function Profile() {
                                     )}
                                 </div>
                             ) : (
-                                <div className="mt-3 flex flex-col w-full">
-                                    <UserConnection
-                                        handleShowSignUp={() => setModalSignUp(true)}
-                                        showLogout={() => setModalLogout(true)}
-                                    />
+                                <div className="mt-3 flex flex-wrap gap-3 w-full">
+                                    <div className="w-full lg:w-[49%]">
+                                        <UserConnection
+                                            handleShowSignUp={() => setModalSignUp(true)}
+                                            showLogout={() => setModalLogout(true)}
+                                        />
+                                    </div>
 
-                                    <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full mt-5">
+                                    <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full lg:w-[49%]">
                                         <div className="flex items-center gap-2">
                                             <MdHelpOutline color='white' size={25} />
                                             <p className="font-semibold text-white">{t('ajuda')}</p>
