@@ -8,18 +8,26 @@ import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
 import { api } from "../../../../services/api";
 import { ModalLogout } from "../ModalLogout";
+import { toast } from "react-toastify";
+import { LoadingTransaction } from "../../../../components/LoadingTransaction";
+import { executeRegisterUser } from "../../../../services/registerUser";
 
 export function UserConnection({ handleShowSignUp, showLogout }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { userData, imageProfile, blockchainData, walletConnected } = useMainContext();
+    const { userData, imageProfile, blockchainData, walletConnected, getUserDataApi } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
     const [accountStatus, setAccountStatus] = useState('pending');
     const [inviteData, setInviteData] = useState({});
+    const [loadingTransaction, setLoadingTransaction] = useState(false);
+    const [modalTransaction, setModalTransaction] = useState(false);
+    const [logTransaction, setLogTransaction] = useState({});
 
     useEffect(() => {
-        if(userData?.accountStatus !== 'blockchain'){
-            checkInvite();
+        if (userData?.accountStatus !== 'blockchain') {
+            if(userData?.wallet){
+                checkInvite();
+            }
         }
     }, [userData]);
 
@@ -40,6 +48,35 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                 })
             }
         }
+    }
+
+    async function handleEfetiveRegister() {
+        if(window.ethereum){
+            setModalTransaction(true);
+            setLoadingTransaction(true);
+    
+            const response = await executeRegisterUser(userData, walletConnected);
+            if(response.success){
+                setLogTransaction({
+                    type: 'success',
+                    message: response.message,
+                    hash: response.transactionHash,
+                });
+                setLoadingTransaction(false);
+                return;
+            }
+    
+            setLogTransaction({
+                type: 'error',
+                message: response.message,
+                hash: response.transactionHash,
+            });
+            setLoadingTransaction(false);
+            
+            return;
+        }
+
+        
     }
 
     return (
@@ -123,8 +160,8 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                                 <>
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
-                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'}/>
-                                    <CheckItem title='efetivarCadastro' type='efetive-register'/>
+                                    <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'} />
+                                    <CheckItem title='efetivarCadastro' type='efetive-register' handleEfetiveRegister={handleEfetiveRegister} />
                                 </>
                             )}
                         </div>
@@ -139,6 +176,20 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                     </button>
                 </>
             )}
+
+            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
+                if (!loadingTransaction) {
+                    setModalTransaction(open)
+                    if (logTransaction.success) {
+                        toast.success(t('cadastroSucesso'));
+                    }
+                }
+            }}>
+                <LoadingTransaction
+                    loading={loadingTransaction}
+                    logTransaction={logTransaction}
+                />
+            </Dialog.Root>
         </div>
     )
 }

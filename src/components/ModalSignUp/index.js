@@ -16,7 +16,7 @@ import { save } from "../../config/infura";
 import { useTranslation } from "react-i18next";
 
 export function ModalSignUp({ close, success }) {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
@@ -31,8 +31,6 @@ export function ModalSignUp({ close, success }) {
     const [passNotMatch, setPassNotMatch] = useState(false);
     const [createdTransaction, setCreatedTransaction] = useState(false);
     const [proofPhoto64, setProofPhoto64] = useState(null);
-    const [checkingWallet, setCheckingWallet] = useState(false);
-    const [walletAvaliable, setWalletAvaliable] = useState(true);
 
     useEffect(() => {
         if (confirmPass.length > 0) {
@@ -52,50 +50,23 @@ export function ModalSignUp({ close, success }) {
         }
     }, [walletConnected]);
 
-    useEffect(() => {
-        if(wallet.length > 10){
-            checkWallet();
-        }
-    }, [wallet]);
-
-    async function checkWallet(){
-        setCheckingWallet(true);
-        try{
-            const response = await api.get(`/user/${wallet}`);
-            setWalletAvaliable(false);
-        }catch(err){
-            if(err.response.data.error === 'user not found'){
-                setWalletAvaliable(true);
-            }
-        }
-        setCheckingWallet(false);
-    }
-
     function nextStep() {
-        if(step === 1 && !walletAvaliable){
-            toast.error('Essa wallet não está disponível para cadastro!')
-            return;
-        }
-        if (step === 1 && !wallet.trim()) {
-            toast.error('Digite uma wallet!');
-            return;
-        }
-        if (step === 2 && userType === 0) {
+        if (step === 1 && userType === 0) {
             toast.error('Selecione um tipo de usuário!');
             return;
         }
 
-        if (step === 2 && userType === 7) {
-            setStep(4);
+        if (step === 1 && userType === 7) {
+            setStep(3);
             return;
         }
 
-        if (step === 3 && !proofPhoto64) {
+        if (step === 2 && !proofPhoto64) {
             toast.error('A foto é obrigatória!')
             return
         }
 
-        if (step === 4) {
+        if (step === 3) {
             if (!name.trim() || !password.trim() || !confirmPass.trim()) {
                 toast.error('Preencha todos os campos!');
                 return;
@@ -109,21 +80,21 @@ export function ModalSignUp({ close, success }) {
     }
 
     function previousStep() {
-        if (step === 4 && userType === 7) {
-            setStep(2);
+        if (step === 3 && userType === 7) {
+            setStep(1);
             return;
         }
         setStep(step - 1);
     }
 
     async function handleRegister() {
-        if(userType === 7){
+        if (userType === 7) {
             if (window.ethereum) {
                 registerSupporterBlockchain();
             } else {
                 registerSupporterOnCheckout();
             }
-        }else{
+        } else {
             registerOnApi();
         }
     }
@@ -241,57 +212,41 @@ export function ModalSignUp({ close, success }) {
         return
     }
 
-    async function handleSyncWallet() {
-        if (loading) {
-            return;
-        }
-
-        if (!window.ethereum) {
-            toast.error('Você não tem um provedor ethereum em seu navegador!');
-            return;
-        }
-        setLoading(true);
-
-        const response = await Sync();
-
-        setLoading(false);
-    }
-
-    async function savePhotoIpfs(){
+    async function savePhotoIpfs() {
         const res = await fetch(proofPhoto64);
         const blob = await res.blob();
 
         const hash = await save(blob);
-        
+
 
         const storageRef = ref(storage, `/images/${hash}.png`);
         const response = await uploadBytesResumable(storageRef, blob)
-        if(response.state === 'success'){
+        if (response.state === 'success') {
             const url = await getDownloadURL(storageRef);
             createImageDB(url, hash)
             return hash;
-        }else{
+        } else {
             return false;
         }
     }
 
-    function createImageDB(url, hash){
-        try{
+    function createImageDB(url, hash) {
+        try {
             api.post('/image', {
                 url,
                 hash
             })
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
 
-    async function registerOnApi(){
+    async function registerOnApi() {
         setLoading(true);
-        
+
         const hashProofPhoto = await savePhotoIpfs();
 
-        if(!hashProofPhoto){
+        if (!hashProofPhoto) {
             toast.error('Erro ao carregar imagem de prova, tente novamente!');
             setLoading(false);
             return;
@@ -326,7 +281,7 @@ export function ModalSignUp({ close, success }) {
     return (
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-black/60 fixed inset-0' onClick={close} />
-            <div className='absolute flex flex-col p-3 lg:w-[400px] h-[400px] justify-between bg-[#03364D] rounded-md m-auto inset-0 z-20'>
+            <div className='absolute flex flex-col p-3 lg:w-[450px] h-[500px] justify-between bg-[#03364D] rounded-md m-auto inset-0 z-20'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-[25px]" />
 
@@ -340,89 +295,18 @@ export function ModalSignUp({ close, success }) {
                 <div className="flex flex-col">
                     {step === 1 && (
                         <>
-                            {walletConnected === '' && (
-                                <>
-                                    <p className="font-semibold text-white text-center">{t('vamosLaPrimeiroCarteiraMetamask')}</p>
-                                    <a
-                                        target="_blank"
-                                        href="https://docs.sintrop.com/suporte/guia-de-utilizacao-do-metamask/tutorial-em-video-do-metamask"
-                                        className="text-center text-blue-500 underline"
-                                    >
-                                        {t('vejaAquiComoCriar')}
-                                    </a>
-                                </>
-                            )}
-
-                            {!window.ethereum && (
-                                <div className="flex flex-col w-full mt-3">
-                                    <label className="font-semibold text-sm text-blue-500">Wallet:</label>
-                                    <input
-                                        placeholder={t('digiteAqui')}
-                                        className="rounded-md p-2 bg-[#012939] text-white"
-                                        value={wallet}
-                                        onChange={(e) => setWallet(e.target.value)}
-                                    />
-                                </div>
-                            )}
-
-
-                            {window.ethereum && (
-                                <>
-                                    <p className="font-semibold text-white text-center mt-5">{walletConnected}</p>
-
-                                    {walletConnected === '' ? (
-                                        <button
-                                            className="font-bold text-white px-5 py-2 rounded-md bg-green-500 mt-1"
-                                            onClick={handleSyncWallet}
-                                        >
-                                            {loading ? (
-                                                <ActivityIndicator
-                                                    size={25}
-                                                />
-                                            ) : t('sincronizeSuaWallet')}
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="font-bold text-white px-5 py-2 underline mt-1"
-                                            onClick={logout}
-                                        >
-                                            {t('desconectarWallet')}
-                                        </button>
-                                    )}
-                                </>
-                            )}
-
-                            {checkingWallet ? (
-                                <div className="flex items-center justify-center gap-2 mt-3">
-                                    
-                                    <p className="font-bold text-white">{t('verificandoWallet')}</p>
-                                </div>
-                            ) : (
-                                <>
-                                    {wallet !== '' && (
-                                        <div className="flex flex-col mt-3 items-center">
-                                            <p className={`font-semibold ${walletAvaliable ? 'text-green-600' : 'text-yellow-500'}`}>{walletAvaliable ? t('walletDisponivel') : t('walletJaCadastrada')}</p>
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    )}
-
-                    {step === 2 && (
-                        <>
                             <p className="font-semibold text-white text-center">{t('escolhaTipoUsuario')}</p>
 
                             <div className="flex flex-wrap justify-center my-3 gap-5">
                                 <button
-                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 7 ? 'border-white' : 'border-transparent'}`}
-                                    onClick={() => setUserType(7)}
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 2 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(2)}
                                 >
                                     <img
-                                        src={require('../../assets/icon-apoiador.png')}
+                                        src={require('../../assets/icon-inspetor.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    {t('textApoiador')}
+                                    {t('textInspetor')}
                                 </button>
 
                                 <button
@@ -437,14 +321,14 @@ export function ModalSignUp({ close, success }) {
                                 </button>
 
                                 <button
-                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 2 ? 'border-white' : 'border-transparent'}`}
-                                    onClick={() => setUserType(2)}
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 4 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(4)}
                                 >
                                     <img
-                                        src={require('../../assets/icon-inspetor.png')}
+                                        src={require('../../assets/centro-dev.png')}
                                         className="w-6 h-6 object-contain"
                                     />
-                                    {t('textInspetor')}
+                                    {t('textDesenvolvedor')}
                                 </button>
 
                                 <button
@@ -457,6 +341,17 @@ export function ModalSignUp({ close, success }) {
                                     />
                                     {t('textAtivista')}
                                 </button>
+
+                                <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 7 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(7)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-apoiador.png')}
+                                        className="w-6 h-6 object-contain"
+                                    />
+                                    {t('textApoiador')}
+                                </button>
                             </div>
 
                             <Info
@@ -465,7 +360,7 @@ export function ModalSignUp({ close, success }) {
                         </>
                     )}
 
-                    {step === 3 && (
+                    {step === 2 && (
                         <>
                             <p className="font-semibold text-white text-center">{t('precisamosDeUmaFoto')}</p>
 
@@ -492,7 +387,7 @@ export function ModalSignUp({ close, success }) {
                         </>
                     )}
 
-                    {step === 4 && (
+                    {step === 3 && (
                         <>
                             <p className="font-semibold text-white text-center">{t('agoraSeusDados')}</p>
                             <p className="text-sm text-white text-center">{t('preenchaCorretamente')}</p>
@@ -539,9 +434,15 @@ export function ModalSignUp({ close, success }) {
                         </>
                     )}
 
-                    {step === 5 && (
+                    {step === 4 && (
                         <>
-                            <p className="font-semibold text-white text-center">{t('tudoOkFinalizarCadastro')}</p>
+                            <p className="font-semibold text-white text-center">
+                                {userType === 7 ? (
+                                    'O tipo de usuário Apoiador pode se cadastrar diretamente na blockchain, é só efetivar seu cadastro abaixo!'
+                                ) : (
+                                    t('tudoOkFinalizarCadastro')
+                                )}
+                            </p>
 
                             <button
                                 className='px-2 h-10 rounded-md font-semibold text-white bg-blue-500 mt-5'
@@ -549,7 +450,11 @@ export function ModalSignUp({ close, success }) {
                             >
                                 {loading ? (
                                     <ActivityIndicator size={25} />
-                                ) : t('finalizarCadastro')}
+                                ) : (
+                                    <>
+                                        {userType === 7 ? 'Efetivar cadastro' : t('finalizarCadastro')}
+                                    </>
+                                )}
                             </button>
                         </>
                     )}
@@ -565,7 +470,7 @@ export function ModalSignUp({ close, success }) {
                         </button>
                     )}
 
-                    {step < 5 && (
+                    {step < 4 && (
                         <button
                             onClick={nextStep}
                             className="text-white font-semibold px-5 py-1 rounded-md bg-blue-500"

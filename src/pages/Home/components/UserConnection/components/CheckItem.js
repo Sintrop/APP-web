@@ -5,7 +5,7 @@ import { useMainContext } from "../../../../../hooks/useMainContext";
 import { useNavigate } from "react-router";
 import { getProportionallity } from "../../../../../services/getProportionality";
 
-export function CheckItem({ check, title, type, handleShowSignUp }) {
+export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister }) {
     const { userData } = useMainContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -128,7 +128,7 @@ export function CheckItem({ check, title, type, handleShowSignUp }) {
                             </p>
 
                             <button
-                                className="w-full h-10 rounded-md mt-5 text-white font-bold text-xs bg-blue-primary max-w-[300px]"
+                                className="w-full h-10 rounded-md mt-5 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
                                 onClick={handleShowSignUp}
                             >
                                 Quero me candidatar
@@ -162,8 +162,8 @@ export function CheckItem({ check, title, type, handleShowSignUp }) {
                                 <>
                                     {avaliableVacancy ? (
                                         <button
-                                            className="w-full h-10 rounded-md mt-5 text-white font-bold text-xs bg-blue-primary max-w-[300px]"
-                                            onClick={handleShowSignUp}
+                                            className="w-full h-10 rounded-md mt-5 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
+                                            onClick={handleEfetiveRegister}
                                         >
                                             {t('efetivarCadastro')}
                                         </button>

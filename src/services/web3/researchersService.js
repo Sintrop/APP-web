@@ -1,5 +1,6 @@
 import { ResearcherContract } from "./Contracts";
-import { researcherContractAddress } from "./Contracts"; 
+import { researcherContractAddress } from "./Contracts";
+import { web3RequestWrite } from "./requestService"; 
 
 export const GetResearcher = async (walletAdd) => {
     const researchers = await ResearcherContract.methods.getResearcher(walletAdd).call()
@@ -46,35 +47,9 @@ export const GetResearches = async () => {
     return researches;
 } 
 
-export const addResearcher = async (wallet, name, proofPhoto) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await ResearcherContract.methods.addResearcher(name, proofPhoto)
-    .send({ from: wallet})
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Researcher registered!"  
-        }
-    })
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            type = 'error'
-            message = 'Not allowed user!'
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    });
-        
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+export async function addResearcher(walletConnected, name, proofPhoto){
+    const response = await web3RequestWrite(ResearcherContract, 'addResearcher', [name, proofPhoto], walletConnected);
+    return response;
 }
 
 export const WithdrawTokens = async (wallet) => {

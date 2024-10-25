@@ -1,4 +1,5 @@
 import { ActivistContract } from "./Contracts";
+import { web3RequestWrite } from "./requestService";
 
 export const GetActivist = async (wallet) => {
     const activist = await ActivistContract.methods.getActivist(wallet).call();
@@ -10,33 +11,35 @@ export const GetActivists = async () => {
     return activists;
 }
 
-export const addActivist = async (wallet, name, proofPhoto) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await ActivistContract.methods.addActivist(name, proofPhoto)
-    .send({ from: wallet })
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Activist registered!"
-        }
-    })
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            type = 'error'
-            message = 'Not allowed user!'
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    })
-        
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+export async function addActivist(walletConnected, name, proofPhoto){
+    const response = await web3RequestWrite(ActivistContract, 'addActivist', [name, proofPhoto], walletConnected);
+    return response;
 }
+
+// export const OldAddActivist = async (wallet, name, proofPhoto) => {
+//     let type = '';
+//     let message = '';
+//     let transactionHash = ''; 
+//     let success = false;
+//     await ActivistContract.methods.addActivist(name, proofPhoto)
+//     .send({ from: wallet })
+//     .on('transactionHash', hash => {
+//         if(hash){
+//             transactionHash = hash
+//             type = 'success'
+//             message = "Activist registered!"
+//             success = true;
+//         }
+//     })
+//     .on("error", (error, receipt) => {
+//         message = error?.message
+//         success = false;
+//     })
+        
+//     return {
+//         type, 
+//         message,
+//         transactionHash,
+//         success
+//     }
+// }
