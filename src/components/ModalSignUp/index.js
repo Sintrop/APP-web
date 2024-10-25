@@ -263,7 +263,7 @@ export function ModalSignUp({ close, success }) {
             });
             //Cadastro realizado
             toast.success(t('cadidaturaSucesso'));
-            getUserDataApi();
+            getUserDataApi(wallet);
             setTimeout(() => close(), 1000);
             success();
         } catch (err) {
