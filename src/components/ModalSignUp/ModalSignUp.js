@@ -332,6 +332,17 @@ export function ModalSignUp({ close, success }) {
                                 </button>
 
                                 <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 5 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(5)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-contribuir.png')}
+                                        className="w-6 h-6 object-contain"
+                                    />
+                                    {t('textContribuidor')}
+                                </button>
+
+                                <button
                                     className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 6 ? 'border-white' : 'border-transparent'}`}
                                     onClick={() => setUserType(6)}
                                 >

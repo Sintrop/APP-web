@@ -19,9 +19,6 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Feedback } from "../../components/Feedback";
 import { ProducerGraphics } from "../../components/ProducerGraphics";
 import { api } from "../../services/api";
-import { addResearcher } from "../../services/web3/researchersService";
-import { addInspector } from "../../services/web3/inspectorService";
-import { addActivist } from "../../services/web3/activistService";
 import { LoadingTransaction } from "../../components/LoadingTransaction";
 import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
@@ -31,7 +28,7 @@ import { ShortPubli } from "./components/ShortPubli/index.js";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
 import { UserConnection } from "../Home/components/UserConnection/UserConnection.js";
-import { ModalSignUp } from "../../components/ModalSignUp/index.js";
+import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
 
 export function Profile() {
     const { t } = useTranslation();

@@ -5,7 +5,7 @@ import { IoMdClose } from 'react-icons/io';
 import { FaWallet, FaKey, FaChevronLeft } from "react-icons/fa";
 import { ActivityIndicator } from '../ActivityIndicator';
 import { useMainContext } from '../../hooks/useMainContext';
-import { ModalSignUp } from '../ModalSignUp';
+import { ModalSignUp } from '../ModalSignUp/ModalSignUp';
 import { UserAccountItem } from './components/UserAccountItem';
 import { useTranslation } from 'react-i18next';
 

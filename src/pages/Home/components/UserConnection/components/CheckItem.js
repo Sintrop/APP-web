@@ -4,8 +4,9 @@ import { FaCheck, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useMainContext } from "../../../../../hooks/useMainContext";
 import { useNavigate } from "react-router";
 import { getProportionallity } from "../../../../../services/getProportionality";
+import { ActivityIndicator } from "../../../../../components/ActivityIndicator";
 
-export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister }) {
+export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister, loadingEfetive }) {
     const { userData } = useMainContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
         }
 
         if (type === 'efetive-register') {
-            if (userData?.accountStatus !== 'guess') {
+            if (userData?.accountStatus === 'guess') {
                 setShowHideBtn(true);
                 setOpen(true);
                 checkVancancies();
@@ -164,8 +165,13 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
                                         <button
                                             className="w-full h-10 rounded-md mt-5 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
                                             onClick={handleEfetiveRegister}
+                                            disabled={loadingEfetive}
                                         >
-                                            {t('efetivarCadastro')}
+                                            {loadingEfetive ? (
+                                                <ActivityIndicator size={25}/>
+                                            ) : (
+                                                t('efetivarCadastro')
+                                            )}
                                         </button>
                                     ) : (
                                         <p className="font-bold text-yellow-500 text-sm text-center my-5">

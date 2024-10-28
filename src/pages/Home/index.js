@@ -14,11 +14,12 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
-import { ModalSignUp } from "../../components/ModalSignUp";
+import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { UserConnection } from "./components/UserConnection/UserConnection.js";
+import { ModalTransactionCreated } from "../../components/ModalTransactionCreated/index.js";
 
 export function Home() {
     const { t } = useTranslation();
@@ -33,6 +34,7 @@ export function Home() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [signUp, setSignUp] = useState(false);
     const [news, setNews] = useState([]);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -95,9 +97,10 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3 w-[250px]">
-                            <UserConnection 
+                            <UserConnection
                                 handleShowSignUp={() => setSignUp(true)}
                                 showLogout={() => setModalLogout(true)}
+                                showTransactionCreated={() => setCreatedTransaction(true)}
                             />
 
                             <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
@@ -210,6 +213,14 @@ export function Home() {
             >
                 <MdOutlineFeedback color='white' size={20}/>
             </button> */}
+
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => {
+                        setCreatedTransaction(false);
+                    }}
+                />
+            )}
 
             {modalLogout && (
                 <ModalLogout

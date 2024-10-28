@@ -7,12 +7,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
 import { api } from "../../../../services/api";
-import { ModalLogout } from "../ModalLogout";
 import { toast } from "react-toastify";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { executeRegisterUser } from "../../../../services/registerUser";
 
-export function UserConnection({ handleShowSignUp, showLogout }) {
+export function UserConnection({ handleShowSignUp, showLogout, showTransactionCreated }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userData, imageProfile, blockchainData, walletConnected, getUserDataApi } = useMainContext();
@@ -22,10 +21,11 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
+    const [loadingEfetive, setLoadingEfetive] = useState(false);
 
     useEffect(() => {
         if (userData?.accountStatus !== 'blockchain') {
-            if(userData?.wallet){
+            if (userData?.wallet) {
                 checkInvite();
             }
         }
@@ -51,12 +51,13 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
     }
 
     async function handleEfetiveRegister() {
-        if(window.ethereum){
+        setLoadingEfetive(true);
+        if (window.ethereum) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-    
+
             const response = await executeRegisterUser(userData, walletConnected);
-            if(response.success){
+            if (response.success) {
                 setLogTransaction({
                     type: 'success',
                     message: response.message,
@@ -65,18 +66,31 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                 setLoadingTransaction(false);
                 return;
             }
-    
+
             setLogTransaction({
                 type: 'error',
                 message: response.message,
                 hash: response.transactionHash,
             });
             setLoadingTransaction(false);
-            
+
             return;
         }
 
-        
+        try {
+            await api.post('/transactions-open/create', {
+                wallet: String(walletConnected).toUpperCase(),
+                type: 'register'
+            });
+            showTransactionCreated();
+        } catch (err) {
+            if (err.response?.data?.message === 'open transaction of the same type') {
+                toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
+                return;
+            }
+        }
+
+        setLoadingEfetive(false);
     }
 
     return (
@@ -161,7 +175,12 @@ export function UserConnection({ handleShowSignUp, showLogout }) {
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
                                     <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'} />
-                                    <CheckItem title='efetivarCadastro' type='efetive-register' handleEfetiveRegister={handleEfetiveRegister} />
+                                    <CheckItem 
+                                        title='efetivarCadastro' 
+                                        type='efetive-register' 
+                                        handleEfetiveRegister={handleEfetiveRegister} 
+                                        loadingEfetive={loadingEfetive}
+                                    />
                                 </>
                             )}
                         </div>

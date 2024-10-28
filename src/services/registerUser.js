@@ -4,6 +4,7 @@ import { createPubliFeed } from "./publiFeed";
 import { addResearcher } from "./web3/researchersService";
 import { addDeveloper } from "./web3/developersService";
 import { addActivist } from "./web3/activistService";
+import { addContributor } from "./web3/contributorService";
 
 export async function executeRegisterUser(userData, walletConnected){
     if(userData?.userType === 2){
@@ -34,6 +35,16 @@ export async function executeRegisterUser(userData, walletConnected){
         }
 
         return responseDeveloper;
+    }
+
+    if(userData?.userType === 5){
+        const responseContributor = await addContributor(walletConnected, userData?.name, userData?.imgProfileUrl);
+        if(responseContributor.success){
+            await afterRegisterBlockchain(walletConnected, userData?.id, responseContributor.transactionHash);
+            return responseContributor;
+        }
+
+        return responseContributor;
     }
 
     if(userData?.userType === 6){
