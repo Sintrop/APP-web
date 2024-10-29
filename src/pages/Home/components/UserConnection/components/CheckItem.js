@@ -38,7 +38,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
         }
 
         if (type === 'efetive-register') {
-            if (userData?.accountStatus === 'guess') {
+            if (userData?.accountStatus === 'guest') {
                 setShowHideBtn(true);
                 setOpen(true);
                 checkVancancies();

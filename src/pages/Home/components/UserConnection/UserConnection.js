@@ -200,6 +200,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                 if (!loadingTransaction) {
                     setModalTransaction(open)
                     if (logTransaction.success) {
+                        getUserDataApi(walletConnected);
                         toast.success(t('cadastroSucesso'));
                     }
                 }
