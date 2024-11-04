@@ -427,6 +427,20 @@
        "escolhaTipoUsuario": "Ahora elige el tipo de usuario que deseas postular",
        "paraOutrosUsuariosNossoApp": "Para postularse como otros usuarios, descargue nuestra aplicación móvil.",
        "finalizarCadastro": "Enviar solicitud",
-       "cadidaturaSucesso": "Solicitud enviada exitosamente"
+       "cadidaturaSucesso": "Solicitud enviada exitosamente",
+       "descInfoComunidade": "La comunidad de Crédito de Regeneración está formada por estos 8 grupos. Para solicitar un usuario, conecte su billetera y complete los campos necesarios. El número de vacantes de cada tipo específico es proporcional al número de productores registrados, siguiendo la proporción.",
+       "textTotalCadastros": "Inscripciones totales en la comunidad",
+       "textVerProdutores": "Ver productores",
+       "textVerInspetores": "Ver inspectores",
+       "textVerPesquisadores": "Ver investigadores",
+       "textVerDesenvolvedores": "Ver desarrolladores",
+       "textVerContribuidores": "Ver contribuyentes",
+       "textVerAtivistas": "Ver activistas",
+       "textVerApoiadores": "Ver seguidores",
+       "textVerValidadores": "Ver validadores",
+       "textCadastrados": "Registrado",
+       "textVagasDisponiveis": "Vacantes disponibles",
+       "textConecteSuaWalletParaCandidatar": "Conecte su billetera para aplicar",
+       "textCandidatese": "Aplicar"
     }
 }

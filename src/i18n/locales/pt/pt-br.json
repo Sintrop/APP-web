@@ -462,6 +462,20 @@
        "proximo": "Próximo",
        "cadastroSucesso": "Cadastro realizado com sucesso!",
        "cadidaturaSucesso": "Candidatura enviada com sucesso!",
-       "vocePrecisaSincronizar": "Você precisa sincronizar sua wallet, essa ação não pode ser feita com wallet e senha!"
+       "vocePrecisaSincronizar": "Você precisa sincronizar sua wallet, essa ação não pode ser feita com wallet e senha!",
+       "descInfoComunidade": "A comunidade do Crédito de Regeneração é composta por esses 8 grupos. Para se candidatar a algum usuário, conecte sua carteira e preencha os campos necessários. A quantidade de vagas de cada tipo específico é proporcional a quantidade de produtores cadastrados, obedecendo a proporção.",
+       "textTotalCadastros": "Total de cadastros na comunidade",
+       "textVerProdutores": "Ver produtores",
+       "textVerInspetores": "Ver inspetores",
+       "textVerPesquisadores": "Ver pesquisadores",
+       "textVerDesenvolvedores": "Ver desenvolvedores",
+       "textVerContribuidores": "Ver contribuidores",
+       "textVerAtivistas": "Ver ativistas",
+       "textVerApoiadores": "Ver apoiadores",
+       "textVerValidadores": "Ver validadores",
+       "textCadastrados": "Cadastrados",
+       "textVagasDisponiveis": "Vagas disponíveis",
+       "textConecteSuaWalletParaCandidatar": "Conecte sua wallet para se candidatar",
+       "textCandidatese": "Candidate-se"
     }
 }

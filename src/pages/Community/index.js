@@ -63,7 +63,7 @@ export function Community() {
 
             {loading ? (
                 <div className="flex-1 flex flex-col items-center justify-center">
-                    <ActivityIndicator size={180}/>
+                    <ActivityIndicator size={180} />
                 </div>
             ) : (
                 <div className="flex flex-col items-center overflow-scroll">
@@ -72,11 +72,15 @@ export function Community() {
 
                         <div className="flex gap-5 mt-10 w-full flex-wrap">
                             <div className="flex items-center h-[150px] w-full lg:w-[49%] bg-green-secondary p-3 rounded-md justify-between px-8">
-                                <div
-                                    className="w-24 h-24 bg-red-500"
+                                <img
+                                    src={require('../../assets/img/users.png')}
+                                    className="w-20 h-20 object-contain"
+                                    alt='Icone de usuários'
                                 />
 
-                                <p className="font-bold text-white max-w-[120px] text-lg text-center">Total de cadastros na comunidade</p>
+                                <p className="font-bold text-white max-w-[120px] text-lg text-center">
+                                    {t('textTotalCadastros')}
+                                </p>
 
                                 <div className="w-24 h-20 rounded-md bg-container-primary flex items-center justify-center">
                                     <p className="font-bold text-green-primary text-5xl">{usersCount?.totalCount}</p>
@@ -84,7 +88,9 @@ export function Community() {
                             </div>
 
                             <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
-                                <p className="text-white">Descrição aqui</p>
+                                <p className="text-white">
+                                    {t('descInfoComunidade')}
+                                </p>
                             </div>
 
                             <CardUserVacancy
@@ -150,6 +156,16 @@ export function Community() {
                                 countUsers={usersCount?.activistsCount}
                                 amountVacancies={vacancies.amountVacancyActivist}
                                 avaliableVacancy={vacancies.avaliableVacancyActivist}
+                                navigateToRanking={navigateToRanking}
+                                showModalSignUp={() => setShowSignUp(true)}
+                                showModalConnect={() => setShowModalConnect(true)}
+                            />
+
+                            <CardUserVacancy
+                                userType={8}
+                                countUsers={usersCount?.validatorsCount}
+                                amountVacancies={vacancies.amountVacancyValidator}
+                                avaliableVacancy={vacancies.avaliableVacancyValidator}
                                 navigateToRanking={navigateToRanking}
                                 showModalSignUp={() => setShowSignUp(true)}
                                 showModalConnect={() => setShowModalConnect(true)}

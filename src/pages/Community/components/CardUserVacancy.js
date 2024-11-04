@@ -15,6 +15,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                             <img
                                 src={require('../../../assets/icon-produtor.png')}
                                 className="w-12 h-12 object-contain"
+                                alt='icon produtor'
                             />
                         )}
 
@@ -22,6 +23,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                             <img
                                 src={require('../../../assets/icon-apoiador.png')}
                                 className="w-12 h-12 object-contain"
+                                alt='icon apoiador'
                             />
                         )}
                         <p className="font-bold text-white text-lg">
@@ -34,8 +36,8 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                         className="px-10 h-10 rounded-md bg-blue-primary text-white"
                         onClick={() => navigateToRanking(userType)}
                     >
-                        {userType === 1 && t('verProdutores')}
-                        {userType === 7 && t('verApoiadores')}
+                        {userType === 1 && t('textVerProdutores')}
+                        {userType === 7 && t('textVerApoiadores')}
                     </button>
                 </div>
                 <div className="w-24 h-20 rounded-md bg-green-secondary flex items-center justify-center">
@@ -51,6 +53,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 <img
                     src={require('../../../assets/icon-inspetor.png')}
                     className="w-20 h-20 object-contain"
+                    alt='icon inspetor'
                 />
             )}
 
@@ -58,6 +61,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 <img
                     src={require('../../../assets/icon-pesquisadores.png')}
                     className="w-20 h-20 object-contain"
+                    alt='icon pesquisador'
                 />
             )}
 
@@ -65,6 +69,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 <img
                     src={require('../../../assets/centro-dev.png')}
                     className="w-20 h-20 object-contain"
+                    alt='icon desenvolvedores'
                 />
             )}
 
@@ -72,6 +77,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 <img
                     src={require('../../../assets/icon-contribuir.png')}
                     className="w-20 h-20 object-contain"
+                    alt='icon contribuidor'
                 />
             )}
 
@@ -79,6 +85,15 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 <img
                     src={require('../../../assets/icon-ativista.png')}
                     className="w-20 h-20 object-contain"
+                    alt='icon ativista'
+                />
+            )}
+
+            {userType === 8 && (
+                <img
+                    src={require('../../../assets/validacao-icon.png')}
+                    className="w-20 h-20 object-contain"
+                    alt='icon validador'
                 />
             )}
 
@@ -88,6 +103,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 {userType === 4 && t('desenvolvedores')}
                 {userType === 5 && t('contribuidores')}
                 {userType === 6 && t('ativistas')}
+                {userType === 8 && t('validadores')}
             </p>
 
             <div className="flex items-center justify-between w-full p-2 bg-green-secondary mt-5 rounded-md">
@@ -106,7 +122,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                     className="text-center text-green-400 underline"
                     onClick={showModalConnect}
                 >
-                    Conecte sua wallet para se candidatar
+                    {t('textConecteSuaWalletParaCandidatar')}
                 </button>
             ) : (
                 <>
@@ -117,7 +133,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                                 disabled={!avaliableVacancy}
                                 onClick={showModalSignUp}
                             >
-                                {t('candidatarse')}
+                                {t('textCandidatese')}
                             </button>
                         </>
                     )}
@@ -128,11 +144,12 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                 className="text-white w-[80%] h-10 bg-blue-primary rounded-md"
                 onClick={() => navigateToRanking(String(userType))}
             >
-                {userType === 2 && t('verInspetores')}
-                {userType === 3 && t('verPesquisadores')}
-                {userType === 4 && t('verDesenvolvedores')}
-                {userType === 5 && t('verContribuidores')}
-                {userType === 6 && t('verAtivistas')}
+                {userType === 2 && t('textVerInspetores')}
+                {userType === 3 && t('textVerPesquisadores')}
+                {userType === 4 && t('textVerDesenvolvedores')}
+                {userType === 5 && t('textVerContribuidores')}
+                {userType === 6 && t('textVerAtivistas')}
+                {userType === 8 && t('textVerValidadores')}
             </button>
         </div>
     )

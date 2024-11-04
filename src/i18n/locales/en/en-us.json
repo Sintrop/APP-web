@@ -465,6 +465,20 @@
     "proximo": "Next",
     "cadastroSucesso": "Registration completed successfully!",
     "vocePrecisaSincronizar": "You need to synchronize your wallet, this action cannot be done with a wallet and password!",
-    "cadidaturaSucesso": "Application sent successfully"
+    "cadidaturaSucesso": "Application sent successfully",
+    "descInfoComunidade": "The Regeneration Credit community is made up of these 8 groups. To apply for a user, connect your wallet and fill in the necessary fields. The number of vacancies of each specific type is proportional to the number of registered producers, following the proportion.",
+    "textTotalCadastros": "Total registrations in the community",
+    "textVerProdutores": "See producers",
+    "textVerInspetores": "See inspectors",
+    "textVerPesquisadores": "See researchers",
+    "textVerDesenvolvedores": "See developers",
+    "textVerContribuidores": "See contributors",
+    "textVerAtivistas": "See activists",
+    "textVerApoiadores": "See supporters",
+    "textVerValidadores": "See validators",
+    "textCadastrados": "Registered",
+    "textVagasDisponiveis": "Available vacancies",
+    "textConecteSuaWalletParaCandidatar": "Connect your wallet to apply",
+    "textCandidatese": "Apply"
   }
 }
