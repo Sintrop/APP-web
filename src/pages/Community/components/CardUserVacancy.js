@@ -8,7 +8,7 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
 
     if (userType === 1 || userType === 7) {
         return (
-            <div className="flex w-full h-[150px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
+            <div className="flex w-full h-[190px] lg:w-[49%] px-8 py-6 bg-container-primary p-3 rounded-md items-center justify-between">
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex items-center gap-4">
                         {userType === 1 && (
@@ -32,13 +32,37 @@ export function CardUserVacancy({ userType, avaliableVacancy, amountVacancies, c
                         </p>
                     </div>
 
-                    <button
-                        className="px-10 h-10 rounded-md bg-blue-primary text-white"
-                        onClick={() => navigateToRanking(userType)}
-                    >
-                        {userType === 1 && t('textVerProdutores')}
-                        {userType === 7 && t('textVerApoiadores')}
-                    </button>
+                    <div>
+                        {walletConnected === '' ? (
+                            <button
+                                className="text-center text-green-400 underline mb-3"
+                                onClick={showModalConnect}
+                            >
+                                {t('textConecteSuaWalletParaCandidatar')}
+                            </button>
+                        ) : (
+                            <>
+                                {userData?.id === 'anonimous' && (
+                                    <>
+                                        <button
+                                            className={`text-white w-[80%] h-10 bg-green-btn rounded-md my-3 ${!avaliableVacancy && 'opacity-40'}`}
+                                            disabled={!avaliableVacancy}
+                                            onClick={showModalSignUp}
+                                        >
+                                            {t('textCandidatese')}
+                                        </button>
+                                    </>
+                                )}
+                            </>
+                        )}
+                        <button
+                            className="w-[80%] h-10 rounded-md bg-blue-primary text-white"
+                            onClick={() => navigateToRanking(userType)}
+                        >
+                            {userType === 1 && t('textVerProdutores')}
+                            {userType === 7 && t('textVerApoiadores')}
+                        </button>
+                    </div>
                 </div>
                 <div className="w-24 h-20 rounded-md bg-green-secondary flex items-center justify-center">
                     <p className="font-bold text-green-primary text-5xl">{countUsers}</p>

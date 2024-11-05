@@ -99,6 +99,7 @@ export function Community() {
                                 navigateToRanking={navigateToRanking}
                                 showModalSignUp={() => setShowSignUp(true)}
                                 showModalConnect={() => setShowModalConnect(true)}
+                                avaliableVacancy={true}
                             />
 
                             <CardUserVacancy
@@ -107,6 +108,7 @@ export function Community() {
                                 navigateToRanking={navigateToRanking}
                                 showModalSignUp={() => setShowSignUp(true)}
                                 showModalConnect={() => setShowModalConnect(true)}
+                                avaliableVacancy={true}
                             />
                         </div>
 

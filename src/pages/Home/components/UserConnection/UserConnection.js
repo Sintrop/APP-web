@@ -73,7 +73,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                 hash: response.transactionHash,
             });
             setLoadingTransaction(false);
-
+            setLoadingEfetive(false);
             return;
         }
 
