@@ -11,30 +11,22 @@ import { QRCode } from "react-qrcode-logo";
 import { Feedback } from "../../components/Feedback";
 import { api } from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { BurnTokens as BurnRCSupporter } from "../../services/web3/supporterService";
-import { BurnTokens } from "../../services/web3/rcTokenService";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { FaChevronRight } from "react-icons/fa";
-import { LoadingTransaction } from "../../components/LoadingTransaction";
-import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
-import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction.js";
+import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 
 export function Actions() {
     const { t } = useTranslation();
-    const { walletConnected, userData, connectionType } = useMainContext();
+    const { walletConnected, userData } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
     const [input, setInput] = useState('');
     const [impactToken, setImpactToken] = useState(null);
     const [balanceData, setBalanceData] = useState(null);
     const [maxAmmount, setMaxAmmount] = useState(false);
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
-    const [modalTransaction, setModalTransaction] = useState(false);
-    const [logTransaction, setLogTransaction] = useState({});
-    const [createdTransaction, setCreatedTransaction] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
     const [addDataTransaction, setAddDataTransaction] = useState({});
@@ -71,7 +63,7 @@ export function Actions() {
 
             setImpactInvestor(data)
         }
-    }, [input]);
+    }, [input, balanceData, impactToken]);
 
     useEffect(() => {
         getImpact();
@@ -107,114 +99,6 @@ export function Actions() {
         }
 
         setShowModalWhereExecuteTransaction(true);
-    }
-
-    async function contributeBlockchain() {
-        setModalTransaction(true);
-        setLoadingTransaction(true);
-        if (userData.userType === 7) {
-            BurnRCSupporter(walletConnected, String(input) + '000000000000000000')
-                .then(res => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        } else {
-            BurnTokens(walletConnected, String(input) + '000000000000000000')
-                .then(res => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
-    }
-
-    async function registerTokensApi(tokens, hash) {
-        const addData = {
-            userData,
-            tokens: Number(tokens),
-            transactionHash: hash,
-            reason: '',
-            itens: [],
-            hash
-        }
-
-        try {
-            await api.post('/tokens-burned', {
-                wallet: walletConnected.toUpperCase(),
-                tokens: Number(tokens),
-                transactionHash: hash,
-                carbon: Number(impactToken?.carbon),
-                water: Number(impactToken?.water),
-                bio: Number(impactToken?.bio),
-                soil: Number(impactToken?.soil)
-            });
-
-            await api.post('/publication/new', {
-                userId: userData?.id,
-                type: 'contribute-tokens',
-                origin: 'platform',
-                additionalData: JSON.stringify(addData),
-            })
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingTransaction(false);
-        }
-    }
-
-    async function createTransaction() {
-        try {
-            setLoading(true);
-            await api.post('/transactions-open/create', {
-                wallet: userData?.wallet,
-                type: 'burn-tokens',
-                additionalData: JSON.stringify({
-                    value: Number(input),
-                    itens: []
-                }),
-            })
-            setInput('');
-            setCreatedTransaction(true);
-        } catch (err) {
-            if (err.response?.data?.message === 'open transaction of the same type') {
-                toast.error(t('transacaoDoMesmoTipoAberto'))
-            }
-        } finally {
-            setLoading(false);
-        }
     }
 
     function successBurn(successType){
@@ -476,38 +360,14 @@ export function Actions() {
                 <Chat />
             </div>
 
-            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
-                if (!loadingTransaction) {
-                    setModalTransaction(open)
-                    setLoading(false);
-                    if (logTransaction.type === 'success') {
-                        toast.success(t('contribuicaoFeita'));
-                    }
-                }
-            }}>
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
-                />
-            </Dialog.Root>
-
-            {createdTransaction && (
-                <ModalTransactionCreated
-                    close={() => setCreatedTransaction(false)}
-                />
-            )}
-
-            <Dialog.Root
-                open={showModalWhereExecuteTransaction}
-                onOpenChange={(open) => setShowModalWhereExecuteTransaction(open)}
-            >
+            {showModalWhereExecuteTransaction && (
                 <ModalWhereExecuteTransaction
                     additionalData={JSON.stringify(addDataTransaction)}
                     transactionType='burn-tokens'
                     close={() => setShowModalWhereExecuteTransaction(false)}
                     success={successBurn}
                 />
-            </Dialog.Root>
+            )}
 
             <ToastContainer />
         </div>
