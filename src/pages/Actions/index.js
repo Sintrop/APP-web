@@ -20,9 +20,10 @@ import { ModalTransactionCreated } from "../../components/ModalTransactionCreate
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
+import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction.js";
 
 export function Actions() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const { walletConnected, userData, connectionType } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
@@ -33,11 +34,16 @@ export function Actions() {
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
-    const [reason, setReason] = useState('');
     const [createdTransaction, setCreatedTransaction] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
+    const [addDataTransaction, setAddDataTransaction] = useState({});
 
     useEffect(() => {
+        setAddDataTransaction({
+            value: Number(input),
+            itens: []
+        });
         if (impactToken) {
             let credits = Number(input);
 
@@ -100,11 +106,7 @@ export function Actions() {
             return
         }
 
-        if (connectionType === 'provider') {
-            contributeBlockchain();
-        } else {
-            createTransaction();
-        }
+        setShowModalWhereExecuteTransaction(true);
     }
 
     async function contributeBlockchain() {
@@ -201,7 +203,6 @@ export function Actions() {
                 type: 'burn-tokens',
                 additionalData: JSON.stringify({
                     value: Number(input),
-                    reason,
                     itens: []
                 }),
             })
@@ -213,6 +214,21 @@ export function Actions() {
             }
         } finally {
             setLoading(false);
+        }
+    }
+
+    function successBurn(successType){
+        setShowModalWhereExecuteTransaction(false);
+        if(successType === 'checkout'){
+            toast.success(t('transacaoEnviadaCheckout'));
+            setInput('');
+        }
+
+        if(successType === 'blockchain'){
+            toast.success('Contribuição realizada com sucesso!');
+            getImpact();
+            getBalance();
+            setInput('');
         }
     }
 
@@ -304,6 +320,7 @@ export function Actions() {
                                                 <img
                                                     src={require('../../assets/token.png')}
                                                     className="w-8 h-8 object-contain"
+                                                    alt='icon do credito de regeneração'
                                                 />
 
                                                 <p className="font-bold text-white text-sm">{Intl.NumberFormat('pt-BR').format(Number(balanceData?.balance).toFixed(5))}</p>
@@ -340,6 +357,7 @@ export function Actions() {
                                             <img
                                                 src={require('../../assets/icon-contribuir.png')}
                                                 className="w-8 h-8 object-contain"
+                                                alt='Icone do botão contribuir'
                                             />
                                             <p className="font-bold text-white">{t('contribuir')}</p>
                                         </div>
@@ -455,7 +473,7 @@ export function Actions() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat/>
+                <Chat />
             </div>
 
             <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
@@ -478,6 +496,18 @@ export function Actions() {
                     close={() => setCreatedTransaction(false)}
                 />
             )}
+
+            <Dialog.Root
+                open={showModalWhereExecuteTransaction}
+                onOpenChange={(open) => setShowModalWhereExecuteTransaction(open)}
+            >
+                <ModalWhereExecuteTransaction
+                    additionalData={JSON.stringify(addDataTransaction)}
+                    transactionType='burn-tokens'
+                    close={() => setShowModalWhereExecuteTransaction(false)}
+                    success={successBurn}
+                />
+            </Dialog.Root>
 
             <ToastContainer />
         </div>
