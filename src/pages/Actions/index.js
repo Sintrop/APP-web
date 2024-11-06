@@ -11,7 +11,7 @@ import { QRCode } from "react-qrcode-logo";
 import { Feedback } from "../../components/Feedback";
 import { api } from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { BurnTokens as BurnRCSupporter } from "../../services/web3/supporterService.js";
+import { BurnTokens as BurnRCSupporter } from "../../services/web3/supporterService";
 import { BurnTokens } from "../../services/web3/rcTokenService";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { FaChevronRight } from "react-icons/fa";

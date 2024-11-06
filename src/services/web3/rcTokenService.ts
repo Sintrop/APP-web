@@ -1,67 +1,48 @@
 import { RcTokenContract } from "./Contracts";
 import { RcTokenContractAddress } from "./Contracts";
 import { web3 } from "./Contracts";
+import { web3RequestWrite } from "./requestService";
 
-export const GetCertificateTokens = async (wallet) => {
+export interface ReturnTransactionProps {
+    transactionHash: string;
+    success: boolean;
+    message: string;
+    code: number;
+}
+
+export const GetCertificateTokens = async (wallet: string) => {
     let tokens = 0
     await RcTokenContract.methods.certificate(wallet).call({from: RcTokenContractAddress})
+    //@ts-ignore
     .then((res) => {
         tokens = res
     })
-    .catch((err) => {
+    .catch(() => {
         tokens = 0
     })
     return tokens
 }
 
-export const GetTokensBalance = async (wallet) => {
+export const GetTokensBalance = async (wallet: string) => {
     let tokens = 0
     await RcTokenContract.methods.balanceOf(wallet).call({from: RcTokenContractAddress})
+    //@ts-ignore
     .then((res) => {
         tokens = res
     })
-    .catch((err) => {
+    .catch(() => {
         tokens = 0
     })
     return tokens
 }
 
-export const BurnTokens = async (wallet, tokens) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = '';
-    await RcTokenContract.methods.burnTokens(String(tokens)).send({from: wallet})
-    .on("confirmation", (receipt) =>
-        type = 'success',
-        message = "Contributor registered!"
-    )
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Contributor registered!"
-        }
-    })
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            return{
-                type: 'error',
-                message: 'Not allowed user!'
-            }
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    });
-
-    return{
-        type,
-        message,
-        hashTransaction,
-    }
+export async function BurnTokens(value: number, wallet: string): Promise<ReturnTransactionProps> {
+    const valueWei = web3.utils.toWei(String(value), 'ether');
+    const response = await web3RequestWrite(RcTokenContract, 'burnTokens', [valueWei], wallet);
+    return response;
 }
 
+//@ts-ignore
 export const BuyRCT = async (wallet, value) => {
     let type = '';
     let message = '';
