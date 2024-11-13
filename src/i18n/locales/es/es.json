@@ -441,6 +441,14 @@
        "textCadastrados": "Registrado",
        "textVagasDisponiveis": "Vacantes disponibles",
        "textConecteSuaWalletParaCandidatar": "Conecte su billetera para aplicar",
-       "textCandidatese": "Aplicar"
+       "textCandidatese": "Aplicar",
+       "saldoDisponivel": "Saldo disponible",
+       "tokenPorEra": "Fichas por ERA",
+       "seusDadosNaPool": "Tus datos en el piscina",
+       "suaEraNaPool": "Tu ERA en la piscina",
+       "eraAtualDaPool": "ERA actual del piscina",
+       "saquesDisponiveis": "Retiros disponibles",
+       "textInfoSaquesDisponiveis": "Tener retiros disponibles no significa que recibirás tokens, pero debes retirarlos para avanzar en ERA en el piscina.",
+       "jaSacado": "Ya retirado"
     }
 }

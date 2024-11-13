@@ -476,6 +476,14 @@
        "textCadastrados": "Cadastrados",
        "textVagasDisponiveis": "Vagas disponíveis",
        "textConecteSuaWalletParaCandidatar": "Conecte sua wallet para se candidatar",
-       "textCandidatese": "Candidate-se"
+       "textCandidatese": "Candidate-se",
+       "saldoDisponivel": "Saldo disponível",
+       "tokenPorEra": "Tokens por ERA",
+       "seusDadosNaPool": "Seus dados na pool",
+       "suaEraNaPool": "Sua ERA na pool",
+       "eraAtualDaPool": "ERA atual da pool",
+       "saquesDisponiveis": "Saques disponíveis",
+       "textInfoSaquesDisponiveis": "Ter saques disponíveis não significa que você receberá tokens, mas você precisa realizar o saque para avançar de ERA na pool",
+       "jaSacado": "Já sacado"
     }
 }

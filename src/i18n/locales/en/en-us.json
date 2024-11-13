@@ -479,6 +479,14 @@
     "textCadastrados": "Registered",
     "textVagasDisponiveis": "Available vacancies",
     "textConecteSuaWalletParaCandidatar": "Connect your wallet to apply",
-    "textCandidatese": "Apply"
+    "textCandidatese": "Apply",
+    "saldoDisponivel": "Available balance",
+    "tokenPorEra": "Tokens per ERA",
+    "seusDadosNaPool": "Your data in the pool",
+    "suaEraNaPool": "Your ERA in the pool",
+    "eraAtualDaPool": "Current pool ERA",
+    "saquesDisponiveis": "Withdrawals available",
+    "textInfoSaquesDisponiveis": "Having withdrawals available does not mean that you will receive tokens, but you need to withdraw to advance in ERA in the pool",
+    "jaSacado": "Already withdrawn"
   }
 }

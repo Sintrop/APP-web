@@ -393,7 +393,7 @@ export function Pools({ }) {
             width: 380,
             type: 'pie',
         },
-        labels: ['Saldo disponível', 'Já sacado'],
+        labels: [t('saldoDisponivel'), t('jaSacado')],
         responsive: [{
             breakpoint: 480,
             options: {
