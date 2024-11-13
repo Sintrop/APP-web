@@ -40,6 +40,7 @@ export default function MainProvider({ children }) {
     const [epoch, setEpoch] = useState(1)
     const [impactToken, setImpactToken] = useState({});
     const [accountsConnected, setAccountsConnected] = useState([]);
+    const [userBlockchain, setUserBlockchain] = useState({});
 
     useEffect(() => {
         handleGetEraInfo();
@@ -234,37 +235,43 @@ export default function MainProvider({ children }) {
         if (userType === 1) {
             const response = await api.get(`/web3/producer-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.producer);
         }
 
         if (userType === 2) {
             const response = await api.get(`/web3/inspector-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.inspector);
         }
 
         if (userType === 4) {
             const response = await api.get(`/web3/developer-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.developer);
         }
 
         if (userType === 3) {
             const response = await api.get(`/web3/researcher-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.researcher);
         }
 
         if (userType === 6) {
             const response = await api.get(`/web3/activist-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.activist);
         }
 
         if (userType === 7) {
             const response = await api.get(`/web3/supporter-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
-            console.log(response.data)
+            setUserBlockchain(response.data.supporter);
         }
 
         if (userType === 8) {
             const response = await api.get(`/web3/validator-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.validator);
         }
     }
 
@@ -336,7 +343,6 @@ export default function MainProvider({ children }) {
                 chooseLanguage,
                 modalChooseLang,
                 toggleModalChooseLang,
-                setWalletConnected,
                 walletSelected,
                 setWalletSelected,
                 modalTutorial,
@@ -352,7 +358,6 @@ export default function MainProvider({ children }) {
                 transactionOpen,
                 setTransactionOpen,
                 transactionOpened,
-                userData,
                 loginWithWalletAndPassword,
                 imageProfile,
                 connectionType,
@@ -366,7 +371,9 @@ export default function MainProvider({ children }) {
                 nextEra,
                 impactToken,
                 epoch,
-                accountsConnected
+                accountsConnected,
+                getUserBlockchainData,
+                userBlockchain,
             }}
         >
             {children}

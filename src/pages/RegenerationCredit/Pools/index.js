@@ -21,18 +21,15 @@ import { useTranslation } from "react-i18next";
 
 export function Pools({ }) {
     const {t} = useTranslation();
-    const { userData, connectionType, walletConnected } = useMainContext();
+    const { userData, connectionType, walletConnected, userBlockchain} = useMainContext();
     const { poolType } = useParams();
     const [loading, setLoading] = useState(false);
     const [poolData, setPoolData] = useState({});
-    const [modalQueue, setModalQueue] = useState(false);
     const [visibleWithdraw, setVisibleWithdraw] = useState(true);
     const [canWithdraw, setCanWithdraw] = useState(true);
     const [nextApprove, setNextApprove] = useState(0);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [users, setUsers] = useState([]);
-    const [modalFeedback, setModalFeedback] = useState(false);
-    const [dataGraphic, setDataGraphic] = useState([]);
     const [totalSupply, setTotalSupply] = useState(0);
     const [totalWithdraw, setTotalWithdraw] = useState(0);
     const [series, setSeries] = useState([44, 55]);
@@ -503,18 +500,38 @@ export function Pools({ }) {
                             </div>
 
                             {visibleWithdraw && (
-                                <div className="flex items-center justify-between w-full bg-[#03364B] rounded-md p-3 mt-3">
-                                    <div className="flex flex-col gap-1">
-                                        <p className="text-sm text-white">{t('proximoSaque')}</p>
-                                        <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>
+                                <>
+                                    <div className="flex flex-wrap items-center justify-between w-full bg-[#03364B] rounded-md p-3 mt-3 gap-3 mb-3">
+                                        <div className="flex flex-col h-full w-[49%] lg:border-r">
+                                            <p className="text-sm text-gray-300">{t('seusDadosNaPool')}</p>
+                                            <p className="text-white font-semibold mt-1">
+                                                {t('suaEraNaPool')}: <span className="font-bold text-blue-primary">{userBlockchain?.pool?.currentEra}</span>
+                                            </p>
+                                            <p className="text-white font-semibold">
+                                                {t('eraAtualDaPool')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract}</span>
+                                            </p>
+                                            <p className="text-white font-semibold">
+                                                {t('saquesDisponiveis')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract - userBlockchain?.pool?.currentEra}</span>
+                                            </p>
+                                        </div>
+
+                                        <div className="flex justify-between h-full w-[49%]">
+                                            <div className="flex flex-col gap-1">
+                                                <p className="text-sm text-white">{t('proximoSaque')}</p>
+                                                <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>
+                                            </div>
+                                            {nextApprove < 0 && (
+                                                <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500" onClick={handleWithdraw}>
+                                                    {t('sacarTokens')}
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
 
-                                    {nextApprove < 0 && (
-                                        <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500" onClick={handleWithdraw}>
-                                            {t('sacarTokens')}
-                                        </button>
-                                    )}
-                                </div>
+                                    <Info
+                                        text1={t('textInfoSaquesDisponiveis')}
+                                    />
+                                </>
                             )}
 
                             <p className="text-sm text-gray-500 mt-5">{t('usuariosAprovados')}</p>
