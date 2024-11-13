@@ -1,6 +1,13 @@
 import { api } from "./api";
 
-export async function createPubliFeed(data){
+interface CreatePubliProps{
+    type: string;
+    additionalData: string;
+    userId?: string;
+    walletConnected?: string;
+}
+
+export async function createPubliFeed(data: CreatePubliProps){
     const {additionalData, type, userId, walletConnected} = data;
 
     let userIdApi = '';
@@ -28,7 +35,7 @@ export async function createPubliFeed(data){
     }
 }
 
-async function getUserIdApi(wallet){
+async function getUserIdApi(wallet: string): Promise<string>{
     try{
         const response = await api.get(`/user/${wallet}`);
         return response.data.user.id;

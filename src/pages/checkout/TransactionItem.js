@@ -1,4 +1,4 @@
-import React, { sueEffect, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import Loading from '../../components/Loading';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
@@ -20,7 +20,7 @@ import { BuyRCT, BurnTokens } from '../../services/web3/rcTokenService';
 import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/web3/supporterService';
 import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/web3/researchersService';
 import { GetProducer, WithdrawTokens as WithdrawProducer, addProducer } from '../../services/web3/producerService';
-import { WithdrawTokens as WithdrawDeveloper, addDeveloper } from '../../services/web3/developersService';
+import { addDeveloper } from '../../services/web3/developersService';
 import { WithdrawTokens as WithdrawInspector, addInspector } from '../../services/web3/inspectorService';
 import { GetInspection, GetIsa, InvalidateInspection, AcceptInspection, RealizeInspection, RequestInspection } from '../../services/web3/sintropService';
 import { addActivist } from '../../services/web3/activistService';
@@ -2991,206 +2991,206 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
     //----------------Sacar tokens ------------------------- Disponível no Sintrop Pay
     async function withdraw() {
-        if (userData?.userType === 4) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawDeveloper(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 4) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawDeveloper(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 1) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawProducer(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 1) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawProducer(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 2) { 
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawInspector(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-                    console.log(res)
+        // if (userData?.userType === 2) { 
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawInspector(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
+        //             console.log(res)
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 3) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawResearcher(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 3) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawResearcher(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction,
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction,
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
     }
 
     //-------------- invite user ------------------- Disponível no Sintrop Pay

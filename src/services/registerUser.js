@@ -1,6 +1,6 @@
 import { addInspector } from "./web3/inspectorService";
 import {api} from './api';
-import { createPubliFeed } from "./publiFeed";
+import { createPubliFeed } from "./publicationFeed";
 import { addResearcher } from "./web3/researchersService";
 import { addDeveloper } from "./web3/developersService";
 import { addActivist } from "./web3/activistService";

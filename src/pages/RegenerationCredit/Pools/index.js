@@ -6,24 +6,18 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../components/ActivityIndicator";
 import Chart from "react-apexcharts";
 import { UserRankingItem } from "../../Community/Ranking/components/UserRankingItem";
-import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";
-import * as Dialog from '@radix-ui/react-dialog';
-import { LoadingTransaction } from "../../../components/LoadingTransaction";
 import { ToastContainer, toast } from "react-toastify";
+import { ModalWhereExecuteTransaction } from "../../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 
-import { WithdrawTokens as WithdrawDeveloper } from "../../../services/web3/developersService";
-import { WithdrawTokens as WithdrawResearcher } from "../../../services/web3/researchersService";
-import { WithdrawTokens as WithdrawProducer } from "../../../services/web3/producerService";
-import { WithdrawTokens as WithdrawInspector } from "../../../services/web3/inspectorService";
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";
 import { useTranslation } from "react-i18next";
 
-export function Pools({ }) {
+export function Pools() {
     const {t} = useTranslation();
-    const { userData, connectionType, walletConnected, userBlockchain} = useMainContext();
+    const { userData, userBlockchain, getUserBlockchainData} = useMainContext();
     const { poolType } = useParams();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [poolData, setPoolData] = useState({});
     const [visibleWithdraw, setVisibleWithdraw] = useState(true);
     const [canWithdraw, setCanWithdraw] = useState(true);
@@ -33,10 +27,7 @@ export function Pools({ }) {
     const [totalSupply, setTotalSupply] = useState(0);
     const [totalWithdraw, setTotalWithdraw] = useState(0);
     const [series, setSeries] = useState([44, 55]);
-    const [createdTransaction, setCreatedTransaction] = useState(false);
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
-    const [modalTransaction, setModalTransaction] = useState(false);
-    const [logTransaction, setLogTransaction] = useState({});
+    const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
 
     useEffect(() => {
         getPoolData();
@@ -178,213 +169,21 @@ export function Pools({ }) {
     }
 
     function handleWithdraw() {
-        if (connectionType === 'provider') {
-            withdrawOnBlockchain();
-        } else {
-            withdrawOnCheckout();
-        }
+        setShowModalWhereExecuteTransaction(true);
     }
 
-    async function withdrawOnCheckout() {
-        try {
-            setLoading(true);
-            await api.post('/transactions-open/create', {
-                wallet: userData?.wallet,
-                type: 'withdraw-tokens'
-            });
-            setCreatedTransaction(true);
-        } catch (err) {
-            if (err.response?.data?.message === 'open transaction of the same type') {
-                alert(t('transacaoDoMesmoTipoAberto'))
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    async function withdrawOnBlockchain() {
-        if (userData?.userType === 4) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawDeveloper(walletConnected)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
-                        toast.success('Saque realizado com sucesso!');
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
+    function successWithdraw(successType){
+        setShowModalWhereExecuteTransaction(false);
+        if(successType === 'checkout'){
+            toast.success(t('transacaoEnviadaCheckout'));
         }
 
-        if (userData?.userType === 1) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawProducer(walletConnected)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
-                        toast.success('Saque realizado com sucesso!');
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
-
-        if (userData?.userType === 2) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawInspector(walletConnected)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
-                        toast.success('Saque realizado com sucesso!');
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
-
-        if (userData?.userType === 3) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawResearcher(walletConnected)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
-                        toast.success('Saque realizado com sucesso!');
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
+        if(successType === 'blockchain'){
+            toast.success('Saque realizado com sucesso!');
+            getUserBlockchainData(userData?.wallet, userData?.userType);
+            getPoolData();
+            getUsersPool();
+            
         }
     }
 
@@ -502,15 +301,15 @@ export function Pools({ }) {
                             {visibleWithdraw && (
                                 <>
                                     <div className="flex flex-wrap items-center justify-between w-full bg-[#03364B] rounded-md p-3 mt-3 gap-3 mb-3">
-                                        <div className="flex flex-col h-full w-[49%] lg:border-r">
-                                            <p className="text-sm text-gray-300">{t('seusDadosNaPool')}</p>
-                                            <p className="text-white font-semibold mt-1">
+                                        <div className="flex flex-col h-full w-[49%] gap-1 lg:border-r">
+                                            <p className="text-xs text-gray-300">{t('seusDadosNaPool')}</p>
+                                            <p className="text-white text-sm mt-1">
                                                 {t('suaEraNaPool')}: <span className="font-bold text-blue-primary">{userBlockchain?.pool?.currentEra}</span>
                                             </p>
-                                            <p className="text-white font-semibold">
+                                            <p className="text-white text-sm">
                                                 {t('eraAtualDaPool')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract}</span>
                                             </p>
-                                            <p className="text-white font-semibold">
+                                            <p className="text-white text-sm">
                                                 {t('saquesDisponiveis')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract - userBlockchain?.pool?.currentEra}</span>
                                             </p>
                                         </div>
@@ -546,21 +345,12 @@ export function Pools({ }) {
                 </div>
             </div>
 
-            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
-                if (!loadingTransaction) {
-                    setModalTransaction(open)
-                    setLoading(false);
-                }
-            }}>
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
-                />
-            </Dialog.Root>
-
-            {createdTransaction && (
-                <ModalTransactionCreated
-                    close={() => setCreatedTransaction(false)}
+            {showModalWhereExecuteTransaction && (
+                <ModalWhereExecuteTransaction
+                    additionalData=''
+                    transactionType='withdraw-tokens'
+                    close={() => setShowModalWhereExecuteTransaction(false)}
+                    success={successWithdraw}
                 />
             )}
 
