@@ -39,7 +39,7 @@ export async function executeRegisterUser(userData: UserApiProps, walletConnecte
     }
 
     if(userData?.userType === 5){
-        const responseContributor = await addContributor(walletConnected, userData?.name, userData?.imgProfileUrl);
+        const responseContributor = await addContributor({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseContributor.success){
             await afterRegisterBlockchain(walletConnected, userData?.id, responseContributor.transactionHash);
             return responseContributor;
@@ -49,7 +49,7 @@ export async function executeRegisterUser(userData: UserApiProps, walletConnecte
     }
 
     if(userData?.userType === 6){
-        const responseActivist = await addActivist(walletConnected, userData?.name, userData?.imgProfileUrl);
+        const responseActivist = await addActivist({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseActivist.success){
             await afterRegisterBlockchain(walletConnected, userData?.id, responseActivist.transactionHash);
             return responseActivist;

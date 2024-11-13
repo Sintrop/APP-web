@@ -1,6 +1,7 @@
 import { ValidatorContract } from "./Contracts";
+import { web3RequestWrite } from "./requestService";
 
-export const GetValidator = async(walletAdd) => {
+export const GetValidator = async(walletAdd: string) => {
     const validator = await ValidatorContract.methods.getValidator(walletAdd).call()
     return validator;
 }
@@ -10,11 +11,12 @@ export const GetValidators = async() => {
     return validators;
 }
 
-export const addValidator = async (wallet) => {
+export const addValidator = async (wallet: string) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
     await ValidatorContract.methods.addValidator().send({ from: wallet })
+    //@ts-ignore
     .on('transactionHash', hash => {
         if(hash){
             hashTransaction = hash
@@ -22,6 +24,7 @@ export const addValidator = async (wallet) => {
             message = "Validator registered!"
         }
     })
+    //@ts-ignore
     .on("error", (error, receipt) => {
         if(error.stack.includes("Not allowed user")){
             type = 'error'
@@ -40,11 +43,12 @@ export const addValidator = async (wallet) => {
     }
 }
 
-export const addValidation = async (wallet, walletUserVote, justification) => {
+export const addValidation = async (wallet: string, walletUserVote: string, justification: string) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
     await ValidatorContract.methods.addValidation(walletUserVote, justification).send({ from: wallet })
+    //@ts-ignore
     .on('transactionHash', hash => {
         if(hash){
             hashTransaction = hash
@@ -52,6 +56,7 @@ export const addValidation = async (wallet, walletUserVote, justification) => {
             message = "Validation ok!"
         }
     })
+    //@ts-ignore
     .on("error", (error, receipt) => {
         if(error.stack.includes("Not allowed user")){
             type = 'error'
@@ -68,4 +73,12 @@ export const addValidation = async (wallet, walletUserVote, justification) => {
         message,
         hashTransaction
     }
+}
+
+interface WithdrawTokensProps{
+    walletConnected: string;
+}
+export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
+    const response = await web3RequestWrite(ValidatorContract, 'withdraw', [], walletConnected);
+    return response;
 }

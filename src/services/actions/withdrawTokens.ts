@@ -4,6 +4,9 @@ import { withdrawTokens as withdrawDeveloper } from "../web3/developersService";
 import { withdrawTokens as withdrawProducer } from "../web3/producerService";
 import { withdrawTokens as withdrawInspector } from "../web3/inspectorService";
 import { withdrawTokens as withdrawResearcher } from "../web3/researchersService";
+import { withdrawTokens as withdrawContributor} from "../web3/contributorService";
+import { withdrawTokens as withdrawActivist } from "../web3/activistService";
+import { withdrawTokens as withdrawValidator } from "../web3/validatorService";
 
 interface ReturnTransactionProps {
     transactionHash: string;
@@ -68,7 +71,6 @@ export async function executeWithdrawTokens({ walletConnected }: ExecuteWithdraw
         return responseWithdrawResearcher;
     }
 
-
     if(user.userType === 4){
         const responseWithdrawDeveloper = await withdrawDeveloper({walletConnected});
         if(responseWithdrawDeveloper.success){
@@ -80,6 +82,45 @@ export async function executeWithdrawTokens({ walletConnected }: ExecuteWithdraw
         }
 
         return responseWithdrawDeveloper;
+    }
+
+    if(user.userType === 5){
+        const responseWithdrawContributor = await withdrawContributor({walletConnected});
+        if(responseWithdrawContributor.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawContributor.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawContributor;
+        }
+
+        return responseWithdrawContributor;
+    }
+
+    if(user.userType === 6){
+        const responseWithdrawActivist = await withdrawActivist({walletConnected});
+        if(responseWithdrawActivist.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawActivist.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawActivist;
+        }
+
+        return responseWithdrawActivist;
+    }
+
+    if(user.userType === 8){
+        const responseWithdrawValidator = await withdrawValidator({walletConnected});
+        if(responseWithdrawValidator.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawValidator.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawValidator;
+        }
+
+        return responseWithdrawValidator;
     }
 
     return{
