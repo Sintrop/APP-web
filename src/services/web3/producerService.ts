@@ -1,12 +1,15 @@
 import { ProducerContract } from "./Contracts";
 import { producerContractAddress } from "./Contracts";
+import { web3RequestWrite } from "./requestService";
 
+//@ts-ignore
 export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaProperty) => {
     let type = '';
     let message = '';
     let hashTransaction = ''; 
     await ProducerContract.methods.addProducer(Number(areaProperty).toFixed(0), name, proofPhoto, geoLocation)
     .send({ from: wallet })
+    //@ts-ignore
     .on('transactionHash', hash => {
         if(hash){
             hashTransaction = hash
@@ -14,6 +17,7 @@ export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaPro
             message = "Producer registered!"
         }
     })
+    //@ts-ignore
     .on("error", (error, receipt) => {
         if(error.stack.includes("Not allowed user")){
             type = 'error'
@@ -32,41 +36,30 @@ export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaPro
     }
 }
 
-export const GetProducer = async (wallet) => {
+export const GetProducer = async (wallet: string) => {
+    //@ts-ignore
     let dataProducer = []
     await ProducerContract.methods.getProducer(wallet).call({from: producerContractAddress})
+    //@ts-ignore
     .then((res) => {
         dataProducer = res;
     })
+    //@ts-ignore
     return dataProducer;
 }
 
-export const WithdrawTokens = async (wallet) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = '';
-    await ProducerContract.methods.withdraw().send({from: wallet})
-    .on('transactionHash', (hash) => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Token withdrawal successful!!"
-        }
-    })
-    .on("error", (error, receipt) => {
-        
-    })
-
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+interface WithdrawTokensProps{
+    walletConnected: string;
+}
+export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
+    const response = await web3RequestWrite(ProducerContract, 'withdraw', [], walletConnected);
+    return response;
 }
 
 export const GetTotalScoreProducers = async () => {
     let score = '';
     await ProducerContract.methods.producersTotalScore().call({from: producerContractAddress})
+    //@ts-ignore
     .then((res) => {
         score = res;
     })

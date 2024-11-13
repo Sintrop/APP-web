@@ -5,10 +5,11 @@ import { addResearcher } from "./web3/researchersService";
 import { addDeveloper } from "./web3/developersService";
 import { addActivist } from "./web3/activistService";
 import { addContributor } from "./web3/contributorService";
+import { UserApiProps } from "../interfaces/user";
 
-export async function executeRegisterUser(userData, walletConnected){
+export async function executeRegisterUser(userData: UserApiProps, walletConnected: string){
     if(userData?.userType === 2){
-        const responseInspector = await addInspector(walletConnected, userData?.name, userData?.imgProfileUrl);
+        const responseInspector = await addInspector({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseInspector.success){
             await afterRegisterBlockchain(walletConnected, userData?.id, responseInspector.transactionHash);
             return responseInspector;
@@ -18,7 +19,7 @@ export async function executeRegisterUser(userData, walletConnected){
     }
 
     if(userData?.userType === 3){
-        const responseResearcher = await addResearcher(walletConnected, userData?.name, userData?.imgProfileUrl);
+        const responseResearcher = await addResearcher({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseResearcher.success){
             await afterRegisterBlockchain(walletConnected, userData?.id, responseResearcher.transactionHash);
             return responseResearcher;
@@ -28,7 +29,7 @@ export async function executeRegisterUser(userData, walletConnected){
     }
 
     if(userData?.userType === 4){
-        const responseDeveloper = await addDeveloper(walletConnected, userData?.name, userData?.imgProfileUrl);
+        const responseDeveloper = await addDeveloper({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseDeveloper.success){
             await afterRegisterBlockchain(walletConnected, userData?.id, responseDeveloper.transactionHash);
             return responseDeveloper;
@@ -58,7 +59,7 @@ export async function executeRegisterUser(userData, walletConnected){
     }
 }
 
-async function afterRegisterBlockchain(walletConnected, userId, transactionHash) {
+async function afterRegisterBlockchain(walletConnected: string, userId: string, transactionHash: string) {
     await updateAccountStatus(walletConnected);
     await createPubliFeed({
         type: 'new-user',
@@ -67,7 +68,7 @@ async function afterRegisterBlockchain(walletConnected, userId, transactionHash)
     })
 }
 
-async function updateAccountStatus(walletConnected) {
+async function updateAccountStatus(walletConnected: string) {
     try {
         await api.put('/user/account-status', { userWallet: walletConnected, status: 'blockchain' })
     } catch (e) {

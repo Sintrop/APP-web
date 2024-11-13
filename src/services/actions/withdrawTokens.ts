@@ -1,6 +1,9 @@
 import { createPubliFeed } from "../publicationFeed";
 import { getUserApi } from "../userApi";
 import { withdrawTokens as withdrawDeveloper } from "../web3/developersService";
+import { withdrawTokens as withdrawProducer } from "../web3/producerService";
+import { withdrawTokens as withdrawInspector } from "../web3/inspectorService";
+import { withdrawTokens as withdrawResearcher } from "../web3/researchersService";
 
 interface ReturnTransactionProps {
     transactionHash: string;
@@ -25,6 +28,46 @@ export async function executeWithdrawTokens({ walletConnected }: ExecuteWithdraw
     }
 
     const user = response.user;
+
+    if(user.userType === 1){
+        const responseWithdrawProducer = await withdrawProducer({walletConnected});
+        if(responseWithdrawProducer.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawProducer.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawProducer;
+        }
+
+        return responseWithdrawProducer;
+    }
+
+    if(user.userType === 2){
+        const responseWithdrawInspector = await withdrawInspector({walletConnected});
+        if(responseWithdrawInspector.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawInspector.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawInspector;
+        }
+
+        return responseWithdrawInspector;
+    }
+
+    if(user.userType === 3){
+        const responseWithdrawResearcher = await withdrawResearcher({walletConnected});
+        if(responseWithdrawResearcher.success){
+            await afterWithdraw({
+                transactionHash: responseWithdrawResearcher.transactionHash,
+                userId: user.id,
+            })
+            return responseWithdrawResearcher;
+        }
+
+        return responseWithdrawResearcher;
+    }
+
 
     if(user.userType === 4){
         const responseWithdrawDeveloper = await withdrawDeveloper({walletConnected});
