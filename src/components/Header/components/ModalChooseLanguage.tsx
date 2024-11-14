@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useMainContext } from "../../../hooks/useMainContext";
 
-export function ModalChooseLanguage({close}) {
+interface Props{
+    close: () => void;
+}
+
+export function ModalChooseLanguage({close}: Props) {
+    //@ts-ignore
     const {chooseLanguage} = useMainContext()
     return (
         <div className='flex justify-center items-center inset-0 z-30'>
@@ -15,6 +20,7 @@ export function ModalChooseLanguage({close}) {
                     <img
                         src={require('../../../assets/icon-br.png')}
                         className="w-10 h-7 object-cover"
+                        alt='bandeira do brasil'
                     />
 
                     <p className="font-bold text-white">Português</p>
@@ -27,6 +33,7 @@ export function ModalChooseLanguage({close}) {
                     <img
                         src={require('../../../assets/icon-brit.png')}
                         className="w-10 h-7 object-cover"
+                        alt='bandeira da inglaterra'
                     />
 
                     <p className="font-bold text-white">English</p>
@@ -39,6 +46,7 @@ export function ModalChooseLanguage({close}) {
                     <img
                         src={require('../../../assets/icon-spa.png')}
                         className="w-10 h-7 object-cover"
+                        alt='bandeira da espanha'
                     />
 
                     <p className="font-bold text-white">Español</p>

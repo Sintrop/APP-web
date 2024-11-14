@@ -4,13 +4,13 @@ import { RiComputerFill } from "react-icons/ri";
 import { BsFillGearFill } from "react-icons/bs";
 import { useNavigate } from "react-router";
 import { useMainContext } from '../../hooks/useMainContext';
-import { ModalConnectAccount } from "../ModalConnectAccount/index.js";
+import { ModalConnectAccount } from "../ModalConnectAccount/index";
 import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
-import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
+import { ModalLogout } from "../../pages/Home/components/ModalLogout/index";
 import { ModalOptionAccount } from "./components/ModalOptionAccount";
 import { useTranslation } from "react-i18next";
-import { ModalChooseLanguage } from "./components/ModalChooseLanguage.js";
+import { ModalChooseLanguage } from "./components/ModalChooseLanguage";
 
 interface Props{
     routeActive: string;
