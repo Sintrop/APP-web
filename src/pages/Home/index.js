@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';

@@ -8,12 +8,17 @@ import { ModalConnectAccount } from "../ModalConnectAccount/index.js";
 import * as Dialog from '@radix-ui/react-dialog';
 import { getImage } from "../../services/getImage";
 import { ModalLogout } from "../../pages/Home/components/ModalLogout/index.js";
-import { ModalOptionAccount } from "./components/ModalOptionAccount.js";
+import { ModalOptionAccount } from "./components/ModalOptionAccount";
 import { useTranslation } from "react-i18next";
 import { ModalChooseLanguage } from "./components/ModalChooseLanguage.js";
 
-export function Header({ routeActive }) {
+interface Props{
+    routeActive: string;
+}
+
+export function Header({ routeActive }: Props) {
     const { t, i18n } = useTranslation();
+    //@ts-ignore
     const { walletConnected, userData, modalChooseLang, toggleModalChooseLang } = useMainContext();
     const navigate = useNavigate();
     const [modalConnect, setModalConnect] = useState(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { ValidatorActions } from "../../Actions/components/ValidatorActions";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { TopBar } from "../../../components/TopBar";
 
 export function ValidationCenter(){

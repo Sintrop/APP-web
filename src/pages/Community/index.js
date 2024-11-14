@@ -1,6 +1,6 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";

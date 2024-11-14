@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { FaMobile } from "react-icons/fa";
 import { MdVideoCall } from "react-icons/md";
 import { SiGooglesheets, SiReadthedocs } from "react-icons/si";

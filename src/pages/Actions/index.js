@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { useMainContext } from '../../hooks/useMainContext';
 import { TopBar } from "../../components/TopBar";
 import * as Dialog from '@radix-ui/react-dialog';

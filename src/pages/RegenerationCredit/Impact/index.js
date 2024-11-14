@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Header } from '../../../components/Header';
+import { Header } from '../../../components/Header/header';
 import { ActivityIndicator } from '../../../components/ActivityIndicator';
 import { api } from '../../../services/api';
 import Chart from 'react-apexcharts';

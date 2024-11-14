@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { ActivityIndicator } from "../../components/ActivityIndicator";
 import { useMainContext } from "../../hooks/useMainContext";
 import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaMobile, FaMapMarkedAlt } from "react-icons/fa";

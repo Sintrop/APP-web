@@ -1,9 +1,16 @@
+import React from "react";
 import { useNavigate } from "react-router";
 import { FaUser } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { FiRefreshCw } from "react-icons/fi";
 
-export function ModalOptionAccount({close, mobile, disconnect, switchAccount}){
+interface Props{
+    close: () => void;
+    mobile?: boolean;
+    disconnect: () => void;
+    switchAccount: () => void;
+}
+export function ModalOptionAccount({close, mobile, disconnect, switchAccount}: Props){
     const navigate = useNavigate();
     return(
         <div onClick={close} className={`flex w-screen h-screen top-0 right-0 absolute z-50`}>
