@@ -100,6 +100,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                     <img
                         src={require('../../../../assets/anonimous.png')}
                         className="w-14 h-14 object-contain rounded-full border-2 border-white"
+                        alt='imagem de um avatar anonimo'
                     />
 
                     <p className="font-bold text-white text-center text-sm mt-2">{t('voceEstaAnonimo')}</p>
@@ -120,6 +121,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                         <img
                             src={imageProfile}
                             className="w-14 h-14 rounded-full object-cover border-2 border-white"
+                            alt='imagem de perfil'
                         />
                     </div>
 

@@ -40,6 +40,7 @@ export function Header({ routeActive }) {
                         <img
                             src={require('../../assets/logo-cr.png')}
                             className="w-[250px] h-[80px] object-contain"
+                            alt='logo do credito de regeneração'
                         />
                     </button>
                     <div className="flex items-center">
@@ -84,6 +85,7 @@ export function Header({ routeActive }) {
                                 <img
                                     src={require('../../assets/token.png')}
                                     className="w-8 h-8 object-contain"
+                                    alt='icone do crédito de regeneração'
                                 />
                             </div>
 
@@ -128,44 +130,45 @@ export function Header({ routeActive }) {
                             )}
                         </button>
 
-                        <button
-                            className="flex flex-col items-center w-[75px]"
-                            onClick={() => {
-                                if (walletConnected === '') {
-                                    setModalConnect(true);
-                                } else {
-                                    setOptionsAccount(true);
-                                }
-                            }}
-                        >
-                            <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
-                                <ModalConnectAccount close={() => setModalConnect(false)} />
-                            </Dialog.Root>
-
-                            <div
-                                className="flex flex-col items-center justify-center w-6 h-6 bg-gray-200 rounded-full"
+                        <Dialog.Root open={modalConnect}>
+                            <Dialog.Trigger
+                                className="flex flex-col items-center w-[75px]"
+                                onClick={() => {
+                                    if (walletConnected === '') {
+                                        setModalConnect(true);
+                                    } else {
+                                        setOptionsAccount(true);
+                                    }
+                                }}
                             >
-                                {walletConnected === '' ? (
-                                    <>
-                                        <FaRegUser color='#aaa' size={15} />
-                                    </>
-                                ) : (
-                                    <>
-                                        {imageProfile && (
-                                            <img
-                                                src={imageProfile}
-                                                className="w-7 h-7 rounded-full object-cover"
-                                            />
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                            <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? t('conectar') : t('perfil')}</p>
+                                <div
+                                    className="flex flex-col items-center justify-center w-6 h-6 bg-gray-200 rounded-full"
+                                >
+                                    {walletConnected === '' ? (
+                                        <>
+                                            <FaRegUser color='#aaa' size={15} />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {imageProfile && (
+                                                <img
+                                                    src={imageProfile}
+                                                    className="w-7 h-7 rounded-full object-cover"
+                                                    alt='imagem de perfil'
+                                                />
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                                <p className={`${routeActive === 'profile' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base text-center`}>{walletConnected === '' ? t('conectar') : t('perfil')}</p>
 
-                            {routeActive === 'profile' && (
-                                <div className="w-full h-1 bg-white rounded-full" />
-                            )}
-                        </button>
+                                {routeActive === 'profile' && (
+                                    <div className="w-full h-1 bg-white rounded-full" />
+                                )}
+                            </Dialog.Trigger>
+
+                            <ModalConnectAccount close={() => setModalConnect(false)} />
+                        </Dialog.Root>
 
                         <button
                             className="w-7 h-5 bg-red-500 ml-5"
@@ -175,18 +178,21 @@ export function Header({ routeActive }) {
                                 <img
                                     src={require('../../assets/icon-br.png')}
                                     className="w-full h-full object-cover"
+                                    alt='bandeira do Brasil'
                                 />
                             )}
                             {i18n.language === 'en-US' && (
                                 <img
                                     src={require('../../assets/icon-brit.png')}
                                     className="w-full h-full object-cover"
+                                    alt='bandeira da inglaterra'
                                 />
                             )}
                             {i18n.language === 'es' && (
                                 <img
                                     src={require('../../assets/icon-spa.png')}
                                     className="w-full h-full object-cover"
+                                    alt='bandeira da espanha'
                                 />
                             )}
                         </button>
