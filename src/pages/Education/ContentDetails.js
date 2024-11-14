@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../services/api";
 import { EpisodeItem } from "./components/EpisodeItem";
 import { ContentItem } from "./components/ContentItem";

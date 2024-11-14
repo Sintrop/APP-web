@@ -4,7 +4,7 @@ import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { InspectionItem } from "./components/InspectionItem";
 import { TopBar } from "../../components/TopBar";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { Feedback } from "../../components/Feedback";
 import { useTranslation } from "react-i18next";
 

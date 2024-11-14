@@ -5,7 +5,7 @@ import { MdVideoCall } from "react-icons/md";
 import { SiGooglesheets, SiReadthedocs } from "react-icons/si";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { useMainContext } from "../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';

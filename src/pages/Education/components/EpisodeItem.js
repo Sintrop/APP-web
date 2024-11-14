@@ -3,7 +3,7 @@ import { MdOutlinePlayCircle } from "react-icons/md";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../services/api";
 
 export function EpisodeItem({data, contentData}){

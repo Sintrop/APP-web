@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header/header";
 import { FaChevronRight } from "react-icons/fa";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../../components/TopBar";
 import { api } from "../../../services/api";

@@ -8,7 +8,7 @@ import { ModalConfirmAssign } from './components/ModalConfirmAssign';
 import { Marker } from './components/Marker';
 import { getImage } from '../../../../../services/getImage';
 import { format } from 'date-fns';
-import { ActivityIndicator } from '../../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../../components/ActivityIndicator/ActivityIndicator';
 import { ModalFinishTask } from './components/ModalFinishTask';
 import { toast } from 'react-toastify';
 import { ModalEditFeedback } from './components/ModalEditFeedback';

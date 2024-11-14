@@ -7,7 +7,7 @@ import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";

@@ -6,7 +6,7 @@ import { LoadingTransaction } from "../LoadingTransaction";
 import { addSupporter } from "../../services/web3/supporterService";
 import { api } from "../../services/api";
 import { ModalTransactionCreated } from "../ModalTransactionCreated";
-import { ActivityIndicator } from "../ActivityIndicator";
+import { ActivityIndicator } from "../ActivityIndicator/ActivityIndicator";
 import { Info } from "../Info";
 import { useMainContext } from "../../hooks/useMainContext";
 import { WebcamCapture } from "./components/WebCam";

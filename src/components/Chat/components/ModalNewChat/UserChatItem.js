@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { api } from "../../../../services/api";
-import { ActivityIndicator } from "../../../ActivityIndicator";
+import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
 import { getImage } from "../../../../services/getImage";
 
 export function UserChatItem({ data, chats, chatCreated, participantChat }) {

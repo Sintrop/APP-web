@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { getImage } from "../../../services/getImage";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { InsumoItem } from "./InsumoItem";
 import { ZoneItem } from "./ZoneItem";
 import { ImageItem } from "./ImageItem";

@@ -3,7 +3,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../services/firebase";
 import { Cropper } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
-import { ActivityIndicator } from "../ActivityIndicator";
+import { ActivityIndicator } from "../ActivityIndicator/ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../services/api";
 import { save } from "../../config/infura";

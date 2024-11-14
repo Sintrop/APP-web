@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {FaChevronLeft} from 'react-icons/fa';
 import { api } from "../../../../services/api";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { UserLikeItem } from "./UserLikeItem";
 import { useTranslation } from "react-i18next";
 

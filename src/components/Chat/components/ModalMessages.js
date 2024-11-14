@@ -5,7 +5,7 @@ import { IoMdCloseCircleOutline, IoMdCloseCircle } from 'react-icons/io';
 import { MdSend, MdGroups } from "react-icons/md";
 import { GrGallery } from "react-icons/gr";
 import { api } from "../../../services/api";
-import { ActivityIndicator } from "../../ActivityIndicator";
+import { ActivityIndicator } from "../../ActivityIndicator/ActivityIndicator";
 import { MessageItem } from "./MessageItem";
 import CryptoJS from "crypto-js";
 import { useMainContext } from "../../../hooks/useMainContext";

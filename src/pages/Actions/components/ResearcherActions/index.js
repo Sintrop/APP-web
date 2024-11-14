@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../../../services/api";
 import { ResearcheItem } from "./components/ResearcheItem";
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { useMainContext } from '../../../../hooks/useMainContext';
 import * as Dialog from '@radix-ui/react-dialog';
 import { PublishResearch } from "../../../../services/web3/researchersService";

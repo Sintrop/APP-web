@@ -5,7 +5,7 @@ import {save, get} from '../../config/infura';
 import { ToastContainer, toast} from 'react-toastify';
 import {IoMdCloseCircleOutline} from 'react-icons/io';
 import { api } from '../../services/api';
-import { ActivityIndicator } from '../ActivityIndicator';
+import { ActivityIndicator } from '../ActivityIndicator/ActivityIndicator';
 import { storage } from '../../services/firebase';
 import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
 import { useMainContext } from '../../hooks/useMainContext';

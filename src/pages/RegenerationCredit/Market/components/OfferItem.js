@@ -4,7 +4,7 @@ import { api } from "../../../../services/api";
 import { useMainContext } from '../../../../hooks/useMainContext';
 import { ModalConfimation } from "../../../../components/ModalConfirmation";
 import CryptoJS from "crypto-js";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 

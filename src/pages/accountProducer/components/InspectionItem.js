@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Inspection } from "../../ResultInspection/components/Inspection";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 
 export function InspectionItem({inspectionId, index}){

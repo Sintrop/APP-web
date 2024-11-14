@@ -11,7 +11,7 @@ import { QRCode } from "react-qrcode-logo";
 import { Feedback } from "../../components/Feedback";
 import { api } from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { FaChevronRight } from "react-icons/fa";
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat/index.js";

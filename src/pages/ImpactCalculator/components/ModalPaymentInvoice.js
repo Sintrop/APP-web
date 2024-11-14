@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { api } from "../../../services/api";
 import { IoMdSearch } from "react-icons/io";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { format } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from "../../../hooks/useMainContext";

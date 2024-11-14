@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { api } from "../../../../services/api";
 import { MdClose } from "react-icons/md";
-import { ActivityIndicator } from "../../../ActivityIndicator";
+import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
 import { UserChatItem } from "./UserChatItem";
 import { IoMdSearch } from "react-icons/io";
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { ItemReceipt } from './components/ItemReceipts';
 import { api } from '../../services/api';
-import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../components/ActivityIndicator/ActivityIndicator';
 import { Item } from '../ImpactCalculator/components/Item';
 import { Helmet } from "react-helmet";
 import Chart from 'react-apexcharts';

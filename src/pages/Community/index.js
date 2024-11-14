@@ -14,7 +14,7 @@ import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp";
 import { CardUserVacancy } from "./components/CardUserVacancy";
 import { ModalConnectAccount } from "../../components/ModalConnectAccount";
 import * as Dialog from '@radix-ui/react-dialog';
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 
 export function Community() {
     const { t } = useTranslation();

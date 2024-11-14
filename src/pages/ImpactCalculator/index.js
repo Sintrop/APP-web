@@ -6,7 +6,7 @@ import { useMainContext } from '../../hooks/useMainContext';
 import { useNavigate } from 'react-router-dom';
 import { TopBar } from "../../components/TopBar";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { RecordItem } from "./components/RecordItem";
 import { ModalAddRecord } from "./components/ModalAddRecord";
 import { ModalPaymentInvoice } from "./components/ModalPaymentInvoice";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header/header";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { useMainContext } from "../../hooks/useMainContext";
 import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaMobile, FaMapMarkedAlt } from "react-icons/fa";
 import { MdHelpOutline } from "react-icons/md";

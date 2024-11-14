@@ -6,7 +6,7 @@ import { Invite } from '../../../../services/web3/invitationService';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
 import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Info } from "../../../../components/Info";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from "../../../../hooks/useMainContext";

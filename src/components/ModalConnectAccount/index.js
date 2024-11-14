@@ -3,7 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import { IoMdClose } from 'react-icons/io';
 import { FaWallet, FaKey, FaChevronLeft } from "react-icons/fa";
-import { ActivityIndicator } from '../ActivityIndicator';
+import { ActivityIndicator } from '../ActivityIndicator/ActivityIndicator';
 import { useMainContext } from '../../hooks/useMainContext';
 import { ModalSignUp } from '../ModalSignUp/ModalSignUp';
 import { UserAccountItem } from './components/UserAccountItem';

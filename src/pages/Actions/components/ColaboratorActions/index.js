@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../../../../services/api";
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { TaskItem } from "./taskItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";

@@ -4,7 +4,7 @@ import { useMainContext } from "../../../hooks/useMainContext";
 import { CropImage } from "../../../components/CropImage";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../../services/api";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import * as Dialog from '@radix-ui/react-dialog';
 
 export function ModalEditProfile({close, imageProfile}){

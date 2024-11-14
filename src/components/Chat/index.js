@@ -3,7 +3,7 @@ import { BsFillChatDotsFill } from 'react-icons/bs';
 import { FaChevronUp, FaChevronDown, FaPlus } from 'react-icons/fa';
 import { useMainContext } from '../../hooks/useMainContext';
 import { api } from '../../services/api';
-import { ActivityIndicator } from '../ActivityIndicator';
+import { ActivityIndicator } from '../ActivityIndicator/ActivityIndicator';
 import io from 'socket.io-client';
 import { ChatItem } from './components/ChatItem';
 import * as Dialog from '@radix-ui/react-dialog';

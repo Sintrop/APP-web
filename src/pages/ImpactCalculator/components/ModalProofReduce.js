@@ -6,7 +6,7 @@ import { storage } from "../../../services/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { api } from "../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
-import {ActivityIndicator} from '../../../components/ActivityIndicator';
+import {ActivityIndicator} from '../../../components/ActivityIndicator/ActivityIndicator';
 import {useMainContext} from '../../../hooks/useMainContext';
 import { useTranslation } from "react-i18next";
 

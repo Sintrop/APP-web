@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Header } from '../../../components/Header/header';
-import { ActivityIndicator } from '../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../components/ActivityIndicator/ActivityIndicator';
 import { api } from '../../../services/api';
 import Chart from 'react-apexcharts';
 import { TopBar } from '../../../components/TopBar';

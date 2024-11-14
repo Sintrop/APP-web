@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import format from "date-fns/format";
 import { useMainContext } from "../../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 
 export function UserInvite({data, inviteUser, loadingInvite}){
     const {userData} = useMainContext();

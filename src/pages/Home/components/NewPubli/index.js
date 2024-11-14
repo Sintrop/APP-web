@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { toast } from "react-toastify";
 import {useMainContext} from '../../../../hooks/useMainContext';
 import { api } from "../../../../services/api";
-import {ActivityIndicator} from '../../../../components/ActivityIndicator';
+import {ActivityIndicator} from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { CropImage } from "../../../../components/CropImage";
 import { MdFactCheck, MdOutlinePhoto } from "react-icons/md";
 import { IoIosCloseCircle } from "react-icons/io";

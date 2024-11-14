@@ -4,7 +4,7 @@ import { FaCheck, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useMainContext } from "../../../../../hooks/useMainContext";
 import { useNavigate } from "react-router";
 import { getProportionallity } from "../../../../../services/getProportionality";
-import { ActivityIndicator } from "../../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 
 export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister, loadingEfetive }) {
     const { userData } = useMainContext();

@@ -4,7 +4,7 @@ import { useMainContext } from "../../hooks/useMainContext";
 import { api } from "../../services/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator } from "../ActivityIndicator";
+import { ActivityIndicator } from "../ActivityIndicator/ActivityIndicator";
 import { LoadingTransaction } from "./components/LoadingTransaction/LoadingTransaction";
 import { ModalTransactionCreated } from "../ModalTransactionCreated";
 

@@ -3,7 +3,7 @@ import { Header } from "../../../components/Header/header";
 import { useParams } from "react-router";
 import { api } from "../../../services/api";
 import { useMainContext } from "../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import Chart from "react-apexcharts";
 import { UserRankingItem } from "../../Community/Ranking/components/UserRankingItem";
 import { ToastContainer, toast } from "react-toastify";

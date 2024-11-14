@@ -6,7 +6,7 @@ import { api } from "../../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { BuyRCT } from "../../../../services/web3/rcTokenService";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 
 export function ModalBuyRc({diferenca, close}){

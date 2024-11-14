@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { useParams } from "react-router";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { PublicationItem } from "../Home/components/PublicationItem";
 import { TopBar } from "../../components/TopBar";
 import { Feedback } from "../../components/Feedback";

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { getImage } from "../../../services/getImage";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 
 export function ProofItem({data, select}){
     const [image, setImage] = useState(null);

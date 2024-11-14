@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../../components/Header/header";
 import { FaEyeSlash, FaRegEye, FaChevronRight } from "react-icons/fa";
 import { useMainContext } from "../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../services/api";
 import Chart from 'react-apexcharts';
 import * as Dialog from '@radix-ui/react-dialog';

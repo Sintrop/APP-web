@@ -9,7 +9,7 @@ import { Polyline } from '../../components/Mapbox/Polyline';
 
 //components
 import { getImage } from '../../services/getImage';
-import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../components/ActivityIndicator/ActivityIndicator';
 import { ProducerGraphics } from '../../components/ProducerGraphics';
 import { Helmet } from "react-helmet";
 import { Inspection } from '../ResultInspection/components/Inspection';
