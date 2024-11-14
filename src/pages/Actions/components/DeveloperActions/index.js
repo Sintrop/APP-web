@@ -13,6 +13,7 @@ import { ModalCreateTask } from "./ModalCreateTask";
 import {Feedback} from '../../../../components/Feedback';
 import {Chat} from '../../../../components/Chat';
 import { useTranslation } from "react-i18next";
+import { ReportItem } from "./components/ReportItem";
 
 export function DeveloperActions() {
     const {t} = useTranslation()
@@ -30,10 +31,12 @@ export function DeveloperActions() {
     const [createTask, setCreateTask] = useState(false);
     const [filterSelected, setFilterSelected] = useState(0);
     const [filterFeedbacks, setFilterFeedbacks] = useState([]);
+    const [contributions, setContributions] = useState([]);
 
     useEffect(() => {
         if (tabSelected === 'open' || tabSelected === 'history') getFeedbacks();
         if (tabSelected === 'users') getUsers();
+        if (tabSelected === 'contributions') getContributions();
     }, [tabSelected]);
 
     useEffect(() => {
@@ -46,6 +49,18 @@ export function DeveloperActions() {
             }
         }
     }, [filterSelected]);
+
+    async function getContributions(){
+        try{
+            setLoading(true);
+            const response = await api.get('/developer/reports');
+            setContributions(response.data.contributions);
+        }catch(e){
+            console.log(e);
+        }finally{
+            setLoading(false);
+        }
+    }
 
     async function getFeedbacks() {
         setLoading(true);
@@ -170,6 +185,13 @@ export function DeveloperActions() {
                     {t('desenvolvedores')}
                 </button>
 
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'contributions' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('contributions')}
+                >
+                    {t('contribuicoes')}
+                </button>
+
                 {userData?.userType === 4 && (
                     <button
                         className={`font-bold py-1 border-b-2 ${tabSelected === 'actions' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
@@ -285,6 +307,17 @@ export function DeveloperActions() {
                         </>
                     )}
                 </>
+            )}
+
+            {tabSelected === 'contributions' && (
+                <div className="flex flex-col gap-3">
+                    {contributions.map(item => (
+                        <ReportItem
+                            key={item.id}
+                            contribution={item}
+                        />
+                    ))}
+                </div>
             )}
 
             {modalDevReport && (

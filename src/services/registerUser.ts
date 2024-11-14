@@ -5,7 +5,7 @@ import { addResearcher } from "./web3/researchersService";
 import { addDeveloper } from "./web3/developersService";
 import { addActivist } from "./web3/activistService";
 import { addContributor } from "./web3/contributorService";
-import { UserApiProps } from "../interfaces/user";
+import { UserApiProps } from "../types/user";
 
 export async function executeRegisterUser(userData: UserApiProps, walletConnected: string){
     if(userData?.userType === 2){

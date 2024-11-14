@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { ReturnTransactionProps } from "../../../../services/web3/rcTokenService";
 import { executeBurnTokens } from "../../../../services/actions/burnTokens";
-import { AddressProps, UserApiProps } from "../../../../interfaces/user";
+import { AddressProps, UserApiProps } from "../../../../types/user";
 import { executeWithdrawTokens } from "../../../../services/actions/withdrawTokens";
 
 interface Props {

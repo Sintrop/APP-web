@@ -1,4 +1,4 @@
-import { UserApiProps } from "../interfaces/user";
+import { UserApiProps } from "../types/user";
 import { api } from "./api";
 
 interface ReturnGetUserProps{

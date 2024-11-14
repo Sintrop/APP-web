@@ -1,4 +1,4 @@
-import { UserApiProps } from '../../interfaces/user';
+import { UserApiProps } from '../../types/user';
 import { api } from "../api";
 import { BurnTokens } from "../web3/rcTokenService";
 import { BurnTokens as BurnTokensSupporter} from '../web3/supporterService';
