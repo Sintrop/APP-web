@@ -8,7 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { PublishResearch } from "../../../../services/web3/researchersService";
 import { save } from "../../../../config/infura";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { CategorieItem } from "./components/CategorieItem";
+import { CategoryItem } from "./components/CategoryItem/CategoryItem";
 import { Item } from '../../../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
 import { FaCalculator, FaChevronRight, FaDatabase, FaFileAlt, FaUsers } from "react-icons/fa";
@@ -312,7 +312,7 @@ export function ResearcherActions() {
                         {tabSelected === 'isa' && (
                             <div className="flex flex-wrap gap-4">
                                 {categories.map(item => (
-                                    <CategorieItem data={item} />
+                                    <CategoryItem data={item} />
                                 ))}
                             </div>
                         )}

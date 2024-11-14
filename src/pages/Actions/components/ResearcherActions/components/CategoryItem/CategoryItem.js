@@ -1,6 +1,7 @@
 import React, {} from "react";
+import { IndicatorItem } from "./components/IndicatorItem";
 
-export function CategorieItem({data}){
+export function CategoryItem({data}){
     return(
         <div className="w-full flex flex-col p-2 rounded-md bg-[#03364B] lg:w-[49%]">
             <p className="font-bold text-white">{data?.name}</p>
@@ -8,10 +9,10 @@ export function CategorieItem({data}){
 
             <div className="flex flex-col gap-2 mt-3">
                 {data?.indicators?.map(item => (
-                    <div className="flex flex-col">
-                        <p className="text-white text-sm">Indicator: {item?.isaId}</p>
-                        <p className="font-semibold text-white">{item?.description}</p>
-                    </div>
+                    <IndicatorItem
+                        key={item.isaId}
+                        indicator={item}
+                    />
                 ))}
             </div>
         </div>
