@@ -209,19 +209,21 @@ export function DeveloperActions() {
 
             {tabSelected === 'open' && (
                 <>
-                    <select
-                        value={filterSelected}
-                        onChange={(e) => setFilterSelected(e.target.value)}
-                        className="w-[200px] h-10 bg-[#03364B] text-white rounded-md px-3 mb-3"
-                    >
-                        <option value={0}>Todos</option>
-                        <option value={1}>Front-End</option>
-                        <option value={2}>Contratos inteligentes</option>
-                        <option value={3}>Mobile</option>
-                        <option value={4}>Design</option>
-                        <option value={5}>UX</option>
-                        <option value={6}>API</option>
-                    </select>
+                    {!loading && (
+                        <select
+                            value={filterSelected}
+                            onChange={(e) => setFilterSelected(e.target.value)}
+                            className="w-[200px] h-10 bg-[#03364B] text-white rounded-md px-3 mb-3"
+                        >
+                            <option value={0}>Todos</option>
+                            <option value={1}>Front-End</option>
+                            <option value={2}>Contratos inteligentes</option>
+                            <option value={3}>Mobile</option>
+                            <option value={4}>Design</option>
+                            <option value={5}>UX</option>
+                            <option value={6}>API</option>
+                        </select>
+                    )}
 
                     {filterFeedbacks.length > 0 ? (
                         <>
