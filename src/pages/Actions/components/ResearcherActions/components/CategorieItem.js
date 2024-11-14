@@ -6,26 +6,14 @@ export function CategorieItem({data}){
             <p className="font-bold text-white">{data?.name}</p>
             <p className="text-white">{data?.description}</p>
 
-            <p className="text-gray-200 text-sm mt-3">Regenerative 3 (25 pts):</p>
-            <p className="text-white">{data?.regenerative3}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Regenerative 2 (10 pts):</p>
-            <p className="text-white">{data?.regenerative2}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Regenerative 1 (1 pts):</p>
-            <p className="text-white">{data?.regenerative1}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Neutro:</p>
-            <p className="text-white">{data?.neutro}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Not Regenerative 1 (-1 pts):</p>
-            <p className="text-white">{data?.notRegenerative1}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Not Regenerative 2 (-10 pts):</p>
-            <p className="text-white">{data?.notRegenerative2}</p>
-
-            <p className="text-gray-200 text-sm mt-3">Not Regenerative 3 (-25 pts):</p>
-            <p className="text-white">{data?.notRegenerative3}</p>
+            <div className="flex flex-col gap-2 mt-3">
+                {data?.indicators?.map(item => (
+                    <div className="flex flex-col">
+                        <p className="text-white text-sm">Indicator: {item?.isaId}</p>
+                        <p className="font-semibold text-white">{item?.description}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
