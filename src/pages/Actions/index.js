@@ -123,11 +123,7 @@ export function Actions() {
                         message: res.message,
                         hash: res.hashTransaction
                     });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -146,11 +142,7 @@ export function Actions() {
                         message: res.message,
                         hash: res.hashTransaction
                     });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
+                    setLoadingTransaction(false);
                 })
                 .catch(err => {
                     setLoadingTransaction(false);
@@ -161,40 +153,6 @@ export function Actions() {
                         hash: ''
                     })
                 })
-        }
-    }
-
-    async function registerTokensApi(tokens, hash) {
-        const addData = {
-            userData,
-            tokens: Number(tokens),
-            transactionHash: hash,
-            reason: '',
-            itens: [],
-            hash
-        }
-
-        try {
-            await api.post('/tokens-burned', {
-                wallet: walletConnected.toUpperCase(),
-                tokens: Number(tokens),
-                transactionHash: hash,
-                carbon: Number(impactToken?.carbon),
-                water: Number(impactToken?.water),
-                bio: Number(impactToken?.bio),
-                soil: Number(impactToken?.soil)
-            });
-
-            await api.post('/publication/new', {
-                userId: userData?.id,
-                type: 'contribute-tokens',
-                origin: 'platform',
-                additionalData: JSON.stringify(addData),
-            })
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingTransaction(false);
         }
     }
 
