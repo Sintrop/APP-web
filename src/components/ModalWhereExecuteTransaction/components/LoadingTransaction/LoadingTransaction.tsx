@@ -4,6 +4,7 @@ import { ReturnTransactionProps } from "../../../../services/web3/rcTokenService
 import { executeBurnTokens } from "../../../../services/actions/burnTokens";
 import { AddressProps, UserApiProps } from "../../../../types/user";
 import { executeWithdrawTokens } from "../../../../services/actions/withdrawTokens";
+import { executeSendContribution } from "../../../../services/actions/sendContribution";
 
 interface Props {
     close: () => void;
@@ -36,6 +37,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'withdraw-tokens') {
             handleWithdrawTokens();
         }
+        if (transactionType === 'sendContribution') {
+            handleSendContribution();
+        }
     }
 
     async function handleBurnTokens() {
@@ -45,6 +49,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleWithdrawTokens() {
         const response = await executeWithdrawTokens({ walletConnected });
+        finishRequestWeb3(response);
+    }
+
+    async function handleSendContribution(){
+        const response = await executeSendContribution({walletConnected, additionalDataTransaction});
         finishRequestWeb3(response);
     }
 

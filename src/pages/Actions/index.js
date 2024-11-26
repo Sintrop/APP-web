@@ -17,6 +17,8 @@ import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
 import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
+import { ModalRealizeAction } from "./components/ModalRealizeAction/ModalRealizeAction";
+import { DeveloperActions } from "./components/DeveloperActions/DeveloperActions";
 
 export function Actions() {
     const { t } = useTranslation();
@@ -30,6 +32,7 @@ export function Actions() {
     const [loading, setLoading] = useState(false);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
     const [addDataTransaction, setAddDataTransaction] = useState({});
+    const [showModalRealizeAction, setShowModalRealizeAction] = useState(false);
 
     useEffect(() => {
         setAddDataTransaction({
@@ -331,6 +334,16 @@ export function Actions() {
                                 </div>
                             )}
 
+                            <div className="flex flex-col w-full gap-1">
+                                <p className="font-semibold text-white">{t('ações')}</p>  
+
+                                <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full">
+                                    {userData?.userType === 4 && (
+                                        <DeveloperActions />
+                                    )}
+                                </div>
+                            </div>
+
                             {/* {userData?.userType === 3 && (
                                 <ResearcherActions />
                             )}
@@ -366,6 +379,12 @@ export function Actions() {
                     transactionType='burn-tokens'
                     close={() => setShowModalWhereExecuteTransaction(false)}
                     success={successBurn}
+                />
+            )}
+
+            {showModalRealizeAction && (
+                <ModalRealizeAction
+                    close={() => setShowModalRealizeAction(false)}
                 />
             )}
 

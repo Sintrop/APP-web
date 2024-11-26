@@ -12,29 +12,38 @@ export const GetDevelopers = async () => {
     return developers;
 }
 
-//@ts-ignore
-export const AddContribution = async (walletAddress, report) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = '';
-    await DeveloperContract.methods.addContribution(report).send({from: walletAddress})
-    //@ts-ignore
-    .on('transactionHash', (hash) => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Inspection successfully accepted!"
-        }
-    })
-    //@ts-ignore
-    .on("error", (error, receipt) => {
-        console.log(receipt);
-    })
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+// //@ts-ignore
+// export const AddContribution = async (walletAddress, report) => {
+//     let type = '';
+//     let message = '';
+//     let hashTransaction = '';
+//     await DeveloperContract.methods.addContribution(report).send({from: walletAddress})
+//     //@ts-ignore
+//     .on('transactionHash', (hash) => {
+//         if(hash){
+//             hashTransaction = hash
+//             type = 'success'
+//             message = "Inspection successfully accepted!"
+//         }
+//     })
+//     //@ts-ignore
+//     .on("error", (error, receipt) => {
+//         console.log(receipt);
+//     })
+//     return {
+//         type, 
+//         message,
+//         hashTransaction
+//     }
+// }
+
+interface AddContributionProps{
+    walletConnected: string;
+    report: string;
+}
+export async function addContribution({walletConnected, report}: AddContributionProps){
+    const response = await web3RequestWrite(DeveloperContract, 'addContribution', [report], walletConnected);
+    return response;
 }
 
 interface WithdrawTokensProps{

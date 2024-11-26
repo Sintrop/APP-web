@@ -1,5 +1,11 @@
 import { api } from "./api";
 
+export const INSPECTOR_PROPORTIONALITY = 3;
+export const ACTIVIST_PROPORTIONALITY = 2;
+export const RESEARCHER_PROPORTIONALITY = 2;
+export const DEVELOPER_PROPORTIONALITY = 1;
+export const VALIDATOR_PROPORTIONALITY = 5;
+export const CONTRIBUTOR_PROPORTIONALITY = 1;
 
 export async function getProportionallity() {
     let producers = 0;
@@ -22,12 +28,12 @@ export async function getProportionallity() {
         contributors = Number(count.contributorsCount);
     }
 
-    const limitTotalInspectors = producers * 3;
-    const limitTotalDevelopers = producers;
-    const limitTotalResearchers = producers / 2;
-    const limitTotalActivists = producers / 2;
-    const limitTotalContributors = producers / 2;
-    const limitTotalValidators = producers / 5;
+    const limitTotalInspectors = producers * INSPECTOR_PROPORTIONALITY;
+    const limitTotalDevelopers = producers * DEVELOPER_PROPORTIONALITY;
+    const limitTotalResearchers = producers / RESEARCHER_PROPORTIONALITY;
+    const limitTotalActivists = producers / ACTIVIST_PROPORTIONALITY;
+    const limitTotalContributors = producers / CONTRIBUTOR_PROPORTIONALITY;
+    const limitTotalValidators = producers / VALIDATOR_PROPORTIONALITY;
 
 
     const calculoInspector = limitTotalInspectors - inspectors;
@@ -50,16 +56,16 @@ export async function getProportionallity() {
     
     return {
         avaliableVacancyInspector: calculoInspector >= 1 ? true : false,
-        amountVacancyInspector: calculoInspector >= 1 ? calculoInspector : Math.floor(producerToInspectors),
+        amountVacancyInspector: calculoInspector >= 1 ? Math.floor(calculoInspector) : Math.floor(producerToInspectors),
         avaliableVacancyResearcher: calculoResearcher >= 1 ? true : false,
-        amountVacancyResearcher: calculoResearcher >= 1 ? calculoResearcher : Math.floor(producerToResearchers),
+        amountVacancyResearcher: calculoResearcher >= 1 ? Math.floor(calculoResearcher) : Math.floor(producerToResearchers),
         avaliableVacancyDeveloper: calculoDeveloper >= 1 ? true : false,
-        amountVacancyDeveloper: calculoDeveloper >= 1 ? calculoDeveloper : Math.floor(producerToDevelopers),
+        amountVacancyDeveloper: calculoDeveloper >= 1 ? Math.floor(calculoDeveloper) : Math.floor(producerToDevelopers),
         avaliableVacancyActivist: calculoActivist >= 1 ? true : false,
-        amountVacancyActivist: calculoActivist >= 1 ? calculoActivist : Math.floor(producerToActivists),
+        amountVacancyActivist: calculoActivist >= 1 ? Math.floor(calculoActivist) : Math.floor(producerToActivists),
         avaliableVacancyValidator: calculoValidator >= 1 ? true : false,
-        amountVacancyValidator: calculoValidator >= 1 ? calculoValidator : Math.floor(producerToValidators),
+        amountVacancyValidator: calculoValidator >= 1 ? Math.floor(calculoValidator) : Math.floor(producerToValidators),
         avaliableVacancyContributor: calculoContributor >= 1 ? true : false,
-        amountVacancyContributor: calculoContributor >= 1 ? calculoContributor : Math.floor(producerToContributors)
+        amountVacancyContributor: calculoContributor >= 1 ? Math.floor(calculoContributor) : Math.floor(producerToContributors)
     }
 }
