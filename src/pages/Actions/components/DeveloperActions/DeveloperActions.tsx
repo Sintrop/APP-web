@@ -14,11 +14,13 @@ export function DeveloperActions(){
                     setShowModalRealizeAction(true);
                 }}
                 label="Enviar relatório"
+                description="Envie seu relatório de contribuição da ERA, para provar o seu desenvolvimento"
             />
 
             <ActionButton
                 onClick={() => {}}
                 label="Sacar tokens"
+                description="Saque seus tokens da sua pool, desde que tenha contribuido na ERA anterior"
             />
 
             {showModalRealizeAction && (
