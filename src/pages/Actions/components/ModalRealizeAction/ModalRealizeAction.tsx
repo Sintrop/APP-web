@@ -1,6 +1,7 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
 import { SendContribuiton } from "../DeveloperActions/components/SendContribuiton";
+import { WithdrawTokens } from "./components/WithdrawTokens";
 
 interface Props{
     close: () => void;
@@ -12,7 +13,7 @@ export function ModalRealizeAction({close, type}: Props){
     return(
         <div className='flex justify-center items-center inset-0'>
             <div className='bg-[rgba(0,0,0,0.6)] fixed inset-0'/>
-            <div className='absolute flex flex-col items-center p-3 lg:w-[400px] h-[300px] bg-container-primary rounded-md my-auto lg:mx-auto mx-2 inset-0 border-2'>
+            <div className='absolute flex flex-col items-center lg:h-[400px] p-3 lg:w-[400px] bg-container-primary rounded-md my-auto lg:mx-auto mx-2 inset-0 border-2'>
                 <div className="flex items-center justify-between w-full">
                     <div className="w-6"/>
 
@@ -27,7 +28,7 @@ export function ModalRealizeAction({close, type}: Props){
                     </button>
                 </div>
 
-                <div>
+                <div className="flex flex-col justify-center h-full">
                     <ActionComponent 
                         close={close}
                     />
@@ -39,6 +40,7 @@ export function ModalRealizeAction({close, type}: Props){
 
 const actionsTypeToComponent = {
     sendContribution: SendContribuiton,
+    withdrawTokens: WithdrawTokens,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;

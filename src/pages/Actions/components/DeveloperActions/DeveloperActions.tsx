@@ -18,7 +18,10 @@ export function DeveloperActions(){
             />
 
             <ActionButton
-                onClick={() => {}}
+                onClick={() => {
+                    setActionType('withdrawTokens');
+                    setShowModalRealizeAction(true);
+                }}
                 label="Sacar tokens"
                 description="Saque seus tokens da sua pool, desde que tenha contribuido na ERA anterior"
             />

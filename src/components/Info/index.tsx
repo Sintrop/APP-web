@@ -1,7 +1,15 @@
 import React from "react";
 import { BiInfoCircle } from "react-icons/bi";
 
-export function Info({ text1, text2, text3, text4, text5, text6 }) {
+interface Props{
+    text1: string;
+    text2?: string;
+    text3?: string;
+    text4?: string;
+    text5?: string;
+    text6?: string;
+}
+export function Info({ text1, text2, text3, text4, text5, text6 }: Props) {
     return (
         <div className="p-2 rounded-md flex flex-col w-full bg-green-600 gap-1">
             <p className="text-white text-sm">{text1}</p>
@@ -30,5 +38,5 @@ export function Info({ text1, text2, text3, text4, text5, text6 }) {
                 <BiInfoCircle color='white' size={20}/>
             </div>
         </div>
-    )
+    );
 }
