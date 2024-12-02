@@ -19,6 +19,9 @@ import { useTranslation } from "react-i18next";
 import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 import { ModalRealizeAction } from "./components/ModalRealizeAction/ModalRealizeAction";
 import { DeveloperActions } from "./components/DeveloperActions/DeveloperActions";
+import { ProducerActions } from "./components/ProducerActions/ProducerActions";
+import { InspectorActions } from "./components/InspectorActions/InspectorActions";
+import { ResearcherActions } from "./components/ResearcherActions/ResearcherActions";
 
 export function Actions() {
     const { t } = useTranslation();
@@ -104,14 +107,14 @@ export function Actions() {
         setShowModalWhereExecuteTransaction(true);
     }
 
-    function successBurn(successType){
+    function successBurn(successType) {
         setShowModalWhereExecuteTransaction(false);
-        if(successType === 'checkout'){
+        if (successType === 'checkout') {
             toast.success(t('transacaoEnviadaCheckout'));
             setInput('');
         }
 
-        if(successType === 'blockchain'){
+        if (successType === 'blockchain') {
             toast.success('Contribuição realizada com sucesso!');
             getImpact();
             getBalance();
@@ -254,6 +257,28 @@ export function Actions() {
                                 )}
                             </button>
 
+                            <div className="flex flex-col w-full gap-1 mb-5">
+                                <p className="font-semibold text-white">{t('ações')}</p>
+
+                                <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full">
+                                    {userData?.userType === 1 && (
+                                        <ProducerActions />
+                                    )}
+
+                                    {userData?.userType === 2 && (
+                                        <InspectorActions />
+                                    )}
+
+                                    {userData?.userType === 3 && (
+                                        <ResearcherActions />
+                                    )}
+
+                                    {userData?.userType === 4 && (
+                                        <DeveloperActions />
+                                    )}
+                                </div>
+                            </div>
+
                             {userData?.userType === 1 && (
                                 <div className="flex flex-col w-full">
                                     <p className="font-semibold text-white">{t('demaisAcoesNoApp')}</p>
@@ -333,16 +358,6 @@ export function Actions() {
                                     </div>
                                 </div>
                             )}
-
-                            <div className="flex flex-col w-full gap-1">
-                                <p className="font-semibold text-white">{t('ações')}</p>  
-
-                                <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full">
-                                    {userData?.userType === 4 && (
-                                        <DeveloperActions />
-                                    )}
-                                </div>
-                            </div>
 
                             {/* {userData?.userType === 3 && (
                                 <ResearcherActions />

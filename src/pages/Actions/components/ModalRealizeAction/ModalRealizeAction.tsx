@@ -2,6 +2,7 @@ import React from "react";
 import { MdClose } from "react-icons/md";
 import { SendContribuiton } from "../DeveloperActions/components/SendContribuiton";
 import { WithdrawTokens } from "./components/WithdrawTokens";
+import { PublishResearche } from "../ResearcherActions/components/PublishResearche";
 
 interface Props{
     close: () => void;
@@ -28,7 +29,7 @@ export function ModalRealizeAction({close, type}: Props){
                     </button>
                 </div>
 
-                <div className="flex flex-col justify-center h-full">
+                <div className="flex flex-col justify-center h-full w-full">
                     <ActionComponent 
                         close={close}
                     />
@@ -41,6 +42,7 @@ export function ModalRealizeAction({close, type}: Props){
 const actionsTypeToComponent = {
     sendContribution: SendContribuiton,
     withdrawTokens: WithdrawTokens,
+    publishResearche: PublishResearche,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;

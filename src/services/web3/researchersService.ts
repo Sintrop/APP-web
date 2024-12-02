@@ -69,3 +69,15 @@ export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
     const response = await web3RequestWrite(ResearcherContract, 'withdraw', [], walletConnected);
     return response;
 }
+
+interface AddWorkProps{
+    title: string;
+    thesis: string;
+    hashPdf: string;
+    walletConnected: string;
+}
+export async function addWork(props: AddWorkProps){
+    const {hashPdf, thesis, title, walletConnected} = props;
+    const response = await web3RequestWrite(ResearcherContract, 'addWork', [title, thesis, hashPdf], walletConnected);
+    return response;
+}

@@ -28,6 +28,7 @@ export async function executeSendContribution({additionalDataTransaction, wallet
         await afterAddContribution({
             walletConnected, 
             contributionHash: additionalData?.contributionHash,
+            transactionHash: responseWeb3.transactionHash,
         });
 
         return responseWeb3;
@@ -39,15 +40,17 @@ export async function executeSendContribution({additionalDataTransaction, wallet
 interface AfterAddContributionProps{
     walletConnected: string;
     contributionHash: string;
+    transactionHash: string;
 }
 async function afterAddContribution(props: AfterAddContributionProps){
-    const {contributionHash, walletConnected} = props;
+    const {contributionHash, walletConnected, transactionHash} = props;
 
     await createPubliFeed({
         type: 'dev-report',
         walletConnected,
         additionalData: JSON.stringify({
             report: contributionHash,
+            hash: transactionHash
         })
     });
 }
