@@ -48,14 +48,6 @@ export const GetProducer = async (wallet: string) => {
     return dataProducer;
 }
 
-interface WithdrawTokensProps{
-    walletConnected: string;
-}
-export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
-    const response = await web3RequestWrite(ProducerContract, 'withdraw', [], walletConnected);
-    return response;
-}
-
 export const GetTotalScoreProducers = async () => {
     let score = '';
     await ProducerContract.methods.producersTotalScore().call({from: producerContractAddress})
@@ -69,4 +61,12 @@ export const GetTotalScoreProducers = async () => {
 export const GetProducers = async () => {
     const producers = await ProducerContract.methods.getProducers().call()
     return producers;
+}
+
+interface WithdrawTokensProps{
+    walletConnected: string;
+}
+export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
+    const response = await web3RequestWrite(ProducerContract, 'withdraw', [], walletConnected);
+    return response;
 }

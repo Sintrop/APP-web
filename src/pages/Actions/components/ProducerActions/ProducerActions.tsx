@@ -10,6 +10,15 @@ export function ProducerActions(){
         <div className="flex flex-col gap-3">
             <ActionButton
                 onClick={() => {
+                    setActionType('requestInspection');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Solicitar inspeção"
+                description="Solicite uma inspeção para que um inspetor vá até sua propriedade"
+            />
+
+            <ActionButton
+                onClick={() => {
                     setActionType('withdrawTokens');
                     setShowModalRealizeAction(true);
                 }}

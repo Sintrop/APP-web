@@ -3,6 +3,7 @@ import { MdClose } from "react-icons/md";
 import { SendContribuiton } from "../DeveloperActions/components/SendContribuiton";
 import { WithdrawTokens } from "./components/WithdrawTokens";
 import { PublishResearche } from "../ResearcherActions/components/PublishResearche";
+import { RequestInspection } from "../ProducerActions/components/RequestInspection";
 
 interface Props{
     close: () => void;
@@ -43,6 +44,7 @@ const actionsTypeToComponent = {
     sendContribution: SendContribuiton,
     withdrawTokens: WithdrawTokens,
     publishResearche: PublishResearche,
+    requestInspection: RequestInspection,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;

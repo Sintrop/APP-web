@@ -12,7 +12,7 @@ interface Props{
     transactionType: string;
     additionalData: string;
     close: () => void;
-    success: (type: string) => void;
+    success: (type: 'blockchain' | 'checkout') => void;
 }
 export function ModalWhereExecuteTransaction({transactionType, close, additionalData, success}: Props){
     const {t} = useTranslation();

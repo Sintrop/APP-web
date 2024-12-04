@@ -6,6 +6,7 @@ import { AddressProps, UserApiProps } from "../../../../types/user";
 import { executeWithdrawTokens } from "../../../../services/actions/withdrawTokens";
 import { executeSendContribution } from "../../../../services/actions/sendContribution";
 import { executePublishResearche } from "../../../../services/actions/publishResearche";
+import { executeRequestInspection } from "../../../../services/actions/requestInspection";
 
 interface Props {
     close: () => void;
@@ -44,6 +45,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'publishResearche') {
             handlePublishResearche();
         }
+        if (transactionType === 'requestInspection') {
+            handleRequestInspection();
+        }
     }
 
     async function handleBurnTokens() {
@@ -63,6 +67,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handlePublishResearche(){
         const response = await executePublishResearche({walletConnected, additionalDataTransaction});
+        finishRequestWeb3(response);
+    }
+
+    async function handleRequestInspection(){
+        const response = await executeRequestInspection({walletConnected});
         finishRequestWeb3(response);
     }
 

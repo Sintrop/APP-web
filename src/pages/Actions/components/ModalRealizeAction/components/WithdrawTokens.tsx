@@ -6,6 +6,7 @@ import { Info } from '../../../../../components/Info';
 import { PoolDataProps } from "../../../../../models/Pool/types";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 import { ModalWhereExecuteTransaction } from "../../../../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
+import { toast } from "react-toastify";
 
 export function WithdrawTokens() {
     const { t } = useTranslation();
@@ -78,10 +79,15 @@ export function WithdrawTokens() {
         setShowModalWhereExecuteTransaction(true);
     }
 
-    function successWithdraw(){
+    function successWithdraw(type: string){
         setShowModalWhereExecuteTransaction(false);
-        getPoolData();
-        getUserBlockchainData(userData?.wallet, userData?.userType)
+        if(type === 'blockchain'){
+            getPoolData();
+            getUserBlockchainData(userData?.wallet, userData?.userType)
+        }
+        if(type === 'checkout'){
+            toast.success(t('transacaoEnviadaCheckout'));
+        }
     }
 
     return (
