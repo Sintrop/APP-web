@@ -84,7 +84,7 @@ export function ModalWhereExecuteTransaction({transactionType, close, additional
                 <div className="flex flex-col mt-5 p-5 w-full gap-3">
                     <button
                         onClick={handleExecuteTransaction}
-                        className={`w-full h-10 rounded-md bg-white flex items-center justify-center gap-3 font-semibold text-black ${!availableProvider ? 'opacity-40' : 'opacity-0'}`}
+                        className={`w-full h-10 rounded-md bg-white flex items-center justify-center gap-3 font-semibold text-black ${!availableProvider ? 'opacity-40' : 'opacity-100'}`}
                         disabled={!availableProvider}
                     >
                         Finalizar agora no metamask
