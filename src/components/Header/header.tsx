@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaHome, FaUsers, FaRegUser } from "react-icons/fa";
-import { RiComputerFill } from "react-icons/ri";
+import { FaUsers, FaRegUser } from "react-icons/fa";
+import { RiComputerFill, RiEarthLine } from "react-icons/ri";
 import { BsFillGearFill } from "react-icons/bs";
 import { useNavigate } from "react-router";
 import { useMainContext } from '../../hooks/useMainContext';
@@ -54,10 +54,10 @@ export function Header({ routeActive }: Props) {
                             onClick={() => navigate('/')}
                         >
                             <div className="hidden lg:flex">
-                                <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={25} />
+                                <RiEarthLine color={routeActive === 'home' ? 'white' : '#ccc'} size={25} />
                             </div>
                             <div className="lg:hidden">
-                                <FaHome color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
+                                <RiEarthLine color={routeActive === 'home' ? 'white' : '#ccc'} size={18} />
                             </div>
                             <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('feed')}</p>
 

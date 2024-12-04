@@ -5,7 +5,7 @@ import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
-import { FaCalculator, FaChevronRight } from "react-icons/fa";
+import { FaCalculator, FaChevronRight, FaHome } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
 import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { Chat } from "../../components/Chat";
@@ -97,6 +97,13 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3 w-[250px]">
+                            <a
+                                href="https://apps.sintrop.com"
+                                className="flex items-center gap-2 text-white border-b w-fit border-white"
+                            >
+                                <FaHome size={20} color='white'/>
+                                Apps Sintrop
+                            </a>
                             <UserConnection
                                 handleShowSignUp={() => setSignUp(true)}
                                 showLogout={() => setModalLogout(true)}
