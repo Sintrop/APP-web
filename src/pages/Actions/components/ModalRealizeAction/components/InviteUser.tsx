@@ -107,6 +107,10 @@ export function InviteUser({}: Props){
 }
 
 const descriptionText = {
-    4: "Para convidar outro desenvolvedor, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado."
+    3: "Para convidar outro pesqusiador, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado.",
+    4: "Para convidar outro desenvolvedor, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado.",
+    5: "Para convidar outro contribuidor, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado.",
+    7: "Para convidar outro apoiador, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado. Você receberá 5% de comissão ara toda contribuição que ele fizer!",
+    8: "Para convidar outro validador, insira a wallet dele abaixo. É importante que essa wallet não possua nenhum convite nem cadastro realizado.",
 }
 type DescriptionTypes = keyof typeof descriptionText;
