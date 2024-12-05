@@ -7,6 +7,7 @@ import { executeWithdrawTokens } from "../../../../services/actions/withdrawToke
 import { executeSendContribution } from "../../../../services/actions/sendContribution";
 import { executePublishResearche } from "../../../../services/actions/publishResearche";
 import { executeRequestInspection } from "../../../../services/actions/requestInspection";
+import { executeInviteUser } from "../../../../services/actions/inviteUser";
 
 interface Props {
     close: () => void;
@@ -48,6 +49,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'requestInspection') {
             handleRequestInspection();
         }
+        if (transactionType === 'inviteUser') {
+            handleInviteUser();
+        }
     }
 
     async function handleBurnTokens() {
@@ -72,6 +76,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleRequestInspection(){
         const response = await executeRequestInspection({walletConnected});
+        finishRequestWeb3(response);
+    }
+
+    async function handleInviteUser(){
+        const response = await executeInviteUser({walletConnected, additionalDataTransaction});
         finishRequestWeb3(response);
     }
 
