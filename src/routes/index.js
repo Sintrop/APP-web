@@ -82,7 +82,6 @@ export default function Router(){
                 <Route exact path="/indices-control" element={<IndicesControl/>}/>
                 <Route exact path="/requests-sepolia" element={<RequestSepolia/>}/>
                 <Route exact path="/view-image/:hashPhoto" element={<ViewImage/>}/>
-                <Route exact path="/checkout" element={<Checkout/>}/>
                 <Route exact path="/view-pdf/:hash" element={<ViewPdf/>}/>
             </Routes>
         </BrowserRouter>
