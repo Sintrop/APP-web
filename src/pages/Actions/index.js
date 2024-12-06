@@ -22,6 +22,7 @@ import { DeveloperActions } from "./components/DeveloperActions/DeveloperActions
 import { ProducerActions } from "./components/ProducerActions/ProducerActions";
 import { InspectorActions } from "./components/InspectorActions/InspectorActions";
 import { ResearcherActions } from "./components/ResearcherActions/ResearcherActions";
+import { SupporterActions } from "./components/SupporterActions/SupporterActions";
 
 export function Actions() {
     const { t } = useTranslation();
@@ -275,6 +276,10 @@ export function Actions() {
 
                                     {userData?.userType === 4 && (
                                         <DeveloperActions />
+                                    )}
+
+                                    {userData?.userType === 7 && (
+                                        <SupporterActions />
                                     )}
                                 </div>
                             </div>
