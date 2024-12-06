@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../../../../services/api";
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { FeedbackItem } from "./FeedbackItem";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { SendReportDev } from '../../../checkout/SendReportDev';
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
-import { Invite } from "../../../../services/invitationService";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
+import { Invite } from "../../../../services/web3/invitationService";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from "react-toastify";
@@ -13,6 +13,7 @@ import { ModalCreateTask } from "./ModalCreateTask";
 import {Feedback} from '../../../../components/Feedback';
 import {Chat} from '../../../../components/Chat';
 import { useTranslation } from "react-i18next";
+import { ReportItem } from "./components/ReportItem";
 
 export function DeveloperActions() {
     const {t} = useTranslation()
@@ -30,10 +31,12 @@ export function DeveloperActions() {
     const [createTask, setCreateTask] = useState(false);
     const [filterSelected, setFilterSelected] = useState(0);
     const [filterFeedbacks, setFilterFeedbacks] = useState([]);
+    const [contributions, setContributions] = useState([]);
 
     useEffect(() => {
         if (tabSelected === 'open' || tabSelected === 'history') getFeedbacks();
         if (tabSelected === 'users') getUsers();
+        if (tabSelected === 'contributions') getContributions();
     }, [tabSelected]);
 
     useEffect(() => {
@@ -46,6 +49,18 @@ export function DeveloperActions() {
             }
         }
     }, [filterSelected]);
+
+    async function getContributions(){
+        try{
+            setLoading(true);
+            const response = await api.get('/developer/reports');
+            setContributions(response.data.contributions);
+        }catch(e){
+            console.log(e);
+        }finally{
+            setLoading(false);
+        }
+    }
 
     async function getFeedbacks() {
         setLoading(true);
@@ -170,6 +185,13 @@ export function DeveloperActions() {
                     {t('desenvolvedores')}
                 </button>
 
+                <button
+                    className={`font-bold py-1 border-b-2 ${tabSelected === 'contributions' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
+                    onClick={() => setTabSelected('contributions')}
+                >
+                    {t('contribuicoes')}
+                </button>
+
                 {userData?.userType === 4 && (
                     <button
                         className={`font-bold py-1 border-b-2 ${tabSelected === 'actions' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
@@ -187,19 +209,21 @@ export function DeveloperActions() {
 
             {tabSelected === 'open' && (
                 <>
-                    <select
-                        value={filterSelected}
-                        onChange={(e) => setFilterSelected(e.target.value)}
-                        className="w-[200px] h-10 bg-[#03364B] text-white rounded-md px-3 mb-3"
-                    >
-                        <option value={0}>Todos</option>
-                        <option value={1}>Front-End</option>
-                        <option value={2}>Contratos inteligentes</option>
-                        <option value={3}>Mobile</option>
-                        <option value={4}>Design</option>
-                        <option value={5}>UX</option>
-                        <option value={6}>API</option>
-                    </select>
+                    {!loading && (
+                        <select
+                            value={filterSelected}
+                            onChange={(e) => setFilterSelected(e.target.value)}
+                            className="w-[200px] h-10 bg-[#03364B] text-white rounded-md px-3 mb-3"
+                        >
+                            <option value={0}>Todos</option>
+                            <option value={1}>Front-End</option>
+                            <option value={2}>Contratos inteligentes</option>
+                            <option value={3}>Mobile</option>
+                            <option value={4}>Design</option>
+                            <option value={5}>UX</option>
+                            <option value={6}>API</option>
+                        </select>
+                    )}
 
                     {filterFeedbacks.length > 0 ? (
                         <>
@@ -285,6 +309,17 @@ export function DeveloperActions() {
                         </>
                     )}
                 </>
+            )}
+
+            {tabSelected === 'contributions' && (
+                <div className="flex flex-col gap-3">
+                    {contributions.map(item => (
+                        <ReportItem
+                            key={item.id}
+                            contribution={item}
+                        />
+                    ))}
+                </div>
             )}
 
             {modalDevReport && (

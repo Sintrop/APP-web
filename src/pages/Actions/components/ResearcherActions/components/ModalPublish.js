@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { ActivityIndicator } from "../../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 import {FaChevronLeft} from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
 

@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
-import { Blocks } from 'react-loader-spinner';
+import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';
-import * as Dialog from '@radix-ui/react-dialog';
-import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
-import { FaCalculator, FaChevronRight } from "react-icons/fa";
-import { MdLogout, MdOutlineFeedback } from "react-icons/md";
+import { FaCalculator, FaChevronRight, FaHome } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { Chat } from "../../components/Chat";
 import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
-import { ModalSignOut } from "../../components/ModalSignOut";
+import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
+import { UserConnection } from "./components/UserConnection/UserConnection.js";
+import { ModalTransactionCreated } from "../../components/ModalTransactionCreated/index.js";
 
 export function Home() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { walletConnected, userData, imageProfile, blockchainData } = useMainContext();
+    const { userData, getUserDataApi } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [publications, setPublications] = useState([]);
     const [page, setPage] = useState(0);
@@ -34,8 +32,9 @@ export function Home() {
     const [modalLogout, setModalLogout] = useState(false);
     const [firstLoad, setFirstLoad] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
-    const [signOut, setSignOut] = useState(false);
+    const [signUp, setSignUp] = useState(false);
     const [news, setNews] = useState([]);
+    const [createdTransaction, setCreatedTransaction] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -97,113 +96,21 @@ export function Home() {
                     </div>
                 ) : (
                     <div className="flex gap-3 mt-3">
-                        <div className="flex flex-col gap-3">
-                            <div className="hidden lg:flex flex-col items-center w-[200px] h-[270px] p-3 bg-[#03364B] rounded-md relative">
-                                {walletConnected === '' ? (
-                                    <>
-                                        <img
-                                            src={require('../../assets/anonimous.png')}
-                                            className="w-14 h-14 object-contain rounded-full border-2 border-white"
-                                        />
+                        <div className="flex flex-col gap-3 w-[250px]">
+                            <a
+                                href="https://apps.sintrop.com"
+                                className="flex items-center gap-2 text-white border-b w-fit border-white"
+                            >
+                                <FaHome size={20} color='white'/>
+                                Apps Sintrop
+                            </a>
+                            <UserConnection
+                                handleShowSignUp={() => setSignUp(true)}
+                                showLogout={() => setModalLogout(true)}
+                                showTransactionCreated={() => setCreatedTransaction(true)}
+                            />
 
-                                        <p className="font-bold text-white text-center text-sm mt-2">{t('voceEstaAnonimo')}</p>
-
-                                        <Dialog.Root open={modalConnect} onOpenChange={(open) => setModalConnect(open)}>
-                                            <Dialog.Trigger
-                                                className="w-full p-2 bg-blue-500 rounded-md text-white font-bold mt-10"
-                                            >
-                                                {t('conectarWallet')}
-                                            </Dialog.Trigger>
-
-                                            <ModalConnectAccount close={() => setModalConnect(false)} />
-                                        </Dialog.Root>
-
-                                        <button
-                                            className="text-white text-center mt-3 text-sm"
-                                            onClick={() => setSignOut(true)}
-                                        >
-                                            {t('cadastre-se')}
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="w-14 h-14 rounded-full bg-gray-500 cursor-pointer" onClick={() => navigate('/profile')}>
-                                            <img
-                                                src={imageProfile}
-                                                className="w-14 h-14 rounded-full object-cover border-2 border-white"
-                                            />
-                                        </div>
-
-                                        <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
-                                        <p className="text-gray-300 text-center text-xs">
-                                            {userData?.userType === 1 && t('textProdutor')}
-                                            {userData?.userType === 2 && t('textInspetor')}
-                                            {userData?.userType === 3 && t('textPesquisador')}
-                                            {userData?.userType === 4 && t('textDesenvolvedor')}
-                                            {userData?.userType === 5 && t('textContribuidor')}
-                                            {userData?.userType === 6 && t('textAtivista')}
-                                            {userData?.userType === 7 && t('textApoiador')}
-                                            {userData?.userType === 8 && t('textValidador')}
-                                        </p>
-                                        <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
-
-                                        {userData?.userType === 0 ? (
-                                            <div className="flex flex-col mt-5">
-                                                <p className="text-center text-white">{t('walletNCadastro')}</p>
-
-                                                <button
-                                                    className="mt-2 text-white py-2 px-5 bg-blue-500 rounded-md font-semibold text-sm"
-                                                    onClick={() => setSignOut(true)}
-                                                >
-                                                    {t('cadastre-se')}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="flex flex-col mt-2 w-full items-center">
-                                                {userData?.accountStatus === 'blockchain' ? (
-                                                    <>
-                                                        <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                                            {blockchainData && (
-                                                                <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                                    {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
-                                                                    {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
-                                                                    {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
-                                                                    {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
-                                                                    {userData?.userType === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(blockchainData?.tokensBurned)}
-                                                                </p>
-                                                            )}
-                                                        </div>
-                                                        <p className="text-xs text-gray-200">
-                                                            {userData?.userType === 1 && t('ptsRegeneracao')}
-                                                            {userData?.userType === 2 && t('ispRealizadas')}
-                                                            {userData?.userType === 3 && t('pesqPublicadas')}
-                                                            {userData?.userType === 4 && t('seuNivel')}
-                                                            {userData?.userType === 7 && t('tokenContribuidos')}
-                                                        </p>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <p className="text-yellow-500 font-semibold text-center mt-3">{t('cadastroPendente')}</p>
-                                                        <button className="underline text-white" onClick={() => navigate('/profile')}>
-                                                            {t('saibaMais')}
-                                                        </button>
-                                                    </>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        <button
-                                            className="absolute top-2 right-2"
-                                            title="Desconectar"
-                                            onClick={() => setModalLogout(true)}
-                                        >
-                                            <MdLogout color='white' size={18} />
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-
-                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-[200px]">
+                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
                                 <button
                                     className="flex flex-col items-center w-16"
                                     onClick={() => navigate('/impact-calculator')}
@@ -314,6 +221,14 @@ export function Home() {
                 <MdOutlineFeedback color='white' size={20}/>
             </button> */}
 
+            {createdTransaction && (
+                <ModalTransactionCreated
+                    close={() => {
+                        setCreatedTransaction(false);
+                    }}
+                />
+            )}
+
             {modalLogout && (
                 <ModalLogout
                     close={() => {
@@ -323,10 +238,13 @@ export function Home() {
                 />
             )}
 
-            {signOut && (
-                <ModalSignOut
-                    close={() => setSignOut(false)}
-                    success={() => navigate('/profile')}
+            {signUp && (
+                <ModalSignUp
+                    close={() => setSignUp(false)}
+                    success={() => {
+                        getUserDataApi(userData.wallet);
+                        setSignUp(false)
+                    }}
                 />
             )}
             <ToastContainer />

@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { useMainContext } from '../../hooks/useMainContext';
-import { DeveloperActions } from "./components/DeveloperActions";
-import { ValidatorActions } from "./components/ValidatorActions";
 import { TopBar } from "../../components/TopBar";
-import { ActivistActions } from "./components/ActivistActions";
-import { SupporterActions } from "./components/SupporterActions";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../components/ModalConnectAccount/index.js";
 import { MdHelpOutline } from "react-icons/md";
@@ -13,36 +9,40 @@ import { SiReadthedocs } from 'react-icons/si';
 import { FaMobile } from 'react-icons/fa';
 import { QRCode } from "react-qrcode-logo";
 import { Feedback } from "../../components/Feedback";
-import { ResearcherActions } from "./components/ResearcherActions";
 import { api } from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { BurnTokens as BurnRCSupporter } from "../../services/supporterService";
-import { BurnTokens } from "../../services/sacTokenService";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { FaChevronRight } from "react-icons/fa";
-import { LoadingTransaction } from "../../components/LoadingTransaction";
-import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
+import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
+import { ModalRealizeAction } from "./components/ModalRealizeAction/ModalRealizeAction";
+import { DeveloperActions } from "./components/DeveloperActions/DeveloperActions";
+import { ProducerActions } from "./components/ProducerActions/ProducerActions";
+import { InspectorActions } from "./components/InspectorActions/InspectorActions";
+import { ResearcherActions } from "./components/ResearcherActions/ResearcherActions";
+import { SupporterActions } from "./components/SupporterActions/SupporterActions";
 
 export function Actions() {
-    const {t} = useTranslation();
-    const { walletConnected, userData, connectionType } = useMainContext();
+    const { t } = useTranslation();
+    const { walletConnected, userData } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
     const [impactInvestor, setImpactInvestor] = useState({});
     const [input, setInput] = useState('');
     const [impactToken, setImpactToken] = useState(null);
     const [balanceData, setBalanceData] = useState(null);
     const [maxAmmount, setMaxAmmount] = useState(false);
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
-    const [modalTransaction, setModalTransaction] = useState(false);
-    const [logTransaction, setLogTransaction] = useState({});
-    const [reason, setReason] = useState('');
-    const [createdTransaction, setCreatedTransaction] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
+    const [addDataTransaction, setAddDataTransaction] = useState({});
+    const [showModalRealizeAction, setShowModalRealizeAction] = useState(false);
 
     useEffect(() => {
+        setAddDataTransaction({
+            value: Number(input),
+            itens: []
+        });
         if (impactToken) {
             let credits = Number(input);
 
@@ -70,7 +70,7 @@ export function Actions() {
 
             setImpactInvestor(data)
         }
-    }, [input]);
+    }, [input, balanceData, impactToken]);
 
     useEffect(() => {
         getImpact();
@@ -105,119 +105,21 @@ export function Actions() {
             return
         }
 
-        if (connectionType === 'provider') {
-            contributeBlockchain();
-        } else {
-            createTransaction();
-        }
+        setShowModalWhereExecuteTransaction(true);
     }
 
-    async function contributeBlockchain() {
-        setModalTransaction(true);
-        setLoadingTransaction(true);
-        if (userData.userType === 7) {
-            BurnRCSupporter(walletConnected, String(input) + '000000000000000000')
-                .then(res => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        } else {
-            BurnTokens(walletConnected, String(input) + '000000000000000000')
-                .then(res => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-
-                    if (res.type === 'success') {
-                        registerTokensApi(input, res.hashTransaction)
-                    }
-
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
-    }
-
-    async function registerTokensApi(tokens, hash) {
-        const addData = {
-            userData,
-            tokens: Number(tokens),
-            transactionHash: hash,
-            reason: '',
-            itens: [],
-            hash
-        }
-
-        try {
-            await api.post('/tokens-burned', {
-                wallet: walletConnected.toUpperCase(),
-                tokens: Number(tokens),
-                transactionHash: hash,
-                carbon: Number(impactToken?.carbon),
-                water: Number(impactToken?.water),
-                bio: Number(impactToken?.bio),
-                soil: Number(impactToken?.soil)
-            });
-
-            await api.post('/publication/new', {
-                userId: userData?.id,
-                type: 'contribute-tokens',
-                origin: 'platform',
-                additionalData: JSON.stringify(addData),
-            })
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingTransaction(false);
-        }
-    }
-
-    async function createTransaction() {
-        try {
-            setLoading(true);
-            await api.post('/transactions-open/create', {
-                wallet: userData?.wallet,
-                type: 'burn-tokens',
-                additionalData: JSON.stringify({
-                    value: Number(input),
-                    reason,
-                    itens: []
-                }),
-            })
+    function successBurn(successType) {
+        setShowModalWhereExecuteTransaction(false);
+        if (successType === 'checkout') {
+            toast.success(t('transacaoEnviadaCheckout'));
             setInput('');
-            setCreatedTransaction(true);
-        } catch (err) {
-            if (err.response?.data?.message === 'open transaction of the same type') {
-                toast.error(t('transacaoDoMesmoTipoAberto'))
-            }
-        } finally {
-            setLoading(false);
+        }
+
+        if (successType === 'blockchain') {
+            toast.success('Contribuição realizada com sucesso!');
+            getImpact();
+            getBalance();
+            setInput('');
         }
     }
 
@@ -309,6 +211,7 @@ export function Actions() {
                                                 <img
                                                     src={require('../../assets/token.png')}
                                                     className="w-8 h-8 object-contain"
+                                                    alt='icon do credito de regeneração'
                                                 />
 
                                                 <p className="font-bold text-white text-sm">{Intl.NumberFormat('pt-BR').format(Number(balanceData?.balance).toFixed(5))}</p>
@@ -345,6 +248,7 @@ export function Actions() {
                                             <img
                                                 src={require('../../assets/icon-contribuir.png')}
                                                 className="w-8 h-8 object-contain"
+                                                alt='Icone do botão contribuir'
                                             />
                                             <p className="font-bold text-white">{t('contribuir')}</p>
                                         </div>
@@ -353,6 +257,32 @@ export function Actions() {
                                     </>
                                 )}
                             </button>
+
+                            <div className="flex flex-col w-full gap-1 mb-5">
+                                <p className="font-semibold text-white">{t('ações')}</p>
+
+                                <div className="p-2 rounded-md bg-[#03364B] flex flex-col w-full">
+                                    {userData?.userType === 1 && (
+                                        <ProducerActions />
+                                    )}
+
+                                    {userData?.userType === 2 && (
+                                        <InspectorActions />
+                                    )}
+
+                                    {userData?.userType === 3 && (
+                                        <ResearcherActions />
+                                    )}
+
+                                    {userData?.userType === 4 && (
+                                        <DeveloperActions />
+                                    )}
+
+                                    {userData?.userType === 7 && (
+                                        <SupporterActions />
+                                    )}
+                                </div>
+                            </div>
 
                             {userData?.userType === 1 && (
                                 <div className="flex flex-col w-full">
@@ -460,27 +390,21 @@ export function Actions() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat/>
+                <Chat />
             </div>
 
-            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
-                if (!loadingTransaction) {
-                    setModalTransaction(open)
-                    setLoading(false);
-                    if (logTransaction.type === 'success') {
-                        toast.success(t('contribuicaoFeita'));
-                    }
-                }
-            }}>
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
+            {showModalWhereExecuteTransaction && (
+                <ModalWhereExecuteTransaction
+                    additionalData={JSON.stringify(addDataTransaction)}
+                    transactionType='burn-tokens'
+                    close={() => setShowModalWhereExecuteTransaction(false)}
+                    success={successBurn}
                 />
-            </Dialog.Root>
+            )}
 
-            {createdTransaction && (
-                <ModalTransactionCreated
-                    close={() => setCreatedTransaction(false)}
+            {showModalRealizeAction && (
+                <ModalRealizeAction
+                    close={() => setShowModalRealizeAction(false)}
                 />
             )}
 

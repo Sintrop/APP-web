@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from 'react-apexcharts';
 import { api } from "../../services/api";
-import { ActivityIndicator } from "../ActivityIndicator";
+import { ActivityIndicator } from "../ActivityIndicator/ActivityIndicator";
 import {BsTreeFill} from 'react-icons/bs';
 import {MdScore, MdTerrain} from 'react-icons/md';
 import {FaCloud, FaWater} from 'react-icons/fa';

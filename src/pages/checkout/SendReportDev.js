@@ -4,7 +4,7 @@ import Loading from '../../components/Loading';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
 import { api } from '../../services/api';
-import { AddContribution } from '../../services/developersService';
+import { addContribution } from '../../services/web3/developersService';
 import { useMainContext } from '../../hooks/useMainContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ export function SendReportDev({ close, walletAddress, userData }) {
 
         setModalTransaction(true);
         setLoadingTransaction(true);
-        AddContribution(walletAddress, pathPDF)
+        addContribution(walletAddress, pathPDF)
         .then(async (res) => {
             setLogTransaction({
                 type: res.type,

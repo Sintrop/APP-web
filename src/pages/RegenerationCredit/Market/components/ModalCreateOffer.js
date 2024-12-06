@@ -3,7 +3,7 @@ import { api } from "../../../../services/api";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { MdClose } from "react-icons/md";
 import { Info } from "../../../../components/Info";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 
 export function ModalCreateOffer({ close, offerCreated }) {

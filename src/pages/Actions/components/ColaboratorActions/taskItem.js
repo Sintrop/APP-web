@@ -12,7 +12,7 @@ import Loader from '../../../../components/Loader';
 import { Marker } from './Marker';
 import { getImage } from '../../../../services/getImage';
 import { format } from 'date-fns';
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { toast, ToastContainer } from 'react-toastify';
 
 export function TaskItem({ data, userData }) {

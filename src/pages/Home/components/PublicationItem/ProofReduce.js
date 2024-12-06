@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../../services/getImage";
 import { Blocks } from 'react-loader-spinner';
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 
 export function ProofReduce({ data }) {

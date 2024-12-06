@@ -1,40 +1,31 @@
-import React, { sueEffect, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import Loading from '../../components/Loading';
-import Web3 from 'web3';
 import { LoadingTransaction } from '../../components/LoadingTransaction';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useNavigate } from 'react-router';
 import { format } from 'date-fns';
 import { save } from '../../config/infura';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useMainContext } from '../../hooks/useMainContext';
-import axios from 'axios';
-import emailjs from '@emailjs/browser';
 import { ConfirmDescart } from './ConfirmDescart';
 import { SendReportDev } from './SendReportDev';
 import { ToastContainer, toast } from 'react-toastify';
 import { ChangePassword } from './ChangePassword';
-import "react-toastify/dist/ReactToastify.css";
-import { FiRefreshCcw } from "react-icons/fi";
 import { ModalPublishResearche } from './ModalPublishResearche';
-
+import "react-toastify/dist/ReactToastify.css";
 
 //Services Web3
-import { addProducer, addInspector, addDeveloper } from '../../services/registerService';
-import { AcceptInspection, RealizeInspection, RequestInspection } from '../../services/manageInspectionsService';
-import { GetTokensBalance, BuyRCT, BurnTokens } from '../../services/sacTokenService';
-import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/supporterService';
-import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/researchersService';
-import { GetProducer, WithdrawTokens as WithdrawProducer } from '../../services/producerService';
-import { WithdrawTokens as WithdrawDeveloper } from '../../services/developersService';
-import { WithdrawTokens as WithdrawInspector } from '../../services/inspectorService';
-import { GetInspection, GetIsa, InvalidateInspection } from '../../services/sintropService';
-import { addActivist } from '../../services/activistService';
-import { addValidation } from '../../services/validatorService';
-import { Invite } from '../../services/invitationService';
-import { addValidator } from '../../services/validatorService';
+import { BuyRCT, BurnTokens } from '../../services/web3/rcTokenService';
+import { addSupporter, BurnTokens as BurnRCSupporter } from '../../services/web3/supporterService';
+import { addResearcher, WithdrawTokens as WithdrawResearcher } from '../../services/web3/researchersService';
+import { GetProducer, WithdrawTokens as WithdrawProducer, addProducer } from '../../services/web3/producerService';
+import { addDeveloper } from '../../services/web3/developersService';
+import { WithdrawTokens as WithdrawInspector, addInspector } from '../../services/web3/inspectorService';
+import { GetInspection, GetIsa, InvalidateInspection, AcceptInspection, RealizeInspection, RequestInspection } from '../../services/web3/sintropService';
+import { addActivist } from '../../services/web3/activistService';
+import { Invite } from '../../services/web3/invitationService';
+import { addValidator,addValidation } from '../../services/web3/validatorService';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -54,7 +45,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
     useEffect(() => {
         if (transaction?.additionalData) {
             setAdditionalData(JSON.parse(transaction?.additionalData))
-            console.log(JSON.parse(transaction?.additionalData))
         }
     }, []);
 
@@ -104,7 +94,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
             setLoading(true);
             const addressPdf = await pdfMake.createPdf(generateAddressPdf(addressData, walletAddress, userData));
-
             addressPdf.getBuffer(async (res) => {
                 const hash = await save(res);
                 setLoading(false);
@@ -127,7 +116,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                                 type: 'new-user',
                                 origin: 'platform',
                                 additionalData: JSON.stringify({
-                                    userData,
                                     hash: res?.hashTransaction
                                 }),
                             });
@@ -180,7 +168,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         if (userData.userType === 2) {
             setModalTransaction(true);
             setLoadingTransaction(true);
-            addInspector(walletAddress, userData?.name, userData.imgProfileUrl, 'geolocation')
+            addInspector(walletAddress, userData?.name, userData.imgProfileUrl)
                 .then(async (res) => {
                     setLogTransaction({
                         type: res.type,
@@ -196,7 +184,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -263,7 +250,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -330,7 +316,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -396,7 +381,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -463,7 +447,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -530,7 +513,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                             type: 'new-user',
                             origin: 'platform',
                             additionalData: JSON.stringify({
-                                userData,
                                 hash: res?.hashTransaction
                             }),
                         });
@@ -785,7 +767,6 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
                         type: 'accept-inspection',
                         origin: 'platform',
                         additionalData: JSON.stringify({
-                            userData,
                             inspectionId: additionalData?.inspectionId,
                             hash: res?.hashTransaction
                         }),
@@ -844,9 +825,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const producer = {
             name: producerData?.name,
             totalInspections: producerData?.totalInspections,
-            recentInspection: producerData?.recentInspection,
+            pendingInspection: producerData?.pendingInspection,
             propertyAddress: JSON.parse(producerDataApi?.address),
-            propertyArea: producerData?.certifiedArea,
+            propertyArea: producerData?.areaInformation?.totalArea,
             propertyGeolocation: producerDataApi?.propertyGeolocation,
             proofPhoto: producerDataApi?.imgProfileUrl,
             producerWallet: producerData?.producerWallet,
@@ -989,98 +970,170 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         //Transforma o isaindex em uma string legivel;
         if (isas) {
-            if (isas.carbon === 0) {
-                isaCarbon = 'Regenerativo 3 = +25 Pontos de Regeneração'
-            }
             if (isas.carbon === 1) {
-                isaCarbon = 'Regenerativo 2 = +10 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 6 = +25 Pontos de Regeneração'
             }
             if (isas.carbon === 2) {
-                isaCarbon = 'Regenerativo 1 = +1 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 5 = +16 Pontos de Regeneração'
             }
             if (isas.carbon === 3) {
-                isaCarbon = 'Neutro = 0 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 4 = +8 Pontos de Regeneração'
             }
             if (isas.carbon === 4) {
-                isaCarbon = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 3 = +4 Pontos de Regeneração'
             }
             if (isas.carbon === 5) {
-                isaCarbon = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 2 = +2 Pontos de Regeneração'
             }
             if (isas.carbon === 6) {
-                isaCarbon = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
+                isaCarbon = 'Regenerativo 1 = +1 Pontos de Regeneração'
+            }
+            if (isas.carbon === 7) {
+                isaCarbon = 'Neutro = 0 Pontos de Regeneração'
+            }
+            if (isas.carbon === 8) {
+                isaCarbon = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+            }
+            if (isas.carbon === 9) {
+                isaCarbon = 'Não Regenerativo 2 = -2 Pontos de Regeneração'
+            }
+            if (isas.carbon === 10) {
+                isaCarbon = 'Não Regenerativo 3 = -4 Pontos de Regeneração'
+            }
+            if (isas.carbon === 11) {
+                isaCarbon = 'Não Regenerativo 4 = -8 Pontos de Regeneração'
+            }
+            if (isas.carbon === 12) {
+                isaCarbon = 'Não Regenerativo 5 = -16 Pontos de Regeneração'
+            }
+            if (isas.carbon === 13) {
+                isaCarbon = 'Não Regenerativo 6 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
-            if (isas.water === 0) {
-                isaWater = 'Regenerativo 3 = +25 Pontos de Regeneração'
-            }
             if (isas.water === 1) {
-                isaWater = 'Regenerativo 2 = +10 Pontos de Regeneração'
+                isaWater = 'Regenerativo 6 = +25 Pontos de Regeneração'
             }
             if (isas.water === 2) {
-                isaWater = 'Regenerativo 1 = +1 Pontos de Regeneração'
+                isaWater = 'Regenerativo 5 = +16 Pontos de Regeneração'
             }
             if (isas.water === 3) {
-                isaWater = 'Neutro = 0 Pontos de Regeneração'
+                isaWater = 'Regenerativo 4 = +8 Pontos de Regeneração'
             }
             if (isas.water === 4) {
-                isaWater = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+                isaWater = 'Regenerativo 3 = +4 Pontos de Regeneração'
             }
             if (isas.water === 5) {
-                isaWater = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
+                isaWater = 'Regenerativo 2 = +2 Pontos de Regeneração'
             }
             if (isas.water === 6) {
-                isaWater = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
+                isaWater = 'Regenerativo 1 = +1 Pontos de Regeneração'
+            }
+            if (isas.water === 7) {
+                isaWater = 'Neutro = 0 Pontos de Regeneração'
+            }
+            if (isas.water === 8) {
+                isaWater = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+            }
+            if (isas.water === 9) {
+                isaWater = 'Não Regenerativo 2 = -2 Pontos de Regeneração'
+            }
+            if (isas.water === 10) {
+                isaWater = 'Não Regenerativo 3 = -4 Pontos de Regeneração'
+            }
+            if (isas.water === 11) {
+                isaWater = 'Não Regenerativo 4 = -8 Pontos de Regeneração'
+            }
+            if (isas.water === 12) {
+                isaWater = 'Não Regenerativo 5 = -16 Pontos de Regeneração'
+            }
+            if (isas.water === 13) {
+                isaWater = 'Não Regenerativo 6 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
-            if (isas.soil === 0) {
-                isaSoil = 'Regenerativo 3 = +25 Pontos de Regeneração'
-            }
             if (isas.soil === 1) {
-                isaSoil = 'Regenerativo 2 = +10 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 6 = +25 Pontos de Regeneração'
             }
             if (isas.soil === 2) {
-                isaSoil = 'Regenerativo 1 = +1 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 5 = +16 Pontos de Regeneração'
             }
             if (isas.soil === 3) {
-                isaSoil = 'Neutro = 0 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 4 = +8 Pontos de Regeneração'
             }
             if (isas.soil === 4) {
-                isaSoil = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 3 = +4 Pontos de Regeneração'
             }
             if (isas.soil === 5) {
-                isaSoil = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 2 = +2 Pontos de Regeneração'
             }
             if (isas.soil === 6) {
-                isaSoil = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
+                isaSoil = 'Regenerativo 1 = +1 Pontos de Regeneração'
+            }
+            if (isas.soil === 7) {
+                isaSoil = 'Neutro = 0 Pontos de Regeneração'
+            }
+            if (isas.soil === 8) {
+                isaSoil = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+            }
+            if (isas.soil === 9) {
+                isaSoil = 'Não Regenerativo 2 = -2 Pontos de Regeneração'
+            }
+            if (isas.soil === 10) {
+                isaSoil = 'Não Regenerativo 3 = -4 Pontos de Regeneração'
+            }
+            if (isas.soil === 11) {
+                isaSoil = 'Não Regenerativo 4 = -8 Pontos de Regeneração'
+            }
+            if (isas.soil === 12) {
+                isaSoil = 'Não Regenerativo 5 = -16 Pontos de Regeneração'
+            }
+            if (isas.soil === 13) {
+                isaSoil = 'Não Regenerativo 6 = -25 Pontos de Regeneração'
             }
         }
 
         if (isas) {
-            if (isas.bio === 0) {
-                isaBio = 'Regenerativo 3 = +25 Pontos de Regeneração'
-            }
             if (isas.bio === 1) {
-                isaBio = 'Regenerativo 2 = +10 Pontos de Regeneração'
+                isaBio = 'Regenerativo 6 = +25 Pontos de Regeneração'
             }
             if (isas.bio === 2) {
-                isaBio = 'Regenerativo 1 = +1 Pontos de Regeneração'
+                isaBio = 'Regenerativo 5 = +16 Pontos de Regeneração'
             }
             if (isas.bio === 3) {
-                isaBio = 'Neutro = 0 Pontos de Regeneração'
+                isaBio = 'Regenerativo 4 = +8 Pontos de Regeneração'
             }
             if (isas.bio === 4) {
-                isaBio = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+                isaBio = 'Regenerativo 3 = +4 Pontos de Regeneração'
             }
             if (isas.bio === 5) {
-                isaBio = 'Não Regenerativo 2 = -10 Pontos de Regeneração'
+                isaBio = 'Regenerativo 2 = +2 Pontos de Regeneração'
             }
             if (isas.bio === 6) {
-                isaBio = 'Não Regenerativo 3 = -25 Pontos de Regeneração'
+                isaBio = 'Regenerativo 1 = +1 Pontos de Regeneração'
+            }
+            if (isas.bio === 7) {
+                isaBio = 'Neutro = 0 Pontos de Regeneração'
+            }
+            if (isas.bio === 8) {
+                isaBio = 'Não Regenerativo 1 = -1 Pontos de Regeneração'
+            }
+            if (isas.bio === 9) {
+                isaBio = 'Não Regenerativo 2 = -2 Pontos de Regeneração'
+            }
+            if (isas.bio === 10) {
+                isaBio = 'Não Regenerativo 3 = -4 Pontos de Regeneração'
+            }
+            if (isas.bio === 11) {
+                isaBio = 'Não Regenerativo 4 = -8 Pontos de Regeneração'
+            }
+            if (isas.bio === 12) {
+                isaBio = 'Não Regenerativo 5 = -16 Pontos de Regeneração'
+            }
+            if (isas.bio === 13) {
+                isaBio = 'Não Regenerativo 6 = -25 Pontos de Regeneração'
             }
         }
 
@@ -1992,7 +2045,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let pdfDevHash = '';
 
         const inspectionData = await GetInspection(additionalData?.inspectionId);
-        const producerData = await GetProducer(inspectionData?.createdBy);
+        const producerData = await GetProducer(inspectionData?.producer);
 
         const response = await api.get(`/inspection/${additionalData?.inspectionId}`)
         if (response.data.inspection.status === 1) {
@@ -2033,7 +2086,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const infoData = {
             producerWallet: producerData?.producerWallet,
             producerName: producerData?.name,
-            producerArea: producerData?.certifiedArea,
+            producerArea: producerData?.areaInformation?.totalArea,
             inspectorWallet: walletAddress,
             date: format(new Date(), 'dd/MM/yyyy - kk:mm')
         }
@@ -2052,11 +2105,11 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             const hash = await save(res);
             pdfDevHash = hash;
 
-            createIsas(data1, 'phoenix', hash, producerData);
+            createIsas(data1, 'phoenix', hash, producerData, response.data.inspection.proofPhoto);
         })
     }
 
-    async function createIsas(data, methodType, hashPdf, producerData) {
+    async function createIsas(data, methodType, hashPdf, producerData, proofPhoto) {
         setLoading(true)
 
         const carbonResult = calculateCarboon(data?.resultIndices);
@@ -2102,25 +2155,26 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         setLoading(false);
         const arrayIsas = [
-            { categoryId: carbon.categoryId, isaIndex: carbon.isaIndex, indicator: carbon.indicator },
-            { categoryId: bio.categoryId, isaIndex: bio.isaIndex, indicator: bio.indicator },
-            { categoryId: solo.categoryId, isaIndex: solo.isaIndex, indicator: solo.indicator },
-            { categoryId: water.categoryId, isaIndex: water.isaIndex, indicator: water.indicator }
+            { categoryId: carbon.categoryId, isaId: carbon.isaIndex, indicator: Number(carbon.indicator) },
+            { categoryId: bio.categoryId, isaId: bio.isaIndex, indicator: Number(bio.indicator) },
+            { categoryId: water.categoryId, isaId: water.isaIndex, indicator: Number(water.indicator) },
+            { categoryId: solo.categoryId, isaId: solo.isaIndex, indicator: Number(solo.indicator) },
         ];
 
         console.log(arrayIsas)
 
-        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData, hashPdf)
+        finishInspectionBlockchain(arrayIsas, resultIndices, methodType, producerData, hashPdf, proofPhoto)
     }
 
-    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData, hashPdf) {
+    async function finishInspectionBlockchain(isas, resultIndices, methodType, producerData, hashPdf, proofPhoto) {
         setModalTransaction(true);
         setLoadingTransaction(true);
         RealizeInspection(
-            String(additionalData?.inspectionId),
+            Number(additionalData?.inspectionId),
             isas,
             walletAddress,
-            hashPdf
+            hashPdf,
+            proofPhoto
         )
             .then(async (res) => {
                 setLogTransaction({
@@ -2239,27 +2293,45 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const carbon = data.carbon;
 
         if (carbon < 0) {
-            if (Math.abs(carbon) > 0 && Math.abs(carbon) < 100000) {
+            if (Math.abs(carbon) > 0 && Math.abs(carbon) < 10) {
+                result = 6
+            }
+            if (Math.abs(carbon) >= 10 && Math.abs(carbon) < 100) {
+                result = 5
+            }
+            if (Math.abs(carbon) >= 100 && Math.abs(carbon) < 1000) {
+                result = 4
+            }
+            if (Math.abs(carbon) >= 1000 && Math.abs(carbon) < 10000) {
+                result = 3
+            }
+            if (Math.abs(carbon) >= 10000 && Math.abs(carbon) < 100000) {
                 result = 2
             }
-            if (Math.abs(carbon) >= 100000 && Math.abs(carbon) < 1000000) {
+            if (Math.abs(carbon) >= 100000) {
                 result = 1
             }
-            if (Math.abs(carbon) >= 1000000) {
-                result = 0
-            }
         }
-        if (carbon >= 1000000) {
-            result = 6
+        if (carbon >= 100000) {
+            result = 13
         }
-        if (carbon >= 100000 && carbon < 1000000) {
-            result = 5
+        if (carbon >= 10000 && carbon < 100000) {
+            result = 12
         }
-        if (carbon > 0 && carbon < 100000) {
-            result = 4
+        if (carbon >= 1000 && carbon < 10000) {
+            result = 11
+        }
+        if (carbon >= 100 && carbon < 1000) {
+            result = 10
+        }
+        if (carbon >= 10 && carbon < 100) {
+            result = 9
+        }
+        if (carbon > 0 && carbon < 10) {
+            result = 8
         }
         if (carbon === 0) {
-            result = 3
+            result = 7
         }
 
         return result;
@@ -2271,26 +2343,44 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
         if (water < 0) {
             if (Math.abs(water) > 0 && Math.abs(water) < 10) {
-                result = 4
+                result = 8
             }
             if (Math.abs(water) < 100 && Math.abs(water) >= 10) {
-                result = 5
+                result = 9
             }
-            if (Math.abs(water) > 100) {
-                result = 6
+            if (Math.abs(water) < 1000 && Math.abs(water) >= 100) {
+                result = 10
+            }
+            if (Math.abs(water) < 10000 && Math.abs(water) >= 1000) {
+                result = 11
+            }
+            if (Math.abs(water) < 100000 && Math.abs(water) >= 10000) {
+                result = 12
+            }
+            if (Math.abs(water) >= 100000) {
+                result = 13
             }
         }
-        if (water >= 100) {
-            result = 0
-        }
-        if (water >= 10 && water < 100) {
+        if (water >= 100000) {
             result = 1
         }
-        if (water > 0 && water < 10) {
+        if (water >= 10000 && water < 100000) {
             result = 2
         }
-        if (water === 0) {
+        if (water >= 1000 && water < 10000) {
             result = 3
+        }
+        if (water >= 100 && water < 1000) {
+            result = 4
+        }
+        if (water >= 10 && water < 100) {
+            result = 5
+        }
+        if (water > 0 && water < 10) {
+            result = 6
+        }
+        if (water === 0) {
+            result = 7
         }
 
         return result;
@@ -2301,33 +2391,57 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         const bio = Number(data.bio);
 
         if (bio < 0) {
-            if (Math.abs(bio) > 0 && Math.abs(bio) < 100) {
-                result = 4
+            if (Math.abs(bio) > 0 && Math.abs(bio) < 10) {
+                result = 8
                 return result;
             }
-            if (Math.abs(bio) >= 100 && Math.abs(bio) < 1000) {
-                result = 5
+            if (Math.abs(bio) >= 10 && Math.abs(bio) < 50) {
+                result = 9
+                return result;
+            }
+            if (Math.abs(bio) >= 50 && Math.abs(bio) < 100) {
+                result = 10
+                return result;
+            }
+            if (Math.abs(bio) >= 100 && Math.abs(bio) < 200) {
+                result = 11
+                return result;
+            }
+            if (Math.abs(bio) >= 200 && Math.abs(bio) < 1000) {
+                result = 12
                 return result;
             }
             if (Math.abs(bio) >= 1000) {
-                result = 6
+                result = 13
                 return result;
             }
         }
         if (bio >= 1000) {
-            result = 0
-            return result;
-        }
-        if (bio < 1000 && bio >= 100) {
             result = 1
             return result;
         }
-        if (bio < 100 && bio > 0) {
+        if (bio < 1000 && bio >= 200) {
             result = 2
             return result;
         }
-        if (bio === 0) {
+        if (bio < 200 && bio >= 100) {
             result = 3
+            return result;
+        }
+        if (bio < 100 && bio >= 50) {
+            result = 4
+            return result;
+        }
+        if (bio < 50 && bio >= 10) {
+            result = 5
+            return result;
+        }
+        if (bio < 10 && bio > 0) {
+            result = 6
+            return result;
+        }
+        if (bio === 0) {
+            result = 7
             return result;
         }
     }
@@ -2338,26 +2452,44 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
         let result = 0;
         if (soil < 0) {
             if (Math.abs(soil) > 0 && Math.abs(soil) < 1) {
-                result = 4
+                result = 8
             }
             if (Math.abs(soil) < 2 && Math.abs(soil) >= 1) {
-                result = 5
+                result = 9
             }
-            if (Math.abs(soil) >= 2) {
-                result = 6
+            if (Math.abs(soil) < 10 && Math.abs(soil) >= 2) {
+                result = 10
+            }
+            if (Math.abs(soil) < 100 && Math.abs(soil) >= 10) {
+                result = 11
+            }
+            if (Math.abs(soil) < 1000 && Math.abs(soil) >= 100) {
+                result = 12
+            }
+            if (Math.abs(soil) >= 1000) {
+                result = 13
             }
         }
-        if (soil >= 100) {
-            result = 0
-        }
-        if (soil >= 2 && soil < 100) {
+        if (soil >= 1000) {
             result = 1
         }
-        if (soil > 0 && soil < 2) {
+        if (soil >= 100 && soil < 1000) {
             result = 2
         }
-        if (soil === 0) {
+        if (soil >= 10 && soil < 100) {
             result = 3
+        }
+        if (soil >= 2 && soil < 10) {
+            result = 4
+        }
+        if (soil >= 1 && soil < 2) {
+            result = 5
+        }
+        if (soil > 0 && soil < 1) {
+            result = 6
+        }
+        if (soil === 0) {
+            result = 7
         }
 
         return result;
@@ -2375,6 +2507,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
 
     //----------- FINISH INSPECTION ---------------------^^^^^^^^
 
+    // ---------------- REQUEST INSPECTION -------------- Disponível no Sintrop Pay
     async function requestInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2486,7 +2619,7 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             })
     }
 
-    //------------ BURN TOKENS ---------------
+    //------------ BURN TOKENS --------------- Disponível no Sintrop Pay
     async function burnTokens() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2626,9 +2759,9 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             }
         }
     }
-    //------------ BURN TOKENS ---------------
+    //------------ BURN TOKENS --------------- Disponível no Sintrop Pay
 
-    //------------ Invalidate inspection ---------------
+    //------------ Invalidate inspection --------------- Disponível no Sintrop Pay
     async function invalidateInspection() {
         setModalTransaction(true);
         setLoadingTransaction(true);
@@ -2856,211 +2989,211 @@ export function TransactionItem({ transaction, attTransactions, walletAddress, u
             })
     }
 
-    //----------------Sacar tokens -------------------------
+    //----------------Sacar tokens ------------------------- Disponível no Sintrop Pay
     async function withdraw() {
-        if (userData?.userType === 4) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawDeveloper(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 4) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawDeveloper(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 1) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawProducer(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 1) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawProducer(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 2) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawInspector(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
-                    console.log(res)
+        // if (userData?.userType === 2) { 
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawInspector(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
+        //             console.log(res)
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
 
-        if (userData?.userType === 3) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-            WithdrawResearcher(walletAddress)
-                .then(async (res) => {
-                    setLogTransaction({
-                        type: res.type,
-                        message: res.message,
-                        hash: res.hashTransaction
-                    });
+        // if (userData?.userType === 3) {
+        //     setModalTransaction(true);
+        //     setLoadingTransaction(true);
+        //     WithdrawResearcher(walletAddress)
+        //         .then(async (res) => {
+        //             setLogTransaction({
+        //                 type: res.type,
+        //                 message: res.message,
+        //                 hash: res.hashTransaction
+        //             });
 
-                    if (res.type === 'success') {
-                        api.put('/transactions-open/finish', { id: transaction.id });
+        //             if (res.type === 'success') {
+        //                 api.put('/transactions-open/finish', { id: transaction.id });
 
-                        attTransactions();
+        //                 attTransactions();
 
-                        await api.post('/publication/new', {
-                            userId: userData?.id,
-                            type: 'withdraw-tokens',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                userData,
-                                transactionHash: res.hashTransaction,
-                                hash: res.hashTransaction,
-                            }),
-                        });
+        //                 await api.post('/publication/new', {
+        //                     userId: userData?.id,
+        //                     type: 'withdraw-tokens',
+        //                     origin: 'platform',
+        //                     additionalData: JSON.stringify({
+        //                         userData,
+        //                         transactionHash: res.hashTransaction,
+        //                         hash: res.hashTransaction,
+        //                     }),
+        //                 });
 
-                    }
-                    setLoadingTransaction(false);
-                })
-                .catch(err => {
-                    setLoadingTransaction(false);
-                    const message = String(err.message);
-                    console.log(message);
-                    if (message.includes("Request OPEN or ACCEPTED")) {
-                        setLogTransaction({
-                            type: 'error',
-                            message: 'Request OPEN or ACCEPTED',
-                            hash: ''
-                        })
-                        return;
-                    }
-                    setLogTransaction({
-                        type: 'error',
-                        message: 'Something went wrong with the transaction, please try again!',
-                        hash: ''
-                    })
-                })
-        }
+        //             }
+        //             setLoadingTransaction(false);
+        //         })
+        //         .catch(err => {
+        //             setLoadingTransaction(false);
+        //             const message = String(err.message);
+        //             console.log(message);
+        //             if (message.includes("Request OPEN or ACCEPTED")) {
+        //                 setLogTransaction({
+        //                     type: 'error',
+        //                     message: 'Request OPEN or ACCEPTED',
+        //                     hash: ''
+        //                 })
+        //                 return;
+        //             }
+        //             setLogTransaction({
+        //                 type: 'error',
+        //                 message: 'Something went wrong with the transaction, please try again!',
+        //                 hash: ''
+        //             })
+        //         })
+        // }
     }
 
-    //-------------- invite user -------------------
+    //-------------- invite user ------------------- Disponível no Sintrop Pay
     async function inviteUser() {
         setModalTransaction(true);
         setLoadingTransaction(true);

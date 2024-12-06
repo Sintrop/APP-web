@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { api } from "../../../services/api";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { FaCalculator, FaChevronRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../components/LoadingTransaction";
-import { ActivityIndicator } from '../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../components/ActivityIndicator/ActivityIndicator';
 import { BurnTokens as BurnRCSupporter } from "../../../services/supporterService";
 import { BurnTokens } from "../../../services/sacTokenService";
 import { ModalTransactionCreated } from "../../../components/ModalTransactionCreated";

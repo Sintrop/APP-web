@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { useParams, useNavigate } from "react-router";
-import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../components/ActivityIndicator/ActivityIndicator';
 import { api } from "../../services/api";
 import { getImage } from "../../services/getImage";
 import { FaUser, FaListAlt, FaList, FaChevronRight, FaQrcode, FaHandHoldingUsd, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";

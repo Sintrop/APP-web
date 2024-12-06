@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../../services/getImage";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { ImageItem } from "./ImageItem";
 import { ViewImage } from "../../../components/ViewImage";
 import { FaMapMarker } from "react-icons/fa";

@@ -3,7 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { api } from '../../../../../../services/api';
-import { ActivityIndicator } from '../../../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../../../components/ActivityIndicator/ActivityIndicator';
 import { useMainContext } from '../../../../../../hooks/useMainContext';
 import { saveImageFirebase } from '../../../../../../services/saveImageFirebase';
 import { useTranslation } from 'react-i18next';

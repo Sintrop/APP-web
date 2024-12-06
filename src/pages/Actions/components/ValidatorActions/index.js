@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { api } from "../../../../services/api";
 import { InspectionValidation } from "./InspectionValidation";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { UserValidation } from "./UserValidation";
 
 export function ValidatorActions(){

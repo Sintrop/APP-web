@@ -3,7 +3,7 @@ import axios from 'axios';
 import { api } from '../../services/api';
 import Loading from '../../components/Loading';
 import { ToastContainer, toast } from 'react-toastify';
-import { ActivityIndicator } from '../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../components/ActivityIndicator/ActivityIndicator';
 import { FaPlay } from 'react-icons/fa'
 import { ContentItem } from './components/ContentItem';
 import { useNavigate } from 'react-router';

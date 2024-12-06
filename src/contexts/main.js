@@ -3,13 +3,12 @@ import Web3 from 'web3';
 import { CheckUser } from '../services/checkUserRegister';
 import ConnectWallet from "../services/connectWallet";
 import { useTranslation } from "react-i18next";
-import { GetBalanceDeveloper } from '../services/developersPoolService';
-import { GetBalanceProducer } from '../services/producerPoolService';
 import CryptoJS from "crypto-js";
 import { api } from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
 import {addDays, compareAsc} from "date-fns";
+import { getEraInfo } from "../services/eraInfo";
 
 export const MainContext = createContext({});
 
@@ -27,7 +26,6 @@ export default function MainProvider({ children }) {
     const [modalChooseLang, setModalChooseLang] = useState(false);
     const [modalTutorial, setModalTutorial] = useState(false);
     const [modalFeedback, setModalFeedback] = useState(false);
-    const [balanceUser, setBalanceUser] = useState(0);
     const [userData, setUserData] = useState(null);
     const [era, setEra] = useState(1);
     const [notifications, setNotifications] = useState([]);
@@ -42,9 +40,10 @@ export default function MainProvider({ children }) {
     const [epoch, setEpoch] = useState(1)
     const [impactToken, setImpactToken] = useState({});
     const [accountsConnected, setAccountsConnected] = useState([]);
+    const [userBlockchain, setUserBlockchain] = useState({});
 
     useEffect(() => {
-        getEraInfo();
+        handleGetEraInfo();
         getImpact();
         checkUserConnected();
         checkAccountsConnected();
@@ -83,11 +82,11 @@ export default function MainProvider({ children }) {
         }
     }
 
-    async function getEraInfo() {
-        const response = await api.get('/web3/era-info');
-        setNextEra(response.data.nextEraIn);
-        setEra(response.data.eraAtual);
-        setEpoch(response.data.epoch)
+    async function handleGetEraInfo() {
+        const response = await getEraInfo();
+        setNextEra(response.nextEraIn);
+        setEra(response.eraAtual);
+        setEpoch(response.epoch);
     }
 
     async function getImpact() {
@@ -177,19 +176,6 @@ export default function MainProvider({ children }) {
         localStorage.setItem('user_connected', JSON.stringify(data));
     }
 
-    async function getBalanceUser(typeUser, wallet) {
-        if (typeUser === '1') {
-            const balanceUser = await GetBalanceProducer(wallet)
-            console.log(balanceUser)
-            setBalanceUser(Number(balanceUser))
-        }
-
-        if (typeUser === '4') {
-            const balanceUser = await GetBalanceDeveloper(wallet)
-            setBalanceUser(Number(balanceUser))
-        }
-    }
-
     function chooseModalRegister() {
         setModalRegister(!modalRegister);
     }
@@ -206,7 +192,6 @@ export default function MainProvider({ children }) {
         const response = await CheckUser(String(wallet));
         setUser(response);
         setWalletConnected(wallet);
-        getBalanceUser(response, wallet);
         if (response !== '0') {
             getUserDataApi(wallet)
         }
@@ -250,37 +235,43 @@ export default function MainProvider({ children }) {
         if (userType === 1) {
             const response = await api.get(`/web3/producer-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.producer);
         }
 
         if (userType === 2) {
             const response = await api.get(`/web3/inspector-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.inspector);
         }
 
         if (userType === 4) {
             const response = await api.get(`/web3/developer-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.developer);
         }
 
         if (userType === 3) {
             const response = await api.get(`/web3/researcher-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.researcher);
         }
 
         if (userType === 6) {
             const response = await api.get(`/web3/activist-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.activist);
         }
 
         if (userType === 7) {
             const response = await api.get(`/web3/supporter-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
-            console.log(response.data)
+            setUserBlockchain(response.data.supporter);
         }
 
         if (userType === 8) {
             const response = await api.get(`/web3/validator-data/${String(wallet).toLowerCase()}`);
             setBlockchainData(response.data);
+            setUserBlockchain(response.data.validator);
         }
     }
 
@@ -352,12 +343,10 @@ export default function MainProvider({ children }) {
                 chooseLanguage,
                 modalChooseLang,
                 toggleModalChooseLang,
-                setWalletConnected,
                 walletSelected,
                 setWalletSelected,
                 modalTutorial,
                 chooseModalTutorial,
-                balanceUser,
                 userData,
                 getUserDataApi,
                 modalFeedback,
@@ -369,7 +358,6 @@ export default function MainProvider({ children }) {
                 transactionOpen,
                 setTransactionOpen,
                 transactionOpened,
-                userData,
                 loginWithWalletAndPassword,
                 imageProfile,
                 connectionType,
@@ -383,7 +371,9 @@ export default function MainProvider({ children }) {
                 nextEra,
                 impactToken,
                 epoch,
-                accountsConnected
+                accountsConnected,
+                getUserBlockchainData,
+                userBlockchain,
             }}
         >
             {children}

@@ -36,7 +36,7 @@ export function PublicationItem({ data }) {
     const { walletConnected, userData: user } = useMainContext();
     const navigate = useNavigate();
     const additionalData = JSON.parse(data.additionalData);
-    const userData = additionalData.userData;
+    const [userData, setUserData] = useState({});
     const [imageProfile, setImageProfile] = useState(null);
     const [visiblePubli, setVisiblePubli] = useState(true);
     const [likes, setLikes] = useState(0);
@@ -48,7 +48,8 @@ export function PublicationItem({ data }) {
     useEffect(() => {
         getImageProfile();
         setLikes(data.LikesPublication.length);
-        setComments(data?.CommentsPublication)
+        setComments(data?.CommentsPublication);
+        setUserData(data.user)
     }, []);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export function PublicationItem({ data }) {
     }, [walletConnected]);
 
     async function getImageProfile() {
-        const imageUrl = await getImage(userData?.imgProfileUrl);
+        const imageUrl = await getImage(data?.user?.imgProfileUrl);
         setImageProfile(imageUrl);
     }
 
@@ -113,7 +114,7 @@ export function PublicationItem({ data }) {
     }
 
     return (
-        <div className="w-[93%] mx-2 lg:mx-0 lg:w-[600px] bg-[#03364B] p-2 rounded-lg flex flex-col gap-3">
+        <div className="w-[93%] mx-2 lg:mx-0 lg:w-[550px] bg-[#03364B] p-2 rounded-lg flex flex-col gap-3">
             <div className="flex justify-between w-full">
                 <div className="flex">
                     <div className="w-14 h-14 rounded-full bg-gray-400">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { useParams } from "react-router";
 import { TopBar } from '../../components/TopBar';
 import { Inspection } from "./components/Inspection";

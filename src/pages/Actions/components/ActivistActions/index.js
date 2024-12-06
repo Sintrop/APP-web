@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { api } from "../../../../services/api";
 import { UserInvite } from "./UserInvite";
-import { Invite } from '../../../../services/invitationService';
+import { Invite } from '../../../../services/web3/invitationService';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { ToastContainer, toast } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
 
 export function ActivistActions({ }) {
     const { userData, walletConnected, connectionType } = useMainContext();
@@ -189,6 +189,7 @@ export function ActivistActions({ }) {
                             onChange={(e) => setUserType(e.target.value)}
                             className="p-2 rounded-md bg-green-950 text-white"
                         >
+                            <option value={1}>Produtor(a)</option>
                             <option value={2}>Inspetor(a)</option>
                             <option value={6}>Ativista</option>
                         </select>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronLeft } from 'react-icons/fa';
-import {ActivityIndicator} from '../../../../components/ActivityIndicator';
+import {ActivityIndicator} from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { toast, ToastContainer } from "react-toastify";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
 import { api } from "../../../../services/api";
-import { InvalidateInspection } from "../../../../services/sintropService";
-import { addValidation } from "../../../../services/validatorService";
+import { InvalidateInspection } from "../../../../services/web3/sintropService";
+import { addValidation } from "../../../../services/web3/validatorService";
 
 export function ModalValidation({ close, data }) {
     const {walletConnected, userData, connectionType} = useMainContext();

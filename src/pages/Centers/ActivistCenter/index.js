@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivistActions } from "../../Actions/components/ActivistActions";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { TopBar } from "../../../components/TopBar";
 
 export function ActivistCenter(){

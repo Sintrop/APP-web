@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js}"],
+  content: ["./src/**/*.{html,js,tsx}"],
   theme: {
     extend: {
       backgroundImage:{
@@ -18,7 +18,23 @@ module.exports = {
         'espaco': "url('/src/assets/espaco.jpg')",
         'espaco2': "url('/src/assets/espaco2.jpg')",
         'florest': "url('/src/assets/bg-florest.jpg')",
-      }
+      },
+      colors: {
+  			background: 'green',
+  			container: {
+  				primary: '#03364B',
+  				secondary: '#012939'
+  			},
+  			green: {
+  				primary: '#75D63A',
+          secondary: '#062c01',
+  				header: '#044640',
+          btn: '#229B13'
+  			},
+  			blue: {
+  				primary: '#3E9EF5'
+  			}
+  		},
     },
   },
   plugins: [

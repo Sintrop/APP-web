@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../components/TopBar";
 import { Feedback } from "../../components/Feedback";

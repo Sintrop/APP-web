@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { api } from '../../../../../../services/api';
 import {format} from 'date-fns';
 import { getImage } from '../../../../../../services/getImage';
-import { ActivityIndicator } from '../../../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../../../components/ActivityIndicator/ActivityIndicator';
 
 export function CommentItem({data}){
     const [userData, setUserData] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { FaChevronRight } from "react-icons/fa";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { useNavigate } from "react-router";
 import { TopBar } from "../../../components/TopBar";
 import { api } from "../../../services/api";
@@ -39,9 +39,9 @@ export function Market() {
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex flex-col gap-1 w-full lg:max-w-[1024px] mt-3 items-start px-2 lg:px-0">
-                    {/* <p className="font-bold text-white text-lg mt-3">{t('comprar')}</p>
-                    <div className="flex flex-wrap justify-center gap-3 w-full">
-                        <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[49%] border-green-600 border">
+                    <p className="font-bold text-white text-lg mt-3">{t('comprar')}</p>
+                    <div className="flex flex-wrap gap-3 w-full">
+                        {/* <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[49%] border-green-600 border">
                             <h3 className="font-bold text-green-600 text-lg">{t('preVendaReal')}</h3>
                             <h4 className="font-bold text-white">1 RC = R$ 0,0282</h4>
 
@@ -51,7 +51,7 @@ export function Market() {
                             >
                                 {t('comprar')}
                             </button>
-                        </div>
+                        </div> */}
 
                         <div className="bg-[#0a4303] p-2 rounded-md flex flex-col gap-1 w-full lg:w-[49%]">
                             <h3 className="font-bold text-green-600 text-lg">{t('icoTitle')}</h3>
@@ -64,7 +64,7 @@ export function Market() {
                                 {t('comprar')}
                             </button>
                         </div>
-                    </div> */}
+                    </div>
 
                     <div className="flex items-center justify-between gap-1 w-full mt-5">
                         <p className="font-bold text-white text-lg">{t('ofertas')}</p>

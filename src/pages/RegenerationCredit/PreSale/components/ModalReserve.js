@@ -4,7 +4,7 @@ import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { api } from "../../../../services/api";
 import CryptoJS from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
 
 export function ModalReserve({ reserved }) {

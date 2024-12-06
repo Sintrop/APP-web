@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from '../../hooks/useMainContext';
 import { useNavigate } from 'react-router-dom';
 import { TopBar } from "../../components/TopBar";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated";
-import { ActivityIndicator } from "../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { RecordItem } from "./components/RecordItem";
 import { ModalAddRecord } from "./components/ModalAddRecord";
 import { ModalPaymentInvoice } from "./components/ModalPaymentInvoice";

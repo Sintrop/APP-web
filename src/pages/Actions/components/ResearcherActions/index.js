@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { api } from "../../../../services/api";
 import { ResearcheItem } from "./components/ResearcheItem";
-import { ActivityIndicator } from '../../../../components/ActivityIndicator';
+import { ActivityIndicator } from '../../../../components/ActivityIndicator/ActivityIndicator';
 import { useMainContext } from '../../../../hooks/useMainContext';
 import * as Dialog from '@radix-ui/react-dialog';
-import { PublishResearch } from "../../../../services/researchersService";
+import { PublishResearch } from "../../../../services/web3/researchersService";
 import { save } from "../../../../config/infura";
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { CategorieItem } from "./components/CategorieItem";
+import { CategoryItem } from "./components/CategoryItem/CategoryItem";
 import { Item } from '../../../ImpactCalculator/components/Item';
 import { ModalPublish } from "./components/ModalPublish";
 import { FaCalculator, FaChevronRight, FaDatabase, FaFileAlt, FaUsers } from "react-icons/fa";
 import { BsGraphUp } from 'react-icons/bs';
 import { VscSymbolMethod } from 'react-icons/vsc';
 import { useNavigate } from "react-router";
-import { UserRankingItem } from "../../../Ranking/components/UserRankingItem";
-import { Invite } from "../../../../services/invitationService";
+import { UserRankingItem } from "../../../Community/Ranking/components/UserRankingItem";
+import { Invite } from "../../../../services/web3/invitationService";
 import { Flora } from "./components/Databases/Flora";
 import { BiFile } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
@@ -312,7 +312,7 @@ export function ResearcherActions() {
                         {tabSelected === 'isa' && (
                             <div className="flex flex-wrap gap-4">
                                 {categories.map(item => (
-                                    <CategorieItem data={item} />
+                                    <CategoryItem data={item} />
                                 ))}
                             </div>
                         )}

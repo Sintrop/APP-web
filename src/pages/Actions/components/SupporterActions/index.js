@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Info } from "../../../../components/Info";
-import { ActivityIndicator } from "../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { ModalTransactionCreated } from "../../../../components/ModalTransactionCreated";
 import * as Dialog from '@radix-ui/react-dialog';
 import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { Invite } from "../../../../services/invitationService";
+import { Invite } from "../../../../services/web3/invitationService";
 
 export function SupporterActions() {
     const { userData, connectionType, walletConnected } = useMainContext();

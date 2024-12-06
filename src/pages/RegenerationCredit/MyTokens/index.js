@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../../../components/Header";
+import { Header } from "../../../components/Header/header";
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
 import { useMainContext } from "../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../components/ActivityIndicator/ActivityIndicator";
 import { api } from "../../../services/api";
 import axios from 'axios'
 import { TxItem } from "./components/TxItem";

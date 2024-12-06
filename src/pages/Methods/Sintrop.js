@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TopBar } from '../../components/TopBar';
-import { Header } from '../../components/Header';
+import { Header } from '../../components/Header/header';
 import { api } from "../../services/api";
 import { Feedback } from "../../components/Feedback";
 

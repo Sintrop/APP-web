@@ -6,7 +6,7 @@ import { FaFileAlt, FaShare } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { format } from "date-fns";
 import { useMainContext } from "../../../../../../hooks/useMainContext";
-import { ActivityIndicator } from "../../../../../../components/ActivityIndicator";
+import { ActivityIndicator } from "../../../../../../components/ActivityIndicator/ActivityIndicator";
 import { CommentResearche } from "./CommentResearche";
 import { useTranslation } from "react-i18next";
 

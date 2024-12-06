@@ -3,12 +3,12 @@ import {getStorage} from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDAjpN058iWNSC_UYLepYoBRMeRBTOglyg",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "sintrop-app-android.firebaseapp.com",
   projectId: "sintrop-app-android",
   storageBucket: "sintrop-app-android.appspot.com",
-  messagingSenderId: "851824435865",
-  appId: "1:851824435865:web:80bd64956003d416268e08",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: "G-KTXK67N4BV"
 };
 
