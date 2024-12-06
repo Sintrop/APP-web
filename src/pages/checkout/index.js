@@ -36,8 +36,6 @@ export function Checkout() {
     const [loadingTransaction, setLoadingTransaction] = useState(false);
     const [modalTransaction, setModalTransaction] = useState(false);
     const [logTransaction, setLogTransaction] = useState({});
-    const [userDataApi, setUserDataApi] = useState({});
-    const [additionalData, setAdditionalData] = useState({});
     const [imageProfile, setImageProfile] = useState('');
     const [balanceETH, setBalanceETH] = useState(0);
     const [balanceRCT, setBalanceRCT] = useState(0);
