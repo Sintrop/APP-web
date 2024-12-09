@@ -10,7 +10,7 @@ export async function web3RequestWrite(
     let code = 0;
 
     try {
-        await contract.methods[method](...params).send({ from: from, gas: 1000000 })
+        await contract.methods[method](...params).send({ from: from, gasPrice: 1000000 })
             .on('transactionHash', (hash: string) => {
                 transactionHash = hash
                 success = true
