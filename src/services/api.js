@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'https://appapiv8.sintrop.com'
+    baseURL: process.env.REACT_APP_API_URL
     //baseURL: 'http://localhost:3333'
 })
