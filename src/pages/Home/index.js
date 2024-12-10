@@ -102,7 +102,7 @@ export function Home() {
                                 className="flex items-center gap-2 text-white border-b w-fit border-white"
                             >
                                 <FaHome size={20} color='white'/>
-                                Apps Sintrop
+                                App Store
                             </a>
                             <UserConnection
                                 handleShowSignUp={() => setSignUp(true)}
