@@ -484,6 +484,15 @@
        "eraAtualDaPool": "ERA atual da pool",
        "saquesDisponiveis": "Saques disponíveis",
        "textInfoSaquesDisponiveis": "Ter saques disponíveis não significa que você receberá tokens, mas você precisa realizar o saque para avançar de ERA na pool",
-       "jaSacado": "Já sacado"
+       "jaSacado": "Já sacado",
+       "walletConectada": "Wallet conectada",
+       "candidaturaEnviada": "Candidatura enviada",
+       "vamosPrecisarDeDadosSeus": "Vamos precisar de alguns dados seus, mas é bem simples",
+       "queroMeCandidatar": "Quero me candidatar",
+       "voceRecebeuConviteDe": "Você recebeu um convite de: ",
+       "vocePrecisaReceberConvite": "Você precisa receber um convite para efetivar seu cadastro",
+       "vamosVerificarSeHaVagas": "Primeiro vamos verificar se há vagas para seu tipo de usuário",
+       "saibaMaisSobreVagas": "Saiba mais sobre as vagas",
+       "verificando": "Verificando..."
     }
 }

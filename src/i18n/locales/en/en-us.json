@@ -487,6 +487,15 @@
     "eraAtualDaPool": "Current pool ERA",
     "saquesDisponiveis": "Withdrawals available",
     "textInfoSaquesDisponiveis": "Having withdrawals available does not mean that you will receive tokens, but you need to withdraw to advance in ERA in the pool",
-    "jaSacado": "Already withdrawn"
+    "jaSacado": "Already withdrawn",
+    "walletConectada": "Connected Wallet",
+    "candidaturaEnviada": "Application sent",
+    "vamosPrecisarDeDadosSeus": "We'll need some data from you, but it's quite simple",
+    "queroMeCandidatar": "I want to apply",
+    "voceRecebeuConviteDe": "You received an invitation from: ",
+    "vocePrecisaReceberConvite": "You need to receive an invitation to register",
+    "vamosVerificarSeHaVagas": "First let's check if there are vacancies for your type of user",
+    "saibaMaisSobreVagas": "Find out more about vacancies",
+    "verificando": "Checking..."
   }
 }

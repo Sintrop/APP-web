@@ -449,6 +449,15 @@
        "eraAtualDaPool": "ERA actual del piscina",
        "saquesDisponiveis": "Retiros disponibles",
        "textInfoSaquesDisponiveis": "Tener retiros disponibles no significa que recibirás tokens, pero debes retirarlos para avanzar en ERA en el piscina.",
-       "jaSacado": "Ya retirado"
+       "jaSacado": "Ya retirado",
+       "walletConectada": "Cartera conectada",
+       "candidaturaEnviada": "Solicitud enviada",
+       "vamosPrecisarDeDadosSeus": "Necesitaremos algunos datos suyos, pero es bastante sencillo.",
+       "queroMeCandidatar": "Quiero aplicar",
+       "voceRecebeuConviteDe": "Has recibido una invitación de: ",
+       "vocePrecisaReceberConvite": "Necesitas recibir una invitación para registrarte.",
+       "vamosVerificarSeHaVagas": "Primero verifiquemos si hay vacantes para tu tipo de usuario.",
+       "saibaMaisSobreVagas": "Obtenga más información sobre las vacantes",
+       "verificando": "De cheques..."
     }
 }
