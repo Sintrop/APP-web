@@ -7,7 +7,7 @@ import { getProportionallity } from "../../../../../services/getProportionality"
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 
 export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister, loadingEfetive }) {
-    const { userData } = useMainContext();
+    const { userData, accountStatus } = useMainContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
         }
 
         if (type === 'efetive-register') {
-            if (userData?.accountStatus === 'guest') {
+            if (accountStatus === 'guest') {
                 setShowHideBtn(true);
                 setOpen(true);
                 checkVancancies();
@@ -47,7 +47,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
                 setOpen(false);
             }
         }
-    }, [check, userData]);
+    }, [check, userData, type, accountStatus]);
 
     async function checkVancancies(){
         setLoading(true);

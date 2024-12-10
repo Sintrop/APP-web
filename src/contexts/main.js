@@ -33,6 +33,7 @@ export default function MainProvider({ children }) {
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [transactionOpened, setTranscationsOpened] = useState([]);
     const [accountStatus, setAccountStatus] = useState('pending');
+    const [inviteData, setInviteData] = useState({});
     const [blockchainData, setBlockchainData] = useState({});
     const [itemsCalculator, setItemsCalculator] = useState([]);
     const [tokensToContribute, setTokensToContribute] = useState(0);
@@ -209,8 +210,28 @@ export default function MainProvider({ children }) {
             getUserBlockchainData(wallet, resUser?.userType);
         }
 
+        if (resUser?.accountStatus !== 'blockchain') {
+            getInviteData(resUser?.wallet);
+        }
+
         const image = await getImage(resUser.imgProfileUrl);
         setImageProfile(image);
+    }
+
+    async function getInviteData(wallet){
+        const response = await api.get(`/invites/${wallet}`)
+        const invite = response.data.invite;
+        setInviteData(invite)
+        if (invite?.invited === '0x0000000000000000000000000000000000000000') {
+            setAccountStatus('pending');
+        }
+        if (String(invite?.invited).toLowerCase() === String(wallet).toLowerCase()) {
+            setAccountStatus('guest');
+            api.put('/user/account-status', {
+                userWallet: userData?.wallet,
+                status: 'guest',
+            })
+        }
     }
 
     async function saveOnAccountsConnected(user){
