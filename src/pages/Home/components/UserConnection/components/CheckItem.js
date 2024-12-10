@@ -125,14 +125,14 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
                     {type === 'application' && (
                         <>
                             <p className="text-white text-center text-xs">
-                                Vamos precisar de alguns dados seus, mas é bem simples
+                                {t('vamosPrecisarDeDadosSeus')}
                             </p>
 
                             <button
                                 className="w-full h-10 rounded-md mt-5 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
                                 onClick={handleShowSignUp}
                             >
-                                Quero me candidatar
+                                {t('queroMeCandidatar')}
                             </button>
                         </>
                     )}
@@ -140,7 +140,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
                     {type === 'invite' && (
                         <>
                             <p className="text-white text-center text-xs">
-                                {check ? 'Você recebeu um convite de: ' : 'Você precisa receber um convite para efetivar seu cadastro'}
+                                {check ? `${t('voceRecebeuConviteDe')}` : `${t('vocePrecisaReceberConvite')}`}
                             </p>
                         </>
                     )}
@@ -148,17 +148,17 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
                     {type === 'efetive-register' && (
                         <>
                             <p className="text-white text-center text-xs">
-                                Primeiro vamos verificar se há vagas para seu tipo de usuário
+                                {t('vamosVerificarSeHaVagas')}
                             </p>
                             <p 
                                 className="text-blue-500 underline text-xs text-center hover:cursor-pointer"
                                 onClick={() => navigate('/community')}
                             >
-                                Saiba mais sobre as vagas
+                                {t('saibaMaisSobreVagas')}
                             </p>
 
                             {loading ? (
-                                <p className="font-bold text-green-primary text-sm text-center my-5">Verificando...</p>
+                                <p className="font-bold text-green-primary text-sm text-center my-5">{t('verificando')}</p>
                             ) : (
                                 <>
                                     {avaliableVacancy ? (

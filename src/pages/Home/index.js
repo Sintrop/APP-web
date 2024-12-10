@@ -76,14 +76,14 @@ export function Home() {
         <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Sintrop App</title>
+                <title>{t('cr')}</title>
                 <link rel="canonical" href={`https://app.sintrop.com`} />
                 <link rel="icon" href="/favicon.png" />
                 <meta
                     name="description"
                     content="Sistema Descentralizado de Regeneração da Natureza"
                 />
-                <meta name="og:title" property="og:title" content="Sintrop App" />
+                <meta name="og:title" property="og:title" content={t('cr')} />
                 <meta name="og:description" property="og:description" content="Sistema Descentralizado de Regeneração da Natureza" />
             </Helmet>
             <TopBar />
@@ -102,7 +102,7 @@ export function Home() {
                                 className="flex items-center gap-2 text-white border-b w-fit border-white"
                             >
                                 <FaHome size={20} color='white'/>
-                                Apps Sintrop
+                                App Store
                             </a>
                             <UserConnection
                                 handleShowSignUp={() => setSignUp(true)}

@@ -3,9 +3,9 @@ import { api } from "./api";
 export const INSPECTOR_PROPORTIONALITY = 3;
 export const ACTIVIST_PROPORTIONALITY = 2;
 export const RESEARCHER_PROPORTIONALITY = 2;
-export const DEVELOPER_PROPORTIONALITY = 1;
-export const VALIDATOR_PROPORTIONALITY = 5;
-export const CONTRIBUTOR_PROPORTIONALITY = 1;
+export const DEVELOPER_PROPORTIONALITY = 2;
+export const VALIDATOR_PROPORTIONALITY = 2;
+export const CONTRIBUTOR_PROPORTIONALITY = 2;
 
 export async function getProportionallity() {
     let producers = 0;
@@ -29,7 +29,7 @@ export async function getProportionallity() {
     }
 
     const limitTotalInspectors = producers * INSPECTOR_PROPORTIONALITY;
-    const limitTotalDevelopers = producers * DEVELOPER_PROPORTIONALITY;
+    const limitTotalDevelopers = producers / DEVELOPER_PROPORTIONALITY;
     const limitTotalResearchers = producers / RESEARCHER_PROPORTIONALITY;
     const limitTotalActivists = producers / ACTIVIST_PROPORTIONALITY;
     const limitTotalContributors = producers / CONTRIBUTOR_PROPORTIONALITY;
@@ -40,19 +40,19 @@ export async function getProportionallity() {
     const producerToInspectors = (limitTotalInspectors / producers) / 3;
 
     const calculoResearcher = limitTotalResearchers - researchers;
-    const producerToResearchers = ((1 - calculoResearcher) / 0.2).toFixed(0);
+    const producerToResearchers = ((1 - calculoResearcher) / producers).toFixed(0);
         
     const calculoDeveloper = limitTotalDevelopers - developers;
-    const producerToDevelopers = ((1 - calculoDeveloper) / 0.2).toFixed(0);
+    const producerToDevelopers = ((1 - calculoDeveloper) / producers).toFixed(0);
     
     const calculoActivist = limitTotalActivists - activists;
-    const producerToActivists = ((1 - calculoActivist) / 0.1).toFixed(0);
+    const producerToActivists = ((1 - calculoActivist) / producers).toFixed(0);
         
     const calculoValidator = limitTotalValidators - validators;
-    const producerToValidators = ((1 - calculoValidator) / 0.1).toFixed(0);
+    const producerToValidators = ((1 - calculoValidator) / producers).toFixed(0);
 
     const calculoContributor = limitTotalContributors - contributors;
-    const producerToContributors = ((1 - calculoContributor) / 0.1).toFixed(0);
+    const producerToContributors = ((1 - calculoContributor) / producers).toFixed(0);
     
     return {
         avaliableVacancyInspector: calculoInspector >= 1 ? true : false,

@@ -40,7 +40,7 @@ export function LoadingTransaction({loading, logTransaction, action}){
                                 <p className="text-gray-300">Hash da transação:</p>
                                 <a 
                                     target='_blank' 
-                                    href={`https://sepolia.etherscan.io/tx/${logTransaction.hash}`}
+                                    href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${logTransaction.hash}`}
                                     className='max-w-[40ch] overflow-hidden text-ellipsis underline-offset-2 text-blue-500 border-b-2 border-blue-500'
                                     >
                                     {logTransaction.hash}

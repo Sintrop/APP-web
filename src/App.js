@@ -3,12 +3,22 @@ import MainProvider from "./contexts/main";
 import Router from "./routes";
 import "./app.css";
 import { HelmetProvider } from "react-helmet-async";
+import { useNetwork } from "./hooks/useNetwork";
+import { UnsupportedNetworkPage } from "./pages/UnsupportedNetworkPage/UnsupportedNetworkPage";
 
 function App() {
+    const {isSupported, data} = useNetwork();
+
     return (
         <HelmetProvider>
             <MainProvider>
-                <Router />
+                {isSupported ? (
+                    <Router />
+                ) : (
+                    <UnsupportedNetworkPage
+                        networkName={data}
+                    />
+                )}
             </MainProvider>
         </HelmetProvider>
     );
