@@ -113,7 +113,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                     <p className="text-white text-sm font-bold">Hash da transação</p>
                                     <a
                                         className="text-sm text-white underline"
-                                        href={`https://sepolia.etherscan.io/tx/${returnTransactionData?.transactionHash}`}
+                                        href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${returnTransactionData?.transactionHash}`}
                                         target="_blank"
                                     >
                                         {returnTransactionData?.transactionHash}

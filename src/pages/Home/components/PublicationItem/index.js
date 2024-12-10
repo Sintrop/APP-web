@@ -234,7 +234,7 @@ export function PublicationItem({ data }) {
             {additionalData?.hash && (
                 <a
                     className="flex items-center gap-1"
-                    href={`https://sepolia.etherscan.io/tx/${additionalData?.hash}`}
+                    href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${additionalData?.hash}`}
                     target="_blank"
                 >
                     <FaExternalLinkAlt className="text-blue-300" size={18} />
@@ -266,7 +266,7 @@ export function PublicationItem({ data }) {
                 <button
                     className="flex flex-col items-center"
                     onClick={() => {
-                        navigator.clipboard.writeText(`https://app.sintrop.com/publication/${data?.id}`);
+                        navigator.clipboard.writeText(`${process.env.REACT_APP_HOST_APP_URL}/publication/${data?.id}`);
                         toast.success(t('linkCopiado'))
                     }}
                 >
