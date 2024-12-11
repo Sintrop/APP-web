@@ -6,7 +6,16 @@ import { useNavigate } from "react-router";
 import { getProportionallity } from "../../../../../services/getProportionality";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 
-export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister, loadingEfetive }) {
+interface Props {
+    check?: boolean;
+    title: string;
+    type?: string;
+    handleShowSignUp?: () => void;
+    handleEfetiveRegister?: () => void;
+    loadingEfetive?: boolean;
+}
+export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveRegister, loadingEfetive }: Props) {
+    //@ts-ignore
     const { userData, accountStatus } = useMainContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -49,42 +58,42 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
         }
     }, [check, userData, type, accountStatus]);
 
-    async function checkVancancies(){
+    async function checkVancancies() {
         setLoading(true);
         const response = await getProportionallity();
 
-        if(userData.userType === 2){
-            if(response.avaliableVacancyInspector){
+        if (userData.userType === 2) {
+            if (response.avaliableVacancyInspector) {
                 setAvaliableVacancy(true);
             }
         }
 
-        if(userData.userType === 3){
-            if(response.avaliableVacancyResearcher){
+        if (userData.userType === 3) {
+            if (response.avaliableVacancyResearcher) {
                 setAvaliableVacancy(true);
             }
         }
 
-        if(userData.userType === 4){
-            if(response.avaliableVacancyDeveloper){
+        if (userData.userType === 4) {
+            if (response.avaliableVacancyDeveloper) {
                 setAvaliableVacancy(true);
             }
         }
 
-        if(userData.userType === 5){
-            if(response.avaliableVacancyContributor){
+        if (userData.userType === 5) {
+            if (response.avaliableVacancyContributor) {
                 setAvaliableVacancy(true);
             }
         }
 
-        if(userData.userType === 6){
-            if(response.avaliableVacancyActivist){
+        if (userData.userType === 6) {
+            if (response.avaliableVacancyActivist) {
                 setAvaliableVacancy(true);
             }
         }
 
-        if(userData.userType === 8){
-            if(response.avaliableVacancyValidator){
+        if (userData.userType === 8) {
+            if (response.avaliableVacancyValidator) {
                 setAvaliableVacancy(true);
             }
         }
@@ -147,36 +156,48 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
 
                     {type === 'efetive-register' && (
                         <>
-                            <p className="text-white text-center text-xs">
-                                {t('vamosVerificarSeHaVagas')}
-                            </p>
-                            <p 
-                                className="text-blue-500 underline text-xs text-center hover:cursor-pointer"
-                                onClick={() => navigate('/community')}
-                            >
-                                {t('saibaMaisSobreVagas')}
-                            </p>
 
                             {loading ? (
-                                <p className="font-bold text-green-primary text-sm text-center my-5">{t('verificando')}</p>
+                                <>
+                                    <p className="text-white text-center text-xs">
+                                        {t('vamosVerificarSeHaVagas')}
+                                    </p>
+                                    <p
+                                        className="text-blue-500 underline text-xs text-center hover:cursor-pointer"
+                                        onClick={() => navigate('/community')}
+                                    >
+                                        {t('saibaMaisSobreVagas')}
+                                    </p>
+
+                                    <p className="font-bold text-green-primary text-sm text-center my-5">{t('verificando')}</p>
+                                </>
                             ) : (
                                 <>
                                     {avaliableVacancy ? (
                                         <button
-                                            className="w-full h-10 rounded-md mt-5 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
+                                            className="w-full h-10 rounded-md mt-1 text-white font-bold text-sm bg-blue-primary max-w-[300px]"
                                             onClick={handleEfetiveRegister}
                                             disabled={loadingEfetive}
                                         >
                                             {loadingEfetive ? (
-                                                <ActivityIndicator size={25}/>
+                                                <ActivityIndicator size={25} />
                                             ) : (
                                                 t('efetivarCadastro')
                                             )}
                                         </button>
                                     ) : (
-                                        <p className="font-bold text-yellow-500 text-sm text-center my-5">
-                                            {t('naoHaVagasNoMomento')}
-                                        </p>
+                                        <>
+                                            <p className="font-bold text-yellow-500 text-sm text-center my-5">
+                                                {t('naoHaVagasNoMomento')}
+                                            </p>
+
+                                            <p
+                                                className="text-blue-500 underline text-xs text-center hover:cursor-pointer mb-3"
+                                                onClick={() => navigate('/community')}
+                                            >
+                                                {t('saibaMaisSobreVagas')}
+                                            </p>
+                                        </>
                                     )}
                                 </>
                             )}

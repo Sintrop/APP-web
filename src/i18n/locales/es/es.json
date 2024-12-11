@@ -460,6 +460,9 @@
        "saibaMaisSobreVagas": "Obtenga más información sobre las vacantes",
        "verificando": "De cheques...",
        "oTipoUsuarioApoiadorPodeEfetivarCadastro": "El tipo de usuario Supporter puede registrarse directamente en la cadena de bloques, simplemente regístrese a continuación!",
-       "candidatura": "Candidatura"
+       "candidatura": "Candidatura",
+       "naoHaVagasNoMomento": "No hay vacantes en este momento!",
+       "cadastroRealizadoSucesso": "Registro completado con éxito!",
+       "transacaoEnviadaCheckout": "Transacción enviada para finalizar la compra, completar y actualizar esta página!"
     }
 }

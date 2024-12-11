@@ -27,7 +27,7 @@ import QRCode from "react-qr-code";
 import { ShortPubli } from "./components/ShortPubli/index.js";
 import { Chat } from "../../components/Chat/index.js";
 import { useTranslation } from "react-i18next";
-import { UserConnection } from "../Home/components/UserConnection/UserConnection.js";
+import { UserConnection } from "../Home/components/UserConnection/UserConnection";
 import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
 
 export function Profile() {

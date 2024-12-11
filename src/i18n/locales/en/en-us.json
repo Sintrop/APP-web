@@ -498,6 +498,9 @@
     "saibaMaisSobreVagas": "Find out more about vacancies",
     "verificando": "Checking...",
     "oTipoUsuarioApoiadorPodeEfetivarCadastro": "The Supporter user type can register directly on the blockchain, just register below!",
-    "candidatura": "Application"
+    "candidatura": "Application",
+    "naoHaVagasNoMomento": "There are no vacancies at the moment!",
+    "cadastroRealizadoSucesso": "Registration completed successfully!",
+    "transacaoEnviadaCheckout": "Transaction sent to checkout, complete and refresh this page!"
   }
 }
