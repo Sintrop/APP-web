@@ -1,4 +1,5 @@
 import { ValidatorContract } from "./Contracts";
+import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
 
 export const GetValidator = async(walletAdd: string) => {
@@ -11,36 +12,12 @@ export const GetValidators = async() => {
     return validators;
 }
 
-export const addValidator = async (wallet: string) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await ValidatorContract.methods.addValidator().send({ from: wallet })
-    //@ts-ignore
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Validator registered!"
-        }
-    })
-    //@ts-ignore
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            type = 'error'
-            message = 'Not allowed user!'
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    })
-        
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+interface AddValidatorProps{
+    walletConnected: string;
+}
+export async function addValidator({walletConnected}: AddValidatorProps): Promise<ReturnTransactionProps>{
+    const response = await web3RequestWrite(ValidatorContract, 'addValidator', [], walletConnected);
+    return response;
 }
 
 export const addValidation = async (wallet: string, walletUserVote: string, justification: string) => {

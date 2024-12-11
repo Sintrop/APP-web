@@ -8,6 +8,7 @@ import { executeSendContribution } from "../../../../services/actions/sendContri
 import { executePublishResearche } from "../../../../services/actions/publishResearche";
 import { executeRequestInspection } from "../../../../services/actions/requestInspection";
 import { executeInviteUser } from "../../../../services/actions/inviteUser";
+import { executeRegisterUser } from "../../../../services/registerUser";
 
 interface Props {
     close: () => void;
@@ -18,7 +19,7 @@ interface Props {
 
 export function LoadingTransaction({ close, success, additionalDataTransaction, transactionType }: Props) {
     //@ts-ignore
-    const { walletConnected } = useMainContext();
+    const { walletConnected, userData } = useMainContext();
     const [loading, setLoading] = useState(false);
     const [transactionSuccessfully, setTransactionSuccessfully] = useState(false);
     const [returnTransactionData, setReturnTransactionData] = useState({} as ReturnTransactionProps);
@@ -52,6 +53,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'inviteUser') {
             handleInviteUser();
         }
+        if (transactionType === 'register'){
+            handleRegisterUser();
+        }
     }
 
     async function handleBurnTokens() {
@@ -84,6 +88,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         finishRequestWeb3(response);
     }
 
+    async function handleRegisterUser(){
+        const response = await executeRegisterUser(userData, walletConnected);
+        finishRequestWeb3(response);
+    }
+
     function finishRequestWeb3(response: ReturnTransactionProps) {
         setReturnTransactionData(response);
         if (response.success) {
@@ -112,7 +121,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                 <div className="flex flex-col w-full mt-14">
                                     <p className="text-white text-sm font-bold">Hash da transação</p>
                                     <a
-                                        className="text-sm text-white underline"
+                                        className="text-sm text-white underline truncate max-w-full"
                                         href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${returnTransactionData?.transactionHash}`}
                                         target="_blank"
                                     >
