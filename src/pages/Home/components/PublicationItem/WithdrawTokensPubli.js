@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { RcTokenContractAddress } from "../../../../services/web3/Contracts";
+import { web3 } from "../../../../services/web3/Contracts";
 
 export function WithdrawTokensPubli({data, changeVisible}){
     const {t} = useTranslation();
@@ -14,18 +14,10 @@ export function WithdrawTokensPubli({data, changeVisible}){
     }, [userData, additionalData]);
 
     async function getTokensWithdraw(hash, wallet) {
-        const response = await axios.get(`https://api-holesky.etherscan.io/api?module=account&action=tokentx&contractaddress=${RcTokenContractAddress}&address=${wallet}&page=1&offset=100&startblock=0&endblock=227025780&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`)
-        const transactions = response.data.result;
-        
-        for (var i = 0; i < transactions.length; i++) {
-            if (transactions[i].hash === hash) {
-                const tokens = String((Number(transactions[i].value) / 10 ** 18).toFixed(0))
-                setTokensWithdraw(tokens)
-                if(tokens === '0'){
-                    changeVisible();
-                }
-            }
-        }
+        const response = await axios.get(`${process.env.REACT_APP_CHAIN_API}/api/v2/transactions/${hash}/token-transfers?type=ERC-20`);
+        const valueTransfer = response.data?.items[0]?.total?.value;
+        const valueFromWei = web3.utils.fromWei(valueTransfer);
+        setTokensWithdraw(valueFromWei);
     }
 
     if(tokensWithdraw === 0){

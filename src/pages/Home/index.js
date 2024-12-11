@@ -18,8 +18,9 @@ import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
 import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { UserConnection } from "./components/UserConnection/UserConnection.js";
+import { UserConnection } from "./components/UserConnection/UserConnection";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated/index.js";
+import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 
 export function Home() {
     const { t } = useTranslation();
@@ -35,6 +36,7 @@ export function Home() {
     const [signUp, setSignUp] = useState(false);
     const [news, setNews] = useState([]);
     const [createdTransaction, setCreatedTransaction] = useState(false);
+    const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
 
     useEffect(() => {
         getPublications();
@@ -70,6 +72,17 @@ export function Home() {
     async function getNews() {
         const response = await api.get('/news');
         setNews(response.data.news);
+    }
+
+    function successRegister(type){
+        setShowModalWhereExecuteTransaction(false);
+        if(type === 'blockchain'){
+            getUserDataApi(userData?.wallet);
+            toast.success(t('cadastroRealizadoSucesso'))
+        }
+        if(type === 'checkout'){
+            toast.success(t('transacaoEnviadaCheckout'));
+        }
     }
 
     return (
@@ -108,6 +121,7 @@ export function Home() {
                                 handleShowSignUp={() => setSignUp(true)}
                                 showLogout={() => setModalLogout(true)}
                                 showTransactionCreated={() => setCreatedTransaction(true)}
+                                showModalWhereExecuteTransaction={() => setShowModalWhereExecuteTransaction(true)}
                             />
 
                             <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
@@ -245,6 +259,15 @@ export function Home() {
                         getUserDataApi(userData.wallet);
                         setSignUp(false)
                     }}
+                />
+            )}
+
+            {showModalWhereExecuteTransaction && (
+                <ModalWhereExecuteTransaction
+                    additionalData=""
+                    close={() => setShowModalWhereExecuteTransaction(false)}
+                    success={successRegister}
+                    transactionType="register"
                 />
             )}
             <ToastContainer />

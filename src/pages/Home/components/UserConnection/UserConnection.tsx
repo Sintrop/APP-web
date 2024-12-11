@@ -7,21 +7,20 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
 import { api } from "../../../../services/api";
-import { toast } from "react-toastify";
-import { LoadingTransaction } from "../../../../components/LoadingTransaction";
-import { executeRegisterUser } from "../../../../services/registerUser";
 
-export function UserConnection({ handleShowSignUp, showLogout, showTransactionCreated }) {
+interface Props{
+    handleShowSignUp: () => void;
+    showLogout: () => void;
+    showTransactionCreated: () => void;
+    showModalWhereExecuteTransaction: () => void;
+}
+export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExecuteTransaction }: Props) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { userData, imageProfile, blockchainData, walletConnected, getUserDataApi } = useMainContext();
+    //@ts-ignore
+    const { userData, imageProfile, blockchainData, walletConnected } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
     const [accountStatus, setAccountStatus] = useState('pending');
-    const [inviteData, setInviteData] = useState({});
-    const [loadingTransaction, setLoadingTransaction] = useState(false);
-    const [modalTransaction, setModalTransaction] = useState(false);
-    const [logTransaction, setLogTransaction] = useState({});
-    const [loadingEfetive, setLoadingEfetive] = useState(false);
 
     useEffect(() => {
         if (userData?.accountStatus !== 'blockchain') {
@@ -40,7 +39,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
         }
         if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
             setAccountStatus('guest');
-            setInviteData(invite);
+            //setInviteData(invite);
             if (accountStatus === 'pending') {
                 api.put('/user/account-status', {
                     userWallet: userData?.wallet,
@@ -51,46 +50,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
     }
 
     async function handleEfetiveRegister() {
-        setLoadingEfetive(true);
-        if (window.ethereum) {
-            setModalTransaction(true);
-            setLoadingTransaction(true);
-
-            const response = await executeRegisterUser(userData, walletConnected);
-            if (response.success) {
-                setLogTransaction({
-                    type: 'success',
-                    message: response.message,
-                    hash: response.transactionHash,
-                });
-                setLoadingTransaction(false);
-                return;
-            }
-
-            setLogTransaction({
-                type: 'error',
-                message: response.message,
-                hash: response.transactionHash,
-            });
-            setLoadingTransaction(false);
-            setLoadingEfetive(false);
-            return;
-        }
-
-        try {
-            await api.post('/transactions-open/create', {
-                wallet: String(walletConnected).toUpperCase(),
-                type: 'register'
-            });
-            showTransactionCreated();
-        } catch (err) {
-            if (err.response?.data?.message === 'open transaction of the same type') {
-                toast.error('Você já tem uma transação do mesmo tipo em aberto! Finalize ou descarte ela no checkout!')
-                return;
-            }
-        }
-
-        setLoadingEfetive(false);
+        showModalWhereExecuteTransaction();
     }
 
     return (
@@ -181,7 +141,6 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                                         title='efetivarCadastro' 
                                         type='efetive-register' 
                                         handleEfetiveRegister={handleEfetiveRegister} 
-                                        loadingEfetive={loadingEfetive}
                                     />
                                 </>
                             )}
@@ -197,21 +156,6 @@ export function UserConnection({ handleShowSignUp, showLogout, showTransactionCr
                     </button>
                 </>
             )}
-
-            <Dialog.Root open={modalTransaction} onOpenChange={(open) => {
-                if (!loadingTransaction) {
-                    setModalTransaction(open)
-                    if (logTransaction.success) {
-                        getUserDataApi(walletConnected);
-                        toast.success(t('cadastroSucesso'));
-                    }
-                }
-            }}>
-                <LoadingTransaction
-                    loading={loadingTransaction}
-                    logTransaction={logTransaction}
-                />
-            </Dialog.Root>
         </div>
     )
 }

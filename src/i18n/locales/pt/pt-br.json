@@ -62,7 +62,7 @@
        "seCadastrarComo": "para se cadastrar como",
        "textComissao": "no Sistema Descentralizado de Regeneração da Natureza e receberá 5% de comissão sobre as contribuições realizadas",
        "oUsuario": "O(a) usuário(a)",
-       "textVersao6": "na versão 7 do Sistema Descentralizado de Regeneração da Natureza",
+       "textVersao6": "na versão 8 do Sistema Descentralizado de Regeneração da Natureza",
        "cadastrouNovaZona": "Cadadastrou uma nova zona de regeneração",
        "zona": "Zona",
        "nome": "Nome",
@@ -493,6 +493,11 @@
        "vocePrecisaReceberConvite": "Você precisa receber um convite para efetivar seu cadastro",
        "vamosVerificarSeHaVagas": "Primeiro vamos verificar se há vagas para seu tipo de usuário",
        "saibaMaisSobreVagas": "Saiba mais sobre as vagas",
-       "verificando": "Verificando..."
+       "verificando": "Verificando...",
+       "oTipoUsuarioApoiadorPodeEfetivarCadastro": "O tipo de usuário Apoiador pode se cadastrar diretamente na blockchain, é só efetivar seu cadastro abaixo!",
+       "candidatura": "Candidatura",
+       "naoHaVagasNoMomento": "Não há vagas no momento!",
+       "cadastroRealizadoSucesso": "Cadastro efetivado com sucesso!",
+       "transacaoEnviadaCheckout": "Transação enviada para o checkout, finalize e atualize essa página!"
     }
 }

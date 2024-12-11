@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 export function ModalSignUp({ close, success }) {
     const { t } = useTranslation();
-    const { walletConnected, Sync, loginWithWalletAndPassword, getUserDataApi, logout } = useMainContext();
+    const { walletConnected, loginWithWalletAndPassword, getUserDataApi } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -51,6 +51,10 @@ export function ModalSignUp({ close, success }) {
     }, [walletConnected]);
 
     function nextStep() {
+        if (step === 1 && userType === 8) {
+            setStep(4);
+            return;
+        }
         if (step === 1 && userType === 0) {
             toast.error('Selecione um tipo de usuário!');
             return;
@@ -81,6 +85,10 @@ export function ModalSignUp({ close, success }) {
 
     function previousStep() {
         if (step === 3 && userType === 7) {
+            setStep(1);
+            return;
+        }
+        if(step === 4 && userType === 8){
             setStep(1);
             return;
         }
@@ -244,12 +252,17 @@ export function ModalSignUp({ close, success }) {
     async function registerOnApi() {
         setLoading(true);
 
-        const hashProofPhoto = await savePhotoIpfs();
+        let hashProofPhoto = '';
 
-        if (!hashProofPhoto) {
-            toast.error('Erro ao carregar imagem de prova, tente novamente!');
-            setLoading(false);
-            return;
+        if(userType < 7){
+            const updateProofPhoto = await savePhotoIpfs();
+            if (!updateProofPhoto) {
+                toast.error('Erro ao carregar imagem de prova, tente novamente!');
+                setLoading(false);
+                return;
+            }
+
+            hashProofPhoto = updateProofPhoto;
         }
 
         try {
@@ -305,6 +318,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/icon-inspetor.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon inspetor'
                                     />
                                     {t('textInspetor')}
                                 </button>
@@ -316,6 +330,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/icon-pesquisadores.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon pesquisador'
                                     />
                                     {t('textPesquisador')}
                                 </button>
@@ -327,6 +342,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/centro-dev.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon desenvolvedor'
                                     />
                                     {t('textDesenvolvedor')}
                                 </button>
@@ -338,6 +354,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/icon-contribuir.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon contribuidor'
                                     />
                                     {t('textContribuidor')}
                                 </button>
@@ -349,6 +366,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/icon-ativista.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon ativista'
                                     />
                                     {t('textAtivista')}
                                 </button>
@@ -360,8 +378,21 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={require('../../assets/icon-apoiador.png')}
                                         className="w-6 h-6 object-contain"
+                                        alt='icon apoiador'
                                     />
                                     {t('textApoiador')}
+                                </button>
+
+                                <button
+                                    className={`flex items-center gap-1 rounded-md border-2 p-2 w-fit text-white font-semibold ${userType === 8 ? 'border-white' : 'border-transparent'}`}
+                                    onClick={() => setUserType(8)}
+                                >
+                                    <img
+                                        src={require('../../assets/icon-validator.png')}
+                                        className="w-6 h-6 object-contain"
+                                        alt='icon validador'
+                                    />
+                                    {t('textValidador')}
                                 </button>
                             </div>
 
@@ -380,6 +411,7 @@ export function ModalSignUp({ close, success }) {
                                     <img
                                         src={proofPhoto64}
                                         className="w-[180px] h-[160px] object-cover rounded-md"
+                                        alt='foto de prova'
                                     />
 
                                     <button
@@ -449,7 +481,7 @@ export function ModalSignUp({ close, success }) {
                         <>
                             <p className="font-semibold text-white text-center">
                                 {userType === 7 ? (
-                                    'O tipo de usuário Apoiador pode se cadastrar diretamente na blockchain, é só efetivar seu cadastro abaixo!'
+                                    t('oTipoUsuarioApoiadorPodeEfetivarCadastro')
                                 ) : (
                                     t('tudoOkFinalizarCadastro')
                                 )}
@@ -458,12 +490,13 @@ export function ModalSignUp({ close, success }) {
                             <button
                                 className='px-2 h-10 rounded-md font-semibold text-white bg-blue-500 mt-5'
                                 onClick={handleRegister}
+                                disabled={loading}
                             >
                                 {loading ? (
                                     <ActivityIndicator size={25} />
                                 ) : (
                                     <>
-                                        {userType === 7 ? 'Efetivar cadastro' : t('finalizarCadastro')}
+                                        {userType === 7 ? t('efetivarCadastro') : t('finalizarCadastro')}
                                     </>
                                 )}
                             </button>
@@ -476,6 +509,7 @@ export function ModalSignUp({ close, success }) {
                         <button
                             onClick={previousStep}
                             className="text-white font-bold px-5"
+                            disabled={loading}
                         >
                             {t('anterior')}
                         </button>
@@ -485,6 +519,7 @@ export function ModalSignUp({ close, success }) {
                         <button
                             onClick={nextStep}
                             className="text-white font-semibold px-5 py-1 rounded-md bg-blue-500"
+                            disabled={loading}
                         >
                             {t('proximo')}
                         </button>

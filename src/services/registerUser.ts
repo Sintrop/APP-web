@@ -6,8 +6,10 @@ import { addDeveloper } from "./web3/developersService";
 import { addActivist } from "./web3/activistService";
 import { addContributor } from "./web3/contributorService";
 import { UserApiProps } from "../types/user";
+import { addValidator } from "./web3/validatorService";
+import { ReturnTransactionProps } from "./web3/rcTokenService";
 
-export async function executeRegisterUser(userData: UserApiProps, walletConnected: string){
+export async function executeRegisterUser(userData: UserApiProps, walletConnected: string): Promise<ReturnTransactionProps>{
     if(userData?.userType === 2){
         const responseInspector = await addInspector({walletConnected, name: userData?.name, proofPhoto: userData?.imgProfileUrl});
         if(responseInspector.success){
@@ -56,6 +58,23 @@ export async function executeRegisterUser(userData: UserApiProps, walletConnecte
         }else{
             return responseActivist;
         }
+    }
+
+    if(userData?.userType === 8){
+        const responseValidator = await addValidator({walletConnected});
+        if(responseValidator.success){
+            await afterRegisterBlockchain(walletConnected, userData?.id, responseValidator.transactionHash);
+            return responseValidator;
+        }else{
+            return responseValidator;
+        }
+    }
+
+    return {
+        code: 0,
+        message: 'Error on register user',
+        success: false,
+        transactionHash: ''
     }
 }
 
