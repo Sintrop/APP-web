@@ -62,7 +62,7 @@
        "seCadastrarComo": "para se cadastrar como",
        "textComissao": "en el Sistema Descentralizado de Regeneración de la Naturaleza y recibirá una comisión del 5% sobre los aportes realizados",
        "oUsuario": "Hola",
-       "textVersao6": "en la versión 7 del Sistema Descentralizado de regeneración da Natureza",
+       "textVersao6": "en la versión 8 del Sistema Descentralizado de regeneración da Natureza",
        "cadastrouNovaZona": "Cadadastró una nueva zona de regeneración",
        "zona": "Zona",
        "nome": "Nome",
@@ -458,6 +458,8 @@
        "vocePrecisaReceberConvite": "Necesitas recibir una invitación para registrarte.",
        "vamosVerificarSeHaVagas": "Primero verifiquemos si hay vacantes para tu tipo de usuario.",
        "saibaMaisSobreVagas": "Obtenga más información sobre las vacantes",
-       "verificando": "De cheques..."
+       "verificando": "De cheques...",
+       "oTipoUsuarioApoiadorPodeEfetivarCadastro": "El tipo de usuario Supporter puede registrarse directamente en la cadena de bloques, simplemente regístrese a continuación!",
+       "candidatura": "Candidatura"
     }
 }

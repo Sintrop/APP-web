@@ -62,7 +62,7 @@
     "seCadastrarComo": "to register as",
     "textComissao": "in the Decentralized Nature Regeneration System and will receive 5% commission on contributions made",
     "oUsuario": "The user",
-    "textVersao6": "in version 7 of the Decentralized Nature Regeneration System",
+    "textVersao6": "in version 8 of the Decentralized Nature Regeneration System",
     "cadastrouNovaZona": "Registered a new regeneration zone",
     "zona": "Zone",
     "nome": "Name",
@@ -496,6 +496,8 @@
     "vocePrecisaReceberConvite": "You need to receive an invitation to register",
     "vamosVerificarSeHaVagas": "First let's check if there are vacancies for your type of user",
     "saibaMaisSobreVagas": "Find out more about vacancies",
-    "verificando": "Checking..."
+    "verificando": "Checking...",
+    "oTipoUsuarioApoiadorPodeEfetivarCadastro": "The Supporter user type can register directly on the blockchain, just register below!",
+    "candidatura": "Application"
   }
 }
