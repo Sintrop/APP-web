@@ -13,7 +13,7 @@ export function UnsupportedNetworkPage({networkName}: Props){
                     className="w-[300px] object-contain"
                 />
 
-                <h1 className="text-white font-bold text-2xl mt-10">Rede imcompatível!</h1>
+                <h1 className="text-white font-bold text-2xl mt-10">Rede incompatível!</h1>
                 <p className="text-white mt-3">
                     A rede {networkName} a qual você está conectado no momento, não é compatível. Troque para nossa rede ou adicione nossa rede em seu metamask
                 </p>
