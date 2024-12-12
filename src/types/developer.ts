@@ -10,3 +10,12 @@ export interface ContributionProps{
     report: string;
     developer: string;
 }
+
+export interface DeveloperProps{
+    id: number;
+    developerWallet: string;
+    name: string;
+    proofPhoto: string;
+
+    userType: 4;
+}

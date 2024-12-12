@@ -5,6 +5,7 @@ import { WithdrawTokens } from "./components/WithdrawTokens";
 import { PublishResearche } from "../ResearcherActions/components/PublishResearche";
 import { RequestInspection } from "../ProducerActions/components/RequestInspection";
 import { InviteUser } from "./components/InviteUser";
+import { VoteUser } from "../ValidatorActions/components/VoteUser";
 
 interface Props{
     close: () => void;
@@ -47,6 +48,7 @@ const actionsTypeToComponent = {
     publishResearche: PublishResearche,
     requestInspection: RequestInspection,
     inviteUser: InviteUser,
+    voteUser: VoteUser,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;

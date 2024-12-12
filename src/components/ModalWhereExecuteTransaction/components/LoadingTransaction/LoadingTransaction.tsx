@@ -9,6 +9,7 @@ import { executePublishResearche } from "../../../../services/actions/publishRes
 import { executeRequestInspection } from "../../../../services/actions/requestInspection";
 import { executeInviteUser } from "../../../../services/actions/inviteUser";
 import { executeRegisterUser } from "../../../../services/registerUser";
+import { executeVoteUser } from "../../../../services/actions/voteUserService";
 
 interface Props {
     close: () => void;
@@ -56,6 +57,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'register'){
             handleRegisterUser();
         }
+        if (transactionType === 'voteUser'){
+            handleVoteUser();
+        }
     }
 
     async function handleBurnTokens() {
@@ -90,6 +94,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleRegisterUser(){
         const response = await executeRegisterUser(userData, walletConnected);
+        finishRequestWeb3(response);
+    }
+
+    async function handleVoteUser(){
+        const response = await executeVoteUser({walletConnected, additionalDataTransaction});
         finishRequestWeb3(response);
     }
 

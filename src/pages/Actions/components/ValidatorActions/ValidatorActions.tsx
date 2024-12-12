@@ -26,6 +26,15 @@ export function ValidatorActions() {
                 description="Saque seus tokens pelos serviços prestados na era anterior"
             />
 
+            <ActionButton
+                onClick={() => {
+                    setActionType('voteUser');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Votar em usuário"
+                description="Vote para invalidar um usuário do sistema apresentando sua justificativa"
+            />
+
             {showModalRealizeAction && (
                 <ModalRealizeAction
                     close={() => setShowModalRealizeAction(false)}
