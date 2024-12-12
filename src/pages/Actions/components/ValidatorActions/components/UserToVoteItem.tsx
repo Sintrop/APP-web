@@ -5,8 +5,10 @@ import { useTranslation } from "react-i18next";
 import { ModalWhereExecuteTransaction } from "../../../../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 import { getImage } from "../../../../../services/getImage";
 import { toast } from "react-toastify";
+import { InspectorProps } from "../../../../../types/inspector";
+import { ResearcherProps } from "../../../../../types/researcher";
 
-type UserProps = ProducerProps | DeveloperProps;
+type UserProps = ProducerProps | InspectorProps | ResearcherProps |DeveloperProps;
 interface Props{
     user: UserProps;
     userType: UserTypeProps;
@@ -32,9 +34,24 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
             }
         }
 
+        if(userType === 2){
+            if(user.userType === userType){
+                setWallet(user.inspectorWallet);
+                handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 3){
+            if(user.userType === userType){
+                setWallet(user.researcherWallet);
+                handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
         if(userType === 4){
             if(user.userType === userType){
                 setWallet(user.developerWallet);
+                handleGetImageProfile(user.proofPhoto);
             }
         }
     }

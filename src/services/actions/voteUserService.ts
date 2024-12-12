@@ -1,6 +1,9 @@
 import { createPubliFeed } from "../publicationFeed";
+import { GetDevelopers } from "../web3/developersService";
+import { GetInspectors } from "../web3/inspectorService";
 import { GetProducers } from "../web3/producerService";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
+import { GetResearchers } from "../web3/researchersService";
 import { addValidation } from "../web3/validatorService";
 
 interface ExecuteVoteUserProps{
@@ -59,6 +62,21 @@ export async function getUsers(userType: number){
     if(userType === 1){
         const responseProducers = await GetProducers();
         return responseProducers;
+    }
+
+    if(userType === 2){
+        const responseInspectors = await GetInspectors();
+        return responseInspectors;
+    }
+
+    if(userType === 3){
+        const responseResearchers = await GetResearchers(); 
+        return responseResearchers;
+    }
+
+    if(userType === 4){
+        const responseDevelopers = await GetDevelopers(); 
+        return responseDevelopers;
     }
 
     return [];

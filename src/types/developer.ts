@@ -16,6 +16,11 @@ export interface DeveloperProps{
     developerWallet: string;
     name: string;
     proofPhoto: string;
-
+    totalContributions: number;
+    createdAt: number;
+    pool: {
+        level: number;
+        currentEra: number;
+    }
     userType: 4;
 }

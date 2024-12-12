@@ -1,3 +1,4 @@
+import { ResearcherProps } from "../../types/researcher";
 import { ResearcherContract } from "./Contracts";
 import { researcherContractAddress } from "./Contracts";
 import { web3RequestWrite } from "./requestService"; 
@@ -8,8 +9,18 @@ export const GetResearcher = async (walletAdd: string) => {
 }
 
 export const GetResearchers = async () => {
-    const researchers = await ResearcherContract.methods.getResearchers().call()
-    return researchers; 
+    const researchers = await ResearcherContract.methods.getResearchers().call();
+
+    let newArray = [];
+    for (var i = 0; i < researchers.length; i++) {
+        const data = {
+            ...researchers[i],
+            userType: 3
+        };
+        newArray.push(data);
+    }
+
+    return newArray as ResearcherProps[];
 }
 
 export const PublishResearch = async (walletAddress: string, title: string, thesis: string, filePath: string) => {
