@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useMainContext } from "../../../../../hooks/useMainContext";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
-import { api } from "../../../../../services/api";
 import { toast } from "react-toastify";
 import { ModalWhereExecuteTransaction } from "../../../../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 import { useTranslation } from "react-i18next";
-import { web3 } from "../../../../../services/web3/Contracts";
+import { checkAvailableToInvite, checkCanInvite } from "../../../../../services/actions/inviteUser";
 
 interface Props{
     close: () => void;
 }
 export function InviteUser({}: Props){
     //@ts-ignore
-    const {userData} = useMainContext();
+    const {userData, walletConnected} = useMainContext();
     const {t} = useTranslation();
     const [wallet, setWallet] = useState('');
     const [userTypeToInvite, setUserTypeToInvite] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [loadingCanInvite, setLoadingCanInvite] = useState(false);
+    const [blocksToNextInvite, setBlocksToNextInvite] = useState(0);
+    const [youCanInvite, setYouCanInvite] = useState(false);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
     const description = descriptionText[userData.userType as DescriptionTypes];
 
@@ -26,47 +28,52 @@ export function InviteUser({}: Props){
         }else{
             setUserTypeToInvite(userData?.userType);
         }
+        handleCheckCanInvite();
     }, [userData]);
 
-    async function handleInvite(){
-        const validWallet = web3.utils.isAddress(wallet);
-        if(!validWallet){
-            toast.error(t('insiraUmaWalletValida'))
-            return;
-        }
-        if(userTypeToInvite === 0){
-            toast.error(t('selecioneUmTipoDeUsuarioParaConvidar'))
-            return;
-        }
-        try{
-            setLoading(true);
-            const response = await api.get(`/invites/${wallet}`);
-            if(response.data.invite.userType !== 0){
-                toast.error(t('essaWalletJaFoiConvidada'));
-                return;
-            }
-        }catch(e){
-            console.log(e);
-        }finally{
-            setLoading(false);
+    async function handleCheckCanInvite(){
+        setLoadingCanInvite(true);
+
+        const response = await checkCanInvite({walletConnected});
+        setYouCanInvite(response.canInvite);
+        if(response.blocksToNextInvite){
+            setBlocksToNextInvite(response.blocksToNextInvite);
         }
 
-        try{
-            setLoading(true);
-            const response = await api.get(`/user/${wallet}`);
-            if(response.data.user){
-                toast.error(t('essaWalletJaEstaCadastrada'));
-                return;
-            }
-        }catch(e){
-            console.log(e);
-            setShowModalWhereExecuteTransaction(true);
-        }finally{
-            setLoading(false);
+        setLoadingCanInvite(false);
+    }
+
+    async function handleInvite(){
+        if(userTypeToInvite === 0){
+            toast.error(t('selecioneUmTipoDeUsuarioParaConvidar'));
+            return;
         }
+        
+        setLoading(true);
+        
+        const check = await checkAvailableToInvite({walletToInvite: wallet});
+        if(check.canInvite){
+            setShowModalWhereExecuteTransaction(true);
+            setLoading(false);
+            return;
+        }
+
+        if(check.message === 'wallet not valid'){
+            toast.error(t('insiraUmaWalletValida'))
+        }
+
+        if(check.message === 'user already exists'){
+            toast.error(t('essaWalletJaEstaCadastrada'));
+        }
+
+        if(check.message === 'wallet invited'){
+            toast.error(t('essaWalletJaFoiConvidada'));
+        }
+        setLoading(false);
     }
 
     function successInvite(type: string){
+        handleCheckCanInvite();
         setShowModalWhereExecuteTransaction(false);
         if(type === 'blockchain'){
             setWallet('');
@@ -77,6 +84,23 @@ export function InviteUser({}: Props){
             setWallet('');
             toast.success(t('transacaoEnviadaCheckout'));
         }
+    }
+
+    if(loadingCanInvite){
+        return(
+            <div className="flex w-full h-full items-center justify-center">
+                <ActivityIndicator size={80}/>
+            </div>
+        )
+    }
+
+    if(!youCanInvite){
+        return(
+            <div className="flex flex-col w-full h-full items-center justify-center">
+                <h3 className="font-semibold text-white text-lg text-center">{t('voceNaoPodeConvidarAgora')}</h3>
+                <p className="text-white text-center mt-2">{t('espere')}: {blocksToNextInvite} {t('blocosParaConseguirConvidar')}</p>
+            </div>
+        )
     }
 
     return(
