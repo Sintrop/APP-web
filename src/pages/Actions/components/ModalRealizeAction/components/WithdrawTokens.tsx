@@ -66,11 +66,10 @@ export function WithdrawTokens() {
             setPoolData(response.data);
 
 
-            const response2 = await api.get(`/web3/next-aprove-validators/${String(userData?.wallet).toLowerCase()}`)
+            const response2 = await api.get(`/web3/next-aprove-validator/${String(userData?.wallet).toLowerCase()}`)
             setCanWithdraw(response2.data.canWithdraw);
             setNextApprove(response2.data.nextAprove);
         }
-        // validadores fazer a pool
         // ativistas fazer a pool
         setLoading(false);
     }
