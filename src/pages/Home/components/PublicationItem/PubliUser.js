@@ -50,7 +50,7 @@ export function PubliUser({ data }) {
     return (
         <div className="flex flex-col">
             {seeMore ? (
-                <p className="text-white">{data?.description}</p>
+                <p className="text-white break-words">{data?.description}</p>
             ) : (
                 <p className="description-publi">{data?.description}</p>
             )}
