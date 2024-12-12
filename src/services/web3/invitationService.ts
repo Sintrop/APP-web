@@ -13,6 +13,11 @@ export async function invite(props: InviteProps): Promise<ReturnTransactionProps
     return response;
 }
 
+export async function lastInviteBlocks(wallet: string): Promise<number>{
+    const response = await InvitationContract.methods.lastInviteBlocks(wallet).call();
+    return response;
+}
+
 export const Invite = async (walletAddress: string, walletInvite: string, userType: number) => {
     let type = '';
     let message = '';
