@@ -498,6 +498,12 @@
        "candidatura": "Candidatura",
        "naoHaVagasNoMomento": "Não há vagas no momento!",
        "cadastroRealizadoSucesso": "Cadastro efetivado com sucesso!",
-       "transacaoEnviadaCheckout": "Transação enviada para o checkout, finalize e atualize essa página!"
+       "transacaoEnviadaCheckout": "Transação enviada para o checkout, finalize e atualize essa página!",
+       "voceNaoPodeConvidarAgora": "Você não pode convidar agora",
+       "espere": "Espere",
+       "blocosParaConseguirConvidar": "blocos, para conseguir convidar um novo usuário",
+       "insiraUmaWalletValida": "Digite uma wallet válida",
+       "essaWalletJaEstaCadastrada": "Essa wallet já está cadastrada no sistema",
+       "essaWalletJaFoiConvidada": "Essa wallet já foi convidada"
     }
 }

@@ -463,6 +463,12 @@
        "candidatura": "Candidatura",
        "naoHaVagasNoMomento": "No hay vacantes en este momento!",
        "cadastroRealizadoSucesso": "Registro completado con éxito!",
-       "transacaoEnviadaCheckout": "Transacción enviada para finalizar la compra, completar y actualizar esta página!"
+       "transacaoEnviadaCheckout": "Transacción enviada para finalizar la compra, completar y actualizar esta página!",
+       "voceNaoPodeConvidarAgora": "No puedes invitar ahora",
+       "espere": "Esperar",
+       "blocosParaConseguirConvidar": "bloques, para poder invitar a un nuevo usuario",
+       "insiraUmaWalletValida": "Ingrese una billetera válida",
+       "essaWalletJaEstaCadastrada": "Esta billetera ya está registrada en el sistema.",
+       "essaWalletJaFoiConvidada": "Esta billetera ya ha sido invitada."
     }
 }

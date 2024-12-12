@@ -501,6 +501,12 @@
     "candidatura": "Application",
     "naoHaVagasNoMomento": "There are no vacancies at the moment!",
     "cadastroRealizadoSucesso": "Registration completed successfully!",
-    "transacaoEnviadaCheckout": "Transaction sent to checkout, complete and refresh this page!"
+    "transacaoEnviadaCheckout": "Transaction sent to checkout, complete and refresh this page!",
+    "voceNaoPodeConvidarAgora": "You can't invite now",
+    "espere": "Wait",
+    "blocosParaConseguirConvidar": "blocks, to be able to invite a new user",
+    "insiraUmaWalletValida": "Enter a valid wallet",
+    "essaWalletJaEstaCadastrada": "This wallet is already registered in the system",
+    "essaWalletJaFoiConvidada": "This wallet has already been invited"
   }
 }
