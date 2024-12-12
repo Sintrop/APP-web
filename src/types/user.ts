@@ -41,6 +41,7 @@ export interface ProducerProps {
         currentEra: number;
         onContractPool: string;
     }
+    userType: 1
 }
 
 export interface InvitationProps{
@@ -49,3 +50,5 @@ export interface InvitationProps{
     inviter: string;
     userType: string;
 }
+
+export type UserTypeProps = 1 | 2 | 3 | 4;

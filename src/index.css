@@ -35,5 +35,5 @@ code {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
-  color: white
+  color: white;
 }

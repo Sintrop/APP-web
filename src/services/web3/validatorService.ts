@@ -20,36 +20,16 @@ export async function addValidator({walletConnected}: AddValidatorProps): Promis
     return response;
 }
 
-export const addValidation = async (wallet: string, walletUserVote: string, justification: string) => {
-    let type = '';
-    let message = '';
-    let hashTransaction = ''; 
-    await ValidatorContract.methods.addValidation(walletUserVote, justification).send({ from: wallet })
-    //@ts-ignore
-    .on('transactionHash', hash => {
-        if(hash){
-            hashTransaction = hash
-            type = 'success'
-            message = "Validation ok!"
-        }
-    })
-    //@ts-ignore
-    .on("error", (error, receipt) => {
-        if(error.stack.includes("Not allowed user")){
-            type = 'error'
-            message = 'Not allowed user!'
-        }
-        if (error.stack.includes("User already exists")){
-            type = 'error'
-            message = 'User already exists'
-        }
-    })
-        
-    return {
-        type, 
-        message,
-        hashTransaction
-    }
+interface AddValidationProps{
+    walletConnected: string;
+    walletToVote: string;
+    justification: string;
+}
+
+export async function addValidation(props: AddValidationProps): Promise<ReturnTransactionProps>{
+    const {justification, walletConnected, walletToVote} = props;
+    const response = await web3RequestWrite(ValidatorContract, 'addUserValidation', [walletToVote, justification], walletConnected);
+    return response;
 }
 
 interface WithdrawTokensProps{

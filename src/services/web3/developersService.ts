@@ -1,3 +1,4 @@
+import { DeveloperProps } from "../../types/developer";
 import { DeveloperContract } from "./Contracts";
 import { web3RequestWrite } from "./requestService";
 
@@ -8,34 +9,19 @@ export const GetDeveloper = async (walletAdd) => {
 }
 
 export const GetDevelopers = async () => {
-    const developers = await DeveloperContract.methods.getDevelopers().call()
-    return developers;
-}
+    const developers = await DeveloperContract.methods.getDevelopers().call();
 
-// //@ts-ignore
-// export const AddContribution = async (walletAddress, report) => {
-//     let type = '';
-//     let message = '';
-//     let hashTransaction = '';
-//     await DeveloperContract.methods.addContribution(report).send({from: walletAddress})
-//     //@ts-ignore
-//     .on('transactionHash', (hash) => {
-//         if(hash){
-//             hashTransaction = hash
-//             type = 'success'
-//             message = "Inspection successfully accepted!"
-//         }
-//     })
-//     //@ts-ignore
-//     .on("error", (error, receipt) => {
-//         console.log(receipt);
-//     })
-//     return {
-//         type, 
-//         message,
-//         hashTransaction
-//     }
-// }
+    let newArray = [];
+    for (var i = 0; i < developers.length; i++) {
+        const data = {
+            ...developers[i],
+            userType: 4
+        };
+        newArray.push(data);
+    }
+
+    return newArray as DeveloperProps[];
+}
 
 interface AddContributionProps{
     walletConnected: string;

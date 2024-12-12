@@ -1,3 +1,4 @@
+import { ProducerProps } from "../../types/user";
 import { ProducerContract } from "./Contracts";
 import { producerContractAddress } from "./Contracts";
 import { web3RequestWrite } from "./requestService";
@@ -58,9 +59,23 @@ export const GetTotalScoreProducers = async () => {
     return score;
 }
 
-export const GetProducers = async () => {
-    const producers = await ProducerContract.methods.getProducers().call()
-    return producers;
+export async function GetProducers(){
+    try{
+        const producers = await ProducerContract.methods.getProducers().call();
+    
+        let newArray = [];
+        for(var i = 0; i < producers.length; i++){
+            const data = {
+                ...producers[i],
+                userType: 1
+            };
+            newArray.push(data);
+        }
+    
+        return newArray as ProducerProps[];
+    }catch(e){
+        return [];
+    }
 }
 
 interface WithdrawTokensProps{

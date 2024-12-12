@@ -9,7 +9,7 @@ export function FinishTaskPubli({ data }) {
     const additionalData = JSON.parse(data?.additionalData);
 
     return (
-        <div className=''>
+        <div className='overflow-hidden'>
             <div className='flex gap-5 p-2 rounded-md bg-[#1C840F] w-full h-[40px]'>
                 <div className='flex items-center gap-1'>
                     <MdInfo color='white' size={20}/>
@@ -58,7 +58,7 @@ export function FinishTaskPubli({ data }) {
 
                 <p className='font-bold text-white'>+{additionalData?.taskData?.pts} pts</p>
             </div>
-            <p className='text-white'>{additionalData?.taskData?.description}</p>
+            <p className='text-white break-words'>{additionalData?.taskData?.description}</p>
 
             <p className='text-gray-300 text-xs mt-2'>{t('dadosFinalizacaoTask')}:</p>
             <a
