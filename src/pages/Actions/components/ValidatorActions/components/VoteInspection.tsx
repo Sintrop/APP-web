@@ -3,8 +3,10 @@ import { InspectionProps } from "../../../../../types/inspection";
 import { getHistoryInspectionsToVote } from "../../../../../services/actions/voteInspectionService";
 import { InspectionToVoteItem } from "./InspectionToVoteItem";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 export function VoteInspection() {
+    const {t} = useTranslation();
     const [inspections, setInspections] = useState<InspectionProps[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -43,6 +45,7 @@ export function VoteInspection() {
                     </div>
                 ) : (
                     <>
+                        <p className="text-white text-center mt-10">{t('nenhumaInspeçãoDisponivelParaVotar')}</p>
                     </>
                 )}
             </div>

@@ -512,6 +512,7 @@
        "verInspecao": "Ver inspeção",
        "votar": "Votar",
        "enviarVoto": "Enviar voto",
-       "essaAcaoNaoEstaDisponivelNoCheckout": "Essa ação não está disponível no checkout"
+       "essaAcaoNaoEstaDisponivelNoCheckout": "Essa ação não está disponível no checkout",
+       "nenhumaInspeçãoDisponivelParaVotar": "Nenhuma inspeção disponível para votar"
     }
 }
