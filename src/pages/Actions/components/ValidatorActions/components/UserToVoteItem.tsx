@@ -8,8 +8,9 @@ import { toast } from "react-toastify";
 import { InspectorProps } from "../../../../../types/inspector";
 import { ResearcherProps } from "../../../../../types/researcher";
 import { ContributorProps } from "../../../../../types/contributor";
+import { ActivistProps } from "../../../../../types/activist";
 
-type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps;
+type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps;
 interface Props{
     user: UserProps;
     userType: UserTypeProps;
@@ -59,6 +60,13 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
         if(userType === 5){
             if(user.userType === userType){
                 setWallet(user.contributorWallet);
+                handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 6){
+            if(user.userType === userType){
+                setWallet(user.activistWallet);
                 handleGetImageProfile(user.proofPhoto);
             }
         }

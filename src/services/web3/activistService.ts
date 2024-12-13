@@ -1,3 +1,4 @@
+import { ActivistProps } from "../../types/activist";
 import { ActivistContract } from "./Contracts";
 import { web3RequestWrite } from "./requestService";
 
@@ -8,7 +9,16 @@ export const GetActivist = async (wallet: string) => {
 
 export const GetActivists = async () => {
     const activists = await ActivistContract.methods.getActivists().call()
-    return activists;
+    let newArray = [];
+    for (var i = 0; i < activists.length; i++) {
+        const data = {
+            ...activists[i],
+            userType: 6
+        };
+        newArray.push(data);
+    }
+
+    return newArray as ActivistProps[];
 }
 
 interface AddActivistProps{

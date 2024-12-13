@@ -1,4 +1,5 @@
 import { createPubliFeed } from "../publicationFeed";
+import { GetActivists } from "../web3/activistService";
 import { getContributors } from "../web3/contributorService";
 import { GetDevelopers } from "../web3/developersService";
 import { GetInspectors } from "../web3/inspectorService";
@@ -83,6 +84,11 @@ export async function getUsers(userType: number){
     if(userType === 5){
         const responseContributors = await getContributors(); 
         return responseContributors;
+    }
+
+    if(userType === 6){
+        const responseActivists = await GetActivists(); 
+        return responseActivists;
     }
 
     return [];
