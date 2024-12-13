@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { InspectionProps } from "../../../../../types/inspection";
 import { getHistoryInspectionsToVote } from "../../../../../services/actions/voteInspectionService";
 import { InspectionToVoteItem } from "./InspectionToVoteItem";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 
 export function VoteInspection() {
-    const { t } = useTranslation();
     const [inspections, setInspections] = useState<InspectionProps[]>([]);
     const [loading, setLoading] = useState(true);
 

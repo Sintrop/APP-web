@@ -128,7 +128,7 @@ export function Pools() {
                 setVisibleWithdraw(false);
             } else {
                 const response2 = await api.get(`/web3/next-aprove-validator/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.canWithdraw);
+                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
                 setNextApprove(response2.data.nextAprove);
             }
         }
