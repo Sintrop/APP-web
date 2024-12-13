@@ -6,6 +6,7 @@ import { GetInspectors } from "../web3/inspectorService";
 import { GetProducers } from "../web3/producerService";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
 import { GetResearchers } from "../web3/researchersService";
+import { getSupporters } from "../web3/supporterService";
 import { addValidation } from "../web3/validatorService";
 
 interface ExecuteVoteUserProps{
@@ -89,6 +90,11 @@ export async function getUsers(userType: number){
     if(userType === 6){
         const responseActivists = await GetActivists(); 
         return responseActivists;
+    }
+
+    if(userType === 7){
+        const responseSupporters = await getSupporters(); 
+        return responseSupporters;
     }
 
     return [];

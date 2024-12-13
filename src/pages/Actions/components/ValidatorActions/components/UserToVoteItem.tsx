@@ -9,8 +9,9 @@ import { InspectorProps } from "../../../../../types/inspector";
 import { ResearcherProps } from "../../../../../types/researcher";
 import { ContributorProps } from "../../../../../types/contributor";
 import { ActivistProps } from "../../../../../types/activist";
+import { SupporterProps } from "../../../../../types/supporter";
 
-type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps;
+type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps | SupporterProps;
 interface Props{
     user: UserProps;
     userType: UserTypeProps;
@@ -68,6 +69,12 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
             if(user.userType === userType){
                 setWallet(user.activistWallet);
                 handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 7){
+            if(user.userType === userType){
+                setWallet(user.supporterWallet);
             }
         }
     }

@@ -8,13 +8,15 @@ import { InspectorProps } from "../../../../../types/inspector";
 import { ResearcherProps } from "../../../../../types/researcher";
 import { ContributorProps } from "../../../../../types/contributor";
 import { ActivistProps } from "../../../../../types/activist";
+import { SupporterProps } from "../../../../../types/supporter";
 
 export function VoteUser() {
     const { t } = useTranslation();
     const [users, setUsers] = useState<
         ProducerProps[] | InspectorProps[] | 
         ResearcherProps[] | DeveloperProps[] | 
-        ContributorProps[] | ActivistProps[]
+        ContributorProps[] | ActivistProps[] |
+        SupporterProps[]
     >([]);
     const [userType, setUserType] = useState<UserTypeProps>(1);
 
@@ -40,6 +42,7 @@ export function VoteUser() {
                 <option value={4}>{t('textDesenvolvedor')}</option>
                 <option value={5}>{t('textContribuidor')}</option>
                 <option value={6}>{t('textAtivista')}</option>
+                <option value={7}>{t('textApoiador')}</option>
             </select>
 
             <div className="flex flex-col overflow-auto max-h-[83%]">
