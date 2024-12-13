@@ -10,6 +10,7 @@ import { executeRequestInspection } from "../../../../services/actions/requestIn
 import { executeInviteUser } from "../../../../services/actions/inviteUser";
 import { executeRegisterUser } from "../../../../services/registerUser";
 import { executeVoteUser } from "../../../../services/actions/voteUserService";
+import { executeAddValidationInspection } from "../../../../services/actions/voteInspectionService";
 
 interface Props {
     close: () => void;
@@ -60,6 +61,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'voteUser'){
             handleVoteUser();
         }
+        if (transactionType === 'voteInspection'){
+            handleVoteInspection();
+        }
     }
 
     async function handleBurnTokens() {
@@ -99,6 +103,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleVoteUser(){
         const response = await executeVoteUser({walletConnected, additionalDataTransaction});
+        finishRequestWeb3(response);
+    }
+
+    async function handleVoteInspection(){
+        const response = await executeAddValidationInspection({walletConnected, additionalDataTransaction});
         finishRequestWeb3(response);
     }
 

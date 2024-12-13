@@ -35,6 +35,15 @@ export function ValidatorActions() {
                 description="Vote para invalidar um usuário do sistema apresentando sua justificativa"
             />
 
+            <ActionButton
+                onClick={() => {
+                    setActionType('voteInspection');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Votar em inspeção"
+                description="Vote para invalidar uma inspeção do sistema apresentando sua justificativa"
+            />
+
             {showModalRealizeAction && (
                 <ModalRealizeAction
                     close={() => setShowModalRealizeAction(false)}

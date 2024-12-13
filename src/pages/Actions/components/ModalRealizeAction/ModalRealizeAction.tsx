@@ -6,6 +6,7 @@ import { PublishResearche } from "../ResearcherActions/components/PublishResearc
 import { RequestInspection } from "../ProducerActions/components/RequestInspection";
 import { InviteUser } from "./components/InviteUser";
 import { VoteUser } from "../ValidatorActions/components/VoteUser";
+import { VoteInspection } from "../ValidatorActions/components/VoteInspection";
 
 interface Props{
     close: () => void;
@@ -49,6 +50,7 @@ const actionsTypeToComponent = {
     requestInspection: RequestInspection,
     inviteUser: InviteUser,
     voteUser: VoteUser,
+    voteInspection: VoteInspection,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;
