@@ -469,6 +469,14 @@
        "blocosParaConseguirConvidar": "bloques, para poder invitar a un nuevo usuario",
        "insiraUmaWalletValida": "Ingrese una billetera válida",
        "essaWalletJaEstaCadastrada": "Esta billetera ya está registrada en el sistema.",
-       "essaWalletJaFoiConvidada": "Esta billetera ya ha sido invitada."
+       "essaWalletJaFoiConvidada": "Esta billetera ya ha sido invitada.",
+       "digiteAJustificativaDoSeuVotoParaEsseUsuario": "Introduce la justificación de tu voto para este usuario",
+       "digiteAJustificativaDoSeuVotoParaEssaInspecao": "Ingrese la justificación de su voto para esta inspección",
+       "votoEnviadoComSucesso": "Voto registrado exitosamente",
+       "votosRecebidos": "Votos recibidos",
+       "verInspecao": "Ver inspección",
+       "votar": "Votar",
+       "enviarVoto": "Enviar voto",
+       "essaAcaoNaoEstaDisponivelNoCheckout": "Esta acción no está disponible al finalizar la compra"
     }
 }

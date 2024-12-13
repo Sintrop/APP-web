@@ -504,6 +504,14 @@
        "blocosParaConseguirConvidar": "blocos, para conseguir convidar um novo usuário",
        "insiraUmaWalletValida": "Digite uma wallet válida",
        "essaWalletJaEstaCadastrada": "Essa wallet já está cadastrada no sistema",
-       "essaWalletJaFoiConvidada": "Essa wallet já foi convidada"
+       "essaWalletJaFoiConvidada": "Essa wallet já foi convidada",
+       "digiteAJustificativaDoSeuVotoParaEsseUsuario": "Digite a justificativa do seu voto para esse usuário",
+       "digiteAJustificativaDoSeuVotoParaEssaInspecao": "Digite a justificativa do seu voto para essa inspeção",
+       "votoEnviadoComSucesso": "Voto registrado com sucesso",
+       "votosRecebidos": "Votos recebidos",
+       "verInspecao": "Ver inspeção",
+       "votar": "Votar",
+       "enviarVoto": "Enviar voto",
+       "essaAcaoNaoEstaDisponivelNoCheckout": "Essa ação não está disponível no checkout"
     }
 }
