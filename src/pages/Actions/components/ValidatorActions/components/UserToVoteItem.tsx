@@ -10,8 +10,9 @@ import { ResearcherProps } from "../../../../../types/researcher";
 import { ContributorProps } from "../../../../../types/contributor";
 import { ActivistProps } from "../../../../../types/activist";
 import { SupporterProps } from "../../../../../types/supporter";
+import { ValidatorProps } from "../../../../../types/validator";
 
-type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps | SupporterProps;
+type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps | SupporterProps | ValidatorProps;
 interface Props{
     user: UserProps;
     userType: UserTypeProps;
@@ -27,7 +28,7 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
 
     useEffect(() => {
         setData();
-    }, []);
+    }, [user, userType]);
 
     function setData(){
         if(userType === 1){
@@ -75,6 +76,14 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
         if(userType === 7){
             if(user.userType === userType){
                 setWallet(user.supporterWallet);
+                setImageProfile('');
+            }
+        }
+
+        if(userType === 8){
+            if(user.userType === userType){
+                setWallet(user.validatorWallet);
+                setImageProfile('');
             }
         }
     }
@@ -120,7 +129,7 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
                 </div>
 
                 <div className="flex flex-col max-w-[70%]">
-                    <p className="text-white font-semibold text-sm truncate">{user.name}</p>
+                    <p className="text-white font-semibold text-sm truncate">{user.userType === 8 ? 'Validador' : user.name}</p>
                     <p className="text-white text-sm truncate">{wallet}</p>
                 </div>
 

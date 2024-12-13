@@ -1,3 +1,4 @@
+import { ValidatorProps } from "../../types/validator";
 import { ValidatorContract } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
@@ -10,6 +11,22 @@ export const GetValidator = async(walletAdd: string) => {
 export const GetValidators = async() => {
     const validators = await ValidatorContract.methods.getValidators().call()
     return validators;
+}
+
+export async function getValidators(): Promise<ValidatorProps[]>{
+    const validators = await ValidatorContract.methods.getValidators().call()
+
+    
+    let newArray = [];
+    for (var i = 0; i < validators.length; i++) {
+        const data = {
+            ...validators[i],
+            userType: 8
+        };
+        newArray.push(data);
+    }
+
+    return newArray as ValidatorProps[];
 }
 
 interface AddValidatorProps{

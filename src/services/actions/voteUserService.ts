@@ -7,7 +7,7 @@ import { GetProducers } from "../web3/producerService";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
 import { GetResearchers } from "../web3/researchersService";
 import { getSupporters } from "../web3/supporterService";
-import { addValidation } from "../web3/validatorService";
+import { addValidation, getValidators } from "../web3/validatorService";
 
 interface ExecuteVoteUserProps{
     additionalDataTransaction: string;
@@ -95,6 +95,11 @@ export async function getUsers(userType: number){
     if(userType === 7){
         const responseSupporters = await getSupporters(); 
         return responseSupporters;
+    }
+
+    if(userType === 8){
+        const responseValidators = await getValidators(); 
+        return responseValidators;
     }
 
     return [];

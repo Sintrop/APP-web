@@ -16,7 +16,7 @@ export async function getSupporters(){
     for (var i = 0; i < supporters.length; i++) {
         const data = {
             ...supporters[i],
-            userType: 5
+            userType: 7
         };
         newArray.push(data);
     }
