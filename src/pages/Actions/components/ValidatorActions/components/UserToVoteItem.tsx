@@ -7,8 +7,12 @@ import { getImage } from "../../../../../services/getImage";
 import { toast } from "react-toastify";
 import { InspectorProps } from "../../../../../types/inspector";
 import { ResearcherProps } from "../../../../../types/researcher";
+import { ContributorProps } from "../../../../../types/contributor";
+import { ActivistProps } from "../../../../../types/activist";
+import { SupporterProps } from "../../../../../types/supporter";
+import { ValidatorProps } from "../../../../../types/validator";
 
-type UserProps = ProducerProps | InspectorProps | ResearcherProps |DeveloperProps;
+type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps | SupporterProps | ValidatorProps;
 interface Props{
     user: UserProps;
     userType: UserTypeProps;
@@ -24,7 +28,7 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
 
     useEffect(() => {
         setData();
-    }, []);
+    }, [user, userType]);
 
     function setData(){
         if(userType === 1){
@@ -52,6 +56,34 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
             if(user.userType === userType){
                 setWallet(user.developerWallet);
                 handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 5){
+            if(user.userType === userType){
+                setWallet(user.contributorWallet);
+                handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 6){
+            if(user.userType === userType){
+                setWallet(user.activistWallet);
+                handleGetImageProfile(user.proofPhoto);
+            }
+        }
+
+        if(userType === 7){
+            if(user.userType === userType){
+                setWallet(user.supporterWallet);
+                setImageProfile('');
+            }
+        }
+
+        if(userType === 8){
+            if(user.userType === userType){
+                setWallet(user.validatorWallet);
+                setImageProfile('');
             }
         }
     }
@@ -97,7 +129,7 @@ export function UserToVoteItem({userType, user, getUsers}: Props){
                 </div>
 
                 <div className="flex flex-col max-w-[70%]">
-                    <p className="text-white font-semibold text-sm truncate">{user.name}</p>
+                    <p className="text-white font-semibold text-sm truncate">{user.userType === 8 ? 'Validador' : user.name}</p>
                     <p className="text-white text-sm truncate">{wallet}</p>
                 </div>
 

@@ -70,7 +70,7 @@
     "#provaDeReducao": "#ReduceIsObligationRegenerateIsTheSolution",
     "provaDeReducao": "Proof of item reduction",
     "daCalculadora": "from the impact calculator",
-    "verPesquisa": "See search",
+    "verPesquisa": "See research",
     "linksNessaPubli": "Links in this post",
     "realizouIsp": "Performed the inspection",
     "ptsRegen": "Regeneration Points",
@@ -507,6 +507,15 @@
     "blocosParaConseguirConvidar": "blocks, to be able to invite a new user",
     "insiraUmaWalletValida": "Enter a valid wallet",
     "essaWalletJaEstaCadastrada": "This wallet is already registered in the system",
-    "essaWalletJaFoiConvidada": "This wallet has already been invited"
+    "essaWalletJaFoiConvidada": "This wallet has already been invited",
+    "digiteAJustificativaDoSeuVotoParaEsseUsuario": "Enter the justification for your vote for this user",
+    "digiteAJustificativaDoSeuVotoParaEssaInspecao": "Enter the justification for your vote for this inspection",
+    "votoEnviadoComSucesso": "Successfully registered vote",
+    "votosRecebidos": "Votes received",
+    "verInspecao": "See inspection",
+    "votar": "Vote",
+    "enviarVoto": "Submit vote",
+    "essaAcaoNaoEstaDisponivelNoCheckout": "This action is not available at checkout",
+    "nenhumaInspeçãoDisponivelParaVotar": "No inspection available to vote"
   }
 }

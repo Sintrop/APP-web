@@ -51,4 +51,4 @@ export interface InvitationProps{
     userType: string;
 }
 
-export type UserTypeProps = 1 | 2 | 3 | 4;
+export type UserTypeProps = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;

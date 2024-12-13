@@ -1,3 +1,4 @@
+import { InspectionProps } from "../../types/inspection";
 import { SintropContract } from "./Contracts";
 import { sintropContractAddress } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
@@ -8,6 +9,29 @@ interface RequestInspectionProps{
 }
 export async function requestInspection({walletConnected}: RequestInspectionProps): Promise<ReturnTransactionProps>{
     const response = await web3RequestWrite(SintropContract, 'requestInspection', [], walletConnected);
+    return response;
+}
+
+export async function getInspections(){
+    const inspectionsCount = await SintropContract.methods.inspectionsCount().call();
+
+    let inspections = [] as InspectionProps[];
+    for(var i = 1; i <= inspectionsCount; i++){
+        const inspection = await GetInspection(i);
+        inspections.push(inspection);
+    }
+
+    return inspections;
+}
+
+interface AddInspectionValidationProps{
+    walletConnected: string;
+    inspectionId: number;
+    justification: string;
+}
+export async function addInspectionValidation(props: AddInspectionValidationProps): Promise<ReturnTransactionProps>{
+    const {inspectionId, justification, walletConnected} = props;
+    const response = await web3RequestWrite(SintropContract, 'addInspectionValidation', [inspectionId, justification], walletConnected);
     return response;
 }
 
@@ -33,14 +57,9 @@ export const InvalidateInspection = async (walletAddress: string, inspectionID: 
     }
 }
 
-export const GetInspection = async (inspectionID: string) => {
-    let inspection = {};
-    await SintropContract.methods.getInspection(inspectionID).call({from: sintropContractAddress})
-    //@ts-ignore
-    .then((res) => {
-        inspection = res;
-    })
-    return inspection;
+export const GetInspection = async (inspectionID: number) => {
+    const response = await SintropContract.methods.getInspection(inspectionID).call();
+    return response as InspectionProps;
 }
 
 export const GetIsa = async (inspectionId: string) => {

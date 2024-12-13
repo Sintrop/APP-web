@@ -1,3 +1,4 @@
+import { SupporterProps } from "../../types/supporter";
 import { SupporterContract } from "./Contracts";
 import { web3 } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
@@ -6,6 +7,21 @@ import { web3RequestWrite } from "./requestService";
 export const GetSupporters = async () => {
     const supporters = await SupporterContract.methods.getSupporters().call();
     return supporters;
+}
+
+export async function getSupporters(){
+    const supporters = await SupporterContract.methods.getSupporters().call();
+
+    let newArray = [];
+    for (var i = 0; i < supporters.length; i++) {
+        const data = {
+            ...supporters[i],
+            userType: 7
+        };
+        newArray.push(data);
+    }
+
+    return newArray as SupporterProps[];
 }
 
 //@ts-ignore

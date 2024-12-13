@@ -1,10 +1,13 @@
 import { createPubliFeed } from "../publicationFeed";
+import { GetActivists } from "../web3/activistService";
+import { getContributors } from "../web3/contributorService";
 import { GetDevelopers } from "../web3/developersService";
 import { GetInspectors } from "../web3/inspectorService";
 import { GetProducers } from "../web3/producerService";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
 import { GetResearchers } from "../web3/researchersService";
-import { addValidation } from "../web3/validatorService";
+import { getSupporters } from "../web3/supporterService";
+import { addValidation, getValidators } from "../web3/validatorService";
 
 interface ExecuteVoteUserProps{
     additionalDataTransaction: string;
@@ -77,6 +80,26 @@ export async function getUsers(userType: number){
     if(userType === 4){
         const responseDevelopers = await GetDevelopers(); 
         return responseDevelopers;
+    }
+
+    if(userType === 5){
+        const responseContributors = await getContributors(); 
+        return responseContributors;
+    }
+
+    if(userType === 6){
+        const responseActivists = await GetActivists(); 
+        return responseActivists;
+    }
+
+    if(userType === 7){
+        const responseSupporters = await getSupporters(); 
+        return responseSupporters;
+    }
+
+    if(userType === 8){
+        const responseValidators = await getValidators(); 
+        return responseValidators;
     }
 
     return [];
