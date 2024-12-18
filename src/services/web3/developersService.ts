@@ -1,4 +1,4 @@
-import { DeveloperProps } from "../../types/developer";
+import { ContributionProps, DeveloperProps } from "../../types/developer";
 import { DeveloperContract } from "./Contracts";
 import { web3RequestWrite } from "./requestService";
 
@@ -47,5 +47,15 @@ interface AddDeveloperProps{
 }
 export async function addDeveloper({walletConnected, name, proofPhoto}: AddDeveloperProps){
     const response = await web3RequestWrite(DeveloperContract, 'addDeveloper', [name, proofPhoto], walletConnected);
+    return response;
+}
+
+export async function getContributionsCount(): Promise<number>{
+    const response = await DeveloperContract.methods.contributionsCount().call();
+    return response;
+}
+
+export async function getContribution(id: number): Promise<ContributionProps>{
+    const response = await DeveloperContract.methods.getContribution(id).call();
     return response;
 }

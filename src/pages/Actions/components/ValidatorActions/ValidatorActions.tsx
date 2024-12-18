@@ -44,6 +44,24 @@ export function ValidatorActions() {
                 description="Vote para invalidar uma inspeção do sistema apresentando sua justificativa"
             />
 
+            {/* <ActionButton
+                onClick={() => {
+                    setActionType('voteDevContribution');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Votar em relatório dev"
+                description="Vote para invalidar uma contribuição enviada por um desenvolvedor"
+            />
+
+            <ActionButton
+                onClick={() => {
+                    setActionType('voteResearche');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Votar em pesquisa"
+                description="Vote para invalidar uma pesquisa enviada por um pesquisador"
+            /> */}
+
             {showModalRealizeAction && (
                 <ModalRealizeAction
                     close={() => setShowModalRealizeAction(false)}
