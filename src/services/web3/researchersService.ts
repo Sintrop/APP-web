@@ -92,3 +92,13 @@ export async function addWork(props: AddWorkProps){
     const response = await web3RequestWrite(ResearcherContract, 'addWork', [title, thesis, hashPdf], walletConnected);
     return response;
 }
+
+export async function worksCount():Promise<number>{
+    const response = await ResearcherContract.methods.worksCount().call();
+    return response;
+}
+
+export async function getWorks(){
+    const response = await ResearcherContract.methods.getWorks().call();
+    return response;
+}

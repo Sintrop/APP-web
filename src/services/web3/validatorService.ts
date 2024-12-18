@@ -42,8 +42,18 @@ interface AddValidationProps{
     walletToVote: string;
     justification: string;
 }
-
 export async function addValidation(props: AddValidationProps): Promise<ReturnTransactionProps>{
+    const {justification, walletConnected, walletToVote} = props;
+    const response = await web3RequestWrite(ValidatorContract, 'addUserValidation', [walletToVote, justification], walletConnected);
+    return response;
+}
+
+interface AddDeveloperContributionValidationProps{
+    walletConnected: string;
+    walletToVote: string;
+    justification: string;
+}
+export async function addDeveloperContributionValidation(props: AddDeveloperContributionValidationProps): Promise<ReturnTransactionProps>{
     const {justification, walletConnected, walletToVote} = props;
     const response = await web3RequestWrite(ValidatorContract, 'addUserValidation', [walletToVote, justification], walletConnected);
     return response;
