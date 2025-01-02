@@ -1,6 +1,12 @@
 import React from "react";
 import { TransactionWeb3Props } from "../../../../../../types/transaction";
 import { TransactionWeb3Header } from "./components/TransactionWeb3Header";
+import { TransactionTypeTag } from "./components/Tags/TransactionTypeTag";
+import { TransactionStatusTag } from "./components/Tags/TransactionStatusTag";
+import { TransactionMethodTag } from "./components/Tags/TransactionMethodTag";
+import { GrTransaction } from "react-icons/gr";
+import { TransactionErrorDetails } from "./components/TransactionErrorDetails";
+import { TransactionSuccessDetails } from "./components/TransactionSuccessDetails";
 
 interface Props {
     transaction: TransactionWeb3Props;
@@ -16,31 +22,41 @@ export function TransactionWeb3Item({ transaction }: Props) {
 
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-3">
-                    <div className="bg-container-secondary rounded-md p-2">
-                        <p className="text-white text-sm">{transaction.transaction_types[0]}</p>
-                    </div>
+                    <TransactionTypeTag transactionTypes={transaction.transaction_types} />
 
-                    <div className="bg-container-secondary rounded-md p-2">
-                        <p className="text-white text-sm">{transaction.status}</p>
-                    </div>
+                    <TransactionStatusTag status={transaction.status} />
 
-                    <div className="bg-container-secondary rounded-md p-2">
-                        <p className="text-white text-sm">{transaction.method}</p>
-                    </div>
-                </div>
-
-                <div className="bg-container-secondary rounded-md p-2">
-                    <p className="text-white text-sm">{transaction.block_number}</p>
+                    <TransactionMethodTag method={transaction.method} />
                 </div>
             </div>
 
-            <a
-                href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${transaction.hash}`}
-                target="_blank"
-                className="truncate text-blue-primary underline"
-            >
-                {transaction.hash}
-            </a>
+            <div className="flex items-center gap-2">
+                <GrTransaction size={20} color='white' />
+                <a
+                    href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${transaction.hash}`}
+                    target="_blank"
+                    className="truncate text-blue-primary underline max-w-[95%]"
+                    rel='noreferrer'
+                >
+                    {transaction.hash}
+                </a>
+            </div>
+
+            <div className="flex flex-col mt-1">
+                <p className="text-xs text-gray-300">Detalhes da transação</p>
+                {transaction.status === 'error' && (
+                    <TransactionErrorDetails
+                        result={transaction.result}
+                    />
+                )}
+
+                {transaction.status === 'ok' && (
+                    <TransactionSuccessDetails
+                        method={transaction.method}
+                        parameters={transaction.decoded_input.parameters}
+                    />
+                )}
+            </div>
         </div>
     )
 }

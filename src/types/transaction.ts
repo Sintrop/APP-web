@@ -70,7 +70,7 @@ export interface TransactionWeb3Props{
     has_error_in_internal_transactions: boolean;
 }
 
-interface ParametersTransactionProps{
+export interface ParametersTransactionProps{
     name: string;
     type: string;
     value: string;
