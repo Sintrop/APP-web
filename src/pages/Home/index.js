@@ -20,6 +20,7 @@ import { ModalTransactionCreated } from "../../components/ModalTransactionCreate
 import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
 import { Web3Feed } from "./components/Web3Feed/Web3Feed";
 import { SocialFeed } from "./components/SocialFeed/SocialFeed";
+import { FeedSelector } from "./components/FeedSelector";
 
 export function Home() {
     const { t } = useTranslation();
@@ -139,19 +140,10 @@ export function Home() {
                             </div>
                         )}
 
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => setFeedType('web3')}
-                            >
-                                Web3
-                            </button>
-
-                            <button
-                                onClick={() => setFeedType('social')}
-                            >
-                                Feed Social
-                            </button>
-                        </div>
+                        <FeedSelector
+                            selectedFeed={feedType}
+                            onChange={setFeedType}
+                        />
 
                         {feedType === 'web3' && (
                             <Web3Feed />
