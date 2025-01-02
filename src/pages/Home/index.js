@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header/header";
 import { api } from "../../services/api";
-import { PublicationItem } from "./components/PublicationItem";
 import { useMainContext } from '../../hooks/useMainContext';
 import { IoMdHelp } from "react-icons/io";
 import { ImBooks } from "react-icons/im";
-import { FaCalculator, FaChevronRight, FaHome } from "react-icons/fa";
+import { FaCalculator } from "react-icons/fa";
 import { QRCode } from "react-qrcode-logo";
-import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 import { Chat } from "../../components/Chat";
-import { NewPubli } from "./components/NewPubli";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ModalLogout } from "./components/ModalLogout";
 import { TopBar } from "../../components/TopBar";
 import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp.js";
@@ -21,20 +18,14 @@ import { useTranslation } from "react-i18next";
 import { UserConnection } from "./components/UserConnection/UserConnection";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated/index.js";
 import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
-import { getListTransactionsWeb3Feed } from "../../services/feed/transactionsWeb3/transactionsWeb3";
 import { Web3Feed } from "./components/Web3Feed/Web3Feed";
+import { SocialFeed } from "./components/SocialFeed/SocialFeed";
 
 export function Home() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userData, getUserDataApi } = useMainContext();
-    const [loading, setLoading] = useState(false);
-    const [publications, setPublications] = useState([]);
-    const [page, setPage] = useState(0);
-    const [modalConnect, setModalConnect] = useState(false);
     const [modalLogout, setModalLogout] = useState(false);
-    const [firstLoad, setFirstLoad] = useState(true);
-    const [loadingMore, setLoadingMore] = useState(false);
     const [signUp, setSignUp] = useState(false);
     const [news, setNews] = useState([]);
     const [createdTransaction, setCreatedTransaction] = useState(false);
@@ -42,41 +33,8 @@ export function Home() {
     const [feedType, setFeedType] = useState('web3');
 
     useEffect(() => {
-        getPublications();
-        teste();
-    }, [page]);
-
-    useEffect(() => {
         getNews();
     }, []);
-
-    async function teste() {
-        const response = await getListTransactionsWeb3Feed();
-        console.log(response.page1Txs);
-    }
-
-    async function getPublications() {
-        if (firstLoad) {
-            setLoading(true);
-            setFirstLoad(false);
-        } else {
-            setLoadingMore(true);
-        }
-
-        const response = await api.get(`/publications/get-all/${page}`);
-        const resPublis = response.data.publications;
-
-        if (page === 0) {
-            setPublications(resPublis);
-        } else {
-            for (var i = 0; i < resPublis.length; i++) {
-                publications.push(resPublis[i]);
-            }
-        }
-
-        setLoadingMore(false);
-        setLoading(false);
-    }
 
     async function getNews() {
         const response = await api.get('/news');
@@ -112,132 +70,115 @@ export function Home() {
             <Header routeActive='home' />
 
             <div className="flex flex-col items-center w-full pt-10 pb-16 lg:pb-5 lg:pt-32 overflow-auto">
-                {loading ? (
-                    <div className="mt-3 flex items-center justify-center h-[100vh]">
-                        <ActivityIndicator size={180} />
-                    </div>
-                ) : (
-                    <div className="flex gap-3 mt-3">
-                        <div className="flex flex-col gap-3 w-[250px]">
-                            <UserConnection
-                                handleShowSignUp={() => setSignUp(true)}
-                                showLogout={() => setModalLogout(true)}
-                                showTransactionCreated={() => setCreatedTransaction(true)}
-                                showModalWhereExecuteTransaction={() => setShowModalWhereExecuteTransaction(true)}
-                            />
 
-                            <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
-                                <button
-                                    className="flex flex-col items-center w-16"
-                                    onClick={() => navigate('/impact-calculator')}
-                                >
-                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
-                                        <FaCalculator color='white' size={25} />
-                                    </div>
-                                    <p className="text-white text-xs text-center">{t('calculadoraDeImpacto')}</p>
-                                </button>
+                <div className="flex gap-3 mt-3">
+                    <div className="flex flex-col gap-3 w-[250px]">
+                        <UserConnection
+                            handleShowSignUp={() => setSignUp(true)}
+                            showLogout={() => setModalLogout(true)}
+                            showTransactionCreated={() => setCreatedTransaction(true)}
+                            showModalWhereExecuteTransaction={() => setShowModalWhereExecuteTransaction(true)}
+                        />
 
-                                <a
-                                    className="flex flex-col items-center w-16"
-                                    href="https://docs.sintrop.com"
-                                    target="_blank"
-                                >
-                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
-                                        <IoMdHelp color='white' size={30} />
-                                    </div>
-                                    <p className="text-white text-xs text-center">{t('ajuda')}</p>
-                                </a>
+                        <div className="flex flex-wrap justify-center gap-5 mt-3 w-full">
+                            <button
+                                className="flex flex-col items-center w-16"
+                                onClick={() => navigate('/impact-calculator')}
+                            >
+                                <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                    <FaCalculator color='white' size={25} />
+                                </div>
+                                <p className="text-white text-xs text-center">{t('calculadoraDeImpacto')}</p>
+                            </button>
 
-                                <button
-                                    className="flex flex-col items-center w-16"
-                                    onClick={() => navigate('/education')}
-                                >
-                                    <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
-                                        <ImBooks color='white' size={30} />
-                                    </div>
-                                    <p className="text-white text-xs text-center">{t('educacao')}</p>
-                                </button>
-                            </div>
+                            <a
+                                className="flex flex-col items-center w-16"
+                                href="https://docs.sintrop.com"
+                                target="_blank"
+                            >
+                                <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                    <IoMdHelp color='white' size={30} />
+                                </div>
+                                <p className="text-white text-xs text-center">{t('ajuda')}</p>
+                            </a>
+
+                            <button
+                                className="flex flex-col items-center w-16"
+                                onClick={() => navigate('/education')}
+                            >
+                                <div className="border-2 border-white w-14 h-14 rounded-full bg-[#03364B] flex flex-col items-center justify-center">
+                                    <ImBooks color='white' size={30} />
+                                </div>
+                                <p className="text-white text-xs text-center">{t('educacao')}</p>
+                            </button>
                         </div>
+                    </div>
 
-                        <div className={`flex flex-col gap-3 w-[100vw] lg:w-auto`}>
-                            {news.length > 0 && (
-                                <div className="flex w-full lg:max-w-[600px] h-[150px] rounded-md overflow-hidden">
-                                    {news.map(item => (
-                                        <button
-                                            key={item?.id}
-                                        >
-                                            {item?.action === 'open-url' ? (
-                                                <a href={item?.link} target="_blank">
-                                                    <img
-                                                        src={item?.bannerUrl}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </a>
-                                            ) : (
+                    <div className={`flex flex-col gap-3 w-[100vw] lg:w-auto`}>
+                        {news.length > 0 && (
+                            <div className="flex w-full lg:max-w-[600px] h-[150px] rounded-md overflow-hidden">
+                                {news.map(item => (
+                                    <button
+                                        key={item?.id}
+                                    >
+                                        {item?.action === 'open-url' ? (
+                                            <a href={item?.link} target="_blank">
                                                 <img
                                                     src={item?.bannerUrl}
                                                     className="w-full h-full object-cover"
                                                 />
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                                            </a>
+                                        ) : (
+                                            <img
+                                                src={item?.bannerUrl}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
-                            {feedType === 'web3' && (
-                                <Web3Feed />
-                            )}
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setFeedType('web3')}
+                            >
+                                Web3
+                            </button>
 
-                            {feedType === 'social' && (
-                                <>
-                                    {userData?.accountStatus === 'blockchain' && (
-                                        <NewPubli attPublis={() => {
-                                            setPage(0)
-                                            getPublications();
-                                            toast.success('Publicação feita com sucesso!')
-                                        }} />
-                                    )}
-                                    {publications.length > 0 && (
-                                        <>
-                                            {publications.map(item => (
-                                                <PublicationItem
-                                                    data={item}
-                                                    key={item.id}
-                                                />
-                                            ))}
-        
-                                            {loadingMore ? (
-                                                <ActivityIndicator size={40} />
-                                            ) : (
-                                                <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
-                                                    {t('verMais')}
-                                                </button>
-                                            )}
-                                        </>
-                                    )}
-                                </>
-                            )}
-
+                            <button
+                                onClick={() => setFeedType('social')}
+                            >
+                                Feed Social
+                            </button>
                         </div>
 
-                        <div className="hidden lg:flex flex-col gap-3">
-                            <div className="flex flex-col items-center w-[200px] p-3 bg-[#03364B] rounded-md">
-                                <p className="font-bold text-white text-xs text-center mb-3">{t('baixeNossoApp')}</p>
-                                <QRCode
-                                    value='https://www.sintrop.com/app'
-                                    size={100}
-                                    qrStyle="dots"
-                                    logoPadding={2}
-                                    logoPaddingStyle="square"
-                                    logoWidth={30}
-                                    removeQrCodeBehindLogo
-                                    eyeColor='#03364B'
-                                />
-                            </div>
+                        {feedType === 'web3' && (
+                            <Web3Feed />
+                        )}
+
+                        {feedType === 'social' && (
+                            <SocialFeed />
+                        )}
+
+                    </div>
+
+                    <div className="hidden lg:flex flex-col gap-3">
+                        <div className="flex flex-col items-center w-[200px] p-3 bg-[#03364B] rounded-md">
+                            <p className="font-bold text-white text-xs text-center mb-3">{t('baixeNossoApp')}</p>
+                            <QRCode
+                                value='https://www.sintrop.com/app'
+                                size={100}
+                                qrStyle="dots"
+                                logoPadding={2}
+                                logoPaddingStyle="square"
+                                logoWidth={30}
+                                removeQrCodeBehindLogo
+                                eyeColor='#03364B'
+                            />
                         </div>
                     </div>
-                )}
+                </div>
             </div>
 
             {/* <button
@@ -258,7 +199,6 @@ export function Home() {
                 <ModalLogout
                     close={() => {
                         setModalLogout(false);
-                        setModalConnect(false);
                     }}
                 />
             )}
