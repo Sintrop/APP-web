@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import { UserConnection } from "./components/UserConnection/UserConnection";
 import { ModalTransactionCreated } from "../../components/ModalTransactionCreated/index.js";
 import { ModalWhereExecuteTransaction } from "../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
+import { getListTransactionsWeb3Feed } from "../../services/feed/transactionsWeb3/transactionsWeb3";
+import { Web3Feed } from "./components/Web3Feed/Web3Feed";
 
 export function Home() {
     const { t } = useTranslation();
@@ -37,14 +39,21 @@ export function Home() {
     const [news, setNews] = useState([]);
     const [createdTransaction, setCreatedTransaction] = useState(false);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
+    const [feedType, setFeedType] = useState('web3');
 
     useEffect(() => {
         getPublications();
+        teste();
     }, [page]);
 
     useEffect(() => {
         getNews();
     }, []);
+
+    async function teste() {
+        const response = await getListTransactionsWeb3Feed();
+        console.log(response.page1Txs);
+    }
 
     async function getPublications() {
         if (firstLoad) {
@@ -74,13 +83,13 @@ export function Home() {
         setNews(response.data.news);
     }
 
-    function successRegister(type){
+    function successRegister(type) {
         setShowModalWhereExecuteTransaction(false);
-        if(type === 'blockchain'){
+        if (type === 'blockchain') {
             getUserDataApi(userData?.wallet);
             toast.success(t('cadastroRealizadoSucesso'))
         }
-        if(type === 'checkout'){
+        if (type === 'checkout') {
             toast.success(t('transacaoEnviadaCheckout'));
         }
     }
@@ -176,31 +185,40 @@ export function Home() {
                                 </div>
                             )}
 
-                            {userData?.accountStatus === 'blockchain' && (
-                                <NewPubli attPublis={() => {
-                                    setPage(0)
-                                    getPublications();
-                                    toast.success('Publicação feita com sucesso!')
-                                }} />
+                            {feedType === 'web3' && (
+                                <Web3Feed />
                             )}
-                            {publications.length > 0 && (
-                                <>
-                                    {publications.map(item => (
-                                        <PublicationItem
-                                            data={item}
-                                            key={item.id}
-                                        />
-                                    ))}
 
-                                    {loadingMore ? (
-                                        <ActivityIndicator size={40} />
-                                    ) : (
-                                        <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
-                                            {t('verMais')}
-                                        </button>
+                            {feedType === 'social' && (
+                                <>
+                                    {userData?.accountStatus === 'blockchain' && (
+                                        <NewPubli attPublis={() => {
+                                            setPage(0)
+                                            getPublications();
+                                            toast.success('Publicação feita com sucesso!')
+                                        }} />
+                                    )}
+                                    {publications.length > 0 && (
+                                        <>
+                                            {publications.map(item => (
+                                                <PublicationItem
+                                                    data={item}
+                                                    key={item.id}
+                                                />
+                                            ))}
+        
+                                            {loadingMore ? (
+                                                <ActivityIndicator size={40} />
+                                            ) : (
+                                                <button onClick={() => setPage(page + 1)} className="underline text-white mb-3">
+                                                    {t('verMais')}
+                                                </button>
+                                            )}
+                                        </>
                                     )}
                                 </>
                             )}
+
                         </div>
 
                         <div className="hidden lg:flex flex-col gap-3">

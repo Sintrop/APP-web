@@ -8,13 +8,15 @@ export function VoteResearche(){
     }, []);
 
     async function handleGetResearches(){
-        
+        setResearches([]);
     }
 
     return(
         <div className="flex flex-col gap-3 h-full">
             {researches.map(researche => (
-                <></>
+                <>
+                    {researche}
+                </>
             ))}
         </div>
     )
