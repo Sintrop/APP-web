@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaUsers, FaRegUser } from "react-icons/fa";
-import { RiComputerFill, RiEarthLine } from "react-icons/ri";
+import { FaRegUser, FaHome } from "react-icons/fa";
+import { RiEarthLine } from "react-icons/ri";
 import { BsFillGearFill } from "react-icons/bs";
 import { useNavigate } from "react-router";
 import { useMainContext } from '../../hooks/useMainContext';
@@ -12,7 +12,7 @@ import { ModalOptionAccount } from "./components/ModalOptionAccount";
 import { useTranslation } from "react-i18next";
 import { ModalChooseLanguage } from "./components/ModalChooseLanguage";
 
-interface Props{
+interface Props {
     routeActive: string;
 }
 
@@ -49,6 +49,19 @@ export function Header({ routeActive }: Props) {
                         />
                     </button>
                     <div className="flex items-center">
+                        <a
+                            className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
+                            href="https://apps.sintrop.com"
+                        >
+                            <div className="hidden lg:flex">
+                                <FaHome size={25} color='white' />
+                            </div>
+                            <div className="lg:hidden">
+                                <FaHome size={18} color='white' />
+                            </div>
+                            <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('Apps')}</p>
+                        </a>
+
                         <button
                             className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
                             onClick={() => navigate('/')}
@@ -62,22 +75,6 @@ export function Header({ routeActive }: Props) {
                             <p className={`${routeActive === 'home' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('feed')}</p>
 
                             {routeActive === 'home' && (
-                                <div className="w-full h-1 bg-white rounded-full" />
-                            )}
-                        </button>
-                        <button
-                            className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
-                            onClick={() => navigate('/centers')}
-                        >
-                            <div className="hidden lg:flex">
-                                <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={25} />
-                            </div>
-                            <div className="lg:hidden">
-                                <RiComputerFill color={routeActive === 'centers' ? 'white' : '#ccc'} size={18} />
-                            </div>
-                            <p className={`${routeActive === 'centers' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('servicos')}</p>
-
-                            {routeActive === 'centers' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
                             )}
                         </button>
@@ -95,24 +92,6 @@ export function Header({ routeActive }: Props) {
                             </div>
 
                             {routeActive === 'regeneration-credit' && (
-                                <div className="w-full h-1 bg-white rounded-full" />
-                            )}
-                        </button>
-
-                        <button
-                            className="flex flex-col items-center hover:text-white w-[85px] lg:w-[100px]"
-                            onClick={() => navigate('/community')}
-                        >
-                            <div className="hidden lg:flex">
-                                <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={25} />
-                            </div>
-                            <div className="lg:hidden">
-                                <FaUsers color={routeActive === 'community' ? 'white' : '#ccc'} size={18} />
-                            </div>
-
-                            <p className={`${routeActive === 'community' ? 'text-white' : 'text-[#ccc]'} text-sm lg:text-base`}>{t('comunidade')}</p>
-
-                            {routeActive === 'community' && (
                                 <div className="w-full h-1 bg-white rounded-full" />
                             )}
                         </button>

@@ -110,13 +110,6 @@ export function Home() {
                 ) : (
                     <div className="flex gap-3 mt-3">
                         <div className="flex flex-col gap-3 w-[250px]">
-                            <a
-                                href="https://apps.sintrop.com"
-                                className="flex items-center gap-2 text-white border-b w-fit border-white"
-                            >
-                                <FaHome size={20} color='white'/>
-                                App Store
-                            </a>
                             <UserConnection
                                 handleShowSignUp={() => setSignUp(true)}
                                 showLogout={() => setModalLogout(true)}

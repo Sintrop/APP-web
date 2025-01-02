@@ -24,7 +24,7 @@ export function Centers() {
                 />
             </Helmet>
             <TopBar />
-            <Header routeActive='centers' />
+            <Header routeActive='regeneration-credit' />
 
             <div className="flex flex-col items-center w-full pt-10 lg:pt-32 pb-20 lg:pb-5 overflow-y-auto">
                 <div className="flex gap-3 flex-wrap max-w-[1024px] mt-3">
