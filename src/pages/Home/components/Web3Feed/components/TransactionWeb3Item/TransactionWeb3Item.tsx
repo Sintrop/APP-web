@@ -10,8 +10,10 @@ export function TransactionWeb3Item({ transaction }: Props) {
         <div className="w-[93%] mx-2 lg:mx-0 lg:w-[550px] bg-[#03364B] p-2 rounded-lg flex flex-col gap-3">
             <TransactionWeb3Header
                 fromWallet={transaction.from.hash}
+                timestamp={transaction.timestamp}
+                blockNumber={transaction.block_number}
             />
-            
+
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-3">
                     <div className="bg-container-secondary rounded-md p-2">
