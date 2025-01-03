@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { getUserTypesCount } from "./web3/userService";
 
 export const INSPECTOR_PROPORTIONALITY = 3;
 export const ACTIVIST_PROPORTIONALITY = 2;
@@ -8,25 +8,15 @@ export const VALIDATOR_PROPORTIONALITY = 2;
 export const CONTRIBUTOR_PROPORTIONALITY = 2;
 
 export async function getProportionallity() {
-    let producers = 0;
-    let inspectors = 0;
-    let developers = 0;
-    let activists = 0;
-    let researchers = 0;
-    let validators = 0;
-    let contributors = 0;
+    const count = await getUsersCount();
 
-    const response = await api.get('/users_count');
-    if (response.data) {
-        const count = response.data;
-        producers = Number(count?.producersCount);
-        inspectors = Number(count?.inspectorsCount);
-        developers = Number(count?.developersCount);
-        researchers = Number(count?.researchersCount);
-        validators = Number(count?.validatorsCount);
-        activists = Number(count?.activistsCount);
-        contributors = Number(count.contributorsCount);
-    }
+    const producers = count.producersCount;
+    const inspectors = count.inspectorsCount;
+    const developers = count.developersCount;
+    const activists = count.activistsCount;
+    const researchers = count.researchersCount;
+    const validators = count.validatorsCount;
+    const contributors = count.contributorsCount;
 
     const limitTotalInspectors = producers * INSPECTOR_PROPORTIONALITY;
     const limitTotalDevelopers = producers / DEVELOPER_PROPORTIONALITY;
@@ -67,5 +57,28 @@ export async function getProportionallity() {
         amountVacancyValidator: calculoValidator >= 1 ? Math.floor(calculoValidator) : Math.floor(producerToValidators),
         avaliableVacancyContributor: calculoContributor >= 1 ? true : false,
         amountVacancyContributor: calculoContributor >= 1 ? Math.floor(calculoContributor) : Math.floor(producerToContributors)
+    }
+}
+
+export async function getUsersCount(){
+    const producers = await getUserTypesCount(1);
+    const inspectors = await getUserTypesCount(2);
+    const researchers = await getUserTypesCount(3);
+    const developers = await getUserTypesCount(4);
+    const contributors = await getUserTypesCount(5);
+    const activists = await getUserTypesCount(6);
+    const supporters = await getUserTypesCount(7);
+    const validators = await getUserTypesCount(8);
+
+    return {
+        producersCount: producers,
+        inspectorsCount: inspectors,
+        researchersCount: researchers,
+        developersCount: developers,
+        contributorsCount: contributors,
+        activistsCount: activists,
+        supportersCount: supporters,
+        validatorsCount: validators,
+        totalCount: producers + inspectors + researchers + developers + contributors + activists + supporters + validators,
     }
 }
