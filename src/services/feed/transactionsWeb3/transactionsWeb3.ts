@@ -1,14 +1,46 @@
 import axios from "axios";
 import { TransactionWeb3Props } from "../../../types/transaction";
+import { 
+    activistContractAddress, 
+    activistPoolContractAddress, 
+    contributorContractAddress, 
+    contributorPoolContractAddress, 
+    developerContractAddress, 
+    developersPoolContractAddress, 
+    inspectorContractAddress, 
+    inspectorPoolContractAddress, 
+    producerContractAddress, 
+    producerPoolContractAddress, 
+    RcTokenContractAddress, 
+    researcherContractAddress, 
+    researcherPoolContractAddress, 
+    sintropContractAddress, 
+    supporterContractAddress, 
+    supporterPoolAddress, 
+    validatorContractAddress,
+    validatorPoolContractAddress
+} from "../../web3/Contracts";
 
 const ITEMS_PER_PAGE = 20;
 const addressesContracts = [
-    '0x2108eB3EcfB90a1C7267B1f4651bfa5f2C0dad43',
-    '0x1B79F01bb7Df539c4378a941d7f829D8C9074FCE',
-    '0x5a723c92CFA303d2839CE3f63a288F0FECd0cea6',
-    '0x678bb159Ea410aC5C09089FdAbe439a5a1221ad5',
-    '0x9371d98d0890e0cD2b8B6270347d0AA0cdb4f98E',
-    '0xF9c44772a5cC1c64A2De36b0Aee040b266CFA845'
+    producerContractAddress,
+    producerPoolContractAddress,
+    inspectorContractAddress,
+    inspectorPoolContractAddress,
+    researcherContractAddress,
+    researcherPoolContractAddress,
+    developerContractAddress,
+    developersPoolContractAddress,
+    contributorContractAddress,
+    contributorPoolContractAddress,
+    activistContractAddress,
+    activistPoolContractAddress,
+    supporterContractAddress,
+    supporterPoolAddress,
+    validatorContractAddress,
+    validatorPoolContractAddress,
+    sintropContractAddress,
+    RcTokenContractAddress
 ]
 
 interface ReturnGetListTransactionsWeb3FeedProps{

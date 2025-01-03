@@ -1,7 +1,6 @@
 import React from "react";
 import { TransactionWeb3Props } from "../../../../../../types/transaction";
 import { TransactionWeb3Header } from "./components/TransactionWeb3Header";
-import { TransactionTypeTag } from "./components/Tags/TransactionTypeTag";
 import { TransactionStatusTag } from "./components/Tags/TransactionStatusTag";
 import { TransactionMethodTag } from "./components/Tags/TransactionMethodTag";
 import { GrTransaction } from "react-icons/gr";
@@ -22,8 +21,6 @@ export function TransactionWeb3Item({ transaction }: Props) {
 
             <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-3">
-                    <TransactionTypeTag transactionTypes={transaction.transaction_types} />
-
                     <TransactionStatusTag status={transaction.status} />
 
                     <TransactionMethodTag method={transaction.method} />
@@ -53,7 +50,7 @@ export function TransactionWeb3Item({ transaction }: Props) {
                 {transaction.status === 'ok' && (
                     <TransactionSuccessDetails
                         method={transaction.method}
-                        parameters={transaction.decoded_input.parameters}
+                        parameters={transaction?.decoded_input?.parameters}
                     />
                 )}
             </div>
