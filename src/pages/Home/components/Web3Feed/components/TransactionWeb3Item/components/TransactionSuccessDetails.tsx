@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParametersTransactionProps } from "../../../../../../../types/transaction";
+import { DescriptionTransaction } from "./DescriptionTransaction/DescriptionTransaction";
 
 interface Props {
     parameters: ParametersTransactionProps[];
@@ -16,9 +17,14 @@ export function TransactionSuccessDetails({ parameters, method }: Props) {
 
     return (
         <div className="flex flex-col gap-1 mt-2">
+            <DescriptionTransaction
+                method={method}
+                parameters={parameters}
+            />
+
             <button
                 onClick={toggleShowDecodedInput}
-                className="text-white text-sm underline text-start w-fit"
+                className="text-blue-primary text-sm underline text-start w-fit"
             >
                 {showDecodedInput ? 'Ocultar dados brutos' : 'Exibir dados brutos'}
             </button>
