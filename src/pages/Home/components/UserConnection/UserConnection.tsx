@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../../../components/ModalConnectAccount";
 import { MdLogout } from "react-icons/md";
@@ -6,9 +6,9 @@ import { useMainContext } from "../../../../hooks/useMainContext";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
-import { api } from "../../../../services/api";
+import { Jazzicon } from '@ukstv/jazzicon-react';
 
-interface Props{
+interface Props {
     handleShowSignUp: () => void;
     showLogout: () => void;
     showTransactionCreated: () => void;
@@ -18,36 +18,8 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
     const { t } = useTranslation();
     const navigate = useNavigate();
     //@ts-ignore
-    const { userData, imageProfile, blockchainData, walletConnected } = useMainContext();
+    const { userData, imageProfile, walletConnected, accountStatus, userTypeConnected, userBlockchain } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
-    const [accountStatus, setAccountStatus] = useState('pending');
-
-    useEffect(() => {
-        if (userData?.accountStatus !== 'blockchain') {
-            if (userData?.wallet) {
-                checkInvite();
-            }
-        }
-    }, [userData]);
-
-    async function checkInvite() {
-        const response = await api.get(`/invites/${userData?.wallet}`)
-        const invite = response.data.invite;
-
-        if (invite?.invited === '0x0000000000000000000000000000000000000000') {
-            setAccountStatus('pending');
-        }
-        if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
-            setAccountStatus('guest');
-            //setInviteData(invite);
-            if (accountStatus === 'pending') {
-                api.put('/user/account-status', {
-                    userWallet: userData?.wallet,
-                    status: 'guest',
-                })
-            }
-        }
-    }
 
     async function handleEfetiveRegister() {
         showModalWhereExecuteTransaction();
@@ -57,11 +29,9 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
         <div className="hidden lg:flex flex-col items-center w-full p-2 bg-[#03364B] rounded-md relative">
             {walletConnected === '' ? (
                 <>
-                    <img
-                        src={require('../../../../assets/anonimous.png')}
-                        className="w-14 h-14 object-contain rounded-full border-2 border-white"
-                        alt='imagem de um avatar anonimo'
-                    />
+                    <div className="w-14 h-14 rounded-full">
+                        <Jazzicon address={walletConnected} />
+                    </div>
 
                     <p className="font-bold text-white text-center text-sm mt-2">{t('voceEstaAnonimo')}</p>
 
@@ -78,23 +48,27 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
             ) : (
                 <>
                     <div className="w-14 h-14 rounded-full bg-gray-500 cursor-pointer" onClick={() => navigate('/profile')}>
-                        <img
-                            src={imageProfile}
-                            className="w-14 h-14 rounded-full object-cover border-2 border-white"
-                            alt='imagem de perfil'
-                        />
+                        {imageProfile === '' ? (
+                            <Jazzicon address={walletConnected} />
+                        ) : (
+                            <img
+                                src={imageProfile}
+                                className="w-14 h-14 rounded-full object-cover border-2 border-white"
+                                alt='imagem de perfil'
+                            />
+                        )}
                     </div>
 
                     <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
                     <p className="text-gray-300 text-center text-xs">
-                        {userData?.userType === 1 && t('textProdutor')}
-                        {userData?.userType === 2 && t('textInspetor')}
-                        {userData?.userType === 3 && t('textPesquisador')}
-                        {userData?.userType === 4 && t('textDesenvolvedor')}
-                        {userData?.userType === 5 && t('textContribuidor')}
-                        {userData?.userType === 6 && t('textAtivista')}
-                        {userData?.userType === 7 && t('textApoiador')}
-                        {userData?.userType === 8 && t('textValidador')}
+                        {userTypeConnected === 1 && t('textProdutor')}
+                        {userTypeConnected === 2 && t('textInspetor')}
+                        {userTypeConnected === 3 && t('textPesquisador')}
+                        {userTypeConnected === 4 && t('textDesenvolvedor')}
+                        {userTypeConnected === 5 && t('textContribuidor')}
+                        {userTypeConnected === 6 && t('textAtivista')}
+                        {userTypeConnected === 7 && t('textApoiador')}
+                        {userTypeConnected === 8 && t('textValidador')}
                     </p>
                     <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
@@ -114,22 +88,22 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
                             {userData?.accountStatus === 'blockchain' ? (
                                 <>
                                     <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                        {blockchainData && (
-                                            <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
-                                                {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
-                                                {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
-                                                {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
-                                                {userData?.userType === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(blockchainData?.tokensBurned)}
+                                        {userBlockchain && (
+                                            <p className={`${userTypeConnected === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
+                                                {userTypeConnected === 1 && parseInt(userBlockchain?.isa?.isaScore)}
+                                                {userTypeConnected === 2 && parseInt(userBlockchain?.totalInspections)}
+                                                {userTypeConnected === 3 && parseInt(userBlockchain?.publishedWorks)}
+                                                {userTypeConnected === 4 && parseInt(userBlockchain?.pool?.level)}
+                                                {userTypeConnected === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(userBlockchain?.tokensBurned)}
                                             </p>
                                         )}
                                     </div>
                                     <p className="text-xs text-gray-200">
-                                        {userData?.userType === 1 && t('ptsRegeneracao')}
-                                        {userData?.userType === 2 && t('ispRealizadas')}
-                                        {userData?.userType === 3 && t('pesqPublicadas')}
-                                        {userData?.userType === 4 && t('seuNivel')}
-                                        {userData?.userType === 7 && t('tokenContribuidos')}
+                                        {userTypeConnected === 1 && t('ptsRegeneracao')}
+                                        {userTypeConnected === 2 && t('ispRealizadas')}
+                                        {userTypeConnected === 3 && t('pesqPublicadas')}
+                                        {userTypeConnected === 4 && t('seuNivel')}
+                                        {userTypeConnected === 7 && t('tokenContribuidos')}
                                     </p>
                                 </>
                             ) : (
@@ -137,10 +111,10 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
                                     <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'} />
-                                    <CheckItem 
-                                        title='efetivarCadastro' 
-                                        type='efetive-register' 
-                                        handleEfetiveRegister={handleEfetiveRegister} 
+                                    <CheckItem
+                                        title='efetivarCadastro'
+                                        type='efetive-register'
+                                        handleEfetiveRegister={handleEfetiveRegister}
                                     />
                                 </>
                             )}

@@ -48,3 +48,8 @@ export async function getUser(wallet: string){
     const response = await UserContract.methods.getUser(wallet).call();
     return parseInt(response)
 }
+
+export async function getUserTypesCount(userType: number){
+    const response = await UserContract.methods.userTypesCount(userType).call();
+    return parseInt(response);
+}

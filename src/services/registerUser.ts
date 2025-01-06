@@ -80,11 +80,11 @@ export async function executeRegisterUser(userData: UserApiProps, walletConnecte
 
 async function afterRegisterBlockchain(walletConnected: string, userId: string, transactionHash: string) {
     await updateAccountStatus(walletConnected);
-    await createPubliFeed({
-        type: 'new-user',
-        userId,
-        additionalData: JSON.stringify({ hash: transactionHash }),
-    })
+    // await createPubliFeed({
+    //     type: 'new-user',
+    //     userId,
+    //     additionalData: JSON.stringify({ hash: transactionHash }),
+    // })
 }
 
 async function updateAccountStatus(walletConnected: string) {

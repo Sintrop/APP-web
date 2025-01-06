@@ -7,8 +7,17 @@ import CryptoJS from "crypto-js";
 import { api } from '../services/api';
 import { ToastContainer, toast } from "react-toastify";
 import { getImage } from "../services/getImage";
-import {addDays, compareAsc} from "date-fns";
+import { addDays, compareAsc } from "date-fns";
 import { getEraInfo } from "../services/eraInfo";
+import { getInvitations, getUser } from "../services/web3/userService";
+import { getUserApi } from "../services/userApi";
+import { GetProducer } from "../services/web3/producerService";
+import { GetDeveloper } from "../services/web3/developersService";
+import { GetInspector } from "../services/web3/inspectorService";
+import { GetResearcher } from "../services/web3/researchersService";
+import { GetActivist } from "../services/web3/activistService";
+import { GetSupporter } from "../services/web3/supporterService";
+import { GetValidator } from "../services/web3/validatorService";
 
 export const MainContext = createContext({});
 
@@ -42,6 +51,7 @@ export default function MainProvider({ children }) {
     const [impactToken, setImpactToken] = useState({});
     const [accountsConnected, setAccountsConnected] = useState([]);
     const [userBlockchain, setUserBlockchain] = useState({});
+    const [userTypeConnected, setUserTypeConnected] = useState(0);
 
     useEffect(() => {
         handleGetEraInfo();
@@ -70,17 +80,140 @@ export default function MainProvider({ children }) {
             }
 
             api.defaults.headers.common['Authorization'] = `Bearer ${data?.token}`;
-            getUserDataApi(data?.wallet);
-            setWalletConnected(data?.wallet);
-            setConnectionType(data?.connection);
+            newFlowConnectUser(data?.wallet, false);
         }
     }
 
-    async function checkAccountsConnected(){
+    async function checkAccountsConnected() {
         const response = await localStorage.getItem('accounts_connected');
-        if(response){
+        if (response) {
             setAccountsConnected(JSON.parse(response));
         }
+    }
+
+    async function newFlowConnectUser(wallet, newConnection) {
+        setWalletConnected(wallet);
+        const userType = await getUser(wallet);
+        setUserTypeConnected(userType);
+
+        if (userType === 0) {
+            getInviteData(wallet);
+            const responseUserApi = await getUserApi(wallet);
+            if (responseUserApi.success) {
+                setUserData(responseUserApi.user);
+            } else {
+                setUserData({
+                    id: 'anonimous',
+                    name: 'anonimous',
+                    wallet: wallet,
+                    userType: 0,
+                    imgProfileUrl: null,
+                    accountStatus: 'pending'
+                })
+            }
+            return
+        }
+
+        if (userType === 9) {
+            setUserData({
+                id: 'anonimous',
+                name: 'Usuário invalidado',
+                wallet: wallet,
+                userType: 0,
+                imgProfileUrl: null,
+                accountStatus: 'pending'
+            });
+            return;
+        }
+
+        getUserData(wallet, userType, newConnection);
+    }
+
+    async function getUserData(wallet, userType, newConnection) {
+        let userWeb3Data = {};
+        if (userType === 1) {
+            const producer = await GetProducer(wallet);
+            setUserBlockchain(producer);
+            userWeb3Data = producer;
+        }
+        if (userType === 2) {
+            const inspector = await GetInspector(wallet);
+            setUserBlockchain(inspector);
+            userWeb3Data = inspector;
+        }
+        if (userType === 3) {
+            const researcher = await GetResearcher(wallet);
+            setUserBlockchain(researcher);
+            userWeb3Data = researcher;
+        }
+        if (userType === 4) {
+            const developer = await GetDeveloper(wallet);
+            setUserBlockchain(developer);
+            userWeb3Data = developer;
+        }
+        if (userType === 6) {
+            const activist = await GetActivist(wallet);
+            setUserBlockchain(activist);
+            userWeb3Data = activist;
+        }
+        if (userType === 7) {
+            const supporter = await GetSupporter(wallet);
+            setUserBlockchain(supporter);
+            userWeb3Data = supporter;
+        }
+        if (userType === 8) {
+            const validator = await GetValidator(wallet);
+            setUserBlockchain(validator);
+            userWeb3Data = validator;
+        }
+
+        if (userWeb3Data.proofPhoto) {
+            getImageProfile(userWeb3Data.proofPhoto);
+        }
+
+        const userApi = await getUserApi(wallet);
+        if (userApi.success) {
+            setUserData(userApi.user);
+
+            if(newConnection){
+                storageUser(wallet);
+                saveOnAccountsConnected(userApi.user);
+            }
+
+            if (userApi.user.accountStatus !== "blockchain") {
+                updateAccountStatus(wallet, "blockchain")
+            }
+        } else {
+            createUserOnApi(userWeb3Data, userType, wallet, newConnection);
+        }
+    }
+
+    async function createUserOnApi(web3Data, userType, wallet, newConnection) {
+        try {
+            const response = await api.post("/users", {
+                name: web3Data?.name ? web3Data.name : "",
+                wallet,
+                userType: Number(userType),
+                imgProfileUrl: web3Data?.proofPhoto ? web3Data.proofPhoto : "",
+                totalArea: web3Data?.areaInformation?.totalArea ? Number(web3Data?.areaInformation?.totalArea) : 0,
+                accountStatus: "blockchain"
+            });
+            setUserData(response.data.user);
+
+            if(newConnection){
+                storageUser(wallet);
+                saveOnAccountsConnected(response.data.user);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async function getImageProfile(hash) {
+        if (!hash) setImageProfile("");
+
+        const response = await getImage(hash);
+        setImageProfile(response);
     }
 
     async function handleGetEraInfo() {
@@ -98,38 +231,7 @@ export default function MainProvider({ children }) {
     async function Sync() {
         const wallet = await ConnectWallet();
         if (wallet.connectedStatus) {
-            const encrypt = CryptoJS.AES.encrypt(process.env.REACT_APP_LOGIN_SECRET_PASS, process.env.REACT_APP_LOGIN_SECURITY_KEY);
-
-            try {
-                const response = await api.post('/login/with-secure-key', {
-                    wallet: wallet.address[0],
-                    secureKey: encrypt.toString(),
-                })
-
-                if (response.data) {
-                    api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
-                    getUserDataApi(wallet.address[0]);
-                    setWalletConnected(String(wallet.address[0]).toLowerCase());
-                    setConnectionType('provider');
-                    storageUser(response.data, wallet.address[0], 'provider');
-                }
-                return {
-                    status: 'connected',
-                    wallet: wallet.address[0]
-                }
-            } catch (err) {
-                if (err?.response.data.message === 'User not found') {
-                    setWalletConnected(String(wallet.address[0]).toLowerCase());
-                    setUserData({
-                        id: 'anonimous',
-                        name: 'anonimous',
-                        wallet: String(wallet.address[0]).toLowerCase(),
-                        userType: 0,
-                        imgProfileUrl: null,
-                        accountStatus: 'pending'
-                    })
-                }
-            }
+            newFlowConnectUser(wallet.address[0], true);
         }
     }
 
@@ -142,10 +244,9 @@ export default function MainProvider({ children }) {
 
             if (response.data) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
-                getUserDataApi(wallet);
-                setWalletConnected(String(wallet).toLowerCase());
-                setConnectionType('notprovider');
-                storageUser(response.data, String(wallet).toLowerCase(), 'notprovider');
+                newFlowConnectUser(wallet, true);
+                //setWalletConnected(String(wallet).toLowerCase());
+                //storageUser(response.data, String(wallet).toLowerCase(), 'notprovider');
             }
             return true;
         } catch (err) {
@@ -166,15 +267,28 @@ export default function MainProvider({ children }) {
         }
     }
 
-    async function storageUser(token, wallet, connection) {
-        const data = {
-            token,
-            wallet,
-            connection,
-            createdAt: new Date()
-        }
+    async function storageUser(wallet) {
+        const encrypt = CryptoJS.AES.encrypt(process.env.REACT_APP_LOGIN_SECRET_PASS, process.env.REACT_APP_LOGIN_SECURITY_KEY);
 
-        localStorage.setItem('user_connected', JSON.stringify(data));
+        try {
+            const response = await api.post('/login/with-secure-key', {
+                wallet: wallet,
+                secureKey: encrypt.toString(),
+            })
+
+            if (response.data) {
+                api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
+                const data = {
+                    token: response.data,
+                    wallet,
+                    createdAt: new Date()
+                }
+        
+                localStorage.setItem('user_connected', JSON.stringify(data));
+            }
+        } catch (err) {
+            console.log('Error on storage user: ' + err)   
+        }
     }
 
     function chooseModalRegister() {
@@ -218,25 +332,30 @@ export default function MainProvider({ children }) {
         setImageProfile(image);
     }
 
-    async function getInviteData(wallet){
-        const response = await api.get(`/invites/${wallet}`)
-        const invite = response.data.invite;
-        setInviteData(invite)
-        if (invite?.invited === '0x0000000000000000000000000000000000000000') {
+    async function getInviteData(wallet) {
+        const response = await getInvitations(wallet);
+
+        setInviteData(response)
+        if (response?.invited === '0x0000000000000000000000000000000000000000') {
             setAccountStatus('pending');
+            updateAccountStatus(wallet, "pending");
         }
-        if (String(invite?.invited).toLowerCase() === String(wallet).toLowerCase()) {
+        if (String(response?.invited).toLowerCase() === String(wallet).toLowerCase()) {
             setAccountStatus('guest');
-            api.put('/user/account-status', {
-                userWallet: userData?.wallet,
-                status: 'guest',
-            })
+            updateAccountStatus(wallet, "guest")
         }
     }
 
-    async function saveOnAccountsConnected(user){
+    async function updateAccountStatus(wallet, status) {
+        api.put('/user/account-status', {
+            userWallet: wallet,
+            status,
+        })
+    }
+
+    async function saveOnAccountsConnected(user) {
         const filter = accountsConnected.filter(item => String(item?.wallet).toUpperCase() === String(user?.wallet).toUpperCase());
-        if(filter.length === 0){
+        if (filter.length === 0) {
             let accounts = [];
             accounts = accountsConnected;
 
@@ -395,6 +514,8 @@ export default function MainProvider({ children }) {
                 accountsConnected,
                 getUserBlockchainData,
                 userBlockchain,
+                userTypeConnected,
+                newFlowConnectUser
             }}
         >
             {children}

@@ -37,16 +37,9 @@ export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaPro
     }
 }
 
-export const GetProducer = async (wallet: string) => {
-    //@ts-ignore
-    let dataProducer = []
-    await ProducerContract.methods.getProducer(wallet).call({from: producerContractAddress})
-    //@ts-ignore
-    .then((res) => {
-        dataProducer = res;
-    })
-    //@ts-ignore
-    return dataProducer;
+export async function GetProducer(wallet: string){
+    const producer = await ProducerContract.methods.getProducer(wallet).call({from: producerContractAddress})
+    return producer;
 }
 
 export const GetTotalScoreProducers = async () => {

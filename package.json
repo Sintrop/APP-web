@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
+    "@ukstv/jazzicon-react": "^1.0.0",
     "@uniswap/widgets": "^2.20.0",
     "@vis.gl/react-google-maps": "latest",
     "@walletconnect/ethereum-provider": "^1.8.0",

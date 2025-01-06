@@ -6,6 +6,8 @@ import { Feedback } from "../../components/Feedback";
 import { Helmet } from "react-helmet";
 import { Chat } from "../../components/Chat";
 import { useTranslation } from "react-i18next";
+import { RiComputerFill } from "react-icons/ri";
+import { FaUsers } from "react-icons/fa";
 
 export function RegenerationCredit() {
     const {t} = useTranslation();
@@ -38,18 +40,6 @@ export function RegenerationCredit() {
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('contribuir')}</p>
-                    </button>
-
-                    <button 
-                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
-                        onClick={() => navigate('/market')}
-                    >
-                        <img
-                            src={require('../../assets/market-icon.png')}
-                            className="h-16 w-16 object-contain"
-                        />
-
-                        <p className="font-bold text-white text-left text-xl mt-2">{t('mercado')}</p>
                     </button>
 
                     <button 
@@ -87,6 +77,24 @@ export function RegenerationCredit() {
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('meusTokens')}</p>
+                    </button>
+
+                    <button 
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
+                        onClick={() => navigate('/centers')}
+                    >
+                        <RiComputerFill color='white' size={50} />
+
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('servicos')}</p>
+                    </button>
+
+                    <button 
+                        className="rounded-md w-[328px] h-[110px] flex items-center px-5 gap-5 bg-[#03364B]"
+                        onClick={() => navigate('/community')}
+                    >
+                        <FaUsers color="white" size={50} />
+
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('comunidade')}</p>
                     </button>
                 </div>
             </div>

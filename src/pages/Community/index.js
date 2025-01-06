@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Chat } from "../../components/Chat";
 import { useTranslation } from "react-i18next";
-import { getProportionallity } from "../../services/getProportionality";
+import { getProportionallity, getUsersCount } from "../../services/getProportionality";
 import { ModalSignUp } from "../../components/ModalSignUp/ModalSignUp";
 import { CardUserVacancy } from "./components/CardUserVacancy";
 import { ModalConnectAccount } from "../../components/ModalConnectAccount";
@@ -37,8 +37,8 @@ export function Community() {
 
     async function getCountUsers() {
         setLoading(true);
-        const response = await api.get('/users_count');
-        setUsersCount(response.data);
+        const response = await getUsersCount();
+        setUsersCount(response);
         setLoading(false);
     }
 

@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 export function ModalSignUp({ close, success }) {
     const { t } = useTranslation();
-    const { walletConnected, loginWithWalletAndPassword, getUserDataApi } = useMainContext();
+    const { walletConnected, loginWithWalletAndPassword, newFlowConnectUser } = useMainContext();
     const [step, setStep] = useState(1);
     const [wallet, setWallet] = useState('');
     const [userType, setUserType] = useState(0);
@@ -128,14 +128,15 @@ export function ModalSignUp({ close, success }) {
                             password,
                             accountStatus: 'blockchain'
                         });
-                        await api.post('/publication/new', {
-                            userId: response.data.user.id,
-                            type: 'new-user',
-                            origin: 'platform',
-                            additionalData: JSON.stringify({
-                                hash: res.hashTransaction
-                            }),
-                        });
+                        newFlowConnectUser(wallet, true);
+                        // await api.post('/publication/new', {
+                        //     userId: response.data.user.id,
+                        //     type: 'new-user',
+                        //     origin: 'platform',
+                        //     additionalData: JSON.stringify({
+                        //         hash: res.hashTransaction
+                        //     }),
+                        // });
                     } catch (err) {
                         console.log(err);
                     } finally {
@@ -276,7 +277,7 @@ export function ModalSignUp({ close, success }) {
             });
             //Cadastro realizado
             toast.success(t('cadidaturaSucesso'));
-            getUserDataApi(wallet);
+            newFlowConnectUser(wallet, false);
             setTimeout(() => close(), 1000);
             success();
         } catch (err) {
