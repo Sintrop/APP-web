@@ -48,7 +48,9 @@ export function SocialFeed() {
     if(loading){
         return (
             <div className="w-[93%] mx-2 lg:mx-0 lg:w-[550px] flex flex-col gap-3">
-
+                <div className="flex flex-col items-center mt-10">
+                    <ActivityIndicator size={100}/>
+                </div>
             </div>
         )
     }
