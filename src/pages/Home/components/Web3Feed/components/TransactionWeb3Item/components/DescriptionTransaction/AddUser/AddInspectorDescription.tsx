@@ -12,7 +12,7 @@ export function AddInspectorDescription({parameters}: Props) {
     return (
         <p className='text-white'>
             {t('oUsuario')} <span className='font-bold text-green-600'>{parameterName[0].value} </span>
-            se cadastrou como
+            {t('seCadastrouComo')}
             <span className='font-bold text-green-600'> {t('textInspetor')}</span> {t('textVersao6')}
         </p>
     )

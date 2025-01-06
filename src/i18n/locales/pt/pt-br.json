@@ -513,6 +513,7 @@
        "votar": "Votar",
        "enviarVoto": "Enviar voto",
        "essaAcaoNaoEstaDisponivelNoCheckout": "Essa ação não está disponível no checkout",
-       "nenhumaInspeçãoDisponivelParaVotar": "Nenhuma inspeção disponível para votar"
+       "nenhumaInspeçãoDisponivelParaVotar": "Nenhuma inspeção disponível para votar",
+       "seCadastrouComo": "se cadastrou como"
     }
 }

@@ -478,6 +478,7 @@
     "votar": "Votar",
     "enviarVoto": "Enviar voto",
     "essaAcaoNaoEstaDisponivelNoCheckout": "Esta acción no está disponible al finalizar la compra",
-    "nenhumaInspeçãoDisponivelParaVotar": "No hay inspección disponible para votar"
+    "nenhumaInspeçãoDisponivelParaVotar": "No hay inspección disponible para votar",
+    "seCadastrouComo": "registrado como"
   }
 }

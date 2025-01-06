@@ -516,6 +516,7 @@
     "votar": "Vote",
     "enviarVoto": "Submit vote",
     "essaAcaoNaoEstaDisponivelNoCheckout": "This action is not available at checkout",
-    "nenhumaInspeçãoDisponivelParaVotar": "No inspection available to vote"
+    "nenhumaInspeçãoDisponivelParaVotar": "No inspection available to vote",
+    "seCadastrouComo": "registered as"
   }
 }
