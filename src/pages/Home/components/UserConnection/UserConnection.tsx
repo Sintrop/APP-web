@@ -18,7 +18,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
     const { t } = useTranslation();
     const navigate = useNavigate();
     //@ts-ignore
-    const { userData, imageProfile, blockchainData, walletConnected, accountStatus } = useMainContext();
+    const { userData, imageProfile, walletConnected, accountStatus, userTypeConnected, userBlockchain } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
 
     async function handleEfetiveRegister() {
@@ -61,18 +61,18 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
 
                     <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
                     <p className="text-gray-300 text-center text-xs">
-                        {userData?.userType === 1 && t('textProdutor')}
-                        {userData?.userType === 2 && t('textInspetor')}
-                        {userData?.userType === 3 && t('textPesquisador')}
-                        {userData?.userType === 4 && t('textDesenvolvedor')}
-                        {userData?.userType === 5 && t('textContribuidor')}
-                        {userData?.userType === 6 && t('textAtivista')}
-                        {userData?.userType === 7 && t('textApoiador')}
-                        {userData?.userType === 8 && t('textValidador')}
+                        {userTypeConnected === 1 && t('textProdutor')}
+                        {userTypeConnected === 2 && t('textInspetor')}
+                        {userTypeConnected === 3 && t('textPesquisador')}
+                        {userTypeConnected === 4 && t('textDesenvolvedor')}
+                        {userTypeConnected === 5 && t('textContribuidor')}
+                        {userTypeConnected === 6 && t('textAtivista')}
+                        {userTypeConnected === 7 && t('textApoiador')}
+                        {userTypeConnected === 8 && t('textValidador')}
                     </p>
                     <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
-                    {userData?.userType === 0 ? (
+                    {userTypeConnected === 0 ? (
                         <div className="flex flex-col mt-5 w-full">
                             <CheckItem title='walletConectada' check />
                             <CheckItem
@@ -88,22 +88,22 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
                             {userData?.accountStatus === 'blockchain' ? (
                                 <>
                                     <div className="bg-activity bg-contain bg-no-repeat w-24 h-24 flex flex-col items-center justify-center">
-                                        {blockchainData && (
-                                            <p className={`${userData?.userType === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
-                                                {userData?.userType === 1 && parseInt(blockchainData?.producer?.isa?.isaScore)}
-                                                {userData?.userType === 2 && parseInt(blockchainData?.inspector?.totalInspections)}
-                                                {userData?.userType === 3 && parseInt(blockchainData?.researcher?.publishedWorks)}
-                                                {userData?.userType === 4 && parseInt(blockchainData?.developer?.pool?.level)}
-                                                {userData?.userType === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(blockchainData?.tokensBurned)}
+                                        {userBlockchain && (
+                                            <p className={`${userTypeConnected === 7 ? 'text-lg' : 'text-4xl'} font-bold text-green-500`}>
+                                                {userTypeConnected === 1 && parseInt(userBlockchain?.isa?.isaScore)}
+                                                {userTypeConnected === 2 && parseInt(userBlockchain?.totalInspections)}
+                                                {userTypeConnected === 3 && parseInt(userBlockchain?.publishedWorks)}
+                                                {userTypeConnected === 4 && parseInt(userBlockchain?.pool?.level)}
+                                                {userTypeConnected === 7 && Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(userBlockchain?.tokensBurned)}
                                             </p>
                                         )}
                                     </div>
                                     <p className="text-xs text-gray-200">
-                                        {userData?.userType === 1 && t('ptsRegeneracao')}
-                                        {userData?.userType === 2 && t('ispRealizadas')}
-                                        {userData?.userType === 3 && t('pesqPublicadas')}
-                                        {userData?.userType === 4 && t('seuNivel')}
-                                        {userData?.userType === 7 && t('tokenContribuidos')}
+                                        {userTypeConnected === 1 && t('ptsRegeneracao')}
+                                        {userTypeConnected === 2 && t('ispRealizadas')}
+                                        {userTypeConnected === 3 && t('pesqPublicadas')}
+                                        {userTypeConnected === 4 && t('seuNivel')}
+                                        {userTypeConnected === 7 && t('tokenContribuidos')}
                                     </p>
                                 </>
                             ) : (

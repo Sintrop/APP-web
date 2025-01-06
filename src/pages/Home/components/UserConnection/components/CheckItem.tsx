@@ -26,7 +26,7 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
 
     useEffect(() => {
         if (type === 'application') {
-            if (userData.id === 'anonimous') {
+            if (userData?.id === 'anonimous') {
                 setShowHideBtn(true);
                 setOpen(true);
             } else {
