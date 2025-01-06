@@ -6,6 +6,12 @@ import { getUser } from "../../../../../../../services/web3/userService";
 import { GetProducer } from "../../../../../../../services/web3/producerService";
 import { getImage } from "../../../../../../../services/getImage";
 import { useTranslation } from "react-i18next";
+import { GetInspector } from "../../../../../../../services/web3/inspectorService";
+import { GetResearcher } from "../../../../../../../services/web3/researchersService";
+import { GetDeveloper } from "../../../../../../../services/web3/developersService";
+import { GetActivist } from "../../../../../../../services/web3/activistService";
+import { GetSupporter } from "../../../../../../../services/web3/supporterService";
+import { GetValidator } from "../../../../../../../services/web3/validatorService";
 
 interface UserWeb3BasicInfoProps{
     id: string;
@@ -54,6 +60,69 @@ export function TransactionWeb3Header({ fromWallet, timestamp, blockNumber }: Pr
                 proofPhoto: response?.proofPhoto
             });
             getImageProfile(response?.proofPhoto)
+        }
+
+        if(userType === 2){
+            const response = await GetInspector(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType,
+                proofPhoto: response?.proofPhoto
+            });
+            getImageProfile(response?.proofPhoto)
+        }
+
+        if(userType === 3){
+            const response = await GetResearcher(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType,
+                proofPhoto: response?.proofPhoto
+            });
+            getImageProfile(response?.proofPhoto)
+        }
+
+        if(userType === 4){
+            const response = await GetDeveloper(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType,
+                proofPhoto: response?.proofPhoto
+            });
+            getImageProfile(response?.proofPhoto)
+        }
+
+        if(userType === 6){
+            const response = await GetActivist(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType,
+                proofPhoto: response?.proofPhoto
+            });
+            getImageProfile(response?.proofPhoto)
+        }
+
+        if(userType === 7){
+            const response = await GetSupporter(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType,
+                proofPhoto: response?.proofPhoto
+            });
+        }
+
+        if(userType === 8){
+            const response = await GetValidator(fromWallet);
+            setUser({
+                id: response?.id,
+                name: response?.name,
+                userType
+            });
         }
 
         setLoading(false);

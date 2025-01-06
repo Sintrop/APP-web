@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { ModalConnectAccount } from "../../../../components/ModalConnectAccount";
 import { MdLogout } from "react-icons/md";
@@ -6,9 +6,9 @@ import { useMainContext } from "../../../../hooks/useMainContext";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { CheckItem } from "./components/CheckItem";
-import { api } from "../../../../services/api";
+import { Jazzicon } from '@ukstv/jazzicon-react';
 
-interface Props{
+interface Props {
     handleShowSignUp: () => void;
     showLogout: () => void;
     showTransactionCreated: () => void;
@@ -18,36 +18,8 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
     const { t } = useTranslation();
     const navigate = useNavigate();
     //@ts-ignore
-    const { userData, imageProfile, blockchainData, walletConnected } = useMainContext();
+    const { userData, imageProfile, blockchainData, walletConnected, accountStatus } = useMainContext();
     const [modalConnect, setModalConnect] = useState(false);
-    const [accountStatus, setAccountStatus] = useState('pending');
-
-    useEffect(() => {
-        if (userData?.accountStatus !== 'blockchain') {
-            if (userData?.wallet) {
-                checkInvite();
-            }
-        }
-    }, [userData]);
-
-    async function checkInvite() {
-        const response = await api.get(`/invites/${userData?.wallet}`)
-        const invite = response.data.invite;
-
-        if (invite?.invited === '0x0000000000000000000000000000000000000000') {
-            setAccountStatus('pending');
-        }
-        if (String(invite?.invited).toLowerCase() === String(userData?.wallet).toLowerCase()) {
-            setAccountStatus('guest');
-            //setInviteData(invite);
-            if (accountStatus === 'pending') {
-                api.put('/user/account-status', {
-                    userWallet: userData?.wallet,
-                    status: 'guest',
-                })
-            }
-        }
-    }
 
     async function handleEfetiveRegister() {
         showModalWhereExecuteTransaction();
@@ -57,11 +29,9 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
         <div className="hidden lg:flex flex-col items-center w-full p-2 bg-[#03364B] rounded-md relative">
             {walletConnected === '' ? (
                 <>
-                    <img
-                        src={require('../../../../assets/anonimous.png')}
-                        className="w-14 h-14 object-contain rounded-full border-2 border-white"
-                        alt='imagem de um avatar anonimo'
-                    />
+                    <div className="w-14 h-14 rounded-full">
+                        <Jazzicon address={walletConnected} />
+                    </div>
 
                     <p className="font-bold text-white text-center text-sm mt-2">{t('voceEstaAnonimo')}</p>
 
@@ -78,11 +48,15 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
             ) : (
                 <>
                     <div className="w-14 h-14 rounded-full bg-gray-500 cursor-pointer" onClick={() => navigate('/profile')}>
-                        <img
-                            src={imageProfile}
-                            className="w-14 h-14 rounded-full object-cover border-2 border-white"
-                            alt='imagem de perfil'
-                        />
+                        {imageProfile === '' ? (
+                            <Jazzicon address={walletConnected} />
+                        ) : (
+                            <img
+                                src={imageProfile}
+                                className="w-14 h-14 rounded-full object-cover border-2 border-white"
+                                alt='imagem de perfil'
+                            />
+                        )}
                     </div>
 
                     <p className="font-bold text-white text-center text-sm mt-2 cursor-pointer hover:underline overflow-hidden text-ellipsis truncate w-[190px]" onClick={() => navigate('/profile')}>{userData?.name}</p>
@@ -137,10 +111,10 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
                                     <CheckItem title='walletConectada' check />
                                     <CheckItem title='candidaturaEnviada' check />
                                     <CheckItem title='conviteRecebido' type='invite' check={accountStatus === 'guest'} />
-                                    <CheckItem 
-                                        title='efetivarCadastro' 
-                                        type='efetive-register' 
-                                        handleEfetiveRegister={handleEfetiveRegister} 
+                                    <CheckItem
+                                        title='efetivarCadastro'
+                                        type='efetive-register'
+                                        handleEfetiveRegister={handleEfetiveRegister}
                                     />
                                 </>
                             )}

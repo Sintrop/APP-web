@@ -25,7 +25,7 @@ import { FeedSelector } from "./components/FeedSelector";
 export function Home() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { userData, getUserDataApi } = useMainContext();
+    const { userData, newFlowConnectUser } = useMainContext();
     const [modalLogout, setModalLogout] = useState(false);
     const [signUp, setSignUp] = useState(false);
     const [news, setNews] = useState([]);
@@ -45,7 +45,7 @@ export function Home() {
     function successRegister(type) {
         setShowModalWhereExecuteTransaction(false);
         if (type === 'blockchain') {
-            getUserDataApi(userData?.wallet);
+            newFlowConnectUser(userData?.wallet, true);
             toast.success(t('cadastroRealizadoSucesso'))
         }
         if (type === 'checkout') {
@@ -199,7 +199,7 @@ export function Home() {
                 <ModalSignUp
                     close={() => setSignUp(false)}
                     success={() => {
-                        getUserDataApi(userData.wallet);
+                        newFlowConnectUser(userData.wallet, true);
                         setSignUp(false)
                     }}
                 />

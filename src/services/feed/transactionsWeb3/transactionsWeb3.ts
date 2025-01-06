@@ -18,10 +18,11 @@ import {
     supporterContractAddress, 
     supporterPoolAddress, 
     validatorContractAddress,
-    validatorPoolContractAddress
+    validatorPoolContractAddress,
+    invitationContractAddress
 } from "../../web3/Contracts";
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 10;
 const addressesContracts = [
     producerContractAddress,
     producerPoolContractAddress,
@@ -40,7 +41,8 @@ const addressesContracts = [
     validatorContractAddress,
     validatorPoolContractAddress,
     sintropContractAddress,
-    RcTokenContractAddress
+    RcTokenContractAddress,
+    invitationContractAddress,
 ]
 
 interface ReturnGetListTransactionsWeb3FeedProps{

@@ -33,7 +33,7 @@ export function Web3Feed(){
     function pageChanged(){
         if(listTxs.length === 0) return;
 
-        const response = paginateListTransactionsWeb3(listTxs, 20, atualPage);
+        const response = paginateListTransactionsWeb3(listTxs, 10, atualPage);
         setListAtualPage(response);
     }
 
