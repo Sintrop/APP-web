@@ -11,6 +11,9 @@ interface Props {
     transaction: TransactionWeb3Props;
 }
 export function TransactionWeb3Item({ transaction }: Props) {
+    if(transaction.hash === '0xe2f34c85dfb950708344638f377d01ae6d89a97ef75ed33d43646992788c0ba4'){
+        console.log(transaction)
+    }
     return (
         <div className="w-[93%] mx-2 lg:mx-0 lg:w-[550px] bg-[#03364B] p-2 rounded-lg flex flex-col gap-3">
             <TransactionWeb3Header
@@ -51,6 +54,7 @@ export function TransactionWeb3Item({ transaction }: Props) {
                     <TransactionSuccessDetails
                         method={transaction.method}
                         parameters={transaction?.decoded_input?.parameters}
+                        tokensTransfer={transaction?.token_transfers}
                     />
                 )}
             </div>

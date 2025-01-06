@@ -1,5 +1,5 @@
 import React from "react";
-import { ParametersTransactionProps } from "../../../../../../../../types/transaction";
+import { ParametersTransactionProps, TokensTransferProps } from "../../../../../../../../types/transaction";
 import { AddProducerDescription } from "./AddUser/AddProducerDescription";
 import { AddInspectorDescription } from "./AddUser/AddInspectorDescription";
 import { AddResearcherDescription } from "./AddUser/AddResearcherDescription";
@@ -9,15 +9,17 @@ import { AddActivistDescription } from "./AddUser/AddActivistDescription";
 import { AddSupporterDescription } from "./AddUser/AddSupporterDescription";
 import { AddValidatorDescription } from "./AddUser/AddValidatorDescription";
 import { InviteDescription } from "./InviteDescription";
+import { WithdrawDescription } from "./WithdrawDescription";
 
 interface Props{
     method: string;
     parameters: ParametersTransactionProps[];
+    tokensTransfer?: TokensTransferProps[];
 }
-export function DescriptionTransaction({method, parameters}: Props){
+export function DescriptionTransaction({method, parameters, tokensTransfer}: Props){
     const Description = DescriptionComponent[method as DescriptionComponentType] || null;
     
-    return Description ? <Description parameters={parameters}/> : <div/>
+    return Description ? <Description parameters={parameters} tokensTransfer={tokensTransfer}/> : <div/>
 }
 
 const DescriptionComponent = {
@@ -29,6 +31,7 @@ const DescriptionComponent = {
     addActivist: AddActivistDescription,
     addSupporter: AddSupporterDescription,
     addValidator: AddValidatorDescription,
-    invite: InviteDescription
+    invite: InviteDescription,
+    withdraw: WithdrawDescription,
 }
 type DescriptionComponentType = keyof typeof DescriptionComponent;
