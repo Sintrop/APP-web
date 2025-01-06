@@ -43,7 +43,7 @@ export function TransactionWeb3Item({ transaction }: Props) {
                 <p className="text-xs text-gray-300">Detalhes da transação</p>
                 {transaction.status === 'error' && (
                     <TransactionErrorDetails
-                        result={transaction.result}
+                        revert_reason={transaction.revert_reason}
                     />
                 )}
 

@@ -5,7 +5,7 @@ export interface TransactionWeb3Props{
     result: string;
     hash: string;
     max_fee_per_gas: string;
-    revert_reason: string;
+    revert_reason: RevertReasonProps;
     confirmation_duration: number[];
     type: number;
     token_transfers_overflow: string;
@@ -68,6 +68,18 @@ export interface TransactionWeb3Props{
     exchange_rate: string;
     block_number: number;
     has_error_in_internal_transactions: boolean;
+}
+
+export interface RevertReasonProps{
+    method_call: string;
+    method_id: string;
+    parameters: ParametersRevertReason[];
+}
+
+export interface ParametersRevertReason{
+    name: string;
+    type: string;
+    value: string;
 }
 
 export interface ParametersTransactionProps{

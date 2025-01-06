@@ -3,6 +3,7 @@ import { getListTransactionsWeb3Feed, paginateListTransactionsWeb3 } from "../..
 import { TransactionWeb3Props } from "../../../../types/transaction";
 import { TransactionWeb3Item } from "./components/TransactionWeb3Item/TransactionWeb3Item";
 import { PageSelect } from "./components/PageSelect";
+import { ActivityIndicator } from "../../../../components/ActivityIndicator/ActivityIndicator";
 
 export function Web3Feed(){
     const [loading, setLoading] = useState(true);
@@ -41,8 +42,9 @@ export function Web3Feed(){
         <div className="w-[93%] mx-2 lg:mx-0 lg:w-[550px] flex flex-col gap-3">
 
             {loading ? (
-                <>
-                </>
+                <div className="flex flex-col items-center mt-10">
+                    <ActivityIndicator size={100}/>
+                </div>
             ) : (
                 <>
                     <PageSelect
