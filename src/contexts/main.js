@@ -244,9 +244,7 @@ export default function MainProvider({ children }) {
 
             if (response.data) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
-                newFlowConnectUser(wallet, true);
-                //setWalletConnected(String(wallet).toLowerCase());
-                //storageUser(response.data, String(wallet).toLowerCase(), 'notprovider');
+                newFlowConnectUser(String(wallet).toLowerCase(), true);
             }
             return true;
         } catch (err) {
