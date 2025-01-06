@@ -72,7 +72,7 @@ export function UserConnection({ handleShowSignUp, showLogout, showModalWhereExe
                     </p>
                     <p className="text-white text-center text-xs text-ellipsis overflow-hidden truncate w-[190px]">{walletConnected}</p>
 
-                    {userTypeConnected === 0 ? (
+                    {userData?.userType === 0 ? (
                         <div className="flex flex-col mt-5 w-full">
                             <CheckItem title='walletConectada' check />
                             <CheckItem
