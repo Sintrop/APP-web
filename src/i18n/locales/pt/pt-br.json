@@ -516,6 +516,8 @@
        "nenhumaInspeçãoDisponivelParaVotar": "Nenhuma inspeção disponível para votar",
        "seCadastrouComo": "se cadastrou como",
        "motivoDoErro": "Motivo do erro",
-       "declaracaoFeitaComSucesso": "Declaração feita com sucesso!"
+       "declaracaoFeitaComSucesso": "Declaração feita com sucesso!",
+       "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Digite a justificativa do seu voto para essa contribuição",
+       "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Digite a justificativa do seu voto para essa pesquisa"
     }
 }

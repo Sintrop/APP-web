@@ -1,3 +1,4 @@
+import { ResearcheProps } from "../../types/researche";
 import { ResearcherProps } from "../../types/researcher";
 import { ResearcherContract } from "./Contracts";
 import { researcherContractAddress } from "./Contracts";
@@ -98,7 +99,7 @@ export async function worksCount():Promise<number>{
     return response;
 }
 
-export async function getWorks(){
+export async function getWorks(): Promise<ResearcheProps[]>{
     const response = await ResearcherContract.methods.getWorks().call();
     return response;
 }

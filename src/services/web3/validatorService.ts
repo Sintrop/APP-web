@@ -1,4 +1,5 @@
 import { ContributionProps } from "../../types/developer";
+import { ResearcheProps } from "../../types/researche";
 import { ValidatorProps } from "../../types/validator";
 import { ValidatorContract } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
@@ -57,6 +58,17 @@ interface AddDeveloperContributionValidationProps{
 export async function addDeveloperContributionValidation(props: AddDeveloperContributionValidationProps): Promise<ReturnTransactionProps>{
     const {contribution, justification, walletConnected} = props;
     const response = await web3RequestWrite(ValidatorContract, 'addDeveloperContributionValidation', [contribution, justification, walletConnected], walletConnected);
+    return response;
+}
+
+interface AddResearcheWorkValidationProps{
+    walletConnected: string;
+    researche: ResearcheProps;
+    justification: string;
+}
+export async function addResearcheWorkValidation(props: AddResearcheWorkValidationProps): Promise<ReturnTransactionProps>{
+    const {researche, justification, walletConnected} = props;
+    const response = await web3RequestWrite(ValidatorContract, 'addResearcheWorkValidation', [researche, justification, walletConnected], walletConnected);
     return response;
 }
 

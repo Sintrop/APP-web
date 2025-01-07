@@ -481,6 +481,8 @@
     "nenhumaInspeçãoDisponivelParaVotar": "No hay inspección disponible para votar",
     "seCadastrouComo": "registrado como",
     "motivoDoErro": "Motivo del error",
-    "declaracaoFeitaComSucesso": "¡Declaración realizada con éxito!"
+    "declaracaoFeitaComSucesso": "¡Declaración realizada con éxito!",
+    "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Ingrese la justificación de su voto por esta contribución",
+    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Introduce la justificación de tu voto en esta encuesta"
   }
 }

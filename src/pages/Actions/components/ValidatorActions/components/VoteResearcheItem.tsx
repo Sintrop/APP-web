@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { ContributionProps } from "../../../../../types/developer";
+import { ResearcheProps } from "../../../../../types/researche";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { ModalWhereExecuteTransaction } from "../../../../../components/ModalWhereExecuteTransaction/ModalWhereExecuteTransaction";
-import { toast } from "react-toastify";
 
-interface Props {
-    contribution: ContributionProps;
+interface Props{
+    researche: ResearcheProps;
 }
-export function ContributionDevToVoteItem({ contribution }: Props) {
-    const { t } = useTranslation();
+export function VoteResearcheItem({researche}: Props){
+    const {t} = useTranslation();
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
     const [showInputJustification, setShowInputJustification] = useState(false);
     const [justification, setJustification] = useState('');
-
+    
     function handleCancelSendVote() {
         setShowInputJustification(false);
         setJustification('');
@@ -34,14 +34,14 @@ export function ContributionDevToVoteItem({ contribution }: Props) {
         }
     }
 
-    return (
+    return(
         <div className="w-full p-3 rounded-md bg-container-secondary">
-            <p className="text-white text-sm">#{contribution.id}</p>
-            <p className="text-white text-sm">{contribution.developer}</p>
+            <p className="text-white text-sm">#{researche.id}</p>
+            <p className="text-white text-sm">{researche.createdBy}</p>
 
             {showInputJustification ? (
                 <div className="flex flex-col w-full mt-2">
-                    <label className="text-gray-300 text-sm">{t('digiteAJustificativaDoSeuVotoParaEssaContribuicao')}:</label>
+                    <label className="text-gray-300 text-sm">{t('digiteAJustificativaDoSeuVotoParaEssaPesquisa')}:</label>
                     <input
                         value={justification}
                         onChange={(e) => setJustification(e.target.value)}
@@ -68,17 +68,17 @@ export function ContributionDevToVoteItem({ contribution }: Props) {
                 </div>
             ) : (
                 <>
-                    <p className="text-white text-sm">Publicado na ERA: {contribution.era} - Bloco: {contribution.createdAtBlockNumber}</p>
-                    <p className="text-white text-sm">Válido: {contribution.valid}</p>
-                    <p className="text-white text-sm">Validações recebidas: {contribution.validationsCount}</p>
+                    <p className="text-white text-sm">Publicado na ERA: {researche.era} - Bloco: {researche.createdAtBlock}</p>
+                    <p className="text-white text-sm">Válido: {researche.valid}</p>
+                    <p className="text-white text-sm">Validações recebidas: {researche.validationsCount}</p>
 
                     <a
                         className="text-blue-500 underline w-fit"
-                        href={`https://ipfs.io/ipfs/${contribution.report}`}
+                        href={`https://ipfs.io/ipfs/${researche.file}`}
                         target="_blank"
                         rel="noreferrer"
                     >
-                        Ver contribuição
+                        Ver pesquisa
                     </a>
 
                     <button
@@ -92,10 +92,10 @@ export function ContributionDevToVoteItem({ contribution }: Props) {
 
             {showModalWhereExecuteTransaction && (
                 <ModalWhereExecuteTransaction
-                    additionalData={JSON.stringify({ justification, contribution })}
+                    additionalData={JSON.stringify({ justification, researche })}
                     close={() => setShowModalWhereExecuteTransaction(false)}
                     success={successVote}
-                    transactionType="voteContributionDev"
+                    transactionType="voteResearche"
                 />
             )}
         </div>
