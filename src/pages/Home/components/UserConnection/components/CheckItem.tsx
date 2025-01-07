@@ -59,6 +59,10 @@ export function CheckItem({ check, title, type, handleShowSignUp, handleEfetiveR
     }, [check, userData, type, accountStatus]);
 
     async function checkVancancies() {
+        if(userData?.userType === 1){
+            setAvaliableVacancy(true);
+            return;
+        }
         setLoading(true);
         const response = await getProportionallity();
 
