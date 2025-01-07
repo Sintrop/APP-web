@@ -58,6 +58,11 @@ export function Web3Feed(){
                             transaction={item}
                         />
                     ))}
+                    <PageSelect
+                        atualPage={atualPage}
+                        totalPages={totalPages}
+                        onChange={setAtualPage}
+                    />
                 </>
             )}
         </div>

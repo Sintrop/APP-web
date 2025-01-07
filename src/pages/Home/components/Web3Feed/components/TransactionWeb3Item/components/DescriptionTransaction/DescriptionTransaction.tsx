@@ -11,6 +11,7 @@ import { AddValidatorDescription } from "./AddUser/AddValidatorDescription";
 import { InviteDescription } from "./InviteDescription";
 import { WithdrawDescription } from "./WithdrawDescription";
 import { UserValidationDescription } from "./Validations/UserValidationDescription";
+import { AddContributionDescription } from "./AddContribution";
 
 interface Props{
     method: string;
@@ -35,5 +36,6 @@ const DescriptionComponent = {
     invite: InviteDescription,
     withdraw: WithdrawDescription,
     addUserValidation: UserValidationDescription,
+    addContribution: AddContributionDescription
 }
 type DescriptionComponentType = keyof typeof DescriptionComponent;
