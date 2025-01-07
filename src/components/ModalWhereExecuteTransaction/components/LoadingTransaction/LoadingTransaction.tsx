@@ -11,6 +11,10 @@ import { executeInviteUser } from "../../../../services/actions/inviteUser";
 import { executeRegisterUser } from "../../../../services/registerUser";
 import { executeVoteUser } from "../../../../services/actions/voteUserService";
 import { executeAddValidationInspection } from "../../../../services/actions/voteInspectionService";
+import { executeDeclareAlive } from "../../../../services/actions/declareAlive";
+import { web3 } from "../../../../services/web3/Contracts";
+import { getTxData } from "../../../../services/chainApi/transactions";
+import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
 
 interface Props {
     close: () => void;
@@ -25,6 +29,8 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
     const [loading, setLoading] = useState(false);
     const [transactionSuccessfully, setTransactionSuccessfully] = useState(false);
     const [returnTransactionData, setReturnTransactionData] = useState({} as ReturnTransactionProps);
+    const [loadingError, setLoadingError] = useState(false);
+    const [errorWeb3Message, setErrorWeb3Message] = useState('');
 
     useEffect(() => {
         setLoading(true);
@@ -55,14 +61,17 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'inviteUser') {
             handleInviteUser();
         }
-        if (transactionType === 'register'){
+        if (transactionType === 'register') {
             handleRegisterUser();
         }
-        if (transactionType === 'voteUser'){
+        if (transactionType === 'voteUser') {
             handleVoteUser();
         }
-        if (transactionType === 'voteInspection'){
+        if (transactionType === 'voteInspection') {
             handleVoteInspection();
+        }
+        if (transactionType === 'declareAlive') {
+            handleDeclareAlive();
         }
     }
 
@@ -76,38 +85,43 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         finishRequestWeb3(response);
     }
 
-    async function handleSendContribution(){
-        const response = await executeSendContribution({walletConnected, additionalDataTransaction});
+    async function handleSendContribution() {
+        const response = await executeSendContribution({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handlePublishResearche(){
-        const response = await executePublishResearche({walletConnected, additionalDataTransaction});
+    async function handlePublishResearche() {
+        const response = await executePublishResearche({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleRequestInspection(){
-        const response = await executeRequestInspection({walletConnected});
+    async function handleRequestInspection() {
+        const response = await executeRequestInspection({ walletConnected });
         finishRequestWeb3(response);
     }
 
-    async function handleInviteUser(){
-        const response = await executeInviteUser({walletConnected, additionalDataTransaction});
+    async function handleInviteUser() {
+        const response = await executeInviteUser({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleRegisterUser(){
+    async function handleRegisterUser() {
         const response = await executeRegisterUser(userData, walletConnected);
         finishRequestWeb3(response);
     }
 
-    async function handleVoteUser(){
-        const response = await executeVoteUser({walletConnected, additionalDataTransaction});
+    async function handleVoteUser() {
+        const response = await executeVoteUser({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleVoteInspection(){
-        const response = await executeAddValidationInspection({walletConnected, additionalDataTransaction});
+    async function handleVoteInspection() {
+        const response = await executeAddValidationInspection({ walletConnected, additionalDataTransaction });
+        finishRequestWeb3(response);
+    }
+
+    async function handleDeclareAlive() {
+        const response = await executeDeclareAlive({ walletConnected });
         finishRequestWeb3(response);
     }
 
@@ -115,8 +129,27 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         setReturnTransactionData(response);
         if (response.success) {
             setTransactionSuccessfully(true);
+        } else {
+            getErrorTransactionDetails(response.transactionHash)
         }
         setLoading(false);
+    }
+
+    async function getErrorTransactionDetails(hash: string) {
+        if(!hash){
+            setErrorWeb3Message('Você rejeitou a transação')
+            return
+        }
+        setLoadingError(true);
+        const response = await getTxData(hash);
+        if (response.success) {
+            if (response?.txData?.revert_reason?.parameters[0]?.value) {
+                setErrorWeb3Message(response?.txData?.revert_reason?.parameters[0]?.value)
+            }
+        } else {
+            setErrorWeb3Message('Erro desconhecido')
+        }
+        setLoadingError(false);
     }
 
     return (
@@ -155,14 +188,13 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                 </div>
                             </>
                         ) : (
-                            <>
-                                {returnTransactionData.message && (
+                            <> 
+                                <p className="font-bold text-white text-xl text-center mb-5">Erro na sua transação</p>
+                                {loadingError ? (
+                                    <ActivityIndicator size={50} />
+                                ) : (
                                     <>
-                                        <p className="font-bold text-white text-xl text-center">Algo deu errado com sua transação</p>
-                                        <p className="mt-20 text-xs text-gray-400 text-center">Erro</p>
-                                        <p className="text-white">Code: {returnTransactionData?.code}</p>
-                                        <p className="text-white text-center">Mensagem: {returnTransactionData?.message.replace('Returned error:', '')}</p>
-
+                                        <p className="text-white text-center">{errorWeb3Message}</p>
                                         <button
                                             onClick={close}
                                             className="text-white font-bold px-20 h-12 rounded-md bg-blue-primary mt-10"

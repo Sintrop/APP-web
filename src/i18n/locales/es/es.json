@@ -480,6 +480,7 @@
     "essaAcaoNaoEstaDisponivelNoCheckout": "Esta acción no está disponible al finalizar la compra",
     "nenhumaInspeçãoDisponivelParaVotar": "No hay inspección disponible para votar",
     "seCadastrouComo": "registrado como",
-    "motivoDoErro": "Motivo del error"
+    "motivoDoErro": "Motivo del error",
+    "declaracaoFeitaComSucesso": "¡Declaración realizada con éxito!"
   }
 }

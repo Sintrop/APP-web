@@ -518,6 +518,7 @@
     "essaAcaoNaoEstaDisponivelNoCheckout": "This action is not available at checkout",
     "nenhumaInspeçãoDisponivelParaVotar": "No inspection available to vote",
     "seCadastrouComo": "registered as",
-    "motivoDoErro": "Reason for the error"
+    "motivoDoErro": "Reason for the error",
+    "declaracaoFeitaComSucesso": "Declaration made successfully!"
   }
 }

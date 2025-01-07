@@ -66,3 +66,11 @@ export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
     const response = await web3RequestWrite(ValidatorContract, 'withdraw', [], walletConnected);
     return response;
 }
+
+interface AddLevelProps{
+    walletConnected: string;
+}
+export async function addLevel({walletConnected}: AddLevelProps) {
+    const response = await web3RequestWrite(ValidatorContract, 'addLevel', [], walletConnected);
+    return response;
+}

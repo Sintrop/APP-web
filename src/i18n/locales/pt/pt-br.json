@@ -515,6 +515,7 @@
        "essaAcaoNaoEstaDisponivelNoCheckout": "Essa ação não está disponível no checkout",
        "nenhumaInspeçãoDisponivelParaVotar": "Nenhuma inspeção disponível para votar",
        "seCadastrouComo": "se cadastrou como",
-       "motivoDoErro": "Motivo do erro"
+       "motivoDoErro": "Motivo do erro",
+       "declaracaoFeitaComSucesso": "Declaração feita com sucesso!"
     }
 }
