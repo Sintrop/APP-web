@@ -92,7 +92,7 @@ export function VoteResearcheItem({researche}: Props){
 
             {showModalWhereExecuteTransaction && (
                 <ModalWhereExecuteTransaction
-                    additionalData={JSON.stringify({ justification, researche })}
+                    additionalData={JSON.stringify({ justification, researcheId: researche.id })}
                     close={() => setShowModalWhereExecuteTransaction(false)}
                     success={successVote}
                     transactionType="voteResearche"

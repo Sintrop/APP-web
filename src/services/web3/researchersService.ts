@@ -2,6 +2,7 @@ import { ResearcheProps } from "../../types/researche";
 import { ResearcherProps } from "../../types/researcher";
 import { ResearcherContract } from "./Contracts";
 import { researcherContractAddress } from "./Contracts";
+import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService"; 
 
 export const GetResearcher = async (walletAdd: string) => {
@@ -101,5 +102,16 @@ export async function worksCount():Promise<number>{
 
 export async function getWorks(): Promise<ResearcheProps[]>{
     const response = await ResearcherContract.methods.getWorks().call();
+    return response;
+}
+
+interface AddWorkValidationProps{
+    walletConnected: string;
+    researcheId: number;
+    justification: string;
+}
+export async function addWorkValidation(props: AddWorkValidationProps): Promise<ReturnTransactionProps>{
+    const {researcheId, justification, walletConnected} = props;
+    const response = await web3RequestWrite(ResearcherContract, 'addWorkValidation', [researcheId, justification], walletConnected);
     return response;
 }

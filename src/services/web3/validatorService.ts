@@ -50,28 +50,6 @@ export async function addValidation(props: AddValidationProps): Promise<ReturnTr
     return response;
 }
 
-interface AddDeveloperContributionValidationProps{
-    walletConnected: string;
-    contribution: ContributionProps;
-    justification: string;
-}
-export async function addDeveloperContributionValidation(props: AddDeveloperContributionValidationProps): Promise<ReturnTransactionProps>{
-    const {contribution, justification, walletConnected} = props;
-    const response = await web3RequestWrite(ValidatorContract, 'addDeveloperContributionValidation', [contribution, justification, walletConnected], walletConnected);
-    return response;
-}
-
-interface AddResearcheWorkValidationProps{
-    walletConnected: string;
-    researche: ResearcheProps;
-    justification: string;
-}
-export async function addResearcheWorkValidation(props: AddResearcheWorkValidationProps): Promise<ReturnTransactionProps>{
-    const {researche, justification, walletConnected} = props;
-    const response = await web3RequestWrite(ValidatorContract, 'addResearcheWorkValidation', [researche, justification, walletConnected], walletConnected);
-    return response;
-}
-
 interface WithdrawTokensProps{
     walletConnected: string;
 }

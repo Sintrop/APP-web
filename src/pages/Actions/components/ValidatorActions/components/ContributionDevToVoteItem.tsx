@@ -92,7 +92,7 @@ export function ContributionDevToVoteItem({ contribution }: Props) {
 
             {showModalWhereExecuteTransaction && (
                 <ModalWhereExecuteTransaction
-                    additionalData={JSON.stringify({ justification, contribution })}
+                    additionalData={JSON.stringify({ justification, contributionId: contribution.id })}
                     close={() => setShowModalWhereExecuteTransaction(false)}
                     success={successVote}
                     transactionType="voteContributionDev"

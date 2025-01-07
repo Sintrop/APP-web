@@ -1,7 +1,6 @@
 import { ResearcheProps } from "../../types/researche";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
-import { getWorks } from "../web3/researchersService";
-import { addResearcheWorkValidation } from "../web3/validatorService";
+import { addWorkValidation, getWorks } from "../web3/researchersService";
 
 export async function getResearches(): Promise<ResearcheProps[]>{
     const response = await getWorks();
@@ -10,7 +9,7 @@ export async function getResearches(): Promise<ResearcheProps[]>{
 
 interface AdditionalDataAddWorkValidationProps {
     justification: string;
-    researche: ResearcheProps;
+    researcheId: number;
 }
 interface ExecuteAddWorkValidationProps {
     additionalDataTransaction: string;
@@ -24,8 +23,8 @@ export async function executeAddWorkValidation(props: ExecuteAddWorkValidationPr
         additionalData = JSON.parse(additionalDataTransaction);
     }
 
-    const responseWeb3 = await addResearcheWorkValidation({
-        researche: additionalData.researche,
+    const responseWeb3 = await addWorkValidation({
+        researcheId: additionalData.researcheId,
         justification: additionalData.justification,
         walletConnected
     });

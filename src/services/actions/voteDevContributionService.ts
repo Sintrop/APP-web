@@ -1,7 +1,6 @@
 import { ContributionProps } from "../../types/developer";
-import { getContribution, getContributionsCount } from "../web3/developersService";
+import { addContributionValidation, getContribution, getContributionsCount } from "../web3/developersService";
 import { ReturnTransactionProps } from "../web3/rcTokenService";
-import { addDeveloperContributionValidation } from "../web3/validatorService";
 
 export async function getContributionsDev(): Promise<ContributionProps[]>{
     const contributionsCount = await getContributionsCount();
@@ -17,7 +16,7 @@ export async function getContributionsDev(): Promise<ContributionProps[]>{
 
 interface AdditionalDataAddContributionValidationProps {
     justification: string;
-    contribution: ContributionProps
+    contributionId: number;
 }
 interface ExecuteAddContributionValidationProps {
     additionalDataTransaction: string;
@@ -31,8 +30,8 @@ export async function executeAddContributionValidation(props: ExecuteAddContribu
         additionalData = JSON.parse(additionalDataTransaction);
     }
 
-    const responseWeb3 = await addDeveloperContributionValidation({
-        contribution: additionalData.contribution,
+    const responseWeb3 = await addContributionValidation({
+        contributionId: additionalData.contributionId,
         justification: additionalData.justification,
         walletConnected
     });

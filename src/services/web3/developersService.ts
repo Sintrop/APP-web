@@ -60,3 +60,14 @@ export async function getContribution(id: number): Promise<ContributionProps>{
     const response = await DeveloperContract.methods.getContribution(id).call();
     return response;
 }
+
+interface AddContributionValidationProps{
+    walletConnected: string;
+    contributionId: number;
+    justification: string;
+}
+export async function addContributionValidation(props: AddContributionValidationProps): Promise<ReturnTransactionProps>{
+    const {contributionId, justification, walletConnected} = props;
+    const response = await web3RequestWrite(DeveloperContract, 'addContributionValidation', [contributionId, justification], walletConnected);
+    return response;
+}
