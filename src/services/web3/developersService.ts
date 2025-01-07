@@ -1,5 +1,6 @@
 import { ContributionProps, DeveloperProps } from "../../types/developer";
 import { DeveloperContract } from "./Contracts";
+import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
 
 //@ts-ignore

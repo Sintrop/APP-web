@@ -53,7 +53,16 @@ export function ValidatorActions() {
                 description="Declare estar vivo, para que consiga votar para invalidar na próxima ERA"
             />
 
-            {/* <ActionButton
+            <ActionButton
+                onClick={() => {
+                    setActionType('voteDevContribution');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Votar em relatório dev"
+                description="Vote para invalidar uma contribuição enviada por um desenvolvedor"
+            />
+
+                {/* <ActionButton
                 onClick={() => {
                     setActionType('voteDevContribution');
                     setShowModalRealizeAction(true);
@@ -71,12 +80,12 @@ export function ValidatorActions() {
                 description="Vote para invalidar uma pesquisa enviada por um pesquisador"
             /> */}
 
-            {showModalRealizeAction && (
-                <ModalRealizeAction
-                    close={() => setShowModalRealizeAction(false)}
-                    type={actionType}
-                />
-            )}
+                {showModalRealizeAction && (
+                    <ModalRealizeAction
+                        close={() => setShowModalRealizeAction(false)}
+                        type={actionType}
+                    />
+                )}
         </div>
     )
 }

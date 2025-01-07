@@ -1,3 +1,4 @@
+import { ContributionProps } from "../../types/developer";
 import { ValidatorProps } from "../../types/validator";
 import { ValidatorContract } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
@@ -50,12 +51,12 @@ export async function addValidation(props: AddValidationProps): Promise<ReturnTr
 
 interface AddDeveloperContributionValidationProps{
     walletConnected: string;
-    walletToVote: string;
+    contribution: ContributionProps;
     justification: string;
 }
 export async function addDeveloperContributionValidation(props: AddDeveloperContributionValidationProps): Promise<ReturnTransactionProps>{
-    const {justification, walletConnected, walletToVote} = props;
-    const response = await web3RequestWrite(ValidatorContract, 'addUserValidation', [walletToVote, justification], walletConnected);
+    const {contribution, justification, walletConnected} = props;
+    const response = await web3RequestWrite(ValidatorContract, 'addDeveloperContributionValidation', [contribution, justification, walletConnected], walletConnected);
     return response;
 }
 

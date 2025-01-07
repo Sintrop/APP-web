@@ -15,6 +15,7 @@ import { executeDeclareAlive } from "../../../../services/actions/declareAlive";
 import { web3 } from "../../../../services/web3/Contracts";
 import { getTxData } from "../../../../services/chainApi/transactions";
 import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
+import { executeAddContributionValidation } from "../../../../services/actions/voteDevContributionService";
 
 interface Props {
     close: () => void;
@@ -73,6 +74,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'declareAlive') {
             handleDeclareAlive();
         }
+        if (transactionType === 'voteContributionDev') {
+            handleVoteContributionDev();
+        }
     }
 
     async function handleBurnTokens() {
@@ -122,6 +126,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleDeclareAlive() {
         const response = await executeDeclareAlive({ walletConnected });
+        finishRequestWeb3(response);
+    }
+
+    async function handleVoteContributionDev() {
+        const response = await executeAddContributionValidation({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
