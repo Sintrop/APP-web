@@ -12,16 +12,17 @@ import { InviteDescription } from "./InviteDescription";
 import { WithdrawDescription } from "./WithdrawDescription";
 import { UserValidationDescription } from "./Validations/UserValidationDescription";
 import { AddContributionDescription } from "./AddContribution";
+import { AddWorkDescription } from "./AddWork";
 
 interface Props{
     method: string;
     parameters: ParametersTransactionProps[];
-    tokensTransfer?: TokensTransferProps[];
+    transactionHash: string;
 }
-export function DescriptionTransaction({method, parameters, tokensTransfer}: Props){
+export function DescriptionTransaction({method, parameters, transactionHash}: Props){
     const Description = DescriptionComponent[method as DescriptionComponentType] || null;
     
-    return Description ? <Description parameters={parameters} tokensTransfer={tokensTransfer}/> : <div/>
+    return Description ? <Description parameters={parameters} transactionHash={transactionHash}/> : <div/>
 }
 
 const DescriptionComponent = {
@@ -36,6 +37,7 @@ const DescriptionComponent = {
     invite: InviteDescription,
     withdraw: WithdrawDescription,
     addUserValidation: UserValidationDescription,
-    addContribution: AddContributionDescription
+    addContribution: AddContributionDescription,
+    addWork: AddWorkDescription
 }
 type DescriptionComponentType = keyof typeof DescriptionComponent;

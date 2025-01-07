@@ -54,7 +54,7 @@ export function TransactionWeb3Item({ transaction }: Props) {
                     <TransactionSuccessDetails
                         method={transaction.method}
                         parameters={transaction?.decoded_input?.parameters}
-                        tokensTransfer={transaction?.token_transfers}
+                        transactionHash={transaction.hash}
                     />
                 )}
             </div>

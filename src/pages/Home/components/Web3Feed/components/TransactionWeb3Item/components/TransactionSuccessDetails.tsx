@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { ParametersTransactionProps, TokensTransferProps } from "../../../../../../../types/transaction";
+import { ParametersTransactionProps } from "../../../../../../../types/transaction";
 import { DescriptionTransaction } from "./DescriptionTransaction/DescriptionTransaction";
 
 interface Props {
     parameters: ParametersTransactionProps[];
     method: string;
-    tokensTransfer: TokensTransferProps[];
+    transactionHash: string;
 }
-export function TransactionSuccessDetails({ parameters, method, tokensTransfer }: Props) {
+export function TransactionSuccessDetails({ parameters, method, transactionHash }: Props) {
     const [showDecodedInput, setShowDecodedInput] = useState(false);
 
     function toggleShowDecodedInput() {
@@ -19,7 +19,7 @@ export function TransactionSuccessDetails({ parameters, method, tokensTransfer }
             <DescriptionTransaction
                 method={method}
                 parameters={parameters}
-                tokensTransfer={tokensTransfer}
+                transactionHash={transactionHash}
             />
 
             <button
