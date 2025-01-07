@@ -1,5 +1,6 @@
 import { ContributionProps, DeveloperProps } from "../../types/developer";
 import { DeveloperContract } from "./Contracts";
+import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
 
 //@ts-ignore
@@ -57,5 +58,16 @@ export async function getContributionsCount(): Promise<number>{
 
 export async function getContribution(id: number): Promise<ContributionProps>{
     const response = await DeveloperContract.methods.getContribution(id).call();
+    return response;
+}
+
+interface AddContributionValidationProps{
+    walletConnected: string;
+    contributionId: number;
+    justification: string;
+}
+export async function addContributionValidation(props: AddContributionValidationProps): Promise<ReturnTransactionProps>{
+    const {contributionId, justification, walletConnected} = props;
+    const response = await web3RequestWrite(DeveloperContract, 'addContributionValidation', [contributionId, justification], walletConnected);
     return response;
 }

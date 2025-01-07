@@ -16,7 +16,7 @@ export function VoteDevContribution(){
     }
 
     return(
-        <div className="flex flex-col gap-3 h-full">
+        <div className="flex flex-col gap-3 h-full overflow-y-auto mb-5">
             {contributions.map(contribution => (
                 <ContributionDevToVoteItem
                     key={contribution.id}

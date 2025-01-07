@@ -518,6 +518,9 @@
     "essaAcaoNaoEstaDisponivelNoCheckout": "This action is not available at checkout",
     "nenhumaInspeçãoDisponivelParaVotar": "No inspection available to vote",
     "seCadastrouComo": "registered as",
-    "motivoDoErro": "Reason for the error"
+    "motivoDoErro": "Reason for the error",
+    "declaracaoFeitaComSucesso": "Declaration made successfully!",
+    "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Enter the justification for your vote for this contribution",
+    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Enter the justification for your vote for this researche"
   }
 }

@@ -1,3 +1,5 @@
+import { ContributionProps } from "../../types/developer";
+import { ResearcheProps } from "../../types/researche";
 import { ValidatorProps } from "../../types/validator";
 import { ValidatorContract } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
@@ -48,21 +50,18 @@ export async function addValidation(props: AddValidationProps): Promise<ReturnTr
     return response;
 }
 
-interface AddDeveloperContributionValidationProps{
-    walletConnected: string;
-    walletToVote: string;
-    justification: string;
-}
-export async function addDeveloperContributionValidation(props: AddDeveloperContributionValidationProps): Promise<ReturnTransactionProps>{
-    const {justification, walletConnected, walletToVote} = props;
-    const response = await web3RequestWrite(ValidatorContract, 'addUserValidation', [walletToVote, justification], walletConnected);
-    return response;
-}
-
 interface WithdrawTokensProps{
     walletConnected: string;
 }
 export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
     const response = await web3RequestWrite(ValidatorContract, 'withdraw', [], walletConnected);
+    return response;
+}
+
+interface AddLevelProps{
+    walletConnected: string;
+}
+export async function addLevel({walletConnected}: AddLevelProps) {
+    const response = await web3RequestWrite(ValidatorContract, 'addLevel', [], walletConnected);
     return response;
 }

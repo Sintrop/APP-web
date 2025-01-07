@@ -44,7 +44,16 @@ export function ValidatorActions() {
                 description="Vote para invalidar uma inspeção do sistema apresentando sua justificativa"
             />
 
-            {/* <ActionButton
+            <ActionButton
+                onClick={() => {
+                    setActionType('declareAlive');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Declarar estar vivo"
+                description="Declare estar vivo, para que consiga votar para invalidar na próxima ERA"
+            />
+
+            <ActionButton
                 onClick={() => {
                     setActionType('voteDevContribution');
                     setShowModalRealizeAction(true);
@@ -60,7 +69,7 @@ export function ValidatorActions() {
                 }}
                 label="Votar em pesquisa"
                 description="Vote para invalidar uma pesquisa enviada por um pesquisador"
-            /> */}
+            />
 
             {showModalRealizeAction && (
                 <ModalRealizeAction

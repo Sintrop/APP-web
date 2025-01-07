@@ -11,6 +11,11 @@ import { executeInviteUser } from "../../../../services/actions/inviteUser";
 import { executeRegisterUser } from "../../../../services/registerUser";
 import { executeVoteUser } from "../../../../services/actions/voteUserService";
 import { executeAddValidationInspection } from "../../../../services/actions/voteInspectionService";
+import { executeDeclareAlive } from "../../../../services/actions/declareAlive";
+import { getTxData } from "../../../../services/chainApi/transactions";
+import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
+import { executeAddContributionValidation } from "../../../../services/actions/voteDevContributionService";
+import { executeAddWorkValidation } from "../../../../services/actions/voteResearcheService";
 
 interface Props {
     close: () => void;
@@ -25,6 +30,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
     const [loading, setLoading] = useState(false);
     const [transactionSuccessfully, setTransactionSuccessfully] = useState(false);
     const [returnTransactionData, setReturnTransactionData] = useState({} as ReturnTransactionProps);
+    const [loadingError, setLoadingError] = useState(false);
+    const [errorWeb3Message, setErrorWeb3Message] = useState('');
+    const [transactionHash, setTransactionHash] = useState('');
 
     useEffect(() => {
         setLoading(true);
@@ -55,14 +63,23 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'inviteUser') {
             handleInviteUser();
         }
-        if (transactionType === 'register'){
+        if (transactionType === 'register') {
             handleRegisterUser();
         }
-        if (transactionType === 'voteUser'){
+        if (transactionType === 'voteUser') {
             handleVoteUser();
         }
-        if (transactionType === 'voteInspection'){
+        if (transactionType === 'voteInspection') {
             handleVoteInspection();
+        }
+        if (transactionType === 'declareAlive') {
+            handleDeclareAlive();
+        }
+        if (transactionType === 'voteContributionDev') {
+            handleVoteContributionDev();
+        }
+        if (transactionType === 'voteResearche') {
+            handleVoteResearche();
         }
     }
 
@@ -76,47 +93,82 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         finishRequestWeb3(response);
     }
 
-    async function handleSendContribution(){
-        const response = await executeSendContribution({walletConnected, additionalDataTransaction});
+    async function handleSendContribution() {
+        const response = await executeSendContribution({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handlePublishResearche(){
-        const response = await executePublishResearche({walletConnected, additionalDataTransaction});
+    async function handlePublishResearche() {
+        const response = await executePublishResearche({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleRequestInspection(){
-        const response = await executeRequestInspection({walletConnected});
+    async function handleRequestInspection() {
+        const response = await executeRequestInspection({ walletConnected });
         finishRequestWeb3(response);
     }
 
-    async function handleInviteUser(){
-        const response = await executeInviteUser({walletConnected, additionalDataTransaction});
+    async function handleInviteUser() {
+        const response = await executeInviteUser({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleRegisterUser(){
+    async function handleRegisterUser() {
         const response = await executeRegisterUser(userData, walletConnected);
         finishRequestWeb3(response);
     }
 
-    async function handleVoteUser(){
-        const response = await executeVoteUser({walletConnected, additionalDataTransaction});
+    async function handleVoteUser() {
+        const response = await executeVoteUser({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
-    async function handleVoteInspection(){
-        const response = await executeAddValidationInspection({walletConnected, additionalDataTransaction});
+    async function handleVoteInspection() {
+        const response = await executeAddValidationInspection({ walletConnected, additionalDataTransaction });
+        finishRequestWeb3(response);
+    }
+
+    async function handleDeclareAlive() {
+        const response = await executeDeclareAlive({ walletConnected });
+        finishRequestWeb3(response);
+    }
+
+    async function handleVoteContributionDev() {
+        const response = await executeAddContributionValidation({ walletConnected, additionalDataTransaction });
+        finishRequestWeb3(response);
+    }
+
+    async function handleVoteResearche() {
+        const response = await executeAddWorkValidation({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 
     function finishRequestWeb3(response: ReturnTransactionProps) {
         setReturnTransactionData(response);
+        setTransactionHash(response.transactionHash);
         if (response.success) {
             setTransactionSuccessfully(true);
+        } else {
+            getErrorTransactionDetails(response.transactionHash)
         }
         setLoading(false);
+    }
+
+    async function getErrorTransactionDetails(hash: string) {
+        if (!hash) {
+            setErrorWeb3Message('Você rejeitou a transação')
+            return
+        }
+        setLoadingError(true);
+        const response = await getTxData(hash);
+        if (response.success) {
+            if (response?.txData?.revert_reason?.parameters[0]?.value) {
+                setErrorWeb3Message(response?.txData?.revert_reason?.parameters[0]?.value)
+            }
+        } else {
+            setErrorWeb3Message('Erro desconhecido')
+        }
+        setLoadingError(false);
     }
 
     return (
@@ -142,6 +194,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                         className="text-sm text-white underline truncate max-w-full"
                                         href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${returnTransactionData?.transactionHash}`}
                                         target="_blank"
+                                        rel="noreferrer"
                                     >
                                         {returnTransactionData?.transactionHash}
                                     </a>
@@ -156,13 +209,26 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                             </>
                         ) : (
                             <>
-                                {returnTransactionData.message && (
+                                <p className="font-bold text-white text-xl text-center mb-5">Erro na sua transação</p>
+                                {loadingError ? (
+                                    <ActivityIndicator size={50} />
+                                ) : (
                                     <>
-                                        <p className="font-bold text-white text-xl text-center">Algo deu errado com sua transação</p>
-                                        <p className="mt-20 text-xs text-gray-400 text-center">Erro</p>
-                                        <p className="text-white">Code: {returnTransactionData?.code}</p>
-                                        <p className="text-white text-center">Mensagem: {returnTransactionData?.message.replace('Returned error:', '')}</p>
+                                        {transactionHash !== '' && (
+                                            <>
+                                                <p className="text-white text-sm font-bold">Hash da transação</p>
+                                                <a
+                                                    className="text-sm text-white underline truncate max-w-full"
+                                                    href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${transactionHash}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    {transactionHash}
+                                                </a>
+                                            </>
+                                        )}
 
+                                        <p className="text-white text-center mt-3">{errorWeb3Message}</p>
                                         <button
                                             onClick={close}
                                             className="text-white font-bold px-20 h-12 rounded-md bg-blue-primary mt-10"

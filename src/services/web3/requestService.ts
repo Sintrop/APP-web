@@ -10,14 +10,16 @@ export async function web3RequestWrite(
     let code = 0;
 
     try {
-        await contract.methods[method](...params).send({ from: from, gasPrice: 1000000 })
+        await contract.methods[method](...params).send({ from: from })
             .on('transactionHash', (hash: string) => {
-                transactionHash = hash
-                success = true
-                message = "Transaction sent successfully"
+                transactionHash = hash;
             })
-            .on("error", () => {
-                // throw new Web3ErrorService(error, receipt);
+            //@ts-ignore
+            .on('receipt', (receipt) => {
+                success = true;
+            })
+            //@ts-ignore
+            .on("error", (error) => {
                 success = false;
                 message = 'Erro na sua transação';
             })
