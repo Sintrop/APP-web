@@ -32,6 +32,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
     const [returnTransactionData, setReturnTransactionData] = useState({} as ReturnTransactionProps);
     const [loadingError, setLoadingError] = useState(false);
     const [errorWeb3Message, setErrorWeb3Message] = useState('');
+    const [transactionHash, setTransactionHash] = useState('');
 
     useEffect(() => {
         setLoading(true);
@@ -144,6 +145,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     function finishRequestWeb3(response: ReturnTransactionProps) {
         setReturnTransactionData(response);
+        setTransactionHash(response.transactionHash);
         if (response.success) {
             setTransactionSuccessfully(true);
         } else {
@@ -153,7 +155,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
     }
 
     async function getErrorTransactionDetails(hash: string) {
-        if(!hash){
+        if (!hash) {
             setErrorWeb3Message('Você rejeitou a transação')
             return
         }
@@ -192,6 +194,7 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                         className="text-sm text-white underline truncate max-w-full"
                                         href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${returnTransactionData?.transactionHash}`}
                                         target="_blank"
+                                        rel="noreferrer"
                                     >
                                         {returnTransactionData?.transactionHash}
                                     </a>
@@ -205,13 +208,27 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
                                 </div>
                             </>
                         ) : (
-                            <> 
+                            <>
                                 <p className="font-bold text-white text-xl text-center mb-5">Erro na sua transação</p>
                                 {loadingError ? (
                                     <ActivityIndicator size={50} />
                                 ) : (
                                     <>
-                                        <p className="text-white text-center">{errorWeb3Message}</p>
+                                        {transactionHash !== '' && (
+                                            <>
+                                                <p className="text-white text-sm font-bold">Hash da transação</p>
+                                                <a
+                                                    className="text-sm text-white underline truncate max-w-full"
+                                                    href={`${process.env.REACT_APP_URL_EXPLORER}/tx/${transactionHash}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    {transactionHash}
+                                                </a>
+                                            </>
+                                        )}
+
+                                        <p className="text-white text-center mt-3">{errorWeb3Message}</p>
                                         <button
                                             onClick={close}
                                             className="text-white font-bold px-20 h-12 rounded-md bg-blue-primary mt-10"
