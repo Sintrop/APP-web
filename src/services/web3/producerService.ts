@@ -37,7 +37,7 @@ export const addProducer = async (wallet, name, proofPhoto, geoLocation, areaPro
     }
 }
 
-export async function GetProducer(wallet: string){
+export async function GetProducer(wallet: string): Promise<ProducerProps>{
     const producer = await ProducerContract.methods.getProducer(wallet).call({from: producerContractAddress})
     return producer;
 }

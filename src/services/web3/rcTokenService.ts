@@ -72,3 +72,8 @@ export const BuyRCT = async (wallet, value) => {
         hashTransaction
     }
 }
+
+export async function balanceOf(address: string): Promise<string>{
+    const response = await RcTokenContract.methods.balanceOf(address).call({from: RcTokenContractAddress});
+    return response;
+}

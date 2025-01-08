@@ -16,6 +16,7 @@ import { getTxData } from "../../../../services/chainApi/transactions";
 import { ActivityIndicator } from "../../../ActivityIndicator/ActivityIndicator";
 import { executeAddContributionValidation } from "../../../../services/actions/voteDevContributionService";
 import { executeAddWorkValidation } from "../../../../services/actions/voteResearcheService";
+import { executeAddContributorContribution } from "../../../../services/actions/addContributorContributionService";
 
 interface Props {
     close: () => void;
@@ -81,6 +82,9 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
         if (transactionType === 'voteResearche') {
             handleVoteResearche();
         }
+        if (transactionType === 'addContributorContribution') {
+            handleAddContributorContribution();
+        }
     }
 
     async function handleBurnTokens() {
@@ -140,6 +144,11 @@ export function LoadingTransaction({ close, success, additionalDataTransaction, 
 
     async function handleVoteResearche() {
         const response = await executeAddWorkValidation({ walletConnected, additionalDataTransaction });
+        finishRequestWeb3(response);
+    }
+
+    async function handleAddContributorContribution() {
+        const response = await executeAddContributorContribution({ walletConnected, additionalDataTransaction });
         finishRequestWeb3(response);
     }
 

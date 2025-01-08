@@ -7,6 +7,7 @@ import { UserRankingItem } from "./components/UserRankingItem";
 import { TopBar } from "../../../components/TopBar";
 import ReactMapGL, { Layer, Marker, Source } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { getContributors } from "../../../services/web3/contributorService";
 
 export function Ranking() {
     const { userType } = useParams();
@@ -56,6 +57,10 @@ export function Ranking() {
         if (userType === '4') {
             const response = await api.get('/web3/developers');
             setUsers(response.data.developers);
+        }
+        if (userType === '5') {
+            const response = await getContributors();
+            setUsers(response);
         }
         if (userType === '6') {
             const response = await api.get('/web3/activists');
