@@ -14,6 +14,8 @@ import { Info } from "../../../components/Info";
 import { useTranslation } from "react-i18next";
 import { getProducersPoolData } from "../../../services/pools/producers";
 import { getInspectorsPoolData } from "../../../services/pools/inspectors";
+import { getResearchersPoolData } from "../../../services/pools/researchers";
+import { getDevelopersPoolData } from "../../../services/pools/developers";
 
 export function Pools() {
     const {t} = useTranslation();
@@ -62,15 +64,19 @@ export function Pools() {
             }
         }
         if (poolType === 'developers') {
-            const response = await api.get('/web3/pool-developers-data');
-            setPoolData(response.data);
+            const response = await getDevelopersPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
 
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
-            const withdraw = supply - Number(response.data.balanceContract);
+            const withdraw = supply - Number(response.poolData.balanceContract);
 
             setTotalSupply(supply);
             setTotalWithdraw(withdraw);
-            setSeries([Number(response.data.balanceContract), Number(withdraw)])
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
 
             if (userData?.userType !== 4) {
                 setVisibleWithdraw(false);
@@ -105,15 +111,19 @@ export function Pools() {
             }
         }
         if (poolType === 'researchers') {
-            const response = await api.get('/web3/pool-researchers-data');
-            setPoolData(response.data);
+            const response = await getResearchersPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
 
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
-            const withdraw = supply - Number(response.data.balanceContract);
+            const withdraw = supply - Number(response.poolData.balanceContract);
 
             setTotalSupply(supply);
             setTotalWithdraw(withdraw);
-            setSeries([Number(response.data.balanceContract), Number(withdraw)])
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
 
             if (userData?.userType !== 3) {
                 setVisibleWithdraw(false);
