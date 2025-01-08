@@ -12,6 +12,8 @@ import { ModalWhereExecuteTransaction } from "../../../components/ModalWhereExec
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";
 import { useTranslation } from "react-i18next";
+import { getProducersPoolData } from "../../../services/pools/producers";
+import { getInspectorsPoolData } from "../../../services/pools/inspectors";
 
 export function Pools() {
     const {t} = useTranslation();
@@ -37,15 +39,19 @@ export function Pools() {
     async function getPoolData() {
         setLoading(true);
         if (poolType === 'producers') {
-            const response = await api.get('/web3/pool-producers-data');
-            setPoolData(response.data);
+            const response = await getProducersPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
 
             const supply = Number(750000000000000000000000000 / 10 ** 18).toFixed(0);
-            const withdraw = supply - Number(response.data.balanceContract);
+            const withdraw = supply - Number(response.poolData.balanceContract);
 
             setTotalSupply(supply);
             setTotalWithdraw(withdraw);
-            setSeries([Number(response.data.balanceContract), Number(withdraw)])
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
 
             if (userData?.userType !== 1) {
                 setVisibleWithdraw(false);
@@ -76,15 +82,19 @@ export function Pools() {
 
         }
         if (poolType === 'inspectors') {
-            const response = await api.get('/web3/pool-inspectors-data');
-            setPoolData(response.data);
+            const response = await getInspectorsPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
 
             const supply = Number(180000000000000000000000000 / 10 ** 18).toFixed(0);
-            const withdraw = supply - Number(response.data.balanceContract);
+            const withdraw = supply - Number(response.poolData.balanceContract);
 
             setTotalSupply(supply);
             setTotalWithdraw(withdraw);
-            setSeries([Number(response.data.balanceContract), Number(withdraw)])
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
 
             if (userData?.userType !== 2) {
                 setVisibleWithdraw(false);
@@ -288,7 +298,7 @@ export function Pools() {
 
                                     <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
                                         <p className="text-white text-sm">{t('eraContrato')}</p>
-                                        <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.currentEraContract))}</p>
+                                        <p className="text-white font-bold">{Intl.NumberFormat('pt-BR').format(Number(poolData?.currentEra))}</p>
                                     </div>
 
                                     <div className="bg-[#012939] flex flex-col p-2 rounded-md w-full border-2 border-white">
