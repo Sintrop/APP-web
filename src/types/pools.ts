@@ -4,3 +4,8 @@ export interface BasicDataPoolProps{
     balanceContract: number;
     epoch: number;
 }
+
+export interface ReturnGetPoolDataProps{
+    success: boolean;
+    poolData?: BasicDataPoolProps;
+}

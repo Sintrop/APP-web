@@ -1,13 +1,9 @@
-import { BasicDataPoolProps } from "../../types/pools";
+import { ReturnGetPoolDataProps } from "../../types/pools";
 import { getTokensBalance } from "../token/balance";
 import { inspectorPoolContractAddress } from "../web3/Contracts";
 import { currentContractEra, currentContractEpoch, tokensPerEra } from "../web3/inspectorPoolService";
 
-interface ReturnGetInspectorsPoolDataProps{
-    success: boolean;
-    poolData?: BasicDataPoolProps;
-}
-export async function getInspectorsPoolData(): Promise<ReturnGetInspectorsPoolDataProps>{
+export async function getInspectorsPoolData(): Promise<ReturnGetPoolDataProps>{
     try{
         const currentEra = await currentContractEra();
         const currentEpoch = await currentContractEpoch();

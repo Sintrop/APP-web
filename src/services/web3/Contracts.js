@@ -11,6 +11,7 @@ import ProducerPoolContractJson from '../../data/contracts/abis/ProducerPool.jso
 import InspectorPoolContractJson from '../../data/contracts/abis/InspectorPool.json';
 import DevelopersPoolContractJson from '../../data/contracts/abis/DeveloperPool.json';
 import ActivistContractJson from '../../data/contracts/abis/ActivistContract.json';
+import ActivistPoolContractJson from '../../data/contracts/abis/ActvistPool.json';
 import SintropContractJson from '../../data/contracts/abis/Sintrop.json';
 import ProducerContractJson from '../../data/contracts/abis/ProducerContract.json';
 import InspectorContractJson from '../../data/contracts/abis/InspectorContract.json';
@@ -19,6 +20,7 @@ import ValidatorPoolContractJson from '../../data/contracts/abis/ValidatorPool.j
 import CategoryContractJson from '../../data/contracts/abis/CategoryContract.json';
 import InvitationContractJson from '../../data/contracts/abis/InvitationContract.json';
 import ContributorContractJson from '../../data/contracts/abis/ContributorContract.json';
+import ContributorPoolContractJson from '../../data/contracts/abis/ContributorPool.json';
 
 export const validatorContractAddress = '0x648291fb228cdB775123f4B2a5BC896A475457C8';
 export const validatorPoolContractAddress = '0xB8E80394b341c29f6dE327CEFb24797bC1BFe40E';
@@ -57,6 +59,7 @@ export const ProducerPoolContract = new web3.eth.Contract(ProducerPoolContractJs
 export const InspectorPoolContract = new web3.eth.Contract(InspectorPoolContractJson, inspectorPoolContractAddress);
 export const DevelopersPoolContract = new web3.eth.Contract(DevelopersPoolContractJson, developersPoolContractAddress);
 export const ActivistContract = new web3.eth.Contract(ActivistContractJson, activistContractAddress);
+export const ActivistPoolContract = new web3.eth.Contract(ActivistPoolContractJson, activistPoolContractAddress);
 export const SintropContract = new web3.eth.Contract(SintropContractJson, sintropContractAddress);
 export const ProducerContract = new web3.eth.Contract(ProducerContractJson, producerContractAddress);
 export const InspectorContract = new web3.eth.Contract(InspectorContractJson, inspectorContractAddress);
@@ -65,3 +68,4 @@ export const ValidatorPoolContract = new web3.eth.Contract(ValidatorPoolContract
 export const CategoryContract = new web3.eth.Contract(CategoryContractJson, categoryContractAddress);
 export const InvitationContract = new web3.eth.Contract(InvitationContractJson, invitationContractAddress);
 export const ContributorContract = new web3.eth.Contract(ContributorContractJson, contributorContractAddress);
+export const ContributorPoolContract = new web3.eth.Contract(ContributorPoolContractJson, contributorPoolContractAddress);

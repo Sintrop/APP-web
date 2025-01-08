@@ -1,13 +1,13 @@
 import { ReturnGetPoolDataProps } from "../../types/pools";
 import { getTokensBalance } from "../token/balance";
-import { researcherPoolContractAddress } from "../web3/Contracts";
-import { currentContractEra, currentContractEpoch, tokensPerEra } from "../web3/researcherPoolService";
+import { validatorPoolContractAddress } from "../web3/Contracts";
+import { currentContractEra, currentContractEpoch, tokensPerEra } from "../web3/validatorPoolService";
 
-export async function getResearchersPoolData(): Promise<ReturnGetPoolDataProps>{
+export async function getValidatorsPoolData(): Promise<ReturnGetPoolDataProps>{
     try{
         const currentEra = await currentContractEra();
         const currentEpoch = await currentContractEpoch();
-        const balanceTokens = await getTokensBalance(researcherPoolContractAddress);
+        const balanceTokens = await getTokensBalance(validatorPoolContractAddress);
         const tokensEra = await tokensPerEra(currentEpoch, 12);
 
         return {

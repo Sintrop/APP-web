@@ -16,6 +16,9 @@ import { getProducersPoolData } from "../../../services/pools/producers";
 import { getInspectorsPoolData } from "../../../services/pools/inspectors";
 import { getResearchersPoolData } from "../../../services/pools/researchers";
 import { getDevelopersPoolData } from "../../../services/pools/developers";
+import { getContributorsPoolData } from "../../../services/pools/contributors";
+import { getValidatorsPoolData } from "../../../services/pools/validators";
+import { getActivitsPoolData } from "../../../services/pools/activists";
 
 export function Pools() {
     const {t} = useTranslation();
@@ -133,16 +136,68 @@ export function Pools() {
                 setNextApprove(response2.data.nextAprove);
             }
         }
-        if (poolType === 'validators') {
-            const response = await api.get('/web3/pool-validators-data');
-            setPoolData(response.data);
+        if (poolType === 'contributors') {
+            const response = await getContributorsPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
 
-            const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
-            const withdraw = supply - Number(response.data.balanceContract);
+            setPoolData(response.poolData);
+
+            const supply = Number(7500000000000000000000000 / 10 ** 18).toFixed(0);
+            const withdraw = supply - Number(response.poolData.balanceContract);
 
             setTotalSupply(supply);
             setTotalWithdraw(withdraw);
-            setSeries([Number(response.data.balanceContract), Number(withdraw)])
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
+
+            if (userData?.userType !== 5) {
+                setVisibleWithdraw(false);
+            } else {
+                // const response2 = await api.get(`/web3/next-aprove-researcher/${String(userData?.wallet).toLowerCase()}`)
+                // setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
+                // setNextApprove(response2.data.nextAprove);
+            }
+        }
+
+        if (poolType === 'activists') {
+            const response = await getActivitsPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
+
+            const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
+            const withdraw = supply - Number(response.poolData.balanceContract);
+
+            setTotalSupply(supply);
+            setTotalWithdraw(withdraw);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
+
+            if (userData?.userType !== 6) {
+                setVisibleWithdraw(false);
+            } else {
+                // const response2 = await api.get(`/web3/next-aprove-researcher/${String(userData?.wallet).toLowerCase()}`)
+                // setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
+                // setNextApprove(response2.data.nextAprove);
+            }
+        }
+        
+        if (poolType === 'validators') {
+            const response = await getValidatorsPoolData();            
+            if(!response.success || !response.poolData){
+                return
+            }
+
+            setPoolData(response.poolData);
+
+            const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
+            const withdraw = supply - Number(response.poolData.balanceContract);
+
+            setTotalSupply(supply);
+            setTotalWithdraw(withdraw);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
 
             if (userData?.userType !== 8) {
                 setVisibleWithdraw(false);
@@ -152,8 +207,6 @@ export function Pools() {
                 setNextApprove(response2.data.nextAprove);
             }
         }
-        // validadores fazer a pool
-        // ativistas fazer a pool
         setLoading(false);
     }
 
@@ -248,9 +301,11 @@ export function Pools() {
                         <div className="flex flex-col mt-3">
                             <h3 className="font-bold text-xl text-white mb-1">
                                 {poolType === 'producers' && t('poolProdutores')}
-                                {poolType === 'developers' && t('poolDesenvolvedores')}
                                 {poolType === 'inspectors' && t('poolInspetores')}
                                 {poolType === 'researchers' && t('poolPesquisadores')}
+                                {poolType === 'developers' && t('poolDesenvolvedores')}
+                                {poolType === 'contributors' && t('poolContributors')}
+                                {poolType === 'activists' && t('poolAtivistas')}
                                 {poolType === 'validators' && t('poolValidadores')}
                             </h3>
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { TopBar } from "../../../components/TopBar";
 import { useTranslation } from "react-i18next";
 
-export function Services({}){
+export function Services(){
     const {t} = useTranslation();
     const navigate = useNavigate();
 
@@ -22,6 +22,7 @@ export function Services({}){
                         <img
                             src={require('../../../assets/icon-produtor.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon producer'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('regeneracaoEcossitemas')}</p>
@@ -34,6 +35,7 @@ export function Services({}){
                         <img
                             src={require('../../../assets/centro-dev.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon devs'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('desenvolvimento')}</p>
@@ -46,6 +48,7 @@ export function Services({}){
                         <img
                             src={require('../../../assets/centro-pesquisa.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon pesquisa'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('pesquisa')}</p>
@@ -58,6 +61,7 @@ export function Services({}){
                         <img
                             src={require('../../../assets/centro-inspecao.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon inspetores'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('inspecao')}</p>
@@ -70,6 +74,7 @@ export function Services({}){
                         <img
                             src={require('../../../assets/validacao-icon.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon validators'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('validacao')}</p>
@@ -77,14 +82,28 @@ export function Services({}){
 
                     <button 
                         className="rounded-md w-[328px] h-[120px] flex items-center px-5 gap-5 bg-[#03364B]"
-                        onClick={() => alert('disponível em breve')}
+                        onClick={() => navigate('/pools/activists')}
                     >
                         <img
                             src={require('../../../assets/icon-ativista.png')}
                             className="h-16 w-16 object-contain"
+                            alt='icon activist'
                         />
 
                         <p className="font-bold text-white text-left text-xl mt-2">{t('ativismo')}</p>
+                    </button>
+
+                    <button 
+                        className="rounded-md w-[328px] h-[120px] flex items-center px-5 gap-5 bg-[#03364B]"
+                        onClick={() => navigate('/pools/contributors')}
+                    >
+                        <img
+                            src={require('../../../assets/icon-ativista.png')}
+                            className="h-16 w-16 object-contain"
+                            alt='icon activist'
+                        />
+
+                        <p className="font-bold text-white text-left text-xl mt-2">{t('contribuicao')}</p>
                     </button>
                 </div>
             </div>
