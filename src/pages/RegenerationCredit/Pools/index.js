@@ -12,17 +12,17 @@ import { ModalWhereExecuteTransaction } from "../../../components/ModalWhereExec
 import { TopBar } from "../../../components/TopBar";
 import { Info } from "../../../components/Info";
 import { useTranslation } from "react-i18next";
-import { getProducersPoolData } from "../../../services/pools/producers";
-import { getInspectorsPoolData } from "../../../services/pools/inspectors";
-import { getResearchersPoolData } from "../../../services/pools/researchers";
-import { getDevelopersPoolData } from "../../../services/pools/developers";
-import { getContributorsPoolData } from "../../../services/pools/contributors";
-import { getValidatorsPoolData } from "../../../services/pools/validators";
-import { getActivitsPoolData } from "../../../services/pools/activists";
+import { getNextWithdrawProducer, getProducersPoolData } from "../../../services/pools/producers";
+import { getInspectorsPoolData, getNextWithdrawInspector } from "../../../services/pools/inspectors";
+import { getNextWithdrawResearcher, getResearchersPoolData } from "../../../services/pools/researchers";
+import { getDevelopersPoolData, getNextWithdrawDeveloper } from "../../../services/pools/developers";
+import { getContributorsPoolData, getNextWithdrawContributor } from "../../../services/pools/contributors";
+import { getNextWithdrawValidator, getValidatorsPoolData } from "../../../services/pools/validators";
+import { getActivitsPoolData, getNextWithdrawActivist } from "../../../services/pools/activists";
 
 export function Pools() {
     const {t} = useTranslation();
-    const { userData, userBlockchain, getUserBlockchainData} = useMainContext();
+    const { userData, userBlockchain, getUserBlockchainData, walletConnected, userTypeConnected} = useMainContext();
     const { poolType } = useParams();
     const [loading, setLoading] = useState(true);
     const [poolData, setPoolData] = useState({});
@@ -31,8 +31,6 @@ export function Pools() {
     const [nextApprove, setNextApprove] = useState(0);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [users, setUsers] = useState([]);
-    const [totalSupply, setTotalSupply] = useState(0);
-    const [totalWithdraw, setTotalWithdraw] = useState(0);
     const [series, setSeries] = useState([44, 55]);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
 
@@ -48,22 +46,20 @@ export function Pools() {
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(750000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 1) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 1) {
+                const response = await getNextWithdrawProducer(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                const response2 = await api.get(`/web3/next-aprove-producer/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
         if (poolType === 'developers') {
@@ -71,22 +67,20 @@ export function Pools() {
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
-
+            
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 4) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 4) {
+                const response = await getNextWithdrawDeveloper(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                const response2 = await api.get(`/web3/next-aprove-developer/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
 
         }
@@ -95,22 +89,20 @@ export function Pools() {
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(180000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 2) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 2) {
+                const response = await getNextWithdrawInspector(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                const response2 = await api.get(`/web3/next-aprove-inspector/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
         if (poolType === 'researchers') {
@@ -118,22 +110,20 @@ export function Pools() {
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 3) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 3) {
+                const response = await getNextWithdrawResearcher(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                const response2 = await api.get(`/web3/next-aprove-researcher/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
         if (poolType === 'contributors') {
@@ -141,70 +131,62 @@ export function Pools() {
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(7500000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 5) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 5) {
+                const response = await getNextWithdrawContributor(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                // const response2 = await api.get(`/web3/next-aprove-researcher/${String(userData?.wallet).toLowerCase()}`)
-                // setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                // setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
-
         if (poolType === 'activists') {
             const response = await getActivitsPoolData();            
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 6) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 6) {
+                const response = await getNextWithdrawActivist(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                // const response2 = await api.get(`/web3/next-aprove-researcher/${String(userData?.wallet).toLowerCase()}`)
-                // setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                // setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
-        
         if (poolType === 'validators') {
             const response = await getValidatorsPoolData();            
             if(!response.success || !response.poolData){
                 return
             }
-
             setPoolData(response.poolData);
 
             const supply = Number(30000000000000000000000000 / 10 ** 18).toFixed(0);
             const withdraw = supply - Number(response.poolData.balanceContract);
+            setSeries([Number(response.poolData.balanceContract), Number(withdraw)]);
 
-            setTotalSupply(supply);
-            setTotalWithdraw(withdraw);
-            setSeries([Number(response.poolData.balanceContract), Number(withdraw)])
-
-            if (userData?.userType !== 8) {
-                setVisibleWithdraw(false);
+            if (userTypeConnected === 8) {
+                const response = await getNextWithdrawValidator(walletConnected);
+                if(response.success){
+                    setCanWithdraw(response.nextWithdraw < 0 ? true : false);
+                    setNextApprove(response.nextWithdraw);
+                }
             } else {
-                const response2 = await api.get(`/web3/next-aprove-validator/${String(userData?.wallet).toLowerCase()}`)
-                setCanWithdraw(response2.data.nextAprove < 0 ? true : false);
-                setNextApprove(response2.data.nextAprove);
+                setVisibleWithdraw(false);
             }
         }
         setLoading(false);
@@ -382,19 +364,19 @@ export function Pools() {
                                                 {t('suaEraNaPool')}: <span className="font-bold text-blue-primary">{userBlockchain?.pool?.currentEra}</span>
                                             </p>
                                             <p className="text-white text-sm">
-                                                {t('eraAtualDaPool')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract}</span>
+                                                {t('eraAtualDaPool')}: <span className="font-bold text-blue-primary">{poolData?.currentEra}</span>
                                             </p>
                                             <p className="text-white text-sm">
-                                                {t('saquesDisponiveis')}: <span className="font-bold text-blue-primary">{poolData?.currentEraContract - userBlockchain?.pool?.currentEra}</span>
+                                                {t('saquesDisponiveis')}: <span className="font-bold text-blue-primary">{poolData?.currentEra - userBlockchain?.pool?.currentEra}</span>
                                             </p>
                                         </div>
 
                                         <div className="flex justify-between h-full w-[49%]">
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-sm text-white">{t('proximoSaque')}</p>
-                                                <p className="text-lg text-blue-500 font-bold">{nextApprove < 0 ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>
+                                                <p className="text-lg text-blue-500 font-bold">{canWithdraw ? t('vocePodeSacar') : `${Intl.NumberFormat('pt-BR').format(Number(nextApprove))} ${t('blocos')}`}</p>
                                             </div>
-                                            {nextApprove < 0 && (
+                                            {canWithdraw && (
                                                 <button className="font-bold text-white px-3 py-1 rounded-md bg-blue-500" onClick={handleWithdraw}>
                                                     {t('sacarTokens')}
                                                 </button>

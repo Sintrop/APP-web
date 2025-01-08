@@ -34,3 +34,8 @@ export async function getContributors(): Promise<ContributorProps[]>{
 
     return newArray as ContributorProps[];
 }
+
+export async function getContributor(address: string):Promise<ContributorProps>{
+    const contributor = await ContributorContract.methods.getContributor(address).call();
+    return contributor
+}

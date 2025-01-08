@@ -71,3 +71,8 @@ export async function addContributionValidation(props: AddContributionValidation
     const response = await web3RequestWrite(DeveloperContract, 'addContributionValidation', [contributionId, justification], walletConnected);
     return response;
 }
+
+export async function getDeveloper(address: string): Promise<DeveloperProps>{
+    const developer = await DeveloperContract.methods.getDeveloper(address).call();
+    return developer;
+}

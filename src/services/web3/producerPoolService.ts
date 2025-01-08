@@ -76,3 +76,8 @@ export async function tokensPerEra(currentEpoch: number, halving: number): Promi
     const response = await ProducerPoolContract.methods.tokensPerEra(currentEpoch, halving).call();
     return Number(web3.utils.fromWei(response));
 }
+
+export async function nextEraIn(atualEra: number): Promise<number>{
+    const response = await ProducerPoolContract.methods.nextEraIn(atualEra).call();
+    return parseInt(response);
+}

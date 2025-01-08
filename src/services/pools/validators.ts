@@ -1,7 +1,8 @@
-import { ReturnGetPoolDataProps } from "../../types/pools";
+import { ReturnGetNextWithdraw, ReturnGetPoolDataProps } from "../../types/pools";
 import { getTokensBalance } from "../token/balance";
 import { validatorPoolContractAddress } from "../web3/Contracts";
-import { currentContractEra, currentContractEpoch, tokensPerEra } from "../web3/validatorPoolService";
+import { currentContractEra, currentContractEpoch, tokensPerEra, nextEraIn } from "../web3/validatorPoolService";
+import { getValidator } from "../web3/validatorService";
 
 export async function getValidatorsPoolData(): Promise<ReturnGetPoolDataProps>{
     try{
@@ -22,6 +23,23 @@ export async function getValidatorsPoolData(): Promise<ReturnGetPoolDataProps>{
     }catch(e){
         return{
             success: false
+        }
+    }
+}
+
+export async function getNextWithdrawValidator(address: string): Promise<ReturnGetNextWithdraw> {
+    try {
+        const validator = await getValidator(address);
+        const nextWithdraw = await nextEraIn(validator.pool.currentEra);
+
+        return {
+            success: true,
+            nextWithdraw
+        }
+    } catch (e) {
+        return {
+            success: false,
+            nextWithdraw: 0
         }
     }
 }

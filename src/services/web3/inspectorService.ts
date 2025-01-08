@@ -39,3 +39,8 @@ export async function withdrawTokens({ walletConnected }: WithdrawTokensProps) {
     const response = await web3RequestWrite(InspectorContract, 'withdraw', [], walletConnected);
     return response;
 }
+
+export async function getInspector(address: string): Promise<InspectorProps>{
+    const inspector = await InspectorContract.methods.getInspector(address).call();
+    return inspector
+}

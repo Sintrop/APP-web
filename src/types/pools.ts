@@ -9,3 +9,8 @@ export interface ReturnGetPoolDataProps{
     success: boolean;
     poolData?: BasicDataPoolProps;
 }
+
+export interface ReturnGetNextWithdraw{
+    success: boolean;
+    nextWithdraw: number;
+}

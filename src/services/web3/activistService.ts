@@ -38,3 +38,8 @@ export async function withdrawTokens({walletConnected}: WithdrawTokensProps){
     const response = await web3RequestWrite(ActivistContract, 'withdraw', [], walletConnected);
     return response;
 }
+
+export async function getActivist(address: string):Promise<ActivistProps>{
+    const activist = await ActivistContract.methods.getActivist(address).call();
+    return activist
+}

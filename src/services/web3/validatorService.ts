@@ -65,3 +65,8 @@ export async function addLevel({walletConnected}: AddLevelProps) {
     const response = await web3RequestWrite(ValidatorContract, 'addLevel', [], walletConnected);
     return response;
 }
+
+export async function getValidator(address: string): Promise<ValidatorProps>{
+    const validator = await ValidatorContract.methods.getValidator(address).call();
+    return validator;
+}

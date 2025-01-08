@@ -115,3 +115,8 @@ export async function addWorkValidation(props: AddWorkValidationProps): Promise<
     const response = await web3RequestWrite(ResearcherContract, 'addWorkValidation', [researcheId, justification], walletConnected);
     return response;
 }
+
+export async function getResearcher(address: string): Promise<ResearcherProps>{
+    const researcher = await ResearcherContract.methods.getResearcher(address).call()
+    return researcher;
+}

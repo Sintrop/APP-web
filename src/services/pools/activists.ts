@@ -1,7 +1,8 @@
-import { ReturnGetPoolDataProps } from "../../types/pools";
+import { ReturnGetNextWithdraw, ReturnGetPoolDataProps } from "../../types/pools";
 import { getTokensBalance } from "../token/balance";
 import { activistPoolContractAddress } from "../web3/Contracts";
-import { currentContractEra, currentContractEpoch, tokensPerEra } from "../web3/activistPoolService";
+import { currentContractEra, currentContractEpoch, tokensPerEra, nextEraIn } from "../web3/activistPoolService";
+import { getActivist } from "../web3/activistService";
 
 export async function getActivitsPoolData(): Promise<ReturnGetPoolDataProps>{
     try{
@@ -22,6 +23,23 @@ export async function getActivitsPoolData(): Promise<ReturnGetPoolDataProps>{
     }catch(e){
         return{
             success: false
+        }
+    }
+}
+
+export async function getNextWithdrawActivist(address: string): Promise<ReturnGetNextWithdraw> {
+    try {
+        const activist = await getActivist(address);
+        const nextWithdraw = await nextEraIn(activist.pool.currentEra);
+
+        return {
+            success: true,
+            nextWithdraw
+        }
+    } catch (e) {
+        return {
+            success: false,
+            nextWithdraw: 0
         }
     }
 }
