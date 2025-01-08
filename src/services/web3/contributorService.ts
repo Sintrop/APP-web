@@ -1,5 +1,6 @@
 import { ContributorProps } from "../../types/contributor";
 import { ContributorContract } from "./Contracts";
+import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
 
 interface AddContributorProps{
@@ -38,4 +39,13 @@ export async function getContributors(): Promise<ContributorProps[]>{
 export async function getContributor(address: string):Promise<ContributorProps>{
     const contributor = await ContributorContract.methods.getContributor(address).call();
     return contributor
+}
+
+interface AddContributionProps{
+    walletConnected: string;
+    report: string;
+}
+export async function addContribution({report, walletConnected}: AddContributionProps): Promise<ReturnTransactionProps>{
+    const response = await web3RequestWrite(ContributorContract, 'addContribution', [report], walletConnected);
+    return response;
 }

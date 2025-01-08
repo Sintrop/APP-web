@@ -70,6 +70,10 @@ export function ModalWhereExecuteTransaction({transactionType, close, additional
             toast.error('essaAcaoNaoEstaDisponivelNoCheckout')
             return;
         }
+        if(transactionType === 'addContributorContribution'){
+            toast.error('essaAcaoNaoEstaDisponivelNoCheckout')
+            return;
+        }
         try{
             setLoadingCheckout(true);
             await api.post('/transactions-open/create', {

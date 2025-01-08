@@ -10,6 +10,7 @@ import { VoteInspection } from "../ValidatorActions/components/VoteInspection";
 import { VoteDevContribution } from "../ValidatorActions/components/VoteDevContribution";
 import { VoteResearche } from "../ValidatorActions/components/VoteResearche";
 import { DeclareAlive } from "../ValidatorActions/components/DeclareAlive";
+import { AddContributorContribuiton } from "../ContributorActions/components/AddContributorContribuiton";
 
 interface Props{
     close: () => void;
@@ -57,6 +58,7 @@ const actionsTypeToComponent = {
     voteDevContribution: VoteDevContribution,
     voteResearche: VoteResearche,
     declareAlive: DeclareAlive,
+    addContributorContribution: AddContributorContribuiton,
 }
 type actionsType = typeof actionsTypeToComponent;
 export type actionsName = keyof actionsType;

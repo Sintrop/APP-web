@@ -26,6 +26,15 @@ export function ContributorActions() {
                 description="Saque seus tokens pelos serviços prestados na era anterior"
             />
 
+            <ActionButton
+                onClick={() => {
+                    setActionType('addContributorContribution');
+                    setShowModalRealizeAction(true);
+                }}
+                label="Enviar relatório"
+                description="Envie seu relatório de contribuição com seus serviços prestados"
+            />
+
             {showModalRealizeAction && (
                 <ModalRealizeAction
                     close={() => setShowModalRealizeAction(false)}
