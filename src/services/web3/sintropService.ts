@@ -12,7 +12,7 @@ export async function requestInspection({walletConnected}: RequestInspectionProp
     return response;
 }
 
-export async function getInspections(){
+export async function getInspections(): Promise<InspectionProps[]>{
     const inspectionsCount = await SintropContract.methods.inspectionsCount().call();
 
     let inspections = [] as InspectionProps[];
