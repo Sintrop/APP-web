@@ -5,8 +5,9 @@ import { InspectorProps } from "../../../types/inspector";
 import { ResearcherProps } from "../../../types/researcher";
 import { SupporterProps } from "../../../types/supporter";
 import { ProducerProps } from "../../../types/user";
-import { ValidatorProps } from "../../../types/validator";
+import { UserValidationProps, ValidatorProps } from "../../../types/validator";
 import { getUsers } from "../../actions/voteUserService";
+import { getUserValidations } from "../../web3/validatorService";
 
 interface ReturnGetUsersValidationCenter{
     success: boolean;
@@ -27,6 +28,26 @@ export async function getUsersValidationCenter(userType: number): Promise<Return
         return {
             success: false,
             users: [],
+        }
+    }
+}
+
+interface ReturnGetUserValidationsValidationCenter{
+    success: boolean;
+    validations: UserValidationProps[];
+}
+export async function getUserValidationsValidationCenter(address: string): Promise<ReturnGetUserValidationsValidationCenter>{
+    try{
+        const response = await getUserValidations(address);
+        return{
+            success: true,
+            validations: response,
+        }
+    }catch(e){
+        console.log(e);
+        return {
+            success: false,
+            validations: [],
         }
     }
 }
