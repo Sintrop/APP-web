@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Header } from "../../../components/Header/header";
 import { TopBar } from "../../../components/TopBar";
 import { TabContent, ValidationCenterTabsNames } from "./components/Tabs/TabContent";
+import { useTranslation } from "react-i18next";
 
 export function ValidationCenter() {
+    const {t} = useTranslation();
     const [selectedTab, setSelectedTab] = useState<ValidationCenterTabsNames>('inspections');
 
     return (
@@ -18,29 +20,15 @@ export function ValidationCenter() {
                             className={`font-bold py-1 border-b-2 ${selectedTab === 'inspections' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setSelectedTab('inspections')}
                         >
-                            Inspeções
+                            {t('textInspecoes')}
                         </button>
 
                         <button
                             className={`font-bold py-1 border-b-2 ${selectedTab === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
                             onClick={() => setSelectedTab('users')}
                         >
-                            Usuários
+                            {t('textUsuarios')}
                         </button>
-
-                        {/* <button
-                            className={`font-bold py-1 border-b-2 ${selectedTab === 'users' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                            onClick={() => setSelectedTab('users')}
-                        >
-                            Usuários
-                        </button>
-
-                        <button
-                            className={`font-bold py-1 border-b-2 ${selectedTab === 'reports' ? ' border-green-600 text-green-600' : 'text-white border-transparent'}`}
-                            onClick={() => setSelectedTab('reports')}
-                        >
-                            Denúncias
-                        </button> */}
                     </div>
 
                     <TabContent selectedTab={selectedTab}/>

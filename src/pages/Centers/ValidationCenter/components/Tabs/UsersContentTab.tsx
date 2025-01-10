@@ -39,10 +39,23 @@ export function UsersContentTab() {
         setLoading(false);
     }
 
+    function handleTryAgain(){
+        setIsError(false);
+        setLoading(true);
+        setTimeout(() => handleGetUsers(), 500)
+    }
+
     if (isError) {
         return (
             <div className="flex flex-col mt-10">
-                <p className="text-white">Erro na busca de dados</p>
+                <p className="text-white">{t('erroNaBuscaDeDados')}</p>
+
+                <button
+                    className="w-fit bg-blue-500 rounded-md text-white font-semibold h-12 px-5 mt-5"
+                    onClick={handleTryAgain}
+                >
+                    {t('tentarNovamente')}
+                </button>
             </div>
         )
     }
@@ -87,7 +100,7 @@ export function UsersContentTab() {
             </select>
             {users.length === 0 ? (
                 <div>
-                    <p className="text-white">Nenhuma usuário cadastrado</p>
+                    <p className="text-white">{t('nenhumUsuarioCadastrado')}</p>
                 </div>
             ) : (
                 <div className="flex flex-col gap-3">

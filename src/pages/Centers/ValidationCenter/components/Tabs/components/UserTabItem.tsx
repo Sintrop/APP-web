@@ -13,6 +13,7 @@ import { getUserValidationsValidationCenter } from "../../../../../../services/c
 import { ActivityIndicator } from "../../../../../../components/ActivityIndicator/ActivityIndicator";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { getUser } from "../../../../../../services/web3/userService";
+import { useTranslation } from "react-i18next";
 
 type UserProps = ProducerProps | InspectorProps | ResearcherProps | DeveloperProps | ContributorProps | ActivistProps | SupporterProps | ValidatorProps;
 interface Props {
@@ -21,6 +22,7 @@ interface Props {
     getUsers: () => void;
 }
 export function UserTabItem({ getUsers, user, userType }: Props) {
+    const {t} = useTranslation();
     const [wallet, setWallet] = useState('');
     const [imageProfile, setImageProfile] = useState('');
     const [isError, setIsError] = useState(false);
@@ -151,7 +153,7 @@ export function UserTabItem({ getUsers, user, userType }: Props) {
 
                             {invalidatedUser && (
                                 <div className="flex px-3 py-1 rounded-full bg-red-500">
-                                    <p className="text-white text-xs">Usuário invalidado</p>
+                                    <p className="text-white text-xs">{t('usuarioInvalidado')}</p>
                                 </div>
                             )}
                         </div>
@@ -164,7 +166,7 @@ export function UserTabItem({ getUsers, user, userType }: Props) {
                         <ActivityIndicator size={25} />
                     ) : (
                         <div className="flex items-center gap-1">
-                            <p className="text-white text-sm">Validações recebidas: {validations.length}</p>
+                            <p className="text-white text-sm">{t('validacoesRecebidas')}: {validations.length}</p>
 
                             {validations.length > 0 && (
                                 <button
@@ -200,11 +202,12 @@ interface UserValidationItemProps{
     validation: UserValidationProps;
 }
 function UserValidationItem({validation}: UserValidationItemProps){
+    const {t} = useTranslation();
     return(
         <div className="flex flex-col border-b border-container-primary py-3">
-            <p className="text-white text-sm">Validador: {validation.validator}</p>
-            <p className="text-white text-sm">Justificativa: {validation.justification}</p>
-            <p className="text-white text-sm">Bloco: {validation.createdAtBlockNumber}</p>
+            <p className="text-white text-sm">{t('textValidador')}: {validation.validator}</p>
+            <p className="text-white text-sm">{t('justificativa')}: {validation.justification}</p>
+            <p className="text-white text-sm">{t('bloco')}: {validation.createdAtBlockNumber}</p>
         </div>  
     )
 }
