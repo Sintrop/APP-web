@@ -3,6 +3,7 @@ import { getInspectionsValidationCenter } from "../../../../../services/centers/
 import { InspectionProps } from "../../../../../types/inspection";
 import { ActivityIndicator } from "../../../../../components/ActivityIndicator/ActivityIndicator";
 import { useTranslation } from "react-i18next";
+import { InspectionValidationItem } from "./components/InspectionValidationItem";
 
 export function InspectionsContentTab(){
     const {t} = useTranslation();
@@ -59,10 +60,41 @@ export function InspectionsContentTab(){
                     <p className="text-white">Nenhuma inspeção para ser mostrada</p>
                 </div>
             ) : (
-                <div>
-                    <p className="text-white">Visualização disponível em breve</p>
+                <div className="flex flex-col">
+                    <div className="flex items-center bg-container-primary rounded-t-md px-3 h-8 border-b-2 border-container-secondary">
+                        <div className="w-[50px] border-r border-container-secondary">
+                            <p className="text-white text-sm font-semibold">ID</p>
+                        </div>
+
+                        <div className="w-[200px] pl-2 border-r border-container-secondary">
+                            <p className="text-white text-sm font-semibold">{t('textProdutor')}</p>
+                        </div>
+
+                        <div className="w-[200px] pl-2 border-r border-container-secondary">
+                            <p className="text-white text-sm font-semibold">{t('textInspetor')}</p>
+                        </div>
+
+                        <div className="w-[150px] pl-2 border-r border-container-secondary">
+                            <p className="text-white text-sm font-semibold">{t('inspecionadoEm')}</p>
+                        </div>
+
+                        <div className="w-[150px] pl-2 border-r border-container-secondary">
+                            <p className="text-white text-sm font-semibold">{t('ptsRegeneracao')}</p>
+                        </div>
+
+                        <div className="w-[150px] pl-2">
+                            <p className="text-white text-sm font-semibold">{t('validacoesRecebidas')}</p>
+                        </div>
+                    </div>
+                    {inspections.map(inspection => (
+                        <InspectionValidationItem
+                            key={inspection.id}
+                            inspection={inspection}
+                        />
+                    ))}
                 </div>
             )}
         </div>
     )
 }
+
