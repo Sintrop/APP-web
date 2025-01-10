@@ -521,6 +521,14 @@
     "motivoDoErro": "Reason for the error",
     "declaracaoFeitaComSucesso": "Declaration made successfully!",
     "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Enter the justification for your vote for this contribution",
-    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Enter the justification for your vote for this researche"
+    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Enter the justification for your vote for this researche",
+    "validacoesRecebidas": "Validations Received",
+    "bloco": "Block",
+    "erroNaBuscaDeDados": "Error when fetching data",
+    "tentarNovamente": "Try again",
+    "nenhumUsuarioCadastrado": "No registered users",
+    "textInspecoes": "Inspections",
+    "textUsuarios": "Users",
+    "naoInspecionada": "Not inspected"
   }
 }
