@@ -37,6 +37,10 @@ export function UserTabItem({ getUsers, user, userType }: Props) {
         getUserValidations();
     }, [wallet]);
 
+    useEffect(() => {
+        if(validations.length)checkInvalidatedUser(wallet);
+    }, [validations]);
+
     function setData() {
         if (userType === 1) {
             if (user.userType === userType) {
@@ -109,14 +113,13 @@ export function UserTabItem({ getUsers, user, userType }: Props) {
 
         if (response.success) {
             setValidations(response.validations);
-            if(validations.length > 0)checkInvalidatedUser();
         }
 
         setLoading(false)
     }
 
-    async function checkInvalidatedUser(){
-        const response = await getUser(wallet);
+    async function checkInvalidatedUser(address: string){
+        const response = await getUser(address);
         if(response === 9){
             setInvalidatedUser(true);
         }
