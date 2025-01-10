@@ -1,4 +1,4 @@
-export interface ValidatorProps{
+export interface ValidatorProps {
     id: number;
     validatorWallet: string;
     pool: {
@@ -6,4 +6,12 @@ export interface ValidatorProps{
         level: number;
     }
     userType: 8;
+}
+
+export interface UserValidationProps {
+    validator: string;
+    user: string;
+    justification: string;
+    majorityValidatorsCount: number;
+    createdAtBlockNumber: number;
 }

@@ -9,7 +9,7 @@ export interface InspectionProps{
     validationsCount: number;
     createdAt: number;
     acceptedAt: number;
-    inspectedAt: number;
+    inspectedAt: string;
     inspectedAtEra: number;
     invalidatedAt: number;
 }

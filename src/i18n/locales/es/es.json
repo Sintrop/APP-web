@@ -483,6 +483,15 @@
     "motivoDoErro": "Motivo del error",
     "declaracaoFeitaComSucesso": "¡Declaración realizada con éxito!",
     "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Ingrese la justificación de su voto por esta contribución",
-    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Introduce la justificación de tu voto en esta encuesta"
+    "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Introduce la justificación de tu voto en esta encuesta",
+    "validacoesRecebidas": "Validaciones recibidas",
+    "bloco": "Bloco",
+    "erroNaBuscaDeDados": "Error al recuperar datos",
+    "tentarNovamente": "Intentar otra vez",
+    "nenhumUsuarioCadastrado": "Ningún usuario registrado",
+    "textInspecoes": "Inspecciones",
+    "textUsuarios": "Usuarios",
+    "naoInspecionada": "No inspeccionado"
+
   }
 }

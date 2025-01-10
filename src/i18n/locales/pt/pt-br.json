@@ -518,6 +518,14 @@
        "motivoDoErro": "Motivo do erro",
        "declaracaoFeitaComSucesso": "Declaração feita com sucesso!",
        "digiteAJustificativaDoSeuVotoParaEssaContribuicao": "Digite a justificativa do seu voto para essa contribuição",
-       "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Digite a justificativa do seu voto para essa pesquisa"
+       "digiteAJustificativaDoSeuVotoParaEssaPesquisa": "Digite a justificativa do seu voto para essa pesquisa",
+       "validacoesRecebidas": "Validações recebidas",
+       "bloco": "Bloco",
+       "erroNaBuscaDeDados": "Erro na busca de dados",
+       "tentarNovamente": "Tentar novamente",
+       "nenhumUsuarioCadastrado": "Nenhum usuário cadastrado",
+       "textInspecoes": "Inspeções",
+       "textUsuarios": "Usuários",
+       "naoInspecionada": "Não inspecionada"
     }
 }

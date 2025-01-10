@@ -32,7 +32,7 @@ import { Impact } from "../pages/RegenerationCredit/Impact";
 import { ViewBooking } from "../pages/RegenerationCredit/PreSale/ViewBookings";
 import { Profile } from "../pages/Profile";
 import { DeveloperCenter } from "../pages/Centers/DeveloperCenter";
-import { ValidationCenter } from "../pages/Centers/ValidationCenter";
+import { ValidationCenter } from "../pages/Centers/ValidationCenter/ValidationCenter";
 import { ImpactCalculator } from "../pages/ImpactCalculator";
 import { MethodSintrop } from "../pages/Methods/Sintrop";
 import { ActivistCenter } from "../pages/Centers/ActivistCenter";

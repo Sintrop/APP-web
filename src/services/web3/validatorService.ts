@@ -1,6 +1,4 @@
-import { ContributionProps } from "../../types/developer";
-import { ResearcheProps } from "../../types/researche";
-import { ValidatorProps } from "../../types/validator";
+import { UserValidationProps, ValidatorProps } from "../../types/validator";
 import { ValidatorContract } from "./Contracts";
 import { ReturnTransactionProps } from "./rcTokenService";
 import { web3RequestWrite } from "./requestService";
@@ -69,4 +67,9 @@ export async function addLevel({walletConnected}: AddLevelProps) {
 export async function getValidator(address: string): Promise<ValidatorProps>{
     const validator = await ValidatorContract.methods.getValidator(address).call();
     return validator;
+}
+
+export async function getUserValidations(address: string): Promise<UserValidationProps[]>{
+    const validations = await ValidatorContract.methods.getUserValidations(address).call();
+    return validations;
 }
