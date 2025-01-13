@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BlockchainUserDataProps } from "../../../../services/userDetails/userDetailsPage";
 import { UserApiProps } from "../../../../types/user";
 import { useTranslation } from "react-i18next";
+import { getImage } from "../../../../services/getImage";
 
 interface Props {
     userType: number;
@@ -12,6 +13,19 @@ interface Props {
 export function DataTab({ userApi, blockchainData, userType }: Props) {
     const { t } = useTranslation();
     const [proofPhoto, setProofPhoto] = useState('');
+
+    useEffect(() => {
+        //@ts-ignore
+        if(blockchainData?.proofPhoto){
+            //@ts-ignore
+            getProofPhoto(blockchainData?.proofPhoto)
+        }
+    }, []);
+
+    async function getProofPhoto(hash: string) {
+        const response = await getImage(hash);
+        setProofPhoto(response);
+    }
 
     return (
         <div className="mt-5 flex flex-col w-full">
