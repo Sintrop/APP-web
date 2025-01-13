@@ -28,9 +28,9 @@ export interface ProducerProps {
     pendingInspection: boolean
     totalInspections: number;
     lastRequestAt: number;
-    isa: {
-        isaScore: number;
-        isaAverage: number;
+    regenerationScore: {
+        score: number;
+        average: number;
         sustainable: boolean
     },
     areaInformation: {
