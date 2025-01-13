@@ -23,7 +23,6 @@ export function PublisTab({userApi}: Props){
 
     async function handleGetPublis(){
         if(!userApi.id){
-            alert('nenhuma')
             return;
         }
 

@@ -3,13 +3,16 @@ import { BlockchainUserDataProps } from "../../../../services/userDetails/userDe
 import { Jazzicon } from "@ukstv/jazzicon-react";
 import { useTranslation } from "react-i18next";
 import { FaHandHoldingUsd, FaUserCheck } from "react-icons/fa";
+import { UserApiProps } from "../../../../types/user";
+import { getImage } from "../../../../services/getImage";
 
 interface Props {
     userType: number;
     blockchainData: BlockchainUserDataProps;
     wallet: string;
+    userApi: UserApiProps;
 }
-export function HeaderUserDetails({blockchainData, userType, wallet }: Props) {
+export function HeaderUserDetails({blockchainData, userType, wallet, userApi }: Props) {
     const {t} = useTranslation();
     const [imageProfile, setImageProfile] = useState('');
     const [name, setName] = useState('');
@@ -17,6 +20,15 @@ export function HeaderUserDetails({blockchainData, userType, wallet }: Props) {
     useEffect(() => {
         setData();
     }, [userType, blockchainData]);
+
+    useEffect(() => {
+        if(userApi.imgProfileUrl)getImageProfile(userApi.imgProfileUrl);
+    }, [userApi]);
+
+    async function getImageProfile(hash: string) {
+        const response = await getImage(hash);
+        setImageProfile(response);
+    }
 
     function setData(){
         if(userType === 1){

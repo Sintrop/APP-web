@@ -58,6 +58,7 @@ export function UserDetails() {
                         blockchainData={blockchainData}
                         userType={userType}
                         wallet={wallet as string}
+                        userApi={userApi}
                     />
 
                     <TabSelectorUserDetails
