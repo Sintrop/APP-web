@@ -10,8 +10,8 @@ interface Props {
 }
 export function RegenerationZonesTab({}: Props){
     return(
-        <div>
-
+        <div className="mt-5 w-full p-3 rounded-md bg-container-primary">
+            <p className="text-white">Visualização em desenvolvimento</p>
         </div>
     )
 }

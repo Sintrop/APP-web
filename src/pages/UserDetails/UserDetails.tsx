@@ -10,6 +10,7 @@ import { HeaderUserDetails } from "./components/HeaderUserDetails/HeaderUserDeta
 import { TabSelectorUserDetails } from "./components/TabSelectorUserDetails/TabSelectorUserDetails";
 import { ContentTabsUserDetails, TabsUserDetailsName } from "./components/ContentTabsUserDetails/ContentTabsUserDetails";
 import { UserApiProps } from "../../types/user";
+import { ActivityIndicator } from "../../components/ActivityIndicator/ActivityIndicator";
 
 export function UserDetails() {
     const { wallet } = useParams();
@@ -24,17 +25,49 @@ export function UserDetails() {
         handleGetUserDetails();
     }, []);
 
-    async function handleGetUserDetails(){
+    async function handleGetUserDetails() {
         setLoading(true);
         const response = await getUserDetailsPage(wallet as string);
         setIsError(!response.success);
 
-        if(response.success){
+        if (response.success) {
             setUserType(response.userType);
-            if(response.blockchainData)setBlockchainData(response.blockchainData);
-            if(response.userApi)setUserApi(response.userApi);
+            if (response.blockchainData) setBlockchainData(response.blockchainData);
+            if (response.userApi) setUserApi(response.userApi);
         }
         setLoading(false);
+    }
+
+    if (loading) {
+        return (
+            <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
+                <TopBar />
+                <Header routeActive="" />
+
+                <div className="flex flex-col items-center w-full pt-10 px-1 lg:px-0 lg:pt-32 overflow-auto">
+                    <div className="flex flex-col items-center w-full lg:w-[1024px] mt-3 mb-20">
+                        <ActivityIndicator
+                            size={80}
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className={`bg-gradient-to-b from-[#043832] to-[#1F5D38] flex flex-col h-[100vh]`}>
+                <TopBar />
+                <Header routeActive="" />
+
+                <div className="flex flex-col items-center w-full pt-10 px-1 lg:px-0 lg:pt-32 overflow-auto">
+                    <div className="flex flex-col items-center w-full lg:w-[1024px] mt-3 mb-20">
+                        <p className="text-white">Erro na busca de dados</p>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -50,7 +83,7 @@ export function UserDetails() {
                 />
             </Helmet>
             <TopBar />
-            <Header routeActive=""/>
+            <Header routeActive="" />
 
             <div className="flex flex-col items-center w-full pt-10 px-1 lg:px-0 lg:pt-32 overflow-auto">
                 <div className="flex flex-col w-full lg:w-[1024px] mt-3 mb-20">
@@ -79,7 +112,7 @@ export function UserDetails() {
 
             <div className="hidden lg:flex">
                 <Feedback />
-                <Chat openChat=""/>
+                <Chat openChat="" />
             </div>
 
         </div>
