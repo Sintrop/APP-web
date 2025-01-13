@@ -4,6 +4,8 @@ import { BlockchainUserDataProps } from "../../../../services/userDetails/userDe
 import { UserApiProps } from "../../../../types/user";
 import { DataTab } from "./DataTab";
 import { PublisTab } from "./PublisTab";
+import { InspectionsTab } from "./InspectionsTab";
+import { RegenerationZonesTab } from "./RegenerationZonesTab";
 
 interface Props{
     userType: number;
@@ -28,4 +30,6 @@ const tabs = {
     certificates: CertificatesTab,
     data: DataTab,
     publis: PublisTab,
+    inspections: InspectionsTab,
+    zones: RegenerationZonesTab
 }
