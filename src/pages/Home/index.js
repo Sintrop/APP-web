@@ -31,7 +31,7 @@ export function Home() {
     const [news, setNews] = useState([]);
     const [createdTransaction, setCreatedTransaction] = useState(false);
     const [showModalWhereExecuteTransaction, setShowModalWhereExecuteTransaction] = useState(false);
-    const [feedType, setFeedType] = useState('web3');
+    const [feedType, setFeedType] = useState('social');
 
     useEffect(() => {
         getNews();

@@ -12,6 +12,7 @@ import { GetDeveloper } from "../../../../../../../services/web3/developersServi
 import { GetActivist } from "../../../../../../../services/web3/activistService";
 import { GetSupporter } from "../../../../../../../services/web3/supporterService";
 import { GetValidator } from "../../../../../../../services/web3/validatorService";
+import { useNavigate } from "react-router";
 
 interface UserWeb3BasicInfoProps{
     id: string;
@@ -26,6 +27,7 @@ interface Props {
 }
 export function TransactionWeb3Header({ fromWallet, timestamp, blockNumber }: Props) {
     const {t} = useTranslation();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({} as UserWeb3BasicInfoProps);
     const [isUserRegistered, setIsUserRegistered] = useState(false);
@@ -135,6 +137,10 @@ export function TransactionWeb3Header({ fromWallet, timestamp, blockNumber }: Pr
         setImageProfile(response);
     }
 
+    function navigateToUserDetails(){
+        navigate(`/user-details/${fromWallet}`);
+    }
+
     return (
         <div className="flex items-center justify-between">
             <div className="flex gap-3">
@@ -151,12 +157,20 @@ export function TransactionWeb3Header({ fromWallet, timestamp, blockNumber }: Pr
                 </div>
                 <div className="flex flex-col">
                     {user.name && (
-                        <p className="text-white text-sm truncate">
+                        <p 
+                            className="text-white text-sm truncate hover:underline cursor-pointer"
+                            onClick={navigateToUserDetails}
+                        >
                             {user.name}
                             <span className="text-xs text-gray-300 ml-2">{t(userTypeToName[user.userType])}</span> 
                         </p>
                     )}
-                    <p className="text-white text-sm">{fromWallet}</p>
+                    <p 
+                        className="text-white text-sm hover:underline cursor-pointer"
+                        onClick={navigateToUserDetails}
+                    >
+                        {fromWallet}
+                    </p>
 
                     <div className="flex items-center gap-3">
                         <p className="text-xs text-gray-300">{format(new Date(timestamp), 'dd/MM/yyyy - kk:mm')}</p>

@@ -16,7 +16,7 @@ import { Centers } from "../pages/Centers";
 import { RegenerationCredit } from "../pages/RegenerationCredit";
 import { Community } from "../pages/Community";
 import { Actions } from '../pages/Actions';
-import { UserDetails } from "../pages/UserDetails";
+import { UserDetails } from "../pages/UserDetails/UserDetails";
 import { InspectionsCenter } from "../pages/InspectionsCenter";
 import { ResultInspection } from "../pages/ResultInspection";
 import { ResearchesCenter } from "../pages/ResearchesCenter";
